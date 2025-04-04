@@ -4,17 +4,17 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 # Translators:
-# Rafael Fontenelle <rffontenelle@gmail.com>, 2024
 # Roustam Khamidoulline, 2024
+# Rafael Fontenelle <rffontenelle@gmail.com>, 2025
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-21 14:55+0000\n"
+"POT-Creation-Date: 2025-04-04 14:56+0000\n"
 "PO-Revision-Date: 2024-05-11 00:32+0000\n"
-"Last-Translator: Roustam Khamidoulline, 2024\n"
+"Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>, 2025\n"
 "Language-Team: Russian (https://app.transifex.com/python-doc/teams/5390/"
 "ru/)\n"
 "MIME-Version: 1.0\n"
@@ -1674,6 +1674,12 @@ msgid ""
 "tp_basicsize`. (Exceptions to this rule can be made using :c:func:"
 "`PyUnstable_Object_GC_NewWithExtraData`.)"
 msgstr ""
+"Существует два вида типов: типы с экземплярами фиксированной длины имеют "
+"нулевое поле :c:member:`!tp_itemsize`, типы с экземплярами переменной длины "
+"имеют ненулевое поле :c:member:`!tp_itemsize`. Для типа с экземплярами "
+"фиксированной длины все экземпляры имеют одинаковый размер, заданный в :c:"
+"member:`!tp_basicsize`. (Исключения из этого правила можно сделать с "
+"помощью :c:func:`PyUnstable_Object_GC_NewWithExtraData`.)"
 
 #: ../../c-api/typeobj.rst:626
 msgid ""
@@ -1693,6 +1699,13 @@ msgid ""
 "underlying storage and its size should be acessed using :c:func:"
 "`PyLong_Export`."
 msgstr ""
+"Функции типа :c:func:`PyObject_NewVar` будут принимать значение N в качестве "
+"аргумента и сохранять его в поле :c:member:`~PyVarObject.ob_size` "
+"экземпляра. Обратите внимание, что поле :c:member:`~PyVarObject.ob_size` "
+"может позже использоваться для других целей. Например, экземпляры :py:type:"
+"`int` используют биты :c:member:`~PyVarObject.ob_size` способом, "
+"определяемым реализацией; доступ к базовому хранилищу и его размеру следует "
+"осуществлять с помощью :c:func:`PyLong_Export`."
 
 #: ../../c-api/typeobj.rst:641
 msgid ""
@@ -1709,6 +1722,12 @@ msgid ""
 "`int`, avoid reading lists' :c:member:`!ob_size` directly. Call :c:func:"
 "`PyList_Size` instead.)"
 msgstr ""
+"Кроме того, наличие поля :c:member:`~PyVarObject.ob_size` в макете "
+"экземпляра не означает, что структура экземпляра имеет переменную длину. "
+"Например, тип :py:type:`list` имеет экземпляры фиксированной длины, но эти "
+"экземпляры имеют поле :c:member:`~PyVarObject.ob_size`. (Как и в случае с :"
+"py:type:`int`, избегайте прямого чтения :c:member:`!ob_size` списков. Вместо "
+"этого вызывайте :c:func:`PyList_Size`.)"
 
 #: ../../c-api/typeobj.rst:651
 msgid ""
@@ -1724,6 +1743,11 @@ msgid ""
 "`!tp_basicsize` must be greater than or equal to the base's :c:member:`!"
 "tp_basicsize`."
 msgstr ""
+"Правильный способ задать :c:member:`!tp_basicsize` — использовать оператор "
+"``sizeof`` в структуре, используемой для объявления макета экземпляра. Эта "
+"структура должна включать структуру, используемую для объявления базового "
+"типа. Другими словами, :c:member:`!tp_basicsize` должно быть больше или "
+"равно базовому :c:member:`!tp_basicsize`."
 
 #: ../../c-api/typeobj.rst:661
 msgid ""
@@ -1733,6 +1757,11 @@ msgid ""
 "by the macro :c:macro:`PyObject_HEAD` or :c:macro:`PyObject_VAR_HEAD`, "
 "respectively."
 msgstr ""
+"Поскольку каждый тип является подтипом :py:type:`object`, эта структура "
+"должна включать :c:type:`PyObject` или :c:type:`PyVarObject` (в зависимости "
+"от того, следует ли включать :c:member:`~PyVarObject.ob_size`). Обычно они "
+"определяются макросом :c:macro:`PyObject_HEAD` или :c:macro:"
+"`PyObject_VAR_HEAD` соответственно."
 
 #: ../../c-api/typeobj.rst:667
 msgid ""
@@ -1758,6 +1787,11 @@ msgid ""
 "when using compiler extensions like ``__attribute__((packed))``, it is up to "
 "you."
 msgstr ""
+":c:member:`!tp_basicsize` должен быть кратен ``_Alignof(PyObject)``. При "
+"использовании ``sizeof`` в ``struct``, включающей :c:macro:`PyObject_HEAD`, "
+"как рекомендуется, компилятор обеспечивает это. Если не используется C "
+"``struct`` или используются расширения компилятора, такие как "
+"``__attribute__((packed))``, это зависит от вас."
 
 #: ../../c-api/typeobj.rst:680
 msgid ""
@@ -1766,6 +1800,11 @@ msgid ""
 "alignment. For example, if a type's variable part stores a ``double``, it is "
 "your responsibility that both fields are a multiple of ``_Alignof(double)``."
 msgstr ""
+"Если переменные элементы требуют определенного выравнивания, :c:member:`!"
+"tp_basicsize` и :c:member:`!tp_itemsize` должны быть кратны этому "
+"выравниванию. Например, если переменная часть типа хранит ``double``, вы "
+"несете ответственность за то, чтобы оба поля были кратны "
+"``_Alignof(double)``."
 
 #: ../../c-api/typeobj.rst:689
 msgid ""
@@ -1773,6 +1812,9 @@ msgid ""
 "set to zero, :c:func:`PyType_Ready` will copy the value from the base type, "
 "indicating that the instances do not need additional storage.)"
 msgstr ""
+"Эти поля наследуются отдельно подтипами. (То есть, если поле установлено в "
+"ноль, :c:func:`PyType_Ready` скопирует значение из базового типа, указывая, "
+"что экземплярам не требуется дополнительное хранилище.)"
 
 #: ../../c-api/typeobj.rst:694
 msgid ""
@@ -1781,6 +1823,10 @@ msgid ""
 "different non-zero value in a subtype (though this depends on the "
 "implementation of the base type)."
 msgstr ""
+"Если базовый тип имеет ненулевое значение :c:member:`~PyTypeObject."
+"tp_itemsize`, то, как правило, небезопасно устанавливать :c:member:"
+"`~PyTypeObject.tp_itemsize` в другое ненулевое значение в подтипе (хотя это "
+"зависит от реализации базового типа)."
 
 #: ../../c-api/typeobj.rst:701
 msgid ""
