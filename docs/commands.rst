@@ -11,9 +11,6 @@ same logic in other languages e.g. Python.
 Note: Where you see ``${LANGCODE}`` in the commands below, replace it with your language code (e.g. 'uk', 'pt_BR') or
 set that variable (e.g. ``LANGCODE=pt_BR``) before running the commands.
 
-.. contents:: Table of Contents
-    :depth: 2
-
 
 Clone CPython repository
 ------------------------
