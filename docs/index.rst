@@ -1,10 +1,5 @@
-.. Python Docs Transifex Automations documentation master file, created by
-   sphinx-quickstart on Sun Jan 26 11:03:05 2025.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Python Docs Transifex Automations documentation
-================================================
+===============================================
 
 Scripts and procedures for maintaining Python_ documentation translation infrastructure under python-doc_ organization in Transifex_.
 
