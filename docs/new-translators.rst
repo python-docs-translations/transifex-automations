@@ -4,7 +4,7 @@ Guidance for New Contributors to Python Documentation Translation on Transifex
 
 This guide is intended for language teams working on the Python documentation
 within the python-doc_ organization on Transifex_. Yes: not all teams translate
-on Transifex, so using Transifex is optional.
+on Transifex, using Transifex is optional.
 
 .. _python-doc: https://app.transifex.com/python-doc
 .. _Transifex: https://www.transifex.com/
@@ -18,11 +18,11 @@ confident in both English and the translation language.
 
 If you are new to the translation of Python documentation, we recommend that
 you start by reading the Translating_ on `Python Developer's Guide`_
-(a.k.a. devguide), joining the relevant contact channels, and familiarizing
-yourself with `PEP 545`_.
+(a.k.a. devguide), joining the relevant contact channels (such as the `Docs Community`_
+Discord ``#translations`` channel), and familiarizing yourself with `PEP 545`_.
 
 If there is already a repository for your language team, please join and
-introduce yourself to the team.
+introduce yourself.
 
 **If there is no existing repository or language team, you will need to create
 one.** Simply translating on Transifex is not enough to have your language
@@ -32,10 +32,11 @@ a new translation.
 .. _Translating: https://devguide.python.org/documentation/translating/
 .. _Python Developer's Guide: https://devguide.python.org
 .. _PEP 545: https://peps.python.org/pep-0545/
+.. _Docs Community: https://docs-community.readthedocs.io/
 
 
-Geting to Know Transifex
-~~~~~~~~~~~~~~~~~~~~~~~~
+Getting to Know Transifex
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you are new to Transifex, it is recommended that you take the time to read
 through the following resources from the Transifex documentation:
@@ -50,7 +51,7 @@ Transifex Does Not Update docs.python.org
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Language teams must download and store the translation files in their VCS
-repository, as per instructions from Translating_ on `Python Developer's Guide`_,
+repository, as per instructions from Translating_ in the `Python Developer's Guide`_,
 as it is from this repository that the python-docs infrastructure will fetch
 translations, build the translated docs, and publish them on docs.python.org.
 
@@ -80,7 +81,7 @@ you only need to translate once and all versions of the Python documentation
 will receive the contribution *if the string remains unchanged*. If a string has
 changed between versions, the contribution will not be applied to the new version.
 
-It is recommended to focus your translation efforts on the "Python" project,
+You should focus your translation efforts on the "Python" project,
 which represents the newest version. Keep in mind that the Python documentation
 contains a large number of strings and that translations will be propagated, so
 older versions will receive most contributions. Additionally, translating the
@@ -108,15 +109,15 @@ Final words
 
 It is recommended that you also follow the style guide for your language and
 review any existing translations to understand the tone and style of the language
-team. Translating the Python documentation can be a large project, and contributions
+team. Translating the Python documentation is a very large project, and contributions
 from many members of the community are appreciated. If you need help or have
 questions, please reach out to the language team or any other contact channel
-provided in Translating_ on `Python Developer's Guide`_, or contact the
+provided in Translating_ in the `Python Developer's Guide`_, or contact the
 python-doc project coordinators on Transifex.
 
-See also
-~~~~~~~~
 
-- PEP 545: https://peps.python.org/pep-0545/
-- Translating: https://devguide.python.org/documentation/translating/
-- Sphinx's reStructuredText Primer: https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html
+.. seealso::
+
+    - `PEP 545`_
+    - `Python Devguide: Translations <https://devguide.python.org/documentation/translating/>`_
+    - `Sphinx's reStructuredText Primer <https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html>`_
