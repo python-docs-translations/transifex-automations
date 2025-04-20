@@ -1,5 +1,5 @@
-Python Docs Transifex Translations documentation
-================================================
+Python Docs Transifex Automations documentation
+===============================================
 
 Scripts and procedures for maintaining Python_ documentation translation infrastructure under python-doc_ organization in Transifex_.
 
