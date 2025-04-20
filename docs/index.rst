@@ -16,7 +16,7 @@ See Translating_ in Python Developer's Guide for more information.
 .. _Python: https://www.python.org
 .. _python-doc: https://app.transifex.com/python-doc/
 .. _Transifex: https://www.transifex.com
-.. _docs: https://github.com/rffontenelle/docspush-transifex/blob/main/docs/
+.. _docs: https://github.com/python-docs-translations/transifex-automations/blob/main/docs/
 .. _Translating: https://devguide.python.org/documentation/translating/
 
 .. toctree::

@@ -43,7 +43,7 @@ remove_msgid() {
 
 
 # \\N is treated as new line in Transifex, so it is an illegal source string
-# https://github.com/rffontenelle/python-docs-tx-translations/issues/15
+# https://github.com/python-docs-translations/transifex-automations/issues/15
 remove_msgid  library/codecs.pot '^\\N$'
 remove_msgid  library/re.pot  '^\\N$'
 remove_msgid  reference/lexical_analysis.pot  '^\\N$'

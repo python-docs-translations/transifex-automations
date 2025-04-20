@@ -48,7 +48,7 @@ To make easier to read the source strings, extract them from the doc files and p
 
 .. code-block:: shell
 
-   git clone https://github.com/rffontenelle/python-docs-tx-translations
+   git clone https://github.com/python-docs-translations/transifex-automations
    cd python-docs-tx-translations
    git clone --depth 1 --branch 3.12 https://github.com/python/cpython
    python -mvenv venv

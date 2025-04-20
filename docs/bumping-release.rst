@@ -2,7 +2,7 @@
 Bumping python-newest to latest Python release
 ====================================================
 
-NOTE: This doc is out of date and needs rework! The `pull request \#13 <https://github.com/rffontenelle/python-docs-tx-translations/pull/13>`_ is a work in progress that would change some instructions from this guide.
+NOTE: This doc is out of date and needs rework! The `pull request \#13 <https://github.com/python-docs-translations/transifex-automations/pull/13>`_ is a work in progress that would change some instructions from this guide.
 
 This document aims to list the steps required for updating version of the 'Python' project (slug 'python-newest) in python-doc organization in Transifex.
 
@@ -40,14 +40,14 @@ In *Workflow* tab, enable the *Translation Memory Fillup* option by checking the
 
     NOTE: The *Translation Memory Fillup* option is essential to have a translation in one of the version projects to be populated to this project. This drastically reduces translation effort replicating one contribution to other strings that are exactly the same.  
 
-6. Adjust the `CI workflow <https://github.com/rffontenelle/python-docs-tx-translations/tree/main/.github/workflows>`_ with the new Python version:
+6. Adjust the `CI workflow <https://github.com/python-docs-translations/transifex-automations/tree/main/.github/workflows>`_ with the new Python version:
 
     #. Set ``PYTHON_NEWEST`` environment variable inside ``env`` to the new Python version
     #. Edit ``cpython_version`` inside ``strategy.matrix`` adding the new version to the beginning array
 
 7. Push source strings to python-newest by manually running the CI workflow: Actions_ tab > CI > Run workflow button > "Branch: main" and confirm "Run workflow"
 
-.. _Actions: https://github.com/rffontenelle/python-docs-tx-translations/actions
+.. _Actions: https://github.com/python-docs-translations/transifex-automations/actions
 
 8. Unlock translations in python-newest, if locked
 

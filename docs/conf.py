@@ -6,7 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'Python Docs Transifex Translations'
+project = 'Python Docs Transifex Automations'
 copyright = '2025, rffontenelle'
 author = 'rffontenelle'
 
