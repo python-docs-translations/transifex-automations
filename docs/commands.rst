@@ -257,20 +257,20 @@ Merging translations into another branch
 ----------------------------------------
 
 This is useful when you want to replicate a translation from the CPython branch
-currently being translated to another older branch. E.g. 3.12 is currently being
-translated, but 3.11 has that same string and could make use of the contributed
+currently being translated to another older branch. E.g. 3.13 is currently being
+translated, but 3.12 has that same string and could make use of the contributed
 translations.
 
 .. code-block:: shell
 
    CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-   TARGET_BRANCH=3.11
+   TARGET_BRANCH=3.12
    pomerge --from-files *.po **/*.po
    git checkout ${TARGET_BRANCH}
    pomerge --to-files *.po **/*.po
 
 After the above command, the translation from the current branch were applied to
-the previous branch "3.11". Now, one can verify lines are wrapped:
+the previous branch "3.12". Now, one can verify lines are wrapped:
 
 .. code-block:: shell
 
