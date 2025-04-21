@@ -17,7 +17,7 @@ Linux (WSL), but feel free to use the same logic in other languages e.g. Python.
 Clone CPython repository
 ------------------------
 
-It is necessary to have a local clone of C`Python's source code repository <https://github.com/python/cpython>`_
+It is necessary to have a local clone of `CPython's source code repository <https://github.com/python/cpython>`_
 in order to update translation files and to build translated documentation.
 
 From inside your language repository, run:
@@ -77,7 +77,7 @@ Install the Transifex CLI client, required to interact with Transifex:
 .. note::
    The above commands result in the ``tx`` binary being downloaded into the ``.venv/bin`` directory.
    Feel free to install this tool wherever you want, but preferably in a
-   directory already in the PATH so that issuing  ``tx`` works without its full path.
+   directory already in the PATH so that ``tx`` works without its full path.
 
 Updating the translations
 -------------------------
