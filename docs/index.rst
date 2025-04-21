@@ -1,17 +1,31 @@
 Python Docs Transifex Automations documentation
 ===============================================
 
-Scripts and procedures for maintaining Python_ documentation translation infrastructure under python-doc_ organization in Transifex_.
+For translators
+---------------
 
-Source strings are updated using continuous integration workflow under *.github/workflows*. Details:
+If you are new to translating on Transifex_ please read our
+:doc:`guide for new translators <new-translators>`.
+
+For translation coordinators
+----------------------------
+
+In this documentation you can find guides for setting up and maintaining your
+(Transifex enhanced) translation repository.
+
+You can also find `Scripts <https://github.com/python-docs-translations/transifex-automation/tree/main/scripts>`_
+and procedures for maintaining Python_ docs translation infrastructure
+under the python-doc_ organization in Transifex_.
+
+Source strings are updated using a continuous integration workflow under
+`.github/workflows <https://github.com/python-docs-translations/transifex-automation/tree/main/.github/workflows>`_.
+Details:
 
 - Run weekly
 - Run for releases in beta, release candidate, stable, bugfixes and security-fixes status; alpha or EOL are excluded;
-- It DOES NOT store translations to be used by the published documentation;
+- It **DOES NOT** store translations to be used by the published documentation;
 
-See docs_ directory for more information on this project maintenance.
-
-See Translating_ in Python Developer's Guide for more information.
+See also  Translating_ in the Python Developer's Guide for more information.
 
 .. _Python: https://www.python.org
 .. _python-doc: https://app.transifex.com/python-doc/
