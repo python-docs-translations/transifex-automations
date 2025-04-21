@@ -23,3 +23,14 @@ exclude_patterns = []
 
 html_theme = 'furo'
 html_static_path = ['_static']
+
+# ----------------------------------------------------------------------------
+
+# Python versions
+newest = '3.13'
+previous = '3.12'
+
+rst_prolog = f"""
+.. |py_new| replace:: {newest}
+.. |py_last| replace:: {previous}
+"""
