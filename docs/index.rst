@@ -5,7 +5,7 @@ For translators
 ---------------
 
 If you are new to translating on Transifex_ please read our
-:doc:`guide for new translators. <new-translators>`.
+:doc:`guide for new translators <new-translators>`.
 
 For translation coordinators
 ----------------------------
