@@ -18,7 +18,7 @@ and procedures for maintaining Python_ docs translation infrastructure
 under the python-doc_ organization in Transifex_.
 
 Source strings are updated using a continuous integration workflow under
-*`.github/workflows <https://github.com/python-docs-translations/transifex-automation/tree/main/.github/workflows>`_*.
+`.github/workflows <https://github.com/python-docs-translations/transifex-automation/tree/main/.github/workflows>`_.
 Details:
 
 - Run weekly
