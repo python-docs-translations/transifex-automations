@@ -4,7 +4,7 @@
 # on Transifex.
 #
 # Inspired by django-docs-translations script by claudep.
-
+import configparser
 from argparse import ArgumentParser
 import os
 from contextlib import chdir
@@ -17,9 +17,9 @@ from warnings import warn
 from polib import pofile
 from transifex.api import transifex_api
 
-LANGUAGE = os.getenv("LANGUAGE")
-PROJECT_SLUG = 'python-newest'
-VERSION = '3.13'
+# LANGUAGE = os.getenv("LANGUAGE")
+# PROJECT_SLUG = 'python-newest'
+# VERSION = '3.13'
 
 def fetch():
     """
@@ -53,13 +53,15 @@ def recreate_tx_config():
         contents = contents.replace('./<lang>/LC_MESSAGES/', '')
         with open('.tx/config', 'w') as file:
             file.write(contents)
-    warn_about_files_to_delete()
 
-def warn_about_files_to_delete():
-    files = list(_get_files_to_delete())
-    if not files:
+def delete_obsolete_files():
+    files_to_delete = list(_get_files_to_delete())
+    if not files_to_delete:
         return
-    warn(f'Found {len(files)} file(s) to delete: {", ".join(files)}.')
+    else:
+        for file in files_to_delete:
+            print(f"Removing {file}")
+            os.remove(file)
 
 def _get_files_to_delete():
     with open('.tx/config') as config_file:
@@ -86,16 +88,30 @@ def _update_txconfig_resources():
 def _get_tx_token() -> str:
     if os.path.exists('.tx/api-key'):
         with open('.tx/api-key') as f:
-            transifex_api_key = f.read()
-    else:
-        transifex_api_key = os.getenv('TX_TOKEN', '')
-    return transifex_api_key
+            return f.read()
+
+    config = configparser.ConfigParser()
+    config.read(os.path.expanduser("~/.transifexrc"))
+    try:
+        return config["https://www.transifex.com"]["token"]
+    except KeyError:
+        pass
+
+    return os.getenv('TX_TOKEN', '')
 
 if __name__ == "__main__":
-    RUNNABLE_SCRIPTS = ('fetch', 'recreate_tx_config', 'warn_about_files_to_delete')
+    RUNNABLE_SCRIPTS = ('fetch', 'recreate_tx_config', 'delete_obsolete_files')
 
     parser = ArgumentParser()
     parser.add_argument('cmd', choices=RUNNABLE_SCRIPTS)
+    parser.add_argument('--language', required=True)
+    parser.add_argument('--project-slug', required=True)
+    parser.add_argument('--version', required=True)
+
     options = parser.parse_args()
 
-    eval(options.cmd)()
+    LANGUAGE = options.language
+    PROJECT_SLUG = options.project_slug
+    VERSION = options.version
+
+    globals()[options.cmd]()
