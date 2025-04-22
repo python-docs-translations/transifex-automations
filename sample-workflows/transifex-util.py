@@ -12,14 +12,10 @@ from pathlib import Path
 from subprocess import call
 import sys
 from tempfile import TemporaryDirectory
-from warnings import warn
 
 from polib import pofile
 from transifex.api import transifex_api
 
-# LANGUAGE = os.getenv("LANGUAGE")
-# PROJECT_SLUG = 'python-newest'
-# VERSION = '3.13'
 
 def fetch():
     """
