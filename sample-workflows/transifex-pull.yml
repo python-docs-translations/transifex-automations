@@ -36,12 +36,17 @@ jobs:
       - run: ./manage_translation.py recreate_tx_config
         env:
           TX_TOKEN: ${{ secrets.TX_TOKEN }}
+          LANGUAGE: XX
       - run: ./manage_translation.py fetch
         env:
           TX_TOKEN: ${{ secrets.TX_TOKEN }}
-      - run: git config --local user.email github-actions@github.com
-      - run: git config --local user.name "GitHub Action's update-translation job"
-      - run: |
+          LANGUAGE: XX
+      - name: Set up Git
+        run: |
+          git config --local user.email github-actions@github.com
+          git config --local user.name "GitHub Action's update-translation job"
+      - name: Filter files
+        run: |
           ! git diff -I'^"POT-Creation-Date: ' \
                      -I'^"Language-Team: ' \
                      -I'^# ' -I'^"Last-Translator: ' \ 

@@ -8,14 +8,10 @@
 from argparse import ArgumentParser
 import os
 from contextlib import chdir
-from dataclasses import dataclass
-from difflib import SequenceMatcher
-from logging import info
 from pathlib import Path
 from subprocess import call
 import sys
 from tempfile import TemporaryDirectory
-from typing import Self, Generator, Iterable
 from warnings import warn
 
 from polib import pofile
