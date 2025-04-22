@@ -24,7 +24,7 @@ From inside your language repository, run:
 
 .. code-block:: shell
 
-   BRANCH=|py_new|
+   BRANCH=3.13
    git clone --depth 1 https://github.com/python/cpython --branch $BRANCH
 
 Use ``--depth 1`` to shallow clone, which avoids downloading all the 800 MB of data
@@ -264,7 +264,7 @@ translations.
 .. code-block:: shell
 
    CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-   TARGET_BRANCH=|py_last|
+   TARGET_BRANCH=3.12
    pomerge --from-files *.po **/*.po
    git checkout ${TARGET_BRANCH}
    pomerge --to-files *.po **/*.po

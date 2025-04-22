@@ -17,22 +17,31 @@ To ensure that translations are of a good standard, it is essential that you are
 confident in both English and the translation language.
 
 If you are new to the translation of Python documentation, we recommend that
-you start by reading the Translating_ on `Python Developer's Guide`_
-(a.k.a. devguide), joining the relevant contact channels (such as the `Docs Community`_
+you start by reading the Translating_ in the `Python Developer's Guide`_
+(a.k.a. *devguide*), joining the relevant contact channels (such as the `Docs Community`_
 Discord ``#translations`` channel), and familiarizing yourself with `PEP 545`_.
 
 If there is already a repository for your language team, please join and
 introduce yourself.
 
-**If there is no existing repository or language team, you will need to create
-one.** Simply translating on Transifex is not enough to have your language
-published in the Python documentation. Please follow the instructions on starting
-a new translation.
-
 .. _Translating: https://devguide.python.org/documentation/translating/
 .. _Python Developer's Guide: https://devguide.python.org
 .. _PEP 545: https://peps.python.org/pep-0545/
 .. _Docs Community: https://docs-community.readthedocs.io/
+
+
+There is no existing project for my language
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**If there is no existing repository or language team, you will need to create
+one.** Simply translating on Transifex is not enough to have your language
+published in the Python documentation.
+
+There are several languages on Transifex that are not connected to a repository,
+please confirm this is not the case before you begin translating. You can verify
+by checking there is an in entry in the Translating_ section of the `devguide <Python Developer's Guide>`_.
+
+To start a new translation follow the guide `here <https://devguide.python.org/documentation/translating/#starting-a-new-translation>`_.
 
 
 Getting to Know Transifex
