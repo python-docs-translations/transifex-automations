@@ -58,6 +58,7 @@ def delete_obsolete_files():
         for file in files_to_delete:
             print(f"Removing {file}")
             os.remove(file)
+            _call(f'git rm --quiet "{file}"')
 
 def _get_files_to_delete():
     with open('.tx/config') as config_file:
