@@ -911,6 +911,10 @@ msgid ""
 "multi-threaded performance.  The tradeoff is that *obj* will only be "
 "deallocated by the tracing garbage collector."
 msgstr ""
+"在 *obj* 上启用 `推迟引用计数 <https://peps.python.org/pep-0703/#deferred-"
+"reference-counting>`_，如果运行时支持的话。 在 :term:`自由线程 <free "
+"threading>` 构建版中，这将允许解释器避免对 *obj* 的引用计数调整，这可以提升多"
+"线程性能。 其代价是 *obj* 将只能由在追踪的垃圾回收器来释放。"
 
 #: ../../c-api/object.rst:601
 msgid ""
@@ -919,6 +923,9 @@ msgid ""
 "reference counting is not supported or if the hint was ignored by the "
 "runtime. This function is thread-safe, and cannot fail."
 msgstr ""
+"如果在 *obj* 上启用了推迟引用计数（包括在调用之前已启用的情况）则此函数将返"
+"回 ``1``，如果推迟引用计数不受运行时支持或者被其忽略 则返回 ``0``。 此函数是"
+"线程安全的，并且一定不会执行失败。"
 
 #: ../../c-api/object.rst:606
 msgid ""
@@ -927,12 +934,15 @@ msgid ""
 "not an object tracked by the garbage collector (see :func:`gc.is_tracked` "
 "and :c:func:`PyObject_GC_IsTracked`)."
 msgstr ""
+"此函数在启用了 :term:`GIL` 的构建版上将不做任何事，因为该版本不支持推迟引用计"
+"数。 如果 *obj* 未被垃圾回收器追踪则此函数也不会做任何事 (参见 :func:`gc."
+"is_tracked` 和 :c:func:`PyObject_GC_IsTracked`)。"
 
 #: ../../c-api/object.rst:611
 msgid ""
 "This function is intended to be used soon after *obj* is created, by the "
 "code that creates it."
-msgstr ""
+msgstr "此函数应当在 *obj* 被创建之后立即供创建它的代码使用。"
 
 #: ../../c-api/object.rst:618
 msgid ""
@@ -941,6 +951,9 @@ msgid ""
 "fail, but the check is conservative, and may return ``0`` in some cases even "
 "if *obj* is a unique temporary object."
 msgstr ""
+"检测 *obj* 是否是一个单独临时对象。 如果确定 *obj* 是一个单独临时对象则返回 "
+"``1``，否则返回 ``0``。 此函数一定不会执行失败，但该检测是偏保守的，在某些情"
+"况下即使 *obj* 是一个单独临时对象也可能返回 ``0``。"
 
 #: ../../c-api/object.rst:624
 msgid ""
