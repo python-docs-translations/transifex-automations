@@ -79,7 +79,7 @@ def _create_txconfig():
 def _update_txconfig_resources():
     _call(
         f'sphinx-intl update-txconfig-resources --transifex-organization-name python-doc '
-        f'--transifex-project-name={PROJECT_SLUG} --locale-dir . --pot-dir gettext'
+        f'--transifex-project-name {PROJECT_SLUG} --locale-dir . --pot-dir gettext'
     )
 
 def _get_tx_token() -> str:
