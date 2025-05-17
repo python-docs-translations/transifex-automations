@@ -10,8 +10,8 @@ from Transifex, lint translated files, and test build the translated documentati
 
 This repository provides three sample workflows, a Linting workflow, a Test Build
 workflow, and a workflow for pulling translations from Transifex. They can be found
-in the `FOLDER <https://github.com>`_ and explanations of how they work and what
-you need to do to set them up can be found below.
+in the `sample-workflows <https://github.com/python-docs-translations/transifex-automations/tree/main/sample-workflows>`_
+and explanations of how they work and what you need to do to set them up can be found below.
 
 .. seealso::
    - `GitHub docs: Writing workflows <https://docs.github.com/en/actions/writing-workflows>`_
@@ -37,11 +37,11 @@ The name can be freely configured and will be displayed in the "Actions" tab.
 
    on:
       schedule:
-         - cron: '0 * * * *'
+         - cron: '0 0 * * *'
 
-Using `cron <https://en.wikipedia.org/wiki/Cron>`_, the frequency the workflow
-runs can be set. In the sample workflows it is configured to ``'0 * * * *'``,
-this means it will run hourly.
+Using `cron <https://en.wikipedia.org/wiki/Cron>`_, the frequency of the workflow
+runs can be set. In the sample workflows it is configured to ``'0 0 * * *'``,
+meaning it will run once daily.
 
 .. code-block:: workflow
 
@@ -61,28 +61,59 @@ manually due to the ``workflow_dispatch`` option.
    jobs:
 
 All jobs or sections under ``jobs:`` will be run. The sample workflows can be
-merged into one by combining all of their jobs. (Note there must only be one `jobs:`)
+merged into one by combining all of their jobs. (Note: there must only be one `jobs:`)
 
-.. Transifex Pull Workflow
-.. -----------------------
-..
-.. This workflow pulls all translations from transifex.
+
+Transifex Pull Workflow
+-----------------------
+
+How to configure the `Transifex Pull Workflow <https://github.com/python-docs-translations/transifex-automations/blob/main/sample-workflows/transifex-pull.yml>`_.
+
+This workflow automatically pulls updated translations from Transifex, commits
+them to the repository, and pushes them back to the relevant branch, if
+significant changes are detected.
+
+Ensure the ``TX_TOKEN`` secret is configured in your repository with your Transifex API token.
+
+In the workflow, replace all instances of ``XX`` with your ITFL language code.
+
+.. code-block:: workflow
+
+     matrix:
+       version: [ 3.14 ]
+
+Set the ``version`` list to the branches for which translations should be updated.
+
+.. code-block:: workflow
+
+   - name: Filter files
+     run: |
+       ! git diff -I'^"POT-Creation-Date: ' \
+                  -I'^"Language-Team: ' \
+                  -I'^# ' -I'^"Last-Translator: ' \
+                  --exit-code \
+         && echo "SIGNIFICANT_CHANGES=1" >> $GITHUB_ENV || exit 0
+
+This step detects whether the changes are significant by ignoring changes
+to the file header. A commit and push only occur if meaningful changes are found,
+these filters can be modified to suit.
+
 
 Test Build Workflow
 -------------------
 
-How to configure the `Test Build Workflow <https://github.com>`_.
+How to configure the `Test Build Workflow <https://github.com/python-docs-translations/transifex-automations/blob/main/sample-workflows/test-build.yml>`_.
 
 In the workflow replace all instances of ``XX`` with your ITFL language code.
 
 .. code-block:: workflow
 
          matrix:
-            version: [ 3.13 ]
+            version: [ 3.14 ]
             format: [ html, latex ]
 
 Set version to the branches in your translation repository that you want to be
-built, for example: ``version: [ 3.13, 3.12, 3.11 ]``, note that this has to be
+built, for example: ``version: [ 3.14, 3.13, 3.12 ]``, note that this has to be
 changed in both ``matrix``'s in the workflow. The format can be modified
 to run for just ``html`` if that is preferred.
 
@@ -110,12 +141,13 @@ found in the "Artefacts" section.
 Linting Workflow
 ----------------
 
+How to configure the po linting `workflow <https://github.com/python-docs-translations/transifex-automations/blob/main/sample-workflows/po-lint.yml>`_.
 This workflow will lint all po files on your branch using `sphinx-lint <https://pypi.org/project/sphinx-lint/0.4/>`_.
 
 .. code-block:: workflow
 
       matrix:
-         version: [ 3.13 ]
+         version: [ 3.14 ]
 
 Set the ``version`` list to the versions you have available and want the linting
 workflow to be run on.
