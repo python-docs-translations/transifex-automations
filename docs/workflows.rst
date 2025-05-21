@@ -8,14 +8,14 @@ system, *GitHub Actions*, which runs *workflows*. Workflows are particularly use
 for testing projects, in translation repos they can be used to update translations
 from Transifex, lint translated files, and test build the translated documentation.
 
-This repository provides three sample workflows, a Linting workflow, a Test Build
+This repository provides three sample workflows: a Linting workflow, a Test Build
 workflow, and a workflow for pulling translations from Transifex. They can be found
 in the `sample-workflows <https://github.com/python-docs-translations/transifex-automations/tree/main/sample-workflows>`_
-and explanations of how they work and what you need to do to set them up can be found below.
+directory and explanations of how they work and what you need to do to set them up can be found below.
 
 .. seealso::
    - `GitHub docs: Writing workflows <https://docs.github.com/en/actions/writing-workflows>`_
-   - :doc:`Setting up Transifex <commands.rst>`
+   - :doc:`Setting up Transifex <commands>`
 
 Running Workflows
 -----------------
@@ -27,13 +27,13 @@ is configured.
 General Overview
 ----------------
 
-.. code-block:: workflow
+.. code-block:: yaml
 
    name: Linting Workflow
 
 The name can be freely configured and will be displayed in the "Actions" tab.
 
-.. code-block:: workflow
+.. code-block:: yaml
 
    on:
       schedule:
@@ -43,7 +43,7 @@ Using `cron <https://en.wikipedia.org/wiki/Cron>`_, the frequency of the workflo
 runs can be set. In the sample workflows it is configured to ``'0 0 * * *'``,
 meaning it will run once daily.
 
-.. code-block:: workflow
+.. code-block:: yaml
 
    on:
       ...
@@ -56,7 +56,7 @@ The workflow can also be set to run under different conditions, in the case of t
 sample workflows it is set to run on a ``push`` to any branch, and can be run
 manually due to the ``workflow_dispatch`` option.
 
-.. code-block:: workflow
+.. code-block:: yaml
 
    jobs:
 
@@ -77,14 +77,14 @@ Ensure the ``TX_TOKEN`` secret is configured in your repository with your Transi
 
 In the workflow, replace all instances of ``XX`` with your ITFL language code.
 
-.. code-block:: workflow
+.. code-block:: yaml
 
      matrix:
        version: [ 3.14 ]
 
 Set the ``version`` list to the branches for which translations should be updated.
 
-.. code-block:: workflow
+.. code-block:: yaml
 
    - name: Filter files
      run: |
@@ -106,7 +106,7 @@ How to configure the `Test Build Workflow <https://github.com/python-docs-transl
 
 In the workflow replace all instances of ``XX`` with your ITFL language code.
 
-.. code-block:: workflow
+.. code-block:: yaml
 
          matrix:
             version: [ 3.14 ]
@@ -117,7 +117,7 @@ built, for example: ``version: [ 3.14, 3.13, 3.12 ]``, note that this has to be
 changed in both ``matrix``'s in the workflow. The format can be modified
 to run for just ``html`` if that is preferred.
 
-.. code-block:: workflow
+.. code-block:: yaml
 
          - uses: actions/setup-python@master
             with:
@@ -126,7 +126,7 @@ to run for just ``html`` if that is preferred.
 The ``python-version`` can be unpinned if no branches older than ``3.11`` are set
 in the ``version`` list.
 
-.. code-block:: workflow
+.. code-block:: yaml
 
       output-pdf:
 
@@ -135,16 +135,16 @@ section also has to be removed if ``latex`` is not in the ``format`` list.
 
 The workflow uses the ``actions/upload-artifact@master`` tool which allows for
 the generated builds to be downloaded. In a run in the "Actions" tab they can be
-found in the "Artefacts" section.
+found in the "Artifacts" section.
 
 
 Linting Workflow
 ----------------
 
 How to configure the po linting `workflow <https://github.com/python-docs-translations/transifex-automations/blob/main/sample-workflows/po-lint.yml>`_.
-This workflow will lint all po files on your branch using `sphinx-lint <https://pypi.org/project/sphinx-lint/0.4/>`_.
+This workflow will lint all po files on your branch using `sphinx-lint <https://pypi.org/project/sphinx-lint/>`_.
 
-.. code-block:: workflow
+.. code-block:: yaml
 
       matrix:
          version: [ 3.14 ]
