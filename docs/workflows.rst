@@ -41,7 +41,8 @@ The name can be freely configured and will be displayed in the "Actions" tab.
 
 Using `cron <https://en.wikipedia.org/wiki/Cron>`_, the frequency of the workflow
 runs can be set. In the sample workflows it is configured to ``'0 0 * * *'``,
-meaning it will run once daily.
+meaning it will run once daily. See `crontab.guru <https://crontab.guru/>`_ for
+a simple cron editor.
 
 .. code-block:: yaml
 
@@ -74,8 +75,11 @@ them to the repository, and pushes them back to the relevant branch, if
 significant changes are detected.
 
 Ensure the ``TX_TOKEN`` secret is configured in your repository with your Transifex API token.
+For generating your API key, see this `Transifex article <https://help.transifex.com/en/articles/6248858-generating-an-api-token>`_,
+for setting up secrets, see this `guide <https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository>`_.
 
-In the workflow, replace all instances of ``XX`` with your ITFL language code.
+In the workflow, replace all instances of ``XX`` with your `IETF <https://datatracker.ietf.org/doc/html/rfc5646.html>`_ language code.
+For example, ``pl`` or ``pt_BR``.
 
 .. code-block:: yaml
 
