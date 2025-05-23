@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 #
-# This python file contains utility scripts to manage Python docs translation
-# on Transifex.
-#
-# Inspired by django-docs-translations script by claudep.
+# This python file contains utility functions to manage a Python docs translation
+# with Transifex.
+# 
+# This file is maintained at: https://github.com/python-docs-translations/transifex-automations/blob/main/sample-workflows/transifex-util.py
+
 import configparser
 from argparse import ArgumentParser
 import os
