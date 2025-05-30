@@ -5,6 +5,7 @@
 #
 # Translators:
 # Rafael Fontenelle <rffontenelle@gmail.com>, 2025
+# Freesand Leo <yuqinju@163.com>, 2025
 #
 #, fuzzy
 msgid ""
@@ -13,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-23 14:55+0000\n"
 "PO-Revision-Date: 2025-05-08 05:09+0000\n"
-"Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>, 2025\n"
+"Last-Translator: Freesand Leo <yuqinju@163.com>, 2025\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/python-doc/"
 "teams/5390/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -444,6 +445,24 @@ msgid ""
 "    // ... rest of initialization\n"
 "}"
 msgstr ""
+"// 作用于进程的旗标\n"
+"static int loaded = 0;\n"
+"\n"
+"// 提供线程安全的互斥锁（仅在自由线程版 Python 中需要）\n"
+"\n"
+"static int\n"
+"exec_module(PyObject* module)\n"
+"{\n"
+"    PyMutex_Lock(&modinit_mutex);\n"
+"    if (loaded) {\n"
+"        PyMutex_Unlock(&modinit_mutex);\n"
+"        PyErr_SetString(PyExc_ImportError,\n"
+"                        \"cannot load module more than once per process\");\n"
+"        return -1;\n"
+"    }\n"
+"    loaded = 1;\n"
+"    PyMutex_Unlock(&modinit_mutex);\n"
+"    // ... 初始化的其余部分"
 
 #: ../../howto/isolating-extensions.rst:240
 msgid ""
@@ -453,6 +472,10 @@ msgid ""
 "but it will, for example, support being loaded after Python runtime shutdown "
 "(:c:func:`Py_FinalizeEx`) and re-initialization (:c:func:`Py_Initialize`)."
 msgstr ""
+"如果你的模块的 :c:member:`PyModuleDef.m_clear` 函数能够为将来的重新初始化做好"
+"准备，它应当清除 ``loaded`` 旗标。 在此情况下，你的模块将不支持多个实例 *并发"
+"地* 存在，但举例来说，它将支持在 Python 运行时关闭 (:c:func:`Py_FinalizeEx`) "
+"和重新初始化 (:c:func:`Py_Initialize`) 之后被加载。"
 
 #: ../../howto/isolating-extensions.rst:249
 msgid "Module State Access from Functions"
