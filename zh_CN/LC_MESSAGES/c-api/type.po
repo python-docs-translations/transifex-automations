@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-23 14:20+0000\n"
+"POT-Creation-Date: 2025-05-30 14:22+0000\n"
 "PO-Revision-Date: 2021-06-28 00:50+0000\n"
 "Last-Translator: Freesand Leo <yuqinju@163.com>, 2025\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/python-doc/"
@@ -223,12 +223,17 @@ msgid ""
 "memory for a new instance, zeros the memory, then initializes the memory as "
 "if by calling :c:func:`PyObject_Init` or :c:func:`PyObject_InitVar`."
 msgstr ""
+"类型对象的 :c:member:`~PyTypeObject.tp_alloc` 槽位的通用处理器。 请使用 "
+"Python 的默认内存分配机制为新建的实例分配内存，向内存写入零值，然后初始化内存"
+"就如同调用了 :c:func:`PyObject_Init` 或 :c:func:`PyObject_InitVar` 一样。"
 
 #: ../../c-api/type.rst:159
 msgid ""
 "Do not call this directly to allocate memory for an object; call the type's :"
 "c:member:`~PyTypeObject.tp_alloc` slot instead."
 msgstr ""
+"请不要直接调用此函数为对象分配内存；而应调用类型的 :c:member:`~PyTypeObject."
+"tp_alloc` 槽位。"
 
 #: ../../c-api/type.rst:162
 msgid ""
@@ -241,6 +246,13 @@ msgid ""
 "the memory is guaranteed to be zeroed before initialization) and should be "
 "paired with :c:func:`PyObject_Free` in :c:member:`~PyTypeObject.tp_free`."
 msgstr ""
+"对于支持垃圾回收的类型（即设置了 :c:macro:`Py_TPFLAGS_HAVE_GC` 旗标），此函数"
+"的行为类似于 :c:macro:`PyObject_GC_New` 或 :c:macro:`PyObject_GC_NewVar` (不"
+"同之处在于内存在初始化之前会确保被写入零值)，并且应当与 :c:member:"
+"`~PyTypeObject.tp_free`中的 :c:func:`PyObject_GC_Del` 相对应。 在其他情况下，"
+"其行为像是 :c:macro:`PyObject_New` 或 :c:macro:`PyObject_NewVar` (不同之处在"
+"于内存在初始化之前会确保被写入零值) 并且应当与 :c:member:`~PyTypeObject."
+"tp_free` 中的 :c:func:`PyObject_Free` 相对应。"
 
 #: ../../c-api/type.rst:174
 msgid ""
@@ -248,6 +260,8 @@ msgid ""
 "object.  Creates a new instance using the type's :c:member:`~PyTypeObject."
 "tp_alloc` slot and returns the resulting object."
 msgstr ""
+"类型对象的 :c:member:`~PyTypeObject.tp_new` 槽位的通用处理器。 请使用类型的 :"
+"c:member:`~PyTypeObject.tp_alloc` 槽位来创建一个新的实例并返回结果对象。"
 
 #: ../../c-api/type.rst:180
 msgid ""
@@ -406,32 +420,39 @@ msgid ""
 "Find the first superclass in *type*'s :term:`method resolution order` whose :"
 "c:macro:`Py_tp_token` token is equal to the given one."
 msgstr ""
+"在 *type* 的 :term:`method resolution order` 中找到 :c:macro:`Py_tp_token` 凭"
+"据等于给定凭据的第一个超类。"
 
 #: ../../c-api/type.rst:292
 msgid ""
 "If found, set *\\*result* to a new :term:`strong reference` to it and return "
 "``1``."
 msgstr ""
+"如果找到，则将 *\\*result* 设为一个新的指向该值的 :term:`strong reference` 并"
+"返回 ``1``。"
 
 #: ../../c-api/type.rst:294
 msgid "If not found, set *\\*result* to ``NULL`` and return ``0``."
-msgstr ""
+msgstr "如果未找到，则将 *\\*result* 设为 ``NULL`` 并返回 ``0``。"
 
 #: ../../c-api/type.rst:295
 msgid ""
 "On error, set *\\*result* to ``NULL`` and return ``-1`` with an exception "
 "set."
 msgstr ""
+"当失败时，则将 *\\*result* 设为 ``NULL`` 并返回 ``-1`` 同时设置一个异常。"
 
 #: ../../c-api/type.rst:298
 msgid ""
 "The *result* argument may be ``NULL``, in which case *\\*result* is not set. "
 "Use this if you need only the return value."
 msgstr ""
+"*result* 参数可能为 ``NULL``，在此情况下将不设置 *\\*result*。 如果你只需要返"
+"回值则可以这样做。"
 
 #: ../../c-api/type.rst:301
 msgid "The *token* argument may not be ``NULL``."
-msgstr ""
+msgstr "*token* 参数不可为 ``NULL``。"
 
 #: ../../c-api/type.rst:307
 msgid "Attempt to assign a version tag to the given type."
@@ -760,7 +781,7 @@ msgstr ""
 
 #: ../../c-api/type.rst:545
 msgid ":c:data:`Py_tp_token`"
-msgstr ""
+msgstr ":c:data:`Py_tp_token`"
 
 #: ../../c-api/type.rst:547
 msgid ""
@@ -805,7 +826,7 @@ msgstr ""
 #: ../../c-api/type.rst:563
 msgid ""
 "The following internal fields cannot be set at all when creating a heap type:"
-msgstr ""
+msgstr "以下内部字段在创建堆类型时完全不可设置："
 
 #: ../../c-api/type.rst:566
 msgid ""
@@ -813,6 +834,9 @@ msgid ""
 "member:`~PyTypeObject.tp_cache`, :c:member:`~PyTypeObject.tp_subclasses`, "
 "and :c:member:`~PyTypeObject.tp_weaklist`."
 msgstr ""
+":c:member:`~PyTypeObject.tp_dict`, :c:member:`~PyTypeObject.tp_mro`, :c:"
+"member:`~PyTypeObject.tp_cache`, :c:member:`~PyTypeObject.tp_subclasses` 和 :"
+"c:member:`~PyTypeObject.tp_weaklist`。"
 
 #: ../../c-api/type.rst:572
 msgid ""
@@ -842,6 +866,8 @@ msgid ""
 "The field :c:member:`~PyTypeObject.tp_vectorcall` can now set using "
 "``Py_tp_vectorcall``.  See the field's documentation for details."
 msgstr ""
+"字段 :c:member:`~PyTypeObject.tp_vectorcall` 现在可使用 ``Py_tp_vectorcall`` "
+"来设置。 请参阅该字段的文档了解详情。"
 
 #: ../../c-api/type.rst:592
 msgid ""

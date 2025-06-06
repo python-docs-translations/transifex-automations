@@ -11,7 +11,7 @@
 # jaystone776 <1732865113@qq.com>, 2021
 # 高乐喆 <gaolezhe@outlook.com>, 2023
 # F-park, 2024
-# lian Wu (Wulian) <xiguawulian@gmail.com>, 2024
+# Wulian233 <xiguawulian@gmail.com>, 2024
 # Pan Felix <tinylambda@gmail.com>, 2024
 # Alpha Du <alphanow@gmail.com>, 2024
 # WH-2099 <wh2099@outlook.com>, 2025
@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-23 14:20+0000\n"
+"POT-Creation-Date: 2025-05-30 14:22+0000\n"
 "PO-Revision-Date: 2021-06-28 00:55+0000\n"
 "Last-Translator: Freesand Leo <yuqinju@163.com>, 2025\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/python-doc/"
@@ -1997,6 +1997,38 @@ msgid ""
 "    # Wait for the result with an optional timeout argument\n"
 "    assert future.result(timeout=2) == 3"
 msgstr ""
+"@contextlib.contextmanager\n"
+"def loop_in_thread() -> Generator[asyncio.AbstractEventLoop]:\n"
+"    loop_fut = concurrent.futures.Future[asyncio.AbstractEventLoop]()\n"
+"    stop_event = asyncio.Event()\n"
+"\n"
+"    async def main() -> None:\n"
+"        loop_fut.set_result(asyncio.get_running_loop())\n"
+"        await stop_event.wait()\n"
+"\n"
+"    with concurrent.futures.ThreadPoolExecutor(1) as tpe:\n"
+"        complete_fut = tpe.submit(asyncio.run, main())\n"
+"        for fut in concurrent.futures.as_completed((loop_fut, "
+"complete_fut)):\n"
+"            if fut is loop_fut:\n"
+"                loop = loop_fut.result()\n"
+"                try:\n"
+"                    yield loop\n"
+"                finally:\n"
+"                    loop.call_soon_threadsafe(stop_event.set)\n"
+"            else:\n"
+"                fut.result()\n"
+"\n"
+"# 在另一线程中创建循环\n"
+"with loop_in_thread() as loop:\n"
+"    # 创建一个协程\n"
+"    coro = asyncio.sleep(1, result=3)\n"
+"\n"
+"    # 将协程提交至给定的循环\n"
+"    future = asyncio.run_coroutine_threadsafe(coro, loop)\n"
+"\n"
+"    # 附带可选的超时参数等待结果\n"
+"    assert future.result(timeout=2) == 3"
 
 #: ../../library/asyncio-task.rst:1141
 msgid ""

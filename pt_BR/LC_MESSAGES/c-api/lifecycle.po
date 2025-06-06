@@ -5,16 +5,16 @@
 #
 # Translators:
 # Claudio Rogerio Carvalho Filho <excriptbrasil@gmail.com>, 2025
+# Rafael Fontenelle <rffontenelle@gmail.com>, 2025
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-23 14:20+0000\n"
+"POT-Creation-Date: 2025-06-06 14:20+0000\n"
 "PO-Revision-Date: 2025-05-23 14:21+0000\n"
-"Last-Translator: Claudio Rogerio Carvalho Filho <excriptbrasil@gmail.com>, "
-"2025\n"
+"Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>, 2025\n"
 "Language-Team: Portuguese (Brazil) (https://app.transifex.com/python-doc/"
 "teams/5390/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,7 @@ msgstr ""
 
 #: ../../c-api/lifecycle.rst:6
 msgid "Object Life Cycle"
-msgstr ""
+msgstr "Ciclo de vida do objeto"
 
 #: ../../c-api/lifecycle.rst:8
 msgid ""
@@ -35,10 +35,14 @@ msgid ""
 "for the slots; instead, refer to the slot-specific documentation in :ref:"
 "`type-structs` for details about a particular slot."
 msgstr ""
+"Esta seção explica como os slots de um tipo se relacionam entre si ao longo "
+"da vida de um objeto. Não se destina a ser uma referência canônica completa "
+"para os slots; em vez disso, consulte a documentação específica do slot em :"
+"ref:`type-structs` para obter detalhes sobre um slot específico."
 
 #: ../../c-api/lifecycle.rst:15
 msgid "Life Events"
-msgstr ""
+msgstr "Eventos de vida"
 
 #: ../../c-api/lifecycle.rst:17
 msgid ""
@@ -47,48 +51,57 @@ msgid ""
 "occur after event *A* has occurred, with the arrow's label indicating the "
 "condition that must be true for *B* to occur after *A*."
 msgstr ""
+"A figura abaixo ilustra a ordem dos eventos que podem ocorrer ao longo da "
+"vida de um objeto. Uma seta de *A* para *B* indica que o evento *B* pode "
+"ocorrer após a ocorrência do evento *A*, com o rótulo da seta indicando a "
+"condição que deve ser verdadeira para que *B* ocorra após *A*."
 
-#: ../../c-api/lifecycle.rst:55 ../../c-api/lifecycle.rst:63
-msgid ""
-"Diagram showing events in an object's life.  Explained in detail\n"
-"below."
+#: ../../c-api/lifecycle.rst:55 ../../c-api/lifecycle.rst:62
+msgid "Diagram showing events in an object's life.  Explained in detail below."
 msgstr ""
+
+#: ../../c-api/lifecycle.rst:70
+msgid "Explanation:"
+msgstr "Explicação:"
 
 #: ../../c-api/lifecycle.rst:72
-msgid "Explanation:"
-msgstr ""
+msgid "When a new object is constructed by calling its type:"
+msgstr "Quando um novo objeto é construído chamando seu tipo:"
 
 #: ../../c-api/lifecycle.rst:74
-msgid "When a new object is constructed by calling its type:"
-msgstr ""
-
-#: ../../c-api/lifecycle.rst:76
 msgid ":c:member:`~PyTypeObject.tp_new` is called to create a new object."
-msgstr ""
+msgstr ":c:member:`~PyTypeObject.tp_new` é chamado para criar um novo objeto."
 
-#: ../../c-api/lifecycle.rst:77
+#: ../../c-api/lifecycle.rst:75
 msgid ""
 ":c:member:`~PyTypeObject.tp_alloc` is directly called by :c:member:"
 "`~PyTypeObject.tp_new` to allocate the memory for the new object."
 msgstr ""
+":c:member:`~PyTypeObject.tp_alloc` é chamado diretamente por :c:member:"
+"`~PyTypeObject.tp_new` para alocar a memória para o novo objeto."
 
-#: ../../c-api/lifecycle.rst:80
+#: ../../c-api/lifecycle.rst:78
 msgid ""
 ":c:member:`~PyTypeObject.tp_init` initializes the newly created object. :c:"
 "member:`!tp_init` can be called again to re-initialize an object, if "
 "desired. The :c:member:`!tp_init` call can also be skipped entirely, for "
 "example by Python code calling :py:meth:`~object.__new__`."
 msgstr ""
+":c:member:`~PyTypeObject.tp_init` inicializa o objeto recém-criado. :c:"
+"member:`!tp_init` pode ser chamado novamente para reinicializar um objeto, "
+"se desejado. A chamada DE :c:member:`!tp_init` também pode ser completamente "
+"ignorada, por exemplo, com código Python chamando :py:meth:`~object.__new__`."
 
-#: ../../c-api/lifecycle.rst:85
+#: ../../c-api/lifecycle.rst:83
 msgid "After :c:member:`!tp_init` completes, the object is ready to use."
 msgstr ""
+"Após a conclusão de :c:member:`!tp_init`, o objeto estará pronto para uso."
+
+#: ../../c-api/lifecycle.rst:84
+msgid "Some time after the last reference to an object is removed:"
+msgstr "Algum tempo após a última referência a um objeto ser removida:"
 
 #: ../../c-api/lifecycle.rst:86
-msgid "Some time after the last reference to an object is removed:"
-msgstr ""
-
-#: ../../c-api/lifecycle.rst:88
 msgid ""
 "If an object is not marked as *finalized*, it might be finalized by marking "
 "it as *finalized* and calling its :c:member:`~PyTypeObject.tp_finalize` "
@@ -96,30 +109,48 @@ msgid ""
 "it is deleted; use :c:func:`PyObject_CallFinalizerFromDealloc` to ensure "
 "that :c:member:`~PyTypeObject.tp_finalize` is always called."
 msgstr ""
+"Se um objeto não estiver marcado como *finalizado*, ele poderá ser "
+"finalizado marcando-o como *finalizado* e chamando sua função :c:member:"
+"`~PyTypeObject.tp_finalize`. O Python *não* finaliza um objeto quando a "
+"última referência a ele é excluída; use :c:func:"
+"`PyObject_CallFinalizerFromDealloc` para garantir que :c:member:"
+"`~PyTypeObject.tp_finalize` seja sempre chamado."
 
-#: ../../c-api/lifecycle.rst:94
+#: ../../c-api/lifecycle.rst:92
 msgid ""
 "If the object is marked as finalized, :c:member:`~PyTypeObject.tp_clear` "
 "might be called by the garbage collector to clear references held by the "
 "object.  It is *not* called when the object's reference count reaches zero."
 msgstr ""
+"Se o objeto estiver marcado como finalizado, :c:member:`~PyTypeObject."
+"tp_clear` poderá ser chamado pelo coletor de lixo para limpar as referências "
+"mantidas pelo objeto. Ele *não* é chamado quando a contagem de referências "
+"do objeto chega a zero."
 
-#: ../../c-api/lifecycle.rst:98
+#: ../../c-api/lifecycle.rst:96
 msgid ""
 ":c:member:`~PyTypeObject.tp_dealloc` is called to destroy the object. To "
 "avoid code duplication, :c:member:`~PyTypeObject.tp_dealloc` typically calls "
 "into :c:member:`~PyTypeObject.tp_clear` to free up the object's references."
 msgstr ""
+":c:member:`~PyTypeObject.tp_dealloc` é chamado para destruir o objeto. Para "
+"evitar duplicação de código, :c:member:`~PyTypeObject.tp_dealloc` "
+"normalmente chama :c:member:`~PyTypeObject.tp_clear` para liberar as "
+"referências do objeto."
 
-#: ../../c-api/lifecycle.rst:102
+#: ../../c-api/lifecycle.rst:100
 msgid ""
 "When :c:member:`~PyTypeObject.tp_dealloc` finishes object destruction, it "
 "directly calls :c:member:`~PyTypeObject.tp_free` (usually set to :c:func:"
 "`PyObject_Free` or :c:func:`PyObject_GC_Del` automatically as appropriate "
 "for the type) to deallocate the memory."
 msgstr ""
+"Quando :c:member:`~PyTypeObject.tp_dealloc` termina a destruição do objeto, "
+"ele chama diretamente :c:member:`~PyTypeObject.tp_free` (geralmente definido "
+"como :c:func:`PyObject_Free` ou :c:func:`PyObject_GC_Del` automaticamente, "
+"conforme apropriado para o tipo) para desalocar a memória."
 
-#: ../../c-api/lifecycle.rst:107
+#: ../../c-api/lifecycle.rst:105
 msgid ""
 "The :c:member:`~PyTypeObject.tp_finalize` function is permitted to add a "
 "reference to the object if desired.  If it does, the object is "
@@ -133,8 +164,19 @@ msgid ""
 "remove the mark if the object does not support garbage collection; either or "
 "both of these behaviors may change in the future."
 msgstr ""
+"A função :c:member:`~PyTypeObject.tp_finalize` tem permissão para adicionar "
+"uma referência ao objeto, se desejado. Se isso acontecer, o objeto será "
+"*ressuscitado*, impedindo sua destruição pendente. (Somente :c:member:`!"
+"tp_finalize` tem permissão para ressuscitar um objeto; :c:member:"
+"`~PyTypeObject.tp_clear` e :c:member:`~PyTypeObject.tp_dealloc` não podem "
+"sem chamar :c:member:`!tp_finalize`.) Ressuscitar um objeto pode ou não "
+"causar a remoção da marca *finalizado* do objeto. Atualmente, o Python não "
+"remove a marca *finalizado* de um objeto ressuscitado se ele suportar coleta "
+"de lixo (ou seja, o sinalizador :c:macro:`Py_TPFLAGS_HAVE_GC` estiver "
+"definido), mas remove a marca se o objeto não suportar coleta de lixo; "
+"qualquer um ou ambos os comportamentos podem mudar no futuro."
 
-#: ../../c-api/lifecycle.rst:120
+#: ../../c-api/lifecycle.rst:118
 msgid ""
 ":c:member:`~PyTypeObject.tp_dealloc` can optionally call :c:member:"
 "`~PyTypeObject.tp_finalize` via :c:func:`PyObject_CallFinalizerFromDealloc` "
@@ -143,8 +185,14 @@ msgid ""
 "called before destruction.  See the :c:member:`~PyTypeObject.tp_dealloc` "
 "documentation for example code."
 msgstr ""
+":c:member:`~PyTypeObject.tp_dealloc` pode opcionalmente chamar :c:member:"
+"`~PyTypeObject.tp_finalize` via :c:func:`PyObject_CallFinalizerFromDealloc` "
+"se desejar reutilizar esse código para auxiliar na destruição de objetos. "
+"Isso é recomendado porque garante que :c:member:`!tp_finalize` seja sempre "
+"chamado antes da destruição. Consulte a documentação de :c:member:"
+"`~PyTypeObject.tp_dealloc` para obter um exemplo de código."
 
-#: ../../c-api/lifecycle.rst:127
+#: ../../c-api/lifecycle.rst:125
 msgid ""
 "If the object is a member of a :term:`cyclic isolate` and either :c:member:"
 "`~PyTypeObject.tp_clear` fails to break the reference cycle or the cyclic "
@@ -153,21 +201,32 @@ msgid ""
 "involved types), the objects remain indefinitely uncollectable (they "
 "\"leak\").  See :data:`gc.garbage`."
 msgstr ""
+"Se o objeto for membro de um :term:`isolado cíclico` e :c:member:"
+"`~PyTypeObject.tp_clear` não conseguir interromper o ciclo de referência ou "
+"o isolado cíclico não for detectado (talvez :func:`gc.disable` tenha sido "
+"chamado ou o sinalizador :c:macro:`Py_TPFLAGS_HAVE_GC` tenha sido omitido "
+"erroneamente em um dos tipos envolvidos), os objetos permanecerão "
+"indefinidamente não coletáveis ​​(eles \"vazam\"). Veja :data:`gc.garbage`."
 
-#: ../../c-api/lifecycle.rst:134
+#: ../../c-api/lifecycle.rst:132
 msgid ""
 "If the object is marked as supporting garbage collection (the :c:macro:"
 "`Py_TPFLAGS_HAVE_GC` flag is set in :c:member:`~PyTypeObject.tp_flags`), the "
 "following events are also possible:"
 msgstr ""
+"Se o objeto for marcado como compatível com coleta de lixo (o sinalizador :c:"
+"macro:`Py_TPFLAGS_HAVE_GC` estiver definido em :c:member:`~PyTypeObject."
+"tp_flags`), os seguintes eventos também serão possíveis:"
 
-#: ../../c-api/lifecycle.rst:138
+#: ../../c-api/lifecycle.rst:136
 msgid ""
 "The garbage collector occasionally calls :c:member:`~PyTypeObject."
 "tp_traverse` to identify :term:`cyclic isolates <cyclic isolate>`."
 msgstr ""
+"O coletor de lixo ocasionalmente chama :c:member:`~PyTypeObject.tp_traverse` "
+"para identificar :term:`isolados cíclicos <cyclic isolate>`."
 
-#: ../../c-api/lifecycle.rst:141
+#: ../../c-api/lifecycle.rst:139
 msgid ""
 "When the garbage collector discovers a :term:`cyclic isolate`, it finalizes "
 "one of the objects in the group by marking it as *finalized* and calling "
@@ -175,8 +234,12 @@ msgid ""
 "repeats until the cyclic isolate doesn't exist or all of the objects have "
 "been finalized."
 msgstr ""
+"Quando o coletor de lixo descobre um :term:`isolado cíclico`, ele finaliza "
+"um dos objetos do grupo marcando-o como *finalizado* e chamando sua função :"
+"c:member:`~PyTypeObject.tp_finalize`, se houver. Isso se repete até que o "
+"isolado cíclico não exista mais ou todos os objetos tenham sido finalizados."
 
-#: ../../c-api/lifecycle.rst:146
+#: ../../c-api/lifecycle.rst:144
 msgid ""
 ":c:member:`~PyTypeObject.tp_finalize` is permitted to resurrect the object "
 "by adding a reference from outside the :term:`cyclic isolate`.  The new "
@@ -184,8 +247,13 @@ msgid ""
 "(the reference cycle may still exist, but if it does the objects are no "
 "longer isolated)."
 msgstr ""
+":c:member:`~PyTypeObject.tp_finalize` tem permissão para ressuscitar o "
+"objeto adicionando uma referência externa ao :term:`isolado cíclico`. A nova "
+"referência faz com que o grupo de objetos não forme mais um isolado cíclico "
+"(o ciclo de referência ainda pode existir, mas se existir, os objetos não "
+"estarão mais isolados)."
 
-#: ../../c-api/lifecycle.rst:151
+#: ../../c-api/lifecycle.rst:149
 msgid ""
 "When the garbage collector discovers a :term:`cyclic isolate` and all of the "
 "objects in the group have already been marked as *finalized*, the garbage "
@@ -194,12 +262,18 @@ msgid ""
 "function.  This repeats as long as the cyclic isolate still exists and not "
 "all of the objects have been cleared."
 msgstr ""
+"Quando o coletor de lixo descobre um :term:`isolado cíclico` e todos os "
+"objetos do grupo já foram marcados como *finalizados*, o coletor de lixo "
+"limpa um ou mais objetos não limpos no grupo (possivelmente simultaneamente) "
+"chamando a função :c:member:`~PyTypeObject.tp_clear` de cada um. Isso se "
+"repete enquanto o isolado cíclico ainda existir e nem todos os objetos "
+"tiverem sido limpos."
+
+#: ../../c-api/lifecycle.rst:158
+msgid "Cyclic Isolate Destruction"
+msgstr "Destruição de isolado cíclico"
 
 #: ../../c-api/lifecycle.rst:160
-msgid "Cyclic Isolate Destruction"
-msgstr ""
-
-#: ../../c-api/lifecycle.rst:162
 msgid ""
 "Listed below are the stages of life of a hypothetical :term:`cyclic isolate` "
 "that continues to exist after each member object is finalized or cleared.  "
@@ -209,15 +283,26 @@ msgid ""
 "because the objects are no longer isolated due to finalizer resurrection "
 "(see :c:member:`~PyTypeObject.tp_finalize`)."
 msgstr ""
+"Abaixo estão listados os estágios de vida de um :term:`isolado cíclico` "
+"hipotético que continua a existir após cada objeto membro ser finalizado ou "
+"limpo. É um vazamento de memória se um isolado cíclico passar por todos "
+"esses estágios; ele deve desaparecer assim que todos os objetos forem "
+"limpos, ou até mesmo antes. Um isolado cíclico pode desaparecer porque o "
+"ciclo de referência foi quebrado ou porque os objetos não estão mais "
+"isolados devido à ressurreição do finalizador (veja :c:member:`~PyTypeObject."
+"tp_finalize`)."
 
-#: ../../c-api/lifecycle.rst:170
+#: ../../c-api/lifecycle.rst:168
 msgid ""
 "**Reachable** (not yet a cyclic isolate): All objects are in their normal, "
 "reachable state.  A reference cycle could exist, but an external reference "
 "means the objects are not yet isolated."
 msgstr ""
+"**Alcançável** (ainda não é um isolado cíclico): Todos os objetos estão em "
+"seu estado normal e acessível. Um ciclo de referência pode existir, mas uma "
+"referência externa significa que os objetos ainda não estão isolados."
 
-#: ../../c-api/lifecycle.rst:173
+#: ../../c-api/lifecycle.rst:171
 msgid ""
 "**Unreachable but consistent:** The final reference from outside the cyclic "
 "group of objects has been removed, causing the objects to become isolated "
@@ -226,8 +311,14 @@ msgid ""
 "some future run of the garbage collector (not necessarily the next run "
 "because the next run might not scan every object)."
 msgstr ""
+"**Inalcançável, mas consistente:** A referência final de fora do grupo "
+"cíclico de objetos foi removida, causando o isolado dos objetos (criando "
+"assim um isolado cíclico). Nenhum dos objetos do grupo foi finalizado ou "
+"limpo ainda. O isolado cíclico permanece neste estágio até alguma execução "
+"futura do coletor de lixo (não necessariamente a próxima execução, pois a "
+"próxima execução pode não varrer todos os objetos)."
 
-#: ../../c-api/lifecycle.rst:179
+#: ../../c-api/lifecycle.rst:177
 msgid ""
 "**Mix of finalized and not finalized:** Objects in a cyclic isolate are "
 "finalized one at a time, which means that there is a period of time when the "
@@ -237,22 +328,37 @@ msgid ""
 "it, and a non-finalized object must be able to tolerate the finalization of "
 "an arbitrary subset of its referents."
 msgstr ""
+"**Mistura de finalizados e não finalizados:** Objetos em um isolado cíclico "
+"são finalizados um de cada vez, o que significa que há um período em que o "
+"isolado cíclico é composto por uma mistura de objetos finalizados e não "
+"finalizados. A ordem de finalização não é especificada, portanto, pode "
+"parecer aleatória. Um objeto finalizado deve se comportar de maneira sensata "
+"quando objetos não finalizados interagem com ele, e um objeto não finalizado "
+"deve ser capaz de tolerar a finalização de um subconjunto arbitrário de seus "
+"referentes."
 
-#: ../../c-api/lifecycle.rst:186
+#: ../../c-api/lifecycle.rst:184
 msgid ""
 "**All finalized:** All objects in a cyclic isolate are finalized before any "
 "of them are cleared."
 msgstr ""
+"**Todos finalizados:** todos os objetos em um isolado cíclico são "
+"finalizados antes que qualquer um deles seja limpo."
 
-#: ../../c-api/lifecycle.rst:188
+#: ../../c-api/lifecycle.rst:186
 msgid ""
 "**Mix of finalized and cleared:** The objects can be cleared serially or "
 "concurrently (but with the :term:`GIL` held); either way, some will finish "
 "before others.  A finalized object must be able to tolerate the clearing of "
 "a subset of its referents.  :pep:`442` calls this stage \"cyclic trash\"."
 msgstr ""
+"**Combinação de finalizado e limpo:** Os objetos podem ser limpos em série "
+"ou simultaneamente (mas com a :term:`GIL` mantida); de qualquer forma, "
+"alguns serão concluídos antes de outros. Um objeto finalizado deve ser capaz "
+"de tolerar a limpeza de um subconjunto de seus referentes. :pep:`442` chama "
+"essa etapa de \"lixo cíclico\"."
 
-#: ../../c-api/lifecycle.rst:192
+#: ../../c-api/lifecycle.rst:190
 msgid ""
 "**Leaked:** If a cyclic isolate still exists after all objects in the group "
 "have been finalized and cleared, then the objects remain indefinitely "
@@ -261,8 +367,14 @@ msgid ""
 "of the participating objects have failed to break the reference cycle as "
 "required."
 msgstr ""
+"**Vazamento:** Se um isolado cíclico ainda existir após todos os objetos do "
+"grupo terem sido finalizados e limpos, os objetos permanecerão "
+"indefinidamente não coletáveis ​​(consulte :data:`gc.garbage`). É um bug se um "
+"isolado cíclico atingir esse estágio --- significa que os métodos :c:member:"
+"`~PyTypeObject.tp_clear` dos objetos participantes falharam em interromper o "
+"ciclo de referência conforme necessário."
 
-#: ../../c-api/lifecycle.rst:199
+#: ../../c-api/lifecycle.rst:197
 msgid ""
 "If :c:member:`~PyTypeObject.tp_clear` did not exist, then Python would have "
 "no way to safely break a reference cycle.  Simply destroying an object in a "
@@ -273,8 +385,17 @@ msgid ""
 "objects enough to detangle them from each other, then :c:member:"
 "`~PyTypeObject.tp_dealloc` is called to complete the destruction."
 msgstr ""
+"Se :c:member:`~PyTypeObject.tp_clear` não existisse, o Python não teria como "
+"interromper com segurança um ciclo de referência. A simples destruição de um "
+"objeto em um isolado cíclico resultaria em um ponteiro pendente, "
+"desencadeando um comportamento indefinido quando um objeto que referencia o "
+"objeto destruído é destruído. A etapa de limpeza torna a destruição de "
+"objetos um processo de duas fases: primeiro, :c:member:`~PyTypeObject."
+"tp_clear` é chamado para destruir parcialmente os objetos o suficiente para "
+"desvinculá-los uns dos outros; em seguida, :c:member:`~PyTypeObject."
+"tp_dealloc` é chamado para completar a destruição."
 
-#: ../../c-api/lifecycle.rst:208
+#: ../../c-api/lifecycle.rst:206
 msgid ""
 "Unlike clearing, finalization is not a phase of destruction.  A finalized "
 "object must still behave properly by continuing to fulfill its design "
@@ -285,8 +406,16 @@ msgid ""
 "`~PyTypeObject.tp_clear` (if called) and concludes with :c:member:"
 "`~PyTypeObject.tp_dealloc`."
 msgstr ""
+"Ao contrário da limpeza, a finalização não é uma fase da destruição. Um "
+"objeto finalizado ainda deve se comportar corretamente, continuando a "
+"cumprir seus contratos de design. O finalizador de um objeto pode executar "
+"código Python arbitrário e até mesmo impedir a destruição iminente "
+"adicionando uma referência. O finalizador está relacionado à destruição "
+"apenas pela ordem de chamada — se for executado, será executado antes da "
+"destruição, que começa com :c:member:`~PyTypeObject.tp_clear` (se chamado) e "
+"termina com :c:member:`~PyTypeObject.tp_dealloc`."
 
-#: ../../c-api/lifecycle.rst:216
+#: ../../c-api/lifecycle.rst:214
 msgid ""
 "The finalization step is not necessary to safely reclaim the objects in a "
 "cyclic isolate, but its existence makes it easier to design types that "
@@ -297,30 +426,45 @@ msgid ""
 "with cleared objects; non-finalized objects are guaranteed to interact with "
 "only non-cleared (but potentially finalized) objects."
 msgstr ""
+"A etapa de finalização não é necessária para recuperar com segurança os "
+"objetos em um isolado cíclico, mas sua existência facilita o design de tipos "
+"que se comportam de maneira sensata quando os objetos são limpos. Limpar um "
+"objeto pode necessariamente deixá-lo em um estado quebrado, parcialmente "
+"destruído — pode ser inseguro chamar qualquer um dos métodos do objeto limpo "
+"ou acessar qualquer um de seus atributos. Com a finalização, apenas objetos "
+"finalizados podem interagir com objetos limpos; objetos não finalizados têm "
+"a garantia de interagir apenas com objetos não limpos (mas potencialmente "
+"finalizados)."
+
+#: ../../c-api/lifecycle.rst:223
+msgid "To summarize the possible interactions:"
+msgstr "Para resumir as interações possíveis:"
 
 #: ../../c-api/lifecycle.rst:225
-msgid "To summarize the possible interactions:"
-msgstr ""
-
-#: ../../c-api/lifecycle.rst:227
 msgid ""
 "A non-finalized object might have references to or from non-finalized and "
 "finalized objects, but not to or from cleared objects."
 msgstr ""
+"Um objeto não finalizado pode ter referências a ou de objetos não "
+"finalizados e finalizados, mas não a ou de objetos limpos."
 
-#: ../../c-api/lifecycle.rst:229
+#: ../../c-api/lifecycle.rst:227
 msgid ""
 "A finalized object might have references to or from non-finalized, "
 "finalized, and cleared objects."
 msgstr ""
+"Um objeto finalizado pode ter referências a ou de objetos não finalizados, "
+"finalizados e limpos."
 
-#: ../../c-api/lifecycle.rst:231
+#: ../../c-api/lifecycle.rst:229
 msgid ""
 "A cleared object might have references to or from finalized and cleared "
 "objects, but not to or from non-finalized objects."
 msgstr ""
+"Um objeto limpo pode ter referências a ou de objetos finalizados e limpos, "
+"mas não a ou de objetos não finalizados."
 
-#: ../../c-api/lifecycle.rst:234
+#: ../../c-api/lifecycle.rst:232
 msgid ""
 "Without any reference cycles, an object can be simply destroyed once its "
 "last reference is deleted; the finalization and clearing steps are not "
@@ -333,16 +477,26 @@ msgid ""
 "`~PyTypeObject.tp_clear` as needed to destroy a cyclic isolate; this may "
 "change in a future version."
 msgstr ""
+"Sem ciclos de referência, um objeto pode ser simplesmente destruído após a "
+"exclusão de sua última referência; as etapas de finalização e limpeza não "
+"são necessárias para recuperar objetos não utilizados com segurança. No "
+"entanto, pode ser útil chamar automaticamente :c:member:`~PyTypeObject."
+"tp_finalize` e :c:member:`~PyTypeObject.tp_clear` antes da destruição, pois "
+"o design de tipos é simplificado quando todos os objetos sempre experimentam "
+"a mesma série de eventos, independentemente de terem participado ou não de "
+"um isolado cíclico. Atualmente, o Python chama :c:member:`~PyTypeObject."
+"tp_finalize` e :c:member:`~PyTypeObject.tp_clear` apenas conforme necessário "
+"para destruir um isolado cíclico; isso pode mudar em uma versão futura."
 
-#: ../../c-api/lifecycle.rst:246
+#: ../../c-api/lifecycle.rst:244
 msgid "Functions"
 msgstr "Funções"
 
-#: ../../c-api/lifecycle.rst:248
+#: ../../c-api/lifecycle.rst:246
 msgid "To allocate and free memory, see :ref:`allocating-objects`."
-msgstr ""
+msgstr "Para alocar e liberar memória, consulte :ref:`allocating-objects`."
 
-#: ../../c-api/lifecycle.rst:253
+#: ../../c-api/lifecycle.rst:251
 msgid ""
 "Finalizes the object as described in :c:member:`~PyTypeObject.tp_finalize`. "
 "Call this function (or :c:func:`PyObject_CallFinalizerFromDealloc`) instead "
@@ -352,8 +506,16 @@ msgid ""
 "collection (i.e., the :c:macro:`Py_TPFLAGS_HAVE_GC` flag is set); this may "
 "change in the future."
 msgstr ""
+"Finaliza o objeto conforme descrito em :c:member:`~PyTypeObject."
+"tp_finalize`. Chame esta função (ou :c:func:"
+"`PyObject_CallFinalizerFromDealloc`) em vez de chamar :c:member:"
+"`~PyTypeObject.tp_finalize` diretamente, pois esta função pode desduplicar "
+"várias chamadas para :c:member:`!tp_finalize`. Atualmente, as chamadas são "
+"desduplicadas somente se o tipo oferecer suporte a coleta de lixo (ou seja, "
+"se o sinalizador :c:macro:`Py_TPFLAGS_HAVE_GC` estiver definido); isso pode "
+"mudar no futuro."
 
-#: ../../c-api/lifecycle.rst:264
+#: ../../c-api/lifecycle.rst:262
 msgid ""
 "Same as :c:func:`PyObject_CallFinalizer` but meant to be called at the "
 "beginning of the object's destructor (:c:member:`~PyTypeObject.tp_dealloc`). "
@@ -362,7 +524,13 @@ msgid ""
 "should happen.  Otherwise, this function returns 0 and destruction can "
 "continue normally."
 msgstr ""
+"O mesmo que :c:func:`PyObject_CallFinalizer`, mas deve ser chamado no início "
+"do destrutor do objeto (:c:member:`~PyTypeObject.tp_dealloc`). Não deve "
+"haver nenhuma referência ao objeto. Se o finalizador do objeto ressuscitar o "
+"objeto, esta função retornará -1; nenhuma outra destruição deverá ocorrer. "
+"Caso contrário, esta função retornará 0 e a destruição pode continuar "
+"normalmente."
 
-#: ../../c-api/lifecycle.rst:273
+#: ../../c-api/lifecycle.rst:271
 msgid ":c:member:`~PyTypeObject.tp_dealloc` for example code."
-msgstr ""
+msgstr ":c:member:`~PyTypeObject.tp_dealloc` para código de exemplo."
