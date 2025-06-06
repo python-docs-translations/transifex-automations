@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-30 15:38+0000\n"
+"POT-Creation-Date: 2025-06-06 15:34+0000\n"
 "PO-Revision-Date: 2024-05-11 00:33+0000\n"
 "Last-Translator: eulalio barbero espinosa <eulalio@disroot.org>, 2025\n"
 "Language-Team: Spanish (Spain) (https://app.transifex.com/python-doc/"
@@ -189,29 +189,31 @@ msgstr "Libera el cierre."
 
 #: ../../library/asyncio-sync.rst:89
 msgid "When the lock is *locked*, reset it to *unlocked* and return."
-msgstr ""
+msgstr "Cuando el seguro esté *locked*, restablécelo a *unlocked* y vuelve."
 
 #: ../../library/asyncio-sync.rst:91
 msgid "If the lock is *unlocked*, a :exc:`RuntimeError` is raised."
-msgstr ""
+msgstr "Si la cerradura está *desbloqueada*, aparece :exc:`RuntimeError`."
 
 #: ../../library/asyncio-sync.rst:95
 msgid "Return ``True`` if the lock is *locked*."
-msgstr ""
+msgstr "Devuelve ``True`` si el seguro está *bloqueado*."
 
 #: ../../library/asyncio-sync.rst:99
 msgid "Event"
-msgstr ""
+msgstr "Evento"
 
 #: ../../library/asyncio-sync.rst:103
 msgid "An event object.  Not thread-safe."
-msgstr ""
+msgstr "Un objeto de evento.  No es seguro para hilos."
 
 #: ../../library/asyncio-sync.rst:105
 msgid ""
 "An asyncio event can be used to notify multiple asyncio tasks that some "
 "event has happened."
 msgstr ""
+"Un evento asyncio se puede utilizar para notificar a múltiples tareas "
+"asyncio que ha ocurrido algún evento."
 
 #: ../../library/asyncio-sync.rst:108
 msgid ""
@@ -220,6 +222,11 @@ msgid ""
 "method.  The :meth:`~Event.wait` method blocks until the flag is set to "
 "*true*.  The flag is set to *false* initially."
 msgstr ""
+"Un objeto Event gestiona un indicador interno que se puede establecer en "
+"*true* con el método :meth:`~Event.set` y restablecer en *false* con el "
+"método :meth:`clear`.  El método :meth:`~Event.wait` se bloquea hasta que el "
+"indicador se establece en *true*.  El indicador se establece inicialmente en "
+"*false*."
 
 #: ../../library/asyncio-sync.rst:118 ../../library/asyncio-sync.rst:372
 msgid "Example::"
@@ -248,52 +255,81 @@ msgid ""
 "\n"
 "asyncio.run(main())"
 msgstr ""
+"async def waiter(event):\n"
+"        print('waiting for it ...')\n"
+"        await event.wait()\n"
+"        print('... got it!')\n"
+"\n"
+"async def main():\n"
+"    # Crea un objeto Event.\n"
+"    event = asyncio.Event()\n"
+"\n"
+"    # Crea una Task para esperar hasta que 'event' se active.\n"
+"    waiter_task = asyncio.create_task(waiter(event))\n"
+"\n"
+"    # Duerme durante 1 segundo y establece el evento.\n"
+"    await asyncio.sleep(1)\n"
+"    event.set()\n"
+"\n"
+"    # Espera a que la tarea waiter termine.\n"
+"    await waiter_task\n"
+"\n"
+"asyncio.run(main())"
 
 #: ../../library/asyncio-sync.rst:144
 msgid "Wait until the event is set."
-msgstr ""
+msgstr "Espere hasta que se active el evento."
 
 #: ../../library/asyncio-sync.rst:146
 msgid ""
 "If the event is set, return ``True`` immediately. Otherwise block until "
 "another task calls :meth:`~Event.set`."
 msgstr ""
+"Si se activa el evento, devuelve ``True`` inmediatamente. En caso contrario, "
+"bloquea hasta que otra tarea llame a :meth:`~Event.set`."
 
 #: ../../library/asyncio-sync.rst:151
 msgid "Set the event."
-msgstr ""
+msgstr "Fija el evento."
 
 #: ../../library/asyncio-sync.rst:153
 msgid "All tasks waiting for event to be set will be immediately awakened."
 msgstr ""
+"Todas las tareas que estén esperando a que se active el evento despertarán "
+"inmediatamente."
 
 #: ../../library/asyncio-sync.rst:158
 msgid "Clear (unset) the event."
-msgstr ""
+msgstr "Borra (anula) el evento."
 
 #: ../../library/asyncio-sync.rst:160
 msgid ""
 "Tasks awaiting on :meth:`~Event.wait` will now block until the :meth:`~Event."
 "set` method is called again."
 msgstr ""
+"Las tareas pendientes en :meth:`~Event.wait` se bloquearán ahora hasta que "
+"se vuelva a llamar al método :meth:`~Event.set`."
 
 #: ../../library/asyncio-sync.rst:165
 msgid "Return ``True`` if the event is set."
-msgstr ""
+msgstr "Devuelve ``True`` si el evento está activado."
 
 #: ../../library/asyncio-sync.rst:169
 msgid "Condition"
-msgstr ""
+msgstr "Condición"
 
 #: ../../library/asyncio-sync.rst:173
 msgid "A Condition object.  Not thread-safe."
-msgstr ""
+msgstr "Un objeto Condición.  No es seguro para hilos."
 
 #: ../../library/asyncio-sync.rst:175
 msgid ""
 "An asyncio condition primitive can be used by a task to wait for some event "
 "to happen and then get exclusive access to a shared resource."
 msgstr ""
+"Una primitiva de condición asyncio se puede utilizar por una tarea para "
+"esperar a que ocurra algún evento y luego obtener acceso exclusivo a un "
+"recurso compartido."
 
 #: ../../library/asyncio-sync.rst:179
 msgid ""
@@ -303,17 +339,26 @@ msgid ""
 "shared resource between different tasks interested in particular states of "
 "that shared resource."
 msgstr ""
+"En esencia, un objeto Condition combina la funcionalidad de un :class:"
+"`Event` y un :class:`Lock`. Es posible tener múltiples objetos Condition "
+"compartiendo un Lock, lo que permite coordinar el acceso exclusivo a un "
+"recurso compartido entre diferentes tareas interesadas en estados "
+"particulares de ese recurso compartido."
 
 #: ../../library/asyncio-sync.rst:185
 msgid ""
 "The optional *lock* argument must be a :class:`Lock` object or ``None``.  In "
 "the latter case a new Lock object is created automatically."
 msgstr ""
+"El argumento opcional *lock* debe ser un objeto :class:`Lock` o ``None``. En "
+"este último caso, se crea automáticamente un nuevo objeto Lock."
 
 #: ../../library/asyncio-sync.rst:192
 msgid ""
 "The preferred way to use a Condition is an :keyword:`async with` statement::"
 msgstr ""
+"La forma preferida de utilizar una condición es una declaración :keyword:"
+"`async with`::"
 
 #: ../../library/asyncio-sync.rst:195
 msgid ""
@@ -323,6 +368,11 @@ msgid ""
 "async with cond:\n"
 "    await cond.wait()"
 msgstr ""
+"cond = asyncio.Condition()\n"
+"\n"
+"# ... más tarde\n"
+"async with cond:\n"
+"    await cond.wait()"
 
 #: ../../library/asyncio-sync.rst:203
 msgid ""
@@ -335,22 +385,34 @@ msgid ""
 "finally:\n"
 "    cond.release()"
 msgstr ""
+"cond = asyncio.Condition()\n"
+"\n"
+"# ... más tarde\n"
+"await cond.adquirir()\n"
+"itry\n"
+"    await cond.wait()\n"
+"finally\n"
+"    cond.release()"
 
 #: ../../library/asyncio-sync.rst:215
 msgid "Acquire the underlying lock."
-msgstr ""
+msgstr "Adquiere el bloqueo subyacente."
 
 #: ../../library/asyncio-sync.rst:217
 msgid ""
 "This method waits until the underlying lock is *unlocked*, sets it to "
 "*locked* and returns ``True``."
 msgstr ""
+"Este método espera hasta que el bloqueo subyacente esté *unlocked*, lo "
+"establece en *locked* y devuelve ``True``."
 
 #: ../../library/asyncio-sync.rst:222
 msgid ""
 "Wake up at most *n* tasks (1 by default) waiting on this condition.  The "
 "method is no-op if no tasks are waiting."
 msgstr ""
+"Despierta como máximo *n* tareas (1 por defecto) en espera de esta "
+"condición.  El método no funciona si no hay tareas en espera."
 
 #: ../../library/asyncio-sync.rst:225 ../../library/asyncio-sync.rst:240
 msgid ""
@@ -358,36 +420,45 @@ msgid ""
 "after.  If called with an *unlocked* lock a :exc:`RuntimeError` error is "
 "raised."
 msgstr ""
+"El bloqueo debe adquirirse antes de llamar a este método y liberarse poco "
+"después.  Si se llama con un bloqueo *desbloqueado*, se produce un error :"
+"exc:`RuntimeError`."
 
 #: ../../library/asyncio-sync.rst:231
 msgid "Return ``True`` if the underlying lock is acquired."
-msgstr ""
+msgstr "Devuelve ``True`` si se adquiere el bloqueo subyacente."
 
 #: ../../library/asyncio-sync.rst:235
 msgid "Wake up all tasks waiting on this condition."
-msgstr ""
+msgstr "Despierta todas las tareas que esperan esta condición."
 
 #: ../../library/asyncio-sync.rst:237
 msgid "This method acts like :meth:`notify`, but wakes up all waiting tasks."
 msgstr ""
+"Este método actúa como :meth:`notify`, pero despierta todas las tareas en "
+"espera."
 
 #: ../../library/asyncio-sync.rst:246
 msgid "Release the underlying lock."
-msgstr ""
+msgstr "Libera el bloqueo subyacente."
 
 #: ../../library/asyncio-sync.rst:248
 msgid "When invoked on an unlocked lock, a :exc:`RuntimeError` is raised."
 msgstr ""
+"Cuando se invoca en una cerradura desbloqueada, se genera un :exc:"
+"`RuntimeError`."
 
 #: ../../library/asyncio-sync.rst:254
 msgid "Wait until notified."
-msgstr ""
+msgstr "Espere hasta que se le notifique."
 
 #: ../../library/asyncio-sync.rst:256
 msgid ""
 "If the calling task has not acquired the lock when this method is called, a :"
 "exc:`RuntimeError` is raised."
 msgstr ""
+"Si la tarea que llama no ha adquirido el bloqueo cuando se llama a este "
+"método, se lanza un :exc:`RuntimeError`."
 
 #: ../../library/asyncio-sync.rst:259
 msgid ""
@@ -395,10 +466,14 @@ msgid ""
 "awakened by a :meth:`notify` or :meth:`notify_all` call. Once awakened, the "
 "Condition re-acquires its lock and this method returns ``True``."
 msgstr ""
+"Este método libera el bloqueo subyacente y se bloquea hasta que se activa "
+"mediante una llamada a :meth:`notify` o :meth:`notify_all`. Una vez "
+"despertado, la Condición vuelve a adquirir su bloqueo y este método devuelve "
+"``True``."
 
 #: ../../library/asyncio-sync.rst:267
 msgid "Wait until a predicate becomes *true*."
-msgstr ""
+msgstr "Esperar a que un predicado sea *true*."
 
 #: ../../library/asyncio-sync.rst:269
 msgid ""
@@ -406,14 +481,17 @@ msgid ""
 "boolean value.  The method will repeatedly :meth:`~Condition.wait` until the "
 "predicate evaluates to *true*. The final value is the return value."
 msgstr ""
+"El predicado debe ser un callable cuyo resultado se interpretará como un "
+"valor booleano.  El método se repetirá en :meth:`~Condition.wait` hasta que "
+"el predicado se evalúe como *true*. El valor final es el valor de retorno."
 
 #: ../../library/asyncio-sync.rst:276
 msgid "Semaphore"
-msgstr ""
+msgstr "Semaphore"
 
 #: ../../library/asyncio-sync.rst:280
 msgid "A Semaphore object.  Not thread-safe."
-msgstr ""
+msgstr "Un objeto Semaphore.  No es seguro para hilos."
 
 #: ../../library/asyncio-sync.rst:282
 msgid ""
@@ -422,6 +500,10 @@ msgid ""
 "never go below zero; when :meth:`acquire` finds that it is zero, it blocks, "
 "waiting until some task calls :meth:`release`."
 msgstr ""
+"Un semáforo gestiona un contador interno que se decrece con cada llamada a :"
+"meth:`acquire` y se incrementa con cada llamada a :meth:`release`. El "
+"contador nunca puede bajar de cero; cuando :meth:`acquire` llega a cero, se "
+"bloquea, esperando que alguna tarea llame a :meth:`release`."
 
 #: ../../library/asyncio-sync.rst:288
 msgid ""
@@ -429,11 +511,16 @@ msgid ""
 "counter (``1`` by default). If the given value is less than ``0`` a :exc:"
 "`ValueError` is raised."
 msgstr ""
+"El argumento opcional *value* da el valor inicial para el contador interno "
+"(``1`` por defecto). Si el valor dado es menor que ``0`` se produce un :exc:"
+"`ValueError`."
 
 #: ../../library/asyncio-sync.rst:295
 msgid ""
 "The preferred way to use a Semaphore is an :keyword:`async with` statement::"
 msgstr ""
+"La forma preferida de utilizar un Semaphore es una declaración :keyword:"
+"`async with`::"
 
 #: ../../library/asyncio-sync.rst:298
 msgid ""
@@ -443,6 +530,11 @@ msgid ""
 "async with sem:\n"
 "    # work with shared resource"
 msgstr ""
+"sem = asyncio.Semaphore(10)\n"
+"\n"
+"# ... más tarde\n"
+"async with sem:\n"
+"    # trabajar con recurso compartido"
 
 #: ../../library/asyncio-sync.rst:306
 msgid ""
@@ -455,10 +547,18 @@ msgid ""
 "finally:\n"
 "    sem.release()"
 msgstr ""
+"sem = asyncio.Semaphore(10)\n"
+"\n"
+"# ... más tarde\n"
+"await sem.adquirir()\n"
+"try:\n"
+"    # trabajar con recurso compartido\n"
+"finally\n"
+"    sem.release()"
 
 #: ../../library/asyncio-sync.rst:318
 msgid "Acquire a semaphore."
-msgstr ""
+msgstr "Adquiere un semáforo."
 
 #: ../../library/asyncio-sync.rst:320
 msgid ""
@@ -466,30 +566,37 @@ msgid ""
 "``True`` immediately.  If it is zero, wait until a :meth:`release` is called "
 "and return ``True``."
 msgstr ""
+"Si el contador interno es mayor que cero, disminuye en uno y devuelve "
+"``True`` inmediatamente.  Si es cero, espere hasta que se llame a :meth:"
+"`release` y devuelva ``True``."
 
 #: ../../library/asyncio-sync.rst:326
 msgid "Returns ``True`` if semaphore can not be acquired immediately."
-msgstr ""
+msgstr "Devuelve ``True`` si el semáforo no puede adquirirse inmediatamente."
 
 #: ../../library/asyncio-sync.rst:330
 msgid ""
 "Release a semaphore, incrementing the internal counter by one. Can wake up a "
 "task waiting to acquire the semaphore."
 msgstr ""
+"Libera un semáforo, incrementando el contador interno en uno. Puede "
+"despertar una tarea en espera de adquirir el semáforo."
 
 #: ../../library/asyncio-sync.rst:333
 msgid ""
 "Unlike :class:`BoundedSemaphore`, :class:`Semaphore` allows making more "
 "``release()`` calls than ``acquire()`` calls."
 msgstr ""
+"A diferencia de :class:`BoundedSemaphore`, :class:`Semaphore` permite "
+"realizar más llamadas a ``release()`` que a ``acquire()``."
 
 #: ../../library/asyncio-sync.rst:338
 msgid "BoundedSemaphore"
-msgstr ""
+msgstr "BoundedSemaphore"
 
 #: ../../library/asyncio-sync.rst:342
 msgid "A bounded semaphore object.  Not thread-safe."
-msgstr ""
+msgstr "Un objeto semáforo limitado.  No es seguro para hilos."
 
 #: ../../library/asyncio-sync.rst:344
 msgid ""
@@ -497,14 +604,17 @@ msgid ""
 "`ValueError` in :meth:`~Semaphore.release` if it increases the internal "
 "counter above the initial *value*."
 msgstr ""
+"Bounded Semaphore es una versión de :class:`Semaphore` que lanza un :exc:"
+"`ValueError` en :meth:`~Semaphore.release` si incrementa el contador interno "
+"por encima del *valor* inicial."
 
 #: ../../library/asyncio-sync.rst:353
 msgid "Barrier"
-msgstr ""
+msgstr "Barrera"
 
 #: ../../library/asyncio-sync.rst:357
 msgid "A barrier object.  Not thread-safe."
-msgstr ""
+msgstr "Un objeto barrera.  No es seguro para hilos."
 
 #: ../../library/asyncio-sync.rst:359
 msgid ""
@@ -514,16 +624,24 @@ msgid ""
 "tasks end up waiting on :meth:`~Barrier.wait`. At that point all of the "
 "waiting tasks would unblock simultaneously."
 msgstr ""
+"Una barrera es una primitiva sincronización simple que permite bloquear "
+"hasta que el número de tareas *parties* estén esperando en ella. Las tareas "
+"pueden esperar en el método :meth:`~Barrier.wait` y se bloquearían hasta que "
+"el número especificado de tareas terminara esperando en :meth:`~Barrier."
+"wait`. En ese momento todas las tareas en espera se desbloquearían "
+"simultáneamente."
 
 #: ../../library/asyncio-sync.rst:365
 msgid ""
 ":keyword:`async with` can be used as an alternative to awaiting on :meth:"
 "`~Barrier.wait`."
 msgstr ""
+":keyword:`async with` puede utilizarse como alternativa a awaiting en :meth:"
+"`~Barrier.wait`."
 
 #: ../../library/asyncio-sync.rst:368
 msgid "The barrier can be reused any number of times."
-msgstr ""
+msgstr "La barrera puede reutilizarse tantas veces como se desee."
 
 #: ../../library/asyncio-sync.rst:374
 msgid ""
@@ -548,10 +666,30 @@ msgid ""
 "\n"
 "asyncio.run(example_barrier())"
 msgstr ""
+"async def example_barrier():\n"
+"   # barrera con 3 partes\n"
+"   b = asyncio.Barrier(3)\n"
+"\n"
+"   # crear 2 nuevas tareas de espera\n"
+"   asyncio.create_task(b.wait())\n"
+"   asyncio.create_task(b.wait())\n"
+"\n"
+"   await asyncio.sleep(0)\n"
+"   print(b)\n"
+"\n"
+"   # La tercera la llamada wait() pasa la barrera\n"
+"    espera a b. wai()\n"
+"   print(b)\n"
+"   print(\"barrier passed\")\n"
+"\n"
+"   await asyncio.sleep(0)\n"
+"   print(b)\n"
+"\n"
+"asyncio.run(example_barrier())"
 
 #: ../../library/asyncio-sync.rst:395
 msgid "Result of this example is::"
-msgstr ""
+msgstr "El resultado de este ejemplo es::"
 
 #: ../../library/asyncio-sync.rst:397
 msgid ""
@@ -560,12 +698,18 @@ msgid ""
 "barrier passed\n"
 "<asyncio.locks.Barrier object at 0x... [filling, waiters:0/3]>"
 msgstr ""
+"<asyncio.locks.Barrier object at 0x... [filling, waiters:2/3]>\n"
+"<asyncio.locks.Barrier object at 0x... [draining, waiters:0/3]>\n"
+"barrier passed\n"
+"<asyncio.locks.Barrier object at 0x... [filling, waiters:0/3]>"
 
 #: ../../library/asyncio-sync.rst:407
 msgid ""
 "Pass the barrier. When all the tasks party to the barrier have called this "
 "function, they are all unblocked simultaneously."
 msgstr ""
+"Pasar la barrera. Cuando todas las tareas que forman parte de la barrera han "
+"llamado a esta función, todas se desbloquean simultáneamente."
 
 #: ../../library/asyncio-sync.rst:410
 msgid ""
@@ -573,6 +717,9 @@ msgid ""
 "the barrier which stays in the same state. If the state of the barrier is "
 "\"filling\", the number of waiting task decreases by 1."
 msgstr ""
+"Cuando se cancela una tarea en espera o bloqueada en la barrera, esta tarea "
+"sale de la barrera que permanece en el mismo estado. Si el estado de la "
+"barrera es \"filling\", el número de tareas en espera disminuye en 1."
 
 #: ../../library/asyncio-sync.rst:415
 msgid ""
@@ -580,6 +727,9 @@ msgid ""
 "for each task. This can be used to select a task to do some special "
 "housekeeping, e.g.::"
 msgstr ""
+"El valor de retorno es un entero en el rango de 0 a ``parties-1``, diferente "
+"para cada tarea. Esto se puede utilizar para seleccionar una tarea para "
+"hacer algunas tareas domésticas especiales, por ejemplo::"
 
 #: ../../library/asyncio-sync.rst:419
 msgid ""
@@ -589,6 +739,11 @@ msgid ""
 "      # Only one task prints this\n"
 "      print('End of *draining phase*')"
 msgstr ""
+"...\n"
+"async with barrier as position:\n"
+"   if position == 0:\n"
+"      # Solo una tarea imprime esto\n"
+"      print('End of *draining phase*')"
 
 #: ../../library/asyncio-sync.rst:425
 msgid ""
@@ -596,18 +751,23 @@ msgid ""
 "is broken or reset while a task is waiting. It could raise a :exc:"
 "`CancelledError` if a task is cancelled."
 msgstr ""
+"Este método puede lanzar una excepción :class:`BrokenBarrierError` si la "
+"barrera se rompe o se reinicia mientras una tarea está esperando. Podría "
+"lanzar un :exc:`CancelledError` si se cancela una tarea."
 
 #: ../../library/asyncio-sync.rst:432
 msgid ""
 "Return the barrier to the default, empty state.  Any tasks waiting on it "
 "will receive the :class:`BrokenBarrierError` exception."
 msgstr ""
+"Devuelve la barrera al estado vacío por defecto.  Cualquier tarea que esté "
+"esperando en ella recibirá la excepción :class:`BrokenBarrierError`."
 
 #: ../../library/asyncio-sync.rst:435
 msgid ""
 "If a barrier is broken it may be better to just leave it and create a new "
 "one."
-msgstr ""
+msgstr "Si se rompe una barrera, puede ser mejor dejarla y crear una nueva."
 
 #: ../../library/asyncio-sync.rst:440
 msgid ""
@@ -616,24 +776,31 @@ msgid ""
 "this for example if one of the tasks needs to abort, to avoid infinite "
 "waiting tasks."
 msgstr ""
+"Poner la barrera en un estado roto.  Esto hace que cualquier llamada activa "
+"o futura a :meth:`~Barrier.wait` falle con el :class:`BrokenBarrierError`. "
+"Usa esto por ejemplo si una de las tareas necesita abortar, para evitar "
+"tareas en espera infinita."
 
 #: ../../library/asyncio-sync.rst:447
 msgid "The number of tasks required to pass the barrier."
-msgstr ""
+msgstr "El número de tareas necesarias para superar la barrera."
 
 #: ../../library/asyncio-sync.rst:451
 msgid "The number of tasks currently waiting in the barrier while filling."
 msgstr ""
+"El número de tareas que esperan actualmente en la barrera mientras se llena."
 
 #: ../../library/asyncio-sync.rst:455
 msgid "A boolean that is ``True`` if the barrier is in the broken state."
-msgstr ""
+msgstr "Un booleano que es ``True`` si la barrera está en estado roto."
 
 #: ../../library/asyncio-sync.rst:460
 msgid ""
 "This exception, a subclass of :exc:`RuntimeError`, is raised when the :class:"
 "`Barrier` object is reset or broken."
 msgstr ""
+"Esta excepción, una subclase de :exc:`RuntimeError`, se lanza cuando el "
+"objeto :class:`Barrier` se reinicia o se rompe."
 
 #: ../../library/asyncio-sync.rst:468
 msgid ""
@@ -641,3 +808,6 @@ msgid ""
 "`with` statement (``with await lock``, ``with (yield from lock)``) was "
 "removed.  Use ``async with lock`` instead."
 msgstr ""
+"Se ha eliminado la adquisición de un bloqueo mediante ``await lock`` o "
+"``yield from lock`` y/o la sentencia :keyword:`with` (``with await lock``, "
+"``with (yield from lock)``).  Utilice ``async with lock`` en su lugar."
