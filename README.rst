@@ -13,4 +13,3 @@ For information about translating on transifex for both users and maintainers se
 .. _python-doc: https://app.transifex.com/python-doc/
 .. _Transifex: https://www.transifex.com
 .. _translation: https://devguide.python.org/documentation/translating/
-

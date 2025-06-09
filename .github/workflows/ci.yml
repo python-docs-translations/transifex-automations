@@ -29,7 +29,7 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
-  
+
 env:
   TX_CLI_VERSION: '1.6.16'
   TX_PROJECT: python-newest  # Project name for the latest python version
@@ -67,13 +67,13 @@ jobs:
         echo "all_versions=$(scripts/manage_versions.py all)" >> $GITHUB_OUTPUT
         echo "current=$(scripts/manage_versions.py current)" >> $GITHUB_OUTPUT
         echo "version_pairs=$(scripts/manage_versions.py generate_pairs)" >> $GITHUB_OUTPUT
-    
+
     - name: Check out branch ${{ steps.version.outputs.current }}
       uses: actions/checkout@v4.2.2
       with:
-        ref: ${{ steps.version.outputs.current }}      
+        ref: ${{ steps.version.outputs.current }}
         path: ${{ steps.version.outputs.current }}
-    
+
     - name: Set languages variable
       id: languages
       working-directory: ${{ steps.version.outputs.current }}
@@ -158,7 +158,7 @@ jobs:
         run: |
           deleted_files=$(git status -s | grep ^' D' | cut -d' ' -f3)
           if [ -n "$deleted_files" ]; then git rm -v $deleted_files; else echo "no POT files to remove"; fi
-        
+
       - name: Remove problematic source messages from POT files
         run: |
           scripts/remove-msgid.sh cpython/Doc/locales/pot
@@ -237,19 +237,19 @@ jobs:
     steps:
       - name: Check out main
         uses: actions/checkout@v4.2.2
-        
+
       - name: Check out branch ${{ matrix.branch.new }}
         uses: actions/checkout@v4.2.2
         with:
           ref: ${{ matrix.branch.new }}
           path: ${{ matrix.branch.new }}
-    
+
       - name: Check out branch ${{ matrix.branch.prev }}
         uses: actions/checkout@v4.2.2
         with:
           ref: ${{ matrix.branch.prev }}
           path: ${{ matrix.branch.prev }}
-      
+
       - name: Set up Python 3
         uses: actions/setup-python@v5.6.0
         with:
@@ -262,7 +262,7 @@ jobs:
         working-directory: /usr/local/bin
         run: |
           curl -o- https://raw.githubusercontent.com/transifex/cli/master/install.sh | bash -s -- v${{ env.TX_CLI_VERSION }}
-    
+
       - name: Install dependencies
         run: |
           python3 -m pip install --upgrade pip
@@ -285,4 +285,4 @@ jobs:
           tx push -t -l ${{ matrix.language }}
         env:
           TX_TOKEN: ${{ secrets.TX_TOKEN }}
-        
+

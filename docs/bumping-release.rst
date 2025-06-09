@@ -38,7 +38,7 @@ In *General* tab:
 
 In *Workflow* tab, enable the *Translation Memory Fillup* option by checking the checkbox;
 
-    NOTE: The *Translation Memory Fillup* option is essential to have a translation in one of the version projects to be populated to this project. This drastically reduces translation effort replicating one contribution to other strings that are exactly the same.  
+    NOTE: The *Translation Memory Fillup* option is essential to have a translation in one of the version projects to be populated to this project. This drastically reduces translation effort replicating one contribution to other strings that are exactly the same.
 
 6. Adjust the `CI workflow <https://github.com/python-docs-translations/transifex-automations/tree/main/.github/workflows>`_ with the new Python version:
 
