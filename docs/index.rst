@@ -38,6 +38,6 @@ See also  Translating_ in the Python Developer's Guide for more information.
    :caption: Contents:
 
    new-translators.rst
-   bumping-relsease.rst
    commands.rst
+   workflows.rst
    placeholders.rst
