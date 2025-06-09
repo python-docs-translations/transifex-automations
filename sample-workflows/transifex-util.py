@@ -2,7 +2,7 @@
 #
 # This python file contains utility functions to manage a Python docs translation
 # with Transifex.
-# 
+#
 # This file is maintained at: https://github.com/python-docs-translations/transifex-automations/blob/main/sample-workflows/transifex-util.py
 
 import configparser
@@ -14,9 +14,6 @@ from subprocess import call
 import sys
 from tempfile import TemporaryDirectory
 
-from polib import pofile
-from transifex.api import transifex_api
-
 
 def fetch():
     """
@@ -26,13 +23,15 @@ def fetch():
         sys.stderr.write("The Transifex client app is required.\n")
         exit(code)
     lang = LANGUAGE
-    _call(f'tx pull -l {lang} --force') # XXX Do we pull everything?
-    for file in Path().rglob('*.po'):
-        _call(f'msgcat --no-location -o {file} {file}')
+    _call(f"tx pull -l {lang} --force")  # XXX Do we pull everything?
+    for file in Path().rglob("*.po"):
+        _call(f"msgcat --no-location -o {file} {file}")
+
 
 def _call(command: str):
     if (return_code := call(command, shell=True)) != 0:
         exit(return_code)
+
 
 def recreate_tx_config():
     """
@@ -42,14 +41,15 @@ def recreate_tx_config():
         with chdir(directory):
             _clone_cpython_repo(VERSION)
             _build_gettext()
-            with chdir(Path(directory) / 'cpython/Doc/build'):
+            with chdir(Path(directory) / "cpython/Doc/build"):
                 _create_txconfig()
                 _update_txconfig_resources()
-                with open('.tx/config', 'r') as file:
+                with open(".tx/config", "r") as file:
                     contents = file.read()
-        contents = contents.replace('./<lang>/LC_MESSAGES/', '')
-        with open('.tx/config', 'w') as file:
+        contents = contents.replace("./<lang>/LC_MESSAGES/", "")
+        with open(".tx/config", "w") as file:
             file.write(contents)
+
 
 def delete_obsolete_files():
     files_to_delete = list(_get_files_to_delete())
@@ -61,31 +61,39 @@ def delete_obsolete_files():
             os.remove(file)
             _call(f'git rm --quiet "{file}"')
 
+
 def _get_files_to_delete():
-    with open('.tx/config') as config_file:
+    with open(".tx/config") as config_file:
         config = config_file.read()
-    for file in Path().rglob('*.po'):
+    for file in Path().rglob("*.po"):
         if os.fsdecode(file) not in config:
             yield os.fsdecode(file)
 
+
 def _clone_cpython_repo(version: str):
-    _call(f'git clone -b {version} --single-branch https://github.com/python/cpython.git --depth 1')
+    _call(
+        f"git clone -b {version} --single-branch https://github.com/python/cpython.git --depth 1"
+    )
+
 
 def _build_gettext():
     _call("make -C cpython/Doc/ gettext")
 
+
 def _create_txconfig():
-    _call('sphinx-intl create-txconfig')
+    _call("sphinx-intl create-txconfig")
+
 
 def _update_txconfig_resources():
     _call(
-        f'sphinx-intl update-txconfig-resources --transifex-organization-name python-doc '
-        f'--transifex-project-name {PROJECT_SLUG} --locale-dir . --pot-dir gettext'
+        f"sphinx-intl update-txconfig-resources --transifex-organization-name python-doc "
+        f"--transifex-project-name {PROJECT_SLUG} --locale-dir . --pot-dir gettext"
     )
 
+
 def _get_tx_token() -> str:
-    if os.path.exists('.tx/api-key'):
-        with open('.tx/api-key') as f:
+    if os.path.exists(".tx/api-key"):
+        with open(".tx/api-key") as f:
             return f.read()
 
     config = configparser.ConfigParser()
@@ -95,16 +103,17 @@ def _get_tx_token() -> str:
     except KeyError:
         pass
 
-    return os.getenv('TX_TOKEN', '')
+    return os.getenv("TX_TOKEN", "")
+
 
 if __name__ == "__main__":
-    RUNNABLE_SCRIPTS = ('fetch', 'recreate_tx_config', 'delete_obsolete_files')
+    RUNNABLE_SCRIPTS = ("fetch", "recreate_tx_config", "delete_obsolete_files")
 
     parser = ArgumentParser()
-    parser.add_argument('cmd', choices=RUNNABLE_SCRIPTS)
-    parser.add_argument('--language', required=True)
-    parser.add_argument('--project-slug', required=True)
-    parser.add_argument('--version', required=True)
+    parser.add_argument("cmd", choices=RUNNABLE_SCRIPTS)
+    parser.add_argument("--language", required=True)
+    parser.add_argument("--project-slug", required=True)
+    parser.add_argument("--version", required=True)
 
     options = parser.parse_args()
 

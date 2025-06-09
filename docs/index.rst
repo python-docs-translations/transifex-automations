@@ -41,4 +41,3 @@ See also  Translating_ in the Python Developer's Guide for more information.
    bumping-relsease.rst
    commands.rst
    placeholders.rst
-
