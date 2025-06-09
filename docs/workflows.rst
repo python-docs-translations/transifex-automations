@@ -64,6 +64,11 @@ manually due to the ``workflow_dispatch`` option.
 All jobs or sections under ``jobs:`` will be run. The sample workflows can be
 merged into one by combining all of their jobs. (Note: there must only be one `jobs:`)
 
+In the workflows, replace all instances of ``XX`` with your `IETF <https://datatracker.ietf.org/doc/html/rfc5646.html>`_
+language tag, as described in `PEP 545 <https://peps.python.org/pep-0545/#language-tag>`_.
+These tools, however, require and underscore (``_``) rather than a dash (``-``);
+for example ``pl`` or ``pt_BR``.
+
 
 Transifex Pull Workflow
 -----------------------
@@ -77,9 +82,6 @@ significant changes are detected.
 Ensure the ``TX_TOKEN`` secret is configured in your repository with your Transifex API token.
 For generating your API key, see this `Transifex article <https://help.transifex.com/en/articles/6248858-generating-an-api-token>`_,
 for setting up secrets, see this `guide <https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository>`_.
-
-In the workflow, replace all instances of ``XX`` with your `IETF <https://datatracker.ietf.org/doc/html/rfc5646.html>`_ language code.
-For example, ``pl`` or ``pt_BR``.
 
 .. code-block:: yaml
 
@@ -107,8 +109,6 @@ Test Build Workflow
 -------------------
 
 How to configure the `Test Build Workflow <https://github.com/python-docs-translations/transifex-automations/blob/main/sample-workflows/test-build.yml>`_.
-
-In the workflow replace all instances of ``XX`` with your ITFL language code.
 
 .. code-block:: yaml
 
