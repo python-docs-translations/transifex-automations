@@ -27,7 +27,7 @@ def get_local_resources(tx_config, project):
 
     try:
         project in re.search(r"p:python-\w+:", config.sections()[1]).group(0)
-    except:
+    except Exception:
         printmsg(
             "error", f"Invalid Transifex configuration file for project '{project}'"
         )
