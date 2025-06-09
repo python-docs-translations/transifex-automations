@@ -16,7 +16,7 @@ Some notes:
       of place holders, and will be rendered as normal text.
     - The roles :dfn: and :term: were not included because their content are normally translatable, so making them
       placeholders would pop up too many false-positive warnings.
-    - \``$\`` is being wrongly replaced with the placeholder ```{TX-PL-LABEL}#x60;``` by Transifex because of the 
+    - \``$\`` is being wrongly replaced with the placeholder ```{TX-PL-LABEL}#x60;``` by Transifex because of the
       custom placeholder that starts and ends with \``. Removing this custom placeholder ceases the issue, but it
       disables custom placeholders for all literal expressions.
 
@@ -76,7 +76,7 @@ Note that the commands sort by alphabetic order ``sort -u``, but it could be sor
 1. To list two-part roles (e.g. ``:c:func:` ``)::
 
 .. code-block:: shell
-   
+
    grep -Po '(^|\s+):([\w\-\_\~!]*:){2}`' strings.txt | sed -E 's|^ +||;' | tr '[:upper:]' '[:lower:]' | sort -u
 
 2. To list one-part roles (e.g. ``:class:` ``):

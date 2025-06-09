@@ -9,7 +9,7 @@ trap "rm -vf $po" 1 2 3 6
 
 if [ -n "$1" ]; then
   cd "$1"
-fi 
+fi
 
 pofiles=$(find * -name '*.po' | sort)
 to_remove=()
