@@ -5,6 +5,9 @@ Commands for maintaining a language repository
 This document contains instructions to guide you on managing your language
 repository, hence helping you translate Python's documentation to your language.
 
+The :doc:`sample workflow's <workflows>` Transifex workflow is an automated
+alternative to this guide.
+
 These commands are written in Linux Shell, and should work in Windows Subsystem
 Linux (WSL), but feel free to use the same logic in other languages e.g. Python.
 
@@ -24,7 +27,7 @@ From inside your language repository, run:
 
 .. code-block:: shell
 
-   BRANCH=3.13
+   BRANCH=3.14
    git clone --depth 1 https://github.com/python/cpython --branch $BRANCH
 
 Use ``--depth 1`` to shallow clone, which avoids downloading all the 800 MB of data
@@ -92,7 +95,7 @@ translation means pulling the translation strings.
    with the pot. Alternatively, you can skip it and pull translations, but new
    translation resources in Transifex could be not mapped, and hence wouldn't be pulled.
 
-.. _generate-pot::
+.. _generate-pot:
 
 Generating pot files
 ^^^^^^^^^^^^^^^^^^^^
