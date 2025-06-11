@@ -128,5 +128,5 @@ python-doc project coordinators on Transifex.
 .. seealso::
 
     - `PEP 545`_
-    - `Python Devguide: Translations <https://devguide.python.org/documentation/translating/>`_
+    - `Python devguide: Translations <https://devguide.python.org/documentation/translating/>`_
     - `Sphinx's reStructuredText Primer <https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html>`_
