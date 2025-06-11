@@ -2,10 +2,9 @@
 Placeholders
 ============
 
-
 Transifex supports adding
 `Translation checks <https://help.transifex.com/en/articles/6241794-setting-translation-checks#h_317a8b70f5>`_
-to fit the translation caracteristics.
+to fit the translation characteristics.
 
 Adding custom placeholders causes the matched expression to be highlighted, be assigned unique numbers in that string,
 and to be warned if translation differs from the source string.
@@ -51,7 +50,7 @@ To make easier to read the source strings, extract them from the doc files and p
    git clone https://github.com/python-docs-translations/transifex-automations
    cd python-docs-tx-translations
    git clone --depth 1 --branch 3.12 https://github.com/python/cpython
-   python -mvenv venv
+   python -m venv venv
    source venv/bin/activate
    pip install -r requirements.txt -r cpython/Doc/requirements.txt
    sphinx-build -E -b gettext -D gettext_compact=0 -d build/.doctrees . locales/pot
@@ -66,14 +65,14 @@ To make easier to read the source strings, extract them from the doc files and p
 
 Now, *strings.txt* have all source strings.
 
-Find pontential placeholders from extracted strings
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Find potential placeholders from extracted strings
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Use the following commands to find potential custom.
 
 Note that the commands sort by alphabetic order ``sort -u``, but it could be sorted by most used placeholders via ``sort | uniq -c | sort -grk 1`` instead.
 
-1. To list two-part roles (e.g. ``:c:func:` ``)::
+1. To list two-part roles (e.g. ``:c:func:` ``):
 
 .. code-block:: shell
 
