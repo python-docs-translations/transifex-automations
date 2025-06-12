@@ -146,7 +146,7 @@ jobs:
         run: |
           ver="$(echo ${{ matrix.cpython_version }} | sed 's|\.||')"
           echo "TX_PROJECT=python-$ver" >> $GITHUB_ENV
-          echo ${{ env.TX_PROJECT }}
+          echo "${{ env.TX_PROJECT }}"
 
         # required for generating .tx/config
       - name: Generate POT files
@@ -158,6 +158,7 @@ jobs:
 
       - name: Include obsolete catalog templates (pot files) for removal
         run: |
+          # shellcheck disable=SC2086
           deleted_files="$(git status -s | grep ^' D' | cut -d' ' -f3)"
           if [ -n "$deleted_files" ]; then git rm -v $deleted_files; else echo "no POT files to remove"; fi
 
@@ -209,6 +210,7 @@ jobs:
       - name: Commit changes
         working-directory: cpython/Doc/locales
         run: |
+          # shellcheck disable=SC2086,SC2035
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git status
