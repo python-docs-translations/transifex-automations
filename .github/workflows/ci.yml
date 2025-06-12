@@ -64,9 +64,11 @@ jobs:
     - name: Set version variables
       id: version
       run: |
-        echo "all_versions=$(scripts/manage_versions.py all)" >> $GITHUB_OUTPUT
-        echo "current=$(scripts/manage_versions.py current)" >> $GITHUB_OUTPUT
-        echo "version_pairs=$(scripts/manage_versions.py generate_pairs)" >> $GITHUB_OUTPUT
+        {
+          echo "all_versions=$(scripts/manage_versions.py all)"
+          echo "current=$(scripts/manage_versions.py current)"
+          echo "version_pairs=$(scripts/manage_versions.py generate_pairs)"
+        } >> "$GITHUB_OUTPUT"
 
     - name: Check out branch ${{ steps.version.outputs.current }}
       uses: actions/checkout@v4.2.2
@@ -78,7 +80,7 @@ jobs:
       id: languages
       working-directory: ${{ steps.version.outputs.current }}
       run: |
-        echo "languages=$(../scripts/list-langs.py)" >> $GITHUB_OUTPUT
+        echo "languages=$(../scripts/list-langs.py)" >> "$GITHUB_OUTPUT"
 
     - name: Print variables values
       run: |
@@ -142,9 +144,9 @@ jobs:
         if: ${{ matrix.cpython_version != needs.trigger.outputs.current }}
         shell: bash
         run: |
-          ver=$(echo ${{ matrix.cpython_version }} | sed 's|\.||')
-          echo "TX_PROJECT=python-$ver" >> $GITHUB_ENV
-          echo ${{ env.TX_PROJECT }}
+          ver="$(echo "${{ matrix.cpython_version }}" | sed 's|\.||')"
+          echo "TX_PROJECT=python-$ver" >> "$GITHUB_ENV"
+          echo "${{ env.TX_PROJECT }}"
 
         # required for generating .tx/config
       - name: Generate POT files
@@ -156,7 +158,8 @@ jobs:
 
       - name: Include obsolete catalog templates (pot files) for removal
         run: |
-          deleted_files=$(git status -s | grep ^' D' | cut -d' ' -f3)
+          deleted_files="$(git status -s | grep ^' D' | cut -d' ' -f3)"
+          # shellcheck disable=SC2086
           if [ -n "$deleted_files" ]; then git rm -v $deleted_files; else echo "no POT files to remove"; fi
 
       - name: Remove problematic source messages from POT files
@@ -211,7 +214,8 @@ jobs:
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git status
           shopt -s globstar
-          git diff -I'^"POT-Creation-Date: ' --numstat **/*.po **/*.pot | cut -f3 | xargs -r git add -v
+          git diff -I'^"POT-Creation-Date: ' --numstat ./**/*.po ./**/*.pot | cut -f3 | xargs -r git add -v
+          # shellcheck disable=SC2046,SC2035
           git add -v $(git ls-files -o --exclude-standard *.po *.pot) .tx/config
           git diff-index --cached --quiet HEAD || { git commit -vm "Update translations from Transifex"; }
 
