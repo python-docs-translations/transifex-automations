@@ -5,8 +5,7 @@ Commands for maintaining a language repository
 This document contains instructions to guide you on managing your language
 repository, hence helping you translate Python's documentation to your language.
 
-The :doc:`sample workflow's <workflows>` Transifex workflow is an automated
-alternative to this guide.
+See the :doc:`workflows` for an automated alternative to this guide.
 
 These commands are written in Linux Shell, and should work in Windows Subsystem
 Linux (WSL), but feel free to use the same logic in other languages e.g. Python.

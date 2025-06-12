@@ -1,5 +1,5 @@
 ================
-GitHub Workflows
+Sample Workflows
 ================
 
 All Python documentation translation repositories are hosted on `GitHub <https://github.com>`_.
