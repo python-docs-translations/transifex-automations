@@ -145,7 +145,7 @@ jobs:
         shell: bash
         run: |
           ver="$(echo "${{ matrix.cpython_version }}" | sed 's|\.||')"
-          echo "TX_PROJECT=python-$ver" >> $GITHUB_ENV
+          echo "TX_PROJECT=python-$ver" >> $GITHUB_ENV             # shellcheck disable=SC2086
           echo "${{ env.TX_PROJECT }}"
 
         # required for generating .tx/config
@@ -215,7 +215,7 @@ jobs:
           git status
           shopt -s globstar
           git diff -I'^"POT-Creation-Date: ' --numstat ./**/*.po ./**/*.pot | cut -f3 | xargs -r git add -v
-          # shellcheck disable=SC2086,SC2035
+          # shellcheck disable=SC2046,SC2035
           git add -v $(git ls-files -o --exclude-standard *.po *.pot) .tx/config
           git diff-index --cached --quiet HEAD || { git commit -vm "Update translations from Transifex"; }
 
