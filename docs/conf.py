@@ -28,8 +28,8 @@ html_title = "Python Docs Transifex Automations"
 # ----------------------------------------------------------------------------
 
 # Python versions
-newest = "3.13"
-previous = "3.12"
+newest = "3.14"
+previous = "3.13"
 
 rst_prolog = f"""
 .. |py_new| replace:: {newest}
