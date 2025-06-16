@@ -24,7 +24,7 @@ Discord ``#translations`` channel), and familiarizing yourself with `PEP 545`_.
 If there is already a repository for your language team, please join and
 introduce yourself.
 
-.. _Translating: https://devguide.python.org/documentation/translating/
+.. _Translating: https://devguide.python.org/documentation/translations/translating/
 .. _Python Developer's Guide: https://devguide.python.org
 .. _PEP 545: https://peps.python.org/pep-0545/
 .. _Docs Community: https://docs-community.readthedocs.io/
