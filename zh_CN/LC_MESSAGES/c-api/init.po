@@ -859,6 +859,8 @@ msgid ""
 "The return value is ``2`` if the argument list does not represent a valid "
 "Python command line, and otherwise the same as :c:func:`Py_RunMain`."
 msgstr ""
+"如果参数列表不是表示一个有效的 Python 命令行则返回值为 ``2``，否则将与 :c:"
+"func:`Py_RunMain` 相同。"
 
 #: ../../c-api/init.rst:504
 msgid ""
@@ -930,6 +932,9 @@ msgid ""
 "exception), the exit status of an unhandled :exc:`SystemExit`, or ``1`` for "
 "any other unhandled exception."
 msgstr ""
+"如果 :c:member:`PyConfig.inspect` 未设置（默认），则当解释器正常退出（也就是"
+"说未引发异常）时返回值将为 ``0``，未处理的 :exc:`SystemExit` 的退出状态，或者"
+"对于任何其他未处理异常则为 ``1``。"
 
 #: ../../c-api/init.rst:542
 msgid ""
@@ -941,11 +946,16 @@ msgid ""
 "determined by the way the *REPL session* terminates: ``0``, ``1``, or the "
 "status of a :exc:`SystemExit`, as specified above."
 msgstr ""
+"如果 :c:member:`PyConfig.inspect` 已设置（例如当使用了 :option:`-i` 选项"
+"时），则当解释器退出时执行将不会返回，而是会使用 ``__main__`` 模块的全局命名"
+"空间在交互式 Python 提示符 (REPL) 中恢复。 如果解释器附带异常退出，该异常将"
+"在 REPL 会话中被立即引发。 随后函数的返回值将由 *REPL 会话* 的终结方式来决"
+"定: ``0``, ``1`` 或者 :exc:`SystemExit` 的状态，如上文所指明的。"
 
 #: ../../c-api/init.rst:550
 msgid ""
 "This function always finalizes the Python interpreter before it returns."
-msgstr ""
+msgstr "此函数总是会在它返回之前最终化 Python 解释器。"
 
 #: ../../c-api/init.rst:552
 msgid ""
@@ -2340,11 +2350,13 @@ msgid ""
 ":term:`Attach <attached thread state>` *tstate* to the current thread, which "
 "must not be ``NULL`` or already :term:`attached <attached thread state>`."
 msgstr ""
+"将 *tstate* :term:`附加 <attached thread state>` 到当前线程，当前线程不能为 "
+"``NULL`` 或者已经 :term:`附加线程状态 <attached thread state>`。"
 
 #: ../../c-api/init.rst:1606
 msgid ""
 "The calling thread must not already have an :term:`attached thread state`."
-msgstr ""
+msgstr "调用方线程不能已经具有 :term:`attached thread state`。"
 
 #: ../../c-api/init.rst:1614
 msgid ""
@@ -2370,6 +2382,9 @@ msgid ""
 "not be ``NULL``, is only used to check that it represents the :term:"
 "`attached thread state` --- if it isn't, a fatal error is reported."
 msgstr ""
+"分离 :term:`attached thread state`。 *tstate* 参数必须不为 ``NULL``，该参数仅"
+"被用于检查它是否代表 :term:`attached thread state` --- 如果不是，则会报告一个"
+"致命级错误。"
 
 #: ../../c-api/init.rst:1634
 msgid ""
@@ -2577,6 +2592,11 @@ msgid ""
 "exception state is stored in the :term:`attached thread state`, which might "
 "not exist."
 msgstr ""
+"成功后，*tstate_p* 将被设为新的子解释器中创建的第一个 :term:`thread state`。 "
+"该线程状态是 :term:`已附加的 <attached thread state>`。 请注意并没有真实的线"
+"程被创建；请参阅下文有关线程状态的讨论。 如果新解释器的创建没有成功，则 "
+"*tstate_p* 将被设为 ``NULL``；不会设置任何异常因为异常状态是存储在 :term:"
+"`attached thread state` 中的，而它并不一定存在。"
 
 #: ../../c-api/init.rst:1780
 msgid ""
@@ -2875,6 +2895,8 @@ msgid ""
 "with the main thread holding an :term:`attached thread state` (*func* can "
 "therefore use the full C API)."
 msgstr ""
+"主线程持有一个 :term:`attached thread state` (因此 *func* 可以使用完整的 C "
+"API)。"
 
 #: ../../c-api/init.rst:1969
 msgid ""
@@ -2883,6 +2905,9 @@ msgid ""
 "notification recursively, but it can still be interrupted to switch threads "
 "if the :term:`thread state <attached thread state>` is detached."
 msgstr ""
+"*func* 必须在成功时返回 ``0``，或在失败时返回 ``-1`` 并设置一个异常集合。 "
+"*func* 不会被中断来递归地执行另一个异步通知，但如果 :term:`thread state "
+"<attached thread state>` 已被分离则它仍可被中断以切换线程。"
 
 #: ../../c-api/init.rst:1974
 msgid ""
@@ -3223,11 +3248,14 @@ msgid ""
 "any existing exception or set an exception.  A :term:`thread state` will be "
 "active every time the tracer function is called."
 msgstr ""
+"追踪函数 **不可** 在内部创建 Python 对象否则调用将被重入。 追踪器也 **不可** "
+"清除任何现有异常或设置异常。 每次当追踪器被调用时都将激活一个 :term:`thread "
+"state`。"
 
 #: ../../c-api/init.rst:2195 ../../c-api/init.rst:2206
 msgid ""
 "There must be an :term:`attached thread state` when calling this function."
-msgstr ""
+msgstr "当调用此函数时必须有一个 :term:`attached thread state`。"
 
 #: ../../c-api/init.rst:2201
 msgid ""
@@ -3304,6 +3332,8 @@ msgid ""
 "A :term:`thread state` does *not* need to be :term:`attached <attached "
 "thread state>` when calling these functions; they suppl their own locking."
 msgstr ""
+"当调用这些函数时 *不需要* :term:`附加 <attached thread state>` 一个 :term:"
+"`thread state`；它们会提供自己的锁机制。"
 
 #: ../../c-api/init.rst:2266
 msgid ""
@@ -3543,6 +3573,9 @@ msgid ""
 "temporarily detach the :term:`thread state <attached thread state>` if one "
 "exists."
 msgstr ""
+"锁定互斥锁 *m*。 如果另一个线程已经锁定了它，调用方线程将会阻塞直到互斥锁被解"
+"锁。 在阻塞期间，如果线程存在 :term:`线程状态 <attached thread state>` 则会临"
+"时释放它。"
 
 #: ../../c-api/init.rst:2439
 msgid ""
