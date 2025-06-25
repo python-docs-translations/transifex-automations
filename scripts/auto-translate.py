@@ -2,6 +2,7 @@ import polib
 import re
 from pathlib import Path
 
+# Patterns for the messages that do not need to be translated
 regex_patterns = (
     re.compile(r"^\d+$"),  # all digits
 )
