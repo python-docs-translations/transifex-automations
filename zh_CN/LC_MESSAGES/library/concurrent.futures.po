@@ -111,6 +111,9 @@ msgid ""
 "results have not yet been yielded. If the buffer is full, iteration over the "
 "*iterables* pauses until a result is yielded from the buffer."
 msgstr ""
+"*iterables* 的收集是立即而非惰性的，除非指定了 *buffersize* 来限制提交结果尚"
+"未产生的任务数量。 如果缓冲区已满，对 *iterables* 的迭代将暂停直到缓冲区产生"
+"了一个结果。"
 
 #: ../../library/concurrent.futures.rst:53
 msgid ""
@@ -147,6 +150,11 @@ msgid ""
 "size of 1.  With :class:`ThreadPoolExecutor` and :class:"
 "`InterpreterPoolExecutor`, *chunksize* has no effect."
 msgstr ""
+"当使用 :class:`ProcessPoolExecutor` 时，这个方法会将 *iterables* 分块并作为单"
+"独的任务提交到执行池中。 这些分块的（近似）大小可通过将 *chunksize* 设为一个"
+"正整数来指定。 对于非常长的迭代器来说，使用较大的 *chunksize* 值相比默认大小 "
+"1 能显著地提升性能。 对于 :class:`ThreadPoolExecutor` 和 :class:"
+"`InterpreterPoolExecutor`，*chunksize* 将没有效果。"
 
 #: ../../library/concurrent.futures.rst:74
 msgid "Added the *chunksize* parameter."
@@ -470,6 +478,10 @@ msgid ""
 "that each worker has its own interpreter, and runs each task using that "
 "interpreter."
 msgstr ""
+":class:`InterpreterPoolExecutor` 类使用一个解释器池来异步地执行调用。 它是 :"
+"class:`ThreadPoolExecutor` 的子类，这意味着每个工作解释器在它自己的线程中运"
+"行。 它与其父类的区别在于每个工作线程都具有自己的解释器，并使用该解释器运行每"
+"个任务。"
 
 #: ../../library/concurrent.futures.rst:248
 msgid ""
@@ -479,6 +491,10 @@ msgid ""
 "interpreter can run on one CPU core, while code in another interpreter runs "
 "unblocked on a different core."
 msgstr ""
+"使用解释器而非只用线程的最大好处是真正的多核心并行。 每个解释器都有自己的 :"
+"term:`全局解释器锁 <global interpreter lock>`，因此在一个解释器中运行的代码可"
+"以在一个 CPU 核心上运行，而在另一个解释器中运行的代码可以在不同的核心上无阻塞"
+"地运行。"
 
 #: ../../library/concurrent.futures.rst:254
 msgid ""
@@ -492,6 +508,11 @@ msgid ""
 "deal with several of the big pain points of using threads, like race "
 "conditions."
 msgstr ""
+"作为交换的是编写用于多解释器的并发代码需要额外的考量。 不过，这是由于它会迫使"
+"你谨慎处理多解释器要怎样以及何时进行交互，并明确哪些数据要在解释器之间进行共"
+"享。 这导致几项有助于对额外的考量进行平衡的好处，包括真正的多核心并行。 例"
+"如，以这种方式编写的代码可以更容易地理顺并发过程。另一项重要的好处是你不必处"
+"理某些使用线程的关键痛点，比如竞争条件等。"
 
 #: ../../library/concurrent.futures.rst:264
 msgid ""
@@ -715,6 +736,9 @@ msgid ""
 "`ProcessPoolExecutor` you must explicitly pass ``mp_context=multiprocessing."
 "get_context(\"fork\")``."
 msgstr ""
+"默认的进程启动方法 (参见 :ref:`multiprocessing-start-methods`) 已改为不再使"
+"用 *fork*。 如果你需要为 :class:`ProcessPoolExecutor` 使用 *fork* 启动方法你"
+"必须显式地传入 ``mp_context=multiprocessing.get_context(\"fork\")``。"
 
 #: ../../library/concurrent.futures.rst:412
 msgid ""
@@ -723,13 +747,16 @@ msgid ""
 "them. Internally, it will also call :meth:`Executor.shutdown` to ensure that "
 "all other resources associated with the executor are freed."
 msgstr ""
+"尝试通过在每个激活中的工作进程上调用 :meth:`Process.terminate "
+"<multiprocessing.Process.terminate>` 来全部终结它们。 在内部，它还将调用 :"
+"meth:`Executor.shutdown` 以确保所有与执行器相关联的其他资源被释放。"
 
 #: ../../library/concurrent.futures.rst:417
 #: ../../library/concurrent.futures.rst:429
 msgid ""
 "After calling this method the caller should no longer submit tasks to the "
 "executor."
-msgstr ""
+msgstr "在调用此方法之后调用方不应再向执行器提交任务。"
 
 #: ../../library/concurrent.futures.rst:424
 msgid ""

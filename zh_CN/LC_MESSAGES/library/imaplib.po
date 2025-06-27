@@ -9,15 +9,16 @@
 # Dai Xu <daixu61@hotmail.com>, 2021
 # Wulian233 <xiguawulian@gmail.com>, 2025
 # Freesand Leo <yuqinju@163.com>, 2025
+# 汇民 王 <whuim@qq.com>, 2025
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-13 14:21+0000\n"
+"POT-Creation-Date: 2025-06-27 14:20+0000\n"
 "PO-Revision-Date: 2021-06-28 01:07+0000\n"
-"Last-Translator: Freesand Leo <yuqinju@163.com>, 2025\n"
+"Last-Translator: 汇民 王 <whuim@qq.com>, 2025\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/python-doc/"
 "teams/5390/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -473,8 +474,8 @@ msgid ""
 "keyword:`with` statement, produces IMAP untagged responses via the :term:"
 "`iterator` protocol, and sends ``DONE`` upon context exit."
 msgstr ""
-"返回的对象将在被 :keyword:`with` 语句激活时发送 ``IDLE`` 命令，通过 :term:"
-"`iterator` 协议产生 IMAP 不带标签的响应，并在上下文退出时发送 ``DONE``。"
+"返回的对象将在被 :keyword:`with` 语句激活时发送 ``IDLE`` 命令，通过 :term:`迭"
+"代器` 协议产生 IMAP 不带标签的响应，并在上下文退出时发送 ``DONE``。"
 
 #: ../../library/imaplib.rst:320
 msgid ""
@@ -494,6 +495,8 @@ msgid ""
 "Responses are represented as ``(type, [data, ...])`` tuples, as described "
 "in :ref:`IMAP4 Objects <imap4-objects>`."
 msgstr ""
+"响应表示为``(type, [data, ...])``元组，如 :ref:`IMAP4 对象 <imap4-objects>` "
+"中所述。"
 
 #: ../../library/imaplib.rst:329
 msgid ""
@@ -504,6 +507,11 @@ msgid ""
 "minutes (1740 seconds). Requires a socket connection; *duration* must be "
 "``None`` on :class:`IMAP4_stream` connections."
 msgstr ""
+"*duration* 参数设置了保持空闲的最大持续时间（以秒为单位），在此之后任何正在进"
+"行的迭代都将停止。它可以是:class:`int`或:class:`float`，或者没有时间限制的"
+"``None``。希望避免服务器上的非活动超时的调用者应该最多保持29分钟（1740秒）。"
+"需要一个套接字连接；在:class:`IMAP4_stream`连接上，*duration* 必须为"
+"``None``。"
 
 #: ../../library/imaplib.rst:337
 msgid ""
@@ -514,12 +522,20 @@ msgid ""
 "EXISTS [b'1']\n"
 "RECENT [b'1']"
 msgstr ""
+">>> with M.idle(duration=29 * 60) as idler:\n"
+"...     for typ, data in idler:\n"
+"...         print(typ, data)\n"
+"...\n"
+"EXISTS [b'1']\n"
+"RECENT [b'1']"
 
 #: ../../library/imaplib.rst:349
 msgid ""
 "Yield a burst of responses no more than *interval* seconds apart (expressed "
 "as an :class:`int` or :class:`float`)."
 msgstr ""
+"产生间隔不超过 *interval* 秒的突发响应（表示为:class:`int`或:class:"
+"`float`）。"
 
 #: ../../library/imaplib.rst:352
 msgid ""
@@ -528,12 +544,15 @@ msgid ""
 "response along with any immediately available subsequent responses. (For "
 "example, a rapid series of ``EXPUNGE`` responses after a bulk delete.)"
 msgstr ""
+":term:`生成器` 是一次迭代一个响应的替代方法，旨在帮助高效的批处理。它检索下一"
+"个响应以及任何立即可用的后续响应。（例如，在批量删除后的一系列快速``EXPUNGE``"
+"响应。）"
 
 #: ../../library/imaplib.rst:358
 msgid ""
 "Requires a socket connection; does not work on :class:`IMAP4_stream` "
 "connections."
-msgstr ""
+msgstr "需要一个套接字连接；在:class:`IMAP4_stream`连接上不起作用。"
 
 #: ../../library/imaplib.rst:361
 msgid ""
@@ -546,6 +565,14 @@ msgid ""
 "processing 3 responses...\n"
 "[('EXPUNGE', [b'2']), ('EXPUNGE', [b'1']), ('RECENT', [b'0'])]"
 msgstr ""
+">>> with M.idle() as idler:\n"
+"...     # 在小于0.1秒的时间内获得响应和其他后续\n"
+"...     batch = list(idler.burst())\n"
+"...     print(f'正在处理 {len(batch)} 个响应...')\n"
+"...     print(batch)\n"
+"...\n"
+"正在处理 3 个响应...\n"
+"[('EXPUNGE', [b'2']), ('EXPUNGE', [b'1']), ('RECENT', [b'0'])]"
 
 #: ../../library/imaplib.rst:374
 msgid ""

@@ -26,6 +26,7 @@
 # LeeWendao <LeeWendao@outlook.com>, 2023
 # Nyuan Zhang, 2025
 # Alpha Du <alphanow@gmail.com>, 2025
+# 汇民 王 <whuim@qq.com>, 2025
 # Freesand Leo <yuqinju@163.com>, 2025
 #
 #, fuzzy
@@ -1773,12 +1774,17 @@ msgid ""
 "__future__ import annotations``. See :pep:`749 <749#pep749-metaclasses>` for "
 "details."
 msgstr ""
+"直接在类对象上访问:attr:`!__annotations__`属性可能会返回错误类的注解，特别是"
+"在某些情况下，类、它的基类或元类是在``from __future__ import annotations``下"
+"定义的。详细信息请参见<749#pep749-metaclasses>`。"
 
 #: ../../reference/datamodel.rst:1245
 msgid ""
 "This attribute does not exist on certain builtin classes. On user-defined "
 "classes without ``__annotations__``, it is an empty dictionary."
 msgstr ""
+"此属性在某些内置类中不存在。对于不带``__annotations__``的用户定义类，它是一个"
+"空字典。"
 
 #: ../../reference/datamodel.rst:1254
 msgid ""
@@ -4947,6 +4953,13 @@ msgid ""
 "optional third argument if the three-argument version of the built-in :func:"
 "`pow` function is to be supported."
 msgstr ""
+"调用这些方法来实现双目算术运算 (``+``, ``-``, ``*``, ``@``, ``/``, ``//``, "
+"``%``, :func:`divmod`, :func:`pow`, ``**``, ``<<``, ``>>``, ``&``, ``^``, ``|"
+"``)。 例如，求表达式 ``x + y`` 的值，其中 *x* 是具有 :meth:`__add__` 方法的类"
+"的一个实例，则会调用 ``type(x).__add__(x, y)``。 :meth:`__divmod__` 方法应该"
+"等价于使用 :meth:`__floordiv__` 和 :meth:`__mod__`；它不应该被关联到 :meth:"
+"`__truediv__`。 注意，如果要支持内置 :func:`pow` 函数的三个参数版本， :meth:"
+"`__pow__` 应该定义为接受可选的第三个参数。"
 
 #: ../../reference/datamodel.rst:3325
 msgid ""
@@ -4969,6 +4982,13 @@ msgid ""
 "__rsub__(y, x)`` is called if ``type(x).__sub__(x, y)`` returns :data:"
 "`NotImplemented` or ``type(y)`` is a subclass of ``type(x)``. [#]_"
 msgstr ""
+"调用这些方法来实现具有反射（交换）操作数的双目算术运算 ( ``+``, ``-``, "
+"``*``, ``@``, ``/``, ``//``, ``%``, :func:`divmod`, :func:`pow`, ``**``, "
+"``<<``, ``>>``, ``&``, ``^``, ``|``)。 只有当操作数的类型不同、左操作数不支持"
+"相应的操作 [#]_，或者右操作数的类派生自左操作数的类时，才调用这些函数。 [#]_ "
+"例如，求表达式 ``x - y`` 的值，其中 *y* 是具有 :meth:`__rsub__` 方法的类的一"
+"个实例，则当 ``type(x).__sub__(x, y)`` 返回 :data:`NotImplemented` 或"
+"``type(y)``是``type(x)``的子类时调用 ``type(y).__rsub__(y, x)``。[#]_"
 
 #: ../../reference/datamodel.rst:3359
 msgid ""
@@ -5288,6 +5308,8 @@ msgid ""
 "<annotation>`, which are a way to associate information (usually :term:`type "
 "hints <type hint>`) with a symbol."
 msgstr ""
+"函数、类和模块可能包含 :term:`注解 <annotation>`，这是一种将信息（通常是 :"
+"term:`类型注解 <type hint>`）与符号关联起来的方法。"
 
 #: ../../reference/datamodel.rst:3595
 msgid ""
@@ -5296,6 +5318,9 @@ msgid ""
 "arbitrary code and raise exceptions. If evaluation is successful, the "
 "attribute is set to a dictionary mapping from variable names to annotations."
 msgstr ""
+"此属性包含对象的注解。它是 :ref:`惰性求值 <lazy-evaluation>`，因此访问该属性"
+"可能会执行任意代码并引发异常。如果求值成功，则将属性设置为从变量名到注解的字"
+"典映射。"
 
 #: ../../reference/datamodel.rst:3600
 msgid "Annotations are now lazily evaluated."
@@ -5315,6 +5340,8 @@ msgid ""
 "should be provided. It must be a member of the :class:`annotationlib.Format` "
 "enum, or an integer with a value corresponding to a member of the enum."
 msgstr ""
+"接受一个格式形参，该参数指定应以何种格式提供注解值。 它必须是 :class:"
+"`annotationlib.Format` 枚举的成员，或者是一个值对应于枚举成员的整数。"
 
 #: ../../reference/datamodel.rst:3612
 msgid ""
@@ -5323,6 +5350,9 @@ msgid ""
 "`~annotationlib.Format.VALUE` format; they must not raise :exc:"
 "`NotImplementedError()` when called with this format."
 msgstr ""
+"如果注解函数不支持请求的格式，它必须引发 :exc:`NotImplementedError`。 注解函"
+"数必须始终支持 :attr:`~annotationlib.Format.VALUE` 格式；当以这种格式调用时，"
+"它们不能引发 :exc:`NotImplementedError()`。"
 
 #: ../../reference/datamodel.rst:3617
 msgid ""
@@ -5330,6 +5360,8 @@ msgid ""
 "function may raise :exc:`NameError`; it must not raise :exc:`!NameError` "
 "when called requesting any other format."
 msgstr ""
+"当以 :attr:`~annotationlib.Format.VALUE` 格式调用时，注解函数可能引发 :exc:"
+"`NameError`；当调用请求任何其他格式时，它不得引发 :exc:`!NameError`。"
 
 #: ../../reference/datamodel.rst:3620
 msgid ""
@@ -5337,6 +5369,8 @@ msgid ""
 "should preferably be set to ``None`` (it can’t be deleted), rather than set "
 "to a function that returns an empty dict."
 msgstr ""
+"如果一个对象没有任何注解，:attr:`~object.__annotate__` 最好设置为 ``None`` "
+"(不能删除)，而不是设置为返回空字典的函数。"
 
 #: ../../reference/datamodel.rst:3627
 msgid ":pep:`649` --- Deferred evaluation of annotation using descriptors"
