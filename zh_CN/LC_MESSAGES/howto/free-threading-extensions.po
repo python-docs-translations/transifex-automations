@@ -6,6 +6,7 @@
 # Translators:
 # ww song <sww4718168@gmail.com>, 2024
 # Nyuan Zhang, 2024
+# 汇民 王 <whuim@qq.com>, 2025
 # Freesand Leo <yuqinju@163.com>, 2025
 #
 #, fuzzy
@@ -13,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-20 14:21+0000\n"
+"POT-Creation-Date: 2025-06-27 14:20+0000\n"
 "PO-Revision-Date: 2024-06-20 06:42+0000\n"
 "Last-Translator: Freesand Leo <yuqinju@163.com>, 2025\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/python-doc/"
@@ -531,10 +532,13 @@ msgid ""
 "implementation directly, understanding their behavior is crucial when using "
 "certain C API functions or managing shared state in the free-threaded build."
 msgstr ""
+"在自由线程构建中，CPython提供了一种称为“临界区”的机制来保护原本由GIL保护的数"
+"据。虽然扩展作者可能不会直接与内部临界区实现交互，但在使用某些C API函数或在自"
+"由线程构建中管理共享状态时，理解它们的行为是至关重要的。"
 
 #: ../../howto/free-threading-extensions.rst:266
 msgid "What Are Critical Sections?"
-msgstr ""
+msgstr "什么是临界区？"
 
 #: ../../howto/free-threading-extensions.rst:268
 msgid ""
@@ -545,26 +549,34 @@ msgid ""
 "func:`PyDict_SetItem`, or explicitly using macros), it attempts to acquire "
 "the underlying mutex."
 msgstr ""
+"从概念上讲，临界区充当建立在简单互斥锁之上的死锁避免层。 每个线程维护一个活动"
+"临界区堆栈。 当线程需要获取与临界区相关的锁时（例如，隐式调用线程安全的 C "
+"API 函数时，如 :c:func:`PyDict_SetItem`，或显式使用宏），它会尝试获取底层互斥"
+"锁。"
 
 #: ../../howto/free-threading-extensions.rst:276
 msgid "Using Critical Sections"
-msgstr ""
+msgstr "使用临界区"
 
 #: ../../howto/free-threading-extensions.rst:278
 msgid "The primary APIs for using critical sections are:"
-msgstr ""
+msgstr "使用临界区的主要API有："
 
 #: ../../howto/free-threading-extensions.rst:280
 msgid ""
 ":c:macro:`Py_BEGIN_CRITICAL_SECTION` and :c:macro:`Py_END_CRITICAL_SECTION` "
 "- For locking a single object"
 msgstr ""
+":c:macro:`Py_BEGIN_CRITICAL_SECTION` 和 :c:macro:`Py_END_CRITICAL_SECTION` - "
+"用于锁定单个对象"
 
 #: ../../howto/free-threading-extensions.rst:283
 msgid ""
 ":c:macro:`Py_BEGIN_CRITICAL_SECTION2` and :c:macro:"
 "`Py_END_CRITICAL_SECTION2` - For locking two objects simultaneously"
 msgstr ""
+":c:macro:`Py_BEGIN_CRITICAL_SECTION2` 和 :c:macro:`Py_END_CRITICAL_SECTION2` "
+"- 用于同时锁定两个对象"
 
 #: ../../howto/free-threading-extensions.rst:286
 msgid ""
@@ -573,6 +585,9 @@ msgid ""
 "non-free-threaded builds, so they can be safely added to code that needs to "
 "support both build types."
 msgstr ""
+"这些宏必须成对使用，并且必须出现在同一个C作用域中，因为它们建立了一个新的局部"
+"作用域。这些宏在非自由线程构建中是无操作的，因此可以安全地将它们添加到需要支"
+"持两种构建类型的代码中。"
 
 #: ../../howto/free-threading-extensions.rst:291
 msgid ""
@@ -581,6 +596,8 @@ msgid ""
 "has an internal count field, you could use a critical section while reading "
 "or writing that field::"
 msgstr ""
+"临界区的一个常见用途是在访问对象的内部属性时锁定对象。例如，如果扩展类型有一"
+"个内部计数字段，你可以在读取或写入该字段时使用临界区::"
 
 #: ../../howto/free-threading-extensions.rst:296
 msgid ""
@@ -596,10 +613,21 @@ msgid ""
 "obj->count = new_count;\n"
 "Py_END_CRITICAL_SECTION();"
 msgstr ""
+"// 读取计数，返回对内部计数值的新引用\n"
+"PyObject *result;\n"
+"Py_BEGIN_CRITICAL_SECTION(obj);\n"
+"result = Py_NewRef(obj->count);\n"
+"Py_END_CRITICAL_SECTION();\n"
+"return result;\n"
+"\n"
+"// 写入计数，从new_count中获取引用\n"
+"Py_BEGIN_CRITICAL_SECTION(obj);\n"
+"obj->count = new_count;\n"
+"Py_END_CRITICAL_SECTION();"
 
 #: ../../howto/free-threading-extensions.rst:310
 msgid "How Critical Sections Work"
-msgstr ""
+msgstr "临界区如何运作"
 
 #: ../../howto/free-threading-extensions.rst:312
 msgid ""
@@ -609,6 +637,9 @@ msgid ""
 "O), the critical section is temporarily suspended—all locks are released—and "
 "then resumed when the blocking operation completes."
 msgstr ""
+"与传统锁不同，临界区不能保证在其整个持续时间内的独占访问。如果线程在持有临界"
+"区时阻塞（例如，通过获取另一个锁或执行I/O），则临界区被暂时挂起——所有锁被释放"
+"——然后在阻塞操作完成时恢复。"
 
 #: ../../howto/free-threading-extensions.rst:318
 msgid ""
@@ -679,6 +710,11 @@ msgid ""
 "released.  If :c:type:`!PyMutex` is used without a critical section, it will "
 "not be released and therefore does not get the same deadlock avoidance."
 msgstr ""
+"注意，上面描述的锁只是基于 :c:type:`!PyMutex` 的锁。 临界区实现并不知道或影响"
+"其他可能正在使用的锁定机制，比如 POSIX 互斥锁。 还要注意，当任何 :c:type:`!"
+"PyMutex` 阻塞时会导致临界区被挂起，只有属于临界区的互斥锁才会被释放。 如果 :"
+"c:type:`!PyMutex` 在没有临界区的情况下使用，它不会被释放，因此不会得到同样的"
+"死锁避免。"
 
 #: ../../howto/free-threading-extensions.rst:354
 msgid "Important Considerations"
@@ -690,6 +726,8 @@ msgid ""
 "threads to modify the protected data. Be careful about making assumptions "
 "about the state of the data after operations that might block."
 msgstr ""
+"临界区可以暂时释放它们的锁，允许其他线程修改受保护的数据。在进行可能阻塞的操"
+"作之后，要谨慎地假设数据的状态。"
 
 #: ../../howto/free-threading-extensions.rst:360
 msgid ""
@@ -700,6 +738,10 @@ msgid ""
 "I/O), all locks held by the thread via critical sections will be released. "
 "This is similar to how the GIL can be released during blocking calls."
 msgstr ""
+"因为锁可以临时释放（挂起），所以进入临界区并不能保证在整个临界区期间对受保护"
+"资源的独占访问。如果临界区内的代码调用另一个阻塞函数（例如，获取另一个锁、执"
+"行阻塞I/O），则该线程通过临界区持有的所有锁将被释放。这类似于在阻塞调用期间释"
+"放GIL的方式。"
 
 #: ../../howto/free-threading-extensions.rst:367
 msgid ""
@@ -707,12 +749,16 @@ msgid ""
 "critical section are guaranteed to be held at any given time. Locks for "
 "outer, nested critical sections might have been suspended."
 msgstr ""
+"在任何给定时间，只有与最近进入（最顶部）的临界区相关的锁才能保证被持有。外部"
+"嵌套临界区的锁可能已经挂起。"
 
 #: ../../howto/free-threading-extensions.rst:371
 msgid ""
 "You can lock at most two objects simultaneously with these APIs. If you need "
 "to lock more objects, you'll need to restructure your code."
 msgstr ""
+"使用这些API最多可以同时锁定两个对象。如果你需要锁定更多的对象，你需要调整你的"
+"代码。"
 
 #: ../../howto/free-threading-extensions.rst:374
 msgid ""
@@ -720,6 +766,8 @@ msgid ""
 "object twice, they are less efficient than purpose-built reentrant locks for "
 "this use case."
 msgstr ""
+"虽然如果你尝试锁定同一个对象两次，临界区不会死锁，但是对于这种用例，它们的效"
+"率不如专门构建的可重入锁。"
 
 #: ../../howto/free-threading-extensions.rst:378
 msgid ""
@@ -727,6 +775,8 @@ msgid ""
 "doesn't affect correctness (the implementation handles deadlock avoidance), "
 "but it's good practice to always lock objects in a consistent order."
 msgstr ""
+"当使用 :c:macro:`Py_BEGIN_CRITICAL_SECTION2` 时，对象的顺序不影响正确性（实现"
+"处理死锁避免），但始终以一致的顺序锁定对象是良好的实践。"
 
 #: ../../howto/free-threading-extensions.rst:382
 msgid ""
@@ -736,6 +786,9 @@ msgid ""
 "protecting purely internal extension state, standard mutexes or other "
 "synchronization primitives might be more appropriate."
 msgstr ""
+"请记住，临界区宏主要用于保护对 *Python对象* 的访问，这些对象可能涉及易受上述"
+"死锁场景影响的内部CPython操作。为了保护纯粹的内部扩展状态，标准互斥体或其他同"
+"步原语可能更合适。"
 
 #: ../../howto/free-threading-extensions.rst:390
 msgid "Building Extensions for the Free-Threaded Build"

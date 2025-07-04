@@ -10,15 +10,16 @@
 # WH-2099 <wh2099@outlook.com>, 2023
 # Xu Siyuan, 2024
 # Freesand Leo <yuqinju@163.com>, 2025
+# 汇民 王 <whuim@qq.com>, 2025
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-20 14:21+0000\n"
+"POT-Creation-Date: 2025-06-27 14:20+0000\n"
 "PO-Revision-Date: 2021-06-28 00:57+0000\n"
-"Last-Translator: Freesand Leo <yuqinju@163.com>, 2025\n"
+"Last-Translator: 汇民 王 <whuim@qq.com>, 2025\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/python-doc/"
 "teams/5390/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -527,6 +528,12 @@ msgid ""
 "different interpreter, including :mod:`sys`, :mod:`builtins`, and even "
 "``__main__``."
 msgstr ""
+"每个工作线程的解释器都是与其他所有解释器隔离的。“隔离”意味着每个解释器都有自"
+"己的运行时状态，并且完全独立地运行。例如，如果你在一个解释器中重定向 :data:"
+"`sys.stdout` ，它不会自动重定向到任何其他解释器。如果你在一个解释器中导入了一"
+"个模块，它不会在其他解释器中自动导入。您需要在需要它的解释器中单独导入模块。"
+"事实上，在解释器中导入的每个模块都是与不同解释器中的相同模块完全独立的对象，"
+"包括 :mod:`sys`、:mod:`builtins` 甚至 ``__main__``。"
 
 #: ../../library/concurrent.futures.rst:276
 msgid ""
@@ -537,6 +544,10 @@ msgid ""
 "copies manually.  Immutable objects and data, like the builtin singletons, "
 "strings, and tuples of immutable objects, don't have these limitations."
 msgstr ""
+"隔离意味着可变对象或其他数据不能同时被多个解释器使用。这实际上意味着解释器实"
+"际上不能共享这些对象或数据。相反，每个解释器必须有自己的副本，并且必须手动同"
+"步副本之间的任何更改。不可变对象和数据，如不可变对象的内置单例、字符串和元"
+"组，就没有这些限制。"
 
 #: ../../library/concurrent.futures.rst:284
 msgid ""
@@ -545,6 +556,9 @@ msgid ""
 "efficient alternative is to serialize with :mod:`pickle` and then send the "
 "bytes over a shared :mod:`socket <socket>` or :func:`pipe <os.pipe>`."
 msgstr ""
+"解释器之间的通信和同步使用专用工具是最有效的，就像在:pep:`734`中建议的那样。"
+"一种效率较低的替代方法是使用:mod:`pickle`进行序列化，然后通过共享的 :mod:`套"
+"接字 <socket>` 或 :func:`管道 <os.pipe>` 发送字节。"
 
 #: ../../library/concurrent.futures.rst:292
 msgid ""
@@ -556,6 +570,11 @@ msgid ""
 "Interpreter Lock <global interpreter lock>`, which means code run with this "
 "executor has true multi-core parallelism."
 msgstr ""
+"一个:class:`ThreadPoolExecutor`子类，使用最多 *max_workers* 线程的池异步执行"
+"调用。每个线程在自己的解释器中运行任务。工作解释器彼此隔离，这意味着每个解释"
+"器都有自己的运行时状态，并且它们不能共享任何可变对象或其他数据。每个解释器都"
+"有自己的 :term:`全局解释器锁 <global interpreter lock>`，这意味着使用该执行器"
+"运行的代码具有真正的多核并行性。"
 
 #: ../../library/concurrent.futures.rst:300
 msgid ""
@@ -565,16 +584,22 @@ msgid ""
 "executor serializes the *initializer* and *initargs* using :mod:`pickle` "
 "when sending them to the worker's interpreter."
 msgstr ""
+"可选的 *initializer* 和 *initargs* 参数与:class:`!ThreadPoolExecutor`具有相同"
+"的含义：初始化器在每个工作线程被创建时运行，尽管在这种情况下它是在工作线程的"
+"解释器中运行的。当执行器将 *initializer* 和 *initargs* 发送给工作线程的解释器"
+"时，使用:mod:`pickle`对它们进行序列化。"
 
 #: ../../library/concurrent.futures.rst:308
 msgid ""
 "The executor may replace uncaught exceptions from *initializer* with :class:"
 "`~concurrent.futures.interpreter.ExecutionFailed`."
 msgstr ""
+"执行器可以用:class:`~concurrent.futures.interpreter.ExecutionFailed`替换 "
+"*initializer* 中未捕获的异常。"
 
 #: ../../library/concurrent.futures.rst:311
 msgid "Other caveats from parent :class:`ThreadPoolExecutor` apply here."
-msgstr ""
+msgstr "来自:class:`ThreadPoolExecutor`的其他警告也适用于此。"
 
 #: ../../library/concurrent.futures.rst:313
 msgid ""
@@ -583,6 +608,9 @@ msgid ""
 "sending them to its interpreter.  The worker likewise serializes the return "
 "value when sending it back."
 msgstr ""
+":meth:`~Executor.submit` 和 :meth:`~Executor.map` 的工作方式与正常情况一样，"
+"只是工作线程在将可调用函数和参数发送到其解释器时使用:mod:`pickle`对其进行序列"
+"化。在发送返回值时，工作线程同样会对其进行序列化。"
 
 #: ../../library/concurrent.futures.rst:318
 msgid ""
@@ -594,6 +622,11 @@ msgid ""
 "preserve the original as-is then it directly preserves the corresponding :"
 "class:`~concurrent.futures.interpreter.ExecutionFailed` instance instead."
 msgstr ""
+"当工作线程的当前任务引发未捕获的异常时，工作线程总是尝试保持异常的原样。如果"
+"成功，那么它还会将``__cause__``设置为相应的:class:`~concurrent.futures."
+"interpreter.ExecutionFailed`实例，该实例包含原始异常的摘要。在极少数情况下，"
+"工作线程不能保留原来的状态，那么它会直接保留相应的:class:`~concurrent."
+"futures.interpreter.ExecutionFailed`实例。"
 
 #: ../../library/concurrent.futures.rst:330
 msgid "ProcessPoolExecutor"
@@ -765,6 +798,9 @@ msgid ""
 "it will also call :meth:`Executor.shutdown` to ensure that all other "
 "resources associated with the executor are freed."
 msgstr ""
+"尝试通过对每个进程调用 :meth:`Process.kill <multiprocessing.Process.kill>` 来"
+"立即杀死所有存活的工作进程。在内部，它还将调用:meth:`Executor.shutdown`来确保"
+"释放与执行器相关的所有其他资源。"
 
 #: ../../library/concurrent.futures.rst:437
 msgid "ProcessPoolExecutor Example"

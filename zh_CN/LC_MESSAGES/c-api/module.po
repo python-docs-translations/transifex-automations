@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-20 14:21+0000\n"
+"POT-Creation-Date: 2025-06-27 14:20+0000\n"
 "PO-Revision-Date: 2021-06-28 00:49+0000\n"
 "Last-Translator: Freesand Leo <yuqinju@163.com>, 2025\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/python-doc/"
@@ -261,6 +261,7 @@ msgid ""
 "initialized and specifies the additional amount of memory it requires for "
 "its state."
 msgstr ""
+"将其设置为非负值意味着可以重新初始化模块，并指定其状态所需的额外内存量。"
 
 #: ../../c-api/module.rst:188
 msgid ""
@@ -270,6 +271,9 @@ msgid ""
 "initialization>` or when :ref:`creating modules dynamically <moduledef-"
 "dynamic>`."
 msgstr ""
+"将``m_size``设置为``-1``意味着模块不支持子解析器，因为它具有全局状态。负"
+"``m_size``只允许在使用 :ref:`遗留单阶段初始化 <single-phase-initialization>` "
+"或 :ref:`动态创建模块 <moduledef-dynamic>` 时使用。"
 
 #: ../../c-api/module.rst:194
 msgid "See :PEP:`3121` for more details."
@@ -289,6 +293,8 @@ msgid ""
 "``{0, NULL}`` entry. When using legacy single-phase initialization, "
 "*m_slots* must be ``NULL``."
 msgstr ""
+"由针对多阶段初始化的槽位定义组成的数组，以一个 ``{0, NULL}`` 条目结束。 当使"
+"用遗留单阶段初始化时，*m_slots* 必须为 ``NULL``。"
 
 #: ../../c-api/module.rst:209
 msgid ""
@@ -529,6 +535,8 @@ msgid ""
 "also used in :ref:`single-phase initialization <single-phase-"
 "initialization>`."
 msgstr ""
+"以下函数可用于在扩展的 :ref:`初始化函数 <extension-export-hook>` 之外创建模"
+"块。 它们也用于 :ref:`单阶段初始化 <single-phase-initialization>`。"
 
 #: ../../c-api/module.rst:404
 msgid ""
@@ -537,6 +545,10 @@ msgid ""
 "macro:`PYTHON_API_VERSION`, or to :c:macro:`PYTHON_ABI_VERSION` if using "
 "the :ref:`limited API <limited-c-api>`."
 msgstr ""
+"根据 *def* 中的定义创建一个新的模块对象。这是一个调用 :c:func:"
+"`PyModule_Create2` 的宏，其中 *module_api_version* 设置为 :c:macro:"
+"`PYTHON_API_VERSION`，或者如果使用 :ref:`受限 API <limited-c-api>`，则设置"
+"为 :c:macro:`PYTHON_ABI_VERSION`。"
 
 #: ../../c-api/module.rst:412
 msgid ""
@@ -553,6 +565,8 @@ msgid ""
 "This function does not support slots. The :c:member:`~PyModuleDef.m_slots` "
 "member of *def* must be ``NULL``."
 msgstr ""
+"此函数不支持槽位。 *def* 的 :c:member:`~PyModuleDef.m_slots` 成员必须为 "
+"``NULL``。"
 
 #: ../../c-api/module.rst:424
 msgid ""
@@ -568,6 +582,9 @@ msgid ""
 "*module_api_version* set to :c:macro:`PYTHON_API_VERSION`, or to :c:macro:"
 "`PYTHON_ABI_VERSION` if using the :ref:`limited API <limited-c-api>`."
 msgstr ""
+"这个宏调用 :c:func:`PyModule_FromDefAndSpec2`， *module_api_version* 设置为 :"
+"c:macro:`PYTHON_API_VERSION`，或者如果使用 :ref:`受限 API <limited-c-api>`，"
+"则设置为 :c:macro:`PYTHON_ABI_VERSION`。"
 
 #: ../../c-api/module.rst:438
 msgid ""
@@ -586,6 +603,8 @@ msgid ""
 "Both ``PyModule_FromDefAndSpec`` and ``PyModule_ExecDef`` must be called to "
 "fully initialize a module."
 msgstr ""
+"注意，这不会处理执行槽（:c:data:`Py_mod_exec`）。必须调用"
+"``PyModule_FromDefAndSpec``和``PyModule_ExecDef``来完全初始化模块。"
 
 #: ../../c-api/module.rst:451
 msgid ""
@@ -601,17 +620,19 @@ msgstr "执行参数*def*中给出的任意执行槽（:c:data:`Py_mod_exec`）�
 
 #: ../../c-api/module.rst:464
 msgid "The C API version. Defined for backwards compatibility."
-msgstr ""
+msgstr "C API 版本，为向后兼容性而定义。"
 
 #: ../../c-api/module.rst:466 ../../c-api/module.rst:473
 msgid ""
 "Currently, this constant is not updated in new Python versions, and is not "
 "useful for versioning. This may change in the future."
 msgstr ""
+"目前，该常量在新的Python版本中没有更新，并且对于版本控制没有用处。这在未来可"
+"能会改变。"
 
 #: ../../c-api/module.rst:471
 msgid "Defined as ``3`` for backwards compatibility."
-msgstr ""
+msgstr "为向后兼容性定义为``3``。"
 
 #: ../../c-api/module.rst:478
 msgid "Support functions"
@@ -624,6 +645,9 @@ msgid ""
 "initialization function for legacy :ref:`single-phase initialization <single-"
 "phase-initialization>`, or code that creates modules dynamically."
 msgstr ""
+"提供以下函数来帮助初始化模块状态。它们用于模块的执行槽（:c:data:"
+"`Py_mod_exec`）、遗留的 :ref:`单阶段初始化 <single-phase-initialization>` 的"
+"初始化函数，或动态创建模块的代码。"
 
 #: ../../c-api/module.rst:488
 msgid ""
@@ -881,6 +905,10 @@ msgid ""
 "level \"functions\" implemented in C typically receive the module as their "
 "first parameter, making them similar to instance methods on Python classes)."
 msgstr ""
+"将以 ``NULL`` 结尾的 *functions* 数组中的函数添加到 *module* 中。有关单个条目"
+"的更多细节，请参阅 :c:type:`PyMethodDef` 文档（由于缺少共享的模块命名空间，在"
+"C中实现的模块级“函数”通常将模块作为它的第一个形参，与Python类的实例方法类"
+"似）。"
 
 #: ../../c-api/module.rst:641
 msgid ""
@@ -890,6 +918,10 @@ msgid ""
 "may prefer defining functions in multiple :c:type:`PyMethodDef` arrays; in "
 "that case they should call this function directly."
 msgstr ""
+"此函数在从 ``PyModuleDef`` 创建模块时自动调用（例如使用 :ref:`multi-phase-"
+"initialization`、 ``PyModule_Create`` 或 ``PyModule_FromDefAndSpec`` 等）。 "
+"一些模块作者可能更喜欢在多个 :c:type:`PyMethodDef` 数组中定义函数；在这种情况"
+"下，他们应该直接调用这个函数。"
 
 #: ../../c-api/module.rst:652
 msgid ""
@@ -898,6 +930,9 @@ msgid ""
 "using :ref:`multi-phase-initialization`, ``PyModule_Create``, or "
 "``PyModule_FromDefAndSpec``)."
 msgstr ""
+"将 *module* 的文档字符串设置为 *docstring* 。 此函数在使用 ``PyModuleDef`` 创"
+"建模块时自动调用（例如使用 :ref:`multi-phase-initialization`、"
+"``PyModule_Create`` 或 ``PyModule_FromDefAndSpec`` 时）。"
 
 #: ../../c-api/module.rst:661
 msgid ""
@@ -910,10 +945,16 @@ msgid ""
 "configured with :option:`--disable-gil`. Return ``-1`` with an exception set "
 "on error, ``0`` on success."
 msgstr ""
+"指明 *module* 是否支持不带全局解释器锁 (GIL) 运行，使用一个来自 :c:macro:"
+"`Py_mod_gil` 的值 。 当使用 :ref:`single-phase-initialization` 时它必须在 "
+"*module* 的初始化函数执行期间被调用。 如果此函数在模块初始化期间未被调用，导"
+"入机制将假定该模块不支持不带 GIL 运行。 此函数仅在配置了 :option:`--disable-"
+"gil` 的 Python 构建版中可用。 当发生错误时将返回 ``-1`` 并设置一个异常，成功"
+"时将返回 ``0``。"
 
 #: ../../c-api/module.rst:675
 msgid "Module lookup (single-phase initialization)"
-msgstr ""
+msgstr "模块查找（单阶段初始化）"
 
 #: ../../c-api/module.rst:677
 msgid ""
@@ -922,6 +963,9 @@ msgid ""
 "context of the current interpreter. This allows the module object to be "
 "retrieved later with only a reference to the module definition."
 msgstr ""
+"遗留的 :ref:`单阶段初始化 <single-phase-initialization>` 初始化方案创建可以在"
+"当前解释器上下文中被查找的单例模块。这使得仅通过模块定义的引用，就可以检索模"
+"块对象。"
 
 #: ../../c-api/module.rst:682
 msgid ""
@@ -968,12 +1012,17 @@ msgid ""
 "directly, or by referring to its implementation for details of the required "
 "state updates)."
 msgstr ""
+"Python 会在使用 :ref:`单阶段初始化` 导入一个模块后自动调用 "
+"``PyState_AddModule``，因此从模块初始化代码中调用它是没有必要的（但也没有害"
+"处）。 显式的调用仅在模块自己的初始化代码后继调用了 ``PyState_FindModule`` 的"
+"情况下才是必要的。 此函数主要是为了实现替代导入机制（或是通过直接调用它，或是"
+"通过引用它的实现来获取所需的状态更新详情）。"
 
 #: ../../c-api/module.rst:708
 msgid ""
 "If a module was attached previously using the same *def*, it is replaced by "
 "the new *module*."
-msgstr ""
+msgstr "如果先前使用相同的 *def* 附加了一个模块，则将其替换为新的 *module*。"
 
 #: ../../c-api/module.rst:711 ../../c-api/module.rst:722
 msgid "The caller must have an :term:`attached thread state`."

@@ -16,6 +16,7 @@
 # taotieren <admin@taotieren.com>, 2023
 # Rafael Fontenelle <rffontenelle@gmail.com>, 2024
 # Nyuan Zhang, 2024
+# 汇民 王 <whuim@qq.com>, 2025
 # Freesand Leo <yuqinju@163.com>, 2025
 #
 #, fuzzy
@@ -252,6 +253,8 @@ msgid ""
 "pointer is set to ``NULL``. It is the same as ``s?`` with the C pointer was "
 "initialized to ``NULL``."
 msgstr ""
+"与 ``s`` 类似，但 Python 对象也可能为 ``None``，在这种情况下 C 指针将被设为 "
+"``NULL``。 它相当于 C 指针被初始化为 ``NULL`` 的 ``s?``。"
 
 #: ../../c-api/arg.rst:118
 msgid ""
@@ -266,6 +269,9 @@ msgid ""
 "is the same as ``s*?`` with the ``buf`` member of the :c:type:`Py_buffer` "
 "structure was initialized to ``NULL``."
 msgstr ""
+"与 ``s*`` 类似，但 Python 对象也可能为 ``None``，在这种情况下 :c:type:"
+"`Py_buffer` 结构体的 ``buf`` 成员将被设为 ``NULL``。 它相当于 :c:type:"
+"`Py_buffer` 结构体的 ``buf`` 成员被初始化为 ``NULL`` 的 ``s*?``。"
 
 #: ../../c-api/arg.rst:124
 msgid ""
@@ -281,6 +287,8 @@ msgid ""
 "pointer is set to ``NULL``. It is the same as ``s#?`` with the C pointer was "
 "initialized to ``NULL``."
 msgstr ""
+"与 ``s#`` 类似，但 Python 对象也可能为 ``None``，在这种情况下 C 指针将被设为 "
+"``NULL``。 它相当于 C 指针被初始化为 ``NULL`` 的 ``s#?``。"
 
 #: ../../c-api/arg.rst:129
 msgid "``y`` (read-only :term:`bytes-like object`) [const char \\*]"
@@ -850,6 +858,9 @@ msgid ""
 "*items*.  The C arguments must correspond to the individual format units in "
 "*items*.  Format units for sequences may be nested."
 msgstr ""
+"对象必须是 Python 序列（除了 :class:`str`、:class:`bytes` 或 :class:"
+"`bytearray`），它的长度是 *items* 中格式单元的数量。C 参数必须对应 *items* 中"
+"每一个独立的格式单元。序列中的格式单元可能有嵌套。"
 
 #: ../../c-api/arg.rst:376
 msgid ""
@@ -859,21 +870,26 @@ msgid ""
 "object must be a Python tuple. The *converter* for the ``O&`` format unit in "
 "*items* must not store a borrowed buffer or a borrowed reference."
 msgstr ""
+"如果 *items* 包含存储 :ref:`借用缓冲区 <c-arg-borrowed-buffer>`（``s``、"
+"``s#``、``z``、``z#``、``y``或``y#``）或 :term:`借用引用`（``S``、``Y``、"
+"``U``、``O`` 或 ``O!``）的格式单元，则对象必须是Python元组。*items* 中 "
+"``O&`` 格式单元的 *转换器* 不得存储借用缓冲区或借用引用。"
 
 #: ../../c-api/arg.rst:383
 msgid ""
 ":class:`str` and :class:`bytearray` objects no longer accepted as a sequence."
-msgstr ""
+msgstr ":class:`str` 和 :class:`bytearray` 对象不再被接受为序列。"
 
 #: ../../c-api/arg.rst:386
 msgid ""
 "Non-tuple sequences are deprecated if *items* contains format units which "
 "store a borrowed buffer or a borrowed reference."
 msgstr ""
+"如果 *items* 包含存储借用缓冲区或借用引用的格式单元，则非元组序列将被弃用。"
 
 #: ../../c-api/arg.rst:390
 msgid "``unit?`` (anything or ``None``) [*matching-variable(s)*]"
-msgstr ""
+msgstr "``unit?`` (任何或 ``None``) [*匹配变量*]"
 
 #: ../../c-api/arg.rst:391
 msgid ""
@@ -883,6 +899,9 @@ msgid ""
 "the contents of the corresponding C variable(s). If the argument is not "
 "``None``, it is parsed according to the specified format unit."
 msgstr ""
+"``?`` 修改前面格式单元的行为。 与该形参对应的 C 变量应初始化为其默认值 —— 当"
+"参数为 ``None`` 时，:c:func:`PyArg_ParseTuple` 不会触及相应 C 变量的内容。 如"
+"果参数不为 ``None``，则根据指定的格式单元进行解析。"
 
 #: ../../c-api/arg.rst:401
 msgid ""
@@ -1402,7 +1421,7 @@ msgstr "将一个 C :c:type:`Py_ssize_t` 类型转化为 Python 整型。"
 
 #: ../../c-api/arg.rst:687
 msgid "Convert a C :c:expr:`int` to a Python :class:`bool` object."
-msgstr ""
+msgstr "将一个 C :c:expr:`int` 转换为 Python :class:`bool` 对象。"
 
 #: ../../c-api/arg.rst:689
 msgid ""
@@ -1411,6 +1430,9 @@ msgid ""
 "automatically. You can convert another type (for example, a pointer or a "
 "float) to a suitable ``int`` value using ``(x) ? 1 : 0`` or ``!!x``."
 msgstr ""
+"请注意，这种格式需要一个``int``参数。与C语言中的大多数其他上下文不同，可变参"
+"数不会自动强制转换为合适的类型。您可以使用``(x) ? 1 : 0``或``!!x``将另一种类"
+"型（例如，指针或浮点数）转换为合适的``int``值。"
 
 #: ../../c-api/arg.rst:697
 msgid "``c`` (:class:`bytes` of length 1) [char]"
