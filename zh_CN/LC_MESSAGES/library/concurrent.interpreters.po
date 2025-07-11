@@ -7,19 +7,19 @@
 # 叶浚安 <ye.pandaaaa906@gmail.com>, 2025
 # Rafael Fontenelle <rffontenelle@gmail.com>, 2025
 # ww song <sww4718168@gmail.com>, 2025
-# 汇民 王 <whuim@qq.com>, 2025
-# Freesand Leo <yuqinju@163.com>, 2025
 # Kade For, 2025
 # walkinrain <walkinrain2008@outlook.com>, 2025
+# Freesand Leo <yuqinju@163.com>, 2025
+# 汇民 王 <whuim@qq.com>, 2025
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-04 14:20+0000\n"
+"POT-Creation-Date: 2025-07-11 14:21+0000\n"
 "PO-Revision-Date: 2025-06-13 14:23+0000\n"
-"Last-Translator: walkinrain <walkinrain2008@outlook.com>, 2025\n"
+"Last-Translator: 汇民 王 <whuim@qq.com>, 2025\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/python-doc/"
 "teams/5390/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -52,6 +52,8 @@ msgid ""
 "mostly involves switching to an interpreter (in the current thread) and "
 "calling a function in that execution context."
 msgstr ""
+"本模块的最初目标是提供一个基本 API 来管理解释器（也称“子解释器”）并在其中运行"
+"任务。 运行过程涉及（在当前线程中）切换解释器并在执行上下文中调用函数。"
 
 #: ../../library/concurrent.interpreters.rst:24
 msgid ""
@@ -60,14 +62,17 @@ msgid ""
 "is available separately through :mod:`threads <threading>`  See `below "
 "<interp-concurrency_>`_"
 msgstr ""
+"对于并发操作，解释器本身（以及本模块）并未提供状态隔离以外的更多手段，对其自"
+"身而言用处不大。 实际的并发是通过 :mod:`线程 <threading>` 单独提供的。 参见 "
+"`below <interp-concurrency_>`_"
 
 #: ../../library/concurrent.interpreters.rst:31
 msgid ":class:`~concurrent.futures.InterpreterPoolExecutor`"
-msgstr ""
+msgstr ":class:`~concurrent.futures.InterpreterPoolExecutor`"
 
 #: ../../library/concurrent.interpreters.rst:32
 msgid "combines threads with interpreters in a familiar interface."
-msgstr ""
+msgstr "通过熟悉的接口实现线程与解释器的结合。"
 
 #: ../../library/concurrent.interpreters.rst:36
 msgid ":ref:`isolating-extensions-howto`"
@@ -109,11 +114,11 @@ msgstr "关键细节"
 msgid ""
 "Before we dive in further, there are a small number of details to keep in "
 "mind about using multiple interpreters:"
-msgstr ""
+msgstr "在进一步深入之前，关于多解释器的使用需要注意以下几个要点："
 
 #: ../../library/concurrent.interpreters.rst:56
 msgid "`isolated <interp-isolation_>`_, by default"
-msgstr ""
+msgstr "默认情况下为 `解释器隔离 <interp-isolation_>`_"
 
 #: ../../library/concurrent.interpreters.rst:57
 msgid "no implicit threads"
@@ -136,6 +141,9 @@ msgid ""
 "in addition to the current interpreter, related to the current exception and "
 "the bytecode eval loop.)"
 msgstr ""
+"\"解释器\"本质上是 Python 运行时的执行上下文，它包含了运行时执行程序所需的所"
+"有状态，包括导入状态和内置对象等。（每个线程——即使只有主线程——除了当前解释器"
+"外，还拥有一些额外的运行时状态，这些状态与当前异常和字节码求值循环相关。）"
 
 #: ../../library/concurrent.interpreters.rst:75
 msgid ""
@@ -144,10 +152,13 @@ msgid ""
 "not well known, and the `isolation <interp-isolation_>`_ was relatively "
 "incomplete until version 3.12."
 msgstr ""
+"解释器的概念和功能自 Python 2.2 版本起便已存在，但该特性此前仅能通过 C-API 使"
+"用且鲜为人知，同时 `隔离 <interp-isolation_>`_ 功能在 3.12 版本前相对不够完"
+"善。"
 
 #: ../../library/concurrent.interpreters.rst:83
 msgid "Multiple Interpreters and Isolation"
-msgstr ""
+msgstr "多解释器与隔离"
 
 #: ../../library/concurrent.interpreters.rst:85
 msgid ""
@@ -156,6 +167,8 @@ msgid ""
 "isolated from the others (with a limited number of carefully managed process-"
 "global exceptions to the rule)."
 msgstr ""
+"Python 实现方案可能支持在同一进程中使用多个解释器，CPython 就具备此功能。每个"
+"解释器实际上都是相互隔离的（仅有少量经过严格管控的进程级全局例外情况）。"
 
 #: ../../library/concurrent.interpreters.rst:90
 msgid ""
@@ -163,6 +176,8 @@ msgid ""
 "logical components of a program, where you want to have careful control of "
 "how those components interact."
 msgstr ""
+"这种隔离机制的主要价值在于为程序的不同逻辑组件提供严格隔离，使开发者能够精准"
+"控制这些组件之间的交互方式。"
 
 #: ../../library/concurrent.interpreters.rst:96
 msgid ""
@@ -173,10 +188,14 @@ msgid ""
 "interpreters in security-sensitive situations, where they shouldn't have "
 "access to each other's data."
 msgstr ""
+"从技术上讲，同一进程中的解释器永远无法实现严格隔离，因为在同一进程内对内存访"
+"问几乎没有任何限制。Python 运行时会尽力确保隔离性，但扩展模块很容易破坏这种隔"
+"离。因此，在安全敏感场景下——当不同解释器之间本不应相互访问数据时——请勿使用多"
+"解释器模式。"
 
 #: ../../library/concurrent.interpreters.rst:104
 msgid "Running in an Interpreter"
-msgstr ""
+msgstr "在一个解释器中运行"
 
 #: ../../library/concurrent.interpreters.rst:106
 msgid ""
@@ -186,6 +205,10 @@ msgid ""
 "interpreters` module provides a basic API for creating and managing "
 "interpreters, as well as the switch-and-call operation."
 msgstr ""
+"在另一个解释器中运行涉及两个步骤：首先在当前线程切换至目标解释器，然后调用目"
+"标函数。运行时将基于当前解释器的状态执行该函数。:mod:`!concurrent."
+"interpreters` 模块提供了一套基础API，用于创建和管理解释器，以及执行这种\"切"
+"换-调用\"操作。"
 
 #: ../../library/concurrent.interpreters.rst:113
 msgid ""
@@ -193,6 +216,9 @@ msgid ""
 "helper <interp-call-in-thread_>`_ for that though. There is another "
 "dedicated helper for calling the builtin :func:`exec` in an interpreter."
 msgstr ""
+"该操作不会自动启动其他线程，但可通过 `一个辅助工具 <interp-call-in-"
+"thread_>`_ 实现此功能。此外还提供了专用辅助工具，用于在解释器中调用内置函数 :"
+"func:`exec`。"
 
 #: ../../library/concurrent.interpreters.rst:118
 msgid ""
@@ -202,10 +228,13 @@ msgid ""
 "module.  This is the same as how scripts invoked from the command-line run "
 "in the :mod:`!__main__` module."
 msgstr ""
+"当在解释器中调用 :func:`exec`（或 :func:`eval`）时，它们会使用该解释器的 :"
+"mod:`!__main__` 模块作为\"全局\"命名空间来运行。对于未关联任何模块的函数也是"
+"如此。这与从命令行调用脚本时在 :mod:`!__main__` 模块中运行的方式相同。"
 
 #: ../../library/concurrent.interpreters.rst:128
 msgid "Concurrency and Parallelism"
-msgstr ""
+msgstr "并发与并行"
 
 #: ../../library/concurrent.interpreters.rst:130
 msgid ""
@@ -214,6 +243,9 @@ msgid ""
 "*in the current thread*.  That isolation makes them similar to processes, "
 "but they still enjoy in-process efficiency, like threads."
 msgstr ""
+"如前所述，解释器本身并不提供任何并发能力。它们严格代表了运行时 *在当前线程* "
+"中将使用的隔离执行上下文。这种隔离特性使解释器与进程相似，但同时又能像线程一"
+"样享受进程内的高效性。"
 
 #: ../../library/concurrent.interpreters.rst:136
 msgid ""
@@ -224,6 +256,9 @@ msgid ""
 "concurrency model to CSP or the actor model, a model which is relatively "
 "easy to reason about."
 msgstr ""
+"尽管如此，解释器确实天然支持特定类型的并发——这正是隔离机制带来的强大副作用。"
+"这种隔离性促成了与异步编程或线程截然不同的并发实现方式，其模型类似于CSP（通信"
+"顺序进程）或Actor模型，这种模型的逻辑可推理性相对较强。"
 
 #: ../../library/concurrent.interpreters.rst:143
 msgid ""
@@ -233,6 +268,9 @@ msgid ""
 "threads.  This mostly involves starting a new thread, where you switch to "
 "another interpreter and run what you want there."
 msgstr ""
+"开发者可以在单线程中利用这种并发模型，以无栈式风格在解释器之间来回切换。然"
+"而，当将多解释器与多线程结合使用时，该模型才更能体现其价值。这种结合主要涉"
+"及：启动新线程 → 切换至目标解释器 → 执行所需操作。"
 
 #: ../../library/concurrent.interpreters.rst:149
 msgid ""
@@ -240,12 +278,14 @@ msgid ""
 "thread, has its own *current* execution context.  Multiple threads can use "
 "the same interpreter or different ones."
 msgstr ""
+"在Python中，每个实际线程（即使仅运行主线程）都拥有自己的 *当前* 执行上下文。"
+"多个线程可以共享同一个解释器，也可以使用不同的解释器。"
 
 #: ../../library/concurrent.interpreters.rst:153
 msgid ""
 "At a high level, you can think of the combination of threads and "
 "interpreters as threads with opt-in sharing."
-msgstr ""
+msgstr "从高层次来看，可以将线程与解释器的组合理解为可选共享的线程模型。"
 
 #: ../../library/concurrent.interpreters.rst:156
 msgid ""
@@ -254,10 +294,13 @@ msgid ""
 "interpreters enables full multi-core parallelism. (This has been the case "
 "since Python 3.12.)"
 msgstr ""
+"一个重要优势是：解释器之间的隔离足够彻底，它们不共享 :term:`GIL`，这意味着将"
+"多线程与多解释器结合使用时，可以实现真正的多核并行处理。（该特性自 Python "
+"3.12 起支持。）"
 
 #: ../../library/concurrent.interpreters.rst:162
 msgid "Communication Between Interpreters"
-msgstr ""
+msgstr "解释器间通信"
 
 #: ../../library/concurrent.interpreters.rst:164
 msgid ""
@@ -265,16 +308,20 @@ msgid ""
 "communicate between them.  This usually involves some form of message "
 "passing, but can even mean sharing data in some carefully managed way."
 msgstr ""
+"在实际应用中，多解释器模式的价值取决于是否存在有效的通信机制。通常采用消息传"
+"递方式实现交互，但在严格管控条件下也可共享数据。"
 
 #: ../../library/concurrent.interpreters.rst:169
 msgid ""
 "With this in mind, the :mod:`!concurrent.interpreters` module provides a :"
 "class:`queue.Queue` implementation, available through :func:`create_queue`."
 msgstr ""
+"基于此，:mod:`!concurrent.interpreters` 模块提供了通过 :func:`create_queue` "
+"访问的 :class:`queue.Queue` 实现。"
 
 #: ../../library/concurrent.interpreters.rst:176
 msgid "\"Sharing\" Objects"
-msgstr ""
+msgstr "\"共享\"对象"
 
 #: ../../library/concurrent.interpreters.rst:178
 msgid ""
@@ -285,6 +332,10 @@ msgid ""
 "Instead, a copy must be created, which means mutable objects won't stay in "
 "sync."
 msgstr ""
+"在解释器间实际共享的任何数据都会丧失由 :term:`GIL` 提供的线程安全性。扩展模块"
+"可通过多种方案处理此问题，但在纯Python代码中，由于缺乏线程安全机制，对象实际"
+"上无法真正共享（仅有少数例外）。这种情况下必须创建对象副本，意味着可变对象无"
+"法保持同步状态。"
 
 #: ../../library/concurrent.interpreters.rst:185
 msgid ""
@@ -292,6 +343,8 @@ msgid ""
 "to another interpreter.  Nearly all of the immutable builtin objects are "
 "either directly shared or copied efficiently.  For example:"
 msgstr ""
+"默认情况下，当对象传递给其他解释器时，多数对象会通过 :mod:`pickle` 模块进行复"
+"制。几乎所有不可变内置对象要么直接共享，要么会高效复制。例如："
 
 #: ../../library/concurrent.interpreters.rst:189
 msgid ":const:`None`"
@@ -299,7 +352,7 @@ msgstr ":const:`None`"
 
 #: ../../library/concurrent.interpreters.rst:190
 msgid ":class:`bool` (:const:`True` and :const:`False`)"
-msgstr ""
+msgstr ":class:`bool` (:const:`True`  和 :const:`False`)"
 
 #: ../../library/concurrent.interpreters.rst:191
 msgid ":class:`bytes`"
@@ -319,13 +372,13 @@ msgstr ":class:`float`"
 
 #: ../../library/concurrent.interpreters.rst:195
 msgid ":class:`tuple` (of similarly supported objects)"
-msgstr ""
+msgstr ":class:`tuple`（仅限包含同类可支持对象时）"
 
 #: ../../library/concurrent.interpreters.rst:197
 msgid ""
 "There is a small number of Python types that actually share mutable data "
 "between interpreters:"
-msgstr ""
+msgstr "仅有少数Python类型能够真正在解释器间共享可变数据："
 
 #: ../../library/concurrent.interpreters.rst:200
 msgid ":class:`memoryview`"
@@ -362,6 +415,8 @@ msgid ""
 "interpreter the runtime created to run the :term:`REPL` or the script given "
 "at the command-line.  It is usually the only one."
 msgstr ""
+"返回主解释器的 :class:`Interpreter` 对象。该解释器是运行时为执行 :term:"
+"`REPL` 或命令行脚本而创建的，通常也是唯一存在的解释器实例。"
 
 #: ../../library/concurrent.interpreters.rst:227
 msgid ""
@@ -374,7 +429,7 @@ msgstr ""
 msgid ""
 "Initialize a new cross-interpreter queue and return a :class:`Queue` object "
 "for it."
-msgstr ""
+msgstr "初始化一个新的跨解释器队列，并返回其对应的 :class:`Queue` 对象。"
 
 #: ../../library/concurrent.interpreters.rst:237
 msgid "Interpreter objects"
@@ -400,7 +455,7 @@ msgstr "（只读）"
 
 #: ../../library/concurrent.interpreters.rst:250
 msgid "The underlying interpreter's ID."
-msgstr ""
+msgstr "底层解释器的 ID。"
 
 #: ../../library/concurrent.interpreters.rst:256
 msgid "A string describing where the interpreter came from."
@@ -420,7 +475,7 @@ msgstr "完成和销毁解释器。"
 
 #: ../../library/concurrent.interpreters.rst:269
 msgid "Bind objects in the interpreter's :mod:`!__main__` module."
-msgstr ""
+msgstr "将对象绑定到解释器的 :mod:`!__main__` 模块中。"
 
 #: ../../library/concurrent.interpreters.rst:271
 #: ../../library/concurrent.interpreters.rst:328
@@ -428,6 +483,8 @@ msgid ""
 "Some objects are actually shared and some are copied efficiently, but most "
 "are copied via :mod:`pickle`.  See :ref:`interp-object-sharing`."
 msgstr ""
+"部分对象会实际共享，部分对象可高效复制，但大多数对象仍需通过 :mod:`pickle` 模"
+"块进行复制。具体参见 :ref:`interp-object-sharing` 。"
 
 #: ../../library/concurrent.interpreters.rst:276
 msgid "Run the given source code in the interpreter (in the current thread)."
@@ -479,7 +536,7 @@ msgstr ""
 
 #: ../../library/concurrent.interpreters.rst:320
 msgid "Communicating Between Interpreters"
-msgstr ""
+msgstr "解释器间通信"
 
 #: ../../library/concurrent.interpreters.rst:324
 msgid ""
@@ -487,22 +544,28 @@ msgid ""
 "class:`queue.Queue` interface.  The underlying queue can only be created "
 "through :func:`create_queue`."
 msgstr ""
+"这是一个对底层跨解释器队列的封装，实现了标准的 :class:`queue.Queue` 接口。底"
+"层队列只能通过 :func:`create_queue` 函数创建。"
 
 #: ../../library/concurrent.interpreters.rst:335
 msgid "The queue's ID."
-msgstr ""
+msgstr "队列的ID。"
 
 #: ../../library/concurrent.interpreters.rst:340
 msgid ""
 "This exception, a subclass of :exc:`queue.Empty`, is raised from :meth:`!"
 "Queue.get` and :meth:`!Queue.get_nowait` when the queue is empty."
 msgstr ""
+"此异常继承自 :exc:`queue.Empty`，当队列为空时，会由 :meth:`!Queue.get` 和 :"
+"meth:`!Queue.get_nowait` 方法引发。"
 
 #: ../../library/concurrent.interpreters.rst:346
 msgid ""
 "This exception, a subclass of :exc:`queue.Full`, is raised from :meth:`!"
 "Queue.put` and :meth:`!Queue.put_nowait` when the queue is full."
 msgstr ""
+"此异常继承自 :exc:`queue.Full`，当队列已满时，会由 :meth:`!Queue.put` 和 :"
+"meth:`!Queue.put_nowait` 方法引发。"
 
 #: ../../library/concurrent.interpreters.rst:352
 msgid "Basic usage"
@@ -547,3 +610,35 @@ msgid ""
 "t = interp.call_in_thread(run)\n"
 "t.join()"
 msgstr ""
+"from concurrent import interpreters\n"
+"\n"
+"interp = interpreters.create()\n"
+"\n"
+"# 在当前操作系统线程中运行。\n"
+"\n"
+"interp.exec('print(\"spam!\")')\n"
+"\n"
+"interp.exec(\"\"\"if True:\n"
+"    print('spam!')\n"
+"    \"\"\")\n"
+"\n"
+"from textwrap import dedent\n"
+"interp.exec(dedent(\"\"\"\n"
+"    print('spam!')\n"
+"    \"\"\"))\n"
+"\n"
+"def run(arg):\n"
+"    return arg\n"
+"\n"
+"res = interp.call(run, 'spam!')\n"
+"print(res)\n"
+"\n"
+"def run():\n"
+"    print('spam!')\n"
+"\n"
+"interp.call(run)\n"
+"\n"
+"# 在新的操作系统线程中运行\n"
+"\n"
+"t = interp.call_in_thread(run)\n"
+"t.join()"
