@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-18 16:29+0000\n"
+"POT-Creation-Date: 2025-03-28 14:58+0000\n"
 "PO-Revision-Date: 2024-05-11 00:32+0000\n"
 "Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>, 2025\n"
 "Language-Team: Japanese (https://app.transifex.com/python-doc/teams/5390/"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: ../../c-api/exceptions.rst:8
 msgid "Exception Handling"
-msgstr ""
+msgstr "例外処理"
 
 #: ../../c-api/exceptions.rst:10
 msgid ""
@@ -38,6 +38,15 @@ msgid ""
 "pointer, or ``-1`` if they return an integer (exception: the ``PyArg_*`` "
 "functions return ``1`` for success and ``0`` for failure)."
 msgstr ""
+"この章で説明する関数を使うと、 Python の例外の処理や例外の送出ができるように"
+"なります。 Python の例外処理の基本をいくらか理解することが大切です。例外は "
+"POSIX :c:data:`errno` 変数にやや似た機能を果たします: 発生した中で最も新しい"
+"エラーの (スレッド毎の) グローバルなインジケータがあります。実行に成功した場"
+"合にはほとんどの C API 関数がこれをクリアしませんが、失敗したときにはエラーの"
+"原因を示すために設定します。ほとんどの C API 関数はエラーインジケータも返し、"
+"通常は関数がポインタを返すことになっている場合は ``NULL`` であり、関数が整数"
+"を返す場合は ``-1`` です。(例外: ``PyArg_*`` 関数は実行に成功したときに "
+"``1`` を返し、失敗したときに ``0`` を返します)."
 
 #: ../../c-api/exceptions.rst:20
 msgid ""
@@ -47,6 +56,11 @@ msgid ""
 "forbidden, for example you can't have a non-``NULL`` traceback if the "
 "exception type is ``NULL``)."
 msgstr ""
+"具体的には、エラーインジケータは、例外の型、例外の値、トレースバックオブジェ"
+"クトの３つのオブジェクトポインタで構成されます。これらのポインタはどれでも、"
+"設定されない場合は ``NULL`` になりえます（ただし、いくつかの組み合わせは禁止"
+"されており、例えば、例外の型が ``NULL`` の場合は、トレースバックは非 "
+"``NULL`` の値になりません）"
 
 #: ../../c-api/exceptions.rst:26
 msgid ""
@@ -60,6 +74,15 @@ msgid ""
 "error is not handled or carefully propagated, additional calls into the "
 "Python/C API may not behave as intended and may fail in mysterious ways."
 msgstr ""
+"ある関数が呼び出した関数がいくつか失敗したために、その関数が失敗しなければな"
+"らないとき、一般的にエラーインジケータを設定しません。呼び出した関数がすでに"
+"設定しています。エラーを処理して例外をクリアするか、あるいは (オブジェクト参"
+"照またはメモリ割り当てのような)それが持つどんなリソースも取り除いた後に戻るか"
+"のどちらか一方を行う責任があります。エラーを処理する準備をしていなければ、普"
+"通に続けるべきでは *ありません*。エラーのために戻る場合は、エラーが設定されて"
+"いると呼び出し元に知らせることが大切です。エラーが処理されていない場合または"
+"丁寧に伝えられている場合には、Python/C APIのさらなる呼び出しは意図した通りに"
+"は動かない可能性があり、不可解な形で失敗するかもしれません。"
 
 #: ../../c-api/exceptions.rst:37
 msgid ""
@@ -71,13 +94,15 @@ msgstr ""
 
 #: ../../c-api/exceptions.rst:44
 msgid "Printing and clearing"
-msgstr ""
+msgstr "出力とクリア"
 
 #: ../../c-api/exceptions.rst:49
 msgid ""
 "Clear the error indicator.  If the error indicator is not set, there is no "
 "effect."
 msgstr ""
+"エラーインジケータをクリアします。エラーインジケータが設定されていないなら"
+"ば、効果はありません。"
 
 #: ../../c-api/exceptions.rst:55
 msgid ""
@@ -86,12 +111,20 @@ msgid ""
 "printed and the Python process will exit with the error code specified by "
 "the ``SystemExit`` instance."
 msgstr ""
+"標準のトレースバックを ``sys.stderr`` に出力し、エラーインジケータをクリアし"
+"ます。\n"
+"ただし、エラーが ``SystemExit`` **である場合を除いて** です。\n"
+"その場合、トレースバックは出力されず、 Python プロセスは ``SystemExit`` イン"
+"スタンスで指定されたエラーコードで終了します。"
 
 #: ../../c-api/exceptions.rst:60
 msgid ""
 "Call this function **only** when the error indicator is set.  Otherwise it "
 "will cause a fatal error!"
 msgstr ""
+"エラーインジケータが設定されているときに **だけ**、この関数を呼び出してくださ"
+"い。\n"
+"それ以外の場合、致命的なエラーを引き起こすでしょう!"
 
 #: ../../c-api/exceptions.rst:63
 msgid ""
@@ -108,13 +141,13 @@ msgstr ""
 
 #: ../../c-api/exceptions.rst:75
 msgid "Alias for ``PyErr_PrintEx(1)``."
-msgstr ""
+msgstr "``PyErr_PrintEx(1)`` のエイリアスです。"
 
 #: ../../c-api/exceptions.rst:80
 msgid ""
 "Call :func:`sys.unraisablehook` using the current exception and *obj* "
 "argument."
-msgstr ""
+msgstr "現在の例外と *obj* 引数で :func:`sys.unraisablehook` を呼び出します。"
 
 #: ../../c-api/exceptions.rst:83
 msgid ""
@@ -134,7 +167,7 @@ msgstr ""
 
 #: ../../c-api/exceptions.rst:93
 msgid "An exception must be set when calling this function."
-msgstr ""
+msgstr "この関数を呼び出すときには、例外がセットされていなければなりません。"
 
 #: ../../c-api/exceptions.rst:95
 msgid "Print a traceback. Print only traceback if *obj* is ``NULL``."
@@ -152,7 +185,7 @@ msgstr ""
 
 #: ../../c-api/exceptions.rst:110
 msgid "Raising exceptions"
-msgstr ""
+msgstr "例外の送出"
 
 #: ../../c-api/exceptions.rst:112
 msgid ""
@@ -160,6 +193,9 @@ msgid ""
 "convenience, some of these functions will always return a ``NULL`` pointer "
 "for use in a ``return`` statement."
 msgstr ""
+"以下の関数は、現在のスレッドのエラーインジケータの設定を補助します。利便性の"
+"ため、これらの関数のいくつかは、 ``return`` 文で利用できるように常に "
+"``NULL`` ポインタを返します。"
 
 #: ../../c-api/exceptions.rst:119
 msgid ""
@@ -175,6 +211,8 @@ msgid ""
 "This function is similar to :c:func:`PyErr_SetString` but lets you specify "
 "an arbitrary Python object for the \"value\" of the exception."
 msgstr ""
+"この関数は :c:func:`PyErr_SetString` に似ていますが、例外の \"値(value)\" と"
+"して任意のPythonオブジェクトを指定することができます。"
 
 #: ../../c-api/exceptions.rst:134
 msgid ""
@@ -183,16 +221,22 @@ msgid ""
 "help format the error message; they have the same meaning and values as in :"
 "c:func:`PyUnicode_FromFormat`. *format* is an ASCII-encoded string."
 msgstr ""
+"この関数はエラーインジケータを設定し ``NULL`` を返します。 *exception* は"
+"Python例外クラスであるべきです。 *format* と以降の引数はエラーメッセージを作"
+"るためのもので, :c:func:`PyUnicode_FromFormat` の引数と同じ意味を持っていま"
+"す。 *format* は ASCII エンコードされた文字列です。"
 
 #: ../../c-api/exceptions.rst:143
 msgid ""
 "Same as :c:func:`PyErr_Format`, but taking a :c:type:`va_list` argument "
 "rather than a variable number of arguments."
 msgstr ""
+":c:func:`PyErr_Format` と同じですが、可変長引数の代わりに :c:type:`va_list` "
+"引数を受け取ります。"
 
 #: ../../c-api/exceptions.rst:151
 msgid "This is a shorthand for ``PyErr_SetObject(type, Py_None)``."
-msgstr ""
+msgstr "これは ``PyErr_SetObject(type, Py_None)`` を省略したものです。"
 
 #: ../../c-api/exceptions.rst:156
 msgid ""
@@ -200,6 +244,9 @@ msgid ""
 "*message* indicates that a built-in operation was invoked with an illegal "
 "argument.  It is mostly for internal use."
 msgstr ""
+"これは ``PyErr_SetString(PyExc_TypeError, message)`` を省略したもので、ここ"
+"で *message* は組み込み操作が不正な引数で呼び出されたということを表していま"
+"す。主に内部で使用するためのものです。"
 
 #: ../../c-api/exceptions.rst:163
 msgid ""
@@ -207,6 +254,9 @@ msgid ""
 "``NULL`` so an object allocation function can write ``return "
 "PyErr_NoMemory();`` when it runs out of memory."
 msgstr ""
+"これは ``PyErr_SetNone(PyExc_MemoryError)`` を省略したもので、``NULL`` を返し"
+"ます。したがって、メモリ不足になったとき、オブジェクト割り当て関数は "
+"``return PyErr_NoMemory();`` と書くことができます。"
 
 #: ../../c-api/exceptions.rst:172
 msgid ""
@@ -236,6 +286,9 @@ msgid ""
 "second filename object, for raising errors when a function that takes two "
 "filenames fails."
 msgstr ""
+":c:func:`PyErr_SetFromErrnoWithFilenameObject` に似てますが、ファイル名を2つ"
+"取る関数が失敗したときに例外を送出するために、2つ目のファイル名オブジェクトを"
+"受け取ります。"
 
 #: ../../c-api/exceptions.rst:204
 msgid ""
@@ -243,6 +296,10 @@ msgid ""
 "is given as a C string.  *filename* is decoded from the :term:`filesystem "
 "encoding and error handler`."
 msgstr ""
+":c:func:`PyErr_SetFromErrnoWithFilenameObject` に似ていますが、ファイル名は "
+"C 文字列として与えられます。\n"
+"*filename* は :term:`ファイルシステムのエンコーディングとエラーハンドラ "
+"<filesystem encoding and error handler>` でデコードされます。"
 
 #: ../../c-api/exceptions.rst:211
 msgid ""
@@ -269,6 +326,8 @@ msgid ""
 "Similar to :c:func:`PyErr_SetFromWindowsErr`, with an additional parameter "
 "specifying the exception type to be raised."
 msgstr ""
+":c:func:`PyErr_SetFromWindowsErr` に似ていますが、送出する例外の型を指定する"
+"引数が追加されています。"
 
 #: ../../c-api/exceptions.rst:234
 msgid ""
@@ -292,12 +351,16 @@ msgid ""
 "Similar to :c:func:`PyErr_SetExcFromWindowsErrWithFilenameObject`, but "
 "accepts a second filename object."
 msgstr ""
+":c:func:`PyErr_SetExcFromWindowsErrWithFilenameObject` に似てますが、2つ目の"
+"ファイル名オブジェクトを受け取ります。"
 
 #: ../../c-api/exceptions.rst:265
 msgid ""
 "Similar to :c:func:`PyErr_SetFromWindowsErrWithFilename`, with an additional "
 "parameter specifying the exception type to be raised."
 msgstr ""
+":c:func:`PyErr_SetFromWindowsErrWithFilename` に似ていますが、送出する例外の"
+"型を指定する引数が追加されています。"
 
 #: ../../c-api/exceptions.rst:273
 msgid ""
@@ -306,12 +369,18 @@ msgid ""
 "be ``NULL``, will be set as the :exc:`ImportError`'s respective ``name`` and "
 "``path`` attributes."
 msgstr ""
+":exc:`ImportError` を簡単に送出するための関数です。 *msg* は例外のメッセージ"
+"文字列としてセットされます。 *name* と *path* はどちらも ``NULL`` にしてよ"
+"く、それぞれ :exc:`ImportError` の ``name`` 属性と ``path`` 属性としてセット"
+"されます。"
 
 #: ../../c-api/exceptions.rst:283
 msgid ""
 "Much like :c:func:`PyErr_SetImportError` but this function allows for "
 "specifying a subclass of :exc:`ImportError` to raise."
 msgstr ""
+":c:func:`PyErr_SetImportError` とよく似ていますが、この関数は送出する例外とし"
+"て、 :exc:`ImportError` のサブクラスを指定できます。"
 
 #: ../../c-api/exceptions.rst:291
 msgid ""
@@ -320,18 +389,26 @@ msgid ""
 "attributes, which make the exception printing subsystem think the exception "
 "is a :exc:`SyntaxError`."
 msgstr ""
+"現在の例外のファイル、行、オフセットの情報をセットします。\n"
+"現在の例外が :exc:`SyntaxError` でない場合は、例外を表示するサブシステムが、"
+"例外が :exc:`SyntaxError` であると思えるように属性を追加します。"
 
 #: ../../c-api/exceptions.rst:301
 msgid ""
 "Like :c:func:`PyErr_SyntaxLocationObject`, but *filename* is a byte string "
 "decoded from the :term:`filesystem encoding and error handler`."
 msgstr ""
+":c:func:`PyErr_SyntaxLocationObject` と似ていますが、 *filename* は :term:`"
+"ファイルシステムのエンコーディングとエラーハンドラ <filesystem encoding and "
+"error handler>` でデコードされたバイト文字列です。"
 
 #: ../../c-api/exceptions.rst:309
 msgid ""
 "Like :c:func:`PyErr_SyntaxLocationEx`, but the *col_offset* parameter is "
 "omitted."
 msgstr ""
+":c:func:`PyErr_SyntaxLocationEx` と似ていますが、 *col_offset* 引数が除去され"
+"ています。"
 
 #: ../../c-api/exceptions.rst:315
 msgid ""
@@ -340,10 +417,13 @@ msgid ""
 "function) was invoked with an illegal argument.  It is mostly for internal "
 "use."
 msgstr ""
+"``PyErr_SetString(PyExc_SystemError, message)`` を省略したものです。ここで "
+"*message* は内部操作(例えば、Python/C API関数)が不正な引数とともに呼び出され"
+"たということを示しています。主に内部で使用するためのものです。"
 
 #: ../../c-api/exceptions.rst:322
 msgid "Issuing warnings"
-msgstr ""
+msgstr "警告"
 
 #: ../../c-api/exceptions.rst:324
 msgid ""
@@ -360,6 +440,19 @@ msgid ""
 "exception handling (for example, :c:func:`Py_DECREF` owned references and "
 "return an error value)."
 msgstr ""
+"以下の関数を使い、 C コードで起きた警告を報告します。\n"
+"Python の :mod:`warnings` モジュールで公開されている同様の関数とよく似てま"
+"す。\n"
+"これらの関数は通常警告メッセージを *sys.stderr* へ出力しますが、ユーザが警告"
+"をエラーへ変更するように指定することもでき、その場合は、関数は例外を送出しま"
+"す。\n"
+"警告機構がもつ問題のためにその関数が例外を送出するということも有り得ます。\n"
+"例外が送出されない場合は戻り値は ``0`` で、例外が送出された場合は ``-1`` で"
+"す。\n"
+"(警告メッセージが実際に出力されるか、およびその例外の原因が何かについては判断"
+"できません; これは意図的なものです。)\n"
+"例外が送出された場合、呼び出し元は通常の例外処理を行います (例えば、保持して"
+"いた参照に対し :c:func:`Py_DECREF` を行い、エラー値を返します)。"
 
 #: ../../c-api/exceptions.rst:339
 msgid ""
@@ -370,6 +463,12 @@ msgid ""
 "stack frame.  A *stack_level* of 1 is the function calling :c:func:"
 "`PyErr_WarnEx`, 2 is  the function above that, and so forth."
 msgstr ""
+"警告メッセージを発行します。 *category* 引数は警告カテゴリ(以下を参照) かまた"
+"は ``NULL`` で、 *message* 引数は UTF-8 エンコードされた文字列です。 "
+"*stacklevel* はスタックフレームの数を示す正の整数です; 警告はそのスタックフ"
+"レームの中の実行している行から発行されます。 *stacklevel* が 1 だと :c:func:"
+"`PyErr_WarnEx` を呼び出している関数が、2 だとその上の関数が Warning の発行元"
+"になります。"
 
 #: ../../c-api/exceptions.rst:346
 msgid ""
@@ -379,6 +478,11 @@ msgid ""
 "warning categories are available as global variables whose names are "
 "enumerated at :ref:`standardwarningcategories`."
 msgstr ""
+"警告カテゴリは :c:data:`PyExc_Warning` のサブクラスでなければなりません。 :c:"
+"data:`PyExc_Warning` は :c:data:`PyExc_Exception` のサブクラスです。\n"
+"デフォルトの警告カテゴリは :c:data:`PyExc_RuntimeWarning` です。\n"
+"標準の Python 警告カテゴリは、 :ref:`standardwarningcategories` で名前が列挙"
+"されているグローバル変数として利用可能です。"
 
 #: ../../c-api/exceptions.rst:352
 msgid ""
@@ -386,6 +490,9 @@ msgid ""
 "`warnings` module and the :option:`-W` option in the command line "
 "documentation.  There is no C API for warning control."
 msgstr ""
+"警告をコントロールするための情報については、 :mod:`warnings` モジュールのド"
+"キュメンテーションとコマンドライン・ドキュメンテーションの :option:`-W` オプ"
+"ションを参照してください。警告コントロールのためのC APIはありません。"
 
 #: ../../c-api/exceptions.rst:359
 msgid ""
@@ -394,6 +501,10 @@ msgid ""
 "warn_explicit`; see there for more information.  The *module* and *registry* "
 "arguments may be set to ``NULL`` to get the default effect described there."
 msgstr ""
+"すべての警告の属性を明示的に制御した警告メッセージを出します。これは Python "
+"関数 :func:`warnings.warn_explicit` の直接的なラッパーで、さらに情報を得るに"
+"はそちらを参照してください。そこに説明されているデフォルトの効果を得るため"
+"に、 *module* と *registry* 引数は ``NULL`` に設定することができます。"
 
 #: ../../c-api/exceptions.rst:370
 msgid ""
@@ -401,6 +512,10 @@ msgid ""
 "*module* are UTF-8 encoded strings, and *filename* is decoded from the :term:"
 "`filesystem encoding and error handler`."
 msgstr ""
+":c:func:`PyErr_WarnExplicitObject` に似ていますが、 *message* と *module* が "
+"UTF-8 エンコードされた文字列であるところが異なり、 *filename* は :term:`ファ"
+"イルシステムのエンコーディングとエラーハンドラ <filesystem encoding and "
+"error handler>` でデコードされます。"
 
 #: ../../c-api/exceptions.rst:377
 msgid ""
@@ -408,6 +523,9 @@ msgid ""
 "`PyUnicode_FromFormat` to format the warning message.  *format* is an ASCII-"
 "encoded string."
 msgstr ""
+":c:func:`PyErr_WarnEx` に似たような関数ですが、警告メッセージをフォーマットす"
+"るのに :c:func:`PyUnicode_FromFormat` を使用します。 *format* は ASCII にエン"
+"コードされた文字列です。"
 
 #: ../../c-api/exceptions.rst:386
 msgid ""
@@ -418,7 +536,7 @@ msgstr ""
 
 #: ../../c-api/exceptions.rst:393
 msgid "Querying the error indicator"
-msgstr ""
+msgstr "エラーインジケータの問い合わせ"
 
 #: ../../c-api/exceptions.rst:397
 msgid ""
@@ -428,10 +546,15 @@ msgid ""
 "do not own a reference to the return value, so you do not need to :c:func:"
 "`Py_DECREF` it."
 msgstr ""
+"エラーインジケータが設定されているかテストします。設定されている場合は、例外"
+"の *型* (``PyErr_Set*`` 関数の一つあるいは :c:func:`PyErr_Restore` への最も新"
+"しい呼び出しに対する第一引数)を返します。設定されていない場合は ``NULL`` を返"
+"します。あなたは戻り値への参照を持っていませんので、それに :c:func:"
+"`Py_DECREF` する必要はありません。"
 
 #: ../../c-api/exceptions.rst:403
 msgid "The caller must hold the GIL."
-msgstr ""
+msgstr "呼び出し側はGILを獲得しなければなりません。"
 
 #: ../../c-api/exceptions.rst:407
 msgid ""
@@ -440,6 +563,10 @@ msgid ""
 "fail since the exception may be an instance instead of a class, in the case "
 "of a class exception, or it may be a subclass of the expected exception.)"
 msgstr ""
+"戻り値を特定の例外と比較しないでください。その代わりに、下に示す :c:func:"
+"`PyErr_ExceptionMatches` を使ってください。(比較は簡単に失敗するでしょう。な"
+"ぜなら、例外はクラスではなくインスタンスかもしれないし、あるいは、クラス例外"
+"の場合は期待される例外のサブクラスかもしれないからです。)"
 
 #: ../../c-api/exceptions.rst:415
 msgid ""
@@ -447,6 +574,9 @@ msgid ""
 "should only be called when an exception is actually set; a memory access "
 "violation will occur if no exception has been raised."
 msgstr ""
+"``PyErr_GivenExceptionMatches(PyErr_Occurred(), exc)`` と同じ。例外が実際に設"
+"定されたときにだけ、これを呼び出だすべきです。例外が発生していないならば、メ"
+"モリアクセス違反が起きるでしょう。"
 
 #: ../../c-api/exceptions.rst:422
 msgid ""
@@ -455,18 +585,27 @@ msgid ""
 "instance of a subclass.  If *exc* is a tuple, all exception types in the "
 "tuple (and recursively in subtuples) are searched for a match."
 msgstr ""
+"例外 *given* が *exc* の例外型と適合する場合に真を返します。\n"
+"*exc* がクラスオブジェクトである場合も、 *given* がサブクラスのインスタンスで"
+"あるときに真を返します。\n"
+"*exc* がタプルの場合は、タプルにある (およびそのサブタプルに再帰的にある) す"
+"べての例外型が適合するか調べられます。"
 
 #: ../../c-api/exceptions.rst:430
 msgid ""
 "Return the exception currently being raised, clearing the error indicator at "
 "the same time. Return ``NULL`` if the error indicator is not set."
 msgstr ""
+"現在発生している例外を返し、同時にエラーインジケータを消去します。エラーイン"
+"ジケータが設定されていない場合は ``NULL`` を返します。"
 
 #: ../../c-api/exceptions.rst:433
 msgid ""
 "This function is used by code that needs to catch exceptions, or code that "
 "needs to save and restore the error indicator temporarily."
 msgstr ""
+"この関数は、例外をキャッチする必要があるコード、または一時的にエラーインジ"
+"ケータを保存・復元する必要があるコードに使用されます。"
 
 #: ../../c-api/exceptions.rst:436 ../../c-api/exceptions.rst:480
 msgid "For example::"
@@ -482,6 +621,13 @@ msgid ""
 "   PyErr_SetRaisedException(exc);\n"
 "}"
 msgstr ""
+"{\n"
+"   PyObject *exc = PyErr_GetRaisedException();\n"
+"\n"
+"   /* ... 他のエラーを発生させる可能性があるコード ... */\n"
+"\n"
+"   PyErr_SetRaisedException(exc);\n"
+"}"
 
 #: ../../c-api/exceptions.rst:446
 msgid ""
@@ -511,6 +657,11 @@ msgid ""
 "object retrieved.  The value and traceback object may be ``NULL`` even when "
 "the type object is not."
 msgstr ""
+"エラーインジケータをアドレスを渡す三つの変数の中へ取り出します。エラーインジ"
+"ケータが設定されていない場合は、三つすべての変数を ``NULL`` に設定します。エ"
+"ラーインジケータが設定されている場合はクリアされ、あなたは取り出されたそれぞ"
+"れのオブジェクトへの参照を持つことになります。型オブジェクトが ``NULL`` でな"
+"いときでさえ、その値とトレースバックオブジェクトは ``NULL`` かもしれません。"
 
 #: ../../c-api/exceptions.rst:477
 msgid ""
@@ -569,6 +720,12 @@ msgid ""
 "normalized, nothing happens. The delayed normalization is implemented to "
 "improve performance."
 msgstr ""
+"ある状況では、以下の :c:func:`PyErr_Fetch` が返す値は \"正規化されていない\" "
+"可能性があります。つまり、 ``*exc`` はクラスオブジェクトだが ``*val`` は同じ"
+"クラスのインスタンスではないという意味です。この関数はそのような場合にそのク"
+"ラスをインスタンス化するために使われます。その値がすでに正規化されている場合"
+"は何も起きません。遅延正規化はパフォーマンスを改善するために実装されていま"
+"す。"
 
 #: ../../c-api/exceptions.rst:532
 msgid ""
@@ -599,6 +756,10 @@ msgid ""
 "state temporarily.  Use :c:func:`PyErr_SetHandledException` to restore or "
 "clear the exception state."
 msgstr ""
+"この関数は、通常は例外を扱うコードでは使用されません。正確に言うと、これは例"
+"外の状態を一時的に保存し、元に戻す必要があるコードで使用することができます。"
+"例外の状態を元に戻す、もしくはクリアするには :c:func:"
+"`PyErr_SetHandledException` を使ってください。"
 
 #: ../../c-api/exceptions.rst:560
 msgid ""
@@ -614,6 +775,10 @@ msgid ""
 "state temporarily.  Use :c:func:`PyErr_GetHandledException` to get the "
 "exception state."
 msgstr ""
+"この関数は、通常は例外を扱うコードでは使用されません。正確に言うと、これは例"
+"外の状態を一時的に保存し、元に戻す必要があるコードで使用することができます。"
+"例外の状態を取得するには :c:func:`PyErr_GetHandledException` を使ってくださ"
+"い。"
 
 #: ../../c-api/exceptions.rst:576
 msgid ""
@@ -632,6 +797,10 @@ msgid ""
 "state temporarily.  Use :c:func:`PyErr_SetExcInfo` to restore or clear the "
 "exception state."
 msgstr ""
+"この関数は、通常は例外を扱うコードでは使用されません。正確に言うと、これは例"
+"外の状態を一時的に保存し、元に戻す必要があるコードで使用することができます。"
+"例外の状態を元に戻す、もしくはクリアするには :c:func:`PyErr_SetExcInfo` を"
+"使ってください。"
 
 #: ../../c-api/exceptions.rst:595
 msgid ""
@@ -650,6 +819,9 @@ msgid ""
 "state temporarily.  Use :c:func:`PyErr_GetExcInfo` to read the exception "
 "state."
 msgstr ""
+"この関数は、通常は例外を扱うコードでは使用されません。正確に言うと、これは例"
+"外の状態を一時的に保存し、元に戻す必要があるコードで使用することができます。"
+"例外の状態を取得するには :c:func:`PyErr_GetExcInfo` を使ってください。"
 
 #: ../../c-api/exceptions.rst:611
 msgid ""
@@ -660,7 +832,7 @@ msgstr ""
 
 #: ../../c-api/exceptions.rst:619
 msgid "Signal Handling"
-msgstr ""
+msgstr "シグナルハンドリング"
 
 #: ../../c-api/exceptions.rst:629
 msgid "This function interacts with Python's signal handling."
@@ -719,6 +891,9 @@ msgid ""
 "`PyErr_CheckSignals` is called,  the Python signal handler for the given "
 "signal number will be called."
 msgstr ""
+"シグナルが到達した効果をシミュレートします。\n"
+"次に :c:func:`PyErr_CheckSignals` が呼ばれたとき、与えられたシグナル番号用の "
+"Python のシグナルハンドラが呼び出されます。"
 
 #: ../../c-api/exceptions.rst:678
 msgid ""
@@ -747,6 +922,10 @@ msgid ""
 "is written as a single byte whenever a signal is received. *fd* must be non-"
 "blocking. It returns the previous such file descriptor."
 msgstr ""
+"このユーティリティ関数は、シグナルを受け取ったときにシグナル番号をバイトとし"
+"て書き込むファイル記述子を指定します。\n"
+"*fd* はノンブロッキングでなければなりません。\n"
+"この関数は、1つ前のファイル記述子を返します。"
 
 #: ../../c-api/exceptions.rst:703
 msgid ""
@@ -755,14 +934,19 @@ msgid ""
 "checking.  *fd* should be a valid file descriptor.  The function should only "
 "be called from the main thread."
 msgstr ""
+"値 ``-1`` を渡すと、この機能を無効にします; これが初期状態です。\n"
+"この関数は Python の :func:`signal.set_wakeup_fd` と同等ですが、どんなエラー"
+"チェックも行いません。\n"
+"*fd* は有効なファイル記述子であるべきです。\n"
+"この関数はメインスレッドからのみ呼び出されるべきです。"
 
 #: ../../c-api/exceptions.rst:708
 msgid "On Windows, the function now also supports socket handles."
-msgstr ""
+msgstr "Windowsで、この関数はソケットハンドルをサポートするようになりました。"
 
 #: ../../c-api/exceptions.rst:713
 msgid "Exception Classes"
-msgstr ""
+msgstr "例外クラス"
 
 #: ../../c-api/exceptions.rst:717
 msgid ""
@@ -772,6 +956,11 @@ msgid ""
 "``NULL``. This creates a class object derived from :exc:`Exception` "
 "(accessible in C as :c:data:`PyExc_Exception`)."
 msgstr ""
+"このユーティリティ関数は新しい例外クラスを作成して返します。 *name* 引数は新"
+"しい例外の名前、 ``module.classname`` 形式の C文字列でなければならない。 "
+"*base* と *dict* 引数は通常 ``NULL`` です。これはすべての例外のためのルート、"
+"組み込み名 :exc:`Exception` (Cでは :c:data:`PyExc_Exception` としてアクセス可"
+"能)をルートとして派生したクラスオブジェクトを作成します。"
 
 #: ../../c-api/exceptions.rst:723
 msgid ""
@@ -789,10 +978,13 @@ msgid ""
 "can easily be given a docstring: If *doc* is non-``NULL``, it will be used "
 "as the docstring for the exception class."
 msgstr ""
+":c:func:`PyErr_NewException` とほぼ同じですが、新しい例外クラスに簡単に "
+"docstring を設定できます。 *doc* が ``NULL`` で無い場合、それが例外クラスの "
+"docstring になります。"
 
 #: ../../c-api/exceptions.rst:740
 msgid "Exception Objects"
-msgstr ""
+msgstr "例外オブジェクト"
 
 #: ../../c-api/exceptions.rst:744
 msgid ""
@@ -800,12 +992,17 @@ msgid ""
 "accessible from Python through the :attr:`~BaseException.__traceback__` "
 "attribute. If there is no traceback associated, this returns ``NULL``."
 msgstr ""
+"Python で :attr:`~BaseException.__traceback__` 属性からアクセスできるものと同"
+"じ、例外に関する traceback の新しい参照を返します。関係する traceback が無い"
+"場合は、 ``NULL`` を返します。"
 
 #: ../../c-api/exceptions.rst:752
 msgid ""
 "Set the traceback associated with the exception to *tb*.  Use ``Py_None`` to "
 "clear it."
 msgstr ""
+"その例外に関する traceback に *tb* をセットします。クリアするには "
+"``Py_None`` を使用してください。"
 
 #: ../../c-api/exceptions.rst:758
 msgid ""
@@ -821,6 +1018,9 @@ msgid ""
 "clear it.  There is no type check to make sure that *ctx* is an exception "
 "instance. This steals a reference to *ctx*."
 msgstr ""
+"例外に関するコンテキストに *ctx* をセットします。クリアするには ``NULL`` を使"
+"用してください。*ctx* が例外インスタンスかどうかを確かめる型チェックは行われ"
+"ません。これは *ctx* への参照を盗みます。"
 
 #: ../../c-api/exceptions.rst:773
 msgid ""
@@ -865,13 +1065,14 @@ msgstr ""
 
 #: ../../c-api/exceptions.rst:814
 msgid "Unicode Exception Objects"
-msgstr ""
+msgstr "Unicode 例外オブジェクト"
 
 #: ../../c-api/exceptions.rst:816
 msgid ""
 "The following functions are used to create and modify Unicode exceptions "
 "from C."
 msgstr ""
+"以下の関数は C言語から Unicode 例外を作ったり修正したりするために利用します。"
 
 #: ../../c-api/exceptions.rst:820
 msgid ""
@@ -879,14 +1080,17 @@ msgid ""
 "*object*, *length*, *start*, *end* and *reason*. *encoding* and *reason* are "
 "UTF-8 encoded strings."
 msgstr ""
+"*encoding*, *object*, *length*, *start*, *end*, *reason* 属性をもった :class:"
+"`UnicodeDecodeError` オブジェクトを作成します。 *encoding* および *reason* "
+"は UTF-8 エンコードされた文字列です。"
 
 #: ../../c-api/exceptions.rst:827
 msgid "Return the *encoding* attribute of the given exception object."
-msgstr ""
+msgstr "与えられた例外オブジェクトの *encoding* 属性を返します。"
 
 #: ../../c-api/exceptions.rst:833
 msgid "Return the *object* attribute of the given exception object."
-msgstr ""
+msgstr "与えられた例外オブジェクトの *object* 属性を返します。"
 
 #: ../../c-api/exceptions.rst:839
 msgid ""
@@ -894,12 +1098,17 @@ msgid ""
 "*\\*start*.  *start* must not be ``NULL``.  Return ``0`` on success, ``-1`` "
 "on failure."
 msgstr ""
+"渡された例外オブジェクトから *start* 属性を取得して *\\*start* に格納します。"
+"*start* は ``NULL`` であってはなりません。成功したら ``0`` を、失敗したら "
+"``-1`` を返します。"
 
 #: ../../c-api/exceptions.rst:847
 msgid ""
 "Set the *start* attribute of the given exception object to *start*.  Return "
 "``0`` on success, ``-1`` on failure."
 msgstr ""
+"渡された例外オブジェクトの *start* 属性を *start* に設定します。成功したら "
+"``0`` を、失敗したら ``-1`` を返します。"
 
 #: ../../c-api/exceptions.rst:854
 msgid ""
@@ -907,26 +1116,33 @@ msgid ""
 "*\\*end*.  *end* must not be ``NULL``.  Return ``0`` on success, ``-1`` on "
 "failure."
 msgstr ""
+"渡された例外オブジェクトから *end* 属性を取得して *\\*end* に格納します。"
+"*end* は ``NULL`` であってはなりません。成功したら ``0`` を、失敗したら "
+"``-1`` を返します。"
 
 #: ../../c-api/exceptions.rst:862
 msgid ""
 "Set the *end* attribute of the given exception object to *end*.  Return "
 "``0`` on success, ``-1`` on failure."
 msgstr ""
+"渡された例外オブジェクトの *end* 属性を *end* に設定します。成功したら ``0`` "
+"を、失敗したら ``-1`` を返します。"
 
 #: ../../c-api/exceptions.rst:869
 msgid "Return the *reason* attribute of the given exception object."
-msgstr ""
+msgstr "渡された例外オブジェクトの *reason* 属性を返します。"
 
 #: ../../c-api/exceptions.rst:875
 msgid ""
 "Set the *reason* attribute of the given exception object to *reason*.  "
 "Return ``0`` on success, ``-1`` on failure."
 msgstr ""
+"渡された例外オブジェクトの *reason* 属性を *reason* に設定します。成功したら "
+"``0`` を、失敗したら ``-1`` を返します。"
 
 #: ../../c-api/exceptions.rst:882
 msgid "Recursion Control"
-msgstr ""
+msgstr "再帰の管理"
 
 #: ../../c-api/exceptions.rst:884
 msgid ""
@@ -940,7 +1156,7 @@ msgstr ""
 
 #: ../../c-api/exceptions.rst:893
 msgid "Marks a point where a recursive C-level call is about to be performed."
-msgstr ""
+msgstr "C レベルの再帰呼び出しをしようとしているところに印を付けます。"
 
 #: ../../c-api/exceptions.rst:895
 msgid ""
@@ -955,6 +1171,10 @@ msgid ""
 "case, a :exc:`RecursionError` is set and a nonzero value is returned. "
 "Otherwise, zero is returned."
 msgstr ""
+"次にこの関数は再帰の上限に達していないかをチェックします。\n"
+"上限に達している場合、 :exc:`RecursionError` をセットしゼロでない値を返しま"
+"す。\n"
+"そうでない場合はゼロを返します。"
 
 #: ../../c-api/exceptions.rst:903
 msgid ""
@@ -962,6 +1182,9 @@ msgid ""
 "to be concatenated to the :exc:`RecursionError` message caused by the "
 "recursion depth limit."
 msgstr ""
+"*where* は ``\" in instance check\"`` のような UTF-8 エンコードされた文字列に"
+"して、再帰の深さの限界に達したことで送出される :exc:`RecursionError` のメッ"
+"セージに連結できるようにすべきです。"
 
 #: ../../c-api/exceptions.rst:907 ../../c-api/exceptions.rst:915
 msgid ""
@@ -974,6 +1197,9 @@ msgid ""
 "Ends a :c:func:`Py_EnterRecursiveCall`.  Must be called once for each "
 "*successful* invocation of :c:func:`Py_EnterRecursiveCall`."
 msgstr ""
+":c:func:`Py_EnterRecursiveCall` を終了させます。 :c:func:"
+"`Py_EnterRecursiveCall` の *成功した* 呼び出しに対し 1 回呼ばなければなりませ"
+"ん。"
 
 #: ../../c-api/exceptions.rst:918
 msgid ""
@@ -983,12 +1209,19 @@ msgid ""
 "cycles.  The following two functions facilitate this functionality.  "
 "Effectively, these are the C equivalent to :func:`reprlib.recursive_repr`."
 msgstr ""
+"コンテナ型に対し :c:member:`~PyTypeObject.tp_repr` を適切に実装するには、特殊"
+"な再帰の処理が求められます。スタックの防護に加え、 :c:member:`~PyTypeObject."
+"tp_repr` は循環処理を避けるためにオブジェクトを辿っていく必要があります。次"
+"の 2 つの関数はその機能を容易にします。実質的には、これらは :func:`reprlib."
+"recursive_repr` と同等な C の実装です。"
 
 #: ../../c-api/exceptions.rst:926
 msgid ""
 "Called at the beginning of the :c:member:`~PyTypeObject.tp_repr` "
 "implementation to detect cycles."
 msgstr ""
+"循環処理を検知するために、 :c:member:`~PyTypeObject.tp_repr` の実装の先頭で呼"
+"び出します。"
 
 #: ../../c-api/exceptions.rst:929
 msgid ""
@@ -997,6 +1230,10 @@ msgid ""
 "should return a string object indicating a cycle.  As examples, :class:"
 "`dict` objects return ``{...}`` and :class:`list` objects return ``[...]``."
 msgstr ""
+"そのオブジェクトが既に処理されたものだった場合、この関数は正の整数を返しま"
+"す。その場合、 :c:member:`~PyTypeObject.tp_repr` の実装は、循環を示す文字列オ"
+"ブジェクトを返すべきです。例えば、 :class:`dict` オブジェクトは ``{...}`` を"
+"返しますし、  :class:`list` オブジェクトは ``[...]`` を返します。"
 
 #: ../../c-api/exceptions.rst:935
 msgid ""
@@ -1004,22 +1241,28 @@ msgid ""
 "reached.  In that case the :c:member:`~PyTypeObject.tp_repr` implementation "
 "should typically return ``NULL``."
 msgstr ""
+"再帰回数の上限に達した場合は、この関数は負の整数を返します。この場合、 :c:"
+"member:`~PyTypeObject.tp_repr` の実装は一般的には ``NULL`` を返すべきです。"
 
 #: ../../c-api/exceptions.rst:939
 msgid ""
 "Otherwise, the function returns zero and the :c:member:`~PyTypeObject."
 "tp_repr` implementation can continue normally."
 msgstr ""
+"それ以外の場合は、関数はゼロを返し、 :c:member:`~PyTypeObject.tp_repr` の実装"
+"は通常どおり処理を続けてかまいません。"
 
 #: ../../c-api/exceptions.rst:944
 msgid ""
 "Ends a :c:func:`Py_ReprEnter`.  Must be called once for each invocation of :"
 "c:func:`Py_ReprEnter` that returns zero."
 msgstr ""
+":c:func:`Py_ReprEnter` を終了させます。 0 を返した :c:func:`Py_ReprEnter` の"
+"呼び出しに対し 1 回呼ばなければなりません。"
 
 #: ../../c-api/exceptions.rst:951
 msgid "Standard Exceptions"
-msgstr ""
+msgstr "標準例外"
 
 #: ../../c-api/exceptions.rst:953
 msgid ""
@@ -1028,15 +1271,18 @@ msgid ""
 "c:expr:`PyObject*`; they are all class objects.  For completeness, here are "
 "all the variables:"
 msgstr ""
+"``PyExc_`` の後ろにPythonの例外名が続く名前をもつグローバル変数として、すべて"
+"の標準Python例外が利用可能です。これらは型 :c:expr:`PyObject*` を持ち、すべて"
+"クラスオブジェクトです。完璧を期するために、すべての変数を以下に列挙します:"
 
 #: ../../c-api/exceptions.rst:1014 ../../c-api/exceptions.rst:1147
 #: ../../c-api/exceptions.rst:1192
 msgid "C Name"
-msgstr ""
+msgstr "C名"
 
 #: ../../c-api/exceptions.rst:1014 ../../c-api/exceptions.rst:1192
 msgid "Python Name"
-msgstr ""
+msgstr "Python名"
 
 #: ../../c-api/exceptions.rst:1014 ../../c-api/exceptions.rst:1147
 #: ../../c-api/exceptions.rst:1192
@@ -1045,433 +1291,433 @@ msgstr "注釈"
 
 #: ../../c-api/exceptions.rst:1016
 msgid ":c:data:`PyExc_BaseException`"
-msgstr ""
+msgstr ":c:data:`PyExc_BaseException`"
 
 #: ../../c-api/exceptions.rst:1016
 msgid ":exc:`BaseException`"
-msgstr ""
+msgstr ":exc:`BaseException`"
 
 #: ../../c-api/exceptions.rst:1016 ../../c-api/exceptions.rst:1018
 #: ../../c-api/exceptions.rst:1020 ../../c-api/exceptions.rst:1066
 #: ../../c-api/exceptions.rst:1078
 msgid "[1]_"
-msgstr ""
+msgstr "[1]_"
 
 #: ../../c-api/exceptions.rst:1018
 msgid ":c:data:`PyExc_Exception`"
-msgstr ""
+msgstr ":c:data:`PyExc_Exception`"
 
 #: ../../c-api/exceptions.rst:1018
 msgid ":exc:`Exception`"
-msgstr ""
+msgstr ":exc:`Exception`"
 
 #: ../../c-api/exceptions.rst:1020
 msgid ":c:data:`PyExc_ArithmeticError`"
-msgstr ""
+msgstr ":c:data:`PyExc_ArithmeticError`"
 
 #: ../../c-api/exceptions.rst:1020
 msgid ":exc:`ArithmeticError`"
-msgstr ""
+msgstr ":exc:`ArithmeticError`"
 
 #: ../../c-api/exceptions.rst:1022
 msgid ":c:data:`PyExc_AssertionError`"
-msgstr ""
+msgstr ":c:data:`PyExc_AssertionError`"
 
 #: ../../c-api/exceptions.rst:1022
 msgid ":exc:`AssertionError`"
-msgstr ""
+msgstr ":exc:`AssertionError`"
 
 #: ../../c-api/exceptions.rst:1024
 msgid ":c:data:`PyExc_AttributeError`"
-msgstr ""
+msgstr ":c:data:`PyExc_AttributeError`"
 
 #: ../../c-api/exceptions.rst:1024
 msgid ":exc:`AttributeError`"
-msgstr ""
+msgstr ":exc:`AttributeError`"
 
 #: ../../c-api/exceptions.rst:1026
 msgid ":c:data:`PyExc_BlockingIOError`"
-msgstr ""
+msgstr ":c:data:`PyExc_BlockingIOError`"
 
 #: ../../c-api/exceptions.rst:1026
 msgid ":exc:`BlockingIOError`"
-msgstr ""
+msgstr ":exc:`BlockingIOError`"
 
 #: ../../c-api/exceptions.rst:1028
 msgid ":c:data:`PyExc_BrokenPipeError`"
-msgstr ""
+msgstr ":c:data:`PyExc_BrokenPipeError`"
 
 #: ../../c-api/exceptions.rst:1028
 msgid ":exc:`BrokenPipeError`"
-msgstr ""
+msgstr ":exc:`BrokenPipeError`"
 
 #: ../../c-api/exceptions.rst:1030
 msgid ":c:data:`PyExc_BufferError`"
-msgstr ""
+msgstr ":c:data:`PyExc_BufferError`"
 
 #: ../../c-api/exceptions.rst:1030
 msgid ":exc:`BufferError`"
-msgstr ""
+msgstr ":exc:`BufferError`"
 
 #: ../../c-api/exceptions.rst:1032
 msgid ":c:data:`PyExc_ChildProcessError`"
-msgstr ""
+msgstr ":c:data:`PyExc_ChildProcessError`"
 
 #: ../../c-api/exceptions.rst:1032
 msgid ":exc:`ChildProcessError`"
-msgstr ""
+msgstr ":exc:`ChildProcessError`"
 
 #: ../../c-api/exceptions.rst:1034
 msgid ":c:data:`PyExc_ConnectionAbortedError`"
-msgstr ""
+msgstr ":c:data:`PyExc_ConnectionAbortedError`"
 
 #: ../../c-api/exceptions.rst:1034
 msgid ":exc:`ConnectionAbortedError`"
-msgstr ""
+msgstr ":exc:`ConnectionAbortedError`"
 
 #: ../../c-api/exceptions.rst:1036
 msgid ":c:data:`PyExc_ConnectionError`"
-msgstr ""
+msgstr ":c:data:`PyExc_ConnectionError`"
 
 #: ../../c-api/exceptions.rst:1036
 msgid ":exc:`ConnectionError`"
-msgstr ""
+msgstr ":exc:`ConnectionError`"
 
 #: ../../c-api/exceptions.rst:1038
 msgid ":c:data:`PyExc_ConnectionRefusedError`"
-msgstr ""
+msgstr ":c:data:`PyExc_ConnectionRefusedError`"
 
 #: ../../c-api/exceptions.rst:1038
 msgid ":exc:`ConnectionRefusedError`"
-msgstr ""
+msgstr ":exc:`ConnectionRefusedError`"
 
 #: ../../c-api/exceptions.rst:1040
 msgid ":c:data:`PyExc_ConnectionResetError`"
-msgstr ""
+msgstr ":c:data:`PyExc_ConnectionResetError`"
 
 #: ../../c-api/exceptions.rst:1040
 msgid ":exc:`ConnectionResetError`"
-msgstr ""
+msgstr ":exc:`ConnectionResetError`"
 
 #: ../../c-api/exceptions.rst:1042
 msgid ":c:data:`PyExc_EOFError`"
-msgstr ""
+msgstr ":c:data:`PyExc_EOFError`"
 
 #: ../../c-api/exceptions.rst:1042
 msgid ":exc:`EOFError`"
-msgstr ""
+msgstr ":exc:`EOFError`"
 
 #: ../../c-api/exceptions.rst:1044
 msgid ":c:data:`PyExc_FileExistsError`"
-msgstr ""
+msgstr ":c:data:`PyExc_FileExistsError`"
 
 #: ../../c-api/exceptions.rst:1044
 msgid ":exc:`FileExistsError`"
-msgstr ""
+msgstr ":exc:`FileExistsError`"
 
 #: ../../c-api/exceptions.rst:1046
 msgid ":c:data:`PyExc_FileNotFoundError`"
-msgstr ""
+msgstr ":c:data:`PyExc_FileNotFoundError`"
 
 #: ../../c-api/exceptions.rst:1046
 msgid ":exc:`FileNotFoundError`"
-msgstr ""
+msgstr ":exc:`FileNotFoundError`"
 
 #: ../../c-api/exceptions.rst:1048
 msgid ":c:data:`PyExc_FloatingPointError`"
-msgstr ""
+msgstr ":c:data:`PyExc_FloatingPointError`"
 
 #: ../../c-api/exceptions.rst:1048
 msgid ":exc:`FloatingPointError`"
-msgstr ""
+msgstr ":exc:`FloatingPointError`"
 
 #: ../../c-api/exceptions.rst:1050
 msgid ":c:data:`PyExc_GeneratorExit`"
-msgstr ""
+msgstr ":c:data:`PyExc_GeneratorExit`"
 
 #: ../../c-api/exceptions.rst:1050
 msgid ":exc:`GeneratorExit`"
-msgstr ""
+msgstr ":exc:`GeneratorExit`"
 
 #: ../../c-api/exceptions.rst:1052
 msgid ":c:data:`PyExc_ImportError`"
-msgstr ""
+msgstr ":c:data:`PyExc_ImportError`"
 
 #: ../../c-api/exceptions.rst:1052
 msgid ":exc:`ImportError`"
-msgstr ""
+msgstr ":exc:`ImportError`"
 
 #: ../../c-api/exceptions.rst:1054
 msgid ":c:data:`PyExc_IndentationError`"
-msgstr ""
+msgstr ":c:data:`PyExc_IndentationError`"
 
 #: ../../c-api/exceptions.rst:1054
 msgid ":exc:`IndentationError`"
-msgstr ""
+msgstr ":exc:`IndentationError`"
 
 #: ../../c-api/exceptions.rst:1056
 msgid ":c:data:`PyExc_IndexError`"
-msgstr ""
+msgstr ":c:data:`PyExc_IndexError`"
 
 #: ../../c-api/exceptions.rst:1056
 msgid ":exc:`IndexError`"
-msgstr ""
+msgstr ":exc:`IndexError`"
 
 #: ../../c-api/exceptions.rst:1058
 msgid ":c:data:`PyExc_InterruptedError`"
-msgstr ""
+msgstr ":c:data:`PyExc_InterruptedError`"
 
 #: ../../c-api/exceptions.rst:1058
 msgid ":exc:`InterruptedError`"
-msgstr ""
+msgstr ":exc:`InterruptedError`"
 
 #: ../../c-api/exceptions.rst:1060
 msgid ":c:data:`PyExc_IsADirectoryError`"
-msgstr ""
+msgstr ":c:data:`PyExc_IsADirectoryError`"
 
 #: ../../c-api/exceptions.rst:1060
 msgid ":exc:`IsADirectoryError`"
-msgstr ""
+msgstr ":exc:`IsADirectoryError`"
 
 #: ../../c-api/exceptions.rst:1062
 msgid ":c:data:`PyExc_KeyError`"
-msgstr ""
+msgstr ":c:data:`PyExc_KeyError`"
 
 #: ../../c-api/exceptions.rst:1062
 msgid ":exc:`KeyError`"
-msgstr ""
+msgstr ":exc:`KeyError`"
 
 #: ../../c-api/exceptions.rst:1064
 msgid ":c:data:`PyExc_KeyboardInterrupt`"
-msgstr ""
+msgstr ":c:data:`PyExc_KeyboardInterrupt`"
 
 #: ../../c-api/exceptions.rst:1064
 msgid ":exc:`KeyboardInterrupt`"
-msgstr ""
+msgstr ":exc:`KeyboardInterrupt`"
 
 #: ../../c-api/exceptions.rst:1066
 msgid ":c:data:`PyExc_LookupError`"
-msgstr ""
+msgstr ":c:data:`PyExc_LookupError`"
 
 #: ../../c-api/exceptions.rst:1066
 msgid ":exc:`LookupError`"
-msgstr ""
+msgstr ":exc:`LookupError`"
 
 #: ../../c-api/exceptions.rst:1068
 msgid ":c:data:`PyExc_MemoryError`"
-msgstr ""
+msgstr ":c:data:`PyExc_MemoryError`"
 
 #: ../../c-api/exceptions.rst:1068
 msgid ":exc:`MemoryError`"
-msgstr ""
+msgstr ":exc:`MemoryError`"
 
 #: ../../c-api/exceptions.rst:1070
 msgid ":c:data:`PyExc_ModuleNotFoundError`"
-msgstr ""
+msgstr ":c:data:`PyExc_ModuleNotFoundError`"
 
 #: ../../c-api/exceptions.rst:1070
 msgid ":exc:`ModuleNotFoundError`"
-msgstr ""
+msgstr ":exc:`ModuleNotFoundError`"
 
 #: ../../c-api/exceptions.rst:1072
 msgid ":c:data:`PyExc_NameError`"
-msgstr ""
+msgstr ":c:data:`PyExc_NameError`"
 
 #: ../../c-api/exceptions.rst:1072
 msgid ":exc:`NameError`"
-msgstr ""
+msgstr ":exc:`NameError`"
 
 #: ../../c-api/exceptions.rst:1074
 msgid ":c:data:`PyExc_NotADirectoryError`"
-msgstr ""
+msgstr ":c:data:`PyExc_NotADirectoryError`"
 
 #: ../../c-api/exceptions.rst:1074
 msgid ":exc:`NotADirectoryError`"
-msgstr ""
+msgstr ":exc:`NotADirectoryError`"
 
 #: ../../c-api/exceptions.rst:1076
 msgid ":c:data:`PyExc_NotImplementedError`"
-msgstr ""
+msgstr ":c:data:`PyExc_NotImplementedError`"
 
 #: ../../c-api/exceptions.rst:1076
 msgid ":exc:`NotImplementedError`"
-msgstr ""
+msgstr ":exc:`NotImplementedError`"
 
 #: ../../c-api/exceptions.rst:1078
 msgid ":c:data:`PyExc_OSError`"
-msgstr ""
+msgstr ":c:data:`PyExc_OSError`"
 
 #: ../../c-api/exceptions.rst:1078
 msgid ":exc:`OSError`"
-msgstr ""
+msgstr ":exc:`OSError`"
 
 #: ../../c-api/exceptions.rst:1080
 msgid ":c:data:`PyExc_OverflowError`"
-msgstr ""
+msgstr ":c:data:`PyExc_OverflowError`"
 
 #: ../../c-api/exceptions.rst:1080
 msgid ":exc:`OverflowError`"
-msgstr ""
+msgstr ":exc:`OverflowError`"
 
 #: ../../c-api/exceptions.rst:1082
 msgid ":c:data:`PyExc_PermissionError`"
-msgstr ""
+msgstr ":c:data:`PyExc_PermissionError`"
 
 #: ../../c-api/exceptions.rst:1082
 msgid ":exc:`PermissionError`"
-msgstr ""
+msgstr ":exc:`PermissionError`"
 
 #: ../../c-api/exceptions.rst:1084
 msgid ":c:data:`PyExc_ProcessLookupError`"
-msgstr ""
+msgstr ":c:data:`PyExc_ProcessLookupError`"
 
 #: ../../c-api/exceptions.rst:1084
 msgid ":exc:`ProcessLookupError`"
-msgstr ""
+msgstr ":exc:`ProcessLookupError`"
 
 #: ../../c-api/exceptions.rst:1086
 msgid ":c:data:`PyExc_RecursionError`"
-msgstr ""
+msgstr ":c:data:`PyExc_RecursionError`"
 
 #: ../../c-api/exceptions.rst:1086
 msgid ":exc:`RecursionError`"
-msgstr ""
+msgstr ":exc:`RecursionError`"
 
 #: ../../c-api/exceptions.rst:1088
 msgid ":c:data:`PyExc_ReferenceError`"
-msgstr ""
+msgstr ":c:data:`PyExc_ReferenceError`"
 
 #: ../../c-api/exceptions.rst:1088
 msgid ":exc:`ReferenceError`"
-msgstr ""
+msgstr ":exc:`ReferenceError`"
 
 #: ../../c-api/exceptions.rst:1090
 msgid ":c:data:`PyExc_RuntimeError`"
-msgstr ""
+msgstr ":c:data:`PyExc_RuntimeError`"
 
 #: ../../c-api/exceptions.rst:1090
 msgid ":exc:`RuntimeError`"
-msgstr ""
+msgstr ":exc:`RuntimeError`"
 
 #: ../../c-api/exceptions.rst:1092
 msgid ":c:data:`PyExc_StopAsyncIteration`"
-msgstr ""
+msgstr ":c:data:`PyExc_StopAsyncIteration`"
 
 #: ../../c-api/exceptions.rst:1092
 msgid ":exc:`StopAsyncIteration`"
-msgstr ""
+msgstr ":exc:`StopAsyncIteration`"
 
 #: ../../c-api/exceptions.rst:1094
 msgid ":c:data:`PyExc_StopIteration`"
-msgstr ""
+msgstr ":c:data:`PyExc_StopIteration`"
 
 #: ../../c-api/exceptions.rst:1094
 msgid ":exc:`StopIteration`"
-msgstr ""
+msgstr ":exc:`StopIteration`"
 
 #: ../../c-api/exceptions.rst:1096
 msgid ":c:data:`PyExc_SyntaxError`"
-msgstr ""
+msgstr ":c:data:`PyExc_SyntaxError`"
 
 #: ../../c-api/exceptions.rst:1096
 msgid ":exc:`SyntaxError`"
-msgstr ""
+msgstr ":exc:`SyntaxError`"
 
 #: ../../c-api/exceptions.rst:1098
 msgid ":c:data:`PyExc_SystemError`"
-msgstr ""
+msgstr ":c:data:`PyExc_SystemError`"
 
 #: ../../c-api/exceptions.rst:1098
 msgid ":exc:`SystemError`"
-msgstr ""
+msgstr ":exc:`SystemError`"
 
 #: ../../c-api/exceptions.rst:1100
 msgid ":c:data:`PyExc_SystemExit`"
-msgstr ""
+msgstr ":c:data:`PyExc_SystemExit`"
 
 #: ../../c-api/exceptions.rst:1100
 msgid ":exc:`SystemExit`"
-msgstr ""
+msgstr ":exc:`SystemExit`"
 
 #: ../../c-api/exceptions.rst:1102
 msgid ":c:data:`PyExc_TabError`"
-msgstr ""
+msgstr ":c:data:`PyExc_TabError`"
 
 #: ../../c-api/exceptions.rst:1102
 msgid ":exc:`TabError`"
-msgstr ""
+msgstr ":exc:`TabError`"
 
 #: ../../c-api/exceptions.rst:1104
 msgid ":c:data:`PyExc_TimeoutError`"
-msgstr ""
+msgstr ":c:data:`PyExc_TimeoutError`"
 
 #: ../../c-api/exceptions.rst:1104
 msgid ":exc:`TimeoutError`"
-msgstr ""
+msgstr ":exc:`TimeoutError`"
 
 #: ../../c-api/exceptions.rst:1106
 msgid ":c:data:`PyExc_TypeError`"
-msgstr ""
+msgstr ":c:data:`PyExc_TypeError`"
 
 #: ../../c-api/exceptions.rst:1106
 msgid ":exc:`TypeError`"
-msgstr ""
+msgstr ":exc:`TypeError`"
 
 #: ../../c-api/exceptions.rst:1108
 msgid ":c:data:`PyExc_UnboundLocalError`"
-msgstr ""
+msgstr ":c:data:`PyExc_UnboundLocalError`"
 
 #: ../../c-api/exceptions.rst:1108
 msgid ":exc:`UnboundLocalError`"
-msgstr ""
+msgstr ":exc:`UnboundLocalError`"
 
 #: ../../c-api/exceptions.rst:1110
 msgid ":c:data:`PyExc_UnicodeDecodeError`"
-msgstr ""
+msgstr ":c:data:`PyExc_UnicodeDecodeError`"
 
 #: ../../c-api/exceptions.rst:1110
 msgid ":exc:`UnicodeDecodeError`"
-msgstr ""
+msgstr ":exc:`UnicodeDecodeError`"
 
 #: ../../c-api/exceptions.rst:1112
 msgid ":c:data:`PyExc_UnicodeEncodeError`"
-msgstr ""
+msgstr ":c:data:`PyExc_UnicodeEncodeError`"
 
 #: ../../c-api/exceptions.rst:1112
 msgid ":exc:`UnicodeEncodeError`"
-msgstr ""
+msgstr ":exc:`UnicodeEncodeError`"
 
 #: ../../c-api/exceptions.rst:1114
 msgid ":c:data:`PyExc_UnicodeError`"
-msgstr ""
+msgstr ":c:data:`PyExc_UnicodeError`"
 
 #: ../../c-api/exceptions.rst:1114
 msgid ":exc:`UnicodeError`"
-msgstr ""
+msgstr ":exc:`UnicodeError`"
 
 #: ../../c-api/exceptions.rst:1116
 msgid ":c:data:`PyExc_UnicodeTranslateError`"
-msgstr ""
+msgstr ":c:data:`PyExc_UnicodeTranslateError`"
 
 #: ../../c-api/exceptions.rst:1116
 msgid ":exc:`UnicodeTranslateError`"
-msgstr ""
+msgstr ":exc:`UnicodeTranslateError`"
 
 #: ../../c-api/exceptions.rst:1118
 msgid ":c:data:`PyExc_ValueError`"
-msgstr ""
+msgstr ":c:data:`PyExc_ValueError`"
 
 #: ../../c-api/exceptions.rst:1118
 msgid ":exc:`ValueError`"
-msgstr ""
+msgstr ":exc:`ValueError`"
 
 #: ../../c-api/exceptions.rst:1120
 msgid ":c:data:`PyExc_ZeroDivisionError`"
-msgstr ""
+msgstr ":c:data:`PyExc_ZeroDivisionError`"
 
 #: ../../c-api/exceptions.rst:1120
 msgid ":exc:`ZeroDivisionError`"
-msgstr ""
+msgstr ":exc:`ZeroDivisionError`"
 
 #: ../../c-api/exceptions.rst:1123
 msgid ""
@@ -1484,38 +1730,47 @@ msgid ""
 "`PyExc_PermissionError`, :c:data:`PyExc_ProcessLookupError` and :c:data:"
 "`PyExc_TimeoutError` were introduced following :pep:`3151`."
 msgstr ""
+":c:data:`PyExc_BlockingIOError` 、 :c:data:`PyExc_BrokenPipeError` 、 :c:"
+"data:`PyExc_ChildProcessError` 、 :c:data:`PyExc_ConnectionError` 、 :c:data:"
+"`PyExc_ConnectionAbortedError` 、 :c:data:`PyExc_ConnectionRefusedError` 、 :"
+"c:data:`PyExc_ConnectionResetError` 、 :c:data:`PyExc_FileExistsError` 、 :c:"
+"data:`PyExc_FileNotFoundError` 、 :c:data:`PyExc_InterruptedError` 、 :c:"
+"data:`PyExc_IsADirectoryError` 、 :c:data:`PyExc_NotADirectoryError` 、 :c:"
+"data:`PyExc_PermissionError` 、 :c:data:`PyExc_ProcessLookupError`  、 :c:"
+"data:`PyExc_TimeoutError` は :pep:`3151` により導入されました。"
 
 #: ../../c-api/exceptions.rst:1133
 msgid ":c:data:`PyExc_StopAsyncIteration` and :c:data:`PyExc_RecursionError`."
 msgstr ""
+":c:data:`PyExc_StopAsyncIteration` および :c:data:`PyExc_RecursionError` 。"
 
 #: ../../c-api/exceptions.rst:1136
 msgid ":c:data:`PyExc_ModuleNotFoundError`."
-msgstr ""
+msgstr ":c:data:`PyExc_ModuleNotFoundError`."
 
 #: ../../c-api/exceptions.rst:1139
 msgid "These are compatibility aliases to :c:data:`PyExc_OSError`:"
-msgstr ""
+msgstr "これらは互換性のある :c:data:`PyExc_OSError` のエイリアスです:"
 
 #: ../../c-api/exceptions.rst:1149
 msgid ":c:data:`!PyExc_EnvironmentError`"
-msgstr ""
+msgstr ":c:data:`!PyExc_EnvironmentError`"
 
 #: ../../c-api/exceptions.rst:1151
 msgid ":c:data:`!PyExc_IOError`"
-msgstr ""
+msgstr ":c:data:`!PyExc_IOError`"
 
 #: ../../c-api/exceptions.rst:1153
 msgid ":c:data:`!PyExc_WindowsError`"
-msgstr ""
+msgstr ":c:data:`!PyExc_WindowsError`"
 
 #: ../../c-api/exceptions.rst:1153
 msgid "[2]_"
-msgstr ""
+msgstr "[2]_"
 
 #: ../../c-api/exceptions.rst:1156
 msgid "These aliases used to be separate exception types."
-msgstr ""
+msgstr "これらのエイリアスは例外の種類を分けるために使われます。"
 
 #: ../../c-api/exceptions.rst:1159 ../../c-api/exceptions.rst:1220
 msgid "Notes:"
@@ -1523,17 +1778,19 @@ msgstr "注釈:"
 
 #: ../../c-api/exceptions.rst:1162
 msgid "This is a base class for other standard exceptions."
-msgstr ""
+msgstr "これは別の標準例外のためのベースクラスです。"
 
 #: ../../c-api/exceptions.rst:1165
 msgid ""
 "Only defined on Windows; protect code that uses this by testing that the "
 "preprocessor macro ``MS_WINDOWS`` is defined."
 msgstr ""
+"Windowsでのみ定義されています。プリプロセッサマクロ ``MS_WINDOWS`` が定義され"
+"ているかテストすることで、これを使うコードを保護してください。"
 
 #: ../../c-api/exceptions.rst:1171
 msgid "Standard Warning Categories"
-msgstr ""
+msgstr "標準警告カテゴリ"
 
 #: ../../c-api/exceptions.rst:1173
 msgid ""
@@ -1542,106 +1799,110 @@ msgid ""
 "the type :c:expr:`PyObject*`; they are all class objects. For completeness, "
 "here are all the variables:"
 msgstr ""
+"``PyExc_`` の後ろにPythonの例外名が続く名前をもつグローバル変数として、すべて"
+"の標準Python警告カテゴリが利用可能です。これらは型 :c:expr:`PyObject*` を持"
+"ち、すべてクラスオブジェクトです。完璧を期するために、すべての変数を以下に列"
+"挙します:"
 
 #: ../../c-api/exceptions.rst:1194
 msgid ":c:data:`PyExc_Warning`"
-msgstr ""
+msgstr ":c:data:`PyExc_Warning`"
 
 #: ../../c-api/exceptions.rst:1194
 msgid ":exc:`Warning`"
-msgstr ""
+msgstr ":exc:`Warning`"
 
 #: ../../c-api/exceptions.rst:1194
 msgid "[3]_"
-msgstr ""
+msgstr "[3]_"
 
 #: ../../c-api/exceptions.rst:1196
 msgid ":c:data:`PyExc_BytesWarning`"
-msgstr ""
+msgstr ":c:data:`PyExc_BytesWarning`"
 
 #: ../../c-api/exceptions.rst:1196
 msgid ":exc:`BytesWarning`"
-msgstr ""
+msgstr ":exc:`BytesWarning`"
 
 #: ../../c-api/exceptions.rst:1198
 msgid ":c:data:`PyExc_DeprecationWarning`"
-msgstr ""
+msgstr ":c:data:`PyExc_DeprecationWarning`"
 
 #: ../../c-api/exceptions.rst:1198
 msgid ":exc:`DeprecationWarning`"
-msgstr ""
+msgstr ":exc:`DeprecationWarning`"
 
 #: ../../c-api/exceptions.rst:1200
 msgid ":c:data:`PyExc_FutureWarning`"
-msgstr ""
+msgstr ":c:data:`PyExc_FutureWarning`"
 
 #: ../../c-api/exceptions.rst:1200
 msgid ":exc:`FutureWarning`"
-msgstr ""
+msgstr ":exc:`FutureWarning`"
 
 #: ../../c-api/exceptions.rst:1202
 msgid ":c:data:`PyExc_ImportWarning`"
-msgstr ""
+msgstr ":c:data:`PyExc_ImportWarning`"
 
 #: ../../c-api/exceptions.rst:1202
 msgid ":exc:`ImportWarning`"
-msgstr ""
+msgstr ":exc:`ImportWarning`"
 
 #: ../../c-api/exceptions.rst:1204
 msgid ":c:data:`PyExc_PendingDeprecationWarning`"
-msgstr ""
+msgstr ":c:data:`PyExc_PendingDeprecationWarning`"
 
 #: ../../c-api/exceptions.rst:1204
 msgid ":exc:`PendingDeprecationWarning`"
-msgstr ""
+msgstr ":exc:`PendingDeprecationWarning`"
 
 #: ../../c-api/exceptions.rst:1206
 msgid ":c:data:`PyExc_ResourceWarning`"
-msgstr ""
+msgstr ":c:data:`PyExc_ResourceWarning`"
 
 #: ../../c-api/exceptions.rst:1206
 msgid ":exc:`ResourceWarning`"
-msgstr ""
+msgstr ":exc:`ResourceWarning`"
 
 #: ../../c-api/exceptions.rst:1208
 msgid ":c:data:`PyExc_RuntimeWarning`"
-msgstr ""
+msgstr ":c:data:`PyExc_RuntimeWarning`"
 
 #: ../../c-api/exceptions.rst:1208
 msgid ":exc:`RuntimeWarning`"
-msgstr ""
+msgstr ":exc:`RuntimeWarning`"
 
 #: ../../c-api/exceptions.rst:1210
 msgid ":c:data:`PyExc_SyntaxWarning`"
-msgstr ""
+msgstr ":c:data:`PyExc_SyntaxWarning`"
 
 #: ../../c-api/exceptions.rst:1210
 msgid ":exc:`SyntaxWarning`"
-msgstr ""
+msgstr ":exc:`SyntaxWarning`"
 
 #: ../../c-api/exceptions.rst:1212
 msgid ":c:data:`PyExc_UnicodeWarning`"
-msgstr ""
+msgstr ":c:data:`PyExc_UnicodeWarning`"
 
 #: ../../c-api/exceptions.rst:1212
 msgid ":exc:`UnicodeWarning`"
-msgstr ""
+msgstr ":exc:`UnicodeWarning`"
 
 #: ../../c-api/exceptions.rst:1214
 msgid ":c:data:`PyExc_UserWarning`"
-msgstr ""
+msgstr ":c:data:`PyExc_UserWarning`"
 
 #: ../../c-api/exceptions.rst:1214
 msgid ":exc:`UserWarning`"
-msgstr ""
+msgstr ":exc:`UserWarning`"
 
 #: ../../c-api/exceptions.rst:1217
 msgid ":c:data:`PyExc_ResourceWarning`."
-msgstr ""
+msgstr ":c:data:`PyExc_ResourceWarning`."
 
 #: ../../c-api/exceptions.rst:1223
 msgid "This is a base class for other standard warning categories."
-msgstr ""
+msgstr "これは別の標準警告カテゴリのためのベースクラスです。"
 
 #: ../../c-api/exceptions.rst:170
 msgid "strerror (C function)"
@@ -1650,12 +1911,12 @@ msgstr ""
 #: ../../c-api/exceptions.rst:624 ../../c-api/exceptions.rst:655
 #: ../../c-api/exceptions.rst:670
 msgid "module"
-msgstr "moduł"
+msgstr "module"
 
 #: ../../c-api/exceptions.rst:624 ../../c-api/exceptions.rst:655
 #: ../../c-api/exceptions.rst:670
 msgid "signal"
-msgstr ""
+msgstr "signal"
 
 #: ../../c-api/exceptions.rst:624 ../../c-api/exceptions.rst:655
 msgid "SIGINT (C macro)"
@@ -1664,7 +1925,7 @@ msgstr ""
 #: ../../c-api/exceptions.rst:624 ../../c-api/exceptions.rst:655
 #: ../../c-api/exceptions.rst:670
 msgid "KeyboardInterrupt (built-in exception)"
-msgstr ""
+msgstr "KeyboardInterrupt (組み込み例外)"
 
 #: ../../c-api/exceptions.rst:958
 msgid "PyExc_BaseException (C var)"
