@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-11 16:41+0000\n"
+"POT-Creation-Date: 2025-01-31 15:27+0000\n"
 "PO-Revision-Date: 2023-05-24 02:22+0000\n"
 "Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>, 2025\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/python-doc/"
@@ -25,11 +25,11 @@ msgstr ""
 
 #: ../../reference/datamodel.rst:6
 msgid "Data model"
-msgstr ""
+msgstr "数据模型"
 
 #: ../../reference/datamodel.rst:12
 msgid "Objects, values and types"
-msgstr ""
+msgstr "对象、值与类型"
 
 #: ../../reference/datamodel.rst:18
 msgid ""
@@ -38,6 +38,9 @@ msgid ""
 "sense, and in conformance to Von Neumann's model of a \"stored program "
 "computer\", code is also represented by objects.)"
 msgstr ""
+":dfn:`对象` 是 Python 中对数据的抽象。 Python 程序中的所有数据都是由对象或对"
+"象间关系来表示的。 （从某种意义上说，按照冯·诺依曼的“存储程序计算机”模型，代"
+"码本身也是由对象来表示的。）"
 
 #: ../../reference/datamodel.rst:35
 msgid ""
@@ -47,10 +50,13 @@ msgid ""
 "objects; the :func:`id` function returns an integer representing its "
 "identity."
 msgstr ""
+"每个对象都有相应的标识号、类型和值。 一个对象被创建后它的 *标识号* 就绝不会改"
+"变；你可以将其理解为该对象在内存中的地址。 :keyword:`is` 运算符比较两个对象的"
+"标识号是否相同；:func:`id` 函数返回一个代表其标识号的整数。"
 
 #: ../../reference/datamodel.rst:42
 msgid "For CPython, ``id(x)`` is the memory address where ``x`` is stored."
-msgstr ""
+msgstr "在 CPython 中，``id(x)`` 就是存放 ``x`` 的内存的地址。"
 
 #: ../../reference/datamodel.rst:44
 msgid ""
@@ -60,6 +66,9 @@ msgid ""
 "an object itself).  Like its identity, an object's :dfn:`type` is also "
 "unchangeable. [#]_"
 msgstr ""
+"对象的类型决定该对象所支持的操作 (例如 \"对象是否有长度属性？\") 并且定义了该"
+"类型的对象可能的取值。:func:`type` 函数能返回一个对象的类型 (类型本身也是对"
+"象)。与编号一样，一个对象的 :dfn:`类型` 也是不可改变的。[#]_"
 
 #: ../../reference/datamodel.rst:50
 msgid ""
@@ -74,6 +83,12 @@ msgid ""
 "instance, numbers, strings and tuples are immutable, while dictionaries and "
 "lists are mutable."
 msgstr ""
+"有些对象的 *值* 可以改变。值可以改变的对象被称为 *可变对象*；值不可以改变的对"
+"象就被称为 *不可变对象*。(一个不可变容器对象如果包含对可变对象的引用，当后者"
+"的值改变时，前者的值也会改变；但是该容器仍属于不可变对象，因为它所包含的对象"
+"集是不会改变的。因此，不可变并不严格等同于值不能改变，实际含义要更微妙。) 一"
+"个对象的可变性是由其类型决定的；例如，数字、字符串和元组是不可变的，而字典和"
+"列表是可变的。"
 
 #: ../../reference/datamodel.rst:65
 msgid ""
@@ -83,6 +98,9 @@ msgid ""
 "implementation quality how garbage collection is implemented, as long as no "
 "objects are collected that are still reachable."
 msgstr ""
+"对象绝不会被显式地销毁；然而，当无法访问时它们可能会被作为垃圾回收。允许具体"
+"的实现推迟垃圾回收或完全省略此机制 --- 如何实现垃圾回收是实现的质量问题，只要"
+"可访问的对象不会被回收即可。"
 
 #: ../../reference/datamodel.rst:73
 msgid ""
@@ -95,6 +113,11 @@ msgid ""
 "on immediate finalization of objects when they become unreachable (so you "
 "should always close files explicitly)."
 msgstr ""
+"CPython 目前使用带有 (可选) 延迟检测循环链接垃圾的引用计数方案，会在对象不可"
+"访问时立即回收其中的大部分，但不保证回收包含循环引用的垃圾。请查看 :mod:`gc` "
+"模块的文档了解如何控制循环垃圾的收集相关信息。其他实现会有不同的行为方式，"
+"CPython 现有方式也可能改变。不要依赖不可访问对象的立即终结机制 (所以你应当总"
+"是显式地关闭文件)。"
 
 #: ../../reference/datamodel.rst:82
 msgid ""
@@ -103,6 +126,9 @@ msgid ""
 "catching an exception with a :keyword:`try`...\\ :keyword:`except` statement "
 "may keep objects alive."
 msgstr ""
+"注意：使用实现的跟踪或调试功能可能令正常情况下会被回收的对象继续存活。还要注"
+"意通过 :keyword:`try`...\\ :keyword:`except` 语句捕捉异常也可能令对象保持存"
+"活。"
 
 #: ../../reference/datamodel.rst:87
 msgid ""
@@ -115,6 +141,11 @@ msgid ""
 "`finally` statement and the :keyword:`with` statement provide convenient "
 "ways to do this."
 msgstr ""
+"有些对象包含对“外部”资源如打开的文件或窗口的引用。 当对象被作为垃圾回收时这些"
+"资源也应该会被释放，但由于垃圾回收并不确保发生，这些对象还提供了明确地释放外"
+"部资源的操作，通常为一个 :meth:`!close` 方法。 强烈推荐在程序中显式关闭此类对"
+"象。 :keyword:`try`...\\ :keyword:`finally` 语句和 :keyword:`with` 语句提供了"
+"进行此种操作的更便捷方式。"
 
 #: ../../reference/datamodel.rst:97
 msgid ""
@@ -127,6 +158,11 @@ msgid ""
 "implied.  So, if an immutable container (like a tuple) contains a reference "
 "to a mutable object, its value changes if that mutable object is changed."
 msgstr ""
+"有些对象包含对其他对象的引用；它们被称为 *容器*。容器的例子有元组、列表和字典"
+"等。这些引用是容器对象值的组成部分。在多数情况下，当谈论一个容器的值时，我们"
+"是指所包含对象的值而不是其编号；但是，当我们谈论一个容器的可变性时，则仅指其"
+"直接包含的对象的编号。因此，如果一个不可变容器 (例如元组) 包含对一个可变对象"
+"的引用，则当该可变对象被改变时容器的值也会改变。"
 
 #: ../../reference/datamodel.rst:106
 msgid ""
@@ -149,7 +185,7 @@ msgstr ""
 
 #: ../../reference/datamodel.rst:120
 msgid "The standard type hierarchy"
-msgstr ""
+msgstr "标准类型层级结构"
 
 #: ../../reference/datamodel.rst:129
 msgid ""
@@ -160,6 +196,9 @@ msgid ""
 "integers, etc.), although such additions will often be provided via the "
 "standard library instead."
 msgstr ""
+"以下是 Python 内置类型的列表。扩展模块 (具体实现会以 C, Java 或其他语言编写) "
+"可以定义更多的类型。未来版本的 Python 可能会加入更多的类型 (例如有理数、高效"
+"存储的整型数组等等)，不过新增类型往往都是通过标准库来提供的。"
 
 #: ../../reference/datamodel.rst:140
 msgid ""
@@ -168,6 +207,8 @@ msgid ""
 "and are not intended for general use.  Their definition may change in the "
 "future."
 msgstr ""
+"以下部分类型的描述中包含有 '特殊属性列表' 段落。这些属性提供对具体实现的访问"
+"而非通常使用。它们的定义在未来可能会改变。"
 
 #: ../../reference/datamodel.rst:146 ../../reference/datamodel.rst:148
 msgid "None"
@@ -180,10 +221,13 @@ msgid ""
 "signify the absence of a value in many situations, e.g., it is returned from "
 "functions that don't explicitly return anything. Its truth value is false."
 msgstr ""
+"此类型只有一种取值。是一个具有此值的单独对象。此对象通过内置名称 ``None`` 访"
+"问。在许多情况下它被用来表示空值，例如未显式指明返回值的函数将返回 None。它的"
+"逻辑值为假。"
 
 #: ../../reference/datamodel.rst:157 ../../reference/datamodel.rst:159
 msgid "NotImplemented"
-msgstr ""
+msgstr "NotImplemented"
 
 #: ../../reference/datamodel.rst:161
 msgid ""
@@ -194,10 +238,14 @@ msgid ""
 "will then try the reflected operation, or some other fallback, depending on "
 "the operator.)  It should not be evaluated in a boolean context."
 msgstr ""
+"此类型只有一种取值。 是一个具有该值的单独对象。 此对象通过内置名称 :data:"
+"`NotImplemented` 访问。 数值方法和丰富比较方法如未实现指定运算符表示的运算则"
+"应返回该值。 （解释器会根据具体运算符继续尝试反向运算或其他回退操作。） 它不"
+"应被解读为布尔值。"
 
 #: ../../reference/datamodel.rst:168
 msgid "See :ref:`implementing-the-arithmetic-operations` for more details."
-msgstr ""
+msgstr "详情参见 :ref:`implementing-the-arithmetic-operations`。"
 
 #: ../../reference/datamodel.rst:172
 msgid ""
@@ -205,10 +253,13 @@ msgid ""
 "it currently evaluates as true, it will emit a :exc:`DeprecationWarning`. It "
 "will raise a :exc:`TypeError` in a future version of Python."
 msgstr ""
+"对 :data:`NotImplemented` 求布尔值的操作已被弃用。 虽然它目前会被求解为真值，"
+"但将同时发出 :exc:`DeprecationWarning`。 它将在未来的 Python 版本中引发 :exc:"
+"`TypeError`。"
 
 #: ../../reference/datamodel.rst:179 ../../reference/datamodel.rst:180
 msgid "Ellipsis"
-msgstr ""
+msgstr "Ellipsis"
 
 #: ../../reference/datamodel.rst:184
 msgid ""
@@ -216,6 +267,8 @@ msgid ""
 "This object is accessed through the literal ``...`` or the built-in name "
 "``Ellipsis``.  Its truth value is true."
 msgstr ""
+"此类型只有一种取值。是一个具有此值的单独对象。此对象通过字面值 ``...`` 或内置"
+"名称 ``Ellipsis`` 访问。它的逻辑值为真。"
 
 #: ../../reference/datamodel.rst:190
 msgid ":class:`numbers.Number`"
@@ -229,6 +282,9 @@ msgid ""
 "strongly related to mathematical numbers, but subject to the limitations of "
 "numerical representation in computers."
 msgstr ""
+"此类对象由数字字面值创建，并会被作为算术运算符和算术内置函数的返回结果。数字"
+"对象是不可变的；一旦创建其值就不再改变。Python 中的数字当然非常类似数学中的数"
+"字，但也受限于计算机中的数字表示方法。"
 
 #: ../../reference/datamodel.rst:200
 msgid ""
@@ -236,32 +292,36 @@ msgid ""
 "`~object.__repr__` and :meth:`~object.__str__`, have the following "
 "properties:"
 msgstr ""
+"数字类的字符串表示形式，由 :meth:`~object.__repr__` 和 :meth:`~object."
+"__str__` 算出，具有以下特征属性:"
 
 #: ../../reference/datamodel.rst:204
 msgid ""
 "They are valid numeric literals which, when passed to their class "
 "constructor, produce an object having the value of the original numeric."
 msgstr ""
+"它们是有效的数字字面值，当被传给它们的类构造器时，将会产生具有原数字值的对"
+"象。"
 
 #: ../../reference/datamodel.rst:208
 msgid "The representation is in base 10, when possible."
-msgstr ""
+msgstr "表示形式会在可能的情况下采用 10 进制。"
 
 #: ../../reference/datamodel.rst:210
 msgid ""
 "Leading zeros, possibly excepting a single zero before a decimal point, are "
 "not shown."
-msgstr ""
+msgstr "开头的零，除小数点前可能存在的单个零之外，将不会被显示。"
 
 #: ../../reference/datamodel.rst:213
 msgid ""
 "Trailing zeros, possibly excepting a single zero after a decimal point, are "
 "not shown."
-msgstr ""
+msgstr "末尾的零，除小数点后可能存在的单个零之外，将不会被显示。"
 
 #: ../../reference/datamodel.rst:216
 msgid "A sign is shown only when the number is negative."
-msgstr ""
+msgstr "正负号仅在当数字为负值时会被显示。"
 
 #: ../../reference/datamodel.rst:218
 msgid ""
@@ -277,7 +337,7 @@ msgstr ":class:`numbers.Integral`"
 msgid ""
 "These represent elements from the mathematical set of integers (positive and "
 "negative)."
-msgstr ""
+msgstr "此类对象表示数学中整数集合的成员 (包括正数和负数)。"
 
 #: ../../reference/datamodel.rst:233
 msgid ""
@@ -285,14 +345,15 @@ msgid ""
 "meaningful interpretation of shift and mask operations involving negative "
 "integers."
 msgstr ""
+"整型数表示规则的目的是在涉及负整型数的变换和掩码运算时提供最为合理的解释。"
 
 #: ../../reference/datamodel.rst:236
 msgid "There are two types of integers:"
-msgstr ""
+msgstr "整型数可细分为两种类型:"
 
 #: ../../reference/datamodel.rst:243
 msgid "Integers (:class:`int`)"
-msgstr ""
+msgstr "整型 (:class:`int`)"
 
 #: ../../reference/datamodel.rst:239
 msgid ""
@@ -302,10 +363,12 @@ msgid ""
 "variant of 2's complement which gives the illusion of an infinite string of "
 "sign bits extending to the left."
 msgstr ""
+"此类对象表示任意大小的数字，仅受限于可用的内存 (包括虚拟内存)。在变换和掩码运"
+"算中会以二进制表示，负数会以 2 的补码表示，看起来像是符号位向左延伸补满空位。"
 
 #: ../../reference/datamodel.rst:256
 msgid "Booleans (:class:`bool`)"
-msgstr ""
+msgstr "布尔型 (:class:`bool`)"
 
 #: ../../reference/datamodel.rst:251
 msgid ""
@@ -316,6 +379,10 @@ msgid ""
 "being that when converted to a string, the strings ``\"False\"`` or "
 "``\"True\"`` are returned, respectively."
 msgstr ""
+"此类对象表示逻辑值 False 和 True。代表 ``False`` 和 ``True`` 值的两个对象是唯"
+"二的布尔对象。布尔类型是整型的子类型，两个布尔值在各种场合的行为分别类似于数"
+"值 0 和 1，例外情况只有在转换为字符串时分别返回字符串 ``\"False\"`` 或 "
+"``\"True\"``。"
 
 #: ../../reference/datamodel.rst:259
 msgid ":class:`numbers.Real` (:class:`float`)"
@@ -353,7 +420,7 @@ msgstr ""
 
 #: ../../reference/datamodel.rst:290
 msgid "Sequences"
-msgstr ""
+msgstr "序列"
 
 #: ../../reference/datamodel.rst:299
 msgid ""
@@ -365,6 +432,11 @@ msgid ""
 "adding the sequence length. For example, ``a[-2]`` equals ``a[n-2]``, the "
 "second to last item of sequence a with length ``n``."
 msgstr ""
+"这些代表以非负数为索引的有限有序集合。 内置函数 :func:`len` 将返回序列的项"
+"数。 当序列 的长度为 *n* 时，索引集合将包含数字 0, 1, ..., *n*-1。 ``a[i]`` "
+"是选择序列 *a* 中的第 *i* 项。 某些序列，包括内置的序列，可通过加上序列长度来"
+"解读负下标值。 例如，``a[-2]`` 等价于 ``a[n-2]``，即长度为 ``n`` 的 a 序列的"
+"倒数第二项。"
 
 #: ../../reference/datamodel.rst:309
 msgid ""
@@ -373,6 +445,9 @@ msgid ""
 "a sequence of the same type. The comment above about negative indexes also "
 "applies to negative slice positions."
 msgstr ""
+"序列还支持切片: ``a[i:j]`` 是选择索引为 *k* 使得 *i* ``<=`` *k* ``<`` *j* 的"
+"所有条目。 当用作表达式时，切片就是一个相同类型的新序列。 以上有关负索引的注"
+"释也适用于切片位置的负值。"
 
 #: ../../reference/datamodel.rst:314
 msgid ""
@@ -380,14 +455,17 @@ msgid ""
 "parameter: ``a[i:j:k]`` selects all items of *a* with index *x* where ``x = "
 "i + n*k``, *n* ``>=`` ``0`` and *i* ``<=`` *x* ``<`` *j*."
 msgstr ""
+"有些序列还支持带有第三个 \"step\" 形参的 \"扩展切片\": ``a[i:j:k]`` 选择 *a* "
+"中索引号为 *x* 的所有条目，``x = i + n*k``, *n* ``>=`` ``0`` 且 *i* ``<=`` "
+"*x* ``<`` *j*。"
 
 #: ../../reference/datamodel.rst:318
 msgid "Sequences are distinguished according to their mutability:"
-msgstr ""
+msgstr "序列可根据其可变性来加以区分:"
 
 #: ../../reference/datamodel.rst:322
 msgid "Immutable sequences"
-msgstr ""
+msgstr "不可变序列"
 
 #: ../../reference/datamodel.rst:328
 msgid ""
@@ -396,14 +474,17 @@ msgid ""
 "be mutable and may be changed; however, the collection of objects directly "
 "referenced by an immutable object cannot change.)"
 msgstr ""
+"不可变序列类型的对象一旦创建就不能再改变。(如果对象包含对其他对象的引用，其中"
+"的可变对象就是可以改变的；但是，一个不可变对象所直接引用的对象集是不能改变"
+"的。)"
 
 #: ../../reference/datamodel.rst:333
 msgid "The following types are immutable sequences:"
-msgstr ""
+msgstr "以下类型属于不可变对象:"
 
 #: ../../reference/datamodel.rst:356
 msgid "Strings"
-msgstr ""
+msgstr "字符串"
 
 #: ../../reference/datamodel.rst:346
 msgid ""
@@ -418,10 +499,17 @@ msgid ""
 "`bytes` using the given text encoding, and :meth:`bytes.decode` can be used "
 "to achieve the opposite."
 msgstr ""
+"字符串是由代表 Unicode 码位的值组成的序列。 取值范围在 ``U+0000 - U+10FFFF`` "
+"之内的所有码位都可在字符串中使用。 Python 没有 :c:expr:`char` 类型；而是将字"
+"符串中的每个码位表示为一个长度为 ``1`` 的字符串对象。 内置函数 :func:`ord` 可"
+"将一个码位由字符串形式转换为取值范围在 ``0 - 10FFFF`` 之内的整数；:func:"
+"`chr` 可将一个取值范围在 ``0 - 10FFFF`` 之内的整数转换为长度为 ``1`` 的对应字"
+"符串对象。 :meth:`str.encode` 可以使用给定的文本编码格式将 :class:`str` 转换"
+"为 :class:`bytes`，而 :meth:`bytes.decode` 则可以被用来实现相反的解码操作。"
 
 #: ../../reference/datamodel.rst:369
 msgid "Tuples"
-msgstr ""
+msgstr "元组"
 
 #: ../../reference/datamodel.rst:364
 msgid ""
@@ -432,10 +520,14 @@ msgid ""
 "usable for grouping of expressions).  An empty tuple can be formed by an "
 "empty pair of parentheses."
 msgstr ""
+"一个元组中的条目可以是任意 Python 对象。包含两个或以上条目的元组由逗号分隔的"
+"表达式构成。只有一个条目的元组 ('单项元组') 可通过在表达式后加一个逗号来构成 "
+"(一个表达式本身不能创建为元组，因为圆括号要用来设置表达式分组)。一个空元组可"
+"通过一对内容为空的圆括号创建。"
 
 #: ../../reference/datamodel.rst:379
 msgid "Bytes"
-msgstr ""
+msgstr "字节串"
 
 #: ../../reference/datamodel.rst:374
 msgid ""
@@ -452,7 +544,7 @@ msgstr ""
 
 #: ../../reference/datamodel.rst:382
 msgid "Mutable sequences"
-msgstr ""
+msgstr "可变序列"
 
 #: ../../reference/datamodel.rst:391
 msgid ""
@@ -460,20 +552,22 @@ msgid ""
 "and slicing notations can be used as the target of assignment and :keyword:"
 "`del` (delete) statements."
 msgstr ""
+"可变序列在被创建后仍可被改变。下标和切片标注可被用作赋值和 :keyword:`del` (删"
+"除) 语句的目标。"
 
 #: ../../reference/datamodel.rst:399
 msgid ""
 "The :mod:`collections` and :mod:`array` module provide additional examples "
 "of mutable sequence types."
-msgstr ""
+msgstr ":mod:`collections` 和 :mod:`array` 模块提供了可变序列类型的更多例子。"
 
 #: ../../reference/datamodel.rst:402
 msgid "There are currently two intrinsic mutable sequence types:"
-msgstr ""
+msgstr "目前有两种内生可变序列类型:"
 
 #: ../../reference/datamodel.rst:409
 msgid "Lists"
-msgstr ""
+msgstr "列表"
 
 #: ../../reference/datamodel.rst:407
 msgid ""
@@ -481,10 +575,12 @@ msgid ""
 "placing a comma-separated list of expressions in square brackets. (Note that "
 "there are no special cases needed to form lists of length 0 or 1.)"
 msgstr ""
+"列表中的条目可以是任意 Python 对象。列表由用方括号括起并由逗号分隔的多个表达"
+"式构成。(注意创建长度为 0 或 1 的列表无需使用特殊规则。)"
 
 #: ../../reference/datamodel.rst:418
 msgid "Byte Arrays"
-msgstr ""
+msgstr "字节数组"
 
 #: ../../reference/datamodel.rst:414
 msgid ""
@@ -493,10 +589,13 @@ msgid ""
 "unhashable), byte arrays otherwise provide the same interface and "
 "functionality as immutable :class:`bytes` objects."
 msgstr ""
+"字节数组对象属于可变数组。可以通过内置的 :func:`bytearray` 构造器来创建。除了"
+"是可变的 (因而也是不可哈希的)，在其他方面字节数组提供的接口和功能都与不可变"
+"的 :class:`bytes` 对象一致。"
 
 #: ../../reference/datamodel.rst:421
 msgid "Set types"
-msgstr ""
+msgstr "集合类型"
 
 #: ../../reference/datamodel.rst:427
 msgid ""
@@ -507,6 +606,10 @@ msgid ""
 "from a sequence, and computing mathematical operations such as intersection, "
 "union, difference, and symmetric difference."
 msgstr ""
+"此类对象表示由不重复且不可变对象组成的无序且有限的集合。因此它们不能通过下标"
+"来索引。但是它们可被迭代，也可用内置函数 :func:`len` 返回集合中的条目数。集合"
+"常见的用处是快速成员检测，去除序列中的重复项，以及进行交、并、差和对称差等数"
+"学运算。"
 
 #: ../../reference/datamodel.rst:434
 msgid ""
@@ -515,14 +618,17 @@ msgid ""
 "numbers compare equal (e.g., ``1`` and ``1.0``), only one of them can be "
 "contained in a set."
 msgstr ""
+"对于集合元素所采用的不可变规则与字典的键相同。注意数字类型遵循正常的数字比较"
+"规则: 如果两个数字相等 (例如 ``1`` 和 ``1.0``)，则同一集合中只能包含其中一"
+"个。"
 
 #: ../../reference/datamodel.rst:439
 msgid "There are currently two intrinsic set types:"
-msgstr ""
+msgstr "目前有两种内生集合类型:"
 
 #: ../../reference/datamodel.rst:448
 msgid "Sets"
-msgstr ""
+msgstr "集合"
 
 #: ../../reference/datamodel.rst:445
 msgid ""
@@ -530,10 +636,12 @@ msgid ""
 "constructor and can be modified afterwards by several methods, such as :meth:"
 "`~set.add`."
 msgstr ""
+"此类对象表示可变集合。它们可通过内置的 :func:`set` 构造器创建，并且创建之后可"
+"以通过方法进行修改，例如 :meth:`~set.add`。"
 
 #: ../../reference/datamodel.rst:457
 msgid "Frozen sets"
-msgstr ""
+msgstr "冻结集合"
 
 #: ../../reference/datamodel.rst:453
 msgid ""
@@ -541,10 +649,13 @@ msgid ""
 "`frozenset` constructor.  As a frozenset is immutable and :term:`hashable`, "
 "it can be used again as an element of another set, or as a dictionary key."
 msgstr ""
+"此类对象表示不可变集合。它们可通过内置的 :func:`frozenset` 构造器创建。由于 "
+"frozenset 对象不可变且 :term:`hashable`，它可以被用作另一个集合的元素或是字典"
+"的键。"
 
 #: ../../reference/datamodel.rst:460
 msgid "Mappings"
-msgstr ""
+msgstr "映射"
 
 #: ../../reference/datamodel.rst:467
 msgid ""
@@ -554,14 +665,17 @@ msgid ""
 "assignments or :keyword:`del` statements. The built-in function :func:`len` "
 "returns the number of items in a mapping."
 msgstr ""
+"此类对象表示由任意索引集合所索引的对象的集合。通过下标 ``a[k]`` 可在映射 "
+"``a`` 中选择索引为 ``k`` 的条目；这可以在表达式中使用，也可作为赋值或 :"
+"keyword:`del` 语句的目标。内置函数 :func:`len` 可返回一个映射中的条目数。"
 
 #: ../../reference/datamodel.rst:473
 msgid "There is currently a single intrinsic mapping type:"
-msgstr ""
+msgstr "目前只有一种内生映射类型:"
 
 #: ../../reference/datamodel.rst:477
 msgid "Dictionaries"
-msgstr ""
+msgstr "字典"
 
 #: ../../reference/datamodel.rst:481
 msgid ""
@@ -574,6 +688,11 @@ msgid ""
 "numbers compare equal (e.g., ``1`` and ``1.0``) then they can be used "
 "interchangeably to index the same dictionary entry."
 msgstr ""
+"此类对象表示由几乎任意值作为索引的有限个对象的集合。不可作为键的值类型只有包"
+"含列表或字典或其他可变类型，通过值而非对象编号进行比较的值，其原因在于高效的"
+"字典实现需要使用键的哈希值以保持一致性。用作键的数字类型遵循正常的数字比较规"
+"则: 如果两个数字相等 (例如 ``1`` 和 ``1.0``) 则它们均可来用来索引同一个字典条"
+"目。"
 
 #: ../../reference/datamodel.rst:490
 msgid ""
@@ -582,6 +701,9 @@ msgid ""
 "an existing key does not change the order, however removing a key and re-"
 "inserting it will add it to the end instead of keeping its old place."
 msgstr ""
+"字典会保留插入顺序，这意味着键将以它们被添加的顺序在字典中依次产生。 替换某个"
+"现有的键不会改变其顺序，但是移除某个键再重新插入则会将其添加到末尾而不会保留"
+"其原有位置。"
 
 #: ../../reference/datamodel.rst:495
 msgid ""
@@ -595,6 +717,8 @@ msgid ""
 "The extension modules :mod:`dbm.ndbm` and :mod:`dbm.gnu` provide additional "
 "examples of mapping types, as does the :mod:`collections` module."
 msgstr ""
+"扩展模块 :mod:`dbm.ndbm` 和 :mod:`dbm.gnu` 提供了额外的映射类型示例，:mod:"
+"`collections` 模块也是如此。"
 
 #: ../../reference/datamodel.rst:506
 msgid ""
@@ -602,20 +726,22 @@ msgid ""
 "3.6. In CPython 3.6, insertion order was preserved, but it was considered an "
 "implementation detail at that time rather than a language guarantee."
 msgstr ""
+"在 Python 3.6 版之前字典不会保留插入顺序。 在 CPython 3.6 中插入顺序会被保"
+"留，但这在当时被当作是一个实现细节而非确定的语言特性。"
 
 #: ../../reference/datamodel.rst:513
 msgid "Callable types"
-msgstr ""
+msgstr "可调用类型"
 
 #: ../../reference/datamodel.rst:521
 msgid ""
 "These are the types to which the function call operation (see section :ref:"
 "`calls`) can be applied:"
-msgstr ""
+msgstr "此类型可以被应用于函数调用操作 (参见 :ref:`calls` 小节):"
 
 #: ../../reference/datamodel.rst:528
 msgid "User-defined functions"
-msgstr ""
+msgstr "用户定义函数"
 
 #: ../../reference/datamodel.rst:535
 msgid ""
@@ -623,19 +749,21 @@ msgid ""
 "section :ref:`function`).  It should be called with an argument list "
 "containing the same number of items as the function's formal parameter list."
 msgstr ""
+"用户定义函数对象可通过函数定义来创建 (参见 :ref:`function` 小节)。它被调用时"
+"应附带一个参数列表，其中包含的条目应与函数所定义的形参列表一致。"
 
 #: ../../reference/datamodel.rst:541 ../../reference/datamodel.rst:1117
 #: ../../reference/datamodel.rst:1308
 msgid "Special read-only attributes"
-msgstr ""
+msgstr "特殊的只读属性"
 
 #: ../../reference/datamodel.rst:551 ../../reference/datamodel.rst:584
 msgid "Attribute"
-msgstr ""
+msgstr "属性"
 
 #: ../../reference/datamodel.rst:552 ../../reference/datamodel.rst:585
 msgid "Meaning"
-msgstr ""
+msgstr "含意"
 
 #: ../../reference/datamodel.rst:555
 msgid ""
@@ -643,26 +771,28 @@ msgid ""
 "`global variables <naming>` -- the global namespace of the module in which "
 "the function was defined."
 msgstr ""
+"对存放该函数中 :ref:`全局变量 <naming>` 的 :class:`字典 <dict>` 的引用 —— 函"
+"数定义所在模块的全局命名空间。"
 
 #: ../../reference/datamodel.rst:560
 msgid ""
 "``None`` or a :class:`tuple` of cells that contain bindings for the "
 "function's free variables."
-msgstr ""
+msgstr "``None`` 或是一个包含该函数的自由变量的绑定单元的 :class:`tuple`。"
 
 #: ../../reference/datamodel.rst:563
 msgid ""
 "A cell object has the attribute ``cell_contents``. This can be used to get "
 "the value of the cell, as well as set the value."
-msgstr ""
+msgstr "单元对象具有 ``cell_contents`` 属性。这可被用来获取以及设置单元的值。"
 
 #: ../../reference/datamodel.rst:567 ../../reference/datamodel.rst:1345
 msgid "Special writable attributes"
-msgstr ""
+msgstr "特殊的可写属性"
 
 #: ../../reference/datamodel.rst:579
 msgid "Most of these attributes check the type of the assigned value:"
-msgstr ""
+msgstr "这些属性大多会检查赋值的类型："
 
 #: ../../reference/datamodel.rst:588
 msgid ""
@@ -674,19 +804,21 @@ msgstr "函数的文档字符串，如果没有则为 ``None``。 不会被子�
 msgid ""
 "The function's name. See also: :attr:`__name__ attributes <definition."
 "__name__>`."
-msgstr ""
+msgstr "函数的名称。 另请参阅: :attr:`__name__ 属性 <definition.__name__>`。"
 
 #: ../../reference/datamodel.rst:596
 msgid ""
 "The function's :term:`qualified name`. See also: :attr:`__qualname__ "
 "attributes <definition.__qualname__>`."
 msgstr ""
+"函数的 :term:`qualified name`。 另请参阅: :attr:`__qualname__ 属性 "
+"<definition.__qualname__>`。"
 
 #: ../../reference/datamodel.rst:602
 msgid ""
 "The name of the module the function was defined in, or ``None`` if "
 "unavailable."
-msgstr ""
+msgstr "该函数所属模块的名称，没有则为 ``None``。"
 
 #: ../../reference/datamodel.rst:606
 msgid ""
@@ -694,18 +826,22 @@ msgid ""
 "parameters that have defaults, or ``None`` if no parameters have a default "
 "value."
 msgstr ""
+"由具有默认值的形参的默认 :term:`parameter` 值组成的 :class:`tuple`，或者如果"
+"无任何形参具有默认值则为 ``None``。"
 
 #: ../../reference/datamodel.rst:611
 msgid ""
 "The :ref:`code object <code-objects>` representing the compiled function "
 "body."
-msgstr ""
+msgstr "代表已编译的函数体的 :ref:`代码对象 <code-objects>`。"
 
 #: ../../reference/datamodel.rst:615
 msgid ""
 "The namespace supporting arbitrary function attributes. See also: :attr:"
 "`__dict__ attributes <object.__dict__>`."
 msgstr ""
+"命名空间支持任意函数属性。 另请参阅: :attr:`__dict__ 属性 <object."
+"__dict__>`。"
 
 #: ../../reference/datamodel.rst:619
 msgid ""
@@ -714,12 +850,16 @@ msgid ""
 "``'return'`` for the return annotation, if provided. See also: :ref:"
 "`annotations-howto`."
 msgstr ""
+"包含 :term:`形参 <parameter>` 标注的 :class:`字典 <dict>`。 该字典的键是形参"
+"名称，如存在返回标注则将包含 ``'return'`` 键。 另请参阅: :ref:`annotations-"
+"howto`。"
 
 #: ../../reference/datamodel.rst:626
 msgid ""
 "A :class:`dictionary <dict>` containing defaults for keyword-only :term:"
 "`parameters <parameter>`."
 msgstr ""
+"包含仅限关键字 :term:`形参 <parameter>` 默认值的 :class:`字典 <dict>`。"
 
 #: ../../reference/datamodel.rst:629
 msgid ""
@@ -727,6 +867,8 @@ msgid ""
 "which can be used, for example, to attach metadata to functions.  Regular "
 "attribute dot-notation is used to get and set such attributes."
 msgstr ""
+"函数对象也支持获取和设置任意属性，举例来说，这可被用于将元数据关联到函数。 通"
+"常使用带点号的属性标注来获取和设置这样的属性。"
 
 #: ../../reference/datamodel.rst:635
 msgid ""
@@ -734,6 +876,8 @@ msgid ""
 "defined functions. Function attributes on :ref:`built-in functions <builtin-"
 "functions>` may be supported in the future."
 msgstr ""
+"CPython 目前的实现仅支持用户自定义函数上的函数属性。 未来可能会支持 :ref:`内"
+"置函数 <builtin-functions>` 上的函数属性。"
 
 #: ../../reference/datamodel.rst:640
 msgid ""
@@ -741,30 +885,32 @@ msgid ""
 "its :ref:`code object <code-objects>` (accessible via the :attr:`~function."
 "__code__` attribute)."
 msgstr ""
+"有关函数定义的额外信息可以从其 :ref:`代码对象 <code-objects>` 中提取（可通"
+"过 :attr:`~function.__code__` 属性来访问）。"
 
 #: ../../reference/datamodel.rst:648
 msgid "Instance methods"
-msgstr ""
+msgstr "实例方法"
 
 #: ../../reference/datamodel.rst:655
 msgid ""
 "An instance method object combines a class, a class instance and any "
 "callable object (normally a user-defined function)."
-msgstr ""
+msgstr "实例方法用于结合类、类实例和任何可调用对象 (通常为用户定义函数)。"
 
 #: ../../reference/datamodel.rst:665 ../../reference/datamodel.rst:1436
 msgid "Special read-only attributes:"
-msgstr ""
+msgstr "特殊的只读属性："
 
 #: ../../reference/datamodel.rst:670
 msgid ""
 "Refers to the class instance object to which the method is :ref:`bound "
 "<method-binding>`"
-msgstr ""
+msgstr "指向方法所 :ref:`绑定 <method-binding>` 的类实例对象。"
 
 #: ../../reference/datamodel.rst:674
 msgid "Refers to the original :ref:`function object <user-defined-funcs>`"
-msgstr ""
+msgstr "指向原本的 :ref:`函数对象 <user-defined-funcs>`"
 
 #: ../../reference/datamodel.rst:677
 msgid ""
@@ -772,23 +918,28 @@ msgid ""
 "__doc__>`). A :class:`string <str>` if the original function had a "
 "docstring, else ``None``."
 msgstr ""
+"方法的文档 (等同于 :attr:`method.__func__.__doc__ <function.__doc__>`)。 如果"
+"原始函数具有文档字符串则为一个 :class:`字符串 <str>`，否则为 ``None``。"
 
 #: ../../reference/datamodel.rst:683
 msgid ""
 "The name of the method (same as :attr:`method.__func__.__name__ <function."
 "__name__>`)"
 msgstr ""
+"方法名称（与 :attr:`method.__func__.__name__ <function.__name__>` 相同）"
 
 #: ../../reference/datamodel.rst:687
 msgid ""
 "The name of the module the method was defined in, or ``None`` if unavailable."
-msgstr ""
+msgstr "方法定义所在模块的名称，如不可用则为 ``None``。"
 
 #: ../../reference/datamodel.rst:690
 msgid ""
 "Methods also support accessing (but not setting) the arbitrary function "
 "attributes on the underlying :ref:`function object <user-defined-funcs>`."
 msgstr ""
+"方法还支持读取（但不能设置）下层 :ref:`函数对象 <user-defined-funcs>` 的任意"
+"函数属性。"
 
 #: ../../reference/datamodel.rst:693
 msgid ""
@@ -797,6 +948,9 @@ msgid ""
 "defined :ref:`function object <user-defined-funcs>` or a :class:"
 "`classmethod` object."
 msgstr ""
+"用户自定义方法对象可在获取一个类的属性（可能是通过该类的实例）时被创建，如果"
+"该属性是一个用户自定义 :ref:`函数对象 <user-defined-funcs>` 或 :class:"
+"`classmethod` 对象的话。"
 
 #: ../../reference/datamodel.rst:700
 msgid ""
@@ -806,6 +960,10 @@ msgid ""
 "method object is said to be *bound*.  The new method's :attr:`~method."
 "__func__` attribute is the original function object."
 msgstr ""
+"当通过从类的实例获取一个用户自定义 :ref:`函数对象 <user-defined-funcs>` 的方"
+"式创建一个实例方法对象时，该方法对象的 :attr:`~method.__self__` 属性即为该实"
+"例，而该方法对象将被称作已 *绑定*。 该新建方法的 :attr:`~method.__func__` 属"
+"性将是原来的函数对象。"
 
 #: ../../reference/datamodel.rst:706
 msgid ""
@@ -814,6 +972,9 @@ msgid ""
 "attribute is the class itself, and its :attr:`~method.__func__` attribute is "
 "the function object underlying the class method."
 msgstr ""
+"当通过从类或实例获取一个 :class:`classmethod` 对象的方式创建一个实例方法对象"
+"时，该对象的 :attr:`~method.__self__` 属性即为该类本身，而其 :attr:`~method."
+"__func__` 属性将是类方法对应的下层函数对象。"
 
 #: ../../reference/datamodel.rst:711
 msgid ""
@@ -824,6 +985,10 @@ msgid ""
 "an instance of :class:`!C`, calling ``x.f(1)`` is equivalent to calling ``C."
 "f(x, 1)``."
 msgstr ""
+"当一个实例方法被调用时，会调用对应的下层函数 (:attr:`~method.__func__`)，并将"
+"类实例 (:attr:`~method.__self__`) 插入参数列表的开头。 例如，当 :class:`!C` "
+"是一个包含 :meth:`!f` 函数定义的类，而 ``x`` 是 :class:`!C` 的一个实例，则调"
+"用 ``x.f(1)`` 就等价于调用 ``C.f(x, 1)``。"
 
 #: ../../reference/datamodel.rst:718
 msgid ""
@@ -833,6 +998,9 @@ msgid ""
 "f(1)`` is equivalent to calling ``f(C,1)`` where ``f`` is the underlying "
 "function."
 msgstr ""
+"当一个实例方法对象是派生自一个 :class:`classmethod` 对象时，保存在 :attr:"
+"`~method.__self__` 中的“类实例”实际上会是该类本身，因此无论是调用 ``x.f(1)`` "
+"还是 ``C.f(1)`` 都等同于调用 ``f(C,1)``，其中 ``f`` 为对应的下层函数。"
 
 #: ../../reference/datamodel.rst:723
 msgid ""
@@ -855,7 +1023,7 @@ msgstr ""
 
 #: ../../reference/datamodel.rst:737
 msgid "Generator functions"
-msgstr ""
+msgstr "生成器函数"
 
 #: ../../reference/datamodel.rst:743
 msgid ""
@@ -869,10 +1037,16 @@ msgid ""
 "exception is raised and the iterator will have reached the end of the set of "
 "values to be returned."
 msgstr ""
+"一个使用 :keyword:`yield` 语句（见 :ref:`yield` 章节）的函数或方法被称为 :"
+"dfn:`生成器函数`。 这样的函数在被调用时，总是返回一个可以执行该函数体的 :"
+"term:`iterator` 对象：调用该迭代器的 :meth:`iterator.__next__` 方法将导致这个"
+"函数一直运行到它使用 :keyword:`!yield` 语句提供一个值。 当这个函数执行 :"
+"keyword:`return` 语句或到达函数体末尾时，将引发 :exc:`StopIteration` 异常并且"
+"该迭代器将到达所返回的值集合的末尾。"
 
 #: ../../reference/datamodel.rst:755
 msgid "Coroutine functions"
-msgstr ""
+msgstr "协程函数"
 
 #: ../../reference/datamodel.rst:760
 msgid ""
@@ -882,10 +1056,14 @@ msgid ""
 "as :keyword:`async with` and :keyword:`async for` statements. See also the :"
 "ref:`coroutine-objects` section."
 msgstr ""
+"使用 :keyword:`async def` 来定义的函数或方法就被称为 :dfn:`协程函数`。这样的"
+"函数在被调用时会返回一个 :term:`coroutine` 对象。它可能包含 :keyword:`await` "
+"表达式以及 :keyword:`async with` 和 :keyword:`async for` 语句。详情可参见 :"
+"ref:`coroutine-objects` 一节。"
 
 #: ../../reference/datamodel.rst:768
 msgid "Asynchronous generator functions"
-msgstr ""
+msgstr "异步生成器函数"
 
 #: ../../reference/datamodel.rst:774
 msgid ""
@@ -895,6 +1073,10 @@ msgid ""
 "iterator` object which can be used in an :keyword:`async for` statement to "
 "execute the body of the function."
 msgstr ""
+"使用 :keyword:`async def` 来定义并使用了 :keyword:`yield` 语句的函数或方法被"
+"称为 :dfn:`异步生成器函数`。 这样的函数在被调用时，将返回一个 :term:"
+"`asynchronous iterator` 对象，该对象可在 :keyword:`async for` 语句中被用来执"
+"行函数体。"
 
 #: ../../reference/datamodel.rst:780
 msgid ""
@@ -906,10 +1088,14 @@ msgid ""
 "asynchronous iterator will have reached the end of the set of values to be "
 "yielded."
 msgstr ""
+"调用异步迭代器的 :meth:`aiterator.__anext__ <object.__anext__>` 方法将返回一"
+"个 :term:`awaitable`，此对象会在被等待时执行直到使用 :keyword:`yield` 产生一"
+"个值。 当函数执行到空的 :keyword:`return` 语句或函数末尾时，将会引发 :exc:"
+"`StopAsyncIteration` 异常并且异步迭代器也将到达要产生的值集合的末尾。"
 
 #: ../../reference/datamodel.rst:793
 msgid "Built-in functions"
-msgstr ""
+msgstr "内置函数"
 
 #: ../../reference/datamodel.rst:800
 msgid ""
@@ -918,31 +1104,38 @@ msgid ""
 "standard built-in module). The number and type of the arguments are "
 "determined by the C function. Special read-only attributes:"
 msgstr ""
+"内置函数是针对特定 C 函数的包装器。 内置函数的例子包括 :func:`len` 和 :func:"
+"`math.sin` 等 (:mod:`math` 是一个标准内置模块)。 参数的数量和类型是由 C 函数"
+"确定的。 特殊的只读属性："
 
 #: ../../reference/datamodel.rst:805
 msgid ""
 ":attr:`!__doc__` is the function's documentation string, or ``None`` if "
 "unavailable. See :attr:`function.__doc__`."
 msgstr ""
+":attr:`!__doc__` 是函数的文档字符串，或者如果不可用则为 ``None``。 参见 :"
+"attr:`function.__doc__`。"
 
 #: ../../reference/datamodel.rst:807
 msgid ""
 ":attr:`!__name__` is the function's name. See :attr:`function.__name__`."
-msgstr ""
+msgstr ":attr:`!__name__` 是函数的名称。 参见 :attr:`function.__name__`。"
 
 #: ../../reference/datamodel.rst:808
 msgid ":attr:`!__self__` is set to ``None`` (but see the next item)."
-msgstr ""
+msgstr ":attr:`!__self__` 被设为 ``None`` (但请参见下一项)。"
 
 #: ../../reference/datamodel.rst:809
 msgid ""
 ":attr:`!__module__` is the name of the module the function was defined in or "
 "``None`` if unavailable. See :attr:`function.__module__`."
 msgstr ""
+":attr:`!__module__` 是函数定义所在模块的名称，或者如果不可用则为 ``None``。 "
+"参见 :attr:`function.__module__`。"
 
 #: ../../reference/datamodel.rst:817
 msgid "Built-in methods"
-msgstr ""
+msgstr "内置方法"
 
 #: ../../reference/datamodel.rst:824
 msgid ""
@@ -954,10 +1147,14 @@ msgid ""
 "the same semantics as it does with :attr:`other instance methods <method."
 "__self__>`.)"
 msgstr ""
+"此类型实际上是内置函数的另一种形式，只不过还包含了一个转入 C 函数的对象作为隐"
+"式的额外参数。 内置方法的一个例子是 ``alist.append()``，其中 *alist* 是一个列"
+"表对象。 在此示例中，特殊的只读属性 :attr:`!__self__` 会被设为 *alist* 所标记"
+"的对象。 （该属性的语义与 :attr:`其他实例方法 <method.__self__>` 的相同。）"
 
 #: ../../reference/datamodel.rst:833
 msgid "Classes"
-msgstr ""
+msgstr "类"
 
 #: ../../reference/datamodel.rst:835
 msgid ""
@@ -967,20 +1164,25 @@ msgid ""
 "meth:`!__new__` and, in the typical case, to :meth:`~object.__init__` to "
 "initialize the new instance."
 msgstr ""
+"类是可调用对象。 这些对象通常是用作创建自身实例的“工厂”，但类也可以有重载 :"
+"meth:`~object.__new__` 的变体类型。 调用的参数会传递给 :meth:`!__new__`，并且"
+"在通常情况下，也会传递给 :meth:`~object.__init__` 来初始化新的实例。"
 
 #: ../../reference/datamodel.rst:843
 msgid "Class Instances"
-msgstr ""
+msgstr "类实例"
 
 #: ../../reference/datamodel.rst:845
 msgid ""
 "Instances of arbitrary classes can be made callable by defining a :meth:"
 "`~object.__call__` method in their class."
 msgstr ""
+"任意类的实例可以通过在其所属类中定义 :meth:`~object.__call__` 方法变成可调用"
+"对象。"
 
 #: ../../reference/datamodel.rst:850
 msgid "Modules"
-msgstr ""
+msgstr "模块"
 
 #: ../../reference/datamodel.rst:856
 msgid ""
@@ -996,12 +1198,21 @@ msgid ""
 "initialize the module (since it isn't needed once the initialization is "
 "done)."
 msgstr ""
+"模块是 Python 代码的基本组织单元，由 :ref:`导入系统 <importsystem>` 创建，它"
+"或是通过 :keyword:`import` 语句，或是通过调用 :func:`importlib."
+"import_module` 和内置的 :func:`__import__` 等函数来唤起。 模块对象具有通过 :"
+"class:`字典 <dict>` 对象实现的命名空间（就是被定义在模块中的函数的 :attr:"
+"`~function.__globals__` 属性所引用的字典）。 属性引用将被转换为在该字典中的查"
+"找操作，例如 ``m.x`` 就等价于 ``m.__dict__[\"x\"]``。 模块对象不包含用于初始"
+"化模块的代码对象（因为初始化完成后已不再需要它）。"
 
 #: ../../reference/datamodel.rst:869
 msgid ""
 "Attribute assignment updates the module's namespace dictionary, e.g., ``m.x "
 "= 1`` is equivalent to ``m.__dict__[\"x\"] = 1``."
 msgstr ""
+"属性赋值会更新模块的命名空间字典，例如 ``m.x = 1`` 等同于 ``m."
+"__dict__[\"x\"] = 1``。"
 
 #: ../../reference/datamodel.rst:879
 msgid "Predefined (writable) attributes:"
@@ -1049,6 +1260,8 @@ msgid ""
 "collected during module body execution.  For best practices on working with :"
 "attr:`__annotations__`, please see :ref:`annotations-howto`."
 msgstr ""
+"包含在模块体执行期间收集的 :term:`变量标注 <variable annotation>` 的字典。 有"
+"关使用 :attr:`__annotations__` 的最佳实践，请参阅 :ref:`annotations-howto`。"
 
 #: ../../reference/datamodel.rst:905
 msgid ""
@@ -1064,10 +1277,13 @@ msgid ""
 "still has live references.  To avoid this, copy the dictionary or keep the "
 "module around while using its dictionary directly."
 msgstr ""
+"由于 CPython 清理模块字典的设定，当模块离开作用域时模块字典将会被清理，即使该"
+"字典还有活动的引用。想避免此问题，可复制该字典或保持模块状态以直接使用其字"
+"典。"
 
 #: ../../reference/datamodel.rst:917
 msgid "Custom classes"
-msgstr ""
+msgstr "自定义类"
 
 #: ../../reference/datamodel.rst:919
 msgid ""
@@ -1102,18 +1318,23 @@ msgid ""
 "which attributes retrieved from a class may differ from those actually "
 "contained in its :attr:`~object.__dict__`."
 msgstr ""
+"当一个类属性引用 (假设类名为 :class:`!C`) 会产生一个类方法对象时，它将转化为"
+"一个 :attr:`~method.__self__` 属性为 :class:`!C` 的实例方法对象。 当它会产生"
+"一个 :class:`staticmethod` 对象时，它将转换为该静态方法对象所包装的对象。 有"
+"关有类的 :attr:`~object.__dict__` 实际包含内容以外获取属性的其他方式请参阅 :"
+"ref:`descriptors` 一节。"
 
 #: ../../reference/datamodel.rst:954
 msgid ""
 "Class attribute assignments update the class's dictionary, never the "
 "dictionary of a base class."
-msgstr ""
+msgstr "类属性赋值会更新类的字典，但不会更新基类的字典。"
 
 #: ../../reference/datamodel.rst:959
 msgid ""
 "A class object can be called (see above) to yield a class instance (see "
 "below)."
-msgstr ""
+msgstr "类对象可被调用 (见上文) 以产生一个类实例 (见下文)。"
 
 #: ../../reference/datamodel.rst:969
 msgid "Special attributes:"
@@ -1133,7 +1354,7 @@ msgstr ":attr:`__module__`"
 
 #: ../../reference/datamodel.rst:975
 msgid "The name of the module in which the class was defined."
-msgstr ""
+msgstr "类定义所在模块的名称。"
 
 #: ../../reference/datamodel.rst:978
 msgid ":attr:`~object.__dict__`"
@@ -1168,7 +1389,7 @@ msgstr ""
 
 #: ../../reference/datamodel.rst:996
 msgid "Class instances"
-msgstr ""
+msgstr "类实例"
 
 #: ../../reference/datamodel.rst:1004
 msgid ""
@@ -1186,6 +1407,15 @@ msgid ""
 "class attribute is found, and the object's class has a :meth:`~object."
 "__getattr__` method, that is called to satisfy the lookup."
 msgstr ""
+"类实例可通过调用类对象来创建（见上文）。 每个类实例都有通过一个字典对象实现的"
+"独立命名空间，属性引用会首先在此字典中进行查找。 当未在其中发现某个属性，而实"
+"例对应的类中有该属性时，会继续在类属性中查找。 如果找到的类属性是一个用户自定"
+"义函数对象，它会被转化为实例方法对象，其 :attr:`~method.__self__` 属性即该实"
+"例。 静态方法和类方法对象也会被转化；参见上文的“类”小节。 要了解其他通过类实"
+"例来获取相应类属性的方式请参阅 :ref:`descriptors` 小节，这样得到的属性可能与"
+"实际存放在类的 :attr:`~object.__dict__` 中的对象不同。 如果未找到类属性，而对"
+"象所属的类具有 :meth:`~object.__getattr__` 方法，则会调用该方法来满足查找要"
+"求。"
 
 #: ../../reference/datamodel.rst:1020
 msgid ""
@@ -1194,12 +1424,17 @@ msgid ""
 "meth:`~object.__delattr__` method, this is called instead of updating the "
 "instance dictionary directly."
 msgstr ""
+"属性赋值和删除会更新实例的字典，但绝不会更新类的字典。 如果类具有 :meth:"
+"`~object.__setattr__` 或 :meth:`~object.__delattr__` 方法，则将调用该方法而不"
+"再直接更新实例的字典。"
 
 #: ../../reference/datamodel.rst:1030
 msgid ""
 "Class instances can pretend to be numbers, sequences, or mappings if they "
 "have methods with certain special names.  See section :ref:`specialnames`."
 msgstr ""
+"如果类实例具有某些特殊名称的方法，就可以伪装为数字、序列或映射。参见 :ref:"
+"`specialnames` 一节。"
 
 #: ../../reference/datamodel.rst:1037
 msgid ""
@@ -1211,7 +1446,7 @@ msgstr ""
 
 #: ../../reference/datamodel.rst:1042
 msgid "I/O objects (also known as file objects)"
-msgstr ""
+msgstr "I/O 对象 (或称文件对象)"
 
 #: ../../reference/datamodel.rst:1057
 msgid ""
@@ -1221,6 +1456,10 @@ msgid ""
 "makefile` method of socket objects (and perhaps by other functions or "
 "methods provided by extension modules)."
 msgstr ""
+":term:`file object` 表示一个打开的文件。有多种快捷方式可用来创建文件对象: :"
+"func:`open` 内置函数，以及 :func:`os.popen`, :func:`os.fdopen` 和 socket 对象"
+"的 :meth:`~socket.socket.makefile` 方法 (还可能使用某些扩展模块所提供的其他函"
+"数或方法)。"
 
 #: ../../reference/datamodel.rst:1063
 msgid ""
@@ -1229,10 +1468,13 @@ msgid ""
 "and error streams; they are all open in text mode and therefore follow the "
 "interface defined by the :class:`io.TextIOBase` abstract class."
 msgstr ""
+"``sys.stdin``, ``sys.stdout`` 和 ``sys.stderr`` 会初始化为对应于解释器标准输"
+"入、输出和错误流的文件对象；它们都会以文本模式打开，因此都遵循 :class:`io."
+"TextIOBase` 抽象类所定义的接口。"
 
 #: ../../reference/datamodel.rst:1071
 msgid "Internal types"
-msgstr ""
+msgstr "内部类型"
 
 #: ../../reference/datamodel.rst:1077
 msgid ""
@@ -1240,10 +1482,12 @@ msgid ""
 "Their definitions may change with future versions of the interpreter, but "
 "they are mentioned here for completeness."
 msgstr ""
+"某些由解释器内部使用的类型也被暴露给用户。它们的定义可能随未来解释器版本的更"
+"新而变化，为内容完整起见在此处一并介绍。"
 
 #: ../../reference/datamodel.rst:1086
 msgid "Code objects"
-msgstr ""
+msgstr "代码对象"
 
 #: ../../reference/datamodel.rst:1088
 msgid ""
@@ -1256,14 +1500,19 @@ msgid ""
 "run-time).  Unlike function objects, code objects are immutable and contain "
 "no references (directly or indirectly) to mutable objects."
 msgstr ""
+"代码对象表示 *编译为字节的* 可执行 Python 代码，或称 :term:`bytecode`。代码对"
+"象和函数对象的区别在于函数对象包含对函数全局对象 (函数所属的模块) 的显式引"
+"用，而代码对象不包含上下文；而且默认参数值会存放于函数对象而不是代码对象内 "
+"(因为它们表示在运行时算出的值)。与函数对象不同，代码对象不可变，也不包含对可"
+"变对象的引用 (不论是直接还是间接)。"
 
 #: ../../reference/datamodel.rst:1122
 msgid "The function name"
-msgstr ""
+msgstr "函数名"
 
 #: ../../reference/datamodel.rst:1125
 msgid "The fully qualified function name"
-msgstr ""
+msgstr "完整限定函数名"
 
 #: ../../reference/datamodel.rst:1130
 msgid ""
@@ -1271,81 +1520,88 @@ msgid ""
 "positional-only parameters and parameters with default values) that the "
 "function has"
 msgstr ""
+"函数的位置 :term:`形参 <parameter>` 的总数（包括仅限位置形参和具有默认值的形"
+"参）"
 
 #: ../../reference/datamodel.rst:1135
 msgid ""
 "The number of positional-only :term:`parameters <parameter>` (including "
 "arguments with default values) that the function has"
-msgstr ""
+msgstr "函数的仅限位置 :term:`形参 <parameter>` 的总数（包括具有默认值的参数）"
 
 #: ../../reference/datamodel.rst:1139
 msgid ""
 "The number of keyword-only :term:`parameters <parameter>` (including "
 "arguments with default values) that the function has"
 msgstr ""
+"函数的仅限关键字 :term:`形参 <parameter>` 的数量（包括具有默认值的参数）"
 
 #: ../../reference/datamodel.rst:1143
 msgid ""
 "The number of :ref:`local variables <naming>` used by the function "
 "(including parameters)"
-msgstr ""
+msgstr "函数使用的 :ref:`局部变量 <naming>` 的数量（包括形参）"
 
 #: ../../reference/datamodel.rst:1147
 msgid ""
 "A :class:`tuple` containing the names of the local variables in the function "
 "(starting with the parameter names)"
-msgstr ""
+msgstr "一个 :class:`tuple`，其中包含函数中局部变量的名称（从形参名称开始）"
 
 #: ../../reference/datamodel.rst:1151
 msgid ""
 "A :class:`tuple` containing the names of :ref:`local variables <naming>` "
 "that are referenced by nested functions inside the function"
 msgstr ""
+"一个 :class:`tuple`，其中包含函数中由嵌套函数所引用的 :ref:`局部变量 "
+"<naming>` 的名称"
 
 #: ../../reference/datamodel.rst:1155
 msgid "A :class:`tuple` containing the names of free variables in the function"
-msgstr ""
+msgstr "一个 :class:`tuple`，其中包含函数中自由变量的名称"
 
 #: ../../reference/datamodel.rst:1158
 msgid ""
 "A string representing the sequence of :term:`bytecode` instructions in the "
 "function"
-msgstr ""
+msgstr "一个表示函数中的 :term:`bytecode` 指令序列的字符串"
 
 #: ../../reference/datamodel.rst:1162
 msgid ""
 "A :class:`tuple` containing the literals used by the :term:`bytecode` in the "
 "function"
-msgstr ""
+msgstr "一个包含函数中的 :term:`bytecode` 所使用的字面值的 :class:`tuple`"
 
 #: ../../reference/datamodel.rst:1166
 msgid ""
 "A :class:`tuple` containing the names used by the :term:`bytecode` in the "
 "function"
-msgstr ""
+msgstr "一个包含函数中的 :term:`bytecode` 所使用的名称的 :class:`tuple`"
 
 #: ../../reference/datamodel.rst:1170
 msgid "The name of the file from which the code was compiled"
-msgstr ""
+msgstr "被编译代码所在文件的名称"
 
 #: ../../reference/datamodel.rst:1173
 msgid "The line number of the first line of the function"
-msgstr ""
+msgstr "函数第一行所对应的行号"
 
 #: ../../reference/datamodel.rst:1176
 msgid ""
 "A string encoding the mapping from :term:`bytecode` offsets to line numbers. "
 "For details, see the source code of the interpreter."
 msgstr ""
+"一个编码了从 :term:`bytecode` 偏移量到行号的映射的字符串。 要获取更多细节，请"
+"查看解释器的源代码。"
 
 #: ../../reference/datamodel.rst:1180
 msgid "The required stack size of the code object"
-msgstr ""
+msgstr "需要的代码对象栈大小"
 
 #: ../../reference/datamodel.rst:1183
 msgid ""
 "An :class:`integer <int>` encoding a number of flags for the interpreter."
-msgstr ""
+msgstr "用于对一系列解释器旗标进行编码的 :class:`整数 <int>`。"
 
 #: ../../reference/datamodel.rst:1188
 msgid ""
@@ -1357,6 +1613,11 @@ msgid ""
 "`inspect-module-co-flags` for details on the semantics of each flags that "
 "might be present."
 msgstr ""
+"以下是针对 :attr:`~codeobject.co_flags` 定义的旗标位：如果函数使用 "
+"``*arguments`` 语法来接受任意数量的位置参数则设置 ``0x04`` 位；如果函数使用 "
+"``**keywords`` 语法来接受任意数量的关键字参数则设置 ``0x08`` 位；如果函数是一"
+"个生成器则设置 ``0x20`` 位。 请参阅 :ref:`inspect-module-co-flags` 可能出现的"
+"每个旗标的语义详情。"
 
 #: ../../reference/datamodel.rst:1196
 msgid ""
@@ -1366,11 +1627,15 @@ msgid ""
 "function was compiled with future division enabled; bits ``0x10`` and "
 "``0x1000`` were used in earlier versions of Python."
 msgstr ""
+"未来特性声明 (``from __future__ import division``) 也使用 :attr:`~codeobject."
+"co_flags` 中的位来提示代码对象的编译是否启用了特定的特性：如果函数编译时启用"
+"了未来除法特性则将设置 ``0x2000`` 位；在更早的 Python 版本中则会使用 "
+"``0x10`` 和 ``0x1000`` 位。."
 
 #: ../../reference/datamodel.rst:1202
 msgid ""
 "Other bits in :attr:`~codeobject.co_flags` are reserved for internal use."
-msgstr ""
+msgstr ":attr:`~codeobject.co_flags` 中的其他位被保留供内部使用。"
 
 #: ../../reference/datamodel.rst:1206
 msgid ""
@@ -1378,16 +1643,19 @@ msgid ""
 "co_consts` is the documentation string of the function, or ``None`` if "
 "undefined."
 msgstr ""
+"如果代码对象表示一个函数，则 :attr:`~codeobject.co_consts` 中的第一项将是函数"
+"的文档字符串，或者如果未定义则为 ``None``。"
 
 #: ../../reference/datamodel.rst:1211
 msgid "Methods on code objects"
-msgstr ""
+msgstr "代码对象的方法"
 
 #: ../../reference/datamodel.rst:1215
 msgid ""
 "Returns an iterable over the source code positions of each :term:`bytecode` "
 "instruction in the code object."
 msgstr ""
+"返回一个包含代码对象中每条 :term:`bytecode` 指令的源代码位置的可迭代对象。"
 
 #: ../../reference/datamodel.rst:1218
 msgid ""
@@ -1396,36 +1664,39 @@ msgid ""
 "position of the source code that compiled to the *i-th* code unit. Column "
 "information is 0-indexed utf-8 byte offsets on the given source line."
 msgstr ""
+"此迭代器返回包含 ``(start_line, end_line, start_column, end_column)`` 的 :"
+"class:`tuple`。 其中第 *i* 个元组冲锋衣官方编译为第 *i* 个代码单元的源代码的"
+"位置。 列信息是给定源代码行从 0 开始索引的 utf-8 字节偏移量。"
 
 #: ../../reference/datamodel.rst:1224
 msgid ""
 "This positional information can be missing. A non-exhaustive lists of cases "
 "where this may happen:"
-msgstr ""
+msgstr "此位置信息可能会丢失。 可能发生这种情况下非详尽列表如下:"
 
 #: ../../reference/datamodel.rst:1227
 msgid "Running the interpreter with :option:`-X` ``no_debug_ranges``."
-msgstr ""
+msgstr "附带 :option:`-X` ``no_debug_ranges`` 运行解释器。"
 
 #: ../../reference/datamodel.rst:1228
 msgid ""
 "Loading a pyc file compiled while using :option:`-X` ``no_debug_ranges``."
-msgstr ""
+msgstr "在使用 :option:`-X` ``no_debug_ranges`` 时加载一个已编译的 pyc 文件。"
 
 #: ../../reference/datamodel.rst:1229
 msgid "Position tuples corresponding to artificial instructions."
-msgstr ""
+msgstr "与人工指令相对应的位置元组。"
 
 #: ../../reference/datamodel.rst:1230
 msgid ""
 "Line and column numbers that can't be represented due to implementation "
 "specific limitations."
-msgstr ""
+msgstr "由于具体实现专属的限制而无法表示的行号和列号。"
 
 #: ../../reference/datamodel.rst:1233
 msgid ""
 "When this occurs, some or all of the tuple elements can be :const:`None`."
-msgstr ""
+msgstr "当发生此情况时，元组的部分或全部元素可以为 :const:`None`。"
 
 #: ../../reference/datamodel.rst:1239
 msgid ""
@@ -1436,6 +1707,11 @@ msgid ""
 "``no_debug_ranges`` command line flag or the :envvar:`PYTHONNODEBUGRANGES` "
 "environment variable can be used."
 msgstr ""
+"此特性需要在代码对象中存储列位置，这可能会导致编译的 which may result in a "
+"small increase of disk usage of compiled Python 文件占用的磁盘空间或解释器占"
+"用的内存略有增加。 要避免存储额外信息和/或取消打印额外的回溯信息，可以使用 :"
+"option:`-X` ``no_debug_ranges`` 命令行旗标或 :envvar:`PYTHONNODEBUGRANGES` 环"
+"境变量。"
 
 #: ../../reference/datamodel.rst:1248
 msgid ""
@@ -1443,18 +1719,24 @@ msgid ""
 "`bytecode`\\s. Each item yielded is a ``(start, end, lineno)`` :class:"
 "`tuple`:"
 msgstr ""
+"返回一个产生有关 :term:`bytecode` 的连续范围的信息的迭代器。 其产生的每一项都"
+"是一个 ``(start, end, lineno)`` :class:`tuple`:"
 
 #: ../../reference/datamodel.rst:1252
 msgid ""
 "``start`` (an :class:`int`) represents the offset (inclusive) of the start "
 "of the :term:`bytecode` range"
 msgstr ""
+"``start`` (一个 :class:`int`) 代表相对于 :term:`bytecode` 范围开始位置的偏移"
+"量 (不包括该位置)。"
 
 #: ../../reference/datamodel.rst:1254
 msgid ""
 "``end`` (an :class:`int`) represents the offset (exclusive) of the end of "
 "the :term:`bytecode` range"
 msgstr ""
+"``end`` (:class:`int` 值) 代表相对于 :term:`bytecode` 范围末尾位置的偏移量"
+"（不包括该位置）。"
 
 #: ../../reference/datamodel.rst:1256
 msgid ""
@@ -1462,14 +1744,16 @@ msgid ""
 "`bytecode` range, or ``None`` if the bytecodes in the given range have no "
 "line number"
 msgstr ""
+"``lineno`` 是一个代表 :term:`bytecode` 范围内的行号的 :class:`int`，或者如果"
+"给定范围内的字节码没有行号则为 ``None``。"
 
 #: ../../reference/datamodel.rst:1260
 msgid "The items yielded will have the following properties:"
-msgstr ""
+msgstr "产生的条目将具有下列特征属性："
 
 #: ../../reference/datamodel.rst:1262
 msgid "The first range yielded will have a ``start`` of 0."
-msgstr ""
+msgstr "产出的第一个范围将以 0 作为 ``start``。"
 
 #: ../../reference/datamodel.rst:1263
 msgid ""
@@ -1477,16 +1761,19 @@ msgid ""
 "for any pair of :class:`tuple`\\s, the ``start`` of the second will be equal "
 "to the ``end`` of the first."
 msgstr ""
+"``(start, end)`` 范围将是非递减和连续的。 也就是说，对于任何一对 :class:"
+"`tuple`，第二个的 ``start`` 将等于第一个的 ``end``。"
 
 #: ../../reference/datamodel.rst:1266
 msgid "No range will be backwards: ``end >= start`` for all triples."
-msgstr ""
+msgstr "任何范围都不会是反向的：对于所有三元组均有 ``end >= start``。"
 
 #: ../../reference/datamodel.rst:1267
 msgid ""
 "The last :class:`tuple` yielded will have ``end`` equal to the size of the :"
 "term:`bytecode`."
 msgstr ""
+"产生的最后一个 :class:`tuple` 的 ``end`` 将等于 :term:`bytecode` 的大小。"
 
 #: ../../reference/datamodel.rst:1270
 msgid ""
@@ -1494,23 +1781,25 @@ msgid ""
 "are used for lines that are present in the source code, but have been "
 "eliminated by the :term:`bytecode` compiler."
 msgstr ""
+"零宽度范围，即 ``start == end`` 也是允许的。 零宽度范围的使用场景是源代码中存"
+"在，但被 :term:`bytecode` 编译器所去除的那些行。"
 
 #: ../../reference/datamodel.rst:1278
 msgid ":pep:`626` - Precise line numbers for debugging and other tools."
-msgstr ""
+msgstr ":pep:`626` - 在调试和其他工具中使用精确的行号。"
 
 #: ../../reference/datamodel.rst:1279
 msgid "The PEP that introduced the :meth:`!co_lines` method."
-msgstr ""
+msgstr "引入 :meth:`!co_lines` 方法的 PEP。"
 
 #: ../../reference/datamodel.rst:1283
 msgid ""
 "Return a copy of the code object with new values for the specified fields."
-msgstr ""
+msgstr "返回代码对象的一个副本，使用指定的新字段值。"
 
 #: ../../reference/datamodel.rst:1291
 msgid "Frame objects"
-msgstr ""
+msgstr "帧对象"
 
 #: ../../reference/datamodel.rst:1295
 msgid ""
@@ -1518,12 +1807,15 @@ msgid ""
 "objects <traceback-objects>`, and are also passed to registered trace "
 "functions."
 msgstr ""
+"帧对象表示执行帧。 它们可能出现在 :ref:`回溯对象 <traceback-objects>` 中，还"
+"会被传递给已注册的跟踪函数。"
 
 #: ../../reference/datamodel.rst:1313
 msgid ""
 "Points to the previous stack frame (towards the caller), or ``None`` if this "
 "is the bottom stack frame"
 msgstr ""
+"指向前一个栈帧（对于调用方而言），或者如果这是最底部的栈帧则为 ``None``"
 
 #: ../../reference/datamodel.rst:1317
 msgid ""
@@ -1531,28 +1823,33 @@ msgid ""
 "Accessing this attribute raises an :ref:`auditing event <auditing>` ``object."
 "__getattr__`` with arguments ``obj`` and ``\"f_code\"``."
 msgstr ""
+"该帧中正在执行的 :ref:`代码对象 <code-objects>`。 访问该属性将引发一个 :ref:`"
+"审计事件 <auditing>` ``object.__getattr__``，附带参数 ``obj`` 和 "
+"``\"f_code\"``。"
 
 #: ../../reference/datamodel.rst:1322
 msgid ""
 "The dictionary used by the frame to look up :ref:`local variables <naming>`"
-msgstr ""
+msgstr "被帧用于查找 :ref:`局部变量 <naming>` 的字典"
 
 #: ../../reference/datamodel.rst:1326
 msgid ""
 "The dictionary used by the frame to look up :ref:`global variables <naming>`"
-msgstr ""
+msgstr "被帧用于查找 :ref:`全局变量 <naming>` 的字典"
 
 #: ../../reference/datamodel.rst:1330
 msgid ""
 "The dictionary used by the frame to look up :ref:`built-in (intrinsic) names "
 "<naming>`"
-msgstr ""
+msgstr "被帧用于查找 :ref:`内置（内建）名称 <naming>` 的字典"
 
 #: ../../reference/datamodel.rst:1334
 msgid ""
 "The \"precise instruction\" of the frame object (this is an index into the :"
 "term:`bytecode` string of the :ref:`code object <code-objects>`)"
 msgstr ""
+"帧对象的“准确指令”（这是 :ref:`代码对象 <code-objects>` 的 :term:`bytecode` "
+"字符串的索引）"
 
 #: ../../reference/datamodel.rst:1350
 msgid ""
@@ -1560,12 +1857,14 @@ msgid ""
 "execution (this is used by debuggers). Normally an event is triggered for "
 "each new source line (see :attr:`~frame.f_trace_lines`)."
 msgstr ""
+"如果不为 ``None``，则是在代码执行期间调用各类事件的函数 (由调试器使用)。 通常"
+"每个新的源代码行会触发一个事件 (参见 :attr:`~frame.f_trace_lines`)。"
 
 #: ../../reference/datamodel.rst:1355
 msgid ""
 "Set this attribute to :const:`False` to disable triggering a tracing event "
 "for each source line."
-msgstr ""
+msgstr "将该属性设为 :const:`False` 以禁用为每个源代码行触发跟踪事件。"
 
 #: ../../reference/datamodel.rst:1359
 msgid ""
@@ -1573,6 +1872,8 @@ msgid ""
 "requested. Note that this may lead to undefined interpreter behaviour if "
 "exceptions raised by the trace function escape to the function being traced."
 msgstr ""
+"将该属性设为 :const:`True` 以允许请求每个操作码事件。 请注意如果跟踪函数引发"
+"的异常逃逸到被跟踪的函数中这可能会导致未定义的解释器行为。"
 
 #: ../../reference/datamodel.rst:1365
 msgid ""
@@ -1581,14 +1882,16 @@ msgid ""
 "debugger can implement a Jump command (aka Set Next Statement) by writing to "
 "this attribute."
 msgstr ""
+"该帧的当前行号 -- 在这里写入从一个跟踪函数内部跳转到的给定行（仅用于最底层的"
+"帧）。 调试器可以通过写入该属性实现一个 Jump 命令（即设置下一条语句）。"
 
 #: ../../reference/datamodel.rst:1371
 msgid "Frame object methods"
-msgstr ""
+msgstr "帧对象方法"
 
 #: ../../reference/datamodel.rst:1373
 msgid "Frame objects support one method:"
-msgstr ""
+msgstr "帧对象支持一个方法:"
 
 #: ../../reference/datamodel.rst:1377
 msgid ""
@@ -1598,14 +1901,18 @@ msgid ""
 "objects (for example when catching an :ref:`exception <bltin-exceptions>` "
 "and storing its :ref:`traceback <traceback-objects>` for later use)."
 msgstr ""
+"此方法将清除该帧持有的全部对 :ref:`局部变量 <naming>` 的引用。 并且，如果该帧"
+"归属于一个 :term:`generator`，此生成器将被终结。 这有助于打破涉及帧对象的循环"
+"引用（例如当捕获一个 :ref:`异常 <bltin-exceptions>` 并保存其 :ref:`回溯 "
+"<traceback-objects>` 供以后使用）。"
 
 #: ../../reference/datamodel.rst:1383
 msgid ":exc:`RuntimeError` is raised if the frame is currently executing."
-msgstr ""
+msgstr "如果该帧当前正在执行，则会引发 :exc:`RuntimeError`"
 
 #: ../../reference/datamodel.rst:1391
 msgid "Traceback objects"
-msgstr ""
+msgstr "回溯对象"
 
 #: ../../reference/datamodel.rst:1404
 msgid ""
@@ -1613,10 +1920,12 @@ msgid ""
 "errors>`. A traceback object is implicitly created when an exception occurs, "
 "and may also be explicitly created by calling :class:`types.TracebackType`."
 msgstr ""
+"回溯对象代表一个 :ref:`异常 <tut-errors>` 的栈跟踪信息。 当异常发生时会隐式地"
+"创建一个回溯对象，也可以通过调用 :class:`types.TracebackType` 显式地创建。"
 
 #: ../../reference/datamodel.rst:1409
 msgid "Traceback objects can now be explicitly instantiated from Python code."
-msgstr ""
+msgstr "现在回溯对象可以通过 Python 代码显式地实例化。"
 
 #: ../../reference/datamodel.rst:1412
 msgid ""
@@ -1628,6 +1937,10 @@ msgid ""
 "`sys.exc_info`, and as the :attr:`~BaseException.__traceback__` attribute of "
 "the caught exception."
 msgstr ""
+"对于隐式地创建的回溯对象，当查找异常处理器使得执行栈展开时，会在每个展开层级"
+"的当前回溯之前插入一个回溯对象。 当进入一个异常处理器时，程序将可以使用栈跟"
+"踪。 （参见 :ref:`try` 一节。） 它可作为 :func:`sys.exc_info` 所返回的元组的"
+"第三项，以及所捕获异常的 :attr:`~BaseException.__traceback__` 属性被获取。"
 
 #: ../../reference/datamodel.rst:1421
 msgid ""
@@ -1636,6 +1949,8 @@ msgid ""
 "interactive, it is also made available to the user as :data:`sys."
 "last_traceback`."
 msgstr ""
+"当程序不包含适用的处理器时，栈跟踪会（以良好的格式）写入到标准错误流；如果解"
+"释器处于交互模式，它也将作为 :data:`sys.last_traceback` 供用户使用。"
 
 #: ../../reference/datamodel.rst:1426
 msgid ""
@@ -1643,25 +1958,29 @@ msgid ""
 "to determine how the :attr:`~traceback.tb_next` attributes should be linked "
 "to form a full stack trace."
 msgstr ""
+"对于显式地创建的回溯对象，则由回溯对象的创建者来决定应该如何连接 :attr:"
+"`~traceback.tb_next` 属性以构成完整的线跟踪。"
 
 #: ../../reference/datamodel.rst:1441
 msgid ""
 "Points to the execution :ref:`frame <frame-objects>` of the current level."
-msgstr ""
+msgstr "指向当前层级的执行 :ref:`帧对象 <frame-objects>`。"
 
 #: ../../reference/datamodel.rst:1444
 msgid ""
 "Accessing this attribute raises an :ref:`auditing event <auditing>` ``object."
 "__getattr__`` with arguments ``obj`` and ``\"tb_frame\"``."
 msgstr ""
+"访问该属性将引发一个 :ref:`审计事件 <auditing>` ``object.__getattr__``，附带"
+"参数 ``obj`` 和 ``\"tb_frame\"``。"
 
 #: ../../reference/datamodel.rst:1449
 msgid "Gives the line number where the exception occurred"
-msgstr ""
+msgstr "给出异常发生所在的行号"
 
 #: ../../reference/datamodel.rst:1452
 msgid "Indicates the \"precise instruction\"."
-msgstr ""
+msgstr "表示“精确指令”。"
 
 #: ../../reference/datamodel.rst:1454
 msgid ""
@@ -1670,6 +1989,9 @@ msgid ""
 "occurred in a :keyword:`try` statement with no matching except clause or "
 "with a :keyword:`finally` clause."
 msgstr ""
+"回溯中的行号和最后一条指令可能与其 :ref:`帧对象 <frame-objects>` 的行号不同，"
+"如果异常发生在 :keyword:`try` 语句中且没有匹配的 except 子句或是有 :keyword:"
+"`finally` 子句的话。"
 
 #: ../../reference/datamodel.rst:1465
 msgid ""
@@ -1677,20 +1999,24 @@ msgid ""
 "stack trace (towards the frame where the exception occurred), or ``None`` if "
 "there is no next level."
 msgstr ""
+"特殊的可写属性 :attr:`!tb_next` 是栈跟踪中的下一层级（通往发生异常的帧），如"
+"果没有下一层级则为 ``None``。"
 
 #: ../../reference/datamodel.rst:1469
 msgid "This attribute is now writable"
-msgstr ""
+msgstr "该属性现在是可写的。"
 
 #: ../../reference/datamodel.rst:1474
 msgid "Slice objects"
-msgstr ""
+msgstr "切片对象"
 
 #: ../../reference/datamodel.rst:1478
 msgid ""
 "Slice objects are used to represent slices for :meth:`~object.__getitem__` "
 "methods.  They are also created by the built-in :func:`slice` function."
 msgstr ""
+"切片对象被用来表示 :meth:`~object.__getitem__` 方法所使用的切片。 该对象也可"
+"使用内置的 :func:`slice` 函数来创建。"
 
 #: ../../reference/datamodel.rst:1487
 msgid ""
@@ -1698,10 +2024,13 @@ msgid ""
 "`~slice.stop` is the upper bound; :attr:`~slice.step` is the step value; "
 "each is ``None`` if omitted.  These attributes can have any type."
 msgstr ""
+"特殊的只读属性: :attr:`~slice.start` 为下界; :attr:`~slice.stop` 为上界; :"
+"attr:`~slice.step` 为步长值; 各值如省略则为 ``None``。这些属性可具有任意类"
+"型。"
 
 #: ../../reference/datamodel.rst:1491
 msgid "Slice objects support one method:"
-msgstr ""
+msgstr "切片对象支持一个方法:"
 
 #: ../../reference/datamodel.rst:1495
 msgid ""
@@ -1712,10 +2041,14 @@ msgid ""
 "stride length of the slice. Missing or out-of-bounds indices are handled in "
 "a manner consistent with regular slices."
 msgstr ""
+"此方法接受一个整型参数 *length* 并计算在切片对象被应用到 *length* 指定长度的"
+"条目序列时切片的相关信息应如何描述。 其返回值为三个整型数组成的元组；这些数分"
+"别为切片的 *start* 和 *stop* 索引号以及 *step* 步长值。索引号缺失或越界则按照"
+"与正规切片相一致的方式处理。"
 
 #: ../../reference/datamodel.rst:1504
 msgid "Static method objects"
-msgstr ""
+msgstr "静态方法对象"
 
 #: ../../reference/datamodel.rst:1506
 msgid ""
@@ -1727,10 +2060,15 @@ msgid ""
 "any further transformation. Static method objects are also callable. Static "
 "method objects are created by the built-in :func:`staticmethod` constructor."
 msgstr ""
+"静态方法对象提供了一种胜过上文所述将函数对象转换为方法对象的方式。 静态方法对"
+"象是对任意其他对象的包装器，通常用来包装用户自定义的方法对象。 当从类或类实例"
+"获取一个静态方法对象时，实际返回的是经过包装的对象，它不会被进一步转换。 静态"
+"方法对象也是可调用对象。 静态方法对象可通过内置的 :func:`staticmethod` 构造器"
+"来创建。"
 
 #: ../../reference/datamodel.rst:1516
 msgid "Class method objects"
-msgstr ""
+msgstr "类方法对象"
 
 #: ../../reference/datamodel.rst:1518
 msgid ""
@@ -1741,10 +2079,14 @@ msgid ""
 "methods>`. Class method objects are created by the built-in :func:"
 "`classmethod` constructor."
 msgstr ""
+"类方法对象与静态方法类似，是对其他对象的包装器，会改变从类或类实例获取该对象"
+"的方式。 类方法对象在这种获取操作中的行为已在上文中描述，见 :ref:`\"实例方法"
+"\" <instance-methods>` 一节。 类方法对象是通过内置 :func:`classmethod` 构造器"
+"创建的。"
 
 #: ../../reference/datamodel.rst:1528
 msgid "Special method names"
-msgstr ""
+msgstr "特殊方法名称"
 
 #: ../../reference/datamodel.rst:1534
 msgid ""
@@ -1759,6 +2101,13 @@ msgid ""
 "appropriate method is defined (typically :exc:`AttributeError` or :exc:"
 "`TypeError`)."
 msgstr ""
+"一个类可以通过定义具有特殊名称的方法来实现由特殊语法来唤起的特定操作（例如算"
+"术运算或抽取与切片）。 这是 Python 实现 :dfn:`运算符重载` 的方式，允许每个类"
+"自行定义基于该语言运算符的特定行为。 举例来说，如果一个类定义了名为 :meth:"
+"`~object.__getitem__` 的方法，并且 ``x`` 是该类的一个实例，则 ``x[i]`` 基本就"
+"等价于 ``type(x).__getitem__(x, i)``。 除非有说明例外情况，在没有定义适当方法"
+"的时候尝试执行某种操作将引发一个异常 (通常为 :exc:`AttributeError` 或 :exc:"
+"`TypeError`)。"
 
 #: ../../reference/datamodel.rst:1545
 msgid ""
@@ -1768,6 +2117,10 @@ msgid ""
 "its instances will raise a :exc:`TypeError` (without falling back to :meth:"
 "`~object.__getitem__`). [#]_"
 msgstr ""
+"将一个特殊方法设为 ``None`` 表示对应的操作不可用。 例如，如果一个类将 :meth:"
+"`~object.__iter__` 设为 ``None``，则该类就是不可迭代的，因此对其实例调用 :"
+"func:`iter` 将引发一个 :exc:`TypeError` (而不会回退至 :meth:`~object."
+"__getitem__`)。 [#]_"
 
 #: ../../reference/datamodel.rst:1551
 msgid ""
@@ -1778,10 +2131,14 @@ msgid ""
 "sense.  (One example of this is the :class:`~xml.dom.NodeList` interface in "
 "the W3C's Document Object Model.)"
 msgstr ""
+"在实现模拟任何内置类型的类时，很重要的一点是模拟的实现程度对于被模拟对象来说"
+"应当是有意义的。例如，提取单个元素的操作对于某些序列来说是适宜的，但提取切片"
+"可能就没有意义。(这种情况的一个实例是 W3C 的文档对象模型中的 :class:`~xml."
+"dom.NodeList` 接口。)"
 
 #: ../../reference/datamodel.rst:1562
 msgid "Basic customization"
-msgstr ""
+msgstr "基本定制"
 
 #: ../../reference/datamodel.rst:1568
 msgid ""
@@ -1792,6 +2149,10 @@ msgid ""
 "(the call to the class).  The return value of :meth:`__new__` should be the "
 "new object instance (usually an instance of *cls*)."
 msgstr ""
+"调用以创建一个 *cls* 类的新实例。:meth:`__new__` 是一个静态方法 (因为是特例所"
+"以你不需要显式地声明)，它会将所请求实例所属的类作为第一个参数。其余的参数会被"
+"传递给对象构造器表达式 (对类的调用)。:meth:`__new__` 的返回值应为新对象实例 "
+"(通常是 *cls* 的实例)。"
 
 #: ../../reference/datamodel.rst:1575
 msgid ""
@@ -1800,6 +2161,9 @@ msgid ""
 "with appropriate arguments and then modifying the newly created instance as "
 "necessary before returning it."
 msgstr ""
+"典型的实现会附带适当的参数使用 ``super().__new__(cls[, ...])`` 通过唤起超类"
+"的 :meth:`__new__` 方法来创建一个新的类实例然后在返回它之前根据需要修改新创建"
+"的实例。"
 
 #: ../../reference/datamodel.rst:1580
 msgid ""
@@ -1809,12 +2173,17 @@ msgid ""
 "the remaining arguments are the same as were passed to the object "
 "constructor."
 msgstr ""
+"如果 :meth:`__new__` 在构造对象期间被唤起并且它返回了一个 *cls* 的实例，则新"
+"实例的 :meth:`__init__` 方法将以 ``__init__(self[, ...])`` 的形式被唤起，其"
+"中 *self* 为新实例而其余的参数与被传给对象构造器的参数相同。"
 
 #: ../../reference/datamodel.rst:1585
 msgid ""
 "If :meth:`__new__` does not return an instance of *cls*, then the new "
 "instance's :meth:`__init__` method will not be invoked."
 msgstr ""
+"如果 :meth:`__new__` 未返回一个 *cls* 的实例，则新实例的 :meth:`__init__` 方"
+"法就不会被执行。"
 
 #: ../../reference/datamodel.rst:1588
 msgid ""
@@ -1823,6 +2192,8 @@ msgid ""
 "commonly overridden in custom metaclasses in order to customize class "
 "creation."
 msgstr ""
+":meth:`__new__` 的目的主要是允许不可变类型的子类 (例如 int, str 或 tuple) 定"
+"制实例创建过程。它也常会在自定义元类中被重载以便定制类创建过程。"
 
 #: ../../reference/datamodel.rst:1597
 msgid ""
@@ -1833,6 +2204,10 @@ msgid ""
 "ensure proper initialization of the base class part of the instance; for "
 "example: ``super().__init__([args...])``."
 msgstr ""
+"在实例 (通过 :meth:`__new__`) 被创建之后，返回调用者之前调用。其参数与传递给"
+"类构造器表达式的参数相同。一个基类如果有 :meth:`__init__` 方法，则其所派生的"
+"类如果也有 :meth:`__init__` 方法，就必须显式地调用它以确保实例基类部分的正确"
+"初始化；例如: ``super().__init__([args...])``."
 
 #: ../../reference/datamodel.rst:1604
 msgid ""
@@ -1841,6 +2216,9 @@ msgid ""
 "it), no non-``None`` value may be returned by :meth:`__init__`; doing so "
 "will cause a :exc:`TypeError` to be raised at runtime."
 msgstr ""
+"因为对象是由 :meth:`__new__` 和 :meth:`__init__` 协作构造完成的 (由 :meth:"
+"`__new__` 创建，并由 :meth:`__init__` 定制)，所以 :meth:`__init__` 返回的值只"
+"能是 ``None``，否则会在运行时引发 :exc:`TypeError`。"
 
 #: ../../reference/datamodel.rst:1617
 msgid ""
@@ -1850,6 +2228,9 @@ msgid ""
 "explicitly call it to ensure proper deletion of the base class part of the "
 "instance."
 msgstr ""
+"在实例将被销毁时调用。 这还被称为终结器或析构器（不适当）。 如果一个基类具"
+"有 :meth:`__del__` 方法，则其所派生的类如果也有 :meth:`__del__` 方法，就必须"
+"显式地调用它以确保实例基类部分的正确清除。"
 
 #: ../../reference/datamodel.rst:1623
 msgid ""
@@ -1860,6 +2241,9 @@ msgid ""
 "about to be destroyed; the current :term:`CPython` implementation only calls "
 "it once."
 msgstr ""
+":meth:`__del__` 方法可以 (但不推荐!) 通过创建一个该实例的新引用来推迟其销毁。"
+"这被称为对象 *重生*。:meth:`__del__` 是否会在重生的对象将被销毁时再次被调用是"
+"由具体实现决定的 ；当前的 :term:`CPython` 实现只会调用一次。"
 
 #: ../../reference/datamodel.rst:1630
 msgid ""
@@ -1873,6 +2257,8 @@ msgid ""
 "the reference count for ``x`` by one, and the latter is only called when "
 "``x``'s reference count reaches zero."
 msgstr ""
+"``del x`` 并不直接调用 ``x.__del__()`` --- 前者会将 ``x`` 的引用计数减一，而"
+"后者仅会在 ``x`` 的引用计数变为零时被调用。"
 
 #: ../../reference/datamodel.rst:1640
 msgid ""
@@ -1884,10 +2270,14 @@ msgid ""
 "references its own traceback, which references the locals of all frames "
 "caught in the traceback."
 msgstr ""
+"一个引用循环可以阻止对象的引用计数归零。 在这种情况下，循环将稍后被检测到并"
+"被 :term:`循环垃圾回收器 <garbage collection>` 删除。 导致引用循环的一个常见"
+"原因是当一个异常在局部变量中被捕获。 帧的局部变量将会引用该异常，这将引用它自"
+"己的回溯信息，它会又引用在回溯中捕获的所有帧的局部变量。"
 
 #: ../../reference/datamodel.rst:1650
 msgid "Documentation for the :mod:`gc` module."
-msgstr ""
+msgstr ":mod:`gc` 模块的文档。"
 
 #: ../../reference/datamodel.rst:1654
 msgid ""
@@ -1895,6 +2285,8 @@ msgid ""
 "invoked, exceptions that occur during their execution are ignored, and a "
 "warning is printed to ``sys.stderr`` instead.  In particular:"
 msgstr ""
+"由于调用 :meth:`__del__` 方法时周边状况已不确定，在其执行期间发生的异常将被忽"
+"略，改为打印一个警告到 ``sys.stderr``。特别地："
 
 #: ../../reference/datamodel.rst:1658
 msgid ""
@@ -1904,6 +2296,9 @@ msgid ""
 "may already be taken by the code that gets interrupted to execute :meth:"
 "`__del__`."
 msgstr ""
+":meth:`__del__` 可在任意代码被执行时启用，包括来自任意线程的代码。如果 :meth:"
+"`__del__` 需要接受锁或启用其他阻塞资源，可能会发生死锁，例如该资源已被为执"
+"行 :meth:`__del__` 而中断的代码所获取。"
 
 #: ../../reference/datamodel.rst:1664
 msgid ""
@@ -1915,6 +2310,10 @@ msgid ""
 "such globals exist, this may help in assuring that imported modules are "
 "still available at the time when the :meth:`__del__` method is called."
 msgstr ""
+":meth:`__del__` 可以在解释器关闭阶段被执行。因此，它需要访问的全局变量（包含"
+"其他模块）可能已被删除或设为 ``None``。Python 会保证先删除模块中名称以单个下"
+"划线打头的全局变量再删除其他全局变量；如果已不存在其他对此类全局变量的引用，"
+"这有助于确保导入的模块在 :meth:`__del__` 方法被调用时仍然可用。"
 
 #: ../../reference/datamodel.rst:1679
 msgid ""
@@ -1927,6 +2326,12 @@ msgid ""
 "`__repr__` but not :meth:`__str__`, then :meth:`__repr__` is also used when "
 "an \"informal\" string representation of instances of that class is required."
 msgstr ""
+"由 :func:`repr` 内置函数调用以输出一个对象的“官方”字符串表示。如果可能，这应"
+"类似一个有效的 Python 表达式，能被用来重建具有相同取值的对象（只要有适当的环"
+"境）。如果这不可能，则应返回形式如 ``<...some useful description...>`` 的字符"
+"串。返回值必须是一个字符串对象。如果一个类定义了 :meth:`__repr__` 但未定义 :"
+"meth:`__str__`，则在需要该类的实例的“非正式”字符串表示时也会使用 :meth:"
+"`__repr__`。"
 
 #: ../../reference/datamodel.rst:1688
 msgid ""
@@ -1952,12 +2357,15 @@ msgid ""
 "expectation that :meth:`__str__` return a valid Python expression: a more "
 "convenient or concise representation can be used."
 msgstr ""
+"此方法与 :meth:`object.__repr__` 的不同点在于 :meth:`__str__` 并不预期返回一"
+"个有效的 Python 表达式：可以使用更方便或更准确的描述信息。"
 
 #: ../../reference/datamodel.rst:1708
 msgid ""
 "The default implementation defined by the built-in type :class:`object` "
 "calls :meth:`object.__repr__`."
 msgstr ""
+"内置类型 :class:`object` 所定义的默认实现会调用 :meth:`object.__repr__`。"
 
 #: ../../reference/datamodel.rst:1718
 msgid ""
@@ -1978,27 +2386,36 @@ msgid ""
 "either delegate formatting to one of the built-in types, or use a similar "
 "formatting option syntax."
 msgstr ""
+"通过 :func:`format` 内置函数、扩展、:ref:`格式化字符串字面值 <f-strings>` 的"
+"求值以及 :meth:`str.format` 方法调用以生成一个对象的“格式化”字符串表示。 "
+"*format_spec* 参数为包含所需格式选项描述的字符串。 *format_spec* 参数的解读是"
+"由实现 :meth:`__format__` 的类型决定的，不过大多数类或是将格式化委托给某个内"
+"置类型，或是使用相似的格式化选项语法。"
 
 #: ../../reference/datamodel.rst:1739
 msgid ""
 "See :ref:`formatspec` for a description of the standard formatting syntax."
-msgstr ""
+msgstr "请参看 :ref:`formatspec` 了解标准格式化语法的描述。"
 
 #: ../../reference/datamodel.rst:1741
 msgid "The return value must be a string object."
-msgstr ""
+msgstr "返回值必须为一个字符串对象。"
 
 #: ../../reference/datamodel.rst:1743
 msgid ""
 "The __format__ method of ``object`` itself raises a :exc:`TypeError` if "
 "passed any non-empty string."
 msgstr ""
+"``object`` 本身的 __format__ 方法如果被传入任何非空字符，将会引发一个 :exc:"
+"`TypeError`。"
 
 #: ../../reference/datamodel.rst:1747
 msgid ""
 "``object.__format__(x, '')`` is now equivalent to ``str(x)`` rather than "
 "``format(str(x), '')``."
 msgstr ""
+"``object.__format__(x, '')`` 现在等同于 ``str(x)`` 而不再是 ``format(str(x), "
+"'')``。"
 
 #: ../../reference/datamodel.rst:1763
 msgid ""
@@ -2008,6 +2425,10 @@ msgid ""
 "``x!=y`` calls ``x.__ne__(y)``, ``x>y`` calls ``x.__gt__(y)``, and ``x>=y`` "
 "calls ``x.__ge__(y)``."
 msgstr ""
+"以上这些被称为“富比较”方法。运算符号与方法名称的对应关系如下：``x<y`` 调用 "
+"``x.__lt__(y)``、``x<=y`` 调用 ``x.__le__(y)``、``x==y`` 调用 ``x."
+"__eq__(y)``、``x!=y`` 调用 ``x.__ne__(y)``、``x>y`` 调用 ``x.__gt__(y)``、"
+"``x>=y`` 调用 ``x.__ge__(y)``。"
 
 #: ../../reference/datamodel.rst:1769
 msgid ""
@@ -2019,6 +2440,11 @@ msgid ""
 "statement), Python will call :func:`bool` on the value to determine if the "
 "result is true or false."
 msgstr ""
+"如果指定的参数对没有相应的实现，富比较方法可能会返回单例对象 :data:"
+"`NotImplemented` 。按照惯例，成功的比较会返回 ``False`` 或 ``True``。不过实际"
+"上这些方法可以返回任意值，因此如果比较运算符是要用于布尔值判断（例如作为 "
+"``if`` 语句的条件），Python 会对返回值调用 :func:`bool` 以确定结果为真还是"
+"假。"
 
 #: ../../reference/datamodel.rst:1776
 msgid ""
@@ -2031,6 +2457,12 @@ msgid ""
 "``x<=y``. To automatically generate ordering operations from a single root "
 "operation, see :func:`functools.total_ordering`."
 msgstr ""
+"在默认情况下，``object`` 通过使用 ``is`` 来实现 :meth:`__eq__` ，并在比较结果"
+"为假值时返回 :data:`NotImplemented` : ``True if x is y else "
+"NotImplemented`` 。 对于 :meth:`__ne__` ，默认会委托给 :meth:`__eq__` 并对结"
+"果取反，除非结果为 :data:`!NotImplemented` 。 比较运算符之间没有其他隐含关系"
+"或默认实现；例如， ``(x<y or x==y)`` 为真并不意味着 ``x<=y`` 。 要根据单根运"
+"算自动生成排序操作，请参看 :func:`functools.total_ordering` 。"
 
 #: ../../reference/datamodel.rst:1785
 msgid ""
@@ -2038,6 +2470,8 @@ msgid ""
 "term:`hashable` objects which support custom comparison operations and are "
 "usable as dictionary keys."
 msgstr ""
+"请查看 :meth:`__hash__` 的相关段落，了解创建可支持自定义比较运算并可用作字典"
+"键的 :term:`hashable` 对象时要注意的一些事项。"
 
 #: ../../reference/datamodel.rst:1789
 msgid ""
@@ -2051,6 +2485,12 @@ msgid ""
 "operand has priority, otherwise the left operand's method has priority.  "
 "Virtual subclassing is not considered."
 msgstr ""
+"这些方法都没有对调参数版本（在左边参数不支持该操作但右边参数支持时使用）；而"
+"是 :meth:`__lt__` 和 :meth:`__gt__` 互为对方的反向，:meth:`__le__` 和 :meth:"
+"`__ge__` 互为对方的反射，而 :meth:`__eq__` 和 :meth:`__ne__` 则是它们自己的反"
+"射。 如果两个操作数的类型不同，且右操作数的类型是左操作数类型的直接或间接子"
+"类，则优先选择右操作数的反射方法，在其他情况下优先选择左操作数的方法。 虚拟子"
+"类化不会被考虑。"
 
 #: ../../reference/datamodel.rst:1800
 msgid ""
@@ -2058,6 +2498,8 @@ msgid ""
 "`NotImplemented`, the ``==`` and ``!=`` operators will fall back to ``is`` "
 "and ``is not``, respectively."
 msgstr ""
+"当没有合适的方法返回任何 :data:`NotImplemented` 以外的值时，``==`` 和 ``!=`` "
+"运算符将分别回退至 ``is`` 和 ``is not``。"
 
 #: ../../reference/datamodel.rst:1809
 msgid ""
@@ -2069,6 +2511,11 @@ msgid ""
 "the object that also play a part in comparison of objects by packing them "
 "into a tuple and hashing the tuple. Example::"
 msgstr ""
+"通过内置函数 :func:`hash` 调用以对哈希集的成员进行操作，属于哈希集的类型包"
+"括 :class:`set`、:class:`frozenset` 以及 :class:`dict`。``__hash__()`` 应该返"
+"回一个整数。对象比较结果相同所需的唯一特征属性是其具有相同的哈希值；建议的做"
+"法是把参与比较的对象全部组件的哈希值混在一起，即将它们打包为一个元组并对该元"
+"组做哈希运算。例如::"
 
 #: ../../reference/datamodel.rst:1822
 msgid ""
@@ -2079,6 +2526,11 @@ msgid ""
 "to check the width on all supported builds.  An easy way to do this is with "
 "``python -c \"import sys; print(sys.hash_info.width)\"``."
 msgstr ""
+":func:`hash` 会从一个对象自定义的 :meth:`__hash__` 方法返回值中截断为 :c:"
+"type:`Py_ssize_t` 的大小。通常对 64 位构建为 8 字节，对 32 位构建为 4 字节。"
+"如果一个对象的   :meth:`__hash__` 必须在不同位大小的构建上进行互操作，请确保"
+"检查全部所支持构建的宽度。做到这一点的简单方法是使用 ``python -c \"import "
+"sys; print(sys.hash_info.width)\"``。"
 
 #: ../../reference/datamodel.rst:1830
 msgid ""
@@ -2091,6 +2543,11 @@ msgid ""
 "value is immutable (if the object's hash value changes, it will be in the "
 "wrong hash bucket)."
 msgstr ""
+"如果一个类没有定义 :meth:`__eq__` 方法，那么它也不应该定义 :meth:`__hash__` "
+"操作；如果它定义了 :meth:`__eq__` 但没有定义 :meth:`__hash__`，则其实例将不可"
+"被用作可哈希多项集的条目。 如果一个类定义了可变对象并实现了 :meth:`__eq__` 方"
+"法，则它不应该实现 :meth:`__hash__`，因为 :term:`hashable` 多项集的实现要求键"
+"的哈希值是不可变的（如果对象的哈希值发生改变，它将位于错误的哈希桶中）。"
 
 #: ../../reference/datamodel.rst:1839
 msgid ""
@@ -2112,6 +2569,11 @@ msgid ""
 "hash value, and will also be correctly identified as unhashable when "
 "checking ``isinstance(obj, collections.abc.Hashable)``."
 msgstr ""
+"一个类如果重载了 :meth:`__eq__` 且没有定义 :meth:`__hash__` 则会将其 :meth:"
+"`__hash__` 隐式地设为 ``None``。当一个类的 :meth:`__hash__` 方法为 ``None`` "
+"时，该类的实例将在一个程序尝试获取其哈希值时正确地引发 :exc:`TypeError`，并会"
+"在检测 ``isinstance(obj, collections.abc.Hashable)`` 时被正确地识别为不可哈希"
+"对象。"
 
 #: ../../reference/datamodel.rst:1851
 msgid ""
@@ -2119,6 +2581,8 @@ msgid ""
 "of :meth:`__hash__` from a parent class, the interpreter must be told this "
 "explicitly by setting ``__hash__ = <ParentClass>.__hash__``."
 msgstr ""
+"如果一个重载了 :meth:`__eq__` 的类需要保留来自父类的 :meth:`__hash__` 实现，"
+"则必须通过设置 ``__hash__ = <ParentClass>.__hash__`` 来显式地告知解释器。"
 
 #: ../../reference/datamodel.rst:1855
 msgid ""
@@ -2128,6 +2592,10 @@ msgid ""
 "`TypeError` would be incorrectly identified as hashable by an "
 "``isinstance(obj, collections.abc.Hashable)`` call."
 msgstr ""
+"如果一个没有重载 :meth:`__eq__` 的类需要去掉哈希支持，则应该在类定义中包含 "
+"``__hash__ = None``。一个自定义了 :meth:`__hash__` 以显式地引发 :exc:"
+"`TypeError` 的类会被 ``isinstance(obj, collections.abc.Hashable)`` 调用错误地"
+"识别为可哈希对象。"
 
 #: ../../reference/datamodel.rst:1864
 msgid ""
@@ -2136,6 +2604,9 @@ msgid ""
 "constant within an individual Python process, they are not predictable "
 "between repeated invocations of Python."
 msgstr ""
+"在默认情况下，str 和 bytes 对象的 :meth:`__hash__` 值会使用一个不可预知的随机"
+"值“加盐”。 虽然它们在一个单独 Python 进程中会保持不变，但它们的值在重复运行"
+"的 Python 间是不可预测的。"
 
 #: ../../reference/datamodel.rst:1869
 msgid ""
@@ -2144,6 +2615,9 @@ msgid ""
 "insertion, *O*\\ (*n*\\ :sup:`2`) complexity.  See http://ocert.org/"
 "advisories/ocert-2011-003.html for details."
 msgstr ""
+"这是为了防止通过精心选择输入来利用字典插入操作在最坏情况下的执行效率即 *O*\\ "
+"(*n*\\ :sup:`2`) 复杂度制度的拒绝服务攻击。 请参阅 http://ocert.org/"
+"advisories/ocert-2011-003.html 了解详情。"
 
 #: ../../reference/datamodel.rst:1874
 msgid ""
@@ -2151,14 +2625,16 @@ msgid ""
 "made guarantees about this ordering (and it typically varies between 32-bit "
 "and 64-bit builds)."
 msgstr ""
+"改变哈希值会影响集合的迭代次序。Python 也从不保证这个次序不会被改变（通常它"
+"在 32 位和 64 位构建上是不一致的）。"
 
 #: ../../reference/datamodel.rst:1878
 msgid "See also :envvar:`PYTHONHASHSEED`."
-msgstr ""
+msgstr "另见 :envvar:`PYTHONHASHSEED`."
 
 #: ../../reference/datamodel.rst:1880
 msgid "Hash randomization is enabled by default."
-msgstr ""
+msgstr "默认启用哈希随机化。"
 
 #: ../../reference/datamodel.rst:1888
 msgid ""
@@ -2175,7 +2651,7 @@ msgstr ""
 
 #: ../../reference/datamodel.rst:1899
 msgid "Customizing attribute access"
-msgstr ""
+msgstr "自定义属性访问"
 
 #: ../../reference/datamodel.rst:1901
 msgid ""
@@ -2183,6 +2659,8 @@ msgid ""
 "access (use of, assignment to, or deletion of ``x.name``) for class "
 "instances."
 msgstr ""
+"可以定义下列方法来自定义对类实例属性访问（``x.name`` 的使用、赋值或删除）的具"
+"体含义."
 
 #: ../../reference/datamodel.rst:1909
 msgid ""
@@ -2211,6 +2689,12 @@ msgid ""
 "object).  See the :meth:`__getattribute__` method below for a way to "
 "actually get total control over attribute access."
 msgstr ""
+"请注意如果属性是通过正常机制找到的，:meth:`__getattr__` 就不会被调用。（这是"
+"在 :meth:`__getattr__` 和 :meth:`__setattr__` 之间故意设置的不对称性。）这既"
+"是出于效率理由也是因为不这样设置的话 :meth:`__getattr__` 将无法访问实例的其他"
+"属性。要注意至少对于实例变量来说，你不必在实例属性字典中插入任何值（而是通过"
+"插入到其他对象）就可以模拟对它的完全控制。请参阅下面的 :meth:"
+"`__getattribute__` 方法了解真正获取对属性访问的完全控制权的办法。"
 
 #: ../../reference/datamodel.rst:1929
 msgid ""
@@ -2223,6 +2707,12 @@ msgid ""
 "base class method with the same name to access any attributes it needs, for "
 "example, ``object.__getattribute__(self, name)``."
 msgstr ""
+"此方法会无条件地被调用以实现对类实例属性的访问。如果类还定义了 :meth:"
+"`__getattr__`，则后者不会被调用，除非 :meth:`__getattribute__` 显式地调用它或"
+"是引发了 :exc:`AttributeError`。此方法应当返回（找到的）属性值或是引发一个 :"
+"exc:`AttributeError` 异常。为了避免此方法中的无限递归，其实现应该总是调用具有"
+"相同名称的基类方法来访问它所需要的任何属性，例如 ``object."
+"__getattribute__(self, name)``。"
 
 #: ../../reference/datamodel.rst:1940
 msgid ""
@@ -2230,6 +2720,8 @@ msgid ""
 "result of implicit invocation via language syntax or :ref:`built-in "
 "functions <builtin-functions>`. See :ref:`special-lookup`."
 msgstr ""
+"此方法在作为通过特定语法或 :ref:`内置函数 <builtin-functions>` 隐式地调用的结"
+"果的情况下查找特殊方法时仍可能会被跳过。 参见 :ref:`special-lookup`。"
 
 #: ../../reference/datamodel.rst:1945
 msgid ""
@@ -2244,6 +2736,8 @@ msgid ""
 "For certain sensitive attribute accesses, raises an :ref:`auditing event "
 "<auditing>` ``object.__getattr__`` with arguments ``obj`` and ``name``."
 msgstr ""
+"对于特定的敏感属性访问，引发一个 :ref:`审计事件 <auditing>` ``object."
+"__getattr__``，附带参数 ``obj`` 和 ``name``。"
 
 #: ../../reference/datamodel.rst:1954
 msgid ""
@@ -2251,6 +2745,8 @@ msgid ""
 "the normal mechanism (i.e. store the value in the instance dictionary). "
 "*name* is the attribute name, *value* is the value to be assigned to it."
 msgstr ""
+"此方法在一个属性被尝试赋值时被调用。这个调用会取代正常机制（即将值保存到实例"
+"字典）。 *name* 为属性名称， *value* 为要赋给属性的值。"
 
 #: ../../reference/datamodel.rst:1958
 msgid ""
@@ -2258,6 +2754,8 @@ msgid ""
 "call the base class method with the same name, for example, ``object."
 "__setattr__(self, name, value)``."
 msgstr ""
+"如果 :meth:`__setattr__` 想要赋值给一个实例属性，它应该调用同名的基类方法，例"
+"如 ``object.__setattr__(self, name, value)``。"
 
 #: ../../reference/datamodel.rst:1962
 msgid ""
@@ -2273,6 +2771,8 @@ msgid ""
 "<auditing>` ``object.__setattr__`` with arguments ``obj``, ``name``, "
 "``value``."
 msgstr ""
+"对特定敏感属性的赋值，会引发一个 :ref:`审计事件 <auditing>` ``object."
+"__setattr__``，附带参数 ``obj``, ``name``, ``value``。"
 
 #: ../../reference/datamodel.rst:1971
 msgid ""
@@ -2280,6 +2780,8 @@ msgid ""
 "This should only be implemented if ``del obj.name`` is meaningful for the "
 "object."
 msgstr ""
+"类似于 :meth:`__setattr__` 但其作用为删除而非赋值。此方法应该仅在 ``del obj."
+"name`` 对于该对象有意义时才被实现。"
 
 #: ../../reference/datamodel.rst:1974
 msgid ""
@@ -2294,16 +2796,20 @@ msgid ""
 "For certain sensitive attribute deletions, raises an :ref:`auditing event "
 "<auditing>` ``object.__delattr__`` with arguments ``obj`` and ``name``."
 msgstr ""
+"对于特定的敏感属性删除，引发一个 :ref:`审计事件 <auditing>` ``object."
+"__delattr__``，附带参数 ``obj`` 和 ``name``。"
 
 #: ../../reference/datamodel.rst:1983
 msgid ""
 "Called when :func:`dir` is called on the object. An iterable must be "
 "returned. :func:`dir` converts the returned iterable to a list and sorts it."
 msgstr ""
+"此方法会在针对相应对象调用 :func:`dir` 时被调用。 返回值必须为一个可迭代对"
+"象。 :func:`dir` 会把返回的可迭代对象转换为列表并对其排序。"
 
 #: ../../reference/datamodel.rst:1988
 msgid "Customizing module attribute access"
-msgstr ""
+msgstr "自定义模块属性访问"
 
 #: ../../reference/datamodel.rst:1995
 msgid ""
@@ -2316,6 +2822,12 @@ msgid ""
 "``__dict__`` before raising an :exc:`AttributeError`. If found, it is called "
 "with the attribute name and the result is returned."
 msgstr ""
+"特殊名称 ``__getattr__`` 和 ``__dir__`` 还可被用来自定义对模块属性的访问。模"
+"块层级的 ``__getattr__`` 函数应当接受一个参数，其名称为一个属性名，并返回计算"
+"结果值或引发一个 :exc:`AttributeError`。如果通过正常查找即 :meth:`object."
+"__getattribute__` 未在模块对象中找到某个属性，则 ``__getattr__`` 会在模块的 "
+"``__dict__`` 中查找，未找到时会引发一个 :exc:`AttributeError`。如果找到，它会"
+"以属性名被调用并返回结果值。"
 
 #: ../../reference/datamodel.rst:2004
 msgid ""
@@ -2323,6 +2835,8 @@ msgid ""
 "of strings that represents the names accessible on module. If present, this "
 "function overrides the standard :func:`dir` search on a module."
 msgstr ""
+"``__dir__`` 函数应当不接受任何参数，并且返回一个表示模块中可访问名称的字符串"
+"可迭代对象。 此函数如果存在，将会重写一个模块中的标准 :func:`dir` 搜索操作。"
 
 #: ../../reference/datamodel.rst:2008
 msgid ""
@@ -2330,6 +2844,8 @@ msgid ""
 "attributes, properties, etc.), one can set the ``__class__`` attribute of a "
 "module object to a subclass of :class:`types.ModuleType`. For example::"
 msgstr ""
+"想要更细致地自定义模块的行为（设置属性和特性属性等待），可以将模块对象的 "
+"``__class__`` 属性设置为一个 :class:`types.ModuleType` 的子类。例如::"
 
 #: ../../reference/datamodel.rst:2026
 msgid ""
@@ -2338,26 +2854,29 @@ msgid ""
 "module globals (whether by code within the module, or via a reference to the "
 "module's globals dictionary) is unaffected."
 msgstr ""
+"定义模块的 ``__getattr__`` 和设置模块的 ``__class__`` 只会影响使用属性访问语"
+"法进行的查找 -- 直接访问模块全局变量（不论是通过模块内的代码还是通过对模块全"
+"局字典的引用）是不受影响的。"
 
 #: ../../reference/datamodel.rst:2031
 msgid "``__class__`` module attribute is now writable."
-msgstr ""
+msgstr "``__class__`` 模块属性改为可写。"
 
 #: ../../reference/datamodel.rst:2034
 msgid "``__getattr__`` and ``__dir__`` module attributes."
-msgstr ""
+msgstr "``__getattr__`` 和 ``__dir__`` 模块属性。"
 
 #: ../../reference/datamodel.rst:2039
 msgid ":pep:`562` - Module __getattr__ and __dir__"
-msgstr ""
+msgstr ":pep:`562` - 模块 __getattr__ 和 __dir__"
 
 #: ../../reference/datamodel.rst:2040
 msgid "Describes the ``__getattr__`` and ``__dir__`` functions on modules."
-msgstr ""
+msgstr "描述用于模块的 ``__getattr__`` 和 ``__dir__`` 函数。"
 
 #: ../../reference/datamodel.rst:2046
 msgid "Implementing Descriptors"
-msgstr ""
+msgstr "实现描述器"
 
 #: ../../reference/datamodel.rst:2048
 msgid ""
@@ -2381,12 +2900,15 @@ msgid ""
 "the attribute was accessed through, or ``None`` when the attribute is "
 "accessed through the *owner*."
 msgstr ""
+"调用此方法以获取所有者类的属性（类属性访问）或该类的实例的属性（实例属性访"
+"问）。 可选的 *owner* 参数是所有者类而 *instance* 是被用来访问属性的实例，如"
+"果通过 *owner* 来访问属性则返回 ``None``。"
 
 #: ../../reference/datamodel.rst:2064
 msgid ""
 "This method should return the computed attribute value or raise an :exc:"
 "`AttributeError` exception."
-msgstr ""
+msgstr "此方法应当返回计算得到的属性值或是引发 :exc:`AttributeError` 异常。"
 
 #: ../../reference/datamodel.rst:2067
 msgid ""
@@ -2397,12 +2919,16 @@ msgid ""
 "implementation always passes in both arguments whether they are required or "
 "not."
 msgstr ""
+":PEP:`252` 指明 :meth:`__get__` 为带有一至二个参数的可调用对象。 Python 自身"
+"内置的描述器支持此规格定义；但是，某些第三方工具可能要求必须带两个参数。 "
+"Python 自身的 :meth:`__getattribute__` 实现总是会传入两个参数，无论它们是否被"
+"要求提供。"
 
 #: ../../reference/datamodel.rst:2076
 msgid ""
 "Called to set the attribute on an instance *instance* of the owner class to "
 "a new value, *value*."
-msgstr ""
+msgstr "调用此方法以设置 *instance* 指定的所有者类的实例的属性为新值 *value*。"
 
 #: ../../reference/datamodel.rst:2079
 msgid ""
@@ -2410,17 +2936,19 @@ msgid ""
 "descriptor to a \"data descriptor\".  See :ref:`descriptor-invocation` for "
 "more details."
 msgstr ""
+"请注意，添加 :meth:`__set__` 或 :meth:`__delete__` 会将描述器变成“数据描述"
+"器”。 更多细节请参阅 :ref:`descriptor-invocation`。"
 
 #: ../../reference/datamodel.rst:2085
 msgid ""
 "Called to delete the attribute on an instance *instance* of the owner class."
-msgstr ""
+msgstr "调用此方法以删除 *instance* 指定的所有者类的实例的属性。"
 
 #: ../../reference/datamodel.rst:2087
 msgid ""
 "Instances of descriptors may also have the :attr:`!__objclass__` attribute "
 "present:"
-msgstr ""
+msgstr "描述器的实例也可能存在 :attr:`!__objclass__` 属性："
 
 #: ../../reference/datamodel.rst:2092
 msgid ""
@@ -2432,10 +2960,14 @@ msgid ""
 "argument (for example, CPython sets this attribute for unbound methods that "
 "are implemented in C)."
 msgstr ""
+"属性 :attr:`!__objclass__` 会被 :mod:`inspect` 模块解读为指定此对象定义所在的"
+"类（正确设置此属性有助于动态类属性的运行时内省）。 对于可调用对象来说，它可以"
+"指明预期或要求提供一个特定类型（或子类）的实例作为第一个位置参数（例如，"
+"CPython 会为在 C 中实现的未绑定方法设置此属性）。"
 
 #: ../../reference/datamodel.rst:2103
 msgid "Invoking Descriptors"
-msgstr ""
+msgstr "调用描述器"
 
 #: ../../reference/datamodel.rst:2105
 msgid ""
@@ -2445,6 +2977,10 @@ msgid ""
 "`~object.__delete__`. If any of those methods are defined for an object, it "
 "is said to be a descriptor."
 msgstr ""
+"总的说来，描述器就是具有“绑定行为”的对象属性，其属性访问已被描述器协议中的方"
+"法所重载:  :meth:`~object.__get__`, :meth:`~object.__set__` 和 :meth:"
+"`~object.__delete__`。 如果一个对象定义了以上方法中的任意一个，它就被称为描述"
+"器。"
 
 #: ../../reference/datamodel.rst:2111
 msgid ""
@@ -2453,6 +2989,9 @@ msgid ""
 "chain starting with ``a.__dict__['x']``, then ``type(a).__dict__['x']``, and "
 "continuing through the base classes of ``type(a)`` excluding metaclasses."
 msgstr ""
+"属性访问的默认行为是从一个对象的字典中获取、设置或删除属性。例如，``a.x`` 的"
+"查找顺序会从 ``a.__dict__['x']`` 开始，然后是 ``type(a).__dict__['x']``，接下"
+"来依次查找 ``type(a)`` 的上级基类，不包括元类。"
 
 #: ../../reference/datamodel.rst:2116
 msgid ""
@@ -2461,46 +3000,55 @@ msgid ""
 "descriptor method instead.  Where this occurs in the precedence chain "
 "depends on which descriptor methods were defined and how they were called."
 msgstr ""
+"但是，如果找到的值是定义了某个描述器方法的对象，则 Python 可能会重载默认行为"
+"并转而唤起描述器方法。这具体发生在优先级链的哪个环节则要根据所定义的描述器方"
+"法及其被调用的方式来决定。"
 
 #: ../../reference/datamodel.rst:2121
 msgid ""
 "The starting point for descriptor invocation is a binding, ``a.x``. How the "
 "arguments are assembled depends on ``a``:"
-msgstr ""
+msgstr "描述器唤起的开始点是一个绑定 ``a.x``。参数的组合方式依 ``a`` 而定:"
 
 #: ../../reference/datamodel.rst:2126
 msgid "Direct Call"
-msgstr ""
+msgstr "直接调用"
 
 #: ../../reference/datamodel.rst:2125
 msgid ""
 "The simplest and least common call is when user code directly invokes a "
 "descriptor method:    ``x.__get__(a)``."
 msgstr ""
+"最简单但最不常见的调用方式是用户代码直接唤起一个描述器方法:    ``x."
+"__get__(a)``。"
 
 #: ../../reference/datamodel.rst:2130
 msgid "Instance Binding"
-msgstr ""
+msgstr "实例绑定"
 
 #: ../../reference/datamodel.rst:2129
 msgid ""
 "If binding to an object instance, ``a.x`` is transformed into the call: "
 "``type(a).__dict__['x'].__get__(a, type(a))``."
 msgstr ""
+"如果绑定到一个对象实例，``a.x`` 会被转换为调用: ``type(a).__dict__['x']."
+"__get__(a, type(a))``。"
 
 #: ../../reference/datamodel.rst:2134
 msgid "Class Binding"
-msgstr ""
+msgstr "类绑定"
 
 #: ../../reference/datamodel.rst:2133
 msgid ""
 "If binding to a class, ``A.x`` is transformed into the call: ``A."
 "__dict__['x'].__get__(None, A)``."
 msgstr ""
+"如果绑定到一个类，``A.x`` 会被转换为调用: ``A.__dict__['x'].__get__(None, "
+"A)``。"
 
 #: ../../reference/datamodel.rst:2140
 msgid "Super Binding"
-msgstr ""
+msgstr "超绑定"
 
 #: ../../reference/datamodel.rst:2137
 msgid ""
@@ -2508,6 +3056,9 @@ msgid ""
 "for a base class ``B`` following ``A`` and then returns ``B.__dict__['x']."
 "__get__(a, A)``.  If not a descriptor, ``x`` is returned unchanged."
 msgstr ""
+"类似 ``super(A, a).x`` 这样的带点号查找将在 ``a.__class__.__mro__`` 中搜索紧"
+"接在 ``A`` 之后的基类 ``B`` 并返回 ``B.__dict__['x'].__get__(a, A)``。 如果 "
+"``x`` 不是描述器，则不加改变地返回它。"
 
 #: ../../reference/datamodel.rst:2174
 msgid ""
@@ -2526,6 +3077,15 @@ msgid ""
 "dictionary.  In contrast, non-data descriptors can be overridden by "
 "instances."
 msgstr ""
+"对于实例绑定，发起描述器调用的优先级取决于定义了哪些描述器方法。 一个描述器可"
+"以定义 :meth:`~object.__get__`, :meth:`~object.__set__` 和 :meth:`~object."
+"__delete__` 的任意组合。 如果它没有定义 :meth:`!__get__`，则访问属性将返回描"
+"述器对象自身，除非对象的实例字典中有相应的属性值。 如果描述器定义了 :meth:`!"
+"__set__` 和/或 :meth:`!__delete__`，则它是一个数据描述器；如果两者均未定义，"
+"则它是一个非数据描述器。 通常，数据描述器会同时定义 :meth:`!__get__` 和 :"
+"meth:`!__set__`，而非数据描述器则只有 :meth:`!__get__` 方法。 定义了 :meth:`!"
+"__get__` 和 :meth:`!__set__` (和/或 :meth:`!__delete__`) 的数据描述器总是会重"
+"载实例字典中的定义。 与之相对地，非数据描述器则可被实例所重载。"
 
 #: ../../reference/datamodel.rst:2189
 msgid ""
@@ -2535,12 +3095,18 @@ msgid ""
 "methods.  This allows individual instances to acquire behaviors that differ "
 "from other instances of the same class."
 msgstr ""
+"Python 方法（包括用 :func:`@staticmethod <staticmethod>` 和 :func:"
+"`@classmethod <classmethod>` 装饰的方法）都是作为非数据描述器来实现的。 因"
+"而，实例可以重定义和重写方法。 这允许单个实例获得与相同类的其他实例不一样的行"
+"为。"
 
 #: ../../reference/datamodel.rst:2195
 msgid ""
 "The :func:`property` function is implemented as a data descriptor. "
 "Accordingly, instances cannot override the behavior of a property."
 msgstr ""
+":func:`property` 函数是作为数据描述器来实现的。因此实例不能重载特性属性的行"
+"为。"
 
 #: ../../reference/datamodel.rst:2202
 msgid "__slots__"
@@ -2552,12 +3118,17 @@ msgid ""
 "and deny the creation of :attr:`~object.__dict__` and *__weakref__* (unless "
 "explicitly declared in *__slots__* or available in a parent.)"
 msgstr ""
+"*__slots__* 允许我们显式地声明数据成员（如特征属性）并禁止创建 :attr:"
+"`~object.__dict__` 和 *__weakref__* (除非是在 *__slots__* 中显式地声明或是在"
+"父类中可用。)"
 
 #: ../../reference/datamodel.rst:2208
 msgid ""
 "The space saved over using :attr:`~object.__dict__` can be significant. "
 "Attribute lookup speed can be significantly improved as well."
 msgstr ""
+"相比使用 :attr:`~object.__dict__` 可以显著节省空间。 属性查找速度也可得到显著"
+"的提升。"
 
 #: ../../reference/datamodel.rst:2213
 msgid ""
@@ -2566,10 +3137,13 @@ msgid ""
 "for the declared variables and prevents the automatic creation of :attr:"
 "`~object.__dict__` and *__weakref__* for each instance."
 msgstr ""
+"这个类变量可赋值为字符串、可迭代对象或由实例使用的变量名组成的字符串序列。 "
+"*__slots__* 会为已声明的变量保留空间并阻止自动为每个实例创建 :attr:`~object."
+"__dict__` 和 *__weakref__*。"
 
 #: ../../reference/datamodel.rst:2222
 msgid "Notes on using *__slots__*:"
-msgstr ""
+msgstr "使用 *__slots__* 的注意事项:"
 
 #: ../../reference/datamodel.rst:2224
 msgid ""
@@ -2577,6 +3151,8 @@ msgid ""
 "__dict__` and *__weakref__* attribute of the instances will always be "
 "accessible."
 msgstr ""
+"当继承自一个没有 *__slots__* 的类时，实例的 :attr:`~object.__dict__` 和 "
+"*__weakref__* 属性将总是可访问的。"
 
 #: ../../reference/datamodel.rst:2228
 msgid ""
@@ -2586,6 +3162,10 @@ msgid ""
 "assignment of new variables is desired, then add ``'__dict__'`` to the "
 "sequence of strings in the *__slots__* declaration."
 msgstr ""
+"没有 :attr:`~object.__dict__` 变量，实例就不能给未在 *__slots__* 定义中列出的"
+"新变量赋值。 尝试给一个未列出的变量名赋值将引发 :exc:`AttributeError`。 如果"
+"需要动态地给新变量赋值，则要将 ``'__dict__'`` 加入到在 *__slots__* 中声明的字"
+"符串序列中。"
 
 #: ../../reference/datamodel.rst:2235
 msgid ""
@@ -2594,6 +3174,9 @@ msgid ""
 "instances. If weak reference support is needed, then add ``'__weakref__'`` "
 "to the sequence of strings in the *__slots__* declaration."
 msgstr ""
+"如果未给每个实例设置 *__weakref__* 变量，则定义了 *__slots__* 的类就不支持对"
+"其实例的 :mod:`弱引用 <weakref>`。 如果需要支持弱引用，则要将 "
+"``'__weakref__'`` 加入到在 *__slots__* 中声明的字符串序列中。"
 
 #: ../../reference/datamodel.rst:2241
 msgid ""
@@ -2602,6 +3185,9 @@ msgid ""
 "be used to set default values for instance variables defined by *__slots__*; "
 "otherwise, the class attribute would overwrite the descriptor assignment."
 msgstr ""
+"*__slots__* 是通过为每个变量名创建 :ref:`描述器 <descriptors>` 在类层级上实现"
+"的。 因此，类属性不能被用来为通过 *__slots__* 定义的实例变量设置默认值；否"
+"则，类属性将会覆盖描述器赋值。"
 
 #: ../../reference/datamodel.rst:2247
 msgid ""
@@ -2623,6 +3209,9 @@ msgid ""
 "meaning of the program undefined.  In the future, a check may be added to "
 "prevent this."
 msgstr ""
+"如果一个类定义的位置在某个基类中也有定义，则由基类位置定义的实例变量将不可访"
+"问（除非通过直接从基类获取其描述器的方式）。这会使得程序的含义变成未定义。未"
+"来可能会添加一个防止此情况的检查。"
 
 #: ../../reference/datamodel.rst:2258
 msgid ""
@@ -2631,10 +3220,13 @@ msgid ""
 "<PyTypeObject.tp_itemsize>` such as :class:`int`, :class:`bytes`, and :class:"
 "`tuple`."
 msgstr ""
+"如果为派生自 :c:member:`\"variable-length\" 内置类型 <PyTypeObject."
+"tp_itemsize>` 如 :class:`int`, :class:`bytes` 和 :class:`tuple` 的类定义了非"
+"空的*__slots__* 则将引发 :exc:`TypeError`。"
 
 #: ../../reference/datamodel.rst:2263
 msgid "Any non-string :term:`iterable` may be assigned to *__slots__*."
-msgstr ""
+msgstr "任何非字符串的 :term:`iterable` 都可以被赋值给 *__slots__*。"
 
 #: ../../reference/datamodel.rst:2265
 msgid ""
@@ -2643,6 +3235,9 @@ msgid ""
 "can be used to provide per-attribute docstrings that will be recognised by :"
 "func:`inspect.getdoc` and displayed in the output of :func:`help`."
 msgstr ""
+"如果是使用一个 :class:`字典 <dict>` 来给 *__slots__* 赋值，则该字典的键将被用"
+"作槽位名称。 字典的值可被用来为每个属性提供将被 :func:`inspect.getdoc` 识别并"
+"在and displayed in the output of :func:`help` 的输出中显示的文档字符串。"
 
 #: ../../reference/datamodel.rst:2270
 msgid ""
@@ -2658,6 +3253,9 @@ msgid ""
 "created by slots (the other bases must have empty slot layouts) - violations "
 "raise :exc:`TypeError`."
 msgstr ""
+"带有多槽位父类的 :ref:`多重继承 <tut-multiple>` 也是可用的，但仅允许一个父类"
+"具有由槽位创建的属性（其他基类必须具有空的槽位布局） —— 违反此规则将引发 :"
+"exc:`TypeError`。"
 
 #: ../../reference/datamodel.rst:2279
 msgid ""
@@ -2665,10 +3263,12 @@ msgid ""
 "created for each of the iterator's values. However, the *__slots__* "
 "attribute will be an empty iterator."
 msgstr ""
+"如果将 :term:`iterator` 用于 *__slots__* 则会为该迭代器的每个值创建一个 :"
+"term:`descriptor`。 但是，*__slots__* 属性将为一个空迭代器。"
 
 #: ../../reference/datamodel.rst:2287
 msgid "Customizing class creation"
-msgstr ""
+msgstr "自定义类创建"
 
 #: ../../reference/datamodel.rst:2289
 msgid ""
@@ -2679,6 +3279,10 @@ msgid ""
 "specific class they're applied to, ``__init_subclass__`` solely applies to "
 "future subclasses of the class defining the method."
 msgstr ""
+"当一个类继承另一个类时，会在这个父类上调用 :meth:`~object."
+"__init_subclass__`。 这样，就使得编写改变子类行为的类成为可能。 这与类装饰器"
+"有很密切的关联，但类装饰器只能影响它们所应用的特定类，而 "
+"``__init_subclass__`` 则只作用于定义了该方法的类在未来的子类。"
 
 #: ../../reference/datamodel.rst:2298
 msgid ""
@@ -2686,6 +3290,8 @@ msgid ""
 "then the new subclass. If defined as a normal instance method, this method "
 "is implicitly converted to a class method."
 msgstr ""
+"当所在类派生子类时此方法就会被调用。*cls* 将指向新的子类。如果定义为一个普通"
+"实例方法，此方法将被隐式地转换为类方法。"
 
 #: ../../reference/datamodel.rst:2302
 msgid ""
@@ -2694,12 +3300,17 @@ msgid ""
 "``__init_subclass__``, one should take out the needed keyword arguments and "
 "pass the others over to the base class, as in::"
 msgstr ""
+"传给一个新类的关键字参数会被传给上级类的 ``__init_subclass__``。 为了与其他使"
+"用 ``__init_subclass__`` 的类兼容，应当去掉需要的关键字参数再将其他参数传给基"
+"类，例如::"
 
 #: ../../reference/datamodel.rst:2316
 msgid ""
 "The default implementation ``object.__init_subclass__`` does nothing, but "
 "raises an error if it is called with any arguments."
 msgstr ""
+"``object.__init_subclass__`` 的默认实现什么都不做，只在带任意参数调用时引发一"
+"个错误。"
 
 #: ../../reference/datamodel.rst:2321
 msgid ""
@@ -2708,18 +3319,24 @@ msgid ""
 "actual metaclass (rather than the explicit hint) can be accessed as "
 "``type(cls)``."
 msgstr ""
+"元类提示 ``metaclass`` 将被其它类型机制消耗掉，并不会被传给 "
+"``__init_subclass__`` 的实现。实际的元类（而非显式的提示）可通过 "
+"``type(cls)`` 访问。"
 
 #: ../../reference/datamodel.rst:2329
 msgid ""
 "When a class is created, :meth:`type.__new__` scans the class variables and "
 "makes callbacks to those with a :meth:`~object.__set_name__` hook."
 msgstr ""
+"当一个类被创建时，:meth:`type.__new__` 会扫描类变量并对其中带有 :meth:"
+"`~object.__set_name__` 钩子的对象执行回调。"
 
 #: ../../reference/datamodel.rst:2334
 msgid ""
 "Automatically called at the time the owning class *owner* is created. The "
 "object has been assigned to *name* in that class::"
 msgstr ""
+"在所有者类 *owner* 被创建时自动调用。 此对象已被赋值给该类中的 *name*::"
 
 #: ../../reference/datamodel.rst:2340
 msgid ""
@@ -2727,14 +3344,16 @@ msgid ""
 "`__set_name__` will not be called automatically. If needed, :meth:"
 "`__set_name__` can be called directly::"
 msgstr ""
+"如果类变量赋值是在类被创建之后进行的，:meth:`__set_name__` 将不会被自动调"
+"用。 如有必要，可以直接调用 :meth:`__set_name__`::"
 
 #: ../../reference/datamodel.rst:2351
 msgid "See :ref:`class-object-creation` for more details."
-msgstr ""
+msgstr "详情参见 :ref:`class-object-creation`。"
 
 #: ../../reference/datamodel.rst:2359
 msgid "Metaclasses"
-msgstr ""
+msgstr "元类"
 
 #: ../../reference/datamodel.rst:2366
 msgid ""
@@ -2742,6 +3361,8 @@ msgid ""
 "executed in a new namespace and the class name is bound locally to the "
 "result of ``type(name, bases, namespace)``."
 msgstr ""
+"默认情况下，类是使用 :func:`type` 来构建的。类体会在一个新的命名空间内执行，"
+"类名会被局部绑定到 ``type(name, bases, namespace)`` 的结果。"
 
 #: ../../reference/datamodel.rst:2370
 msgid ""
@@ -2750,40 +3371,44 @@ msgid ""
 "existing class that included such an argument. In the following example, "
 "both ``MyClass`` and ``MySubclass`` are instances of ``Meta``::"
 msgstr ""
+"类创建过程可通过在定义行传入 ``metaclass`` 关键字参数，或是通过继承一个包含此"
+"参数的现有类来进行定制。在以下示例中，``MyClass`` 和 ``MySubclass`` 都是 "
+"``Meta`` 的实例::"
 
 #: ../../reference/datamodel.rst:2384
 msgid ""
 "Any other keyword arguments that are specified in the class definition are "
 "passed through to all metaclass operations described below."
 msgstr ""
+"在类定义内指定的任何其他关键字参数都会在下面所描述的所有元类操作中进行传递。"
 
 #: ../../reference/datamodel.rst:2387
 msgid "When a class definition is executed, the following steps occur:"
-msgstr ""
+msgstr "当一个类定义被执行时，将发生以下步骤:"
 
 #: ../../reference/datamodel.rst:2389
 msgid "MRO entries are resolved;"
-msgstr ""
+msgstr "解析 MRO 条目；"
 
 #: ../../reference/datamodel.rst:2390
 msgid "the appropriate metaclass is determined;"
-msgstr ""
+msgstr "确定适当的元类；"
 
 #: ../../reference/datamodel.rst:2391
 msgid "the class namespace is prepared;"
-msgstr ""
+msgstr "准备类命名空间；"
 
 #: ../../reference/datamodel.rst:2392
 msgid "the class body is executed;"
-msgstr ""
+msgstr "执行类主体；"
 
 #: ../../reference/datamodel.rst:2393
 msgid "the class object is created."
-msgstr ""
+msgstr "创建类对象。"
 
 #: ../../reference/datamodel.rst:2397
 msgid "Resolving MRO entries"
-msgstr ""
+msgstr "解析 MRO 条目"
 
 #: ../../reference/datamodel.rst:2401
 msgid ""
@@ -2796,6 +3421,11 @@ msgid ""
 "the base. The returned tuple may be empty: in these cases, the original base "
 "is ignored."
 msgstr ""
+"如果一个出现在类定义中的基类不是 :class:`type` 的实例，则会在该基类中搜索 :"
+"meth:`!__mro_entries__` 方法。 如果找到了 :meth:`!__mro_entries__` 方法，则在"
+"创建类时该基类会被替换为调用 :meth:`!__mro_entries__` 的结果。 该方法被调用时"
+"将附带传给 *bases* 形参的原始基类元组，并且必须返回一个由将被用来替代该基类的"
+"类组成的元组。 返回的元组可能为空：在此情况下，原始基类将被忽略。"
 
 #: ../../reference/datamodel.rst:2413
 msgid ":func:`types.resolve_bases`"
@@ -2803,7 +3433,7 @@ msgstr ":func:`types.resolve_bases`"
 
 #: ../../reference/datamodel.rst:2413
 msgid "Dynamically resolve bases that are not instances of :class:`type`."
-msgstr ""
+msgstr "动态地解析不属于 :class:`type` 实例的基类。"
 
 #: ../../reference/datamodel.rst:2415
 msgid ":pep:`560`"
@@ -2811,33 +3441,36 @@ msgstr ":pep:`560`"
 
 #: ../../reference/datamodel.rst:2416
 msgid "Core support for typing module and generic types."
-msgstr ""
+msgstr "对 typing 模块和泛用类型的核心支持。"
 
 #: ../../reference/datamodel.rst:2420
 msgid "Determining the appropriate metaclass"
-msgstr ""
+msgstr "确定适当的元类"
 
 #: ../../reference/datamodel.rst:2424
 msgid ""
 "The appropriate metaclass for a class definition is determined as follows:"
-msgstr ""
+msgstr "为一个类定义确定适当的元类是根据以下规则:"
 
 #: ../../reference/datamodel.rst:2426
 msgid ""
 "if no bases and no explicit metaclass are given, then :func:`type` is used;"
-msgstr ""
+msgstr "如果没有基类且没有显式指定元类，则使用 :func:`type`；"
 
 #: ../../reference/datamodel.rst:2427
 msgid ""
 "if an explicit metaclass is given and it is *not* an instance of :func:"
 "`type`, then it is used directly as the metaclass;"
 msgstr ""
+"如果给出一个显式元类而且 *不是* :func:`type` 的实例，则其会被直接用作元类；"
 
 #: ../../reference/datamodel.rst:2429
 msgid ""
 "if an instance of :func:`type` is given as the explicit metaclass, or bases "
 "are defined, then the most derived metaclass is used."
 msgstr ""
+"如果给出一个 :func:`type` 的实例作为显式元类，或是定义了基类，则使用最近派生"
+"的元类。"
 
 #: ../../reference/datamodel.rst:2432
 msgid ""
@@ -2847,10 +3480,13 @@ msgid ""
 "of these candidate metaclasses. If none of the candidate metaclasses meets "
 "that criterion, then the class definition will fail with ``TypeError``."
 msgstr ""
+"最近派生的元类会从显式指定的元类（如果有）以及所有指定的基类的元类（即 "
+"``type(cls)``）中选取。最近派生的元类应为 *所有* 这些候选元类的一个子类型。如"
+"果没有一个候选元类符合该条件，则类定义将失败并抛出 ``TypeError``。"
 
 #: ../../reference/datamodel.rst:2442
 msgid "Preparing the class namespace"
-msgstr ""
+msgstr "准备类命名空间"
 
 #: ../../reference/datamodel.rst:2447
 msgid ""
@@ -2863,24 +3499,31 @@ msgid ""
 "``__new__``, but when the final class object is created the namespace is "
 "copied into a new ``dict``."
 msgstr ""
+"一旦确定了适当的元类，就开始准备类的命名空间。 如果元类具有 ``__prepare__`` "
+"属性，它将以 ``namespace = metaclass.__prepare__(name, bases, **kwds)`` 的形"
+"式被调用（其中如果存在任何额外关键字参数，则应来自类定义）。 ``__prepare__`` "
+"方法应当被实现为 :func:`类方法 <classmethod>`。 ``__prepare__`` 所返回的命名"
+"空间会被传入 ``__new__``，但是当最终的类对象被创建时该命名空间会被拷贝到一个"
+"新的 ``dict`` 中。"
 
 #: ../../reference/datamodel.rst:2456
 msgid ""
 "If the metaclass has no ``__prepare__`` attribute, then the class namespace "
 "is initialised as an empty ordered mapping."
 msgstr ""
+"如果元类没有 ``__prepare__`` 属性，则类命名空间将初始化为一个空的有序映射。"
 
 #: ../../reference/datamodel.rst:2461
 msgid ":pep:`3115` - Metaclasses in Python 3000"
-msgstr ""
+msgstr ":pep:`3115` - Python 3000 中的元类"
 
 #: ../../reference/datamodel.rst:2462
 msgid "Introduced the ``__prepare__`` namespace hook"
-msgstr ""
+msgstr "引入 ``__prepare__`` 命名空间钩子"
 
 #: ../../reference/datamodel.rst:2466
 msgid "Executing the class body"
-msgstr ""
+msgstr "执行类主体"
 
 #: ../../reference/datamodel.rst:2471
 msgid ""
@@ -2890,6 +3533,9 @@ msgid ""
 "names from the current and outer scopes when the class definition occurs "
 "inside a function."
 msgstr ""
+"类主体会以（类似于） ``exec(body, globals(), namespace)`` 的形式被执行。普通"
+"调用与 :func:`exec` 的关键区别在于当类定义发生于函数内部时，词法作用域允许类"
+"主体（包括任何方法）引用来自当前和外部作用域的名称。"
 
 #: ../../reference/datamodel.rst:2477
 msgid ""
@@ -2899,10 +3545,13 @@ msgid ""
 "class methods, or through the implicit lexically scoped ``__class__`` "
 "reference described in the next section."
 msgstr ""
+"但是，即使当类定义发生于函数内部时，在类内部定义的方法仍然无法看到在类作用域"
+"层次上定义的名称。类变量必须通过实例的第一个形参或类方法来访问，或者是通过下"
+"一节中描述的隐式词法作用域的 ``__class__`` 引用。"
 
 #: ../../reference/datamodel.rst:2486
 msgid "Creating the class object"
-msgstr ""
+msgstr "创建类对象"
 
 #: ../../reference/datamodel.rst:2493
 msgid ""
@@ -2911,6 +3560,9 @@ msgid ""
 "**kwds)`` (the additional keywords passed here are the same as those passed "
 "to ``__prepare__``)."
 msgstr ""
+"一旦执行类主体完成填充类命名空间，将通过调用 ``metaclass(name, bases, "
+"namespace, **kwds)`` 创建类对象（此处的附加关键字参数与传入 ``__prepare__`` "
+"的相同）。"
 
 #: ../../reference/datamodel.rst:2498
 msgid ""
@@ -2922,6 +3574,10 @@ msgid ""
 "scoping, while the class or instance that was used to make the current call "
 "is identified based on the first argument passed to the method."
 msgstr ""
+"如果类主体中有任何方法引用了 ``__class__`` 或 ``super``，这个类对象会通过零参"
+"数形式的 :func:`super`. ``__class__`` 所引用，这是由编译器所创建的隐式闭包引"
+"用。这使用零参数形式的 :func:`super` 能够正确标识正在基于词法作用域来定义的"
+"类，而被用于进行当前调用的类或实例则是基于传递给方法的第一个参数来标识的。"
 
 #: ../../reference/datamodel.rst:2508
 msgid ""
@@ -2931,6 +3587,10 @@ msgid ""
 "initialised correctly. Failing to do so will result in a :exc:`RuntimeError` "
 "in Python 3.8."
 msgstr ""
+"在 CPython 3.6 及之后的版本中，``__class__`` 单元会作为类命名空间中的 "
+"``__classcell__`` 条目被传给元类。 如果存在，它必须被向上传播给 ``type."
+"__new__`` 调用，以便能正确地初始化该类。 如果不这样做，在 Python 3.8 中将引"
+"发 :exc:`RuntimeError`。"
 
 #: ../../reference/datamodel.rst:2514
 msgid ""
@@ -2938,24 +3598,31 @@ msgid ""
 "ultimately calls ``type.__new__``, the following additional customization "
 "steps are invoked after creating the class object:"
 msgstr ""
+"当使用默认的元类 :class:`type`，或者任何最终会调用 ``type.__new__`` 的元类"
+"时，以下额外的自定义步骤将在创建类对象之后被唤起："
 
 #: ../../reference/datamodel.rst:2518
 msgid ""
 "The ``type.__new__`` method collects all of the attributes in the class "
 "namespace that define a :meth:`~object.__set_name__` method;"
 msgstr ""
+"``type.__new__`` 方法会收集类命名空间中所有定义了 :meth:`~object."
+"__set_name__` 方法的属性;"
 
 #: ../../reference/datamodel.rst:2520
 msgid ""
 "Those ``__set_name__`` methods are called with the class being defined and "
 "the assigned name of that particular attribute;"
 msgstr ""
+"这些 ``__set_name__`` 方法将附带所定义的类和指定的属性所赋的名称进行调用;"
 
 #: ../../reference/datamodel.rst:2522
 msgid ""
 "The :meth:`~object.__init_subclass__` hook is called on the immediate parent "
 "of the new class in its method resolution order."
 msgstr ""
+"在新类基于方法解析顺序所确定的直接父类上调用 :meth:`~object."
+"__init_subclass__` 钩子。"
 
 #: ../../reference/datamodel.rst:2525
 msgid ""
@@ -2963,6 +3630,8 @@ msgid ""
 "included in the class definition (if any) and the resulting object is bound "
 "in the local namespace as the defined class."
 msgstr ""
+"在类对象创建之后，它会被传给包含在类定义中的类装饰器（如果有的话），得到的对"
+"象将作为已定义的类绑定到局部命名空间。"
 
 #: ../../reference/datamodel.rst:2529
 msgid ""
@@ -2977,15 +3646,15 @@ msgstr ""
 
 #: ../../reference/datamodel.rst:2536
 msgid ":pep:`3135` - New super"
-msgstr ""
+msgstr ":pep:`3135` - 新的超类型"
 
 #: ../../reference/datamodel.rst:2537
 msgid "Describes the implicit ``__class__`` closure reference"
-msgstr ""
+msgstr "描述隐式的 ``__class__`` 闭包引用"
 
 #: ../../reference/datamodel.rst:2541
 msgid "Uses for metaclasses"
-msgstr ""
+msgstr "元类的作用"
 
 #: ../../reference/datamodel.rst:2543
 msgid ""
@@ -2994,16 +3663,20 @@ msgid ""
 "automatic property creation, proxies, frameworks, and automatic resource "
 "locking/synchronization."
 msgstr ""
+"元类的潜在作用非常广泛。已经过尝试的设想包括枚举、日志、接口检查、自动委托、"
+"自动特征属性创建、代理、框架以及自动资源锁定/同步等等。"
 
 #: ../../reference/datamodel.rst:2550
 msgid "Customizing instance and subclass checks"
-msgstr ""
+msgstr "自定义实例及子类检查"
 
 #: ../../reference/datamodel.rst:2552
 msgid ""
 "The following methods are used to override the default behavior of the :func:"
 "`isinstance` and :func:`issubclass` built-in functions."
 msgstr ""
+"以下方法被用来重载 :func:`isinstance` 和 :func:`issubclass` 内置函数的默认行"
+"为。"
 
 #: ../../reference/datamodel.rst:2555
 msgid ""
@@ -3012,6 +3685,8 @@ msgid ""
 "base classes\" to any class or type (including built-in types), including "
 "other ABCs."
 msgstr ""
+"特别地，元类 :class:`abc.ABCMeta` 实现了这些方法以便允许将抽象基类（ABC）作"
+"为“虚拟基类”添加到任何类或类型（包括内置类型），包括其他 ABC 之中。"
 
 #: ../../reference/datamodel.rst:2562
 msgid ""
@@ -3019,6 +3694,8 @@ msgid ""
 "instance of *class*. If defined, called to implement ``isinstance(instance, "
 "class)``."
 msgstr ""
+"如果 *instance* 应被视为 *class* 的一个（直接或间接）实例则返回真值。如果定义"
+"了此方法，则会被调用以实现 ``isinstance(instance, class)``。"
 
 #: ../../reference/datamodel.rst:2569
 msgid ""
@@ -3026,6 +3703,8 @@ msgid ""
 "subclass of *class*.  If defined, called to implement ``issubclass(subclass, "
 "class)``."
 msgstr ""
+"Return true 如果 *subclass* 应被视为 *class* 的一个（直接或间接）子类则返回真"
+"值。如果定义了此方法，则会被调用以实现 ``issubclass(subclass, class)``。"
 
 #: ../../reference/datamodel.rst:2574
 msgid ""
@@ -3034,10 +3713,13 @@ msgid ""
 "consistent with the lookup of special methods that are called on instances, "
 "only in this case the instance is itself a class."
 msgstr ""
+"请注意这些方法的查找是基于类的类型（元类）。它们不能作为类方法在实际的类中被"
+"定义。这与基于实例被调用的特殊方法的查找是一致的，只有在此情况下实例本身被当"
+"作是类。"
 
 #: ../../reference/datamodel.rst:2585
 msgid ":pep:`3119` - Introducing Abstract Base Classes"
-msgstr ""
+msgstr ":pep:`3119` - 引入抽象基类"
 
 #: ../../reference/datamodel.rst:2582
 msgid ""
@@ -3053,7 +3735,7 @@ msgstr ""
 
 #: ../../reference/datamodel.rst:2590
 msgid "Emulating generic types"
-msgstr ""
+msgstr "模拟泛型类型"
 
 #: ../../reference/datamodel.rst:2592
 msgid ""
@@ -3062,46 +3744,54 @@ msgid ""
 "notation. For example, the annotation ``list[int]`` might be used to signify "
 "a :class:`list` in which all the elements are of type :class:`int`."
 msgstr ""
+"当使用 :term:`类型标注 <annotation>` 时，使用 Python 的方括号标记来 *形参化* "
+"一个 :term:`generic type` 往往会很有用处。 例如，``list[int]`` 这样的标注可以"
+"被用来表示一个 :class:`list` 中的所有元素均为 :class:`int` 类型。"
 
 #: ../../reference/datamodel.rst:2600
 msgid ":pep:`484` - Type Hints"
-msgstr ""
+msgstr ":pep:`484` —— 类型注解"
 
 #: ../../reference/datamodel.rst:2600
 msgid "Introducing Python's framework for type annotations"
-msgstr ""
+msgstr "介绍 Python 中用于类型标注的框架"
 
 #: ../../reference/datamodel.rst:2603
 msgid ":ref:`Generic Alias Types<types-genericalias>`"
-msgstr ""
+msgstr ":ref:`泛用别名类型<types-genericalias>`"
 
 #: ../../reference/datamodel.rst:2603
 msgid "Documentation for objects representing parameterized generic classes"
-msgstr ""
+msgstr "代表形参化泛用类的对象的文档"
 
 #: ../../reference/datamodel.rst:2606
 msgid ""
 ":ref:`Generics`, :ref:`user-defined generics<user-defined-generics>` and :"
 "class:`typing.Generic`"
 msgstr ""
+":ref:`Generics`, :ref:`用户自定义泛型 <user-defined-generics>` 和 :class:"
+"`typing.Generic`"
 
 #: ../../reference/datamodel.rst:2606
 msgid ""
 "Documentation on how to implement generic classes that can be parameterized "
 "at runtime and understood by static type-checkers."
 msgstr ""
+"有关如何实现可在运行时被形参化并能被静态类型检查器所识别的泛用类的文档。"
 
 #: ../../reference/datamodel.rst:2609
 msgid ""
 "A class can *generally* only be parameterized if it defines the special "
 "class method ``__class_getitem__()``."
 msgstr ""
+"一个类 *通常* 只有在定义了特殊的类方法 ``__class_getitem__()`` 时才能被形参"
+"化。"
 
 #: ../../reference/datamodel.rst:2614
 msgid ""
 "Return an object representing the specialization of a generic class by type "
 "arguments found in *key*."
-msgstr ""
+msgstr "按照 *key* 参数指定的类型返回一个表示泛型类的专门化对象。"
 
 #: ../../reference/datamodel.rst:2617
 msgid ""
@@ -3109,10 +3799,12 @@ msgid ""
 "method. As such, there is no need for it to be decorated with :func:"
 "`@classmethod<classmethod>` when it is defined."
 msgstr ""
+"当在类上定义时，``__class_getitem__()`` 会自动成为类方法。 因此，当它被定义时"
+"没有必要使用 :func:`@classmethod<classmethod>` 来装饰。"
 
 #: ../../reference/datamodel.rst:2623
 msgid "The purpose of *__class_getitem__*"
-msgstr ""
+msgstr "*__class_getitem__* 的目的"
 
 #: ../../reference/datamodel.rst:2625
 msgid ""
@@ -3120,6 +3812,8 @@ msgid ""
 "parameterization of standard-library generic classes in order to more easily "
 "apply :term:`type hints<type hint>` to these classes."
 msgstr ""
+":meth:`~object.__class_getitem__` 的目的是允许标准库泛型类的运行时形参化以更"
+"方便地对这些类应用 :term:`类型提示 <type hint>`。"
 
 #: ../../reference/datamodel.rst:2629
 msgid ""
@@ -3129,6 +3823,9 @@ msgid ""
 "__class_getitem__`, or inherit from :class:`typing.Generic`, which has its "
 "own implementation of ``__class_getitem__()``."
 msgstr ""
+"要实现可以在运行时被形参化并可被静态类型检查所理解的自定义泛型类，用户应当从"
+"已经实现了 :meth:`~object.__class_getitem__` 的标准库类继承，或是从 :class:"
+"`typing.Generic` 继承，这个类拥有自己的 ``__class_getitem__()`` 实现。"
 
 #: ../../reference/datamodel.rst:2635
 msgid ""
@@ -3137,10 +3834,13 @@ msgid ""
 "type-checkers such as mypy. Using ``__class_getitem__()`` on any class for "
 "purposes other than type hinting is discouraged."
 msgstr ""
+"标准库以外的类上的 :meth:`~object.__class_getitem__` 自定义实现可能无法被第三"
+"方类型检查器如 mypy 所理解。 不建议在任何类上出于类型提示以外的目的使用 "
+"``__class_getitem__()``。"
 
 #: ../../reference/datamodel.rst:2645
 msgid "*__class_getitem__* versus *__getitem__*"
-msgstr ""
+msgstr "*__class_getitem__* 与 *__getitem__*"
 
 #: ../../reference/datamodel.rst:2647
 msgid ""
@@ -3151,6 +3851,11 @@ msgid ""
 "instead. ``__class_getitem__()`` should return a :ref:`GenericAlias<types-"
 "genericalias>` object if it is properly defined."
 msgstr ""
+"通常，使用方括号语法 :ref:`抽取 <subscriptions>` 一个对象将会调用在该对象的类"
+"上定义的 :meth:`~object.__getitem__` 实例方法。 不过，如果被拟抽取的对象本身"
+"是一个类，则可能会调用 :meth:`~object.__class_getitem__` 类方法。 "
+"``__class_getitem__()`` 如果被正确地定义，则应当返回一个 :ref:"
+"`GenericAlias<types-genericalias>` 对象。"
 
 #: ../../reference/datamodel.rst:2654
 msgid ""
@@ -3158,6 +3863,9 @@ msgid ""
 "follows something like the following process to decide whether :meth:"
 "`~object.__getitem__` or :meth:`~object.__class_getitem__` should be called::"
 msgstr ""
+"使用 :term:`表达式 <expression>` ``obj[x]`` 来呈现，Python 解释器会遵循下面这"
+"样的过程来确定应当调用 :meth:`~object.__getitem__` 还是 :meth:`~object."
+"__class_getitem__`::"
 
 #: ../../reference/datamodel.rst:2682
 msgid ""
@@ -3168,6 +3876,11 @@ msgid ""
 "``dict[str, float]`` and ``tuple[str, bytes]`` all result in :meth:`~object."
 "__class_getitem__` being called::"
 msgstr ""
+"在 Python 中，所有的类自身也是其他类的实例。 一个类所属的类被称为该类的 :"
+"term:`metaclass`，并且大多数类都将 :class:`type` 类作为它们的元类。 :class:"
+"`type` 没有定义 :meth:`~object.__getitem__`，这意味着 ``list[int]``, "
+"``dict[str, float]`` 和 ``tuple[str, bytes]`` 这样的表达式都将导致 :meth:"
+"`~object.__class_getitem__` 被调用::"
 
 #: ../../reference/datamodel.rst:2701
 msgid ""
@@ -3175,10 +3888,12 @@ msgid ""
 "__getitem__`, subscribing the class may result in different behaviour. An "
 "example of this can be found in the :mod:`enum` module::"
 msgstr ""
+"然而，如果一个类属于定义了 :meth:`~object.__getitem__` 的自定义元类，则抽取该"
+"类可能导致不同的行为。 这方面的一个例子可以在 :mod:`enum` 模块中找到::"
 
 #: ../../reference/datamodel.rst:2726
 msgid ":pep:`560` - Core Support for typing module and generic types"
-msgstr ""
+msgstr ":pep:`560` - 对 typing 模块和泛型的核心支持"
 
 #: ../../reference/datamodel.rst:2725
 msgid ""
@@ -3186,10 +3901,12 @@ msgid ""
 "`subscription<subscriptions>` results in ``__class_getitem__()`` being "
 "called instead of :meth:`~object.__getitem__`"
 msgstr ""
+"介绍 :meth:`~object.__class_getitem__`，并指明 :ref:`抽取 <subscriptions>` 在"
+"何时会导致 ``__class_getitem__()`` 而不是 :meth:`~object.__getitem__` 被调用"
 
 #: ../../reference/datamodel.rst:2733
 msgid "Emulating callable objects"
-msgstr ""
+msgstr "模拟可调用对象"
 
 #: ../../reference/datamodel.rst:2740
 msgid ""
@@ -3202,7 +3919,7 @@ msgstr ""
 
 #: ../../reference/datamodel.rst:2747
 msgid "Emulating container types"
-msgstr ""
+msgstr "模拟容器类型"
 
 #: ../../reference/datamodel.rst:2749
 msgid ""
@@ -3270,6 +3987,9 @@ msgid ""
 "define a :meth:`~object.__bool__` method and whose :meth:`!__len__` method "
 "returns zero is considered to be false in a Boolean context."
 msgstr ""
+"调用此方法以实现内置函数 :func:`len`。 应该返回对象的长度，以一个 ``>=`` 0 的"
+"整数表示。 此外，如果一个对象未定义 :meth:`~object.__bool__` 方法而其 :meth:"
+"`!__len__` 方法返回值为零则它在布尔运算中将被视为具有假值。"
 
 #: ../../reference/datamodel.rst:2797
 msgid ""
@@ -3279,6 +3999,10 @@ msgid ""
 "OverflowError` by truth value testing, an object must define a :meth:"
 "`~object.__bool__` method."
 msgstr ""
+"在 CPython 中，要求长度最大只能为 :data:`sys.maxsize`。 如果长度大于 :data:`!"
+"sys.maxsize` 则某些特性 (如 :func:`len`) 可能会引发 :exc:`OverflowError`。 要"
+"防止真值测试引发 :exc:`!OverflowError`，对象必须定义 :meth:`~object."
+"__bool__` 方法。"
 
 #: ../../reference/datamodel.rst:2806
 msgid ""
@@ -3289,19 +4013,23 @@ msgid ""
 "method didn't exist at all. This method is purely an optimization and is "
 "never required for correctness."
 msgstr ""
+"调用此方法以实现 :func:`operator.length_hint`。 应该返回对象长度的估计值（可"
+"能大于或小于实际长度）。 此长度应为一个 ``>=`` 0 的整数。 返回值也可以为 :"
+"data:`NotImplemented` ，这会被视作与 ``__length_hint__`` 方法完全不存在时一样"
+"处理。 此方法纯粹是为了优化性能，并不要求正确无误。"
 
 #: ../../reference/datamodel.rst:2820
 msgid ""
 "Slicing is done exclusively with the following three methods.  A call like ::"
-msgstr ""
+msgstr "切片是通过下述三个专门方法完成的。以下形式的调用 ::"
 
 #: ../../reference/datamodel.rst:2824
 msgid "is translated to ::"
-msgstr ""
+msgstr "会为转写为 ::"
 
 #: ../../reference/datamodel.rst:2828
 msgid "and so forth.  Missing slice items are always filled in with ``None``."
-msgstr ""
+msgstr "其他形式以此类推。略去的切片项总是以 ``None`` 补全。"
 
 #: ../../reference/datamodel.rst:2833
 msgid ""
@@ -3314,12 +4042,20 @@ msgid ""
 "term:`mapping` types, if *key* is missing (not in the container), :exc:"
 "`KeyError` should be raised."
 msgstr ""
+"调用此方法以实现 ``self[key]`` 的求值。 对于 :term:`sequence` 类型，接受的键"
+"应为整数。 作为可选项，它们也可能支持 :class:`slice` 对象。 对负数索引的支持"
+"也是可选项。 如果 *key* 的类型不正确，则可能引发 :exc:`TypeError`。 如果 "
+"*key* 为序列索引集合范围以外的值（在进行任何负数索引的特殊解读之后），则应当"
+"引发 :exc:`IndexError`。 对于 :term:`mapping` 类型，如果 *key* 找不到（不在容"
+"器中），则应当引发 :exc:`KeyError`。"
 
 #: ../../reference/datamodel.rst:2845
 msgid ""
 ":keyword:`for` loops expect that an :exc:`IndexError` will be raised for "
 "illegal indexes to allow proper detection of the end of the sequence."
 msgstr ""
+":keyword:`for` 循环在有不合法索引时会期待捕获 :exc:`IndexError` 以便正确地检"
+"测到序列的结束。"
 
 #: ../../reference/datamodel.rst:2850
 msgid ""
@@ -3327,6 +4063,9 @@ msgid ""
 "meth:`~object.__class_getitem__` may be called instead of ``__getitem__()``. "
 "See :ref:`classgetitem-versus-getitem` for more details."
 msgstr ""
+"当 :ref:`抽取 <subscriptions>` 一个 *class* 时，可能会调用特殊类方法 :meth:"
+"`~object.__class_getitem__` 而不是 ``__getitem__()``。 请参阅 :ref:"
+"`classgetitem-versus-getitem` 了解详情。"
 
 #: ../../reference/datamodel.rst:2858
 msgid ""
@@ -3336,6 +4075,10 @@ msgid ""
 "sequences if elements can be replaced.  The same exceptions should be raised "
 "for improper *key* values as for the :meth:`__getitem__` method."
 msgstr ""
+"调用此方法以实现向 ``self[key]`` 赋值。注意事项与 :meth:`__getitem__` 相同。"
+"为对象实现此方法应该仅限于需要映射允许基于键修改值或添加键，或是序列允许元素"
+"被替换时。不正确的 *key* 值所引发的异常应与 :meth:`__getitem__` 方法的情况相"
+"同。"
 
 #: ../../reference/datamodel.rst:2867
 msgid ""
@@ -3345,12 +4088,17 @@ msgid ""
 "the sequence.  The same exceptions should be raised for improper *key* "
 "values as for the :meth:`__getitem__` method."
 msgstr ""
+"调用此方法以实现 ``self[key]`` 的删除。注意事项与 :meth:`__getitem__` 相同。"
+"为对象实现此方法应该权限于需要映射允许移除键，或是序列允许移除元素时。不正确"
+"的 *key* 值所引发的异常应与 :meth:`__getitem__` 方法的情况相同。"
 
 #: ../../reference/datamodel.rst:2876
 msgid ""
 "Called by :class:`dict`\\ .\\ :meth:`__getitem__` to implement ``self[key]`` "
 "for dict subclasses when key is not in the dictionary."
 msgstr ""
+"此方法由 :class:`dict`\\ .\\ :meth:`__getitem__` 在找不到字典中的键时调用以实"
+"现 dict 子类的 ``self[key]``。"
 
 #: ../../reference/datamodel.rst:2882
 msgid ""
@@ -3359,6 +4107,9 @@ msgid ""
 "the objects in the container.  For mappings, it should iterate over the keys "
 "of the container."
 msgstr ""
+"此方法会在需要为一个容器创建 :term:`iterator` 时被调用。 此方法应当返回一个新"
+"的迭代器对象，它可以对容器中的所有对象执行迭代。 对于映射，它应当对窗口中的键"
+"执行迭代。"
 
 #: ../../reference/datamodel.rst:2890
 msgid ""
@@ -3366,6 +4117,8 @@ msgid ""
 "iteration.  It should return a new iterator object that iterates over all "
 "the objects in the container in reverse order."
 msgstr ""
+"此方法（如果存在）会被 :func:`reversed` 内置函数调用以实现逆向迭代。它应当返"
+"回一个新的以逆序逐个迭代容器内所有对象的迭代器对象。"
 
 #: ../../reference/datamodel.rst:2894
 msgid ""
@@ -3375,6 +4128,10 @@ msgid ""
 "provide :meth:`__reversed__` if they can provide an implementation that is "
 "more efficient than the one provided by :func:`reversed`."
 msgstr ""
+"如果未提供 :meth:`__reversed__` 方法，则 :func:`reversed` 内置函数将回退到使"
+"用序列协议 (:meth:`__len__` 和 :meth:`__getitem__`)。支持序列协议的对象应当仅"
+"在能够提供比 :func:`reversed` 所提供的实现更高效的实现时才提供 :meth:"
+"`__reversed__` 方法。"
 
 #: ../../reference/datamodel.rst:2901
 msgid ""
@@ -3383,6 +4140,9 @@ msgid ""
 "objects can supply the following special method with a more efficient "
 "implementation, which also does not require the object be iterable."
 msgstr ""
+"成员检测运算符 (:keyword:`in` 和 :keyword:`not in`) 通常以对容器进行逐个迭代"
+"的方式来实现。 不过，容器对象可以提供以下特殊方法并采用更有效率的实现，这样也"
+"不要求对象必须为可迭代对象。"
 
 #: ../../reference/datamodel.rst:2908
 msgid ""
@@ -3390,6 +4150,8 @@ msgid ""
 "is in *self*, false otherwise.  For mapping objects, this should consider "
 "the keys of the mapping rather than the values or the key-item pairs."
 msgstr ""
+"调用此方法以实现成员检测运算符。如果 *item* 是 *self* 的成员则应返回真，否则"
+"返回假。对于映射类型，此检测应基于映射的键而不是值或者键值对。"
 
 #: ../../reference/datamodel.rst:2912
 msgid ""
@@ -3398,10 +4160,13 @@ msgid ""
 "protocol via :meth:`__getitem__`, see :ref:`this section in the language "
 "reference <membership-test-details>`."
 msgstr ""
+"对于未定义 :meth:`__contains__` 的对象，成员检测将首先尝试通过 :meth:"
+"`__iter__` 进行迭代，然后再使用 :meth:`__getitem__` 的旧式序列迭代协议，参"
+"看 :ref:`语言参考中的相应部分 <membership-test-details>`。"
 
 #: ../../reference/datamodel.rst:2921
 msgid "Emulating numeric types"
-msgstr ""
+msgstr "模拟数字类型"
 
 #: ../../reference/datamodel.rst:2923
 msgid ""
@@ -3410,6 +4175,8 @@ msgid ""
 "number implemented (e.g., bitwise operations for non-integral numbers) "
 "should be left undefined."
 msgstr ""
+"定义以下方法即可模拟数字类型。特定种类的数字不支持的运算（例如非整数不能进行"
+"位运算）所对应的方法应当保持未定义状态。"
 
 #: ../../reference/datamodel.rst:2949
 msgid ""
@@ -3424,12 +4191,21 @@ msgid ""
 "optional third argument if the ternary version of the built-in :func:`pow` "
 "function is to be supported."
 msgstr ""
+"调用这些方法来实现双目算术运算 (``+``, ``-``, ``*``, ``@``, ``/``, ``//``, "
+"``%``, :func:`divmod`, :func:`pow`, ``**``, ``<<``, ``>>``, ``&``, ``^``, ``|"
+"``)。 例如，求表达式 ``x + y`` 的值，其中 *x* 是具有 :meth:`__add__` 方法的类"
+"的一个实例，则会调用 ``type(x).__add__(x, y)``。 :meth:`__divmod__` 方法应该"
+"等价于使用 :meth:`__floordiv__` 和 :meth:`__mod__`；它不应该被关联到 :meth:"
+"`__truediv__`。 请注意如果要支持三目版本的内置 :func:`pow` 函数则 :meth:"
+"`__pow__` 应当被定义为接受可选的第三个参数。"
 
 #: ../../reference/datamodel.rst:2960
 msgid ""
 "If one of those methods does not support the operation with the supplied "
 "arguments, it should return :data:`NotImplemented`."
 msgstr ""
+"如果这些方法中的某一个不支持与所提供参数进行运算，它应该返回 :data:"
+"`NotImplemented` 。"
 
 #: ../../reference/datamodel.rst:2983
 msgid ""
@@ -3443,12 +4219,20 @@ msgid ""
 "__rsub__(y, x)`` is called if ``type(x).__sub__(x, y)`` returns :data:"
 "`NotImplemented`."
 msgstr ""
+"调用这些方法来实现具有反射（交换）操作数的双目算术运算 ( ``+``, ``- ``, "
+"``*``, ``@``, ``/``, ``//``, ``%``, :func:`divmod`, :func:`pow`, ``**``, "
+"``<<``, ``>>``, ``&``, ``^``, ``|``)。 这些函数仅会在左操作数不支持相应运算 "
+"[#]_ 且两个操作数类型不同时被调用。 [#]_ 例 如，求表达式 ``x - y`` 的值，其"
+"中 *y* 是具有 :meth:`__rsub__` 方法的类的一个实例，则当 ``type(x).__sub__(x, "
+"y)`` 返回 :data:`NotImplemented` 时将会调用 ``type(y).__rsub__(y, x)``。"
 
 #: ../../reference/datamodel.rst:2995
 msgid ""
 "Note that ternary :func:`pow` will not try calling :meth:`__rpow__` (the "
 "coercion rules would become too complicated)."
 msgstr ""
+"请注意三元版的 :func:`pow` 并不会尝试调用 :meth:`__rpow__` (因为强制转换规则"
+"会太过复杂)。"
 
 #: ../../reference/datamodel.rst:3000
 msgid ""
@@ -3458,6 +4242,9 @@ msgid ""
 "reflected method. This behavior allows subclasses to override their "
 "ancestors' operations."
 msgstr ""
+"如果右操作数类型为左操作数类型的一个子类，且该子类提供了指定运算的反射方法，"
+"则此方法将先于左操作数的非反射方法被调用。 此行为可允许子类重载其祖先类的运算"
+"符。"
 
 #: ../../reference/datamodel.rst:3021
 msgid ""
@@ -3476,18 +4263,30 @@ msgid ""
 "augmented-assignment-tuple-error`), but this behavior is in fact part of the "
 "data model."
 msgstr ""
+"调用这些方法来实现增强算术赋值 (``+=``, ``-=``, ``*=``, ``@=``, ``/=``, ``//"
+"=``, ``%=``, ``**=``, ``<<=``, ``>>=``, ``&=``, ``^=``, ``|=``)。 这些方法应"
+"当尝试原地执行操作 (对 *self* 进行修改) 并返回结果 (结果可以为 *self* 但这并"
+"非必须)。 如果某个方法未被定义，或者如果该方法返回 :data:`NotImplemented`，则"
+"相应的增强赋值将回退到普通方法。 举例来说，如果 *x* 是一个具有 :meth:"
+"`__iadd__` 方法的类的实例，则 ``x += y`` 就等价于 ``x = x.__iadd__(y)``。 如"
+"果 :meth:`__iadd__` 不存在，或者如果 ``x.__iadd__(y)`` 返回 :data:`!"
+"NotImplemented`，则将使用 ``x.__add__(y)`` 和 ``y.__radd__(x)``，如同对 ``x "
+"+ y`` 求值一样。 在某些情况下，增强赋值可能导致未预期的错误 (参见 :ref:`faq-"
+"augmented-assignment-tuple-error`)，但此行为实际上是数据模型的一部分。"
 
 #: ../../reference/datamodel.rst:3044
 msgid ""
 "Called to implement the unary arithmetic operations (``-``, ``+``, :func:"
 "`abs` and ``~``)."
-msgstr ""
+msgstr "调用此方法以实现一元算术运算 (``-``, ``+``, :func:`abs` 和 ``~``)。"
 
 #: ../../reference/datamodel.rst:3057
 msgid ""
 "Called to implement the built-in functions :func:`complex`, :func:`int` and :"
 "func:`float`.  Should return a value of the appropriate type."
 msgstr ""
+"调用这些方法以实现内置函数 :func:`complex`, :func:`int` 和 :func:`float`。应"
+"当返回一个相应类型的值。"
 
 #: ../../reference/datamodel.rst:3064
 msgid ""
@@ -3497,6 +4296,9 @@ msgid ""
 "functions). Presence of this method indicates that the numeric object is an "
 "integer type.  Must return an integer."
 msgstr ""
+"调用此方法以实现 :func:`operator.index` 以及 Python 需要无损地将数字对象转换"
+"为整数对象的场合（例如切片或是内置的 :func:`bin`, :func:`hex` 和 :func:`oct` "
+"函数)。 存在此方法表明数字对象属于整数类型。 必须返回一个整数。"
 
 #: ../../reference/datamodel.rst:3070
 msgid ""
@@ -3504,6 +4306,9 @@ msgid ""
 "defined then corresponding built-in functions :func:`int`, :func:`float` "
 "and :func:`complex` fall back to :meth:`__index__`."
 msgstr ""
+"如果未定义 :meth:`__int__`, :meth:`__float__` 和 :meth:`__complex__` 则相应的"
+"内置函数 :func:`int`, :func:`float` 和 :func:`complex` 将回退为 :meth:"
+"`__index__`。"
 
 #: ../../reference/datamodel.rst:3082
 msgid ""
@@ -3513,20 +4318,26 @@ msgid ""
 "return the value of the object truncated to an :class:`~numbers.Integral` "
 "(typically an :class:`int`)."
 msgstr ""
+"调用这些方法以实现内置函数 :func:`round` 以及 :mod:`math` 函数 :func:`~math."
+"trunc`, :func:`~math.floor` 和 :func:`~math.ceil`。 除了将 *ndigits* 传给 :"
+"meth:`!__round__` 的情况之外这些方法的返回值都应当是原对象截断为 :class:"
+"`~numbers.Integral` (通常为 :class:`int`)。"
 
 #: ../../reference/datamodel.rst:3088
 msgid ""
 "The built-in function :func:`int` falls back to :meth:`__trunc__` if "
 "neither :meth:`__int__` nor :meth:`__index__` is defined."
 msgstr ""
+"如果 :meth:`__int__` 或 :meth:`__index__` 均未被定义则内置函数 :func:`int` 会"
+"回退至 :meth:`__trunc__`。"
 
 #: ../../reference/datamodel.rst:3091
 msgid "The delegation of :func:`int` to :meth:`__trunc__` is deprecated."
-msgstr ""
+msgstr "将 :func:`int` 委托给 :meth:`__trunc__` 的做法已被弃用。"
 
 #: ../../reference/datamodel.rst:3098
 msgid "With Statement Context Managers"
-msgstr ""
+msgstr "with 语句上下文管理器"
 
 #: ../../reference/datamodel.rst:3100
 msgid ""
@@ -3537,12 +4348,18 @@ msgid ""
 "using the :keyword:`!with` statement (described in section :ref:`with`), but "
 "can also be used by directly invoking their methods."
 msgstr ""
+":dfn:`上下文管理器` 是一个对象，它定义了在执行 :keyword:`with` 语句时要建立的"
+"运行时上下文。 上下文管理器处理进入和退出所需运行时上下文以执行代码块。 通常"
+"使用 :keyword:`!with` 语句（在 :ref:`with` 中描述），但是也可以通过直接调用它"
+"们的方法来使用。"
 
 #: ../../reference/datamodel.rst:3111
 msgid ""
 "Typical uses of context managers include saving and restoring various kinds "
 "of global state, locking and unlocking resources, closing opened files, etc."
 msgstr ""
+"上下文管理器的典型用法包括保存和恢复各种全局状态，锁定和解锁资源，关闭打开的"
+"文件等等。"
 
 #: ../../reference/datamodel.rst:3114
 msgid ""
@@ -3555,6 +4372,8 @@ msgid ""
 "statement will bind this method's return value to the target(s) specified in "
 "the :keyword:`!as` clause of the statement, if any."
 msgstr ""
+"进入与此对象相关的运行时上下文。 :keyword:`with` 语句将会绑定这个方法的返回值"
+"到 :keyword:`!as` 子句中指定的目标，如果有的话。"
 
 #: ../../reference/datamodel.rst:3126
 msgid ""
@@ -3562,6 +4381,8 @@ msgid ""
 "exception that caused the context to be exited. If the context was exited "
 "without an exception, all three arguments will be :const:`None`."
 msgstr ""
+"退出关联到此对象的运行时上下文。 各个参数描述了导致上下文退出的异常。 如果上"
+"下文是无异常地退出的，三个参数都将为 :const:`None`。"
 
 #: ../../reference/datamodel.rst:3130
 msgid ""
@@ -3570,26 +4391,30 @@ msgid ""
 "Otherwise, the exception will be processed normally upon exit from this "
 "method."
 msgstr ""
+"如果提供了异常，并且希望方法屏蔽此异常（即避免其被传播），则应当返回真值。 否"
+"则的话，异常将在退出此方法时按正常流程处理。"
 
 #: ../../reference/datamodel.rst:3134
 msgid ""
 "Note that :meth:`~object.__exit__` methods should not reraise the passed-in "
 "exception; this is the caller's responsibility."
 msgstr ""
+"请注意 :meth:`~object.__exit__` 方法不应该重新引发被传入的异常，这是调用者的"
+"责任。"
 
 #: ../../reference/datamodel.rst:3141
 msgid ":pep:`343` - The \"with\" statement"
-msgstr ""
+msgstr ":pep:`343` - \"with\" 语句"
 
 #: ../../reference/datamodel.rst:3141
 msgid ""
 "The specification, background, and examples for the Python :keyword:`with` "
 "statement."
-msgstr ""
+msgstr "Python :keyword:`with` 语句的规范描述、背景和示例。"
 
 #: ../../reference/datamodel.rst:3148
 msgid "Customizing positional arguments in class pattern matching"
-msgstr ""
+msgstr "定制类模式匹配中的位置参数"
 
 #: ../../reference/datamodel.rst:3150
 msgid ""
@@ -3598,6 +4423,9 @@ msgid ""
 "without special support in ``MyClass``. To be able to use that kind of "
 "pattern, the class needs to define a *__match_args__* attribute."
 msgstr ""
+"当在模式中使用类名称时，默认不允许模式中出现位置参数，例如在 ``MyClass`` 没有"
+"特别支持的情况下 ``case MyClass(x, y)`` 通常是无效的。 要能使用这样的模式，类"
+"必须定义一个 *__match_args__* 属性。"
 
 #: ../../reference/datamodel.rst:3157
 msgid ""
@@ -3607,6 +4435,9 @@ msgid ""
 "*__match_args__* as the keyword. The absence of this attribute is equivalent "
 "to setting it to ``()``."
 msgstr ""
+"该类变量可以被赋值为一个字符串元组。 当该类被用于带位置参数的类模式时，每个位"
+"置参数都将被转换为关键字参数，并使用 *__match_args__* 中的对应值作为关键字。 "
+"缺失此属性就等价于将其设为 ``()``。"
 
 #: ../../reference/datamodel.rst:3163
 msgid ""
@@ -3617,18 +4448,22 @@ msgid ""
 "*__match_args__*; if it is larger, the pattern match attempt will raise a :"
 "exc:`TypeError`."
 msgstr ""
+"举例来说，如果 ``MyClass.__match_args__`` 为 ``(\"left\", \"center\", "
+"\"right\")`` 则意味着 ``case MyClass(x, y)`` 就等价于 ``case MyClass(left=x, "
+"center=y)``。 请注意模式中参数的数量必须小于等于 *__match_args__* 中元素的数"
+"量；如果前者大于后者，则尝试模式匹配时将引发 :exc:`TypeError`。"
 
 #: ../../reference/datamodel.rst:3173
 msgid ":pep:`634` - Structural Pattern Matching"
-msgstr ""
+msgstr ":pep:`634` - 结构化模式匹配"
 
 #: ../../reference/datamodel.rst:3174
 msgid "The specification for the Python ``match`` statement."
-msgstr ""
+msgstr "有关 Python ``match`` 语句的规范说明。"
 
 #: ../../reference/datamodel.rst:3180
 msgid "Special method lookup"
-msgstr ""
+msgstr "特殊方法查找"
 
 #: ../../reference/datamodel.rst:3182
 msgid ""
@@ -3637,6 +4472,8 @@ msgid ""
 "object's instance dictionary.  That behaviour is the reason why the "
 "following code raises an exception::"
 msgstr ""
+"对于自定义类来说，特殊方法的隐式唤起仅保证在其定义于对象类型中时能正确地发挥"
+"作用，而不能定义在对象实例字典中。 该行为就是以下代码会引发异常的原因。::"
 
 #: ../../reference/datamodel.rst:3197
 msgid ""
@@ -3646,6 +4483,9 @@ msgid ""
 "of these methods used the conventional lookup process, they would fail when "
 "invoked on the type object itself::"
 msgstr ""
+"此行为背后的原理在于包括类型对象在内的所有对象都会实现的几个特殊方法如 :meth:"
+"`~object.__hash__` 和 :meth:`~object.__repr__`。 如果这些方法的隐式查找使用了"
+"传统的查找过程，则当它们在针对类型对象自身被唤起时将会失败::"
 
 #: ../../reference/datamodel.rst:3211
 msgid ""
@@ -3653,6 +4493,8 @@ msgid ""
 "sometimes referred to as 'metaclass confusion', and is avoided by bypassing "
 "the instance when looking up special methods::"
 msgstr ""
+"以这种方式不正确地尝试唤起一个类的未绑定方法有时被称为‘元类混淆’，可以通过在"
+"查找特殊方法时绕过实例的方式来避免::"
 
 #: ../../reference/datamodel.rst:3220
 msgid ""
@@ -3660,6 +4502,8 @@ msgid ""
 "correctness, implicit special method lookup generally also bypasses the :"
 "meth:`~object.__getattribute__` method even of the object's metaclass::"
 msgstr ""
+"除了出于正确性考虑而会绕过任何实例属性，隐式特殊方法查找通常还会绕过 :meth:"
+"`~object.__getattribute__` 方法，甚至包括对象的元类::"
 
 #: ../../reference/datamodel.rst:3246
 msgid ""
@@ -3669,14 +4513,17 @@ msgid ""
 "special method *must* be set on the class object itself in order to be "
 "consistently invoked by the interpreter)."
 msgstr ""
+"以这种方式绕过 :meth:`~object.__getattribute__` 机制为解释器内部的速度优化提"
+"供了显著的空间，其代价则是牺牲了一些处理特殊方法时的灵活性（特殊方法 *must* "
+"必须设置在类对象自身上以便始终一致地由解释器唤起）。"
 
 #: ../../reference/datamodel.rst:3257
 msgid "Coroutines"
-msgstr ""
+msgstr "协程"
 
 #: ../../reference/datamodel.rst:3261
 msgid "Awaitable Objects"
-msgstr ""
+msgstr "可等待对象"
 
 #: ../../reference/datamodel.rst:3263
 msgid ""
@@ -3684,6 +4531,8 @@ msgid ""
 "__await__` method. :term:`Coroutine objects <coroutine>` returned from :"
 "keyword:`async def` functions are awaitable."
 msgstr ""
+":term:`awaitable` 对象主要实现了 :meth:`~object.__await__` 方法。 从 :"
+"keyword:`async def` 函数返回的 :term:`协程对象 <coroutine>` 即为可等待对象。"
 
 #: ../../reference/datamodel.rst:3269
 msgid ""
@@ -3691,6 +4540,8 @@ msgid ""
 "with :func:`types.coroutine` are also awaitable, but they do not implement :"
 "meth:`~object.__await__`."
 msgstr ""
+"从带有 :func:`types.coroutine` 装饰器的生成器返回的 :term:`generator "
+"iterator` 对象也属于可等待对象，但它们并未实现 :meth:`~object.__await__`。"
 
 #: ../../reference/datamodel.rst:3275
 msgid ""
@@ -3708,14 +4559,17 @@ msgid ""
 "specific to the implementation of the asynchronous execution framework (e."
 "g. :mod:`asyncio`) that will be managing the :term:`awaitable` object."
 msgstr ""
+"本语言不会对 ``__await__`` 所返回的迭代器产生的对象的类型或值施加任何限制，因"
+"为这是负责管理 :term:`awaitable` 对象的异步执行框架的具体实现 (如 :mod:"
+"`asyncio`) 专属特性。"
 
 #: ../../reference/datamodel.rst:3289
 msgid ":pep:`492` for additional information about awaitable objects."
-msgstr ""
+msgstr ":pep:`492` 了解有关可等待对象的详细信息。"
 
 #: ../../reference/datamodel.rst:3295
 msgid "Coroutine Objects"
-msgstr ""
+msgstr "协程对象"
 
 #: ../../reference/datamodel.rst:3297
 msgid ""
@@ -3727,6 +4581,11 @@ msgid ""
 "coroutine raises an exception, it is propagated by the iterator.  Coroutines "
 "should not directly raise unhandled :exc:`StopIteration` exceptions."
 msgstr ""
+":term:`协程对象 <coroutine>` 属于 :term:`awaitable` 对象。 协程的执行可以通过"
+"调用 :meth:`~object.__await__` 并迭代其结果来控制。 当协程结束执行并返回时，"
+"迭代器会引发 :exc:`StopIteration`，而该异常的 :attr:`~StopIteration.value` 属"
+"性将存放返回值。 如果协程引发了异常，它会被迭代器传播出去。 协程不应当直接引"
+"发未被处理的 :exc:`StopIteration` 异常。"
 
 #: ../../reference/datamodel.rst:3305
 msgid ""
@@ -3734,10 +4593,12 @@ msgid ""
 "of generators (see :ref:`generator-methods`).  However, unlike generators, "
 "coroutines do not directly support iteration."
 msgstr ""
+"协程也具有下面列出的方法，它们类似于生成器的对应方法 (参见 :ref:`generator-"
+"methods`)。 但是，与生成器不同，协程并不直接支持迭代。"
 
 #: ../../reference/datamodel.rst:3309
 msgid "It is a :exc:`RuntimeError` to await on a coroutine more than once."
-msgstr ""
+msgstr "等待一个协程超过一次将引发 :exc:`RuntimeError`。"
 
 #: ../../reference/datamodel.rst:3315
 msgid ""
@@ -3749,6 +4610,11 @@ msgid ""
 "exception) is the same as when iterating over the :meth:`!__await__` return "
 "value, described above."
 msgstr ""
+"开始或恢复协程的执行。 如果 *value* 为 ``None``，这将等价于前往 :meth:"
+"`~object.__await__` 所返回的迭代器的下一项。 如果 *value* 不为 ``None``，此方"
+"法将委托给导致协挂起的迭代器的 :meth:`~generator.send` 方法。 其结果（返回"
+"值, :exc:`StopIteration` 或是其他异常）将与上述对 :meth:`!__await__` 返回值进"
+"行迭代的结果相同。"
 
 #: ../../reference/datamodel.rst:3326
 msgid ""
@@ -3760,6 +4626,11 @@ msgid ""
 "meth:`~object.__await__` return value, described above.  If the exception is "
 "not caught in the coroutine, it propagates back to the caller."
 msgstr ""
+"在协程内引发指定的异常。 此方法将委托给导致该协程挂起的迭代器的 :meth:"
+"`~generator.throw` 方法，如果存在此方法的话。 否则，该异常将在挂起点被引发。 "
+"其结果（返回值，:exc:`StopIteration` 或是其他异常）将与上述对 :meth:`~object."
+"__await__` 返回值进行迭代的结果相同。 如果该异常未在协程内被捕获，则将回传给"
+"调用方。"
 
 #: ../../reference/datamodel.rst:3337
 msgid ""
@@ -3770,41 +4641,47 @@ msgid ""
 "causing the coroutine to immediately clean itself up. Finally, the coroutine "
 "is marked as having finished executing, even if it was never started."
 msgstr ""
+"此方法会使得协程清理自身并退出。 如果协程被挂起，此方法会先委托给导致协程挂起"
+"的迭代器的 :meth:`~generator.close` 方法，如果存在该方法。 然后它会在挂起点引"
+"发 :exc:`GeneratorExit`，使得协程立即清理自身。 最后，协程会被标记为已结束执"
+"行，即使它根本未被启动。"
 
 #: ../../reference/datamodel.rst:3345
 msgid ""
 "Coroutine objects are automatically closed using the above process when they "
 "are about to be destroyed."
-msgstr ""
+msgstr "当协程对象将要被销毁时，会使用以上处理过程来自动关闭。"
 
 #: ../../reference/datamodel.rst:3351
 msgid "Asynchronous Iterators"
-msgstr ""
+msgstr "异步迭代器"
 
 #: ../../reference/datamodel.rst:3353
 msgid ""
 "An *asynchronous iterator* can call asynchronous code in its ``__anext__`` "
 "method."
-msgstr ""
+msgstr "*异步迭代器* 可以在其 ``__anext__`` 方法中调用异步代码。"
 
 #: ../../reference/datamodel.rst:3356
 msgid ""
 "Asynchronous iterators can be used in an :keyword:`async for` statement."
-msgstr ""
+msgstr "异步迭代器可在 :keyword:`async for` 语句中使用。"
 
 #: ../../reference/datamodel.rst:3360
 msgid "Must return an *asynchronous iterator* object."
-msgstr ""
+msgstr "必须返回一个 *异步迭代器* 对象。"
 
 #: ../../reference/datamodel.rst:3364
 msgid ""
 "Must return an *awaitable* resulting in a next value of the iterator.  "
 "Should raise a :exc:`StopAsyncIteration` error when the iteration is over."
 msgstr ""
+"必须返回一个 *可等待对象* 输出迭代器的下一结果值。 当迭代结束时应该引发 :exc:"
+"`StopAsyncIteration` 错误。"
 
 #: ../../reference/datamodel.rst:3367
 msgid "An example of an asynchronous iterable object::"
-msgstr ""
+msgstr "异步可迭代对象的一个示例::"
 
 #: ../../reference/datamodel.rst:3384
 msgid ""
@@ -3812,6 +4689,8 @@ msgid ""
 "that would resolve to an :term:`asynchronous iterator <asynchronous "
 "iterator>`."
 msgstr ""
+"在 Python 3.7 之前，:meth:`~object.__aiter__` 可以返回一个 *可等待对象* 并将"
+"被解析为 :term:`异步迭代器 <asynchronous iterator>`。"
 
 #: ../../reference/datamodel.rst:3389
 msgid ""
@@ -3819,42 +4698,50 @@ msgid ""
 "asynchronous iterator object.  Returning anything else will result in a :exc:"
 "`TypeError` error."
 msgstr ""
+"从 Python 3.7 开始，:meth:`~object.__aiter__` 必须返回一个异步迭代器对象。 返"
+"回任何其他对象都将导致 :exc:`TypeError` 错误。"
 
 #: ../../reference/datamodel.rst:3397
 msgid "Asynchronous Context Managers"
-msgstr ""
+msgstr "异步上下文管理器"
 
 #: ../../reference/datamodel.rst:3399
 msgid ""
 "An *asynchronous context manager* is a *context manager* that is able to "
 "suspend execution in its ``__aenter__`` and ``__aexit__`` methods."
 msgstr ""
+"*异步上下文管理器* 是 *上下文管理器* 的一种，它能够在其 ``__aenter__`` 和 "
+"``__aexit__`` 方法中暂停执行。"
 
 #: ../../reference/datamodel.rst:3402
 msgid ""
 "Asynchronous context managers can be used in an :keyword:`async with` "
 "statement."
-msgstr ""
+msgstr "异步上下文管理器可在 :keyword:`async with` 语句中使用。"
 
 #: ../../reference/datamodel.rst:3406
 msgid ""
 "Semantically similar to :meth:`~object.__enter__`, the only difference being "
 "that it must return an *awaitable*."
 msgstr ""
+"在语义上类似于 :meth:`~object.__enter__`，仅有的区别在于它必须返回一个 *可等"
+"待对象*。"
 
 #: ../../reference/datamodel.rst:3411
 msgid ""
 "Semantically similar to :meth:`~object.__exit__`, the only difference being "
 "that it must return an *awaitable*."
 msgstr ""
+"在语义上类似于 :meth:`~object.__exit__`，仅有的区别在于它必须返回一个 *可等待"
+"对象*。"
 
 #: ../../reference/datamodel.rst:3414
 msgid "An example of an asynchronous context manager class::"
-msgstr ""
+msgstr "异步上下文管理器类的一个示例::"
 
 #: ../../reference/datamodel.rst:3427
 msgid "Footnotes"
-msgstr ""
+msgstr "备注"
 
 #: ../../reference/datamodel.rst:3428
 msgid ""
@@ -3862,6 +4749,8 @@ msgid ""
 "controlled conditions. It generally isn't a good idea though, since it can "
 "lead to some very strange behaviour if it is handled incorrectly."
 msgstr ""
+"在某些情况下 *有可能* 基于可控的条件改变一个对象的类型。 但这通常不是个好主"
+"意，因为如果处理不当会导致一些非常怪异的行为。"
 
 #: ../../reference/datamodel.rst:3432
 msgid ""
@@ -3870,6 +4759,10 @@ msgid ""
 "handling for this; others will still raise a :exc:`TypeError`, but may do so "
 "by relying on the behavior that ``None`` is not callable."
 msgstr ""
+":meth:`~object.__hash__`, :meth:`~object.__iter__`, :meth:`~object."
+"__reversed__` 以及 :meth:`~object.__contains__` 方法对此有特殊处理；其他方法"
+"仍会引发 :exc:`TypeError`，但可能依赖 ``None`` 属于不可调用对象的行为来做到这"
+"一点。"
 
 #: ../../reference/datamodel.rst:3438
 msgid ""
@@ -3878,6 +4771,9 @@ msgid ""
 "you want to force fallback to the right operand's reflected method—that will "
 "instead have the opposite effect of explicitly *blocking* such fallback."
 msgstr ""
+"这里的“不支持”是指该类无此方法，或方法返回 :data:`NotImplemented` 。 如果你想"
+"强制回退到右操作数的反射方法，请不要设置方法为 ``None`` — 那会造成显式地 *阻"
+"塞* 此种回退的相反效果。"
 
 #: ../../reference/datamodel.rst:3444
 msgid ""
@@ -3885,6 +4781,8 @@ msgid ""
 "method -- such as :meth:`~object.__add__` -- fails then the overall "
 "operation is not supported, which is why the reflected method is not called."
 msgstr ""
+"对于相同类型的操作数，如果非返回方法 -- 例如 :meth:`~object.__add__` -- 失败"
+"则会认为整个运算都不被支持，这就是反射方法不会被调用的原因。"
 
 #: ../../reference/datamodel.rst:14 ../../reference/datamodel.rst:148
 #: ../../reference/datamodel.rst:159 ../../reference/datamodel.rst:180
@@ -3904,11 +4802,11 @@ msgstr ""
 #: ../../reference/datamodel.rst:1293 ../../reference/datamodel.rst:1393
 #: ../../reference/datamodel.rst:1805 ../../reference/datamodel.rst:2816
 msgid "object"
-msgstr "obiekt"
+msgstr "object -- 对象"
 
 #: ../../reference/datamodel.rst:14 ../../reference/datamodel.rst:122
 msgid "data"
-msgstr ""
+msgstr "数据"
 
 #: ../../reference/datamodel.rst:23 ../../reference/datamodel.rst:292
 #: ../../reference/datamodel.rst:339 ../../reference/datamodel.rst:423
@@ -3921,7 +4819,7 @@ msgstr ""
 #: ../../reference/datamodel.rst:3042 ../../reference/datamodel.rst:3052
 #: ../../reference/datamodel.rst:3080
 msgid "built-in function"
-msgstr ""
+msgstr "内置函数"
 
 #: ../../reference/datamodel.rst:23
 msgid "id"
@@ -3930,58 +4828,58 @@ msgstr "id"
 #: ../../reference/datamodel.rst:23 ../../reference/datamodel.rst:122
 #: ../../reference/datamodel.rst:2361
 msgid "type"
-msgstr ""
+msgstr "type"
 
 #: ../../reference/datamodel.rst:23
 msgid "identity of an object"
-msgstr ""
+msgstr "对象的标识号"
 
 #: ../../reference/datamodel.rst:23
 msgid "value of an object"
-msgstr ""
+msgstr "对象的值"
 
 #: ../../reference/datamodel.rst:23
 msgid "type of an object"
-msgstr ""
+msgstr "对象的类型"
 
 #: ../../reference/datamodel.rst:23
 msgid "mutable object"
-msgstr ""
+msgstr "可变对象"
 
 #: ../../reference/datamodel.rst:23
 msgid "immutable object"
-msgstr ""
+msgstr "不可变对象"
 
 #: ../../reference/datamodel.rst:60
 msgid "garbage collection"
-msgstr ""
+msgstr "garbage collection -- 垃圾回收"
 
 #: ../../reference/datamodel.rst:60
 msgid "reference counting"
-msgstr ""
+msgstr "引用计数"
 
 #: ../../reference/datamodel.rst:60
 msgid "unreachable object"
-msgstr ""
+msgstr "不可达对象"
 
 #: ../../reference/datamodel.rst:95 ../../reference/datamodel.rst:934
 msgid "container"
-msgstr ""
+msgstr "容器"
 
 #: ../../reference/datamodel.rst:122
 msgid "hierarchy"
-msgstr ""
+msgstr "层次结构"
 
 #: ../../reference/datamodel.rst:122
 msgid "extension"
-msgstr ""
+msgstr "扩展"
 
 #: ../../reference/datamodel.rst:122 ../../reference/datamodel.rst:396
 #: ../../reference/datamodel.rst:397 ../../reference/datamodel.rst:498
 #: ../../reference/datamodel.rst:852 ../../reference/datamodel.rst:872
 #: ../../reference/datamodel.rst:1044
 msgid "module"
-msgstr ""
+msgstr "module"
 
 #: ../../reference/datamodel.rst:122 ../../reference/datamodel.rst:261
 #: ../../reference/datamodel.rst:795
@@ -3991,21 +4889,21 @@ msgstr "C"
 #: ../../reference/datamodel.rst:122 ../../reference/datamodel.rst:261
 #: ../../reference/datamodel.rst:795
 msgid "language"
-msgstr ""
+msgstr "语言"
 
 #: ../../reference/datamodel.rst:135 ../../reference/datamodel.rst:934
 #: ../../reference/datamodel.rst:952 ../../reference/datamodel.rst:998
 #: ../../reference/datamodel.rst:1018
 msgid "attribute"
-msgstr ""
+msgstr "attribute -- 属性"
 
 #: ../../reference/datamodel.rst:135
 msgid "special"
-msgstr ""
+msgstr "特殊"
 
 #: ../../reference/datamodel.rst:135
 msgid "generic"
-msgstr ""
+msgstr "泛型"
 
 #: ../../reference/datamodel.rst:180
 msgid "..."
@@ -4013,24 +4911,24 @@ msgstr "..."
 
 #: ../../reference/datamodel.rst:180
 msgid "ellipsis literal"
-msgstr ""
+msgstr "省略符字面值"
 
 #: ../../reference/datamodel.rst:192 ../../reference/datamodel.rst:1025
 msgid "numeric"
-msgstr ""
+msgstr "数字"
 
 #: ../../reference/datamodel.rst:225 ../../reference/datamodel.rst:231
 #: ../../reference/datamodel.rst:339
 msgid "integer"
-msgstr ""
+msgstr "integer"
 
 #: ../../reference/datamodel.rst:231
 msgid "representation"
-msgstr ""
+msgstr "表示形式"
 
 #: ../../reference/datamodel.rst:246
 msgid "Boolean"
-msgstr ""
+msgstr "布尔值"
 
 #: ../../reference/datamodel.rst:246
 msgid "False"
@@ -4046,7 +4944,7 @@ msgstr "浮点数"
 
 #: ../../reference/datamodel.rst:261 ../../reference/datamodel.rst:279
 msgid "number"
-msgstr ""
+msgstr "数字"
 
 #: ../../reference/datamodel.rst:261
 msgid "Java"
@@ -4054,7 +4952,7 @@ msgstr "Java"
 
 #: ../../reference/datamodel.rst:279 ../../reference/datamodel.rst:3052
 msgid "complex"
-msgstr ""
+msgstr "复数"
 
 #: ../../reference/datamodel.rst:292 ../../reference/datamodel.rst:423
 #: ../../reference/datamodel.rst:462 ../../reference/datamodel.rst:2786
@@ -4063,41 +4961,41 @@ msgstr "len"
 
 #: ../../reference/datamodel.rst:292 ../../reference/datamodel.rst:1025
 msgid "sequence"
-msgstr ""
+msgstr "sequence"
 
 #: ../../reference/datamodel.rst:292
 msgid "index operation"
-msgstr ""
+msgstr "索引操作"
 
 #: ../../reference/datamodel.rst:292
 msgid "item selection"
-msgstr ""
+msgstr "条目选择"
 
 #: ../../reference/datamodel.rst:292 ../../reference/datamodel.rst:384
 #: ../../reference/datamodel.rst:462
 msgid "subscription"
-msgstr ""
+msgstr "下标"
 
 #: ../../reference/datamodel.rst:307 ../../reference/datamodel.rst:384
 msgid "slicing"
-msgstr ""
+msgstr "切片"
 
 #: ../../reference/datamodel.rst:324
 msgid "immutable sequence"
-msgstr ""
+msgstr "不可变序列"
 
 #: ../../reference/datamodel.rst:324
 msgid "immutable"
-msgstr ""
+msgstr "immutable -- 不可变对象"
 
 #: ../../reference/datamodel.rst:335 ../../reference/datamodel.rst:1691
 #: ../../reference/datamodel.rst:1721
 msgid "string"
-msgstr ""
+msgstr "string"
 
 #: ../../reference/datamodel.rst:335
 msgid "immutable sequences"
-msgstr ""
+msgstr "不可变序列"
 
 #: ../../reference/datamodel.rst:339
 msgid "chr"
@@ -4109,7 +5007,7 @@ msgstr "ord"
 
 #: ../../reference/datamodel.rst:339
 msgid "character"
-msgstr ""
+msgstr "字符"
 
 #: ../../reference/datamodel.rst:339
 msgid "Unicode"
@@ -4117,42 +5015,42 @@ msgstr "Unicode"
 
 #: ../../reference/datamodel.rst:359
 msgid "tuple"
-msgstr ""
+msgstr "元组"
 
 #: ../../reference/datamodel.rst:359
 msgid "singleton"
-msgstr ""
+msgstr "单例"
 
 #: ../../reference/datamodel.rst:359
 msgid "empty"
-msgstr ""
+msgstr "空"
 
 #: ../../reference/datamodel.rst:372 ../../reference/datamodel.rst:1716
 msgid "bytes"
-msgstr "байтів"
+msgstr "字节串"
 
 #: ../../reference/datamodel.rst:372
 msgid "byte"
-msgstr ""
+msgstr "字节"
 
 #: ../../reference/datamodel.rst:384
 msgid "mutable sequence"
-msgstr ""
+msgstr "可变序列"
 
 #: ../../reference/datamodel.rst:384
 msgid "mutable"
-msgstr ""
+msgstr "mutable -- 可变对象"
 
 #: ../../reference/datamodel.rst:384 ../../reference/datamodel.rst:952
 #: ../../reference/datamodel.rst:1018
 msgid "assignment"
-msgstr ""
+msgstr "赋值"
 
 #: ../../reference/datamodel.rst:384 ../../reference/datamodel.rst:852
 #: ../../reference/datamodel.rst:1430 ../../reference/datamodel.rst:1612
 #: ../../reference/datamodel.rst:3107
 msgid "statement"
-msgstr ""
+msgstr "statement -- 语句"
 
 #: ../../reference/datamodel.rst:396
 msgid "array"
@@ -4164,19 +5062,19 @@ msgstr "collections"
 
 #: ../../reference/datamodel.rst:405
 msgid "list"
-msgstr ""
+msgstr "list"
 
 #: ../../reference/datamodel.rst:412
 msgid "bytearray"
-msgstr ""
+msgstr "bytearray"
 
 #: ../../reference/datamodel.rst:423
 msgid "set type"
-msgstr ""
+msgstr "集合类型"
 
 #: ../../reference/datamodel.rst:443
 msgid "set"
-msgstr ""
+msgstr "set"
 
 #: ../../reference/datamodel.rst:451
 msgid "frozenset"
@@ -4184,12 +5082,12 @@ msgstr "frozenset"
 
 #: ../../reference/datamodel.rst:462 ../../reference/datamodel.rst:1025
 msgid "mapping"
-msgstr ""
+msgstr "mapping -- 映射"
 
 #: ../../reference/datamodel.rst:479 ../../reference/datamodel.rst:934
 #: ../../reference/datamodel.rst:1805
 msgid "dictionary"
-msgstr ""
+msgstr "dictionary -- 字典"
 
 #: ../../reference/datamodel.rst:498
 msgid "dbm.ndbm"
@@ -4201,42 +5099,42 @@ msgstr "dbm.gnu"
 
 #: ../../reference/datamodel.rst:515
 msgid "callable"
-msgstr ""
+msgstr "callable -- 可调用对象"
 
 #: ../../reference/datamodel.rst:515 ../../reference/datamodel.rst:530
 #: ../../reference/datamodel.rst:739 ../../reference/datamodel.rst:757
 #: ../../reference/datamodel.rst:770 ../../reference/datamodel.rst:795
 msgid "function"
-msgstr ""
+msgstr "function -- 函数"
 
 #: ../../reference/datamodel.rst:515 ../../reference/datamodel.rst:934
 #: ../../reference/datamodel.rst:957 ../../reference/datamodel.rst:2738
 msgid "call"
-msgstr ""
+msgstr "call"
 
 #: ../../reference/datamodel.rst:515
 msgid "invocation"
-msgstr ""
+msgstr "唤起"
 
 #: ../../reference/datamodel.rst:515
 msgid "argument"
-msgstr ""
+msgstr "argument -- 参数"
 
 #: ../../reference/datamodel.rst:530 ../../reference/datamodel.rst:650
 msgid "user-defined"
-msgstr ""
+msgstr "用户自定义"
 
 #: ../../reference/datamodel.rst:530
 msgid "user-defined function"
-msgstr ""
+msgstr "用户自定义函数"
 
 #: ../../reference/datamodel.rst:543
 msgid "__closure__ (function attribute)"
-msgstr ""
+msgstr "__closure__ (函数属性)"
 
 #: ../../reference/datamodel.rst:543
 msgid "__globals__ (function attribute)"
-msgstr ""
+msgstr "__globals__ (函数属性)"
 
 #: ../../reference/datamodel.rst:543
 msgid "global"
@@ -4244,95 +5142,95 @@ msgstr "global"
 
 #: ../../reference/datamodel.rst:543 ../../reference/datamodel.rst:872
 msgid "namespace"
-msgstr ""
+msgstr "namespace -- 命名空间"
 
 #: ../../reference/datamodel.rst:569
 msgid "__doc__ (function attribute)"
-msgstr ""
+msgstr "__doc__ (函数属性)"
 
 #: ../../reference/datamodel.rst:569
 msgid "__name__ (function attribute)"
-msgstr ""
+msgstr "__name__ (函数属性)"
 
 #: ../../reference/datamodel.rst:569
 msgid "__module__ (function attribute)"
-msgstr ""
+msgstr "__module__ (函数属性)"
 
 #: ../../reference/datamodel.rst:569
 msgid "__dict__ (function attribute)"
-msgstr ""
+msgstr "__dict__ (函数属性)"
 
 #: ../../reference/datamodel.rst:569
 msgid "__defaults__ (function attribute)"
-msgstr ""
+msgstr "__defaults__ (函数属性)"
 
 #: ../../reference/datamodel.rst:569
 msgid "__code__ (function attribute)"
-msgstr ""
+msgstr "__code__ (函数属性)"
 
 #: ../../reference/datamodel.rst:569
 msgid "__annotations__ (function attribute)"
-msgstr ""
+msgstr "__annotations__ (函数属性)"
 
 #: ../../reference/datamodel.rst:569
 msgid "__kwdefaults__ (function attribute)"
-msgstr ""
+msgstr "__kwdefaults__ (函数属性)"
 
 #: ../../reference/datamodel.rst:650 ../../reference/datamodel.rst:819
 msgid "method"
-msgstr ""
+msgstr "method -- 方法"
 
 #: ../../reference/datamodel.rst:650
 msgid "user-defined method"
-msgstr ""
+msgstr "用户自定义方法"
 
 #: ../../reference/datamodel.rst:658
 msgid "__func__ (method attribute)"
-msgstr ""
+msgstr "__func__ (方法属性)"
 
 #: ../../reference/datamodel.rst:658
 msgid "__self__ (method attribute)"
-msgstr ""
+msgstr "__self__ (方法属性)"
 
 #: ../../reference/datamodel.rst:658
 msgid "__doc__ (method attribute)"
-msgstr ""
+msgstr "__doc__ (方法属性)"
 
 #: ../../reference/datamodel.rst:658
 msgid "__name__ (method attribute)"
-msgstr ""
+msgstr "__name__ (方法属性)"
 
 #: ../../reference/datamodel.rst:658
 msgid "__module__ (method attribute)"
-msgstr ""
+msgstr "__module__ (方法属性)"
 
 #: ../../reference/datamodel.rst:739 ../../reference/datamodel.rst:1186
 msgid "generator"
-msgstr ""
+msgstr "generator -- 生成器"
 
 #: ../../reference/datamodel.rst:739
 msgid "iterator"
-msgstr ""
+msgstr "iterator -- 迭代器"
 
 #: ../../reference/datamodel.rst:757 ../../reference/datamodel.rst:3253
 msgid "coroutine"
-msgstr ""
+msgstr "coroutine -- 协程"
 
 #: ../../reference/datamodel.rst:770
 msgid "asynchronous generator"
-msgstr ""
+msgstr "asynchronous generator -- 异步生成器"
 
 #: ../../reference/datamodel.rst:770
 msgid "asynchronous iterator"
-msgstr ""
+msgstr "asynchronous iterator -- 异步迭代器"
 
 #: ../../reference/datamodel.rst:819
 msgid "built-in method"
-msgstr ""
+msgstr "内置方法"
 
 #: ../../reference/datamodel.rst:819
 msgid "built-in"
-msgstr ""
+msgstr "内置"
 
 #: ../../reference/datamodel.rst:852
 msgid "import"
@@ -4340,79 +5238,79 @@ msgstr "import"
 
 #: ../../reference/datamodel.rst:872
 msgid "__name__ (module attribute)"
-msgstr ""
+msgstr "__name__ (模块属性)"
 
 #: ../../reference/datamodel.rst:872
 msgid "__doc__ (module attribute)"
-msgstr ""
+msgstr "__doc__ (模块属性)"
 
 #: ../../reference/datamodel.rst:872
 msgid "__file__ (module attribute)"
-msgstr ""
+msgstr "__file__ (模块属性)"
 
 #: ../../reference/datamodel.rst:872
 msgid "__annotations__ (module attribute)"
-msgstr ""
+msgstr "__annotations__ (模块属性)"
 
 #: ../../reference/datamodel.rst:903
 msgid "__dict__ (module attribute)"
-msgstr ""
+msgstr "__dict__ (模块属性)"
 
 #: ../../reference/datamodel.rst:934 ../../reference/datamodel.rst:952
 #: ../../reference/datamodel.rst:998 ../../reference/datamodel.rst:1595
 #: ../../reference/datamodel.rst:2468
 msgid "class"
-msgstr ""
+msgstr "class"
 
 #: ../../reference/datamodel.rst:934 ../../reference/datamodel.rst:998
 #: ../../reference/datamodel.rst:1018
 msgid "class instance"
-msgstr ""
+msgstr "类实例"
 
 #: ../../reference/datamodel.rst:934 ../../reference/datamodel.rst:998
 #: ../../reference/datamodel.rst:2738
 msgid "instance"
-msgstr ""
+msgstr "实例"
 
 #: ../../reference/datamodel.rst:934 ../../reference/datamodel.rst:957
 msgid "class object"
-msgstr ""
+msgstr "类对象"
 
 #: ../../reference/datamodel.rst:961
 msgid "__name__ (class attribute)"
-msgstr ""
+msgstr "__name__ (类属性)"
 
 #: ../../reference/datamodel.rst:961
 msgid "__module__ (class attribute)"
-msgstr ""
+msgstr "__module__ (类属性)"
 
 #: ../../reference/datamodel.rst:961
 msgid "__dict__ (class attribute)"
-msgstr ""
+msgstr "__dict__ (类属性)"
 
 #: ../../reference/datamodel.rst:961
 msgid "__bases__ (class attribute)"
-msgstr ""
+msgstr "__bases__ (类属性)"
 
 #: ../../reference/datamodel.rst:961
 msgid "__doc__ (class attribute)"
-msgstr ""
+msgstr "__doc__ (类属性)"
 
 #: ../../reference/datamodel.rst:961
 msgid "__annotations__ (class attribute)"
-msgstr ""
+msgstr "__annotations__ (类属性)"
 
 #: ../../reference/datamodel.rst:1033
 msgid "__dict__ (instance attribute)"
-msgstr ""
+msgstr "__dict__ (实例属性)"
 
 #: ../../reference/datamodel.rst:1033
 msgid "__class__ (instance attribute)"
-msgstr ""
+msgstr "__class__ (实例属性)"
 
 #: ../../reference/datamodel.rst:1044
 msgid "open"
-msgstr ""
+msgstr "open"
 
 #: ../../reference/datamodel.rst:1044
 msgid "io"
@@ -4420,11 +5318,11 @@ msgstr "io"
 
 #: ../../reference/datamodel.rst:1044
 msgid "popen() (in module os)"
-msgstr ""
+msgstr "popen() (在 os 模块中)"
 
 #: ../../reference/datamodel.rst:1044
 msgid "makefile() (socket method)"
-msgstr ""
+msgstr "makefile() (套接字属性)"
 
 #: ../../reference/datamodel.rst:1044
 msgid "sys.stdin"
@@ -4444,27 +5342,27 @@ msgstr "stdio"
 
 #: ../../reference/datamodel.rst:1044
 msgid "stdin (in module sys)"
-msgstr ""
+msgstr "stdin (在 sys 模块中)"
 
 #: ../../reference/datamodel.rst:1044
 msgid "stdout (in module sys)"
-msgstr ""
+msgstr "stdout (在 sys 模块中)"
 
 #: ../../reference/datamodel.rst:1044
 msgid "stderr (in module sys)"
-msgstr ""
+msgstr "stderr (在 sys 模块中)"
 
 #: ../../reference/datamodel.rst:1073
 msgid "internal type"
-msgstr ""
+msgstr "内部类型"
 
 #: ../../reference/datamodel.rst:1073
 msgid "types, internal"
-msgstr ""
+msgstr "类型, 内部"
 
 #: ../../reference/datamodel.rst:1081
 msgid "bytecode"
-msgstr ""
+msgstr "bytecode -- 字节码"
 
 #: ../../reference/datamodel.rst:1081
 msgid "code"
@@ -4472,155 +5370,155 @@ msgstr "code"
 
 #: ../../reference/datamodel.rst:1081
 msgid "code object"
-msgstr ""
+msgstr "代码对象"
 
 #: ../../reference/datamodel.rst:1097
 msgid "co_argcount (code object attribute)"
-msgstr ""
+msgstr "co_argcount (代码对象属性)"
 
 #: ../../reference/datamodel.rst:1097
 msgid "co_posonlyargcount (code object attribute)"
-msgstr ""
+msgstr "co_posonlyargcount (代码对象属性)"
 
 #: ../../reference/datamodel.rst:1097
 msgid "co_kwonlyargcount (code object attribute)"
-msgstr ""
+msgstr "co_kwonlyargcount (代码对象属性)"
 
 #: ../../reference/datamodel.rst:1097
 msgid "co_code (code object attribute)"
-msgstr ""
+msgstr "co_code (代码对象属性)"
 
 #: ../../reference/datamodel.rst:1097
 msgid "co_consts (code object attribute)"
-msgstr ""
+msgstr "co_consts (代码对象属性)"
 
 #: ../../reference/datamodel.rst:1097
 msgid "co_filename (code object attribute)"
-msgstr ""
+msgstr "co_filename (代码对象属性)"
 
 #: ../../reference/datamodel.rst:1097
 msgid "co_firstlineno (code object attribute)"
-msgstr ""
+msgstr "co_firstlineno (代码对象属性)"
 
 #: ../../reference/datamodel.rst:1097
 msgid "co_flags (code object attribute)"
-msgstr ""
+msgstr "co_flags (代码对象属性)"
 
 #: ../../reference/datamodel.rst:1097
 msgid "co_lnotab (code object attribute)"
-msgstr ""
+msgstr "co_lnotab (代码对象属性)"
 
 #: ../../reference/datamodel.rst:1097
 msgid "co_name (code object attribute)"
-msgstr ""
+msgstr "co_name (代码对象属性)"
 
 #: ../../reference/datamodel.rst:1097
 msgid "co_names (code object attribute)"
-msgstr ""
+msgstr "co_names (代码对象属性)"
 
 #: ../../reference/datamodel.rst:1097
 msgid "co_nlocals (code object attribute)"
-msgstr ""
+msgstr "co_nlocals (代码对象属性)"
 
 #: ../../reference/datamodel.rst:1097
 msgid "co_stacksize (code object attribute)"
-msgstr ""
+msgstr "co_stacksize (代码对象属性)"
 
 #: ../../reference/datamodel.rst:1097
 msgid "co_varnames (code object attribute)"
-msgstr ""
+msgstr "co_varnames (代码对象属性)"
 
 #: ../../reference/datamodel.rst:1097
 msgid "co_cellvars (code object attribute)"
-msgstr ""
+msgstr "co_cellvars (代码对象属性)"
 
 #: ../../reference/datamodel.rst:1097
 msgid "co_freevars (code object attribute)"
-msgstr ""
+msgstr "co_freevars (代码对象属性)"
 
 #: ../../reference/datamodel.rst:1097
 msgid "co_qualname (code object attribute)"
-msgstr ""
+msgstr "co_qualname (代码对象属性)"
 
 #: ../../reference/datamodel.rst:1204
 msgid "documentation string"
-msgstr ""
+msgstr "文档字符串"
 
 #: ../../reference/datamodel.rst:1293
 msgid "frame"
-msgstr ""
+msgstr "frame -- 帧"
 
 #: ../../reference/datamodel.rst:1299
 msgid "f_back (frame attribute)"
-msgstr ""
+msgstr "f_back (帧属性)"
 
 #: ../../reference/datamodel.rst:1299
 msgid "f_code (frame attribute)"
-msgstr ""
+msgstr "f_code (帧属性)"
 
 #: ../../reference/datamodel.rst:1299
 msgid "f_globals (frame attribute)"
-msgstr ""
+msgstr "f_globals (帧属性)"
 
 #: ../../reference/datamodel.rst:1299
 msgid "f_locals (frame attribute)"
-msgstr ""
+msgstr "f_locals (帧属性)"
 
 #: ../../reference/datamodel.rst:1299
 msgid "f_lasti (frame attribute)"
-msgstr ""
+msgstr "f_lasti (帧属性)"
 
 #: ../../reference/datamodel.rst:1299
 msgid "f_builtins (frame attribute)"
-msgstr ""
+msgstr "f_builtins (帧属性)"
 
 #: ../../reference/datamodel.rst:1338
 msgid "f_trace (frame attribute)"
-msgstr ""
+msgstr "f_trace (帧属性)"
 
 #: ../../reference/datamodel.rst:1338
 msgid "f_trace_lines (frame attribute)"
-msgstr ""
+msgstr "f_trace_lines (帧属性)"
 
 #: ../../reference/datamodel.rst:1338
 msgid "f_trace_opcodes (frame attribute)"
-msgstr ""
+msgstr "f_trace_opcodes (帧属性)"
 
 #: ../../reference/datamodel.rst:1338
 msgid "f_lineno (frame attribute)"
-msgstr ""
+msgstr "f_lineno (帧属性)"
 
 #: ../../reference/datamodel.rst:1393
 msgid "traceback"
-msgstr ""
+msgstr "回溯"
 
 #: ../../reference/datamodel.rst:1393
 msgid "stack"
-msgstr ""
+msgstr "栈"
 
 #: ../../reference/datamodel.rst:1393
 msgid "trace"
-msgstr ""
+msgstr "跟踪"
 
 #: ../../reference/datamodel.rst:1393
 msgid "exception"
-msgstr ""
+msgstr "异常"
 
 #: ../../reference/datamodel.rst:1393
 msgid "handler"
-msgstr ""
+msgstr "处理器"
 
 #: ../../reference/datamodel.rst:1393
 msgid "execution"
-msgstr ""
+msgstr "执行"
 
 #: ../../reference/datamodel.rst:1393
 msgid "exc_info (in module sys)"
-msgstr ""
+msgstr "exc_info (在 sys 模块中)"
 
 #: ../../reference/datamodel.rst:1393
 msgid "last_traceback (in module sys)"
-msgstr ""
+msgstr "last_traceback (在 sys 模块中)"
 
 #: ../../reference/datamodel.rst:1393
 msgid "sys.exc_info"
@@ -4636,15 +5534,15 @@ msgstr "sys.last_traceback"
 
 #: ../../reference/datamodel.rst:1430
 msgid "tb_frame (traceback attribute)"
-msgstr ""
+msgstr "tb_frame (回溯属性)"
 
 #: ../../reference/datamodel.rst:1430
 msgid "tb_lineno (traceback attribute)"
-msgstr ""
+msgstr "tb_lineno (回溯属性)"
 
 #: ../../reference/datamodel.rst:1430
 msgid "tb_lasti (traceback attribute)"
-msgstr ""
+msgstr "tb_lasti (回溯属性)"
 
 #: ../../reference/datamodel.rst:1430
 msgid "try"
@@ -4652,55 +5550,55 @@ msgstr "try"
 
 #: ../../reference/datamodel.rst:1460
 msgid "tb_next (traceback attribute)"
-msgstr ""
+msgstr "tb_next (回溯属性)"
 
 #: ../../reference/datamodel.rst:1476 ../../reference/datamodel.rst:2816
 msgid "slice"
-msgstr ""
+msgstr "slice -- 切片"
 
 #: ../../reference/datamodel.rst:1482
 msgid "start (slice object attribute)"
-msgstr ""
+msgstr "start (切片对象属性)"
 
 #: ../../reference/datamodel.rst:1482
 msgid "stop (slice object attribute)"
-msgstr ""
+msgstr "stop (切片对象属性)"
 
 #: ../../reference/datamodel.rst:1482
 msgid "step (slice object attribute)"
-msgstr ""
+msgstr "step (切片对象属性)"
 
 #: ../../reference/datamodel.rst:1530
 msgid "operator"
-msgstr ""
+msgstr "operator"
 
 #: ../../reference/datamodel.rst:1530
 msgid "overloading"
-msgstr ""
+msgstr "重载"
 
 #: ../../reference/datamodel.rst:1530
 msgid "__getitem__() (mapping object method)"
-msgstr ""
+msgstr "__getitem__() (映射对象方法)"
 
 #: ../../reference/datamodel.rst:1566
 msgid "subclassing"
-msgstr ""
+msgstr "子类化"
 
 #: ../../reference/datamodel.rst:1566
 msgid "immutable types"
-msgstr ""
+msgstr "不可变类型"
 
 #: ../../reference/datamodel.rst:1595
 msgid "constructor"
-msgstr ""
+msgstr "构造器"
 
 #: ../../reference/datamodel.rst:1612
 msgid "destructor"
-msgstr ""
+msgstr "destructor"
 
 #: ../../reference/datamodel.rst:1612
 msgid "finalizer"
-msgstr ""
+msgstr "终结器"
 
 #: ../../reference/datamodel.rst:1612
 msgid "del"
@@ -4708,27 +5606,27 @@ msgstr "del"
 
 #: ../../reference/datamodel.rst:1674
 msgid "repr() (built-in function)"
-msgstr ""
+msgstr "repr() (内置函数)"
 
 #: ../../reference/datamodel.rst:1674
 msgid "__repr__() (object method)"
-msgstr ""
+msgstr "__repr__() (对象方法)"
 
 #: ../../reference/datamodel.rst:1691
 msgid "__str__() (object method)"
-msgstr ""
+msgstr "__str__() (对象方法)"
 
 #: ../../reference/datamodel.rst:1691
 msgid "format() (built-in function)"
-msgstr ""
+msgstr "format() (内置函数)"
 
 #: ../../reference/datamodel.rst:1691
 msgid "print() (built-in function)"
-msgstr ""
+msgstr "print() (内置函数)"
 
 #: ../../reference/datamodel.rst:1721
 msgid "__format__() (object method)"
-msgstr ""
+msgstr "__format__() (对象方法)"
 
 #: ../../reference/datamodel.rst:1721
 msgid "conversion"
@@ -4740,7 +5638,7 @@ msgstr "print"
 
 #: ../../reference/datamodel.rst:1760
 msgid "comparisons"
-msgstr ""
+msgstr "比较"
 
 #: ../../reference/datamodel.rst:1805
 msgid "hash"
@@ -4748,55 +5646,55 @@ msgstr "hash"
 
 #: ../../reference/datamodel.rst:1886
 msgid "__len__() (mapping object method)"
-msgstr ""
+msgstr "__len__() (映射对象方法)"
 
 #: ../../reference/datamodel.rst:1990
 msgid "__getattr__ (module attribute)"
-msgstr ""
+msgstr "__getattr__ (模块属性)"
 
 #: ../../reference/datamodel.rst:1990
 msgid "__dir__ (module attribute)"
-msgstr ""
+msgstr "__dir__ (模块属性)"
 
 #: ../../reference/datamodel.rst:1990
 msgid "__class__ (module attribute)"
-msgstr ""
+msgstr "__class__ (模块属性)"
 
 #: ../../reference/datamodel.rst:2361
 msgid "metaclass"
-msgstr ""
+msgstr "metaclass -- 元类"
 
 #: ../../reference/datamodel.rst:2361
 msgid "= (equals)"
-msgstr ""
+msgstr "= (等于号)"
 
 #: ../../reference/datamodel.rst:2361
 msgid "class definition"
-msgstr ""
+msgstr "类定义"
 
 #: ../../reference/datamodel.rst:2421
 msgid "metaclass hint"
-msgstr ""
+msgstr "元类提示"
 
 #: ../../reference/datamodel.rst:2444
 msgid "__prepare__ (metaclass method)"
-msgstr ""
+msgstr "__prepare__ (元类方法)"
 
 #: ../../reference/datamodel.rst:2468
 msgid "body"
-msgstr ""
+msgstr "body"
 
 #: ../../reference/datamodel.rst:2488
 msgid "__class__ (method cell)"
-msgstr ""
+msgstr "__class__ (方法单元)"
 
 #: ../../reference/datamodel.rst:2488
 msgid "__classcell__ (class namespace entry)"
-msgstr ""
+msgstr "__classcell__ (类命名空间条目)"
 
 #: ../../reference/datamodel.rst:2786
 msgid "__bool__() (object method)"
-msgstr ""
+msgstr "__bool__() (对象方法)"
 
 #: ../../reference/datamodel.rst:2944 ../../reference/datamodel.rst:2979
 msgid "divmod"
@@ -4817,7 +5715,7 @@ msgstr "int"
 
 #: ../../reference/datamodel.rst:3052
 msgid "float"
-msgstr ""
+msgstr "float"
 
 #: ../../reference/datamodel.rst:3080
 msgid "round"
@@ -4829,4 +5727,4 @@ msgstr "with"
 
 #: ../../reference/datamodel.rst:3107
 msgid "context manager"
-msgstr ""
+msgstr "context manager -- 上下文管理器"
