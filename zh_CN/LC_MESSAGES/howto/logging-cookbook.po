@@ -4,19 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 # Translators:
-# Shengjing Zhu <zsj950618@gmail.com>, 2021
-# ww song <sww4718168@gmail.com>, 2021
-# 欢 王 <whthu168@163.com>, 2021
-# MuSheng Chen <sheng.2179@gmail.com>, 2021
-# 浩听 王 <wht_andrew@163.com>, 2021
-# 非法操作 <ultrahe@gmail.com>, 2021
-# Dai Xu <daixu61@hotmail.com>, 2021
-# Alpha Du <alphanow@gmail.com>, 2022
-# cdarlint <cdarling@126.com>, 2022
-# ProgramRipper, 2023
-# 乐成 王, 2023
-# WH-2099 <wh2099@outlook.com>, 2024
-# Freesand Leo <yuqinju@163.com>, 2025
+# Rafael Fontenelle <rffontenelle@gmail.com>, 2025
 #
 #, fuzzy
 msgid ""
@@ -24,8 +12,8 @@ msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-11 14:21+0000\n"
-"PO-Revision-Date: 2021-06-28 00:53+0000\n"
-"Last-Translator: Freesand Leo <yuqinju@163.com>, 2025\n"
+"PO-Revision-Date: 2025-07-18 18:48+0000\n"
+"Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>, 2025\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/python-doc/"
 "teams/5390/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -8226,7 +8214,7 @@ msgstr ""
 
 #: ../../howto/logging-cookbook.rst:4082
 msgid "How to uniformly handle newlines in logging output"
-msgstr ""
+msgstr "如何统一地处理日志记录输出中的换行符"
 
 #: ../../howto/logging-cookbook.rst:4084
 msgid ""
@@ -8238,6 +8226,11 @@ msgid ""
 "uniformly formatted as if it was logged separately, you can do this using a "
 "handler mixin, as in the following snippet:"
 msgstr ""
+"通常，被记录的消息（输出到控制台或文件）是由单行文本组成的。 不过，在某些时候"
+"也会需要处理具有多行的消息 —— 不论是因为日志格式字符串包含换行符，还是因为被"
+"记录的数据包含换行符。 如果你想以统一的方式处理此类消息，使得被记录的消息中的"
+"每一行格式看起来保持一致就像它是被单独记录的，你可以使用处理器混入类做到这一"
+"点，如下面的代码片段所示："
 
 #: ../../howto/logging-cookbook.rst:4092
 msgid ""
@@ -8257,10 +8250,25 @@ msgid ""
 "                rec.msg = line\n"
 "                super().emit(rec)"
 msgstr ""
+"# 假定这是在一个模块的 mymixins.py 中\n"
+"import copy\n"
+"\n"
+"class MultilineMixin:\n"
+"    def emit(self, record):\n"
+"        s = record.getMessage()\n"
+"        if '\\n' not in s:\n"
+"            super().emit(record)\n"
+"        else:\n"
+"            lines = s.splitlines()\n"
+"            rec = copy.copy(record)\n"
+"            rec.args = None\n"
+"            for line in lines:\n"
+"                rec.msg = line\n"
+"                super().emit(rec)"
 
 #: ../../howto/logging-cookbook.rst:4110
 msgid "You can use the mixin as in the following script:"
-msgstr ""
+msgstr "你可以像下面的脚本一样使用该混入类："
 
 #: ../../howto/logging-cookbook.rst:4112
 msgid ""
@@ -8283,10 +8291,28 @@ msgid ""
 "    logger.debug('Multiple lines:\\n%s', 'fool me ...\\ncan\\'t get fooled "
 "again')"
 msgstr ""
+"import logging\n"
+"\n"
+"from mymixins import MultilineMixin\n"
+"\n"
+"logger = logging.getLogger(__name__)\n"
+"\n"
+"class StreamHandler(MultilineMixin, logging.StreamHandler):\n"
+"    pass\n"
+"\n"
+"if __name__ == '__main__':\n"
+"    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s "
+"%(levelname)-9s %(message)s',\n"
+"                        handlers = [StreamHandler()])\n"
+"    logger.debug('Single line')\n"
+"    logger.debug('Multiple lines:\\nfool me once ...')\n"
+"    logger.debug('Another single line')\n"
+"    logger.debug('Multiple lines:\\n%s', 'fool me ...\\ncan\\'t get fooled "
+"again')"
 
 #: ../../howto/logging-cookbook.rst:4131
 msgid "The script, when run, prints something like:"
-msgstr ""
+msgstr "在运行时，这个脚本将打印如下内容："
 
 #: ../../howto/logging-cookbook.rst:4133
 msgid ""
@@ -8298,6 +8324,13 @@ msgid ""
 "2025-07-02 13:54:47,234 DEBUG     fool me ...\n"
 "2025-07-02 13:54:47,234 DEBUG     can't get fooled again"
 msgstr ""
+"2025-07-02 13:54:47,234 DEBUG     Single line\n"
+"2025-07-02 13:54:47,234 DEBUG     Multiple lines:\n"
+"2025-07-02 13:54:47,234 DEBUG     fool me once ...\n"
+"2025-07-02 13:54:47,234 DEBUG     Another single line\n"
+"2025-07-02 13:54:47,234 DEBUG     Multiple lines:\n"
+"2025-07-02 13:54:47,234 DEBUG     fool me ...\n"
+"2025-07-02 13:54:47,234 DEBUG     can't get fooled again"
 
 #: ../../howto/logging-cookbook.rst:4143
 msgid ""
@@ -8305,6 +8338,8 @@ msgid ""
 "org/www-community/attacks/Log_Injection>`_, you can use a formatter which "
 "escapes newlines, as per the following example:"
 msgstr ""
+"另一方面，如果你担心 `日志注入 <https://owasp.org/www-community/attacks/"
+"Log_Injection>`_，你可以使用对换行符进行转义的格式化器，就像下面的例子："
 
 #: ../../howto/logging-cookbook.rst:4147
 msgid ""
@@ -8328,12 +8363,33 @@ msgid ""
 "    logger.debug('Multiple lines:\\n%s', 'fool me ...\\ncan\\'t get fooled "
 "again')"
 msgstr ""
+"import logging\n"
+"\n"
+"logger = logging.getLogger(__name__)\n"
+"\n"
+"class EscapingFormatter(logging.Formatter):\n"
+"    def format(self, record):\n"
+"        s = super().format(record)\n"
+"        return s.replace('\\n', r'\\n')\n"
+"\n"
+"if __name__ == '__main__':\n"
+"    h = logging.StreamHandler()\n"
+"    h.setFormatter(EscapingFormatter('%(asctime)s %(levelname)-9s "
+"%(message)s'))\n"
+"    logging.basicConfig(level=logging.DEBUG, handlers = [h])\n"
+"    logger.debug('Single line')\n"
+"    logger.debug('Multiple lines:\\nfool me once ...')\n"
+"    logger.debug('Another single line')\n"
+"    logger.debug('Multiple lines:\\n%s', 'fool me ...\\ncan\\'t get fooled "
+"again')"
 
 #: ../../howto/logging-cookbook.rst:4167
 msgid ""
 "You can, of course, use whatever escaping scheme makes the most sense for "
 "you. The script, when run, should produce output like this:"
 msgstr ""
+"当然，你可以使用任何对你来说最合适的转义方案。 在运行时，这个脚本将会产生这样"
+"的输出："
 
 #: ../../howto/logging-cookbook.rst:4170
 msgid ""
@@ -8343,12 +8399,17 @@ msgid ""
 "2025-07-09 06:47:33,783 DEBUG     Multiple lines:\\nfool me ...\\ncan't get "
 "fooled again"
 msgstr ""
+"2025-07-09 06:47:33,783 DEBUG     Single line\n"
+"2025-07-09 06:47:33,783 DEBUG     Multiple lines:\\nfool me once ...\n"
+"2025-07-09 06:47:33,783 DEBUG     Another single line\n"
+"2025-07-09 06:47:33,783 DEBUG     Multiple lines:\\nfool me ...\\ncan't get "
+"fooled again"
 
 #: ../../howto/logging-cookbook.rst:4177
 msgid ""
 "Escaping behaviour can't be the stdlib default , as it would break backwards "
 "compatibility."
-msgstr ""
+msgstr "转义行为不能是标准库默认设置，因为它会破坏向下兼容性。"
 
 #: ../../howto/logging-cookbook.rst:4183
 msgid "Patterns to avoid"
