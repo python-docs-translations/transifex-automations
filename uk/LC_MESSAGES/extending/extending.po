@@ -4,16 +4,16 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 # Translators:
-# Rafael Fontenelle <rffontenelle@gmail.com>, 2024
+# Rafael Fontenelle <rffontenelle@gmail.com>, 2025
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-21 22:53+0000\n"
-"PO-Revision-Date: 2022-11-05 17:21+0000\n"
-"Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>, 2024\n"
+"POT-Creation-Date: 2025-07-25 18:10+0000\n"
+"PO-Revision-Date: 2025-07-18 20:08+0000\n"
+"Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>, 2025\n"
 "Language-Team: Ukrainian (https://app.transifex.com/python-doc/teams/5390/"
 "uk/)\n"
 "MIME-Version: 1.0\n"
@@ -315,6 +315,16 @@ msgid ""
 "interpreter's main loop, this aborts the currently executing Python code and "
 "tries to find an exception handler specified by the Python programmer."
 msgstr ""
+"Когда функция *f*, вызывающая другую функцию *g*, обнаруживает, что "
+"последняя не удалась, *f* сама должна вернуть значение ошибки (обычно "
+"``NULL`` или ``-1``). Он *не* должен вызывать одну из функций ``PyErr_*`` "
+"--- одна из них уже была вызвана *g*. Предполагается, что вызывающий *f* "
+"также возвращает индикацию ошибки вызывающему *его* объекту, опять же *без* "
+"вызова ``PyErr_*``, и так далее --- наиболее подробная причина ошибки уже "
+"была сообщена функция, которая первой обнаружила его. Как только ошибка "
+"достигает основного цикла интерпретатора Python, он прерывает выполнение "
+"текущего кода Python и пытается найти обработчик исключений, указанный "
+"программистом Python."
 
 #: ../../extending/extending.rst:168
 msgid ""
@@ -324,6 +334,11 @@ msgid ""
 "cause information about the cause of the error to be lost: most operations "
 "can fail for a variety of reasons.)"
 msgstr ""
+"(Бывают ситуации, когда модуль действительно может выдать более подробное "
+"сообщение об ошибке, вызвав другую функцию ``PyErr_*``, и в таких случаях "
+"это нормально. Однако, как правило, в этом нет необходимости, и может "
+"привести к потере информации о причине ошибки: большинство операций могут "
+"завершиться неудачей по разным причинам.)"
 
 #: ../../extending/extending.rst:174
 msgid ""
@@ -522,6 +537,10 @@ msgid ""
 "``None``.   You need this idiom to do so (which is implemented by the :c:"
 "macro:`Py_RETURN_NONE` macro)::"
 msgstr ""
+"Если у вас есть функция C, которая не возвращает никакого полезного "
+"аргумента (функция, возвращающая :c:expr:`void`), соответствующая функция "
+"Python должна возвращать ``None``. Для этого вам понадобится эта идиома "
+"(которая реализуется макросом :c:macro:`Py_RETURN_NONE`)::"
 
 #: ../../extending/extending.rst:308
 msgid ""
@@ -1707,6 +1726,14 @@ msgid ""
 "module, retrieve the value of this name, and then retrieve the pointer from "
 "the Capsule."
 msgstr ""
+"Python предоставляет специальный механизм для передачи информации уровня C "
+"(указателей) из одного модуля расширения в другой: Capsules. Капсула — это "
+"тип данных Python, в котором хранится указатель (:c:expr:`void \\*`). "
+"Капсулы можно создавать и получать к ним доступ только через C API, но их "
+"можно передавать, как и любой другой объект Python. В частности, им можно "
+"присвоить имя в пространстве имен модуля расширения. Другие модули "
+"расширения могут затем импортировать этот модуль, получить значение этого "
+"имени, а затем получить указатель из капсулы."
 
 #: ../../extending/extending.rst:1180
 msgid ""
@@ -1732,6 +1759,12 @@ msgid ""
 "of runtime type-safety; there is no feasible way to tell one unnamed Capsule "
 "from another."
 msgstr ""
+"Какой бы метод вы ни выбрали, важно правильно назвать свои капсулы. Функция :"
+"c:func:`PyCapsule_New` принимает параметр имени (:c:expr:`const char \\*`); "
+"вам разрешено передавать имя NULL, но мы настоятельно рекомендуем вам "
+"указать имя. Правильно названные капсулы обеспечивают определенную степень "
+"безопасности типов во время выполнения; невозможно отличить одну безымянную "
+"капсулу от другой."
 
 #: ../../extending/extending.rst:1193
 msgid ""
@@ -1763,6 +1796,13 @@ msgid ""
 "takes care of importing the module and retrieving its C API pointers; client "
 "modules only have to call this macro before accessing the C API."
 msgstr ""
+"В следующем примере демонстрируется подход, который возлагает большую часть "
+"нагрузки на автора модуля экспорта, что подходит для часто используемых "
+"библиотечных модулей. Он хранит все указатели C API (только один в примере!) "
+"в массиве указателей :c:expr:`void`, который становится значением Capsule. "
+"Файл заголовка, соответствующий модулю, содержит макрос, который отвечает за "
+"импорт модуля и получение его указателей API C; клиентским модулям нужно "
+"только вызвать этот макрос перед доступом к C API."
 
 #: ../../extending/extending.rst:1211
 msgid ""

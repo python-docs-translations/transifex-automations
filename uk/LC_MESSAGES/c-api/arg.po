@@ -4,16 +4,16 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 # Translators:
-# Rafael Fontenelle <rffontenelle@gmail.com>, 2024
+# Rafael Fontenelle <rffontenelle@gmail.com>, 2025
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-21 22:53+0000\n"
-"PO-Revision-Date: 2022-11-05 17:21+0000\n"
-"Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>, 2024\n"
+"POT-Creation-Date: 2025-07-25 18:10+0000\n"
+"PO-Revision-Date: 2025-07-18 20:08+0000\n"
+"Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>, 2025\n"
 "Language-Team: Ukrainian (https://app.transifex.com/python-doc/teams/5390/"
 "uk/)\n"
 "MIME-Version: 1.0\n"
@@ -120,6 +120,9 @@ msgid ""
 "**You have to call** :c:func:`PyMem_Free` after you have finished processing "
 "the data (or in any early abort case)."
 msgstr ""
+"Форматы ``es``, ``es#``, ``et`` и ``et#`` выделяют результирующий буфер. "
+"**Вы должны вызвать** :c:func:`PyMem_Free` после завершения обработки данных "
+"(или в любом случае раннего прерывания)."
 
 #: ../../c-api/arg.rst:54
 msgid ""
@@ -129,6 +132,11 @@ msgid ""
 "corresponding Python object, and shares the lifetime of this object. You "
 "won't have to release any memory yourself."
 msgstr ""
+"Другие форматы принимают :class:`str` или доступный только для чтения :term:"
+"`bytes-like object`, такой как :class:`bytes`,  и предоставляют указатель "
+"``const char *`` на его буфер. В этом случае буфер \"заимствован\": он "
+"управляется соответствующим объектом Python и разделяет время жизни этого "
+"объекта. Вам не придется освобождать память самостоятельно."
 
 #: ../../c-api/arg.rst:61
 msgid ""
@@ -137,6 +145,11 @@ msgid ""
 "disallows common mutable objects such as :class:`bytearray`, but also some "
 "read-only objects such as :class:`memoryview` of :class:`bytes`."
 msgstr ""
+"Чтобы гарантировать, что базовый буфер может быть безопасно заимствован, "
+"поле объекта :c:member:`PyBufferProcs.bf_releasebuffer` должно быть "
+"``NULL``. Это запрещает обычные изменяемые объекты, такие как :class:"
+"`bytearray`, но также некоторые объекты, доступные только для чтения, такие "
+"как :class:`memoryview` из :class:`bytes`."
 
 #: ../../c-api/arg.rst:67
 msgid ""
@@ -144,6 +157,10 @@ msgid ""
 "whether the input object is immutable (e.g. whether it would honor a request "
 "for a writable buffer, or whether another thread can mutate the data)."
 msgstr ""
+"Помимо этого требования ``bf_releasebuffer`` нет никакой проверки, чтобы "
+"убедиться, является ли входной объект неизменяемым (например, удовлетворит "
+"ли он запрос буфера с возможностью записи или другой поток может изменить "
+"данные)."
 
 #: ../../c-api/arg.rst:73
 msgid ""
@@ -231,6 +248,11 @@ msgid ""
 "null bytes. Unicode objects are converted to C strings using ``'utf-8'`` "
 "encoding."
 msgstr ""
+"Аналогично ``s*``, за исключением того, что он предоставляет :ref:`borrowed "
+"buffer <c-arg-borrowed-buffer>`. Результат сохраняется в двух переменных C, "
+"первая из которых является указателем на строку C, вторая - ее длиной. "
+"Строка может содержать встроенные нулевые байты. Объекты Unicode "
+"преобразуются в строки C с использованием кодировки ``'utf-8'``."
 
 #: ../../c-api/arg.rst:115 ../../c-api/arg.rst:584
 msgid "``z`` (:class:`str` or ``None``) [const char \\*]"
@@ -285,6 +307,10 @@ msgid ""
 "objects.  The bytes buffer must not contain embedded null bytes; if it does, "
 "a :exc:`ValueError` exception is raised."
 msgstr ""
+"Этот формат преобразует байтоподобный объект в указатель C на строку "
+"символов :ref:`borrowed <c-arg-borrowed-buffer>`; он не принимает объекты "
+"Unicode. Буфер байтов не должен содержать встроенных нулевых байтов; если "
+"это так, возникает исключение :exc:`ValueError`."
 
 #: ../../c-api/arg.rst:132
 msgid ""
@@ -331,6 +357,10 @@ msgid ""
 "attempting any conversion.  Raises :exc:`TypeError` if the object is not a "
 "bytes object.  The C variable may also be declared as :c:expr:`PyObject*`."
 msgstr ""
+"Требуется, чтобы объект Python был объектом :class:`bytes` без попытки "
+"какого-либо преобразования. Вызывает :exc:`TypeError`, если объект не "
+"является объектом bytes. Переменная C также может быть объявлена как :c:expr:"
+"`PyObject*`."
 
 #: ../../c-api/arg.rst:153
 msgid "``Y`` (:class:`bytearray`) [PyByteArrayObject \\*]"
@@ -343,6 +373,10 @@ msgid ""
 "class:`bytearray` object. The C variable may also be declared as :c:expr:"
 "`PyObject*`."
 msgstr ""
+"Требуется, чтобы объект Python был объектом :class:`bytearray` без попытки "
+"какого-либо преобразования. Вызывает :exc:`TypeError`, если объект не "
+"является объектом :class:`bytearray`. Переменная C также может быть "
+"объявлена как :c:expr:`PyObject*`."
 
 #: ../../c-api/arg.rst:170
 msgid "``u`` (:class:`str`) [const Py_UNICODE \\*]"
@@ -427,6 +461,9 @@ msgid ""
 "conversion.  Raises :exc:`TypeError` if the object is not a Unicode object.  "
 "The C variable may also be declared as :c:expr:`PyObject*`."
 msgstr ""
+"Требуется, чтобы объект Python был объектом Unicode, без попытки какого-либо "
+"преобразования. Вызывает :exc:`TypeError`, если объект не является объектом "
+"Unicode. Переменная C также может быть объявлена как :c:expr:`PyObject*`."
 
 #: ../../c-api/arg.rst:206
 msgid "``w*`` (read-write :term:`bytes-like object`) [Py_buffer]"
@@ -466,6 +503,14 @@ msgid ""
 "references will be set to a buffer with the contents of the argument text. "
 "The text will be encoded in the encoding specified by the first argument."
 msgstr ""
+"Этот формат требует двух аргументов. Первый используется только в качестве "
+"входных данных и должен быть :c:expr:`const char*`, который указывает на имя "
+"кодировки в виде нуль-терминированной строки, или``NULL``, в этом случае "
+"используется кодировка ``'utf-8'``. Возникает исключение, если именованная "
+"кодировка неизвестна Python. Вторым аргументом должен быть :c:expr:`char**`; "
+"значение указателя, на который он ссылается, будет установлено в буфер с "
+"содержимым текста аргумента. Текст будет закодирован в кодировке, указанной "
+"в первом аргументе."
 
 #: ../../c-api/arg.rst:220
 msgid ""
@@ -527,6 +572,16 @@ msgid ""
 "The third argument must be a pointer to an integer; the referenced integer "
 "will be set to the number of bytes in the output buffer."
 msgstr ""
+"Для этого требуются три аргумента. Первый используется только в качестве "
+"входных данных и должен быть :c:expr:`const char*`, который указывает на имя "
+"кодировки в виде нуль-терминированной строки или``NULL``. В этом случае "
+"используется кодировка ``'utf-8'``. Возникает исключение, если именованная "
+"кодировка неизвестна Python. Вторым аргументом должен быть :c:expr:`char**`; "
+"значение указателя, на который он ссылается, будет установлено в буфер с "
+"содержимым текста аргумента. Текст будет закодирован в кодировке, указанной "
+"в первом аргументе. Третий аргумент должен быть указателем на целое число; "
+"целому числу, на которое ссылается ссылка, будет присвоено количество байт в "
+"выходном буфере."
 
 #: ../../c-api/arg.rst:245
 msgid "There are two modes of operation:"
@@ -640,7 +695,7 @@ msgstr "``i`` (:class:`int`) [int]"
 
 #: ../../c-api/arg.rst:285
 msgid "Convert a Python integer to a plain C :c:expr:`int`."
-msgstr ""
+msgstr "Преобразует целое число Python в обычный C :c:expr:`int`."
 
 #: ../../c-api/arg.rst:289 ../../c-api/arg.rst:624
 msgid "``I`` (:class:`int`) [unsigned int]"
@@ -651,6 +706,8 @@ msgid ""
 "Convert a Python integer to a C :c:expr:`unsigned int`, without overflow "
 "checking."
 msgstr ""
+"Преобразует целое число Python в C :c:expr:`unsigned int` без проверки "
+"переполнения."
 
 #: ../../c-api/arg.rst:292 ../../c-api/arg.rst:615
 msgid "``l`` (:class:`int`) [long int]"
@@ -658,7 +715,7 @@ msgstr "``l`` (:class:`int`) [довге ціле]"
 
 #: ../../c-api/arg.rst:292
 msgid "Convert a Python integer to a C :c:expr:`long int`."
-msgstr ""
+msgstr "Преобразует целое число Python в C :c:expr:`long int`."
 
 #: ../../c-api/arg.rst:296 ../../c-api/arg.rst:627
 msgid "``k`` (:class:`int`) [unsigned long]"
@@ -669,6 +726,8 @@ msgid ""
 "Convert a Python integer to a C :c:expr:`unsigned long` without overflow "
 "checking."
 msgstr ""
+"Преобразует целое число Python в C :c:expr:`unsigned long` без проверки "
+"переполнения."
 
 #: ../../c-api/arg.rst:299 ../../c-api/arg.rst:630
 msgid "``L`` (:class:`int`) [long long]"
@@ -676,7 +735,7 @@ msgstr "``L`` (:class:`int`) [довгий довгий]"
 
 #: ../../c-api/arg.rst:299
 msgid "Convert a Python integer to a C :c:expr:`long long`."
-msgstr ""
+msgstr "Преобразует целое число Python в C :c:expr:`long long`."
 
 #: ../../c-api/arg.rst:303 ../../c-api/arg.rst:633
 msgid "``K`` (:class:`int`) [unsigned long long]"
@@ -687,6 +746,8 @@ msgid ""
 "Convert a Python integer to a C :c:expr:`unsigned long long` without "
 "overflow checking."
 msgstr ""
+"Преобразует целое число Python в C :c:expr:`unsigned long long` без проверки "
+"переполнения."
 
 #: ../../c-api/arg.rst:306 ../../c-api/arg.rst:636
 msgid "``n`` (:class:`int`) [:c:type:`Py_ssize_t`]"
@@ -705,6 +766,8 @@ msgid ""
 "Convert a Python byte, represented as a :class:`bytes` or :class:`bytearray` "
 "object of length 1, to a C :c:expr:`char`."
 msgstr ""
+"Преобразует байт Python, представленный как объект :class:`bytes` или:class:"
+"`bytearray` длины 1, в C :c:expr:`char`."
 
 #: ../../c-api/arg.rst:312
 msgid "Allow :class:`bytearray` objects."
@@ -719,6 +782,8 @@ msgid ""
 "Convert a Python character, represented as a :class:`str` object of length "
 "1, to a C :c:expr:`int`."
 msgstr ""
+"Преобразует символ Python, представленный как объект :class:`str` длиной 1, "
+"в C :c:expr:`int`."
 
 #: ../../c-api/arg.rst:320 ../../c-api/arg.rst:650
 msgid "``f`` (:class:`float`) [float]"
@@ -726,7 +791,7 @@ msgstr "``f`` (:class:`float`) [float]"
 
 #: ../../c-api/arg.rst:320
 msgid "Convert a Python floating point number to a C :c:expr:`float`."
-msgstr ""
+msgstr "Преобразует число с плавающей точкой Python в C :c:expr:`float`."
 
 #: ../../c-api/arg.rst:323 ../../c-api/arg.rst:647
 msgid "``d`` (:class:`float`) [double]"
@@ -734,7 +799,7 @@ msgstr "``d`` (:class:`float`) [double]"
 
 #: ../../c-api/arg.rst:323
 msgid "Convert a Python floating point number to a C :c:expr:`double`."
-msgstr ""
+msgstr "Преобразует число с плавающей точкой Python в C :c:expr:`double`."
 
 #: ../../c-api/arg.rst:326
 msgid "``D`` (:class:`complex`) [Py_complex]"
@@ -760,6 +825,11 @@ msgid ""
 "`strong reference` to the object is not created (i.e. its reference count is "
 "not increased). The pointer stored is not ``NULL``."
 msgstr ""
+"Сохраняет объект Python (без какого-либо преобразования) в указателе на "
+"объект C. Таким образом, программа C получает фактический объект, который "
+"был передан. Новая :term:`strong reference` на объект не создается (т.е. "
+"количество его ссылок не увеличивается). Сохраненный указатель не является "
+"``NULL``."
 
 #: ../../c-api/arg.rst:343
 msgid "``O!`` (object) [*typeobject*, PyObject \\*]"
@@ -773,6 +843,11 @@ msgid ""
 "which the object pointer is stored.  If the Python object does not have the "
 "required type, :exc:`TypeError` is raised."
 msgstr ""
+"Сохраняет объект Python в указателе на объект C . Это похоже на ``O``, но "
+"принимает два аргумента C: первый - это адрес объекта типа Python, второй - "
+"адрес переменной C (типа :c:expr:`PyObject*`), в которой хранится указатель "
+"на объект. Если объект Python не имеет требуемого типа, вызывается :exc:"
+"`TypeError`."
 
 #: ../../c-api/arg.rst:368 ../../c-api/arg.rst:677
 msgid "``O&`` (object) [*converter*, *anything*]"
@@ -785,6 +860,10 @@ msgid ""
 "of a C variable (of arbitrary type), converted to :c:expr:`void *`.  The "
 "*converter* function in turn is called as follows::"
 msgstr ""
+"Преобразуйте объект Python в переменную C с помощью функции *converter*. Для "
+"этого требуется два аргумента: первый - функция, второй - адрес переменной C "
+"(произвольного типа), преобразованный в :c:expr:`void*`. Функция "
+"*converter*, в свою очередь, вызывается следующим образом::"
 
 #: ../../c-api/arg.rst:355
 msgid ""
@@ -795,6 +874,12 @@ msgid ""
 "function should raise an exception and leave the content of *address* "
 "unmodified."
 msgstr ""
+"где *object* - это объект Python, подлежащий преобразованию, а *address* - "
+"это аргумент :c:expr:`void*`, который был передан функции ``PyArg_Parse*``. "
+"Возвращаемый *статус* должен быть ``1`` для успешного преобразования и "
+"``0``, если преобразование завершилось неудачей. При сбое преобразования "
+"функция *converter* должна вызвать исключение и оставить содержимое "
+"*address* неизмененным."
 
 #: ../../c-api/arg.rst:361
 msgid ""
@@ -937,6 +1022,9 @@ msgid ""
 "*borrowed* references; do not release them (i.e. do not decrement their "
 "reference count)!"
 msgstr ""
+"Обратите внимание, что любые ссылки на объекты Python, которые "
+"предоставляются вызывающему объекту, являются *заимствованными* ссылками; не "
+"освобождайте их (т.е. не уменьшайте их счётчик ссылок)!"
 
 #: ../../c-api/arg.rst:423
 msgid ""
@@ -963,6 +1051,13 @@ msgid ""
 "the format units, the variables at the addresses corresponding to that and "
 "the following format units are left untouched."
 msgstr ""
+"Чтобы преобразование было успешным, объект *arg* должен соответствовать "
+"формату, и формат должен быть исчерпан. В случае успеха функции "
+"``PyArg_Parse*`` возвращают значение true, в противном случае они возвращают "
+"значение false и вызывают соответствующее исключение. Когда функции "
+"``PyArg_Parse*`` завершаются ошибкой из-за сбоя преобразования в одной из "
+"единиц формата, переменные по адресам, соответствующим этой и следующим "
+"единицам формата, остаются нетронутыми."
 
 #: ../../c-api/arg.rst:438
 msgid "API Functions"
@@ -1089,6 +1184,10 @@ msgid ""
 "value or ``NULL`` in the case of an error; an exception will be raised if "
 "``NULL`` is returned."
 msgstr ""
+"Создает новое значение на основе строки формата, аналогичной тем, которые "
+"принимаются семейством функций ``PyArg_Parse*``, и последовательности "
+"значений. Возвращает значение или ``NULL`` в случае ошибки; исключение будет "
+"вызвано, если будет возвращено ``NULL``."
 
 #: ../../c-api/arg.rst:544
 msgid ""
@@ -1248,7 +1347,7 @@ msgstr ""
 
 #: ../../c-api/arg.rst:606
 msgid "Convert a plain C :c:expr:`int` to a Python integer object."
-msgstr ""
+msgstr "Преобразует обычный С :c:expr:`int` в целочисленный объект Python."
 
 #: ../../c-api/arg.rst:609
 msgid "``b`` (:class:`int`) [char]"
@@ -1256,39 +1355,42 @@ msgstr "``b`` (:class:`int`) [символ]"
 
 #: ../../c-api/arg.rst:609
 msgid "Convert a plain C :c:expr:`char` to a Python integer object."
-msgstr ""
+msgstr "Преобразует обычный С :c:expr:`char` в целочисленный объект Python."
 
 #: ../../c-api/arg.rst:612
 msgid "Convert a plain C :c:expr:`short int` to a Python integer object."
 msgstr ""
+"Преобразует обычный C :c:expr:`short int` в целочисленный объект Python."
 
 #: ../../c-api/arg.rst:615
 msgid "Convert a C :c:expr:`long int` to a Python integer object."
-msgstr ""
+msgstr "Преобразует C :c:expr:`long int` в целочисленный объект Python."
 
 #: ../../c-api/arg.rst:618
 msgid "Convert a C :c:expr:`unsigned char` to a Python integer object."
-msgstr ""
+msgstr "Преобразует C :c:expr:`unsigned char` в целочисленный объект Python."
 
 #: ../../c-api/arg.rst:621
 msgid "Convert a C :c:expr:`unsigned short int` to a Python integer object."
 msgstr ""
+"Преобразует C :c:expr:`unsigned short int` в целочисленный объект Python."
 
 #: ../../c-api/arg.rst:624
 msgid "Convert a C :c:expr:`unsigned int` to a Python integer object."
-msgstr ""
+msgstr "Преобразует C :c:expr:`unsigned int` в целочисленный объект Python."
 
 #: ../../c-api/arg.rst:627
 msgid "Convert a C :c:expr:`unsigned long` to a Python integer object."
-msgstr ""
+msgstr "Преобразует C :c:expr:`unsigned long` в целочисленный объект Python."
 
 #: ../../c-api/arg.rst:630
 msgid "Convert a C :c:expr:`long long` to a Python integer object."
-msgstr ""
+msgstr "Преобразует C :c:expr:`long long` в целочисленный объект Python."
 
 #: ../../c-api/arg.rst:633
 msgid "Convert a C :c:expr:`unsigned long long` to a Python integer object."
 msgstr ""
+"Преобразует C :c:expr:`unsigned long long` в целочисленный объект Python."
 
 #: ../../c-api/arg.rst:636
 msgid "Convert a C :c:type:`Py_ssize_t` to a Python integer."
@@ -1303,20 +1405,24 @@ msgid ""
 "Convert a C :c:expr:`int` representing a byte to a Python :class:`bytes` "
 "object of length 1."
 msgstr ""
+"Преобразует C :c:expr:`int` представляющий байт, в объект Python :class:"
+"`bytes` длиной 1."
 
 #: ../../c-api/arg.rst:643
 msgid ""
 "Convert a C :c:expr:`int` representing a character to Python :class:`str` "
 "object of length 1."
 msgstr ""
+"Преобразует C :c:expr:`int` представляющий символ, в объект Python :class:"
+"`str` длиной 1."
 
 #: ../../c-api/arg.rst:647
 msgid "Convert a C :c:expr:`double` to a Python floating point number."
-msgstr ""
+msgstr "Преобразует C :c:expr:`double` в число с плавающей точкой Python."
 
 #: ../../c-api/arg.rst:650
 msgid "Convert a C :c:expr:`float` to a Python floating point number."
-msgstr ""
+msgstr "Преобразует C :c:expr:`float` в число с плавающей точкой Python."
 
 #: ../../c-api/arg.rst:653
 msgid "``D`` (:class:`complex`) [Py_complex \\*]"
@@ -1336,6 +1442,13 @@ msgid ""
 "func:`Py_BuildValue` will return ``NULL`` but won't raise an exception.  If "
 "no exception has been raised yet, :exc:`SystemError` is set."
 msgstr ""
+"Передает объект Python нетронутым, но создает новый :term:`strong reference` "
+"на него (т.е. количество его ссылок увеличивается на единицу). Если "
+"переданный объект является указателем ``NULL``, предполагается, что это было "
+"вызвано тем, что вызов, генерирующий аргумент, обнаружил ошибку и установил "
+"исключение. Следовательно, :c:func:`Py_BuildValue` вернет ``NULL`` , но не "
+"вызовет исключение. Если исключение еще не было вызвано, устанавливается :"
+"exc:`SystemError`."
 
 #: ../../c-api/arg.rst:666
 msgid "``S`` (object) [PyObject \\*]"
@@ -1355,6 +1468,9 @@ msgid ""
 "Useful when the object is created by a call to an object constructor in the "
 "argument list."
 msgstr ""
+"То же, что и ``O``, за исключением того, что оно не создает новый :term:"
+"`strong reference`. Полезно, когда объект создается вызовом конструктора "
+"объекта в списке аргументов."
 
 #: ../../c-api/arg.rst:674
 msgid ""
@@ -1363,6 +1479,10 @@ msgid ""
 "`void*`) as its argument and should return a \"new\" Python object, or "
 "``NULL`` if an error occurred."
 msgstr ""
+"Преобразует *anything* в объект Python с помощью функции *converter*. "
+"Функция вызывается с *anything* (который должен быть совместим с :c:expr:"
+"`void*`)в качестве аргумента и должна возвращать \"новый\" объект Python или "
+"``NULL``, если произошла ошибка."
 
 #: ../../c-api/arg.rst:680
 msgid ""
