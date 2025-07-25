@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-09 14:59+0000\n"
-"PO-Revision-Date: 2025-05-08 05:09+0000\n"
+"POT-Creation-Date: 2025-07-25 15:00+0000\n"
+"PO-Revision-Date: 2025-07-18 19:21+0000\n"
 "Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>, 2025\n"
 "Language-Team: Spanish (Spain) (https://app.transifex.com/python-doc/"
 "teams/5390/es_ES/)\n"
@@ -40,6 +40,8 @@ msgid ""
 "Here is the definition of :c:type:`PyTypeObject`, with some fields only used "
 "in :ref:`debug builds <debug-build>` omitted:"
 msgstr ""
+"Ось визначення :c:type:`PyTypeObject` з деякими полями, які використовуються "
+"лише в :ref:`debug builds <debug-build>` опущено:"
 
 #: ../../extending/newtypes.rst:17
 msgid ""
@@ -159,7 +161,7 @@ msgstr ""
 
 #: ../../extending/newtypes.rst:31
 msgid "const char *tp_name; /* For printing */"
-msgstr ""
+msgstr "const char *tp_name; /* For printing */"
 
 #: ../../extending/newtypes.rst:33
 msgid ""
@@ -173,7 +175,7 @@ msgstr ""
 
 #: ../../extending/newtypes.rst:37
 msgid "Py_ssize_t tp_basicsize, tp_itemsize; /* For allocation */"
-msgstr ""
+msgstr "Py_ssize_t tp_basicsize, tp_itemsize; /* For allocation */"
 
 #: ../../extending/newtypes.rst:39
 msgid ""
@@ -191,7 +193,7 @@ msgstr ""
 
 #: ../../extending/newtypes.rst:44
 msgid "const char *tp_doc;"
-msgstr ""
+msgstr "const char *tp_doc;"
 
 #: ../../extending/newtypes.rst:46
 msgid ""
@@ -216,7 +218,7 @@ msgstr "Finalización y desasignación"
 
 #: ../../extending/newtypes.rst:64
 msgid "destructor tp_dealloc;"
-msgstr ""
+msgstr "destructor tp_dealloc;"
 
 #: ../../extending/newtypes.rst:66
 msgid ""
@@ -375,6 +377,8 @@ msgid ""
 "reprfunc tp_repr;\n"
 "reprfunc tp_str;"
 msgstr ""
+"reprfunc tp_repr;\n"
+"reprfunc tp_str;"
 
 #: ../../extending/newtypes.rst:166
 msgid ""
@@ -402,6 +406,9 @@ msgid ""
 "interpreter will supply a representation that uses the type's :c:member:"
 "`~PyTypeObject.tp_name` and a uniquely identifying value for the object."
 msgstr ""
+"Если обработчик :c:member:`~PyTypeObject.tp_repr` не указан, интерпретатор "
+"предоставит представление, которое использует тип :c:member:`~PyTypeObject."
+"tp_name` и уникально идентифицирующее значение для объекта."
 
 #: ../../extending/newtypes.rst:181
 msgid ""
@@ -464,6 +471,11 @@ msgid ""
 "`char\\*`, while the other accepts a :c:expr:`PyObject*`.  Each type can use "
 "whichever pair makes more sense for the implementation's convenience. ::"
 msgstr ""
+"Python поддерживает две пары обработчиков атрибутов; тип, поддерживающий "
+"атрибуты, должен реализовывать функции только для одной пары. Разница в том, "
+"что одна пара принимает имя атрибута как :c:expr:`char\\*`, а другая "
+"принимает :c:expr:`PyObject*`. Каждый тип может использовать любую пару, "
+"которая имеет больше смысла для удобства реализации. ::"
 
 #: ../../extending/newtypes.rst:214
 msgid ""
@@ -473,6 +485,11 @@ msgid ""
 "getattrofunc tp_getattro;       /* PyObject * version */\n"
 "setattrofunc tp_setattro;"
 msgstr ""
+"getattrfunc  tp_getattr;        /* char * version */\n"
+"setattrfunc  tp_setattr;\n"
+"/* ... */\n"
+"getattrofunc tp_getattro;       /* PyObject * version */\n"
+"setattrofunc tp_setattro;"
 
 #: ../../extending/newtypes.rst:220
 msgid ""
@@ -484,6 +501,13 @@ msgid ""
 "examples which have not been updated to use some of the new generic "
 "mechanism that is available."
 msgstr ""
+"Если доступ к атрибутам объекта всегда является простой операцией (это будет "
+"объяснено ниже), существуют общие реализации, которые можно использовать для "
+"предоставления версии :c:expr:`PyObject*` функций управления атрибутами. "
+"Фактическая необходимость в обработчиках атрибутов, специфичных для "
+"конкретного типа, почти полностью исчезла, начиная с Python 2.2, хотя "
+"существует множество примеров, которые не были обновлены для использования "
+"некоторых доступных новых универсальных механизмов."
 
 #: ../../extending/newtypes.rst:231
 msgid "Generic Attribute Management"
@@ -554,6 +578,9 @@ msgid ""
 "struct PyMemberDef *tp_members;\n"
 "struct PyGetSetDef *tp_getset;"
 msgstr ""
+"struct PyMethodDef *tp_methods;\n"
+"struct PyMemberDef *tp_members;\n"
+"struct PyGetSetDef *tp_getset;"
 
 #: ../../extending/newtypes.rst:259
 msgid ""
@@ -574,6 +601,12 @@ msgid ""
 "    const char  *ml_doc;        /* docstring */\n"
 "} PyMethodDef;"
 msgstr ""
+"typedef struct PyMethodDef {\n"
+"    const char  *ml_name;       /* method name */\n"
+"    PyCFunction  ml_meth;       /* implementation function */\n"
+"    int          ml_flags;      /* flags */\n"
+"    const char  *ml_doc;        /* docstring */\n"
+"} PyMethodDef;"
 
 #: ../../extending/newtypes.rst:270
 msgid ""
@@ -582,6 +615,10 @@ msgid ""
 "needed at the end; it is a sentinel that marks the end of the array.  The :c:"
 "member:`~PyMethodDef.ml_name` field of the sentinel must be ``NULL``."
 msgstr ""
+"Для каждого метода, предоставляемого типом, должна быть определена одна "
+"запись; для методов, унаследованных от базового типа, записи не требуются. В "
+"конце необходима еще одна запись; это индикатор, отмечающий конец массива. "
+"Поле :c:member:`~PyMethodDef.ml_name` дозорного должно быть ``NULL``."
 
 #: ../../extending/newtypes.rst:275
 msgid ""
@@ -605,6 +642,13 @@ msgid ""
 "    const char *doc;\n"
 "} PyMemberDef;"
 msgstr ""
+"typedef struct PyMemberDef {\n"
+"    const char *name;\n"
+"    int         type;\n"
+"    int         offset;\n"
+"    int         flags;\n"
+"    const char *doc;\n"
+"} PyMemberDef;"
 
 #: ../../extending/newtypes.rst:287
 msgid ""
@@ -617,6 +661,14 @@ msgid ""
 "the attribute can be accessed: you can set it to :c:macro:`Py_READONLY` to "
 "prevent Python code from setting it."
 msgstr ""
+"Для каждой записи в таблице будет создан :term:`дескриптор` и добавлен к "
+"типу, который сможет извлечь значение из структуры экземпляра. Поле :c:"
+"member:`~PyMemberDef.type` должно содержать код типа, например :c:macro:"
+"`Py_T_INT` или :c:macro:`Py_T_DOUBLE`; значение будет использоваться для "
+"определения способа преобразования значений Python в значения C и обратно. "
+"Поле :c:member:`~PyMemberDef.flags` используется для хранения флагов, "
+"управляющих доступом к атрибуту: вы можете установить для него значение :c:"
+"macro:`Py_READONLY`, чтобы предотвратить его установку кодом Python."
 
 #: ../../extending/newtypes.rst:295
 msgid ""
@@ -627,12 +679,22 @@ msgid ""
 "the descriptor from the class object, and get the doc string using its :attr:"
 "`~type.__doc__` attribute."
 msgstr ""
+"Интересным преимуществом использования таблицы :c:member:`~PyTypeObject."
+"tp_members` для создания дескрипторов, используемых во время выполнения, "
+"является то, что любой атрибут, определенный таким образом, может иметь "
+"связанную строку документа, просто предоставляя текст в таблице. Приложение "
+"может использовать API интроспекции для получения дескриптора из объекта "
+"класса и получения строки документа, используя его атрибут :attr:`~type."
+"__doc__`."
 
 #: ../../extending/newtypes.rst:301
 msgid ""
 "As with the :c:member:`~PyTypeObject.tp_methods` table, a sentinel entry "
 "with a :c:member:`~PyMethodDef.ml_name` value of ``NULL`` is required."
 msgstr ""
+"Как и в случае с таблицей :c:member:`~PyTypeObject.tp_methods`, требуется "
+"контрольная запись со значением :c:member:`~PyMethodDef.ml_name`, равным "
+"``NULL``."
 
 #: ../../extending/newtypes.rst:315
 msgid "Type-specific Attribute Management"
@@ -648,6 +710,13 @@ msgid ""
 "handler functions are called, so that if you do need to extend their "
 "functionality, you'll understand what needs to be done."
 msgstr ""
+"Для простоты здесь будет продемонстрирована только версия :c:expr:`char\\*`; "
+"тип параметра name — единственное различие между вариантами интерфейса :c:"
+"expr:`char\\*` и :c:expr:`PyObject*`. Этот пример фактически делает то же "
+"самое, что и общий пример выше, но не использует универсальную поддержку, "
+"добавленную в Python 2.2. Там объясняется, как вызываются функции-"
+"обработчики, так что если вам понадобится расширить их функциональность, вы "
+"поймете, что нужно сделать."
 
 #: ../../extending/newtypes.rst:325
 msgid ""
@@ -655,6 +724,9 @@ msgid ""
 "requires an attribute look-up.  It is called in the same situations where "
 "the :meth:`~object.__getattr__` method of a class would be called."
 msgstr ""
+"Обработчик :c:member:`~PyTypeObject.tp_getattr` вызывается, когда объекту "
+"требуется поиск атрибута. Он вызывается в тех же ситуациях, когда вызывается "
+"метод :meth:`~object.__getattr__` класса."
 
 #: ../../extending/newtypes.rst:329
 msgid "Here is an example::"
@@ -686,6 +758,12 @@ msgid ""
 "exception; if this were really all you wanted, the :c:member:`~PyTypeObject."
 "tp_setattr` handler should be set to ``NULL``. ::"
 msgstr ""
+"Обработчик :c:member:`~PyTypeObject.tp_setattr` вызывается, когда будет "
+"вызван метод :meth:`~object.__setattr__` или :meth:`~object.__delattr__` "
+"экземпляра класса. Если атрибут необходимо удалить, третьим параметром будет "
+"значение NULL. Вот пример, который просто вызывает исключение; если бы это "
+"было действительно все, что вам нужно, обработчик :c:member:`~PyTypeObject."
+"tp_setattr` должен быть установлен в значение ``NULL``. ::"
 
 #: ../../extending/newtypes.rst:351
 msgid ""
@@ -703,7 +781,7 @@ msgstr "Comparación de objetos"
 
 #: ../../extending/newtypes.rst:363
 msgid "richcmpfunc tp_richcompare;"
-msgstr ""
+msgstr "richcmpfunc tp_richcompare;"
 
 #: ../../extending/newtypes.rst:365
 msgid ""
@@ -712,6 +790,10 @@ msgid ""
 "methods <richcmpfuncs>`, like :meth:`!__lt__`, and also called by :c:func:"
 "`PyObject_RichCompare` and :c:func:`PyObject_RichCompareBool`."
 msgstr ""
+"Обработчик :c:member:`~PyTypeObject.tp_richcompare` вызывается, когда "
+"необходимо сравнение. Он аналогичен :ref:`методам расширенного сравнения "
+"<richcmpfuncs>`, например :meth:`!__lt__`, и также вызывается :c:func:"
+"`PyObject_RichCompare` и :c:func:`PyObject_RichCompareBool`."
 
 #: ../../extending/newtypes.rst:370
 msgid ""
@@ -815,6 +897,9 @@ msgid ""
 "PySequenceMethods *tp_as_sequence;\n"
 "PyMappingMethods  *tp_as_mapping;"
 msgstr ""
+"PyNumberMethods   *tp_as_number;\n"
+"PySequenceMethods *tp_as_sequence;\n"
+"PyMappingMethods  *tp_as_mapping;"
 
 #: ../../extending/newtypes.rst:429
 msgid ""
@@ -836,7 +921,7 @@ msgstr ""
 
 #: ../../extending/newtypes.rst:436
 msgid "hashfunc tp_hash;"
-msgstr ""
+msgstr "hashfunc tp_hash;"
 
 #: ../../extending/newtypes.rst:438
 msgid ""
@@ -873,7 +958,7 @@ msgstr ""
 
 #: ../../extending/newtypes.rst:458
 msgid "ternaryfunc tp_call;"
-msgstr ""
+msgstr "ternaryfunc tp_call;"
 
 #: ../../extending/newtypes.rst:460
 msgid ""
@@ -953,6 +1038,9 @@ msgid ""
 "getiterfunc tp_iter;\n"
 "iternextfunc tp_iternext;"
 msgstr ""
+"/* Iterators */\n"
+"getiterfunc tp_iter;\n"
+"iternextfunc tp_iternext;"
 
 #: ../../extending/newtypes.rst:504
 msgid ""
@@ -964,6 +1052,12 @@ msgid ""
 "`~PyTypeObject.tp_iternext` corresponds to the Python :meth:`~iterator."
 "__next__` method."
 msgstr ""
+"Эти функции обеспечивают поддержку протокола итератора. Оба обработчика "
+"принимают ровно один параметр — экземпляр, для которого они вызываются, — и "
+"возвращают новую ссылку. В случае ошибки они должны установить исключение и "
+"вернуть NULL. :c:member:`~PyTypeObject.tp_iter` соответствует методу Python :"
+"meth:`~object.__iter__`, а :c:member:`~PyTypeObject.tp_iternext` "
+"соответствует методу Python :meth:`~iterator.__next__ `метод."
 
 #: ../../extending/newtypes.rst:511
 msgid ""
@@ -1050,11 +1144,15 @@ msgid ""
 "field. The legacy :c:member:`~PyTypeObject.tp_weaklistoffset` field should "
 "be left as zero."
 msgstr ""
+"Чтобы на объект можно было слабо ссылаться, тип расширения должен установить "
+"бит ``Py_TPFLAGS_MANAGED_WEAKREF`` поля :c:member:`~PyTypeObject.tp_flags`. "
+"Устаревшее поле :c:member:`~PyTypeObject.tp_weaklistoffset` следует оставить "
+"равным нулю."
 
 #: ../../extending/newtypes.rst:553
 msgid ""
 "Concretely, here is how the statically declared type object would look::"
-msgstr ""
+msgstr "Конкретно, вот как будет выглядеть статически объявленный объект типа:"
 
 #: ../../extending/newtypes.rst:555
 msgid ""
@@ -1064,12 +1162,19 @@ msgid ""
 "    .tp_flags = Py_TPFLAGS_MANAGED_WEAKREF | ...,\n"
 "};"
 msgstr ""
+"static PyTypeObject TrivialType = {\n"
+"    PyVarObject_HEAD_INIT(NULL, 0)\n"
+"    /* ... other members omitted for brevity ... */\n"
+"    .tp_flags = Py_TPFLAGS_MANAGED_WEAKREF | ...,\n"
+"};"
 
 #: ../../extending/newtypes.rst:562
 msgid ""
 "The only further addition is that ``tp_dealloc`` needs to clear any weak "
 "references (by calling :c:func:`PyObject_ClearWeakRefs`)::"
 msgstr ""
+"Единственное дополнение заключается в том, что ``tp_dealloc`` должен очищать "
+"все слабые ссылки (путем вызова :c:func:`PyObject_ClearWeakRefs`)::"
 
 #: ../../extending/newtypes.rst:565
 msgid ""
@@ -1118,6 +1223,10 @@ msgid ""
 "    return NULL;\n"
 "}"
 msgstr ""
+"if (!PyObject_TypeCheck(some_object, &MyType)) {\n"
+"    PyErr_SetString(PyExc_TypeError, \"arg #1 not a mything\");\n"
+"    return NULL;\n"
+"}"
 
 #: ../../extending/newtypes.rst:594
 msgid "Download CPython source releases."
@@ -1144,27 +1253,27 @@ msgstr "objeto"
 
 #: ../../extending/newtypes.rst:56
 msgid "deallocation"
-msgstr ""
+msgstr "освобождение"
 
 #: ../../extending/newtypes.rst:56
 msgid "deallocation, object"
-msgstr ""
+msgstr "освобождение, объект"
 
 #: ../../extending/newtypes.rst:56
 msgid "finalization"
-msgstr ""
+msgstr "завершение"
 
 #: ../../extending/newtypes.rst:56
 msgid "finalization, of objects"
-msgstr ""
+msgstr "доработка объектов"
 
 #: ../../extending/newtypes.rst:91
 msgid "PyErr_Fetch (C function)"
-msgstr ""
+msgstr "PyErr_Fetch (C функция)"
 
 #: ../../extending/newtypes.rst:91
 msgid "PyErr_Restore (C function)"
-msgstr ""
+msgstr "PyErr_Restore (C функция)"
 
 #: ../../extending/newtypes.rst:150
 msgid "string"
@@ -1172,11 +1281,11 @@ msgstr "cadena"
 
 #: ../../extending/newtypes.rst:150
 msgid "object representation"
-msgstr ""
+msgstr "представление объекта"
 
 #: ../../extending/newtypes.rst:150
 msgid "built-in function"
-msgstr ""
+msgstr "funkcja wbudowana"
 
 #: ../../extending/newtypes.rst:150
 msgid "repr"

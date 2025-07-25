@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-23 14:55+0000\n"
-"PO-Revision-Date: 2025-05-08 05:08+0000\n"
+"POT-Creation-Date: 2025-07-25 15:00+0000\n"
+"PO-Revision-Date: 2025-07-18 19:20+0000\n"
 "Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>, 2025\n"
 "Language-Team: Spanish (Spain) (https://app.transifex.com/python-doc/"
 "teams/5390/es_ES/)\n"
@@ -51,10 +51,15 @@ msgid ""
 "instances of the type are mutable, a :c:member:`~PyTypeObject.tp_clear` "
 "implementation must also be provided."
 msgstr ""
+"Чтобы создать тип контейнера, поле :c:member:`~PyTypeObject.tp_flags` "
+"объекта типа должно включать :c:macro:`Py_TPFLAGS_HAVE_GC` и обеспечивать "
+"реализацию :c:member:`~PyTypeObject.tp_traverse. `обработчик. Если "
+"экземпляры типа изменяемы, необходимо также предоставить реализацию :c:"
+"member:`~PyTypeObject.tp_clear`."
 
 #: ../../c-api/gcsupport.rst:21
 msgid ":c:macro:`Py_TPFLAGS_HAVE_GC`"
-msgstr ""
+msgstr ":c:macro:`Py_TPFLAGS_HAVE_GC`"
 
 #: ../../c-api/gcsupport.rst:22
 msgid ""
@@ -75,6 +80,8 @@ msgid ""
 "The memory for the object must be allocated using :c:macro:`PyObject_GC_New` "
 "or :c:macro:`PyObject_GC_NewVar`."
 msgstr ""
+"Память для объекта должна быть выделена с помощью :c:macro:`PyObject_GC_New` "
+"или :c:macro:`PyObject_GC_NewVar`."
 
 #: ../../c-api/gcsupport.rst:31
 msgid ""
@@ -126,18 +133,29 @@ msgid ""
 "implements the garbage collector protocol and the child class does *not* "
 "include the :c:macro:`Py_TPFLAGS_HAVE_GC` flag."
 msgstr ""
+"При вызове :c:func:`PyType_Ready` или некоторых API, которые косвенно "
+"вызывают его, например :c:func:`PyType_FromSpecWithBases` или :c:func:"
+"`PyType_FromSpec`, интерпретатор автоматически заполняет :c:member:`~ Поля "
+"PyTypeObject.tp_flags`, :c:member:`~PyTypeObject.tp_traverse` и :c:member:"
+"`~PyTypeObject.tp_clear`, если тип наследуется от класса, реализующего "
+"протокол сборщика мусора, а дочерний класс *нет* включите флаг :c:macro:"
+"`Py_TPFLAGS_HAVE_GC`."
 
 #: ../../c-api/gcsupport.rst:57
 msgid ""
 "Analogous to :c:macro:`PyObject_New` but for container objects with the :c:"
 "macro:`Py_TPFLAGS_HAVE_GC` flag set."
 msgstr ""
+"Аналогично :c:macro:`PyObject_New`, но для объектов-контейнеров с "
+"установленным флагом :c:macro:`Py_TPFLAGS_HAVE_GC`."
 
 #: ../../c-api/gcsupport.rst:62
 msgid ""
 "Analogous to :c:macro:`PyObject_NewVar` but for container objects with the :"
 "c:macro:`Py_TPFLAGS_HAVE_GC` flag set."
 msgstr ""
+"Аналогично :c:macro:`PyObject_NewVar`, но для объектов-контейнеров с "
+"установленным флагом :c:macro:`Py_TPFLAGS_HAVE_GC`."
 
 #: ../../c-api/gcsupport.rst:67
 msgid ""
@@ -146,12 +164,18 @@ msgid ""
 "The allocated memory is initialized to zeros, except for the :c:type:`Python "
 "object header <PyObject>`."
 msgstr ""
+"Аналогично :c:macro:`PyObject_GC_New`, но выделяет *extra_size* байты в "
+"конце объекта (по смещению :c:member:`~PyTypeObject.tp_basicsize`). "
+"Выделенная память инициализируется нулями, за исключением :c:type:`Заголовка "
+"объекта Python <PyObject>`."
 
 #: ../../c-api/gcsupport.rst:73
 msgid ""
 "The extra data will be deallocated with the object, but otherwise it is not "
 "managed by Python."
 msgstr ""
+"Дополнительные данные будут освобождены вместе с объектом, но в противном "
+"случае они не управляются Python."
 
 #: ../../c-api/gcsupport.rst:77
 msgid ""
@@ -160,6 +184,10 @@ msgid ""
 "number of fields, prefer using :c:type:`PyVarObject` and :c:member:"
 "`~PyTypeObject.tp_itemsize` instead."
 msgstr ""
+"Функция помечена как нестабильная, поскольку окончательный механизм "
+"резервирования дополнительных данных после экземпляра еще не определен. Для "
+"выделения переменного количества полей вместо этого предпочтительнее "
+"использовать :c:type:`PyVarObject` и :c:member:`~PyTypeObject.tp_itemsize`."
 
 #: ../../c-api/gcsupport.rst:88
 msgid ""
@@ -167,12 +195,17 @@ msgid ""
 "resized object of type ``TYPE*`` (refers to any C type) or ``NULL`` on "
 "failure."
 msgstr ""
+"Измените размер объекта, выделенного :c:macro:`PyObject_NewVar`. Возвращает "
+"объект измененного размера типа TYPE* ​​(относится к любому типу C) или NULL в "
+"случае ошибки."
 
 #: ../../c-api/gcsupport.rst:92
 msgid ""
 "*op* must be of type :c:expr:`PyVarObject *` and must not be tracked by the "
 "collector yet. *newsize* must be of type :c:type:`Py_ssize_t`."
 msgstr ""
+"*op* должен иметь тип :c:expr:`PyVarObject *` и пока не должен отслеживаться "
+"сборщиком. *newsize* должен иметь тип :c:type:`Py_ssize_t`."
 
 #: ../../c-api/gcsupport.rst:99
 msgid ""
@@ -234,6 +267,8 @@ msgid ""
 "Releases memory allocated to an object using :c:macro:`PyObject_GC_New` or :"
 "c:macro:`PyObject_GC_NewVar`."
 msgstr ""
+"Освобождает память, выделенную объекту, используя :c:macro:`PyObject_GC_New` "
+"или :c:macro:`PyObject_GC_NewVar`."
 
 #: ../../c-api/gcsupport.rst:142
 msgid ""
@@ -257,6 +292,8 @@ msgid ""
 "The :c:func:`!_PyObject_GC_TRACK` and :c:func:`!_PyObject_GC_UNTRACK` macros "
 "have been removed from the public C API."
 msgstr ""
+"Макросы :c:func:`!_PyObject_GC_TRACK` и :c:func:`!_PyObject_GC_UNTRACK` были "
+"удалены из общедоступного C API."
 
 #: ../../c-api/gcsupport.rst:154
 msgid ""
@@ -325,6 +362,9 @@ msgid ""
 "return it. Using this macro, :c:member:`~PyTypeObject.tp_traverse` handlers "
 "look like::"
 msgstr ""
+"如果 :c:expr:`PyObject *` *o* 不为 ``NULL``，则调用 *visit* 回调，附带参数 "
+"*o* 和 *arg*。 如果 *visit* 返回一个非零值，则将返回该值。 使用此宏之后，:c:"
+"member:`~PyTypeObject.tp_traverse` 处理器看起来是这样的::"
 
 #: ../../c-api/gcsupport.rst:190
 msgid ""
@@ -336,6 +376,13 @@ msgid ""
 "    return 0;\n"
 "}"
 msgstr ""
+"static int\n"
+"my_traverse(Noddy *self, visitproc visit, void *arg)\n"
+"{\n"
+"    Py_VISIT(self->foo);\n"
+"    Py_VISIT(self->bar);\n"
+"    return 0;\n"
+"}"
 
 #: ../../c-api/gcsupport.rst:198
 msgid ""
@@ -363,19 +410,21 @@ msgstr ""
 
 #: ../../c-api/gcsupport.rst:213
 msgid "Controlling the Garbage Collector State"
-msgstr ""
+msgstr "Контроль стану Garbage Collector"
 
 #: ../../c-api/gcsupport.rst:215
 msgid ""
 "The C-API provides the following functions for controlling garbage "
 "collection runs."
-msgstr ""
+msgstr "C-API надає такі функції для керування виконанням збирання сміття."
 
 #: ../../c-api/gcsupport.rst:220
 msgid ""
 "Perform a full garbage collection, if the garbage collector is enabled. "
 "(Note that :func:`gc.collect` runs it unconditionally.)"
 msgstr ""
+"Виконати повне збирання сміття, якщо ввімкнено збирач сміття. (Зверніть "
+"увагу, що :func:`gc.collect` запускає його безумовно.)"
 
 #: ../../c-api/gcsupport.rst:223
 msgid ""
@@ -384,46 +433,62 @@ msgid ""
 "returns ``0`` immediately. Errors during garbage collection are passed to :"
 "data:`sys.unraisablehook`. This function does not raise exceptions."
 msgstr ""
+"Повертає кількість зібраних + недосяжних об’єктів, які неможливо зібрати. "
+"Якщо збирач сміття вимкнено або вже збирає, негайно повертає ``0``. Помилки "
+"під час збирання сміття передаються до :data:`sys.unraisablehook`. Ця "
+"функція не викликає винятків."
 
 #: ../../c-api/gcsupport.rst:233
 msgid ""
 "Enable the garbage collector: similar to :func:`gc.enable`. Returns the "
 "previous state, 0 for disabled and 1 for enabled."
 msgstr ""
+"Увімкніть збирач сміття: подібно до :func:`gc.enable`. Повертає попередній "
+"стан, 0 для вимкнено та 1 для ввімкнено."
 
 #: ../../c-api/gcsupport.rst:241
 msgid ""
 "Disable the garbage collector: similar to :func:`gc.disable`. Returns the "
 "previous state, 0 for disabled and 1 for enabled."
 msgstr ""
+"Вимкнути збирач сміття: подібно до :func:`gc.disable`. Повертає попередній "
+"стан, 0 для вимкнено та 1 для ввімкнено."
 
 #: ../../c-api/gcsupport.rst:249
 msgid ""
 "Query the state of the garbage collector: similar to :func:`gc.isenabled`. "
 "Returns the current state, 0 for disabled and 1 for enabled."
 msgstr ""
+"Запитайте стан збирача сміття: подібно до :func:`gc.isenabled`. Повертає "
+"поточний стан, 0 для вимкнено та 1 для ввімкнено."
 
 #: ../../c-api/gcsupport.rst:256
 msgid "Querying Garbage Collector State"
-msgstr ""
+msgstr "Запрос состояния сборщика мусора"
 
 #: ../../c-api/gcsupport.rst:258
 msgid ""
 "The C-API provides the following interface for querying information about "
 "the garbage collector."
 msgstr ""
+"C-API предоставляет следующий интерфейс для запроса информации о сборщике "
+"мусора."
 
 #: ../../c-api/gcsupport.rst:263
 msgid ""
 "Run supplied *callback* on all live GC-capable objects. *arg* is passed "
 "through to all invocations of *callback*."
 msgstr ""
+"Запустите предоставленный *обратный вызов* на всех живых объектах, "
+"поддерживающих сборщик мусора. *arg* передается во все вызовы *callback*."
 
 #: ../../c-api/gcsupport.rst:267
 msgid ""
 "If new objects are (de)allocated by the callback it is undefined if they "
 "will be visited."
 msgstr ""
+"Если новые объекты выделяются (освобождаются) обратным вызовом, неизвестно, "
+"будут ли они посещены."
 
 #: ../../c-api/gcsupport.rst:270
 msgid ""
@@ -431,6 +496,9 @@ msgid ""
 "collection in the callback may lead to undefined behaviour e.g. visiting the "
 "same objects multiple times or not at all."
 msgstr ""
+"Во время работы сбор мусора отключен. Явное выполнение коллекции в обратном "
+"вызове может привести к неопределенному поведению, например, к посещению "
+"одних и тех же объектов несколько раз или к отсутствию вообще."
 
 #: ../../c-api/gcsupport.rst:278
 msgid ""
@@ -440,3 +508,8 @@ msgid ""
 "``0`` to stop iteration. Other return values are reserved for now so "
 "behavior on returning anything else is undefined."
 msgstr ""
+"Тип функции посетителя, передаваемой в :c:func:`PyUnstable_GC_VisitObjects`. "
+"*arg* совпадает с *arg*, передаваемым в ``PyUnstable_GC_VisitObjects``. "
+"Верните ``1`` для продолжения итерации, верните ``0`` для остановки "
+"итерации. Другие возвращаемые значения пока зарезервированы, поэтому "
+"поведение при возврате чего-либо еще не определено."
