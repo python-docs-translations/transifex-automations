@@ -21,7 +21,7 @@ Source strings are updated using a continuous integration workflow under
 `.github/workflows <https://github.com/python-docs-translations/transifex-automation/tree/main/.github/workflows>`_.
 Details:
 
-- Run weekly
+- Run every second day;
 - Run for releases in beta, release candidate, stable, bugfixes and security-fixes status; alpha or EOL are excluded;
 - It **DOES NOT** store translations to be used by the published documentation;
 
