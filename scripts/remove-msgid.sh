@@ -53,6 +53,6 @@ remove_msgid  reference/lexical_analysis.pot  '^\\N$'
 remove_msgid  c-api/sys.pot '^Raises an :ref:`auditing event <auditing>` ``sys.addaudithook`` with no arguments.$'
 remove_msgid  library/sys.pot '^Raises an :ref:`auditing event <auditing>` ``sys.addaudithook`` with no arguments.$'
 
-# "Object" is too common Word, and should not be translated in this case.
+# "object" is too common, and should not be translated in this case.
 # Remove to avoid incorrect translation.
 remove_msgid library/string.templatelib.pot '^object$'
