@@ -34,11 +34,15 @@ remove_msgid() {
     pot=$1
     shift
     msgid=$@
-    msggrep -Ke "$msgid" $pot > $tmp
-    msgcomm --no-wrap --less-than=2 $pot $tmp > $tmp2
-    mv $tmp2 $pot
-    echo "Stripping from '$pot': $msgid"
-    powrap -q $pot
+    if [ ! -f $pot ]; then
+        echo "$pot was not found, skipping"
+    else
+        msggrep -Ke "$msgid" $pot > $tmp
+        msgcomm --no-wrap --less-than=2 $pot $tmp > $tmp2
+        mv $tmp2 $pot
+        echo "Stripping from '$pot': $msgid"
+        powrap -q $pot
+    fi
 }
 
 
