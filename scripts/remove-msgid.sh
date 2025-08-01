@@ -55,4 +55,4 @@ remove_msgid  library/sys.pot '^Raises an :ref:`auditing event <auditing>` ``sys
 
 # "Object" is too common Word, and should not be translated in this case.
 # Remove to avoid incorrect translation.
-remove_msgid library/string.templatelib.pot '^object$"
+remove_msgid library/string.templatelib.pot '^object$'
