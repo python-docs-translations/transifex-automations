@@ -34,11 +34,15 @@ remove_msgid() {
     pot=$1
     shift
     msgid=$@
-    msggrep -Ke "$msgid" $pot > $tmp
-    msgcomm --no-wrap --less-than=2 $pot $tmp > $tmp2
-    mv $tmp2 $pot
-    echo "Stripping from '$pot': $msgid"
-    powrap -q $pot
+    if [ ! -f $pot ]; then
+        echo "$pot was not found, skipping"
+    else
+        msggrep -Ke "$msgid" $pot > $tmp
+        msgcomm --no-wrap --less-than=2 $pot $tmp > $tmp2
+        mv $tmp2 $pot
+        echo "Stripping from '$pot': $msgid"
+        powrap -q $pot
+    fi
 }
 
 
@@ -52,3 +56,7 @@ remove_msgid  reference/lexical_analysis.pot  '^\\N$'
 # Fixed via https://github.com/python/cpython/pull/19470
 remove_msgid  c-api/sys.pot '^Raises an :ref:`auditing event <auditing>` ``sys.addaudithook`` with no arguments.$'
 remove_msgid  library/sys.pot '^Raises an :ref:`auditing event <auditing>` ``sys.addaudithook`` with no arguments.$'
+
+# "object" is too common, and should not be translated in this case.
+# Remove to avoid incorrect translation.
+remove_msgid library/string.templatelib.pot '^object$'
