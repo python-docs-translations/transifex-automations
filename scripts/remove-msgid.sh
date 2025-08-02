@@ -47,8 +47,3 @@ remove_msgid() {
 remove_msgid  library/codecs.pot '^\\N$'
 remove_msgid  library/re.pot  '^\\N$'
 remove_msgid  reference/lexical_analysis.pot  '^\\N$'
-
-# This string should not be translated, otherwise sphinx-build give warnings
-# Fixed via https://github.com/python/cpython/pull/19470
-remove_msgid  c-api/sys.pot '^Raises an :ref:`auditing event <auditing>` ``sys.addaudithook`` with no arguments.$'
-remove_msgid  library/sys.pot '^Raises an :ref:`auditing event <auditing>` ``sys.addaudithook`` with no arguments.$'
