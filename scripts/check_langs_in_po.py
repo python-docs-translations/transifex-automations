@@ -66,7 +66,9 @@ def main():
         "--no-polish", action="store_true", help="Disable Polish pattern checking."
     )
     parser.add_argument(
-        "--no-ukrainian", action="store_true", help="Disable Ukrainian pattern checking."
+        "--no-ukrainian",
+        action="store_true",
+        help="Disable Ukrainian pattern checking."
     )
 
     args = parser.parse_args()
@@ -74,7 +76,7 @@ def main():
     pattern = build_pattern(
         enable_russian=not args.no_russian,
         enable_polish=not args.no_polish,
-        enable_ukrainian=not args.no_ukrainian
+        enable_ukrainian=not args.no_ukrainian,
     )
 
     if not pattern:
