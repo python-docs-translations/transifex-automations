@@ -21,7 +21,7 @@ for po in $pofiles; do
 done
 
 # Check first element in the array. If not empty, then go ahead and remove them
-if [ -z "${to_remove}" ]; then
+if [ ${#to_remove[@]} -eq 0 ]; then
   echo "No empty PO to remove."
 else
   git rm ${to_remove[@]}
