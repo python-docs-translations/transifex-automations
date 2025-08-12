@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Check .po files for presence of specific language patterns in translated strings.
-Languages currently checked: Russian, Polish, Ukranian.
+Languages currently checked: Russian, Polish, Ukrainian.
 """
 import argparse
 import re
@@ -12,6 +12,25 @@ from pathlib import Path
 RUSSIAN = r"\u0400-\u04FF"  # Full Cyrillic block
 POLISH = r"ĄĆĘŁŃŚŹŻąćęłńśźż"
 UKRAINIAN = r"ҐЄІЇґєії"
+
+# Words to ignore if found in msgstr
+IGNORE_WORDS = [
+    "Charles-François",
+    "Gruszczyński",
+    "Jędrzejewski-Szmek",
+    "Kołodziej",
+    "Коренберг Марк",
+    "Łukasz",
+    "Łapkiewicz",
+    "Марк Коренберг",
+    "Michał",
+    "Ożarowski",
+    "Sławecki",
+    "Stanisław",
+    "Tvrtković",
+    "Wołodźko",
+    "Є",
+]
 
 
 def build_pattern(enable_russian=True, enable_polish=True, enable_ukrainian=True):
@@ -30,10 +49,20 @@ def build_pattern(enable_russian=True, enable_polish=True, enable_ukrainian=True
     return re.compile(f"[{''.join(parts)}]")
 
 
+def should_ignore(text):
+    """
+    Return True if the text contains any of the ignore words.
+    """
+    for word in IGNORE_WORDS:
+        if word in text:
+            return True
+    return False
+
+
 def find_matches_in_po(po_path, pattern):
     """
     Search for matches in translated strings of a PO file.
-    Skips entries with empty translations.
+    Skips entries with empty translations or containing ignored words.
     """
     matches = []
     if not pattern:
@@ -43,6 +72,9 @@ def find_matches_in_po(po_path, pattern):
     for entry in po:
         # Skip if there is no translation at all
         if not entry.msgstr.strip():
+            continue
+
+        if should_ignore(entry.msgstr):
             continue
 
         texts = [entry.msgstr]
