@@ -42,7 +42,7 @@ def find_matches_in_po(po_path, pattern):
     po = polib.pofile(po_path)
     for entry in po:
         # Skip if there is no translation at all
-        if not entry.msgstr.strip() and not any(v.strip() for v in entry.msgstr_plural.values()):
+        if not entry.msgstr.strip():
             continue
 
         texts = [entry.msgstr]
