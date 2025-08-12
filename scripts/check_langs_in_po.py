@@ -56,10 +56,18 @@ def find_matches_in_po(po_path, pattern):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("paths", nargs="+", help="One or more PO files or directories to search")
-    parser.add_argument("--no-russian", action="store_true", help="Disable Russian pattern checking.")
-    parser.add_argument("--no-polish", action="store_true", help="Disable Polish pattern checking.")
-    parser.add_argument("--no-ukrainian", action="store_true", help="Disable Ukrainian pattern checking.")
+    parser.add_argument(
+        "paths", nargs="+", help="One or more PO files or directories to search"
+    )
+    parser.add_argument(
+        "--no-russian", action="store_true", help="Disable Russian pattern checking."
+    )
+    parser.add_argument(
+        "--no-polish", action="store_true", help="Disable Polish pattern checking."
+    )
+    parser.add_argument(
+        "--no-ukrainian", action="store_true", help="Disable Ukrainian pattern checking."
+    )
 
     args = parser.parse_args()
 
