@@ -5,15 +5,16 @@
 #
 # Translators:
 # python-doc bot, 2025
+# Daniel Nylander <po@danielnylander.se>, 2025
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-07 20:38+0000\n"
+"POT-Creation-Date: 2025-08-13 14:19+0000\n"
 "PO-Revision-Date: 2025-08-02 17:34+0000\n"
-"Last-Translator: python-doc bot, 2025\n"
+"Last-Translator: Daniel Nylander <po@danielnylander.se>, 2025\n"
 "Language-Team: Swedish (https://app.transifex.com/python-doc/teams/5390/"
 "sv/)\n"
 "MIME-Version: 1.0\n"
@@ -24,17 +25,19 @@ msgstr ""
 
 #: ../../library/sched.rst:2
 msgid ":mod:`!sched` --- Event scheduler"
-msgstr ""
+msgstr ":mod:`!sched` --- Schemaläggare för händelser"
 
 #: ../../library/sched.rst:9
 msgid "**Source code:** :source:`Lib/sched.py`"
-msgstr ""
+msgstr "**Källkod:** :source:`Lib/sched.py`"
 
 #: ../../library/sched.rst:15
 msgid ""
 "The :mod:`sched` module defines a class which implements a general purpose "
 "event scheduler:"
 msgstr ""
+"Modulen :mod:`sched` definierar en klass som implementerar en schemaläggare "
+"för händelser för allmänt bruk:"
 
 #: ../../library/sched.rst:20
 msgid ""
@@ -47,15 +50,23 @@ msgid ""
 "argument ``0`` after each event is run to allow other threads an opportunity "
 "to run in multi-threaded applications."
 msgstr ""
+"Klassen :class:`scheduler` definierar ett generiskt gränssnitt för "
+"schemaläggning av händelser. Den behöver två funktioner för att faktiskt "
+"hantera \"omvärlden\" --- *timefunc* skall kunna anropas utan argument och "
+"returnera ett tal (\"tiden\", i valfri enhet).  Funktionen *delayfunc* skall "
+"kunna anropas med ett argument, kompatibelt med resultatet från *timefunc*, "
+"och skall fördröja så många tidsenheter. *delayfunc* kommer också att "
+"anropas med argumentet ``0`` efter att varje händelse har körts för att ge "
+"andra trådar en möjlighet att köra i flertrådade applikationer."
 
 #: ../../library/sched.rst:29
 msgid "*timefunc* and *delayfunc* parameters are optional."
-msgstr ""
+msgstr "parametrarna *timefunc* och *delayfunc* är valfria."
 
 #: ../../library/sched.rst:32
 msgid ""
 ":class:`scheduler` class can be safely used in multi-threaded environments."
-msgstr ""
+msgstr ":class:`scheduler`-klassen kan användas säkert i flertrådade miljöer."
 
 #: ../../library/sched.rst:36
 msgid "Example::"
@@ -91,14 +102,41 @@ msgid ""
 "From print_time 1652342840.369612 default\n"
 "1652342840.3697174"
 msgstr ""
+">>> import sched, time\n"
+">>> s = sched.scheduler(time.time, time.sleep)\n"
+">>> def print_time(a='default'):\n"
+"...     print(\"From print_time\", time.time(), a)\n"
+"...\n"
+">>> def print_some_times():\n"
+"...     print(time.time())\n"
+"...     s.enter(10, 1, print_time)\n"
+"...     s.enter(5, 2, print_time, argument=('positional',))\n"
+"...     # despite having higher priority, 'keyword' runs after 'positional' "
+"as enter() is relative\n"
+"...     s.enter(5, 1, print_time, kwargs={'a': 'keyword'})\n"
+"...     s.enterabs(1_650_000_000, 10, print_time, argument=(\"first "
+"enterabs\",))\n"
+"...     s.enterabs(1_650_000_000, 5, print_time, argument=(\"second "
+"enterabs\",))\n"
+"...     s.run()\n"
+"...     print(time.time())\n"
+"...\n"
+">>> print_some_times()\n"
+"1652342830.3640375\n"
+"From print_time 1652342830.3642538 second enterabs\n"
+"From print_time 1652342830.3643398 first enterabs\n"
+"From print_time 1652342835.3694863 positional\n"
+"From print_time 1652342835.3696074 keyword\n"
+"From print_time 1652342840.369612 default\n"
+"1652342840.3697174"
 
 #: ../../library/sched.rst:67
 msgid "Scheduler Objects"
-msgstr ""
+msgstr "Schemaläggningsobjekt"
 
 #: ../../library/sched.rst:69
 msgid ":class:`scheduler` instances have the following methods and attributes:"
-msgstr ""
+msgstr ":class:`scheduler`-instanser har följande metoder och attribut:"
 
 #: ../../library/sched.rst:74
 msgid ""
@@ -107,6 +145,11 @@ msgid ""
 "constructor. Events scheduled for the same *time* will be executed in the "
 "order of their *priority*. A lower number represents a higher priority."
 msgstr ""
+"Schemalägg en ny händelse. Argumentet *time* bör vara en numerisk typ som är "
+"kompatibel med returvärdet för funktionen *timefunc* som skickas till "
+"konstruktören. Händelser som schemalagts för samma *tid* kommer att utföras "
+"i den ordning som deras *prioritet* anger. En lägre siffra representerar en "
+"högre prioritet."
 
 #: ../../library/sched.rst:79
 msgid ""
@@ -114,20 +157,26 @@ msgid ""
 "*argument* is a sequence holding the positional arguments for *action*. "
 "*kwargs* is a dictionary holding the keyword arguments for *action*."
 msgstr ""
+"Att utföra händelsen innebär att utföra ``action(*argument, **kwargs)``. "
+"*argument* är en sekvens som innehåller de positionella argumenten för "
+"*action*. *kwargs* är en ordbok som innehåller nyckelordsargumenten för "
+"*action*."
 
 #: ../../library/sched.rst:83
 msgid ""
 "Return value is an event which may be used for later cancellation of the "
 "event (see :meth:`cancel`)."
 msgstr ""
+"Returvärdet är en händelse som kan användas för senare annullering av "
+"händelsen (se :meth:`cancel`)."
 
 #: ../../library/sched.rst:86 ../../library/sched.rst:99
 msgid "*argument* parameter is optional."
-msgstr ""
+msgstr "*argument*-parametern är valfri."
 
 #: ../../library/sched.rst:89 ../../library/sched.rst:102
 msgid "*kwargs* parameter was added."
-msgstr ""
+msgstr "*parametern kwargs* har lagts till."
 
 #: ../../library/sched.rst:95
 msgid ""
@@ -135,16 +184,22 @@ msgid ""
 "the other arguments, the effect and the return value are the same as those "
 "for :meth:`enterabs`."
 msgstr ""
+"Schemalägg en händelse för *fördröjning* fler tidsenheter. Förutom den "
+"relativa tiden är de andra argumenten, effekten och returvärdet desamma som "
+"för :meth:`enterabs`."
 
 #: ../../library/sched.rst:107
 msgid ""
 "Remove the event from the queue. If *event* is not an event currently in the "
 "queue, this method will raise a :exc:`ValueError`."
 msgstr ""
+"Tar bort händelsen från kön. Om *event* inte är en händelse som för "
+"närvarande finns i kön, kommer denna metod att ge upphov till ett :exc:"
+"`ValueError`."
 
 #: ../../library/sched.rst:113
 msgid "Return ``True`` if the event queue is empty."
-msgstr ""
+msgstr "Returnerar ``True`` om händelsekön är tom."
 
 #: ../../library/sched.rst:118
 msgid ""
@@ -152,6 +207,10 @@ msgid ""
 "function passed to the constructor) for the next event, then execute it and "
 "so on until there are no more scheduled events."
 msgstr ""
+"Kör alla schemalagda händelser. Den här metoden väntar (med hjälp av "
+"funktionen *delayfunc* som skickas till konstruktören) på nästa händelse och "
+"kör den sedan och så vidare tills det inte finns några fler schemalagda "
+"händelser."
 
 #: ../../library/sched.rst:122
 msgid ""
@@ -159,6 +218,9 @@ msgid ""
 "(if any) and then return the deadline of the next scheduled call in the "
 "scheduler (if any)."
 msgstr ""
+"Om *blocking* är false körs de schemalagda händelser som löper ut tidigast "
+"(om sådana finns) och returnerar sedan tidsfristen för nästa schemalagda "
+"anrop i schemaläggaren (om sådan finns)."
 
 #: ../../library/sched.rst:126
 msgid ""
@@ -167,6 +229,10 @@ msgid ""
 "an exception is raised by *action*, the event will not be attempted in "
 "future calls to :meth:`run`."
 msgstr ""
+"Antingen *action* eller *delayfunc* kan ge upphov till ett undantag.  I båda "
+"fallen kommer schemaläggaren att upprätthålla ett konsekvent tillstånd och "
+"sprida undantaget.  Om ett undantag utlöses av *action* kommer händelsen "
+"inte att prövas i framtida anrop till :meth:`run`."
 
 #: ../../library/sched.rst:131
 msgid ""
@@ -175,10 +241,14 @@ msgid ""
 "dropped; the calling code is responsible for canceling  events which are no "
 "longer pertinent."
 msgstr ""
+"Om en sekvens av händelser tar längre tid att köra än den tid som finns "
+"tillgänglig före nästa händelse, kommer schemaläggaren helt enkelt att hamna "
+"på efterkälken.  Inga händelser kommer att avbrytas; den anropande koden är "
+"ansvarig för att avbryta händelser som inte längre är relevanta."
 
 #: ../../library/sched.rst:136
 msgid "*blocking* parameter was added."
-msgstr ""
+msgstr "*parametern blocking* har lagts till."
 
 #: ../../library/sched.rst:141
 msgid ""
@@ -186,7 +256,10 @@ msgid ""
 "will be run.  Each event is shown as a :term:`named tuple` with the "
 "following fields:  time, priority, action, argument, kwargs."
 msgstr ""
+"Skrivskyddat attribut som returnerar en lista över kommande händelser i den "
+"ordning de kommer att köras.  Varje händelse visas som en :term:`named "
+"tuple` med följande fält: tid, prioritet, åtgärd, argument, kwargs."
 
 #: ../../library/sched.rst:11
 msgid "event scheduling"
-msgstr ""
+msgstr "schemaläggning av evenemang"
