@@ -137,7 +137,9 @@ def main():
             print(f"Warning: {p} not found.")
 
     for path in paths:
-        for po_path, linenum, text in find_matches_in_po(path, pattern, args.delete_matches):
+        for po_path, linenum, text in find_matches_in_po(
+            path, pattern, args.delete_matches
+        ):
             print(f"{po_path}:{linenum}: {text}")
 
 
