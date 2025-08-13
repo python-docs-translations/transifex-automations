@@ -24,7 +24,7 @@ def fetch():
         exit(code)
     lang = LANGUAGE
     if PULL_OPTIONS:
-        _call(f"tx pull -l {lang} {PULL_OPTIONS}")  # XXX Do we pull everything?
+        _call(f"tx pull -l {lang} --force {PULL_OPTIONS}")  # XXX Do we pull everything?
     else:
         _call(f"tx pull -l {lang} --force")
     for file in Path().rglob("*.po"):

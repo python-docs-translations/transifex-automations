@@ -104,6 +104,14 @@ This step detects whether the changes are significant by ignoring changes
 to the file header. A commit and push only occur if meaningful changes are found,
 these filters can be modified to suit.
 
+The workflow pulls translations using the `Transifex CLI <https://developers.transifex.com/docs/cli>`_
+and is currently configured to pull *all* files. The configuration options
+can be modified with the command line argument ``--pull-options``, for example:
+
+.. code-block::
+
+    --pull-options="--mode reviewed" # This will only pull reviewed translations
+
 
 Test Build Workflow
 -------------------
