@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
 Check .po files for presence of specific language patterns in translated strings.
+Optionally delete matched translations.
 Languages currently checked: Russian, Polish, Ukrainian.
 """
 import argparse
@@ -59,30 +60,36 @@ def should_ignore(text):
     return False
 
 
-def find_matches_in_po(po_path, pattern):
+def find_matches_in_po(po_path, pattern, delete_matches=False):
     """
     Search for matches in translated strings of a PO file.
     Skips entries with empty translations or containing ignored words.
+    Optionally delete matched translations.
     """
     matches = []
     if not pattern:
         return matches
 
     po = polib.pofile(po_path)
+    modified = False
+
     for entry in po:
         # Skip if there is no translation at all
         if not entry.msgstr.strip():
             continue
 
+        # Skip if contains ignored word
         if should_ignore(entry.msgstr):
             continue
 
-        texts = [entry.msgstr]
+        if pattern.search(entry.msgstr):
+            matches.append((po_path, entry.linenum, entry.msgstr))
+            if delete_matches:
+                entry.msgstr = ""
+                modified = True
 
-        for text in texts:
-            if text and pattern.search(text):
-                matches.append((po_path, entry.linenum, text))
-                break  # avoid multiple reports for the same entry
+        if delete_matches and modified:
+            po.save()
     return matches
 
 
@@ -100,7 +107,12 @@ def main():
     parser.add_argument(
         "--no-ukrainian",
         action="store_true",
-        help="Disable Ukrainian pattern checking."
+        help="Disable Ukrainian pattern checking.",
+    )
+    parser.add_argument(
+        "--delete-matches",
+        action="store_true",
+        help="Delete msgstr of matched entries.",
     )
 
     args = parser.parse_args()
@@ -125,7 +137,7 @@ def main():
             print(f"Warning: {p} not found.")
 
     for path in paths:
-        for po_path, linenum, text in find_matches_in_po(path, pattern):
+        for po_path, linenum, text in find_matches_in_po(path, pattern, args.delete_matches):
             print(f"{po_path}:{linenum}: {text}")
 
 
