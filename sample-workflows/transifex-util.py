@@ -23,7 +23,10 @@ def fetch():
         sys.stderr.write("The Transifex client app is required.\n")
         exit(code)
     lang = LANGUAGE
-    _call(f"tx pull -l {lang} --force")  # XXX Do we pull everything?
+    if PULL_OPTIONS:
+        _call(f"tx pull -l {lang} {PULL_OPTIONS}")  # XXX Do we pull everything?
+    else:
+        _call(f"tx pull -l {lang} --force")
     for file in Path().rglob("*.po"):
         _call(f"msgcat --no-location -o {file} {file}")
 
@@ -114,11 +117,13 @@ if __name__ == "__main__":
     parser.add_argument("--language", required=True)
     parser.add_argument("--project-slug", required=True)
     parser.add_argument("--version", required=True)
+    parser.add_argument("--pull-options", required=False)
 
     options = parser.parse_args()
 
     LANGUAGE = options.language
     PROJECT_SLUG = options.project_slug
     VERSION = options.version
+    PULL_OPTIONS = options.pull_options
 
     globals()[options.cmd]()
