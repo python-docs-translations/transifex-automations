@@ -20,7 +20,7 @@ for po in $pofiles; do
   fi
 done
 
-# Check first element in the array. If not empty, then go ahead and remove them
+# Check array size. If not 0, then go ahead and remove them
 if [ ${#to_remove[@]} -eq 0 ]; then
   echo "No empty PO to remove."
 else
