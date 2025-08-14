@@ -50,6 +50,8 @@ def recreate_tx_config():
                 with open(".tx/config", "r") as file:
                     contents = file.read()
         contents = contents.replace("./<lang>/LC_MESSAGES/", "")
+
+        os.makedirs(".tx", exist_ok=True)
         with open(".tx/config", "w") as file:
             file.write(contents)
 
