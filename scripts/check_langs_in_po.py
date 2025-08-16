@@ -2,6 +2,7 @@
 """
 Check PO files for translations from another language
 """
+
 import argparse
 import re
 from pathlib import Path
@@ -15,10 +16,44 @@ from pyfranc import franc
 # TODO: de-hardcode this.
 # Languages currently available in transifex-automations, without region
 ALLOWED_LANGUAGES = [
-    "ans", "ar", "az", "bn", "ca", "cmn", "cs", "da", "de", "el", "es", "fa",
-    "fi", "hi", "hu", "id", "it", "ja", "ka", "ko", "ky", "lt", "mr", "nb",
-    "ne", "nl", "pl", "ps", "pt", "ru", "si", "sq", "sv", "tr", "uk", "ur",
-    "vi", "zh"
+    "ans",
+    "ar",
+    "az",
+    "bn",
+    "ca",
+    "cmn",
+    "cs",
+    "da",
+    "de",
+    "el",
+    "es",
+    "fa",
+    "fi",
+    "hi",
+    "hu",
+    "id",
+    "it",
+    "ja",
+    "ka",
+    "ko",
+    "ky",
+    "lt",
+    "mr",
+    "nb",
+    "ne",
+    "nl",
+    "pl",
+    "ps",
+    "pt",
+    "ru",
+    "si",
+    "sq",
+    "sv",
+    "tr",
+    "uk",
+    "ur",
+    "vi",
+    "zh",
 ]
 
 LANGUAGE_PATTERN = r"([a-z]{3}|[a-z]{2})"
@@ -30,7 +65,7 @@ def get_lang_from_file(po: polib.POFile) -> str | None:
     and return ISO 639-3 equivalent.
     Returns None if language metadata is missing or invalid.
     """
-    lang = po.metadata.get('Language', '')
+    lang = po.metadata.get("Language", "")
     match = re.match(LANGUAGE_PATTERN, lang)
     try:
         lang_code_2 = match.group(0)
@@ -44,10 +79,7 @@ def convert_language_list_to_iso639_3(allowed_languages: list) -> list:
     Generate a ISO 639-3 list from the existing language list as downloaded
     from Transifex. Handles lang nameas as "ru", "pt_BR", "cmn" and "es_419"
     """
-    converted = sorted([
-        Lang(l).pt3 if len(l) == 2 else l
-        for l in allowed_languages
-    ])
+    converted = sorted([Lang(l).pt3 if len(l) == 2 else l for l in allowed_languages])
     return converted
 
 
@@ -56,14 +88,16 @@ def detect_language_from_text(text: str, allowed_languages: list) -> str | None:
     Return the ISO 639-3 language code as detected by pyfranc's franc function,
     or return None if matches nothing, if undefined or not a 100% match.
     """
-    found = franc.lang_detect(text, whitelist = allowed_languages)
-    if found and not found[0][0] == 'und':
+    found = franc.lang_detect(text, whitelist=allowed_languages)
+    if found and not found[0][0] == "und":
         return found[0][0]  # returns ISO 639-3
     else:
         return None
 
 
-def find_matches_in_po(po_path: str, delete_matches: bool = False, allowed_languages: list = []):
+def find_matches_in_po(
+    po_path: str, delete_matches: bool = False, allowed_languages: list = []
+):
     """
     Compare expected language from metadata with detected language from msgstr.
     If different, record the entry. Optionally delete mismatched translations.
@@ -74,16 +108,14 @@ def find_matches_in_po(po_path: str, delete_matches: bool = False, allowed_langu
     modified = False
 
     if not expected_lang:
-        return matches # skip if no valid expected language
+        return matches  # skip if no valid expected language
 
     for entry in po:
         # Skip if there is no translation at all
         if not entry.msgstr.strip():
             continue
 
-        detected_lang = detect_language_from_text(
-            entry.msgstr, allowed_languages
-        )
+        detected_lang = detect_language_from_text(entry.msgstr, allowed_languages)
 
         if detected_lang != expected_lang and detected_lang:
             matches.append((po_path, entry.linenum, detected_lang, entry.msgstr))
@@ -111,7 +143,7 @@ def main():
         "--lang",
         metavar="LANG",
         help="Specific language (2- or 3-letter code) to compare translations against. "
-             "If not set, will check against all allowed languages."
+        "If not set, will check against all allowed languages."
     )
 
     args = parser.parse_args()
