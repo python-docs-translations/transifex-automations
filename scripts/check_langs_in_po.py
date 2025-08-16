@@ -143,7 +143,7 @@ def main():
         "--lang",
         metavar="LANG",
         help="Specific language (2- or 3-letter code) to compare translations against. "
-        "If not set, will check against all allowed languages."
+          "If not set, will check against all allowed languages."
     )
 
     args = parser.parse_args()
