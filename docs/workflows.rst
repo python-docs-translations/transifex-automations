@@ -64,10 +64,12 @@ manually due to the ``workflow_dispatch`` option.
 All jobs or sections under ``jobs:`` will be run. The sample workflows can be
 merged into one by combining all of their jobs. (Note: there must only be one `jobs:`)
 
-In the workflows, replace all instances of ``XX`` with your `IETF <https://datatracker.ietf.org/doc/html/rfc5646.html>`_
-language tag, as described in `PEP 545 <https://peps.python.org/pep-0545/#language-tag>`_.
-These tools, however, require and underscore (``_``) rather than a dash (``-``);
-for example ``pl`` or ``pt_BR``.
+.. important::
+
+    In the workflows, replace all instances of ``XX`` with your `IETF <https://datatracker.ietf.org/doc/html/rfc5646.html>`_
+    language tag, as described in `PEP 545 <https://peps.python.org/pep-0545/#language-tag>`_.
+    These tools, however, require and underscore (``_``) rather than a dash (``-``);
+    for example ``pl`` or ``pt_BR``.
 
 
 Transifex Pull Workflow
