@@ -160,16 +160,16 @@ msgid ""
 "              RETURN_VALUE"
 msgstr ""
 ">>> dis.dis(myfunc)\n"
-"  2 ÅTERGÅ 0\n"
+"  2           RESUME                   0\n"
 "\n"
-"  3 LOAD_GLOBAL 1 (len + NULL)\n"
-"              LOAD_FAST_BORROW 0 (alist)\n"
-"              CALL 1\n"
+"  3           LOAD_GLOBAL              1 (len + NULL)\n"
+"              LOAD_FAST_BORROW         0 (alist)\n"
+"              CALL                     1\n"
 "              RETURN_VALUE"
 
 #: ../../library/dis.rst:83
 msgid "(The \"2\" is a line number)."
-msgstr "(2\" är ett linjenummer)."
+msgstr "(\"2\" är ett radnummer)."
 
 #: ../../library/dis.rst:88
 msgid "Command-line interface"
@@ -376,13 +376,13 @@ msgid ""
 "RETURN_VALUE"
 msgstr ""
 ">>> bytecode = dis.Bytecode(myfunc)\n"
-">>> för instr i bytecode:\n"
-"... print(instr.opname)\n"
+">>> for instr in bytecode:\n"
+"...     print(instr.opname)\n"
 "...\n"
-"ÅTERUPPTA\n"
-"LADDA_GLOBAL\n"
-"LADDA_SNABBT_LÅNA\n"
-"RINGA\n"
+"RESUME\n"
+"LOAD_GLOBAL\n"
+"LOAD_FAST_BORROW\n"
+"CALL\n"
 "RETURN_VALUE"
 
 #: ../../library/dis.rst:224
@@ -679,7 +679,7 @@ msgstr ""
 
 #: ../../library/dis.rst:440
 msgid "Python Bytecode Instructions"
-msgstr "Python Bytecode Instruktioner"
+msgstr "Instruktioner för Python Bytecode"
 
 #: ../../library/dis.rst:442
 msgid ""
@@ -909,7 +909,7 @@ msgid ""
 msgstr ""
 "I stället för att vara en faktisk instruktion används denna opcode för att "
 "markera extra utrymme för tolken att cacha användbara data direkt i själva "
-"bytekoden. Den döljs automatiskt av alla ``dis``-verktyg, men kan visas med "
+"bytekoden. Den döljs automatiskt av alla ``dis`` verktyg, men kan visas med "
 "``show_caches=True``."
 
 #: ../../library/dis.rst:639
@@ -1034,7 +1034,7 @@ msgstr ""
 #: ../../library/dis.rst:1065 ../../library/dis.rst:1210
 #: ../../library/dis.rst:1222 ../../library/dis.rst:1234
 msgid "Implements::"
-msgstr "Redskap::"
+msgstr "Implementerar::"
 
 #: ../../library/dis.rst:722
 msgid ""
@@ -1043,10 +1043,10 @@ msgid ""
 "value = STACK.pop()\n"
 "container[key] = value"
 msgstr ""
-"nyckel = STACK.pop()\n"
+"key = STACK.pop()\n"
 "container = STACK.pop()\n"
-"värde = STACK.pop()\n"
-"behållare[nyckel] = värde"
+"value = STACK.pop()\n"
+"container[key] = value"
 
 #: ../../library/dis.rst:732
 msgid ""
@@ -1054,9 +1054,9 @@ msgid ""
 "container = STACK.pop()\n"
 "del container[key]"
 msgstr ""
-"nyckel = STACK.pop()\n"
+"key = STACK.pop()\n"
 "container = STACK.pop()\n"
-"del container[nyckel]"
+"del container[key]"
 
 #: ../../library/dis.rst:740
 msgid ""
@@ -1065,10 +1065,10 @@ msgid ""
 "container = STACK.pop()\n"
 "STACK.append(container[start:end])"
 msgstr ""
-"slut = STACK.pop()\n"
+"end = STACK.pop()\n"
 "start = STACK.pop()\n"
 "container = STACK.pop()\n"
-"STACK.append(behållare[start:slut])"
+"STACK.append(container[start:end])"
 
 #: ../../library/dis.rst:752
 msgid ""
@@ -1078,11 +1078,11 @@ msgid ""
 "values = STACK.pop()\n"
 "container[start:end] = value"
 msgstr ""
-"slut = STACK.pop()\n"
+"end = STACK.pop()\n"
 "start = STACK.pop()\n"
-"behållare = STACK.pop()\n"
-"värden = STACK.pop()\n"
-"behållare[start:slut] = värde"
+"container = STACK.pop()\n"
+"values = STACK.pop()\n"
+"container[start:end] = value"
 
 #: ../../library/dis.rst:761
 msgid "**Coroutine opcodes**"
@@ -1177,7 +1177,7 @@ msgid ""
 "set.add(STACK[-i], item)"
 msgstr ""
 "item = STACK.pop()\n"
-"set.add(STACK[-i], objekt)"
+"set.add(STACK[-i], item)"
 
 #: ../../library/dis.rst:833
 msgid "Used to implement set comprehensions."
@@ -1189,7 +1189,7 @@ msgid ""
 "list.append(STACK[-i], item)"
 msgstr ""
 "item = STACK.pop()\n"
-"list.append(STACK[-i], objekt)"
+"list.append(STACK[-i], item)"
 
 #: ../../library/dis.rst:843
 msgid "Used to implement list comprehensions."
@@ -1201,9 +1201,9 @@ msgid ""
 "key = STACK.pop()\n"
 "dict.__setitem__(STACK[-i], key, value)"
 msgstr ""
-"värde = STACK.pop()\n"
-"nyckel = STACK.pop()\n"
-"dict.__setitem__(STACK[-i], nyckel, värde)"
+"value = STACK.pop()\n"
+"key = STACK.pop()\n"
+"dict.__setitem__(STACK[-i], key, value)"
 
 #: ../../library/dis.rst:854
 msgid "Used to implement dict comprehensions."
@@ -1426,8 +1426,8 @@ msgid ""
 "`STORE_GLOBAL` if possible."
 msgstr ""
 "Implementerar ``name = STACK.pop()``. *namei* är indexet för *name* i "
-"attributet :attr:`~codeobject.co_names` i :ref:``code object <code-"
-"objects>`. Kompilatorn försöker använda :opcode:`STORE_FAST` eller :opcode:"
+"attributet :attr:`~codeobject.co_names` i :ref:`code object <code-objects>`. "
+"Kompilatorn försöker använda :opcode:`STORE_FAST` eller :opcode:"
 "`STORE_GLOBAL` om möjligt."
 
 #: ../../library/dis.rst:1020
@@ -1500,8 +1500,8 @@ msgid ""
 "obj.name = value"
 msgstr ""
 "obj = STACK.pop()\n"
-"värde = STACK.pop()\n"
-"obj.namn = värde"
+"value = STACK.pop()\n"
+"obj.name = value"
 
 #: ../../library/dis.rst:1060
 msgid ""
@@ -1517,7 +1517,7 @@ msgid ""
 "del obj.name"
 msgstr ""
 "obj = STACK.pop()\n"
-"del obj.namn"
+"del obj.name"
 
 #: ../../library/dis.rst:1070
 msgid ""
@@ -1576,7 +1576,7 @@ msgstr ""
 "``co_names[namei]``. Om namnet inte hittas där, letar det upp det i de "
 "globala variablerna och sedan i de inbyggda variablerna, liknande :opcode:"
 "`LOAD_GLOBAL`. Detta används för att ladda globala variabler i :ref:"
-"``annotation scopes <annotation-scopes>`` inom klasskroppar."
+"`annotation scopes <annotation-scopes>` inom klasskroppar."
 
 #: ../../library/dis.rst:1125
 msgid ""
@@ -1584,6 +1584,9 @@ msgid ""
 "of strings and a tuple of interpolations and pushes the resulting object "
 "onto the stack::"
 msgstr ""
+"Konstruerar en ny :class:`~string.templatelib.Template` -instans från en "
+"tupel av strängar och en tupel av interpolationer och lägger det "
+"resulterande objektet i stacken::"
 
 #: ../../library/dis.rst:1129
 msgid ""
@@ -1591,9 +1594,9 @@ msgid ""
 "strings = STACK.pop()\n"
 "STACK.append(_build_template(strings, interpolations))"
 msgstr ""
-"interpolationer = STACK.pop()\n"
-"strängar = STACK.pop()\n"
-"STACK.append(_build_template(strängar, interpolationer))"
+"interpolations = STACK.pop()\n"
+"strings = STACK.pop()\n"
+"STACK.append(_build_template(strings, interpolations))"
 
 #: ../../library/dis.rst:1138
 msgid ""
@@ -1601,6 +1604,9 @@ msgid ""
 "value and its source expression and pushes the resulting object onto the "
 "stack."
 msgstr ""
+"Konstruerar en ny :class:`~string.templatelib.Interpolation` -instans från "
+"ett värde och dess källuttryck och lägger det resulterande objektet i "
+"stacken."
 
 #: ../../library/dis.rst:1142
 msgid ""
@@ -1641,14 +1647,15 @@ msgid ""
 "STACK.append(_build_interpolation(value, expression, conversion, "
 "format_spec))"
 msgstr ""
-"konvertering = format >> 2\n"
-"om format & 1:\n"
+"conversion = format >> 2\n"
+"if format & 1:\n"
 "    format_spec = STACK.pop()\n"
-"annat:\n"
-"    format_spec = Ingen\n"
-"uttryck = STACK.pop()\n"
-"värde = STACK.pop()\n"
-"STACK.append(_build_interpolation(värde, uttryck, konvertering, format_spec))"
+"else:\n"
+"    format_spec = None\n"
+"expression = STACK.pop()\n"
+"value = STACK.pop()\n"
+"STACK.append(_build_interpolation(value, expression, conversion, "
+"format_spec))"
 
 #: ../../library/dis.rst:1167
 msgid ""
@@ -1668,13 +1675,13 @@ msgid ""
 "\n"
 "STACK.append(value)"
 msgstr ""
-"om count == 0:\n"
-"    värde = ()\n"
-"i annat fall\n"
-"    värde = tuple(STACK[-count:])\n"
+"if count == 0:\n"
+"    value = ()\n"
+"else:\n"
+"    value = tuple(STACK[-count:])\n"
 "    STACK = STACK[:-count]\n"
 "\n"
-"STACK.append(värde)"
+"STACK.append(value)"
 
 #: ../../library/dis.rst:1181
 msgid "Works as :opcode:`BUILD_TUPLE`, but creates a list."
@@ -1882,7 +1889,7 @@ msgstr ""
 "poppas och ger argumenten *fromlist* och *level* i :func:`__import__`. "
 "Modulobjektet skjuts upp på stacken.  Den aktuella namnrymden påverkas inte: "
 "för en korrekt importsats modifieras namnrymden av en efterföljande :opcode:"
-"`STORE_FAST'-instruktion."
+"`STORE_FAST` -instruktion."
 
 #: ../../library/dis.rst:1330
 msgid ""
@@ -1892,7 +1899,7 @@ msgid ""
 msgstr ""
 "Läser in attributet ``co_names[namei]`` från den modul som finns i "
 "``STACK[-1]``. Det resulterande objektet läggs på stacken, för att sedan "
-"lagras med en :opcode:`STORE_FAST` instruktion."
+"lagras med en :opcode:`STORE_FAST` -instruktion."
 
 #: ../../library/dis.rst:1337
 msgid "Increments bytecode counter by *delta*."
@@ -2173,7 +2180,7 @@ msgstr "Den infordringsbara"
 
 #: ../../library/dis.rst:1571 ../../library/dis.rst:1595
 msgid "``self`` or ``NULL``"
-msgstr "``själv`` eller ``NULL``"
+msgstr "``self`` eller ``NULL``"
 
 #: ../../library/dis.rst:1572 ../../library/dis.rst:1596
 msgid "The remaining positional arguments"
@@ -2486,15 +2493,15 @@ msgstr ""
 
 #: ../../library/dis.rst:1762
 msgid "``1`` After a ``yield`` expression"
-msgstr "``1`` Efter ett ``avkastande`` uttryck"
+msgstr "``1`` Efter ett ``yield`` -uttryck"
 
 #: ../../library/dis.rst:1763
 msgid "``2`` After a ``yield from`` expression"
-msgstr "``2`` Efter ett ``utbyte från`` uttryck"
+msgstr "``2`` Efter ett ``yield from`` -uttryck"
 
 #: ../../library/dis.rst:1764
 msgid "``3`` After an ``await`` expression"
-msgstr "``3`` Efter ett ``await`` uttryck"
+msgstr "``3`` Efter ett ``await`` -uttryck"
 
 #: ../../library/dis.rst:1766
 msgid ""
@@ -2615,7 +2622,7 @@ msgstr "Skriver ut argumentet till standardutskrift. Används i REPL."
 
 #: ../../library/dis.rst:1833
 msgid "``INTRINSIC_IMPORT_STAR``"
-msgstr "``INTRINSIC_IMPORT_STJÄRNA``"
+msgstr "``INTRINSIC_IMPORT_STAR``"
 
 #: ../../library/dis.rst:1833
 msgid "Performs ``import *`` for the named module."
@@ -2733,7 +2740,7 @@ msgstr ""
 
 #: ../../library/dis.rst:1888
 msgid "``INTRINSIC_TYPEVAR_WITH_BOUND``"
-msgstr "``INTRINSIC_TYPEVAR_MED_BOUND``"
+msgstr "``INTRINSIC_TYPEVAR_WITH_BOUND``"
 
 #: ../../library/dis.rst:1888
 msgid "Creates a :class:`typing.TypeVar` with a bound."
@@ -2741,7 +2748,7 @@ msgstr "Skapar en :class:`typing.TypeVar` med en bound."
 
 #: ../../library/dis.rst:1891
 msgid "``INTRINSIC_TYPEVAR_WITH_CONSTRAINTS``"
-msgstr "``INTRINSIC_TYPEVAR_MED_BEGRÄNSNINGAR``"
+msgstr "``INTRINSIC_TYPEVAR_WITH_CONSTRAINTS``"
 
 #: ../../library/dis.rst:1891
 msgid "Creates a :class:`typing.TypeVar` with constraints."
