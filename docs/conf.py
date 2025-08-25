@@ -7,22 +7,22 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "Python Docs Transifex Automations"
-copyright = "2025, rffontenelle"
-author = "rffontenelle"
+copyright = "2025, rffontenelle and StanFromIreland"
+author = "rffontenelle and StanFromIreland"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = []
 
-templates_path = ["_templates"]
-exclude_patterns = []
+templates_path = []
+exclude_patterns = ["venv", ".venv"]
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "furo"
-html_static_path = ["_static"]
+html_static_path = []
 html_title = "Python Docs Transifex Automations"
 
 # ----------------------------------------------------------------------------

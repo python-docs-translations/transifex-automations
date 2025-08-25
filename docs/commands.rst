@@ -88,6 +88,7 @@ For language teams that coordinate translation efforts on Transifex, updating
 translation means pulling the translation strings.
 
 .. admonition:: Recommendation
+
    Before pulling translations, consider updating the .tx/config to
    have an up-to-date mapping of project/resources. For this, it is required to
    generate the documentation's pot files (template of po files), so start
