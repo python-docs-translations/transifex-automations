@@ -1,13 +1,17 @@
-====================================================
+:orphan:
+
+==============================================
 Bumping python-newest to latest Python release
-====================================================
+==============================================
 
-NOTE: This doc is out of date and needs rework! The
-`pull request \#13 <https://github.com/python-docs-translations/transifex-automations/pull/13>`_
-is a work in progress that would change some instructions from this guide.
+.. warning::
 
-This document aims to list the steps required for updating version of the 'Python'
-project (slug 'python-newest) in python-doc organization in Transifex.
+    This doc is out of date and needs rework! The
+    `pull request \#13 <https://github.com/python-docs-translations/transifex-automations/pull/13>`_
+    is a work in progress that would change some instructions from this guide.
+
+This document aims to list the steps required for bumping the version of the
+'Python' project (slug 'python-newest) in the python-doc organization on Transifex.
 
 1. Back up current translations:
 
