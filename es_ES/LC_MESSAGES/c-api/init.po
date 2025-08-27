@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 15:18+0000\n"
+"POT-Creation-Date: 2025-08-27 15:16+0000\n"
 "PO-Revision-Date: 2025-07-18 19:20+0000\n"
 "Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>, 2025\n"
 "Language-Team: Spanish (Spain) (https://app.transifex.com/python-doc/"
@@ -3881,22 +3881,25 @@ msgstr ""
 
 #: ../../c-api/init.rst:2399
 msgid ""
-"Critical sections avoid deadlocks by implicitly suspending active critical "
-"sections and releasing the locks during calls to :c:func:"
-"`PyEval_SaveThread`. When :c:func:`PyEval_RestoreThread` is called, the most "
-"recent critical section is resumed, and its locks reacquired.  This means "
-"the critical section API provides weaker guarantees than traditional locks "
-"-- they are useful because their behavior is similar to the :term:`GIL`."
+"Critical sections are intended to be used for custom types implemented in C-"
+"API extensions. They should generally not be used with built-in types like :"
+"class:`list` and :class:`dict` because their public C-APIs already use "
+"critical sections internally, with the notable exception of :c:func:"
+"`PyDict_Next`, which requires critical section to be acquired externally."
 msgstr ""
-"Критические секции избегают взаимоблокировок, неявно приостанавливая "
-"активные критические секции и снимая блокировки во время вызовов :c:func:"
-"`PyEval_SaveThread`. Когда вызывается :c:func:`PyEval_RestoreThread`, "
-"возобновляется работа самой последней критической секции, и ее блокировки "
-"восстанавливаются. Это означает, что API критической секции предоставляет "
-"более слабые гарантии, чем традиционные блокировки — они полезны, поскольку "
-"их поведение похоже на :term:`GIL`."
 
 #: ../../c-api/init.rst:2406
+msgid ""
+"Critical sections avoid deadlocks by implicitly suspending active critical "
+"sections, hence, they do not provide exclusive access such as provided by "
+"traditional locks like :c:type:`PyMutex`.  When a critical section is "
+"started, the per-object lock for the object is acquired. If the code "
+"executed inside the critical section calls C-API functions then it can "
+"suspend the critical section thereby releasing the per-object lock, so other "
+"threads can acquire the per-object lock for the same object."
+msgstr ""
+
+#: ../../c-api/init.rst:2414
 msgid ""
 "The functions and structs used by the macros are exposed for cases where C "
 "macros are not available. They should only be used as in the given macro "
@@ -3908,7 +3911,7 @@ msgstr ""
 "макрорасширениях. Обратите внимание, что размеры и содержимое структур могут "
 "измениться в будущих версиях Python."
 
-#: ../../c-api/init.rst:2413
+#: ../../c-api/init.rst:2421
 msgid ""
 "Operations that need to lock two objects at once must use :c:macro:"
 "`Py_BEGIN_CRITICAL_SECTION2`.  You *cannot* use nested critical sections to "
@@ -3923,11 +3926,11 @@ msgstr ""
 "приостановить работу внешних критических секций. Этот API не предоставляет "
 "возможности заблокировать более двух объектов одновременно."
 
-#: ../../c-api/init.rst:2419
+#: ../../c-api/init.rst:2427
 msgid "Example usage::"
 msgstr "Ejemplo de uso::"
 
-#: ../../c-api/init.rst:2421
+#: ../../c-api/init.rst:2429
 msgid ""
 "static PyObject *\n"
 "set_field(MyObject *self, PyObject *value)\n"
@@ -3947,7 +3950,7 @@ msgstr ""
 "   Py_RETURN_NONE;\n"
 "}"
 
-#: ../../c-api/init.rst:2430
+#: ../../c-api/init.rst:2438
 msgid ""
 "In the above example, :c:macro:`Py_SETREF` calls :c:macro:`Py_DECREF`, which "
 "can call arbitrary code through an object's deallocation function.  The "
@@ -3964,19 +3967,19 @@ msgstr ""
 "код, запущенный финализатором, блокируется и вызывает :c:func:"
 "`PyEval_SaveThread`."
 
-#: ../../c-api/init.rst:2438
+#: ../../c-api/init.rst:2446
 msgid ""
 "Acquires the per-object lock for the object *op* and begins a critical "
 "section."
 msgstr ""
 "Получает блокировку для каждого объекта *op* и начинает критическую секцию."
 
-#: ../../c-api/init.rst:2441 ../../c-api/init.rst:2455
-#: ../../c-api/init.rst:2470 ../../c-api/init.rst:2484
+#: ../../c-api/init.rst:2449 ../../c-api/init.rst:2463
+#: ../../c-api/init.rst:2478 ../../c-api/init.rst:2492
 msgid "In the free-threaded build, this macro expands to::"
 msgstr "В свободнопоточной сборке этот макрос расширяется до:"
 
-#: ../../c-api/init.rst:2443
+#: ../../c-api/init.rst:2451
 msgid ""
 "{\n"
 "    PyCriticalSection _py_cs;\n"
@@ -3986,15 +3989,15 @@ msgstr ""
 "    PyCriticalSection _py_cs;\n"
 "    PyCriticalSection_Begin(&_py_cs, (PyObject*)(op))"
 
-#: ../../c-api/init.rst:2447 ../../c-api/init.rst:2476
+#: ../../c-api/init.rst:2455 ../../c-api/init.rst:2484
 msgid "In the default build, this macro expands to ``{``."
 msgstr "В сборке по умолчанию этот макрос расширяется до ``{``."
 
-#: ../../c-api/init.rst:2453
+#: ../../c-api/init.rst:2461
 msgid "Ends the critical section and releases the per-object lock."
 msgstr "Завершает критическую секцию и снимает блокировку каждого объекта."
 
-#: ../../c-api/init.rst:2457
+#: ../../c-api/init.rst:2465
 msgid ""
 "    PyCriticalSection_End(&_py_cs);\n"
 "}"
@@ -4002,11 +4005,11 @@ msgstr ""
 "    PyCriticalSection_End(&_py_cs);\n"
 "}"
 
-#: ../../c-api/init.rst:2460 ../../c-api/init.rst:2489
+#: ../../c-api/init.rst:2468 ../../c-api/init.rst:2497
 msgid "In the default build, this macro expands to ``}``."
 msgstr "В сборке по умолчанию этот макрос расширяется до ``}``."
 
-#: ../../c-api/init.rst:2466
+#: ../../c-api/init.rst:2474
 msgid ""
 "Acquires the per-objects locks for the objects *a* and *b* and begins a "
 "critical section.  The locks are acquired in a consistent order (lowest "
@@ -4016,7 +4019,7 @@ msgstr ""
 "Блокировки устанавливаются в последовательном порядке (сначала наименьший "
 "адрес), чтобы избежать взаимоблокировок в порядке блокировок."
 
-#: ../../c-api/init.rst:2472
+#: ../../c-api/init.rst:2480
 msgid ""
 "{\n"
 "    PyCriticalSection2 _py_cs2;\n"
@@ -4026,11 +4029,11 @@ msgstr ""
 "    PyCriticalSection2 _py_cs2;\n"
 "    PyCriticalSection2_Begin(&_py_cs2, (PyObject*)(a), (PyObject*)(b))"
 
-#: ../../c-api/init.rst:2482
+#: ../../c-api/init.rst:2490
 msgid "Ends the critical section and releases the per-object locks."
 msgstr "Завершает критическую секцию и снимает блокировки для каждого объекта."
 
-#: ../../c-api/init.rst:2486
+#: ../../c-api/init.rst:2494
 msgid ""
 "    PyCriticalSection2_End(&_py_cs2);\n"
 "}"
