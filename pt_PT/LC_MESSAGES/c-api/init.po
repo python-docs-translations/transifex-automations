@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-01 14:16+0000\n"
+"POT-Creation-Date: 2025-09-03 14:18+0000\n"
 "PO-Revision-Date: 2025-08-02 17:33+0000\n"
 "Last-Translator: André Moreira <afrmscb@gmail.com>, 2025\n"
 "Language-Team: Portuguese (Portugal) (https://app.transifex.com/python-doc/"
@@ -3140,10 +3140,17 @@ msgid ""
 "`PyInterpreterState` values.  A read-only copy of the config may be stored "
 "internally on the :c:type:`PyInterpreterState`."
 msgstr ""
+"Observe que a configuração é usada apenas brevemente e não fica modificada. "
+"Durante a inicialização, os valores da configuração são convertidos em "
+"vários valores :c:type:`PyInterpreterState`. Uma cópia somente leitura da "
+"configuração pode ser armazenada internamente no :c:type:"
+"`PyInterpreterState`."
 
 #: ../../c-api/init.rst:1818
 msgid "Extension modules are shared between (sub-)interpreters as follows:"
 msgstr ""
+"Os módulos de extensão são partilhados entre (sub)intérpretes da seguinte "
+"forma:"
 
 #: ../../c-api/init.rst:1820
 msgid ""
@@ -3152,6 +3159,10 @@ msgid ""
 "initialized for each interpreter. Only C-level static and global variables "
 "are shared between these module objects."
 msgstr ""
+"Para módulos que utilizam inicialização multifásica, por exemplo: :c:func:"
+"`PyModule_FromDefAndSpec`, um objeto de módulo separado é criado e "
+"inicializado para cada interpretador. Apenas variáveis estáticas e globais "
+"de nível C são partilhadas entre esses objetos de módulo."
 
 #: ../../c-api/init.rst:1826
 msgid ""
@@ -3164,6 +3175,15 @@ msgid ""
 "the module's dictionary thus end up shared across (sub-)interpreters, which "
 "might cause unwanted behavior (see `Bugs and caveats`_ below)."
 msgstr ""
+"Para módulos que utilizam inicialização monofásica, por exemplo: :c:func:"
+"`PyModule_Create`, na primeira vez que uma extensão específica é importada, "
+"ela é inicializada normalmente e uma cópia (superficial) do dicionário do "
+"seu módulo é guardada. Quando a mesma extensão é importada por outro "
+"(sub)interpretador, um novo módulo é inicializado e preenchido com o "
+"conteúdo dessa cópia; a função ``init`` da extensão não é chamada. Os "
+"objetos no dicionário do módulo acabam sendo compartilhados entre "
+"(sub)interpretadores, o que pode causar um comportamento indesejado "
+"(consulte `Bugs e advertências`_ abaixo)."
 
 #: ../../c-api/init.rst:1837
 msgid ""
@@ -3174,6 +3194,12 @@ msgid ""
 "initialization, this means that only C-level static and global variables are "
 "shared between these modules."
 msgstr ""
+"Note que isto é diferente do que acontece quando uma extensão é importada "
+"após o interpretador ter sido completamente reinicializado chamando :c:func:"
+"`Py_FinalizeEx` e :c:func:`Py_Initialize`; nesse caso, a função "
+"``initmodule`` da extensão *é* chamada novamente. Tal como na inicialização "
+"multifásica, isto significa que apenas as variáveis estáticas e globais ao "
+"nível C são partilhadas entre estes módulos."
 
 #: ../../c-api/init.rst:1857
 msgid ""
@@ -3183,6 +3209,12 @@ msgid ""
 "interpreter's GIL, allows fork/exec, allows daemon threads, and allows "
 "single-phase init modules."
 msgstr ""
+"Cria um novo subinterpretador. Essencialmente, trata-se apenas de um "
+"invólucro em torno de :c:func:`Py_NewInterpreterFromConfig` com uma "
+"configuração que preserva o comportamento existente. O resultado é um "
+"subinterpretador não isolado que partilha o GIL do interpretador principal, "
+"permite fork/exec, permite threads daemon e permite módulos de inicialização "
+"de fase única."
 
 #: ../../c-api/init.rst:1869
 msgid ""
@@ -3191,16 +3223,23 @@ msgid ""
 "When the call returns, there will be no :term:`attached thread state`. All "
 "thread states associated with this interpreter are destroyed."
 msgstr ""
+"Destrói o (sub)intérprete representado pelo :term:`estado da thread` "
+"fornecido. O estado da thread fornecido deve ser :term:`anexado <attached "
+"thread state>`. Quando a chamada retornar, não haverá :term:`estado do "
+"thread anexado`. Todos os estados da thread associados a este intérprete são "
+"destruídos."
 
 #: ../../c-api/init.rst:1874
 msgid ""
 ":c:func:`Py_FinalizeEx` will destroy all sub-interpreters that haven't been "
 "explicitly destroyed at that point."
 msgstr ""
+":c:func:`Py_FinalizeEx` destruirá todos os subinterpretadores que não tenham "
+"sido explicitamente destruídos até esse momento."
 
 #: ../../c-api/init.rst:1879
 msgid "A Per-Interpreter GIL"
-msgstr ""
+msgstr "Um GIL por intérprete"
 
 #: ../../c-api/init.rst:1881
 msgid ""
@@ -3213,6 +3252,14 @@ msgid ""
 "isolation also encourages a different approach to concurrency than that of "
 "just using threads. (See :pep:`554`.)"
 msgstr ""
+"Usando :c:func:`Py_NewInterpreterFromConfig`, você pode criar um "
+"subinterpretador que é completamente isolado de outros interpretadores, "
+"incluindo ter seu próprio GIL. A vantagem mais importante desse isolamento é "
+"que tal interpretador pode executar código Python sem ser bloqueado por "
+"outros interpretadores ou bloquear quaisquer outros. Assim, um único "
+"processo Python pode realmente tirar proveito de vários núcleos de CPU ao "
+"executar código Python. O isolamento também incentiva uma abordagem "
+"diferente da concorrência do que apenas usar threads. (Veja :pep:`554`.)"
 
 #: ../../c-api/init.rst:1891
 msgid ""
@@ -3227,6 +3274,17 @@ msgid ""
 "been done for the builtin singletons, small integers, and a number of other "
 "builtin objects."
 msgstr ""
+"Usar um interpretador isolado requer vigilância para preservar esse "
+"isolamento. Isso significa, especialmente, não partilhar quaisquer objetos "
+"ou estados mutáveis sem garantias sobre a segurança da thread. Mesmo objetos "
+"que são imutáveis (por exemplo, ``None``, ``(1, 5)``) normalmente não podem "
+"ser partilhados devido à contagem de referências. Uma abordagem simples, mas "
+"menos eficiente, para contornar isso é usar um bloqueio global em torno de "
+"todo o uso de algum estado (ou objeto). Alternativamente, objetos "
+"efetivamente imutáveis (como inteiros ou strings) podem ser tornados "
+"seguros, apesar de suas contagens de referência, tornando-os :term:"
+"`imortais`. Na verdade, isso foi feito para os singletons embutidos, "
+"pequenos inteiros e vários outros objetos embutidos."
 
 #: ../../c-api/init.rst:1902
 msgid ""
@@ -3235,6 +3293,10 @@ msgid ""
 "to preserve isolation will expose you to the full consequences of free-"
 "threading, including races and hard-to-debug crashes."
 msgstr ""
+"Se mantiver o isolamento, terá acesso à computação multi-core adequada sem "
+"as complicações que acompanham o free-threading. Não manter o isolamento irá "
+"expô-lo a todas as consequências do free-threading, incluindo corridas e "
+"falhas difíceis de depurar."
 
 #: ../../c-api/init.rst:1907
 msgid ""
@@ -3245,10 +3307,16 @@ msgid ""
 "of preserving isolation and expose effective tools for communicating (and "
 "sharing) data between interpreters."
 msgstr ""
+"Além disso, um dos principais desafios de usar vários interpretadores "
+"isolados é como comunicar entre eles de forma segura (sem quebrar o "
+"isolamento) e eficiente. O runtime e a stdlib ainda não oferecem nenhuma "
+"abordagem padrão para isso. Um futuro módulo stdlib ajudaria a mitigar o "
+"esforço de preservar o isolamento e expor ferramentas eficazes para "
+"comunicar (e partilhar) dados entre interpretadores."
 
 #: ../../c-api/init.rst:1918
 msgid "Bugs and caveats"
-msgstr ""
+msgstr "Erros e advertências"
 
 #: ../../c-api/init.rst:1920
 msgid ""
@@ -3262,6 +3330,15 @@ msgid ""
 "one sub-interpreter into a namespace of another (sub-)interpreter; this "
 "should be avoided if possible."
 msgstr ""
+"Como os subinterpretadores (e o interpretador principal) fazem parte do "
+"mesmo processo, o isolamento entre eles não é perfeito — por exemplo, usando "
+"operações de ficheiro de baixo nível como :func:`os.close`, eles podem "
+"(acidentalmente ou maliciosamente) afetar os ficheiros abertos uns dos "
+"outros. Devido à forma como as extensões são partilhadas entre "
+"(sub)intérpretes, algumas extensões podem não funcionar corretamente; isto é "
+"especialmente provável ao usar inicialização monofásica ou variáveis globais "
+"(estáticas). É possível inserir objetos criados num subintérprete num "
+"namespace de outro (sub)intérprete; isto deve ser evitado, se possível."
 
 #: ../../c-api/init.rst:1930
 msgid ""
@@ -3271,6 +3348,12 @@ msgid ""
 "dictionary of loaded modules. It is equally important to avoid sharing "
 "objects from which the above are reachable."
 msgstr ""
+"Deve-se tomar cuidado especial para evitar o compartilhamento de funções, "
+"métodos, instâncias ou classes definidos pelo utilizador entre "
+"subinterpretadores, uma vez que as operações de importação executadas por "
+"tais objetos podem afetar o dicionário de módulos carregados do "
+"(sub)interpretador errado. É igualmente importante evitar o compartilhamento "
+"de objetos a partir dos quais os itens acima são acessíveis."
 
 #: ../../c-api/init.rst:1936
 msgid ""
@@ -3283,10 +3366,19 @@ msgid ""
 "`ctypes`) using these APIs to allow calling of Python code from non-Python "
 "created threads will probably be broken when using sub-interpreters."
 msgstr ""
+"Observe também que combinar essa funcionalidade com as APIs ``PyGILState_*`` "
+"é delicado, porque essas APIs assumem uma bijeção entre os estados de thread "
+"do Python e os threads no nível do sistema operativo, uma suposição quebrada "
+"pela presença de subinterpretadores. É altamente recomendável que você não "
+"alterne subinterpretadores entre um par de chamadas correspondentes :c:func:"
+"`PyGILState_Ensure` e :c:func:`PyGILState_Release`. Além disso, extensões "
+"(como :mod:`ctypes`) que usam essas APIs para permitir a chamada de código "
+"Python a partir de threads não criadas em Python provavelmente serão "
+"interrompidas ao usar subinterpretadores."
 
 #: ../../c-api/init.rst:1947
 msgid "Asynchronous Notifications"
-msgstr ""
+msgstr "Notificações assíncronas"
 
 #: ../../c-api/init.rst:1949
 msgid ""
@@ -3294,6 +3386,9 @@ msgid ""
 "interpreter thread.  These notifications take the form of a function pointer "
 "and a void pointer argument."
 msgstr ""
+"É fornecido um mecanismo para fazer notificações assíncronas à thread "
+"principal do interpretador. Essas notificações assumem a forma de um "
+"ponteiro de função e um argumento de ponteiro nulo."
 
 #: ../../c-api/init.rst:1956
 msgid ""
@@ -3301,6 +3396,10 @@ msgid ""
 "success, ``0`` is returned and *func* is queued for being called in the main "
 "thread.  On failure, ``-1`` is returned without setting any exception."
 msgstr ""
+"Agende uma função a ser chamada a partir do thread principal do "
+"interpretador. Em caso de sucesso, ``0`` é retornado e *func* é colocado na "
+"fila para ser chamado no thread principal. Em caso de falha, ``-1`` é "
+"retornado sem definir nenhuma exceção."
 
 #: ../../c-api/init.rst:1960
 msgid ""
@@ -3309,16 +3408,22 @@ msgid ""
 "asynchronously with respect to normally running Python code, but with both "
 "these conditions met:"
 msgstr ""
+"Quando colocada na fila com sucesso, *func* será *eventualmente* chamada a "
+"partir do thread principal do interpretador com o argumento *arg*. Ela será "
+"chamada de forma assíncrona em relação ao código Python em execução normal, "
+"mas com ambas as condições atendidas:"
 
 #: ../../c-api/init.rst:1965
 msgid "on a :term:`bytecode` boundary;"
-msgstr ""
+msgstr "em um :term:`bytecode` boundary;"
 
 #: ../../c-api/init.rst:1966
 msgid ""
 "with the main thread holding an :term:`attached thread state` (*func* can "
 "therefore use the full C API)."
 msgstr ""
+"com o thread principal mantendo um :term:`estado de thread anexado` (*func* "
+"pode, portanto, usar a API C completa)."
 
 #: ../../c-api/init.rst:1969
 msgid ""
@@ -3327,6 +3432,11 @@ msgid ""
 "notification recursively, but it can still be interrupted to switch threads "
 "if the :term:`thread state <attached thread state>` is detached."
 msgstr ""
+"*func* deve retornar ``0`` em caso de sucesso ou ``-1`` em caso de falha com "
+"uma exceção definida. *func* não será interrompido para realizar outra "
+"notificação assíncrona recursivamente, mas ainda pode ser interrompido para "
+"alternar threads se o :term:`estado da thread <attached thread state>` "
+"estiver destacado."
 
 #: ../../c-api/init.rst:1974
 msgid ""
@@ -3335,6 +3445,10 @@ msgid ""
 "`attached thread state`. Otherwise, the function *func* can be scheduled to "
 "be called from the wrong interpreter."
 msgstr ""
+"Esta função não necessita de um :term:`estado de thread anexado`. No "
+"entanto, para chamar esta função num subinterpretador, o chamador deve ter "
+"um :term:`estado de thread anexado`. Caso contrário, a função *func* pode "
+"ser agendada para ser chamada a partir do interpretador errado."
 
 #: ../../c-api/init.rst:1979
 msgid ""
@@ -3345,6 +3459,12 @@ msgid ""
 "calling Python code from arbitrary C threads.  Instead, use the :ref:"
 "`PyGILState API<gilstate>`."
 msgstr ""
+"Esta é uma função de baixo nível, útil apenas em casos muito especiais. Não "
+"há garantia de que *func* será chamada o mais rápido possível. Se o thread "
+"principal estiver ocupado a executar uma chamada do sistema, *func* não será "
+"chamada antes que a chamada do sistema retorne. Esta função geralmente "
+"**não** é adequada para chamar código Python a partir de threads C "
+"arbitrários. Em vez disso, use a :ref:`PyGILState API<gilstate>`."
 
 #: ../../c-api/init.rst:1988
 msgid ""
@@ -3353,10 +3473,14 @@ msgid ""
 "from the main interpreter. Each subinterpreter now has its own list of "
 "scheduled calls."
 msgstr ""
+"Se esta função for chamada num subinterpretador, a função *func* será agora "
+"agendada para ser chamada a partir do subinterpretador, em vez de ser "
+"chamada a partir do interpretador principal. Cada subinterpretador tem agora "
+"a sua própria lista de chamadas agendadas."
 
 #: ../../c-api/init.rst:1997
 msgid "Profiling and Tracing"
-msgstr ""
+msgstr "Perfilagem e rastreamento"
 
 #: ../../c-api/init.rst:2002
 msgid ""
@@ -3364,6 +3488,9 @@ msgid ""
 "profiling and execution tracing facilities.  These are used for profiling, "
 "debugging, and coverage analysis tools."
 msgstr ""
+"O interpretador Python fornece algum suporte de baixo nível para anexar "
+"recursos de perfilagem e rastreamento de execução. Estes são usados para "
+"ferramentas de perfilagem, depuração e análise de cobertura."
 
 #: ../../c-api/init.rst:2006
 msgid ""
@@ -3374,6 +3501,13 @@ msgid ""
 "basic events reported to the trace function are the same as had been "
 "reported to the Python-level trace functions in previous versions."
 msgstr ""
+"Esta interface C permite que o código de perfilagem ou rastreamento evite a "
+"sobrecarga de chamadas através de objetos chamáveis no nível Python, fazendo "
+"uma chamada direta à função C. Os atributos essenciais do recurso não "
+"mudaram; a interface permite que funções de rastreamento sejam instaladas "
+"por thread, e os eventos básicos relatados à função de rastreamento são os "
+"mesmos que foram relatados às funções de rastreamento no nível Python nas "
+"versões anteriores."
 
 #: ../../c-api/init.rst:2016
 msgid ""
@@ -3386,65 +3520,73 @@ msgid ""
 "`PyTrace_C_RETURN`, or :c:data:`PyTrace_OPCODE`, and *arg* depends on the "
 "value of *what*:"
 msgstr ""
+"O tipo da função de rastreamento registrada usando :c:func:"
+"`PyEval_SetProfile` e :c:func:`PyEval_SetTrace`. O primeiro parâmetro é o "
+"objeto passado para a função de registo como *obj*, *frame* é o objeto de "
+"quadro ao qual o evento pertence, *what* é uma das constantes :c:data:"
+"`PyTrace_CALL`, :c:data:`PyTrace_EXCEPTION`, :c:data:`PyTrace_LINE`, :c:data:"
+"`PyTrace_RETURN`, :c:data:`PyTrace_C_CALL`, :c:data:`PyTrace_C_EXCEPTION`, :"
+"c:data:`PyTrace_C_RETURN` ou :c:data:`PyTrace_OPCODE`, e *arg* depende do "
+"valor de *what*:"
 
 #: ../../c-api/init.rst:2025
 msgid "Value of *what*"
-msgstr ""
+msgstr "Valor de *what*"
 
 #: ../../c-api/init.rst:2025
 msgid "Meaning of *arg*"
-msgstr ""
+msgstr "Significado de *arg*"
 
 #: ../../c-api/init.rst:2027
 msgid ":c:data:`PyTrace_CALL`"
-msgstr ""
+msgstr ":c:data:`PyTrace_CALL`"
 
 #: ../../c-api/init.rst:2027 ../../c-api/init.rst:2032
 #: ../../c-api/init.rst:2043
 msgid "Always :c:data:`Py_None`."
-msgstr ""
+msgstr "Sempre :c:data:`Py_None`."
 
 #: ../../c-api/init.rst:2029
 msgid ":c:data:`PyTrace_EXCEPTION`"
-msgstr ""
+msgstr ":c:data:`PyTrace_EXCEPTION`"
 
 #: ../../c-api/init.rst:2029
 msgid "Exception information as returned by :func:`sys.exc_info`."
-msgstr ""
+msgstr "Informações de exceção retornadas por :func:`sys.exc_info`."
 
 #: ../../c-api/init.rst:2032
 msgid ":c:data:`PyTrace_LINE`"
-msgstr ""
+msgstr ":c:data:`PyTrace_LINE`"
 
 #: ../../c-api/init.rst:2034
 msgid ":c:data:`PyTrace_RETURN`"
-msgstr ""
+msgstr ":c:data:`PyTrace_RETURN`"
 
 #: ../../c-api/init.rst:2034
 msgid ""
 "Value being returned to the caller, or ``NULL`` if caused by an exception."
-msgstr ""
+msgstr "Valor devolvido ao chamador ou ``NULL`` se causado por uma exceção."
 
 #: ../../c-api/init.rst:2037
 msgid ":c:data:`PyTrace_C_CALL`"
-msgstr ""
+msgstr ":c:data:`PyTrace_C_CALL`"
 
 #: ../../c-api/init.rst:2037 ../../c-api/init.rst:2039
 #: ../../c-api/init.rst:2041
 msgid "Function object being called."
-msgstr ""
+msgstr "Objeto de função a ser chamado."
 
 #: ../../c-api/init.rst:2039
 msgid ":c:data:`PyTrace_C_EXCEPTION`"
-msgstr ""
+msgstr ":c:data:`PyTrace_C_EXCEPTION`"
 
 #: ../../c-api/init.rst:2041
 msgid ":c:data:`PyTrace_C_RETURN`"
-msgstr ""
+msgstr ":c:data:`PyTrace_C_RETURN`"
 
 #: ../../c-api/init.rst:2043
 msgid ":c:data:`PyTrace_OPCODE`"
-msgstr ""
+msgstr ":c:data:`PyTrace_OPCODE`"
 
 #: ../../c-api/init.rst:2048
 msgid ""
@@ -3454,6 +3596,11 @@ msgid ""
 "is not reported as there is no control transfer to the Python bytecode in "
 "the corresponding frame."
 msgstr ""
+"O valor do parâmetro *what* para uma função :c:type:`Py_tracefunc` quando "
+"uma nova chamada para uma função ou método está a ser reportada, ou uma nova "
+"entrada num gerador. Note que a criação do iterador para uma função geradora "
+"não é reportada, pois não há transferência de controlo para o bytecode "
+"Python no quadro correspondente."
 
 #: ../../c-api/init.rst:2057
 msgid ""
@@ -3466,6 +3613,14 @@ msgid ""
 "Only trace functions receives these events; they are not needed by the "
 "profiler."
 msgstr ""
+"O valor do parâmetro *what* para uma função :c:type:`Py_tracefunc` quando "
+"uma exceção é levantada. A função de retorno de chamada é chamada com este "
+"valor para *what* quando, após qualquer bytecode ser processado, a exceção é "
+"definida dentro do quadro que está a ser executado. O efeito disso é que, à "
+"medida que a propagação da exceção faz com que a pilha Python se desenrole, "
+"a função de retorno de chamada é chamada ao retornar a cada quadro à medida "
+"que a exceção se propaga. Apenas as funções de rastreamento recebem esses "
+"eventos; eles não são necessários para o profiler."
 
 #: ../../c-api/init.rst:2068
 msgid ""
@@ -3474,30 +3629,42 @@ msgid ""
 "reported. It may be disabled for a frame by setting :attr:`~frame."
 "f_trace_lines` to *0* on that frame."
 msgstr ""
+"O valor passado como parâmetro *what* para uma função :c:type:`Py_tracefunc` "
+"(mas não para uma função de perfilagem) quando um evento de número de linha "
+"está a ser relatado. Pode ser desativado para um quadro definindo :attr:"
+"`~frame.f_trace_lines` como *0* nesse quadro."
 
 #: ../../c-api/init.rst:2076
 msgid ""
 "The value for the *what* parameter to :c:type:`Py_tracefunc` functions when "
 "a call is about to return."
 msgstr ""
+"O valor do parâmetro *what* para as funções :c:type:`Py_tracefunc` quando "
+"uma chamada está prestes a retornar."
 
 #: ../../c-api/init.rst:2082
 msgid ""
 "The value for the *what* parameter to :c:type:`Py_tracefunc` functions when "
 "a C function is about to be called."
 msgstr ""
+"O valor para o parâmetro *what* para funções :c:type:`Py_tracefunc` quando "
+"uma função C está prestes a ser chamada."
 
 #: ../../c-api/init.rst:2088
 msgid ""
 "The value for the *what* parameter to :c:type:`Py_tracefunc` functions when "
 "a C function has raised an exception."
 msgstr ""
+"O valor do parâmetro *what* para as funções :c:type:`Py_tracefunc` quando "
+"uma função C levantou uma exceção."
 
 #: ../../c-api/init.rst:2094
 msgid ""
 "The value for the *what* parameter to :c:type:`Py_tracefunc` functions when "
 "a C function has returned."
 msgstr ""
+"O valor do parâmetro *what* para as funções :c:type:`Py_tracefunc` quando "
+"uma função C é retornada."
 
 #: ../../c-api/init.rst:2100
 msgid ""
@@ -3506,6 +3673,11 @@ msgid ""
 "event is not emitted by default: it must be explicitly requested by setting :"
 "attr:`~frame.f_trace_opcodes` to *1* on the frame."
 msgstr ""
+"O valor para o parâmetro *what* das funções :c:type:`Py_tracefunc` (mas não "
+"das funções de perfilagem) quando um novo código de operação está prestes a "
+"ser executado. Este evento não é emitido por predefinição: deve ser "
+"explicitamente solicitado definindo :attr:`~frame.f_trace_opcodes` como *1* "
+"no quadro."
 
 #: ../../c-api/init.rst:2108
 msgid ""
@@ -3516,10 +3688,17 @@ msgid ""
 "it.  The profile function is called for all monitored events except :c:data:"
 "`PyTrace_LINE` :c:data:`PyTrace_OPCODE` and :c:data:`PyTrace_EXCEPTION`."
 msgstr ""
+"Defina a função do profiler como *func*. O parâmetro *obj* é passado para a "
+"função como seu primeiro parâmetro e pode ser qualquer objeto Python ou "
+"``NULL``. Se a função do perfil precisar manter o estado, usar um valor "
+"diferente para *obj* para cada thread fornece um local seguro para thread "
+"para armazená-lo. A função de perfil é chamada para todos os eventos "
+"monitorados, exceto :c:data:`PyTrace_LINE` :c:data:`PyTrace_OPCODE` e :c:"
+"data:`PyTrace_EXCEPTION`."
 
 #: ../../c-api/init.rst:2115
 msgid "See also the :func:`sys.setprofile` function."
-msgstr ""
+msgstr "Veja também a função :func:`sys.setprofile`."
 
 #: ../../c-api/init.rst:2121
 msgid ""
@@ -3527,12 +3706,17 @@ msgid ""
 "running threads belonging to the current interpreter instead of the setting "
 "it only on the current thread."
 msgstr ""
+"Semelhante a :c:func:`PyEval_SetProfile`, mas define a função de perfil em "
+"todos os threads em execução pertencentes ao interpretador atual, em vez de "
+"defini-la apenas no thread atual."
 
 #: ../../c-api/init.rst:2126
 msgid ""
 "As :c:func:`PyEval_SetProfile`, this function ignores any exceptions raised "
 "while setting the profile functions in all threads."
 msgstr ""
+"Tal como :c:func:`PyEval_SetProfile`, esta função ignora quaisquer exceções "
+"levantadas durante a definição das funções de perfil em todos os threads."
 
 #: ../../c-api/init.rst:2134
 msgid ""
@@ -3544,10 +3728,17 @@ msgid ""
 "`PyTrace_C_EXCEPTION` or :c:data:`PyTrace_C_RETURN` as a value for the "
 "*what* parameter."
 msgstr ""
+"Defina a função de rastreamento como *func*. Isso é semelhante a :c:func:"
+"`PyEval_SetProfile`, exceto que a função de rastreamento recebe eventos de "
+"número de linha e eventos por código de operação, mas não recebe nenhum "
+"evento relacionado a objetos de função C que estão sendo chamados. Qualquer "
+"função de rastreamento registrada usando :c:func:`PyEval_SetTrace` não "
+"receberá :c:data:`PyTrace_C_CALL`, :c:data:`PyTrace_C_EXCEPTION` ou :c:data:"
+"`PyTrace_C_RETURN` como um valor para o parâmetro *what*."
 
 #: ../../c-api/init.rst:2141
 msgid "See also the :func:`sys.settrace` function."
-msgstr ""
+msgstr "Veja também a função :func:`sys.settrace`."
 
 #: ../../c-api/init.rst:2147
 msgid ""
@@ -3555,16 +3746,21 @@ msgid ""
 "threads belonging to the current interpreter instead of the setting it only "
 "on the current thread."
 msgstr ""
+"Semelhante a :c:func:`PyEval_SetTrace`, mas define a função de rastreamento "
+"em todos os threads em execução pertencentes ao interpretador atual, em vez "
+"de defini-la apenas no thread atual."
 
 #: ../../c-api/init.rst:2152
 msgid ""
 "As :c:func:`PyEval_SetTrace`, this function ignores any exceptions raised "
 "while setting the trace functions in all threads."
 msgstr ""
+"Tal como :c:func:`PyEval_SetTrace`, esta função ignora quaisquer exceções "
+"levantadas durante a definição das funções de rastreio em todos os threads."
 
 #: ../../c-api/init.rst:2158
 msgid "Reference tracing"
-msgstr ""
+msgstr "Rastreamento de referência"
 
 #: ../../c-api/init.rst:2164
 msgid ""
@@ -3575,18 +3771,29 @@ msgid ""
 "`PyRefTracer_DESTROY`). The **data** argument is the opaque pointer that was "
 "provided when :c:func:`PyRefTracer_SetTracer` was called."
 msgstr ""
+"O tipo da função de rastreamento registrada usando :c:func:"
+"`PyRefTracer_SetTracer`. O primeiro parâmetro é um objeto Python que acabou "
+"de ser criado (quando **event** é definido como :c:data:"
+"`PyRefTracer_CREATE`) ou está prestes a ser destruído (quando **event** é "
+"definido como :c:data:`PyRefTracer_DESTROY`). O argumento **data** é o "
+"ponteiro opaco que foi fornecido quando :c:func:`PyRefTracer_SetTracer` foi "
+"chamado."
 
 #: ../../c-api/init.rst:2174
 msgid ""
 "The value for the *event* parameter to :c:type:`PyRefTracer` functions when "
 "a Python object has been created."
 msgstr ""
+"O valor do parâmetro *event* para as funções :c:type:`PyRefTracer` quando um "
+"objeto Python é criado."
 
 #: ../../c-api/init.rst:2179
 msgid ""
 "The value for the *event* parameter to :c:type:`PyRefTracer` functions when "
 "a Python object has been destroyed."
 msgstr ""
+"O valor do parâmetro *event* para as funções :c:type:`PyRefTracer` quando um "
+"objeto Python é destruído."
 
 #: ../../c-api/init.rst:2184
 msgid ""
@@ -3596,6 +3803,11 @@ msgid ""
 "the tracer function is called. Return ``0`` on success. Set an exception and "
 "return ``-1`` on error."
 msgstr ""
+"Regista uma função de rastreamento de referência. A função será chamada "
+"quando um novo Python for criado ou quando um objeto for destruído. Se "
+"**data** for fornecida, deve ser um ponteiro opaco que será fornecido quando "
+"a função de rastreamento for chamada. Retorna ``0`` em caso de sucesso. "
+"Define uma exceção e retorna ``-1`` em caso de erro."
 
 #: ../../c-api/init.rst:2190
 msgid ""
@@ -3604,11 +3816,17 @@ msgid ""
 "any existing exception or set an exception.  A :term:`thread state` will be "
 "active every time the tracer function is called."
 msgstr ""
+"Não que as funções de rastreamento **não devam** criar objetos Python "
+"internamente, caso contrário a chamada será reentrante. O rastreador também "
+"**não deve** limpar nenhuma exceção existente ou definir uma exceção. Um :"
+"term:`estado de thread` ficará ativo sempre que a função de rastreamento for "
+"chamada."
 
 #: ../../c-api/init.rst:2195 ../../c-api/init.rst:2206
 msgid ""
 "There must be an :term:`attached thread state` when calling this function."
 msgstr ""
+"Deve existir um :term:`estado de thread anexado` ao chamar esta função."
 
 #: ../../c-api/init.rst:2201
 msgid ""
@@ -3617,47 +3835,61 @@ msgid ""
 "called. If no tracer was registered this function will return NULL and will "
 "set the **data** pointer to NULL."
 msgstr ""
+"Obtém a função de rastreamento de referência registada e o valor do ponteiro "
+"de dados opaco que foi registado quando :c:func:`PyRefTracer_SetTracer` foi "
+"chamado. Se nenhum rastreador foi registado, esta função retornará NULL e "
+"definirá o ponteiro **data** como NULL."
 
 #: ../../c-api/init.rst:2213
 msgid "Advanced Debugger Support"
-msgstr ""
+msgstr "Suporte avançado ao depurador"
 
 #: ../../c-api/init.rst:2218
 msgid ""
 "These functions are only intended to be used by advanced debugging tools."
 msgstr ""
+"Estas funções destinam-se apenas a ser utilizadas por ferramentas de "
+"depuração avançadas."
 
 #: ../../c-api/init.rst:2223
 msgid ""
 "Return the interpreter state object at the head of the list of all such "
 "objects."
 msgstr ""
+"Retorna o objeto do estado do interpretador no início da lista de todos "
+"esses objetos."
 
 #: ../../c-api/init.rst:2228
 msgid "Return the main interpreter state object."
-msgstr ""
+msgstr "Retorna o objeto do estado do interpretador principal."
 
 #: ../../c-api/init.rst:2233
 msgid ""
 "Return the next interpreter state object after *interp* from the list of all "
 "such objects."
 msgstr ""
+"Retorna o próximo objeto de estado do interpretador após *interp* da lista "
+"de todos esses objetos."
 
 #: ../../c-api/init.rst:2239
 msgid ""
 "Return the pointer to the first :c:type:`PyThreadState` object in the list "
 "of threads associated with the interpreter *interp*."
 msgstr ""
+"Retorna o ponteiro para o primeiro objeto :c:type:`PyThreadState` na lista "
+"de threads associadas ao interpretador *interp*."
 
 #: ../../c-api/init.rst:2245
 msgid ""
 "Return the next thread state object after *tstate* from the list of all such "
 "objects belonging to the same :c:type:`PyInterpreterState` object."
 msgstr ""
+"Retorna o próximo objeto de estado da thread após *tstate* da lista de todos "
+"os objetos pertencentes ao mesmo objeto :c:type:`PyInterpreterState`."
 
 #: ../../c-api/init.rst:2252
 msgid "Thread Local Storage Support"
-msgstr ""
+msgstr "Suporte para armazenamento local de threads"
 
 #: ../../c-api/init.rst:2256
 msgid ""
@@ -3668,18 +3900,29 @@ msgid ""
 "use a thread key and functions to associate a :c:expr:`void*` value per "
 "thread."
 msgstr ""
+"O interpretador Python fornece suporte de baixo nível para armazenamento "
+"local de threads (TLS), que envolve a implementação TLS nativa subjacente "
+"para suportar a API de armazenamento local de threads no nível Python (:"
+"class:`threading.local`). As APIs no nível C do CPython são semelhantes às "
+"oferecidas pelo pthreads e pelo Windows: use uma chave de thread e funções "
+"para associar um valor :c:expr:`void*` por thread."
 
 #: ../../c-api/init.rst:2263
 msgid ""
 "A :term:`thread state` does *not* need to be :term:`attached <attached "
 "thread state>` when calling these functions; they suppl their own locking."
 msgstr ""
+"A :term:`thread state` não precisa estar :term:`anexado <attached thread "
+"state>` ao chamar essas funções; elas fornecem o seu próprio bloqueio."
 
 #: ../../c-api/init.rst:2266
 msgid ""
 "Note that :file:`Python.h` does not include the declaration of the TLS APIs, "
 "you need to include :file:`pythread.h` to use thread-local storage."
 msgstr ""
+"Observe que :file:`Python.h` não inclui a declaração das APIs TLS. É "
+"necessário incluir :file:`pythread.h` para usar o armazenamento local de "
+"threads."
 
 #: ../../c-api/init.rst:2270
 msgid ""
@@ -3688,10 +3931,14 @@ msgid ""
 "the :c:expr:`void*` values happen to be :c:expr:`PyObject*`, these functions "
 "don't do refcount operations on them either."
 msgstr ""
+"Nenhuma destas funções API lida com a gestão de memória em nome dos valores :"
+"c:expr:`void*`. Você precisa alocá-los e desalocá-los por conta própria. Se "
+"os valores :c:expr:`void*` forem :c:expr:`PyObject*`, estas funções também "
+"não realizam operações de contagem de referências neles."
 
 #: ../../c-api/init.rst:2278
 msgid "Thread Specific Storage (TSS) API"
-msgstr ""
+msgstr "API de armazenamento específico da thread (TSS)"
 
 #: ../../c-api/init.rst:2280
 msgid ""
@@ -3699,10 +3946,15 @@ msgid ""
 "the CPython interpreter.  This API uses a new type :c:type:`Py_tss_t` "
 "instead of :c:expr:`int` to represent thread keys."
 msgstr ""
+"A API TSS foi introduzida para substituir o uso da API TLS existente no "
+"interpretador CPython. Esta API usa um novo tipo :c:type:`Py_tss_t` em vez "
+"de :c:expr:`int` para representar chaves de thread."
 
 #: ../../c-api/init.rst:2286
 msgid "\"A New C-API for Thread-Local Storage in CPython\" (:pep:`539`)"
 msgstr ""
+"\"Uma nova C-API para armazenamento local de threads no CPython\" (:pep:"
+"`539`)"
 
 #: ../../c-api/init.rst:2291
 msgid ""
@@ -3711,22 +3963,30 @@ msgid ""
 "internal field representing the key's initialization state.  There are no "
 "public members in this structure."
 msgstr ""
+"Esta estrutura de dados representa o estado de uma chave de thread, cuja "
+"definição pode depender da implementação TLS subjacente, e possui um campo "
+"interno que representa o estado de inicialização da chave. Não há membros "
+"públicos nesta estrutura."
 
 #: ../../c-api/init.rst:2296
 msgid ""
 "When :ref:`Py_LIMITED_API <stable>` is not defined, static allocation of "
 "this type by :c:macro:`Py_tss_NEEDS_INIT` is allowed."
 msgstr ""
+"Quando :ref:`Py_LIMITED_API <stable>` não está definido, a alocação estática "
+"deste tipo por :c:macro:`Py_tss_NEEDS_INIT` é permitida."
 
 #: ../../c-api/init.rst:2302
 msgid ""
 "This macro expands to the initializer for :c:type:`Py_tss_t` variables. Note "
 "that this macro won't be defined with :ref:`Py_LIMITED_API <stable>`."
 msgstr ""
+"Esta macro expande-se para o inicializador das variáveis :c:type:`Py_tss_t`. "
+"Note que esta macro não será definida com :ref:`Py_LIMITED_API <stable>`."
 
 #: ../../c-api/init.rst:2307
 msgid "Dynamic Allocation"
-msgstr ""
+msgstr "Alocação dinâmica"
 
 #: ../../c-api/init.rst:2309
 msgid ""
@@ -3734,12 +3994,18 @@ msgid ""
 "built with :ref:`Py_LIMITED_API <stable>`, where static allocation of this "
 "type is not possible due to its implementation being opaque at build time."
 msgstr ""
+"Alocação dinâmica do :c:type:`Py_tss_t`, necessário em módulos de extensão "
+"compilados com :ref:`Py_LIMITED_API <stable>`, onde a alocação estática "
+"deste tipo não é possível devido à sua implementação ser opaca no momento da "
+"compilação."
 
 #: ../../c-api/init.rst:2316
 msgid ""
 "Return a value which is the same state as a value initialized with :c:macro:"
 "`Py_tss_NEEDS_INIT`, or ``NULL`` in the case of dynamic allocation failure."
 msgstr ""
+"Retorna um valor que é o mesmo estado de um valor inicializado com :c:macro:"
+"`Py_tss_NEEDS_INIT`, ou ``NULL`` no caso de falha na alocação dinâmica."
 
 #: ../../c-api/init.rst:2323
 msgid ""
@@ -3747,15 +4013,21 @@ msgid ""
 "calling :c:func:`PyThread_tss_delete` to ensure any associated thread locals "
 "have been unassigned. This is a no-op if the *key* argument is ``NULL``."
 msgstr ""
+"Libera a *chave* atribuída por :c:func:`PyThread_tss_alloc`, após primeiro "
+"chamar :c:func:`PyThread_tss_delete` para garantir que quaisquer variáveis "
+"locais associadas à thread tenham sido desatribuídas. Isto é uma operação "
+"nula se o argumento *chave* for ``NULL``."
 
 #: ../../c-api/init.rst:2329
 msgid ""
 "A freed key becomes a dangling pointer. You should reset the key to ``NULL``."
 msgstr ""
+"Uma chave liberada torna-se um ponteiro pendente. Deve redefinir a chave "
+"para ``NULL``."
 
 #: ../../c-api/init.rst:2334
 msgid "Methods"
-msgstr ""
+msgstr "Métodos"
 
 #: ../../c-api/init.rst:2336
 msgid ""
@@ -3764,12 +4036,18 @@ msgid ""
 "undefined if the given :c:type:`Py_tss_t` has not been initialized by :c:"
 "func:`PyThread_tss_create`."
 msgstr ""
+"O parâmetro *key* destas funções não deve ser ``NULL``. Além disso, os "
+"comportamentos de :c:func:`PyThread_tss_set` e :c:func:`PyThread_tss_get` "
+"são indefinidos se o :c:type:`Py_tss_t` fornecido não tiver sido "
+"inicializado por :c:func:`PyThread_tss_create`."
 
 #: ../../c-api/init.rst:2344
 msgid ""
 "Return a non-zero value if the given :c:type:`Py_tss_t` has been initialized "
 "by :c:func:`PyThread_tss_create`."
 msgstr ""
+"Retorna um valor diferente de zero se o :c:type:`Py_tss_t` fornecido tiver "
+"sido inicializado por :c:func:`PyThread_tss_create`."
 
 #: ../../c-api/init.rst:2350
 msgid ""
@@ -3779,6 +4057,11 @@ msgid ""
 "repeatedly on the same key -- calling it on an already initialized key is a "
 "no-op and immediately returns success."
 msgstr ""
+"Retorna um valor zero na inicialização bem-sucedida de uma chave TSS. O "
+"comportamento é indefinido se o valor apontado pelo argumento *key* não for "
+"inicializado por :c:macro:`Py_tss_NEEDS_INIT`. Esta função pode ser chamada "
+"repetidamente na mesma chave — chamá-la em uma chave já inicializada é uma "
+"operação nula e retorna imediatamente sucesso."
 
 #: ../../c-api/init.rst:2359
 msgid ""
@@ -3788,6 +4071,11 @@ msgid ""
 "`PyThread_tss_create`. This function can be called repeatedly on the same "
 "key -- calling it on an already destroyed key is a no-op."
 msgstr ""
+"Destrua uma chave TSS para esquecer os valores associados à chave em todos "
+"os threads e altere o estado de inicialização da chave para não "
+"inicializado. Uma chave destruída pode ser inicializada novamente por :c:"
+"func:`PyThread_tss_create`. Esta função pode ser chamada repetidamente na "
+"mesma chave — chamá-la em uma chave já destruída não tem efeito."
 
 #: ../../c-api/init.rst:2368
 msgid ""
@@ -3795,6 +4083,9 @@ msgid ""
 "value with a TSS key in the current thread.  Each thread has a distinct "
 "mapping of the key to a :c:expr:`void*` value."
 msgstr ""
+"Retorna um valor zero para indicar que associou com sucesso um valor :c:expr:"
+"`void*` a uma chave TSS na thread atual. Cada thread tem um mapeamento "
+"distinto da chave para um valor :c:expr:`void*`."
 
 #: ../../c-api/init.rst:2375
 msgid ""
@@ -3802,16 +4093,21 @@ msgid ""
 "thread.  This returns ``NULL`` if no value is associated with the key in the "
 "current thread."
 msgstr ""
+"Retorna o valor :c:expr:`void*` associado a uma chave TSS na thread atual. "
+"Isso retorna ``NULL`` se nenhum valor estiver associado à chave na thread "
+"atual."
 
 #: ../../c-api/init.rst:2383
 msgid "Thread Local Storage (TLS) API"
-msgstr ""
+msgstr "API de armazenamento local de threads (TLS)"
 
 #: ../../c-api/init.rst:2385
 msgid ""
 "This API is superseded by :ref:`Thread Specific Storage (TSS) API <thread-"
 "specific-storage-api>`."
 msgstr ""
+"Esta API foi substituída pela :ref:`API de armazenamento específico da "
+"thread (TSS) <thread-specific-storage-api>`."
 
 #: ../../c-api/init.rst:2390
 msgid ""
@@ -3821,30 +4117,39 @@ msgid ""
 "failure status, and the other TLS functions will all be no-ops on such "
 "platforms."
 msgstr ""
+"Esta versão da API não suporta plataformas nas quais a chave TLS nativa é "
+"definida de forma que não pode ser convertida com segurança para ``int``. "
+"Nessas plataformas, :c:func:`PyThread_create_key` retornará imediatamente "
+"com um status de falha, e as outras funções TLS serão todas no-ops nessas "
+"plataformas."
 
 #: ../../c-api/init.rst:2395
 msgid ""
 "Due to the compatibility problem noted above, this version of the API should "
 "not be used in new code."
 msgstr ""
+"Devido ao problema de compatibilidade mencionado acima, esta versão da API "
+"não deve ser utilizada em código novo."
 
 #: ../../c-api/init.rst:2406
 msgid "Synchronization Primitives"
-msgstr ""
+msgstr "Primitivas de sincronização"
 
 #: ../../c-api/init.rst:2408
 msgid "The C-API provides a basic mutual exclusion lock."
-msgstr ""
+msgstr "A C-API fornece um bloqueio básico de exclusão mútua."
 
 #: ../../c-api/init.rst:2412
 msgid ""
 "A mutual exclusion lock.  The :c:type:`!PyMutex` should be initialized to "
 "zero to represent the unlocked state.  For example::"
 msgstr ""
+"Um bloqueio de exclusão mútua. O :c:type:`!PyMutex` deve ser inicializado "
+"como zero para representar o estado desbloqueado. Por exemplo::"
 
 #: ../../c-api/init.rst:2415
 msgid "PyMutex mutex = {0};"
-msgstr ""
+msgstr "PyMutex mutex = {0};"
 
 #: ../../c-api/init.rst:2417
 msgid ""
@@ -3852,6 +4157,9 @@ msgid ""
 "contents and address of a :c:type:`!PyMutex` are meaningful, and it must "
 "remain at a fixed, writable location in memory."
 msgstr ""
+"As instâncias de :c:type:`!PyMutex` não devem ser copiadas ou movidas. Tanto "
+"o conteúdo como o endereço de um :c:type:`!PyMutex` são significativos e "
+"devem permanecer numa localização fixa e gravável na memória."
 
 #: ../../c-api/init.rst:2423
 msgid ""
@@ -3859,6 +4167,9 @@ msgid ""
 "considered unstable.  The size may change in future Python releases without "
 "a deprecation period."
 msgstr ""
+"A :c:type:`!PyMutex` ocupa atualmente um byte, mas o tamanho deve ser "
+"considerado instável. O tamanho pode mudar em futuras versões lançadas do "
+"Python sem um período de descontinuação."
 
 #: ../../c-api/init.rst:2431
 msgid ""
@@ -3867,16 +4178,24 @@ msgid ""
 "temporarily detach the :term:`thread state <attached thread state>` if one "
 "exists."
 msgstr ""
+"Bloqueia o mutex *m*. Se outro thread já o tiver bloqueado, o thread de "
+"chamada ficará bloqueado até que o mutex seja desbloqueado. Enquanto estiver "
+"bloqueado, o thread irá separar temporariamente o :term:`estado de thread "
+"<attached thread state>`, se existir."
 
 #: ../../c-api/init.rst:2439
 msgid ""
 "Unlock mutex *m*. The mutex must be locked --- otherwise, the function will "
 "issue a fatal error."
 msgstr ""
+"Desbloquear mutex *m*. O mutex deve estar bloqueado --- caso contrário, a "
+"função emitirá um erro fatal."
 
 #: ../../c-api/init.rst:2446
 msgid "Returns non-zero if the mutex *m* is currently locked, zero otherwise."
 msgstr ""
+"Retorna um valor diferente de zero se o mutex *m* estiver bloqueado no "
+"momento, zero caso contrário."
 
 #: ../../c-api/init.rst:2450
 msgid ""
@@ -3884,10 +4203,13 @@ msgid ""
 "should not be used to make concurrency control decisions, as the lock state "
 "may change immediately after the check."
 msgstr ""
+"Esta função destina-se apenas a ser utilizada em afirmações e depuração e "
+"não deve ser utilizada para tomar decisões de controlo de concorrência, uma "
+"vez que o estado do bloqueio pode mudar imediatamente após a verificação."
 
 #: ../../c-api/init.rst:2459
 msgid "Python Critical Section API"
-msgstr ""
+msgstr "API de secção crítica Python"
 
 #: ../../c-api/init.rst:2461
 msgid ""
@@ -3896,6 +4218,11 @@ msgid ""
 "intended to replace reliance on the :term:`global interpreter lock`, and are "
 "no-ops in versions of Python with the global interpreter lock."
 msgstr ""
+"A API da secção crítica fornece uma camada de prevenção de impasses sobre os "
+"bloqueios por objeto para :term:`free-threaded <free threading>` CPython. "
+"Elas têm como objetivo substituir a dependência do :term:`bloqueio global do "
+"interpretador` e são operações nulas nas versões do Python com o bloqueio "
+"global do interpretador."
 
 #: ../../c-api/init.rst:2466
 msgid ""
@@ -3905,6 +4232,12 @@ msgid ""
 "critical sections internally, with the notable exception of :c:func:"
 "`PyDict_Next`, which requires critical section to be acquired externally."
 msgstr ""
+"As secções críticas destinam-se a ser utilizadas para tipos personalizados "
+"implementados em extensões C-API. Geralmente, não devem ser utilizadas com "
+"tipos incorporados como :class:`list` e :class:`dict`, porque as suas C-APIs "
+"públicas já utilizam secções críticas internamente, com a notável exceção "
+"de :c:func:`PyDict_Next`, que requer que a secção crítica seja adquirida "
+"externamente."
 
 #: ../../c-api/init.rst:2473
 msgid ""
@@ -3916,6 +4249,13 @@ msgid ""
 "suspend the critical section thereby releasing the per-object lock, so other "
 "threads can acquire the per-object lock for the same object."
 msgstr ""
+"As secções críticas evitam impasses ao suspender implicitamente as secções "
+"críticas ativas, portanto, não fornecem acesso exclusivo, como o fornecido "
+"por bloqueios tradicionais, como :c:type:`PyMutex`. Quando uma secção "
+"crítica é iniciada, o bloqueio por objeto para o objeto é adquirido. Se o "
+"código executado dentro da secção crítica chamar funções C-API, ele poderá "
+"suspender a secção crítica, liberando assim o bloqueio por objeto, para que "
+"outras threads possam adquirir o bloqueio por objeto para o mesmo objeto."
 
 #: ../../c-api/init.rst:2481
 msgid ""
@@ -3925,6 +4265,11 @@ msgid ""
 "with a C type that does not extend or wrap :c:type:`PyObject` but still "
 "needs to call into the C API in a manner that might lead to deadlocks."
 msgstr ""
+"Variantes que aceitam ponteiros :c:type:`PyMutex` em vez de objetos Python "
+"também estão disponíveis. Use essas variantes para iniciar uma seção crítica "
+"em uma situação em que não há :c:type:`PyObject` — por exemplo, ao trabalhar "
+"com um tipo C que não estende ou envolve :c:type:`PyObject`, mas ainda "
+"precisa chamar a API C de uma maneira que pode levar a deadlocks."
 
 #: ../../c-api/init.rst:2487
 msgid ""
@@ -3933,6 +4278,10 @@ msgid ""
 "expansions. Note that the sizes and contents of the structures may change in "
 "future Python versions."
 msgstr ""
+"As funções e estruturas utilizadas pelas macros são expostas para casos em "
+"que as macros C não estão disponíveis. Elas só devem ser utilizadas como nas "
+"expansões de macro fornecidas. Note que os tamanhos e conteúdos das "
+"estruturas podem mudar em versões futuras do Python."
 
 #: ../../c-api/init.rst:2494
 msgid ""
@@ -3942,10 +4291,15 @@ msgid ""
 "suspend the outer critical sections.  This API does not provide a way to "
 "lock more than two objects at once."
 msgstr ""
+"As operações que precisam bloquear dois objetos ao mesmo tempo devem usar :c:"
+"macro:`Py_BEGIN_CRITICAL_SECTION2`. Você *não pode* usar seções críticas "
+"aninhadas para bloquear mais de um objeto ao mesmo tempo, porque a seção "
+"crítica interna pode suspender as seções críticas externas. Esta API não "
+"fornece uma maneira de bloquear mais de dois objetos ao mesmo tempo."
 
 #: ../../c-api/init.rst:2500
 msgid "Example usage::"
-msgstr ""
+msgstr "Exemplo de utilização::"
 
 #: ../../c-api/init.rst:2502
 msgid ""
@@ -3958,6 +4312,14 @@ msgid ""
 "   Py_RETURN_NONE;\n"
 "}"
 msgstr ""
+"static PyObject *\n"
+"set_field(MyObject *self, PyObject *value)\n"
+"{\n"
+"   Py_BEGIN_CRITICAL_SECTION(self);\n"
+"   Py_SETREF(self->field, Py_XNewRef(value));\n"
+"   Py_END_CRITICAL_SECTION();\n"
+"   Py_RETURN_NONE;\n"
+"}"
 
 #: ../../c-api/init.rst:2511
 msgid ""
@@ -3968,18 +4330,25 @@ msgid ""
 "if the code triggered by the finalizer blocks and calls :c:func:"
 "`PyEval_SaveThread`."
 msgstr ""
+"No exemplo acima, :c:macro:`Py_SETREF` chama :c:macro:`Py_DECREF`, que pode "
+"chamar código arbitrário através da função de desalocação de um objeto. A "
+"API da secção crítica evita potenciais bloqueios devido à reentrada e à "
+"ordenação de bloqueios, permitindo que o tempo de execução suspenda "
+"temporariamente a secção crítica se o código acionado pelo finalizador "
+"bloquear e chamar :c:func:`PyEval_SaveThread`."
 
 #: ../../c-api/init.rst:2519
 msgid ""
 "Acquires the per-object lock for the object *op* and begins a critical "
 "section."
 msgstr ""
+"Adquire o bloqueio por objeto para o objeto *op* e inicia uma secção crítica."
 
 #: ../../c-api/init.rst:2522 ../../c-api/init.rst:2536
 #: ../../c-api/init.rst:2553 ../../c-api/init.rst:2568
 #: ../../c-api/init.rst:2582 ../../c-api/init.rst:2599
 msgid "In the free-threaded build, this macro expands to::"
-msgstr ""
+msgstr "Na compilação de thread livre, esta macro expande-se para::"
 
 #: ../../c-api/init.rst:2524
 msgid ""
@@ -3987,14 +4356,17 @@ msgid ""
 "    PyCriticalSection _py_cs;\n"
 "    PyCriticalSection_Begin(&_py_cs, (PyObject*)(op))"
 msgstr ""
+"{\n"
+"    PyCriticalSection _py_cs;\n"
+"    PyCriticalSection_Begin(&_py_cs, (PyObject*)(op))"
 
 #: ../../c-api/init.rst:2528 ../../c-api/init.rst:2574
 msgid "In the default build, this macro expands to ``{``."
-msgstr ""
+msgstr "Na compilação padrão, esta macro expande-se para ``{``."
 
 #: ../../c-api/init.rst:2534
 msgid "Locks the mutex *m* and begins a critical section."
-msgstr ""
+msgstr "Bloqueia o mutex *m* e inicia uma secção crítica."
 
 #: ../../c-api/init.rst:2538
 msgid ""
@@ -4002,30 +4374,38 @@ msgid ""
 "     PyCriticalSection _py_cs;\n"
 "     PyCriticalSection_BeginMutex(&_py_cs, m)"
 msgstr ""
+"{\n"
+"     PyCriticalSection _py_cs;\n"
+"     PyCriticalSection_BeginMutex(&_py_cs, m)"
 
 #: ../../c-api/init.rst:2542
 msgid ""
 "Note that unlike :c:macro:`Py_BEGIN_CRITICAL_SECTION`, there is no cast for "
 "the argument of the macro - it must be a :c:type:`PyMutex` pointer."
 msgstr ""
+"Note que, ao contrário de :c:macro:`Py_BEGIN_CRITICAL_SECTION`, não há "
+"conversão para o argumento da macro — ele deve ser um ponteiro :c:type:"
+"`PyMutex`."
 
 #: ../../c-api/init.rst:2545 ../../c-api/init.rst:2591
 msgid "On the default build, this macro expands to ``{``."
-msgstr ""
+msgstr "Na compilação padrão, esta macro expande-se para ``{``."
 
 #: ../../c-api/init.rst:2551
 msgid "Ends the critical section and releases the per-object lock."
-msgstr ""
+msgstr "Encerra a secção crítica e liberta o bloqueio por objeto."
 
 #: ../../c-api/init.rst:2555
 msgid ""
 "    PyCriticalSection_End(&_py_cs);\n"
 "}"
 msgstr ""
+"    PyCriticalSection_End(&_py_cs);\n"
+"}"
 
 #: ../../c-api/init.rst:2558 ../../c-api/init.rst:2604
 msgid "In the default build, this macro expands to ``}``."
-msgstr ""
+msgstr "Na compilação padrão, esta macro expande-se para ``}``."
 
 #: ../../c-api/init.rst:2564
 msgid ""
@@ -4033,6 +4413,9 @@ msgid ""
 "critical section.  The locks are acquired in a consistent order (lowest "
 "address first) to avoid lock ordering deadlocks."
 msgstr ""
+"Adquire os bloqueios por objeto para os objetos *a* e *b* e inicia uma "
+"secção crítica. Os bloqueios são adquiridos numa ordem consistente (primeiro "
+"o endereço mais baixo) para evitar impasses na ordem dos bloqueios."
 
 #: ../../c-api/init.rst:2570
 msgid ""
@@ -4040,10 +4423,13 @@ msgid ""
 "    PyCriticalSection2 _py_cs2;\n"
 "    PyCriticalSection2_Begin(&_py_cs2, (PyObject*)(a), (PyObject*)(b))"
 msgstr ""
+"{\n"
+"    PyCriticalSection2 _py_cs2;\n"
+"    PyCriticalSection2_Begin(&_py_cs2, (PyObject*)(a), (PyObject*)(b))"
 
 #: ../../c-api/init.rst:2580
 msgid "Locks the mutexes *m1* and *m2* and begins a critical section."
-msgstr ""
+msgstr "Bloqueia os mutexes *m1* e *m2* e inicia uma secção crítica."
 
 #: ../../c-api/init.rst:2584
 msgid ""
@@ -4051,172 +4437,180 @@ msgid ""
 "     PyCriticalSection2 _py_cs2;\n"
 "     PyCriticalSection2_BeginMutex(&_py_cs2, m1, m2)"
 msgstr ""
+"{\n"
+"     PyCriticalSection2 _py_cs2;\n"
+"     PyCriticalSection2_BeginMutex(&_py_cs2, m1, m2)"
 
 #: ../../c-api/init.rst:2588
 msgid ""
 "Note that unlike :c:macro:`Py_BEGIN_CRITICAL_SECTION2`, there is no cast for "
 "the arguments of the macro - they must be :c:type:`PyMutex` pointers."
 msgstr ""
+"Note que, ao contrário de :c:macro:`Py_BEGIN_CRITICAL_SECTION2`, não há "
+"conversão para os argumentos da macro — eles devem ser ponteiros :c:type:"
+"`PyMutex`."
 
 #: ../../c-api/init.rst:2597
 msgid "Ends the critical section and releases the per-object locks."
-msgstr ""
+msgstr "Encerra a secção crítica e liberta os bloqueios por objeto."
 
 #: ../../c-api/init.rst:2601
 msgid ""
 "    PyCriticalSection2_End(&_py_cs2);\n"
 "}"
 msgstr ""
+"    PyCriticalSection2_End(&_py_cs2);\n"
+"}"
 
 #: ../../c-api/init.rst:350
 msgid "PyEval_InitThreads()"
-msgstr ""
+msgstr "PyEval_InitThreads()"
 
 #: ../../c-api/init.rst:350
 msgid "modules (in module sys)"
-msgstr ""
+msgstr "módulos (no módulo sys)"
 
 #: ../../c-api/init.rst:350 ../../c-api/init.rst:712
 msgid "path (in module sys)"
-msgstr ""
+msgstr "path (no módulo sys)"
 
 #: ../../c-api/init.rst:350 ../../c-api/init.rst:712 ../../c-api/init.rst:1222
 #: ../../c-api/init.rst:1750 ../../c-api/init.rst:1849
 msgid "module"
-msgstr ""
+msgstr "módulo"
 
 #: ../../c-api/init.rst:350 ../../c-api/init.rst:1750 ../../c-api/init.rst:1849
 msgid "builtins"
-msgstr ""
+msgstr "embutidos"
 
 #: ../../c-api/init.rst:350 ../../c-api/init.rst:1750 ../../c-api/init.rst:1849
 msgid "__main__"
-msgstr ""
+msgstr "__main__"
 
 #: ../../c-api/init.rst:350 ../../c-api/init.rst:1750 ../../c-api/init.rst:1849
 msgid "sys"
-msgstr ""
+msgstr "sys"
 
 #: ../../c-api/init.rst:350 ../../c-api/init.rst:712
 msgid "search"
-msgstr ""
+msgstr "pesquisar"
 
 #: ../../c-api/init.rst:350 ../../c-api/init.rst:712
 msgid "path"
-msgstr ""
+msgstr "caminho"
 
 #: ../../c-api/init.rst:350 ../../c-api/init.rst:1814 ../../c-api/init.rst:1867
 msgid "Py_FinalizeEx (C function)"
-msgstr ""
+msgstr "Py_FinalizeEx (função C)"
 
 #: ../../c-api/init.rst:572
 msgid "Py_Initialize()"
-msgstr ""
+msgstr "Py_Initialize()"
 
 #: ../../c-api/init.rst:572 ../../c-api/init.rst:810
 msgid "main()"
-msgstr ""
+msgstr "main()"
 
 #: ../../c-api/init.rst:572
 msgid "Py_GetPath()"
-msgstr ""
+msgstr "Py_GetPath()"
 
 #: ../../c-api/init.rst:690
 msgid "executable (in module sys)"
-msgstr ""
+msgstr "executável (no módulo sys)"
 
 #: ../../c-api/init.rst:745 ../../c-api/init.rst:787 ../../c-api/init.rst:801
 msgid "version (in module sys)"
-msgstr ""
+msgstr "versão (no módulo sys)"
 
 #: ../../c-api/init.rst:757
 msgid "platform (in module sys)"
-msgstr ""
+msgstr "plataforma (no módulo sys)"
 
 #: ../../c-api/init.rst:774
 msgid "copyright (in module sys)"
-msgstr ""
+msgstr "direitos de autor (no módulo sys)"
 
 #: ../../c-api/init.rst:810
 msgid "Py_FatalError()"
-msgstr ""
+msgstr "Py_FatalError()"
 
 #: ../../c-api/init.rst:810
 msgid "argv (in module sys)"
-msgstr ""
+msgstr "argv (no módulo sys)"
 
 #: ../../c-api/init.rst:930
 msgid "global interpreter lock"
-msgstr ""
+msgstr "bloqueio global do interpretador"
 
 #: ../../c-api/init.rst:930
 msgid "interpreter lock"
-msgstr ""
+msgstr "bloqueio do intérprete"
 
 #: ../../c-api/init.rst:930
 msgid "lock, interpreter"
-msgstr ""
+msgstr "bloqueio, intérprete"
 
 #: ../../c-api/init.rst:944
 msgid "setswitchinterval (in module sys)"
-msgstr ""
+msgstr "setswitchinterval (no módulo sys)"
 
 #: ../../c-api/init.rst:953
 msgid "PyThreadState (C type)"
-msgstr ""
+msgstr "PyThreadState (tipo C)"
 
 #: ../../c-api/init.rst:989
 msgid "Py_BEGIN_ALLOW_THREADS (C macro)"
-msgstr ""
+msgstr "Py_BEGIN_ALLOW_THREADS (macro C)"
 
 #: ../../c-api/init.rst:989
 msgid "Py_END_ALLOW_THREADS (C macro)"
-msgstr ""
+msgstr "Py_END_ALLOW_THREADS (macro C)"
 
 #: ../../c-api/init.rst:1005
 msgid "PyEval_RestoreThread (C function)"
-msgstr ""
+msgstr "PyEval_RestoreThread (função C)"
 
 #: ../../c-api/init.rst:1005
 msgid "PyEval_SaveThread (C function)"
-msgstr ""
+msgstr "PyEval_SaveThread (função C)"
 
 #: ../../c-api/init.rst:1200
 msgid "PyEval_AcquireThread()"
-msgstr ""
+msgstr "PyEval_AcquireThread()"
 
 #: ../../c-api/init.rst:1200
 msgid "PyEval_ReleaseThread()"
-msgstr ""
+msgstr "PyEval_ReleaseThread()"
 
 #: ../../c-api/init.rst:1200
 msgid "PyEval_SaveThread()"
-msgstr ""
+msgstr "PyEval_SaveThread()"
 
 #: ../../c-api/init.rst:1200
 msgid "PyEval_RestoreThread()"
-msgstr ""
+msgstr "PyEval_RestoreThread()"
 
 #: ../../c-api/init.rst:1222
 msgid "_thread"
-msgstr ""
+msgstr "_thread"
 
 #: ../../c-api/init.rst:1750 ../../c-api/init.rst:1849
 msgid "stdout (in module sys)"
-msgstr ""
+msgstr "stdout (no módulo sys)"
 
 #: ../../c-api/init.rst:1750 ../../c-api/init.rst:1849
 msgid "stderr (in module sys)"
-msgstr ""
+msgstr "stderr (no módulo sys)"
 
 #: ../../c-api/init.rst:1750 ../../c-api/init.rst:1849
 msgid "stdin (in module sys)"
-msgstr ""
+msgstr "stdin (no módulo sys)"
 
 #: ../../c-api/init.rst:1814
 msgid "Py_Initialize (C function)"
-msgstr ""
+msgstr "Py_Initialize (função C)"
 
 #: ../../c-api/init.rst:1844
 msgid "close (in module os)"
-msgstr ""
+msgstr "fechar (no módulo os)"
