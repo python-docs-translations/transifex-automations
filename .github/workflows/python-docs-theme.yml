@@ -1,0 +1,119 @@
+name: Update and pull python-docs-theme project
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths-ignore:
+      - 'docs/**'
+      - '.readthedocs.yaml'
+      - 'sample-workflows/**'
+  pull_request:
+    branches:
+      - 'main'
+    paths-ignore:
+      - 'docs/**'
+      - '.readthedocs.yaml'
+      - 'sample-workflows/**'
+  workflow_dispatch:
+    inputs:
+      push:
+        description: "Push source strings and translations to Transifex"
+        type: boolean
+      pull:
+        description: "Pull translations from Transifex"
+        type: boolean
+  schedule:
+    - cron: '0 0 * * 1'
+
+env:
+  TX_CLI_VERSION: '1.6.16'
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check out ${{ github.repository }}
+        uses: actions/checkout@v4.2.2
+
+      - name: Check out python-docs-theme
+        uses: actions/checkout@v4.2.2
+        with:
+          repository: python/python-docs-theme
+          persist-credentials: false
+          path: python-docs-theme
+
+      - name: Set up Python 3
+        uses: actions/setup-python@v5.6.0
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: |
+            requirements.txt
+            python-docs-theme/requirements.txt
+
+      - name: Install Transifex CLI
+        working-directory: /usr/local/bin
+        run: |
+          curl -o- https://raw.githubusercontent.com/transifex/cli/master/install.sh | bash -s -- v${{ env.TX_CLI_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          sudo apt update -y && sudo apt install gettext -y
+          pip3 install --upgrade pip
+          pip3 install -r requirements.txt -r python-docs-theme/requirements.txt
+
+        # required for generating .tx/config
+      - name: Generate POT files
+        working-directory: python-docs-theme
+        run: |
+          python babel_runner.py extract
+
+      - name: Generate Transifex configuration file
+        working-directory: python-docs-theme/python-docs-theme/locale
+        run: |
+          rm .tx/config
+          sphinx-intl create-txconfig
+          sphinx-intl update-txconfig-resources --pot-dir . --locale-dir . --transifex-organization-name python-doc --transifex-project-name python-docs-theme
+          sed -i '/^minimum_perc *= 0$/s/0/1/' .tx/config
+          git diff .tx/config
+
+      - name: Push source strings to Transifex
+        if: ${{ github.event_name == 'schedule' ||
+               (github.event_name == 'workflow_dispatch' && github.event.inputs.push == 'true') }}
+        working-directory: python-docs-theme/python-docs-theme/locale
+        id: tx_push
+        run: |
+          tx push --source --skip
+        env:
+          TX_TOKEN: ${{ secrets.TX_TOKEN }}
+
+      - name: Pull translations for all languages
+        if: ${{ github.event_name == 'schedule' ||
+               (github.event_name == 'workflow_dispatch' && github.event.inputs.pull == 'true') }}
+        working-directory: python-docs-theme/python-docs-theme/locale
+        run: |
+          tx pull --all --translations --force
+        env:
+          TX_TOKEN: ${{ secrets.TX_TOKEN }}
+
+      - name: Commit changes
+        working-directory: python-docs-theme/python-docs-theme/locale
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git status
+          shopt -s globstar
+          git diff -I'^"POT-Creation-Date: ' --numstat ./**/*.po ./**/*.pot | cut -f3 | xargs -r git add -v
+          # shellcheck disable=SC2046,SC2035
+          git add -v $(git ls-files -o --exclude-standard *.po *.pot) .tx/config
+          git diff-index --cached --quiet HEAD || { git commit -vm "Update translations from Transifex"; }
+
+      - name: Push changes
+        working-directory: python-docs-theme/python-docs-theme/locale
+        if: ${{ contains(fromJSON('["schedule", "workflow_dispatch"]'), github.event_name) }}
+        run: |
+          git push
