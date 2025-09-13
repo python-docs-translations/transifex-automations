@@ -73,7 +73,7 @@ jobs:
           python babel_runner.py extract
 
       - name: Generate Transifex configuration file
-        working-directory: python-docs-theme/python-docs-theme/locale
+        working-directory: python-docs-theme/python_docs_theme/locale/
         run: |
           sphinx-intl create-txconfig
           sphinx-intl update-txconfig-resources --pot-dir . --locale-dir . --transifex-organization-name python-doc --transifex-project-name python-docs-theme
@@ -83,7 +83,7 @@ jobs:
       - name: Push source strings to Transifex
         if: ${{ github.event_name == 'schedule' ||
                (github.event_name == 'workflow_dispatch' && github.event.inputs.push == 'true') }}
-        working-directory: python-docs-theme/python-docs-theme/locale
+        working-directory: python-docs-theme/python_docs_theme/locale/
         id: tx_push
         run: |
           tx push --source --skip
@@ -93,14 +93,14 @@ jobs:
       - name: Pull translations for all languages
         if: ${{ github.event_name == 'schedule' ||
                (github.event_name == 'workflow_dispatch' && github.event.inputs.pull == 'true') }}
-        working-directory: python-docs-theme/python-docs-theme/locale
+        working-directory: python-docs-theme/python_docs_theme/locale/
         run: |
           tx pull --all --translations --force
         env:
           TX_TOKEN: ${{ secrets.TX_TOKEN }}
 
       - name: Commit changes
-        working-directory: python-docs-theme/python-docs-theme/locale
+        working-directory: python-docs-theme/python_docs_theme/locale/
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
@@ -112,7 +112,7 @@ jobs:
           git diff-index --cached --quiet HEAD || { git commit -vm "Update translations from Transifex"; }
 
       - name: Push changes
-        working-directory: python-docs-theme/python-docs-theme/locale
+        working-directory: python-docs-theme/python_docs_theme/locale/
         if: ${{ contains(fromJSON('["schedule", "workflow_dispatch"]'), github.event_name) }}
         run: |
           git push
