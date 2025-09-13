@@ -36,7 +36,7 @@ jobs:
       contents: write
 
     steps:
-      - name: Check out python-docs-theme
+      - name: Check out repository
         uses: actions/checkout@v4.2.2
         with:
           ref: python-docs-theme
@@ -46,7 +46,7 @@ jobs:
         with:
           repository: python/python-docs-theme
           persist-credentials: false
-          path: ../python-docs-theme
+          path: python-docs-theme
 
       - name: Set up Python 3
         uses: actions/setup-python@v5.6.0
@@ -54,7 +54,7 @@ jobs:
           python-version: 3
           cache: 'pip'
           cache-dependency-path: |
-            ../python-docs-theme/requirements.txt
+            python-docs-theme/requirements.txt
 
       - name: Install Transifex CLI
         working-directory: /usr/local/bin
@@ -65,12 +65,12 @@ jobs:
         run: |
           sudo apt update -y && sudo apt install gettext -y
           pip3 install --upgrade pip
-          pip3 install -r ../python-docs-theme/requirements.txt
+          pip3 install -r python-docs-theme/requirements.txt
 
       - name: Generate and store POT file
         run: |
-          python ../python-docs-theme/babel_runner.py extract
-          cp ../python-docs-theme/python_docs_theme/locale/python-docs-theme.pot .
+          python python-docs-theme/babel_runner.py extract
+          cp python-docs-theme/python_docs_theme/locale/python-docs-theme.pot .
 
       - name: Push source strings to Transifex
         if: ${{ github.event_name == 'schedule' ||
