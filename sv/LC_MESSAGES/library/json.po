@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-09 14:15+0000\n"
+"POT-Creation-Date: 2025-09-13 14:14+0000\n"
 "PO-Revision-Date: 2025-08-15 19:00+0000\n"
 "Last-Translator: python-doc bot, 2025\n"
 "Language-Team: Swedish (https://app.transifex.com/python-doc/teams/5390/"
@@ -24,11 +24,11 @@ msgstr ""
 
 #: ../../library/json.rst:2
 msgid ":mod:`!json` --- JSON encoder and decoder"
-msgstr ""
+msgstr ":mod:`!json` --- JSON-kodare och -avkodare"
 
 #: ../../library/json.rst:10
 msgid "**Source code:** :source:`Lib/json/__init__.py`"
-msgstr ""
+msgstr "**Källkod:** :source:`Lib/json/__init__.py`"
 
 #: ../../library/json.rst:14
 msgid ""
@@ -39,6 +39,12 @@ msgid ""
 "wikipedia.org/wiki/JavaScript>`_ object literal syntax (although it is not a "
 "strict subset of JavaScript [#rfc-errata]_ )."
 msgstr ""
+"`JSON (JavaScript Object Notation) <https://json.org>`_, specificerat av :"
+"rfc:`7159` (som föråldrar :rfc:`4627`) och av `ECMA-404 <https://ecma-"
+"international.org/publications-and-standards/standards/ecma-404/>`_, är ett "
+"lättviktigt datautbytesformat inspirerat av `JavaScript <https://en."
+"wikipedia.org/wiki/JavaScript>`_ objektlitteral syntax (även om det inte är "
+"en strikt delmängd av JavaScript [#rfc-errata]_ )."
 
 #: ../../library/json.rst:22
 msgid ""
@@ -46,6 +52,9 @@ msgid ""
 "ambiguous. All values in Python are objects. In JSON, an object refers to "
 "any data wrapped in curly braces, similar to a Python dictionary."
 msgstr ""
+"Termen \"objekt\" i samband med JSON-bearbetning i Python kan vara tvetydig. "
+"Alla värden i Python är objekt. I JSON avser ett objekt alla data som är "
+"förpackade inom hakparenteser, på samma sätt som en Python-ordbok."
 
 #: ../../library/json.rst:27
 msgid ""
@@ -53,16 +62,22 @@ msgid ""
 "string may cause the decoder to consume considerable CPU and memory "
 "resources. Limiting the size of data to be parsed is recommended."
 msgstr ""
+"Var försiktig när du analyserar JSON-data från otillförlitliga källor. En "
+"skadlig JSON-sträng kan leda till att avkodaren förbrukar betydande CPU- och "
+"minnesresurser. Vi rekommenderar att du begränsar storleken på de data som "
+"ska analyseras."
 
 #: ../../library/json.rst:31
 msgid ""
 "This module exposes an API familiar to users of the standard library :mod:"
 "`marshal` and :mod:`pickle` modules."
 msgstr ""
+"Denna modul exponerar ett API som är bekant för användare av "
+"standardbibliotekets moduler :mod:`marshal` och :mod:`pickle`."
 
 #: ../../library/json.rst:34
 msgid "Encoding basic Python object hierarchies::"
-msgstr ""
+msgstr "Kodning av grundläggande Python-objekthierarkier::"
 
 #: ../../library/json.rst:36
 msgid ""
@@ -83,10 +98,26 @@ msgid ""
 ">>> io.getvalue()\n"
 "'[\"streaming API\"]'"
 msgstr ""
+">>> import json\n"
+">>> json.dumps(['foo', {'bar': ('baz', None, 1.0, 2)}])\n"
+"'[\"foo\", {\"bar\": [\"baz\", null, 1.0, 2]}]'\n"
+">>> print(json.dumps(\"\\\"foo\\bar\"))\n"
+"\"\\\"foo\\bar\"\n"
+">>> print(json.dumps('\\u1234'))\n"
+"\"\\u1234\"\n"
+">>> print(json.dumps('\\\\'))\n"
+"\"\\\\\"\n"
+">>> print(json.dumps({\"c\": 0, \"b\": 0, \"a\": 0}, sort_keys=True))\n"
+"{\"a\": 0, \"b\": 0, \"c\": 0}\n"
+">>> from io import StringIO\n"
+">>> io = StringIO()\n"
+">>> json.dump(['streaming API'], io)\n"
+">>> io.getvalue()\n"
+"'[\"streaming API\"]'"
 
 #: ../../library/json.rst:53
 msgid "Compact encoding::"
-msgstr ""
+msgstr "Kompakt kodning::"
 
 #: ../../library/json.rst:55
 msgid ""
@@ -94,10 +125,13 @@ msgid ""
 ">>> json.dumps([1, 2, 3, {'4': 5, '6': 7}], separators=(',', ':'))\n"
 "'[1,2,3,{\"4\":5,\"6\":7}]'"
 msgstr ""
+">>> import json\n"
+">>> json.dumps([1, 2, 3, {'4': 5, '6': 7}], separators=(',', ':'))\n"
+"'[1,2,3,{\"4\":5,\"6\":7}]'"
 
 #: ../../library/json.rst:59
 msgid "Pretty printing::"
-msgstr ""
+msgstr "Vacker utskrift::"
 
 #: ../../library/json.rst:61
 msgid ""
@@ -108,10 +142,16 @@ msgid ""
 "    \"6\": 7\n"
 "}"
 msgstr ""
+">>> import json\n"
+">>> print(json.dumps({'6': 7, '4': 5}, sort_keys=True, indent=4))\n"
+"{\n"
+"    \"4\": 5,\n"
+"    \"6\": 7\n"
+"}"
 
 #: ../../library/json.rst:68
 msgid "Customizing JSON object encoding::"
-msgstr ""
+msgstr "Anpassa kodning av JSON-objekt::"
 
 #: ../../library/json.rst:70
 msgid ""
@@ -125,10 +165,19 @@ msgid ""
 ">>> json.dumps(1 + 2j, default=custom_json)\n"
 "'{\"__complex__\": true, \"real\": 1.0, \"imag\": 2.0}'"
 msgstr ""
+">>> import json\n"
+">>> def custom_json(obj):\n"
+"...     if isinstance(obj, complex):\n"
+"...         return {'__complex__': True, 'real': obj.real, 'imag': obj."
+"imag}\n"
+"...     raise TypeError(f'Cannot serialize object of {type(obj)}')\n"
+"...\n"
+">>> json.dumps(1 + 2j, default=custom_json)\n"
+"'{\"__complex__\": true, \"real\": 1.0, \"imag\": 2.0}'"
 
 #: ../../library/json.rst:79
 msgid "Decoding JSON::"
-msgstr ""
+msgstr "Avkodning av JSON::"
 
 #: ../../library/json.rst:81
 msgid ""
@@ -142,10 +191,19 @@ msgid ""
 ">>> json.load(io)\n"
 "['streaming API']"
 msgstr ""
+">>> import json\n"
+">>> json.loads('[\"foo\", {\"bar\":[\"baz\", null, 1.0, 2]}]')\n"
+"['foo', {'bar': ['baz', None, 1.0, 2]}]\n"
+">>> json.loads('\"\\\\\"foo\\\\bar\"')\n"
+"'\"foo\\x08ar'\n"
+">>> from io import StringIO\n"
+">>> io = StringIO('[\"streaming API\"]')\n"
+">>> json.load(io)\n"
+"['streaming API']"
 
 #: ../../library/json.rst:91
 msgid "Customizing JSON object decoding::"
-msgstr ""
+msgstr "Anpassa avkodning av JSON-objekt::"
 
 #: ../../library/json.rst:93
 msgid ""
@@ -162,10 +220,22 @@ msgid ""
 ">>> json.loads('1.1', parse_float=decimal.Decimal)\n"
 "Decimal('1.1')"
 msgstr ""
+">>> import json\n"
+">>> def as_complex(dct):\n"
+"...     if '__complex__' in dct:\n"
+"...         return complex(dct['real'], dct['imag'])\n"
+"...     return dct\n"
+"...\n"
+">>> json.loads('{\"__complex__\": true, \"real\": 1, \"imag\": 2}',\n"
+"...     object_hook=as_complex)\n"
+"(1+2j)\n"
+">>> import decimal\n"
+">>> json.loads('1.1', parse_float=decimal.Decimal)\n"
+"Decimal('1.1')"
 
 #: ../../library/json.rst:106
 msgid "Extending :class:`JSONEncoder`::"
-msgstr ""
+msgstr "Utökning av :class:`JSONEncoder`::"
 
 #: ../../library/json.rst:108
 msgid ""
@@ -184,10 +254,24 @@ msgid ""
 ">>> list(ComplexEncoder().iterencode(2 + 1j))\n"
 "['[2.0', ', 1.0', ']']"
 msgstr ""
+">>> import json\n"
+">>> class ComplexEncoder(json.JSONEncoder):\n"
+"...     def default(self, obj):\n"
+"...         if isinstance(obj, complex):\n"
+"...             return [obj.real, obj.imag]\n"
+"...         # Let the base class default method raise the TypeError\n"
+"...         return super().default(obj)\n"
+"...\n"
+">>> json.dumps(2 + 1j, cls=ComplexEncoder)\n"
+"'[2.0, 1.0]'\n"
+">>> ComplexEncoder().encode(2 + 1j)\n"
+"'[2.0, 1.0]'\n"
+">>> list(ComplexEncoder().iterencode(2 + 1j))\n"
+"['[2.0', ', 1.0', ']']"
 
 #: ../../library/json.rst:124
 msgid "Using :mod:`json` from the shell to validate and pretty-print:"
-msgstr ""
+msgstr "Använda :mod:`json` från skalet för att validera och skriva ut snyggt:"
 
 #: ../../library/json.rst:126
 msgid ""
@@ -198,10 +282,16 @@ msgid ""
 "$ echo '{1.2:3.4}' | python -m json\n"
 "Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"
 msgstr ""
+"$ echo '{\"json\":\"obj\"}' | python -m json\n"
+"{\n"
+"    \"json\": \"obj\"\n"
+"}\n"
+"$ echo '{1.2:3.4}' | python -m json\n"
+"Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"
 
 #: ../../library/json.rst:135
 msgid "See :ref:`json-commandline` for detailed documentation."
-msgstr ""
+msgstr "Se :ref:`json-commandline` för detaljerad dokumentation."
 
 #: ../../library/json.rst:139
 msgid ""
@@ -210,16 +300,23 @@ msgid ""
 "value) is also a subset of YAML 1.0 and 1.1.  This module can thus also be "
 "used as a YAML serializer."
 msgstr ""
+"JSON är en underdel av `YAML <https://yaml.org/>`_ 1.2.  Den JSON som "
+"produceras av den här modulens standardinställningar (i synnerhet "
+"standardvärdet *separators*) är också en delmängd av YAML 1.0 och 1.1.  Den "
+"här modulen kan därför också användas som en YAML-serialisator."
 
 #: ../../library/json.rst:146
 msgid ""
 "This module's encoders and decoders preserve input and output order by "
 "default.  Order is only lost if the underlying containers are unordered."
 msgstr ""
+"Den här modulens kodare och avkodare bevarar inmatnings- och "
+"utmatningsordning som standard.  Ordningen går bara förlorad om de "
+"underliggande behållarna är oordnade."
 
 #: ../../library/json.rst:151
 msgid "Basic Usage"
-msgstr ""
+msgstr "Grundläggande användning"
 
 #: ../../library/json.rst:158
 msgid ""
@@ -227,6 +324,9 @@ msgid ""
 "supporting :term:`file-like object`) using this :ref:`Python-to-JSON "
 "conversion table <py-to-json-table>`."
 msgstr ""
+"Serialisera *obj* som en JSON-formaterad ström till *fp* (ett ``.write()``\\-"
+"stödjande :term:`filliknande objekt`) med hjälp av denna :ref:`Python-"
+"tillJSON-konverteringstabell <py-to-json-table>`."
 
 #: ../../library/json.rst:164
 msgid ""
@@ -234,6 +334,9 @@ msgid ""
 "trying to serialize multiple objects with repeated calls to :func:`dump` "
 "using the same *fp* will result in an invalid JSON file."
 msgstr ""
+"Till skillnad från :mod:`pickle` och :mod:`marshal` är JSON inte ett inramat "
+"protokoll, så försök att serialisera flera objekt med upprepade anrop till :"
+"func:`dump` med samma *fp* kommer att resultera i en ogiltig JSON-fil."
 
 #: ../../library/json.rst:0
 msgid "Parameters"
@@ -241,7 +344,7 @@ msgstr "Parametrar"
 
 #: ../../library/json.rst:168
 msgid "The Python object to be serialized."
-msgstr ""
+msgstr "Python-objektet som ska serialiseras."
 
 #: ../../library/json.rst:171
 msgid ""
@@ -249,6 +352,9 @@ msgid ""
 "always produces :class:`str` objects, not :class:`bytes` objects, therefore "
 "``fp.write()`` must support :class:`str` input."
 msgstr ""
+"Det filliknande objekt som *obj* ska serialiseras till. Modulen :mod:`!json` "
+"producerar alltid :class:`str` objekt, inte :class:`bytes` objekt, därför "
+"måste ``fp.write()`` stödja :class:`str` indata."
 
 #: ../../library/json.rst:178
 msgid ""
@@ -256,6 +362,10 @@ msgid ""
 "class:`float`, :class:`bool`, ``None``) will be skipped instead of raising "
 "a :exc:`TypeError`. Default ``False``."
 msgstr ""
+"Om ``True``, kommer nycklar som inte är av en grundläggande typ (:class:"
+"`str`, :class:`int`, :class:`float`, :class:`bool`, ``None``) att hoppas "
+"över istället för att ge upphov till ett :exc:`TypeError`. Standard "
+"``False``."
 
 #: ../../library/json.rst:184
 msgid ""
@@ -263,6 +373,8 @@ msgid ""
 "ASCII characters escaped. If ``False``, these characters will be outputted "
 "as-is."
 msgstr ""
+"Om ``True`` (standard) garanteras att alla inkommande icke-ASCII-tecken i "
+"utdata är escapade. Om ``False``, kommer dessa tecken att matas ut som de är."
 
 #: ../../library/json.rst:189
 msgid ""
@@ -270,6 +382,9 @@ msgid ""
 "and a circular reference will result in a :exc:`RecursionError` (or worse). "
 "Default ``True``."
 msgstr ""
+"Om ``False``, hoppar man över kontrollen av cirkulära referenser för "
+"containertyper och en cirkulär referens resulterar i ett :exc:"
+"`RecursionError` (eller värre). Standard ``True``."
 
 #: ../../library/json.rst:194
 msgid ""
@@ -278,6 +393,11 @@ msgid ""
 "with the JSON specification. If ``True`` (the default), their JavaScript "
 "equivalents (``NaN``, ``Infinity``, ``-Infinity``) are used."
 msgstr ""
+"Om ``False``, serialisering av out-of-range :class:`float`\\-värden "
+"(``nan``, ``inf``, ``\\-inf``) kommer att resultera i en :exc:`ValueError`, "
+"i strikt överensstämmelse med JSON-specifikationen. Om ``True`` (standard), "
+"används deras JavaScript-ekvivalenter (``NaN``, ``Infinity``, ``\\-"
+"Infinity``)."
 
 #: ../../library/json.rst:201
 msgid ""
@@ -285,6 +405,9 @@ msgid ""
 "overridden, for serializing into custom datatypes. If ``None`` (the "
 "default), :class:`!JSONEncoder` is used."
 msgstr ""
+"Om inställd, en anpassad JSON-kodare med :meth:`~JSONEncoder.default`\\-"
+"metoden åsidosatt, för serialisering till anpassade datatyper. Om ``None`` "
+"(standard) används :class:`!JSONEncoder`."
 
 #: ../../library/json.rst:208
 msgid ""
@@ -294,6 +417,12 @@ msgid ""
 "level. If zero, negative, or ``\"\"`` (the empty string), only newlines are "
 "inserted. If ``None`` (the default), the most compact representation is used."
 msgstr ""
+"Om det är ett positivt heltal eller en sträng kommer JSON-arrayelement och "
+"objektmedlemmar att skrivas ut med den indragsnivån. Ett positivt heltal "
+"indenterar så många mellanslag per nivå; en sträng (t.ex. ``\"\\t\"``) "
+"används för att indentera varje nivå. Om noll, negativt eller ``\"\"`` (den "
+"tomma strängen) infogas endast nya rader. Om ``None`` (standard) används den "
+"mest kompakta representationen."
 
 #: ../../library/json.rst:218
 msgid ""
@@ -302,6 +431,10 @@ msgid ""
 "``(',', ': ')`` otherwise. For the most compact JSON, specify ``(',', ':')`` "
 "to eliminate whitespace."
 msgstr ""
+"En två-tupel: ``(item_separator, key_separator)``. Om ``None`` (standard), "
+"är *separators* standard ``(', ', ': ')`` om *indent* är ``None``, och "
+"``(',', ': ')`` annars. För den mest kompakta JSON, ange ``(',', ':')`` för "
+"att eliminera blanksteg."
 
 #: ../../library/json.rst:227
 msgid ""
@@ -309,24 +442,31 @@ msgid ""
 "should return a JSON encodable version of the object or raise a :exc:"
 "`TypeError`. If ``None`` (the default), :exc:`!TypeError` is raised."
 msgstr ""
+"En funktion som anropas för objekt som inte kan serialiseras på annat sätt. "
+"Den ska returnera en JSON-kodbar version av objektet eller ge upphov till "
+"ett :exc:`TypeError`. Om ``None`` (standard), kommer :exc:`!TypeError` att "
+"returneras."
 
 #: ../../library/json.rst:234
 msgid ""
 "If ``True``, dictionaries will be outputted sorted by key. Default ``False``."
 msgstr ""
+"Om ``True``, kommer ordböcker att matas ut sorterade efter nyckel. Standard "
+"``False``."
 
 #: ../../library/json.rst:238 ../../library/json.rst:523
 msgid "Allow strings for *indent* in addition to integers."
-msgstr ""
+msgstr "Tillåt strängar för *indent* i tillägg till heltal."
 
 #: ../../library/json.rst:241 ../../library/json.rst:531
 msgid "Use ``(',', ': ')`` as default if *indent* is not ``None``."
-msgstr ""
+msgstr "Använd ``(',', ': ')`` som standard om *indent* inte är ``None``."
 
 #: ../../library/json.rst:244 ../../library/json.rst:343
 msgid ""
 "All optional parameters are now :ref:`keyword-only <keyword-only_parameter>`."
 msgstr ""
+"Alla valfria parametrar är nu :ref:`keyword-only <keyword-only_parameter>`."
 
 #: ../../library/json.rst:253
 msgid ""
@@ -334,6 +474,9 @@ msgid ""
 "table <py-to-json-table>`.  The arguments have the same meaning as in :func:"
 "`dump`."
 msgstr ""
+"Serialiserar *obj* till en JSON-formaterad :class:`str` med hjälp av denna :"
+"ref:`konverteringstabell <py-to-json-table>`.  Argumenten har samma "
+"betydelse som i :func:`dump`."
 
 #: ../../library/json.rst:259
 msgid ""
@@ -343,18 +486,28 @@ msgid ""
 "JSON and then back into a dictionary, the dictionary may not equal the "
 "original one. That is, ``loads(dumps(x)) != x`` if x has non-string keys."
 msgstr ""
+"Nycklar i nyckel/värde-par i JSON är alltid av typen :class:`str`. När en "
+"ordbok konverteras till JSON omvandlas alla nycklar i ordboken till "
+"strängar. Om en ordbok konverteras till JSON och sedan tillbaka till en "
+"ordbok kan det därför hända att ordboken inte motsvarar den ursprungliga. "
+"Det vill säga, ``loads(dumps(x)) != x`` om x har nycklar som inte är "
+"strängar."
 
 #: ../../library/json.rst:270
 msgid ""
 "Deserialize *fp* to a Python object using the :ref:`JSON-to-Python "
 "conversion table <json-to-py-table>`."
 msgstr ""
+"Deserialisera *fp* till ett Python-objekt med hjälp av :ref:`JSON-till-"
+"Python-konverteringstabell <json-to-py-table>`."
 
 #: ../../library/json.rst:273
 msgid ""
 "A ``.read()``-supporting :term:`text file` or :term:`binary file` containing "
 "the JSON document to be deserialized."
 msgstr ""
+"En ``.read()``\\-stödjande :term:`text file` eller :term:`binary file` som "
+"innehåller det JSON-dokument som ska deserialiseras."
 
 #: ../../library/json.rst:278
 msgid ""
@@ -362,6 +515,9 @@ msgid ""
 "will be passed to the constructor of *cls*. If ``None`` (the default), :"
 "class:`!JSONDecoder` is used."
 msgstr ""
+"Om inställd, en anpassad JSON-avkodare. Ytterligare nyckelordsargument till :"
+"func:`!load` kommer att skickas till konstruktören av *cls*. Om ``None`` "
+"(standard), används :class:`!JSONDecoder`."
 
 #: ../../library/json.rst:285
 msgid ""
@@ -371,6 +527,11 @@ msgid ""
 "decoders, for example `JSON-RPC <https://www.jsonrpc.org>`_ class hinting. "
 "Default ``None``."
 msgstr ""
+"Om inställd, en funktion som anropas med resultatet av en JSON-"
+"objektlitteral som avkodats (en :class:`dict`). Returvärdet för denna "
+"funktion kommer att användas istället för :class:`dict`. Denna funktion kan "
+"användas för att implementera anpassade avkodare, till exempel `JSON-RPC "
+"<https://www.jsonrpc.org>`_ class hinting. Standard ``None``."
 
 #: ../../library/json.rst:295
 msgid ""
@@ -380,6 +541,11 @@ msgid ""
 "implement custom decoders. If *object_hook* is also set, *object_pairs_hook* "
 "takes priority. Default ``None``."
 msgstr ""
+"Om inställd, en funktion som anropas med resultatet av en JSON-"
+"objektlitteral som avkodas med en ordnad lista av par. Returvärdet för denna "
+"funktion kommer att användas i stället för :class:`dict`. Den här funktionen "
+"kan användas för att implementera anpassade avkodare. Om *object_hook* också "
+"är inställd, har *object_pairs_hook* prioritet. Standard ``None``."
 
 #: ../../library/json.rst:305
 msgid ""
@@ -388,6 +554,10 @@ msgid ""
 "This can be used to parse JSON floats into custom datatypes, for example :"
 "class:`decimal.Decimal`."
 msgstr ""
+"Om den är inställd, en funktion som anropas med strängen för varje JSON-flat "
+"som ska avkodas. Om ``None`` (standard), är det likvärdigt med "
+"``float(num_str)``. Detta kan användas för att analysera JSON-flottor till "
+"anpassade datatyper, t.ex. :class:`decimal.Decimal`."
 
 #: ../../library/json.rst:313
 msgid ""
@@ -396,6 +566,10 @@ msgid ""
 "This can be used to parse JSON integers into custom datatypes, for example :"
 "class:`float`."
 msgstr ""
+"Om den är inställd, en funktion som anropas med strängen för varje JSON int "
+"som ska avkodas. Om ``None`` (standard), är det likvärdigt med "
+"``int(num_str)``. Detta kan användas för att analysera JSON heltal till "
+"anpassade datatyper, t.ex. :class:`float`."
 
 #: ../../library/json.rst:321
 msgid ""
@@ -403,34 +577,41 @@ msgid ""
 "Infinity'``, ``'Infinity'``, or ``'NaN'``. This can be used to raise an "
 "exception if invalid JSON numbers are encountered. Default ``None``."
 msgstr ""
+"Om den är inställd, en funktion som anropas med en av följande strängar: ``'-"
+"Infinity'``, ``'Infinity'`` eller ``'NaN'``. Detta kan användas för att "
+"skapa ett undantag om ogiltiga JSON-nummer påträffas. Standard ``None``."
 
 #: ../../library/json.rst:0
 msgid "Raises"
-msgstr ""
+msgstr "Höjer"
 
 #: ../../library/json.rst:329
 msgid "When the data being deserialized is not a valid JSON document."
-msgstr ""
+msgstr "När de data som deserialiseras inte är ett giltigt JSON-dokument."
 
 #: ../../library/json.rst:332
 msgid ""
 "When the data being deserialized does not contain UTF-8, UTF-16 or UTF-32 "
 "encoded data."
 msgstr ""
+"När de data som deserialiseras inte innehåller UTF-8-, UTF-16- eller UTF-32-"
+"kodade data."
 
 #: ../../library/json.rst:338
 msgid "Added the optional *object_pairs_hook* parameter."
-msgstr ""
+msgstr "Lagt till den valfria parametern *object_pairs_hook*."
 
 #: ../../library/json.rst:339
 msgid "*parse_constant* doesn't get called on 'null', 'true', 'false' anymore."
-msgstr ""
+msgstr "*parse_constant* anropas inte längre på 'null', 'true', 'false'."
 
 #: ../../library/json.rst:344
 msgid ""
 "*fp* can now be a :term:`binary file`. The input encoding should be UTF-8, "
 "UTF-16 or UTF-32."
 msgstr ""
+"*fp* kan nu vara en :term:`binary file`. Kodningen för indata bör vara "
+"UTF-8, UTF-16 eller UTF-32."
 
 #: ../../library/json.rst:347
 msgid ""
@@ -438,6 +619,10 @@ msgid ""
 "integer string via the interpreter's :ref:`integer string conversion length "
 "limitation <int_max_str_digits>` to help avoid denial of service attacks."
 msgstr ""
+"Standardvärdet *parse_int* för :func:`int` begränsar nu den maximala längden "
+"på heltalssträngen via tolkens :ref:`Längdsbegränsning för konvertering av "
+"heltalssträngar <int_max_str_digits>` för att undvika "
+"överbelastningsattacker."
 
 #: ../../library/json.rst:355
 msgid ""
@@ -446,44 +631,50 @@ msgid ""
 "containing a JSON document) to a Python object using this :ref:`conversion "
 "table <json-to-py-table>`."
 msgstr ""
+"Identiskt med :func:`load`, men istället för ett filliknande objekt, "
+"deserialisera *s* (en :class:`str`, :class:`bytes` eller :class:"
+"`bytearray`\\-instans som innehåller ett JSON-dokument) till ett Python-"
+"objekt med hjälp av denna :ref:`konverteringstabell <json-to-py-table>`."
 
 #: ../../library/json.rst:360
 msgid ""
 "*s* can now be of type :class:`bytes` or :class:`bytearray`. The input "
 "encoding should be UTF-8, UTF-16 or UTF-32."
 msgstr ""
+"*s* kan nu vara av typen :class:`bytes` eller :class:`bytearray`. Kodningen "
+"för indata bör vara UTF-8, UTF-16 eller UTF-32."
 
 #: ../../library/json.rst:364
 msgid "The keyword argument *encoding* has been removed."
-msgstr ""
+msgstr "Nyckelordsargumentet *encoding* har tagits bort."
 
 #: ../../library/json.rst:369
 msgid "Encoders and Decoders"
-msgstr ""
+msgstr "Kodare och avkodare"
 
 #: ../../library/json.rst:373
 msgid "Simple JSON decoder."
-msgstr ""
+msgstr "Enkel JSON-avkodare."
 
 #: ../../library/json.rst:375
 msgid "Performs the following translations in decoding by default:"
-msgstr ""
+msgstr "Utför följande översättningar vid avkodning som standard:"
 
 #: ../../library/json.rst:380 ../../library/json.rst:468
 msgid "JSON"
-msgstr ""
+msgstr "JSON"
 
 #: ../../library/json.rst:380 ../../library/json.rst:468
 msgid "Python"
-msgstr ""
+msgstr "Python"
 
 #: ../../library/json.rst:382 ../../library/json.rst:470
 msgid "object"
-msgstr "objekt"
+msgstr "object"
 
 #: ../../library/json.rst:382 ../../library/json.rst:470
 msgid "dict"
-msgstr ""
+msgstr "dict"
 
 #: ../../library/json.rst:384 ../../library/json.rst:472
 msgid "array"
@@ -491,11 +682,11 @@ msgstr "array"
 
 #: ../../library/json.rst:384
 msgid "list"
-msgstr "lista"
+msgstr "list"
 
 #: ../../library/json.rst:386 ../../library/json.rst:474
 msgid "string"
-msgstr "sträng"
+msgstr "string"
 
 #: ../../library/json.rst:386 ../../library/json.rst:474
 msgid "str"
@@ -503,7 +694,7 @@ msgstr "str"
 
 #: ../../library/json.rst:388
 msgid "number (int)"
-msgstr ""
+msgstr "number (int)"
 
 #: ../../library/json.rst:388
 msgid "int"
@@ -511,41 +702,43 @@ msgstr "int"
 
 #: ../../library/json.rst:390
 msgid "number (real)"
-msgstr ""
+msgstr "number (real)"
 
 #: ../../library/json.rst:390
 msgid "float"
-msgstr "flyt"
+msgstr "float"
 
 #: ../../library/json.rst:392 ../../library/json.rst:478
 msgid "true"
-msgstr "sant"
+msgstr "true"
 
 #: ../../library/json.rst:392 ../../library/json.rst:478
 msgid "True"
-msgstr "Sant"
+msgstr "True"
 
 #: ../../library/json.rst:394 ../../library/json.rst:480
 msgid "false"
-msgstr "falskt"
+msgstr "false"
 
 #: ../../library/json.rst:394 ../../library/json.rst:480
 msgid "False"
-msgstr "Falskt"
+msgstr "False"
 
 #: ../../library/json.rst:396 ../../library/json.rst:482
 msgid "null"
-msgstr ""
+msgstr "null"
 
 #: ../../library/json.rst:396 ../../library/json.rst:482
 msgid "None"
-msgstr "Ingen"
+msgstr "None"
 
 #: ../../library/json.rst:399
 msgid ""
 "It also understands ``NaN``, ``Infinity``, and ``-Infinity`` as their "
 "corresponding ``float`` values, which is outside the JSON spec."
 msgstr ""
+"Den förstår också ``NaN``, ``Infinity`` och ``\\-Infinity`` som deras "
+"motsvarande ``float``\\-värden, vilket ligger utanför JSON-specifikationen."
 
 #: ../../library/json.rst:402
 msgid ""
@@ -554,6 +747,11 @@ msgid ""
 "given :class:`dict`.  This can be used to provide custom deserializations (e."
 "g. to support `JSON-RPC <https://www.jsonrpc.org>`_ class hinting)."
 msgstr ""
+"*object_hook* är en valfri funktion som kommer att anropas med resultatet av "
+"varje JSON-objekt som avkodas och dess returvärde kommer att användas i "
+"stället för den angivna :class:`dict`.  Detta kan användas för att "
+"tillhandahålla anpassade deserialiseringar (t.ex. för att stödja `JSON-RPC "
+"<https://www.jsonrpc.org>`_ class hinting)."
 
 #: ../../library/json.rst:407
 msgid ""
@@ -563,10 +761,15 @@ msgid ""
 "`dict`.  This feature can be used to implement custom decoders.  If "
 "*object_hook* is also defined, the *object_pairs_hook* takes priority."
 msgstr ""
+"*object_pairs_hook* är en valfri funktion som anropas med resultatet av "
+"varje JSON-objekt som avkodats med en ordnad lista av par.  Returvärdet för "
+"*object_pairs_hook* kommer att användas istället för :class:`dict`.  Den här "
+"funktionen kan användas för att implementera anpassade avkodare.  Om "
+"*object_hook* också är definierad, har *object_pairs_hook* prioritet."
 
 #: ../../library/json.rst:413
 msgid "Added support for *object_pairs_hook*."
-msgstr ""
+msgstr "Lagt till stöd för *object_pairs_hook*."
 
 #: ../../library/json.rst:416
 msgid ""
@@ -575,6 +778,10 @@ msgid ""
 "``float(num_str)``.  This can be used to use another datatype or parser for "
 "JSON floats (e.g. :class:`decimal.Decimal`)."
 msgstr ""
+"*parse_float* är en valfri funktion som anropas med strängen för varje JSON-"
+"flat som ska avkodas.  Som standard är detta likvärdigt med "
+"``float(num_str)``.  Detta kan användas för att använda en annan datatyp "
+"eller parser för JSON-flottor (t.ex. :class:`decimal.Decimal`)."
 
 #: ../../library/json.rst:421
 msgid ""
@@ -583,6 +790,10 @@ msgid ""
 "``int(num_str)``.  This can be used to use another datatype or parser for "
 "JSON integers (e.g. :class:`float`)."
 msgstr ""
+"*parse_int* är en valfri funktion som anropas med strängen för varje JSON-"
+"int som ska avkodas.  Som standard är detta likvärdigt med "
+"``int(num_str)``.  Detta kan användas för att använda en annan datatyp eller "
+"parser för JSON-integraler (t.ex. :class:`float`)."
 
 #: ../../library/json.rst:426
 msgid ""
@@ -590,6 +801,9 @@ msgid ""
 "following strings: ``'-Infinity'``, ``'Infinity'``, ``'NaN'``.  This can be "
 "used to raise an exception if invalid JSON numbers are encountered."
 msgstr ""
+"*parse_constant* är en valfri funktion som kommer att anropas med en av "
+"följande strängar: ``'-Infinity'``, ``'Infinity'``, ``'NaN'``.  Detta kan "
+"användas för att skapa ett undantag om ogiltiga JSON-tal påträffas."
 
 #: ../../library/json.rst:430
 msgid ""
@@ -598,28 +812,38 @@ msgid ""
 "with character codes in the 0--31 range, including ``'\\t'`` (tab), "
 "``'\\n'``, ``'\\r'`` and ``'\\0'``."
 msgstr ""
+"Om *strict* är false (``True`` är standard) kommer kontrolltecken att "
+"tillåtas i strängar.  Kontrolltecken i det här sammanhanget är de som har "
+"teckenkoder i intervallet 0-31, inklusive ``'\\t'`` (tab), ``'\\n'``, "
+"``'\\r'`` och ``'\\0'``."
 
 #: ../../library/json.rst:435
 msgid ""
 "If the data being deserialized is not a valid JSON document, a :exc:"
 "`JSONDecodeError` will be raised."
 msgstr ""
+"Om data som deserialiseras inte är ett giltigt JSON-dokument, kommer ett :"
+"exc:`JSONDecodeError` att uppstå."
 
 #: ../../library/json.rst:438 ../../library/json.rst:539
 msgid "All parameters are now :ref:`keyword-only <keyword-only_parameter>`."
-msgstr ""
+msgstr "Alla parametrar är nu :ref:`keyword-only <keyword-only_parameter>`."
 
 #: ../../library/json.rst:443
 msgid ""
 "Return the Python representation of *s* (a :class:`str` instance containing "
 "a JSON document)."
 msgstr ""
+"Returnerar Python-representationen av *s* (en :class:`str`\\-instans som "
+"innehåller ett JSON-dokument)."
 
 #: ../../library/json.rst:446
 msgid ""
 ":exc:`JSONDecodeError` will be raised if the given JSON document is not "
 "valid."
 msgstr ""
+":exc:`JSONDecodeError` kommer att uppstå om det angivna JSON-dokumentet inte "
+"är giltigt."
 
 #: ../../library/json.rst:451
 msgid ""
@@ -627,36 +851,41 @@ msgid ""
 "document) and return a 2-tuple of the Python representation and the index in "
 "*s* where the document ended."
 msgstr ""
+"Avkodar ett JSON-dokument från *s* (en :class:`str` som börjar med ett JSON-"
+"dokument) och returnerar en 2-tupel av Python-representationen och indexet i "
+"*s* där dokumentet slutade."
 
 #: ../../library/json.rst:455
 msgid ""
 "This can be used to decode a JSON document from a string that may have "
 "extraneous data at the end."
 msgstr ""
+"Detta kan användas för att avkoda ett JSON-dokument från en sträng som kan "
+"innehålla ovidkommande data i slutet."
 
 #: ../../library/json.rst:461
 msgid "Extensible JSON encoder for Python data structures."
-msgstr ""
+msgstr "Utökad JSON-kodare för Python-datastrukturer."
 
 #: ../../library/json.rst:463
 msgid "Supports the following objects and types by default:"
-msgstr ""
+msgstr "Stöder följande objekt och typer som standard:"
 
 #: ../../library/json.rst:472
 msgid "list, tuple"
-msgstr ""
+msgstr "list, tuple"
 
 #: ../../library/json.rst:476
 msgid "int, float, int- & float-derived Enums"
-msgstr ""
+msgstr "int, float, int- & float-deriverade Enum"
 
 #: ../../library/json.rst:476
 msgid "number"
-msgstr "nummer"
+msgstr "number"
 
 #: ../../library/json.rst:485
 msgid "Added support for int- and float-derived Enum classes."
-msgstr ""
+msgstr "Stöd för int- och float-deriverade Enum-klasser har lagts till."
 
 #: ../../library/json.rst:488
 msgid ""
@@ -665,6 +894,10 @@ msgid ""
 "serializable object for ``o`` if possible, otherwise it should call the "
 "superclass implementation (to raise :exc:`TypeError`)."
 msgstr ""
+"För att utöka detta till att känna igen andra objekt, subklassa och "
+"implementera en :meth:`~JSONEncoder.default`\\-metod med en annan metod som "
+"returnerar ett serialiserbart objekt för ``o`` om möjligt, annars bör den "
+"anropa superklassens implementering (för att höja :exc:`TypeError`)."
 
 #: ../../library/json.rst:493
 msgid ""
@@ -673,6 +906,10 @@ msgid ""
 "`float`, :class:`bool` or ``None``.  If *skipkeys* is true, such items are "
 "simply skipped."
 msgstr ""
+"Om *skipkeys* är false (standard), kommer ett :exc:`TypeError` att uppstå "
+"när man försöker koda nycklar som inte är :class:`str`, :class:`int`, :class:"
+"`float`, :class:`bool` eller ``None``.  Om *skipkeys* är true, hoppas sådana "
+"objekt helt enkelt över."
 
 #: ../../library/json.rst:497
 msgid ""
@@ -680,6 +917,9 @@ msgid ""
 "all incoming non-ASCII characters escaped.  If *ensure_ascii* is false, "
 "these characters will be output as-is."
 msgstr ""
+"Om *ensure_ascii* är true (standard) garanteras att alla inkommande icke-"
+"ASCII-tecken i utdata är escapade.  Om *ensure_ascii* är false kommer dessa "
+"tecken att matas ut som de är."
 
 #: ../../library/json.rst:501
 msgid ""
@@ -688,6 +928,10 @@ msgid ""
 "prevent an infinite recursion (which would cause a :exc:`RecursionError`). "
 "Otherwise, no such check takes place."
 msgstr ""
+"Om *check_circular* är true (standard) kommer listor, dicts och anpassade "
+"kodade objekt att kontrolleras för cirkulära referenser under kodningen för "
+"att förhindra en oändlig rekursion (vilket skulle orsaka ett :exc:"
+"`RecursionError`). I annat fall sker ingen sådan kontroll."
 
 #: ../../library/json.rst:506
 msgid ""
@@ -696,6 +940,11 @@ msgid ""
 "compliant, but is consistent with most JavaScript based encoders and "
 "decoders.  Otherwise, it will be a :exc:`ValueError` to encode such floats."
 msgstr ""
+"Om *allow_nan* är true (standard) kommer ``NaN``, ``Infinity`` och ``\\-"
+"Infinity`` att kodas som sådana.  Detta beteende är inte förenligt med JSON-"
+"specifikationen, men överensstämmer med de flesta JavaScript-baserade kodare "
+"och avkodare.  Annars kommer det att vara ett :exc:`ValueError` att koda "
+"sådana floats."
 
 #: ../../library/json.rst:512
 msgid ""
@@ -703,6 +952,9 @@ msgid ""
 "will be sorted by key; this is useful for regression tests to ensure that "
 "JSON serializations can be compared on a day-to-day basis."
 msgstr ""
+"Om *sort_keys* är true (standard: ``False``) kommer utdata från ordböcker "
+"att sorteras efter nyckel; detta är användbart för regressionstester för att "
+"säkerställa att JSON-serialiseringar kan jämföras på daglig basis."
 
 #: ../../library/json.rst:516
 msgid ""
@@ -713,6 +965,12 @@ msgid ""
 "indent indents that many spaces per level.  If *indent* is a string (such as "
 "``\"\\t\"``), that string is used to indent each level."
 msgstr ""
+"Om *indent* är ett icke-negativt heltal eller en sträng, kommer JSON-"
+"arrayelement och objektmedlemmar att skrivas ut med den indentnivån.  En "
+"indragsnivå på 0, negativ eller ``\"\"`` infogar bara nya rader.  ``None`` "
+"(standard) väljer den mest kompakta representationen. Om du använder ett "
+"positivt heltal indenteras så många mellanslag per nivå.  Om *indent* är en "
+"sträng (t.ex. ``\"\\t\"``) används den strängen för att indentera varje nivå."
 
 #: ../../library/json.rst:526
 msgid ""
@@ -721,6 +979,10 @@ msgid ""
 "': ')`` otherwise.  To get the most compact JSON representation, you should "
 "specify ``(',', ':')`` to eliminate whitespace."
 msgstr ""
+"Om det anges ska *separatorer* vara en tupel av ``(item_separator, "
+"key_separator)``.  Standardvärdet är ``(', ', ': ')`` om *indent* är "
+"``None`` och ``(',', ': ')`` annars.  För att få den mest kompakta JSON-"
+"representationen bör du ange ``(',', ':')`` för att eliminera blanksteg."
 
 #: ../../library/json.rst:534
 msgid ""
@@ -729,6 +991,10 @@ msgid ""
 "version of the object or raise a :exc:`TypeError`.  If not specified, :exc:"
 "`TypeError` is raised."
 msgstr ""
+"Om det anges ska *default* vara en funktion som anropas för objekt som inte "
+"kan serialiseras på annat sätt.  Den ska returnera en JSON-kodbar version av "
+"objektet eller ge upphov till ett :exc:`TypeError`.  Om den inte "
+"specificeras, genereras :exc:`TypeError`."
 
 #: ../../library/json.rst:545
 msgid ""
@@ -736,12 +1002,17 @@ msgid ""
 "object for *o*, or calls the base implementation (to raise a :exc:"
 "`TypeError`)."
 msgstr ""
+"Implementera denna metod i en subklass så att den returnerar ett "
+"serialiserbart objekt för *o*, eller anropar basimplementationen (för att "
+"skapa ett :exc:`TypeError`)."
 
 #: ../../library/json.rst:549
 msgid ""
 "For example, to support arbitrary iterators, you could implement :meth:"
 "`~JSONEncoder.default` like this::"
 msgstr ""
+"Till exempel, för att stödja godtyckliga iteratorer, kan du implementera :"
+"meth:`~JSONEncoder.default` så här::"
 
 #: ../../library/json.rst:552
 msgid ""
@@ -755,30 +1026,47 @@ msgid ""
 "   # Let the base class default method raise the TypeError\n"
 "   return super().default(o)"
 msgstr ""
+"def default(self, o):\n"
+"   try:\n"
+"       iterable = iter(o)\n"
+"   except TypeError:\n"
+"       pass\n"
+"   else:\n"
+"       return list(iterable)\n"
+"   # Let the base class default method raise the TypeError\n"
+"   return super().default(o)"
 
 #: ../../library/json.rst:565
 msgid ""
 "Return a JSON string representation of a Python data structure, *o*.  For "
 "example::"
 msgstr ""
+"Returnerar en JSON-strängrepresentation av en Python-datastruktur, *o*.  "
+"Till exempel::"
 
 #: ../../library/json.rst:568
 msgid ""
 ">>> json.JSONEncoder().encode({\"foo\": [\"bar\", \"baz\"]})\n"
 "'{\"foo\": [\"bar\", \"baz\"]}'"
 msgstr ""
+">>> json.JSONEncoder().encode({\"foo\": [\"bar\", \"baz\"]})\n"
+"'{\"foo\": [\"bar\", \"baz\"]}'"
 
 #: ../../library/json.rst:574
 msgid ""
 "Encode the given object, *o*, and yield each string representation as "
 "available.  For example::"
 msgstr ""
+"Kodar det givna objektet, *o*, och ger varje strängrepresentation som är "
+"tillgänglig.  Till exempel::"
 
 #: ../../library/json.rst:577
 msgid ""
 "for chunk in json.JSONEncoder().iterencode(bigobject):\n"
 "    mysocket.write(chunk)"
 msgstr ""
+"for chunk in json.JSONEncoder().iterencode(bigobject):\n"
+"    mysocket.write(chunk)"
 
 #: ../../library/json.rst:582
 msgid "Exceptions"
@@ -786,31 +1074,31 @@ msgstr "Undantag"
 
 #: ../../library/json.rst:586
 msgid "Subclass of :exc:`ValueError` with the following additional attributes:"
-msgstr ""
+msgstr "Underklass till :exc:`ValueError` med följande ytterligare attribut:"
 
 #: ../../library/json.rst:590
 msgid "The unformatted error message."
-msgstr ""
+msgstr "Det oformaterade felmeddelandet."
 
 #: ../../library/json.rst:594
 msgid "The JSON document being parsed."
-msgstr ""
+msgstr "Det JSON-dokument som analyseras."
 
 #: ../../library/json.rst:598
 msgid "The start index of *doc* where parsing failed."
-msgstr ""
+msgstr "Startindex för *doc* där tolkningen misslyckades."
 
 #: ../../library/json.rst:602
 msgid "The line corresponding to *pos*."
-msgstr ""
+msgstr "Den linje som motsvarar *pos*."
 
 #: ../../library/json.rst:606
 msgid "The column corresponding to *pos*."
-msgstr ""
+msgstr "Den kolumn som motsvarar *pos*."
 
 #: ../../library/json.rst:612
 msgid "Standard Compliance and Interoperability"
-msgstr ""
+msgstr "Standardöverensstämmelse och interoperabilitet"
 
 #: ../../library/json.rst:614
 msgid ""
@@ -820,22 +1108,31 @@ msgid ""
 "simplicity, :class:`JSONEncoder` and :class:`JSONDecoder` subclasses, and "
 "parameters other than those explicitly mentioned, are not considered."
 msgstr ""
+"JSON-formatet specificeras av :rfc:`7159` och av `ECMA-404 <https://ecma-"
+"international.org/publications-and-standards/standards/ecma-404/>`_. I det "
+"här avsnittet beskrivs modulens nivå av överensstämmelse med RFC. För "
+"enkelhetens skull beaktas inte underklasserna :class:`JSONEncoder` och :"
+"class:`JSONDecoder`, och andra parametrar än de som uttryckligen nämns."
 
 #: ../../library/json.rst:620
 msgid ""
 "This module does not comply with the RFC in a strict fashion, implementing "
 "some extensions that are valid JavaScript but not valid JSON.  In particular:"
 msgstr ""
+"Denna modul följer inte RFC strikt, utan implementerar vissa tillägg som är "
+"giltiga JavaScript men inte giltiga JSON.  Detta gäller i synnerhet följande:"
 
 #: ../../library/json.rst:623
 msgid "Infinite and NaN number values are accepted and output;"
-msgstr ""
+msgstr "Oändliga och NaN-talvärden accepteras och matas ut;"
 
 #: ../../library/json.rst:624
 msgid ""
 "Repeated names within an object are accepted, and only the value of the last "
 "name-value pair is used."
 msgstr ""
+"Upprepade namn inom ett objekt accepteras, och endast värdet för det sista "
+"namn-värdeparet används."
 
 #: ../../library/json.rst:627
 msgid ""
@@ -843,10 +1140,13 @@ msgid ""
 "not RFC-compliant, this module's deserializer is technically RFC-compliant "
 "under default settings."
 msgstr ""
+"Eftersom RFC tillåter RFC-kompatibla parsers att acceptera inmatningstexter "
+"som inte är RFC-kompatibla, är den här modulens deserializer tekniskt sett "
+"RFC-kompatibel med standardinställningarna."
 
 #: ../../library/json.rst:632
 msgid "Character Encodings"
-msgstr ""
+msgstr "Kodning av tecken"
 
 #: ../../library/json.rst:634
 msgid ""
@@ -854,6 +1154,9 @@ msgid ""
 "UTF-32, with UTF-8 being the recommended default for maximum "
 "interoperability."
 msgstr ""
+"RFC kräver att JSON representeras med antingen UTF-8, UTF-16 eller UTF-32, "
+"där UTF-8 är den rekommenderade standardversionen för maximal "
+"interoperabilitet."
 
 #: ../../library/json.rst:637
 msgid ""
@@ -861,6 +1164,9 @@ msgid ""
 "*ensure_ascii=True* by default, thus escaping the output so that the "
 "resulting strings only contain ASCII characters."
 msgstr ""
+"Som RFC tillåter, men inte kräver, ställer den här modulens serializer in "
+"*ensure_ascii=True* som standard, vilket innebär att utdata escapas så att "
+"de resulterande strängarna endast innehåller ASCII-tecken."
 
 #: ../../library/json.rst:641
 msgid ""
@@ -869,6 +1175,9 @@ msgid ""
 "<str>`, and thus does not otherwise directly address the issue of character "
 "encodings."
 msgstr ""
+"Förutom parametern *ensure_ascii* definieras den här modulen strikt i termer "
+"av konvertering mellan Python-objekt och :class:`Unicode-strängar <str>`, "
+"och tar därför inte direkt upp frågan om teckenkodning."
 
 #: ../../library/json.rst:646
 msgid ""
@@ -878,6 +1187,11 @@ msgid ""
 "in their input.  This module's deserializer raises a :exc:`ValueError` when "
 "an initial BOM is present."
 msgstr ""
+"Enligt RFC är det förbjudet att lägga till en byteordermark (BOM) i början "
+"av en JSON-text, och den här modulens serialiserare lägger inte till någon "
+"BOM i utdata. RFC tillåter, men kräver inte, att JSON-deserialiserare "
+"ignorerar en initial BOM i sin indata.  Den här modulens deserialiserare ger "
+"upphov till ett :exc:`ValueError` när en initial BOM finns."
 
 #: ../../library/json.rst:652
 msgid ""
@@ -887,10 +1201,15 @@ msgid ""
 "By default, this module accepts and outputs (when present in the original :"
 "class:`str`) code points for such sequences."
 msgstr ""
+"RFC förbjuder inte uttryckligen JSON-strängar som innehåller byte-sekvenser "
+"som inte motsvarar giltiga Unicode-tecken (t.ex. oparade UTF-16-surrogat), "
+"men noterar att de kan orsaka problem med interoperabilitet. Som standard "
+"accepterar och matar den här modulen ut (när de finns i den ursprungliga :"
+"class:`str`) kodpunkter för sådana sekvenser."
 
 #: ../../library/json.rst:660
 msgid "Infinite and NaN Number Values"
-msgstr ""
+msgstr "Oändliga och NaN-talvärden"
 
 #: ../../library/json.rst:662
 msgid ""
@@ -898,6 +1217,10 @@ msgid ""
 "Despite that, by default, this module accepts and outputs ``Infinity``, ``-"
 "Infinity``, and ``NaN`` as if they were valid JSON number literal values::"
 msgstr ""
+"RFC tillåter inte representation av oändliga eller NaN-talvärden. Trots "
+"detta accepterar och matar den här modulen som standard ut ``Infinity``, "
+"``\\-Infinity`` och ``NaN`` som om de vore giltiga JSON-numeriska "
+"bokstavliga värden::"
 
 #: ../../library/json.rst:666
 msgid ""
@@ -913,6 +1236,17 @@ msgid ""
 ">>> json.loads('NaN')\n"
 "nan"
 msgstr ""
+">>> # Neither of these calls raises an exception, but the results are not "
+"valid JSON\n"
+">>> json.dumps(float('-inf'))\n"
+"'-Infinity'\n"
+">>> json.dumps(float('nan'))\n"
+"'NaN'\n"
+">>> # Same when deserializing\n"
+">>> json.loads('-Infinity')\n"
+"-inf\n"
+">>> json.loads('NaN')\n"
+"nan"
 
 #: ../../library/json.rst:677
 msgid ""
@@ -920,10 +1254,13 @@ msgid ""
 "behavior.  In the deserializer, the *parse_constant* parameter can be used "
 "to alter this behavior."
 msgstr ""
+"I serializern kan parametern *allow_nan* användas för att ändra detta "
+"beteende.  I deserializern kan parametern *parse_constant* användas för att "
+"ändra detta beteende."
 
 #: ../../library/json.rst:683
 msgid "Repeated Names Within an Object"
-msgstr ""
+msgstr "Upprepade namn inom ett objekt"
 
 #: ../../library/json.rst:685
 msgid ""
@@ -932,6 +1269,10 @@ msgid ""
 "default, this module does not raise an exception; instead, it ignores all "
 "but the last name-value pair for a given name::"
 msgstr ""
+"RFC anger att namnen i ett JSON-objekt ska vara unika, men anger inte hur "
+"upprepade namn i JSON-objekt ska hanteras.  Som standard ger den här modulen "
+"inte upphov till något undantag, utan ignorerar alla utom det sista namn-"
+"värdeparet för ett givet namn::"
 
 #: ../../library/json.rst:690
 msgid ""
@@ -939,14 +1280,18 @@ msgid ""
 ">>> json.loads(weird_json)\n"
 "{'x': 3}"
 msgstr ""
+">>> weird_json = '{\"x\": 1, \"x\": 2, \"x\": 3}'\n"
+">>> json.loads(weird_json)\n"
+"{'x': 3}"
 
 #: ../../library/json.rst:694
 msgid "The *object_pairs_hook* parameter can be used to alter this behavior."
 msgstr ""
+"Parametern *object_pairs_hook* kan användas för att ändra detta beteende."
 
 #: ../../library/json.rst:698
 msgid "Top-level Non-Object, Non-Array Values"
-msgstr ""
+msgstr "Värden på högsta nivå som inte är objekt eller arrayer"
 
 #: ../../library/json.rst:700
 msgid ""
@@ -957,42 +1302,53 @@ msgid ""
 "this module does not and has never implemented that restriction in either "
 "its serializer or its deserializer."
 msgstr ""
+"Den gamla versionen av JSON som specificeras av den föråldrade :rfc:`4627` "
+"krävde att toppnivåvärdet för en JSON-text måste vara antingen ett JSON-"
+"objekt eller en array (Python :class:`dict` eller :class:`list`), och kunde "
+"inte vara ett JSON null-, boolean-, nummer- eller strängvärde. :rfc:`7159` "
+"tog bort den begränsningen, och den här modulen implementerar inte och har "
+"aldrig implementerat den begränsningen i varken dess serializer eller dess "
+"deserializer."
 
 #: ../../library/json.rst:707
 msgid ""
 "Regardless, for maximum interoperability, you may wish to voluntarily adhere "
 "to the restriction yourself."
 msgstr ""
+"För att uppnå maximal interoperabilitet kan det dock vara bra om du själv "
+"frivilligt följer begränsningen."
 
 #: ../../library/json.rst:712
 msgid "Implementation Limitations"
-msgstr ""
+msgstr "Begränsningar i genomförandet"
 
 #: ../../library/json.rst:714
 msgid "Some JSON deserializer implementations may set limits on:"
-msgstr ""
+msgstr "Vissa implementeringar av JSON-deserializer kan sätta gränser för:"
 
 #: ../../library/json.rst:716
 msgid "the size of accepted JSON texts"
-msgstr ""
+msgstr "storleken på accepterade JSON-texter"
 
 #: ../../library/json.rst:717
 msgid "the maximum level of nesting of JSON objects and arrays"
-msgstr ""
+msgstr "den maximala nivån för nestning av JSON-objekt och matriser"
 
 #: ../../library/json.rst:718
 msgid "the range and precision of JSON numbers"
-msgstr ""
+msgstr "intervall och precision för JSON-tal"
 
 #: ../../library/json.rst:719
 msgid "the content and maximum length of JSON strings"
-msgstr ""
+msgstr "innehåll och maximal längd för JSON-strängar"
 
 #: ../../library/json.rst:721
 msgid ""
 "This module does not impose any such limits beyond those of the relevant "
 "Python datatypes themselves or the Python interpreter itself."
 msgstr ""
+"Denna modul inför inte några sådana begränsningar utöver de som gäller för "
+"de relevanta Python-datatyperna själva eller Python-tolken själv."
 
 #: ../../library/json.rst:724
 msgid ""
@@ -1004,6 +1360,13 @@ msgid ""
 "magnitude, or when serializing instances of \"exotic\" numerical types such "
 "as :class:`decimal.Decimal`."
 msgstr ""
+"När du serialiserar till JSON bör du vara uppmärksam på sådana begränsningar "
+"i applikationer som kan konsumera din JSON.  I synnerhet är det vanligt att "
+"JSON-tal deserialiseras till IEEE 754-tal med dubbel precision och därmed "
+"omfattas av den representationens begränsningar för intervall och "
+"precision.  Detta är särskilt relevant vid serialisering av Python :class:"
+"`int`\\-värden av extremt stor magnitud, eller vid serialisering av "
+"instanser av \"exotiska\" numeriska typer som :class:`decimal.Decimal`."
 
 #: ../../library/json.rst:737
 msgid "Command-line interface"
@@ -1011,7 +1374,7 @@ msgstr "Kommandoradsgränssnitt"
 
 #: ../../library/json.rst:742
 msgid "**Source code:** :source:`Lib/json/tool.py`"
-msgstr ""
+msgstr "**Källkod:** :source:`Lib/json/tool.py`"
 
 #: ../../library/json.rst:746
 msgid ""
@@ -1019,12 +1382,17 @@ msgid ""
 "validate and pretty-print JSON objects. The :mod:`json.tool` submodule "
 "implements this interface."
 msgstr ""
+"Modulen :mod:`json` kan anropas som ett skript via ``python -m json`` för "
+"att validera och pretty-printa JSON-objekt. Undermodulen :mod:`json.tool` "
+"implementerar detta gränssnitt."
 
 #: ../../library/json.rst:750
 msgid ""
 "If the optional ``infile`` and ``outfile`` arguments are not specified, :"
 "data:`sys.stdin` and :data:`sys.stdout` will be used respectively:"
 msgstr ""
+"Om de valfria argumenten ``infile`` och ``outfile`` inte anges, används :"
+"data:`sys.stdin` respektive :data:`sys.stdout`:"
 
 #: ../../library/json.rst:753
 msgid ""
@@ -1035,12 +1403,20 @@ msgid ""
 "$ echo '{1.2:3.4}' | python -m json\n"
 "Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"
 msgstr ""
+"$ echo '{\"json\": \"obj\"}' | python -m json\n"
+"{\n"
+"    \"json\": \"obj\"\n"
+"}\n"
+"$ echo '{1.2:3.4}' | python -m json\n"
+"Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"
 
 #: ../../library/json.rst:762
 msgid ""
 "The output is now in the same order as the input. Use the :option:`--sort-"
 "keys` option to sort the output of dictionaries alphabetically by key."
 msgstr ""
+"Utdata är nu i samma ordning som indata. Använd alternativet :option:`\\--"
+"sort-keys` för att sortera utdata från ordböcker alfabetiskt efter nyckel."
 
 #: ../../library/json.rst:767
 msgid ""
@@ -1048,6 +1424,9 @@ msgid ""
 "For backwards compatibility, invoking the CLI as ``python -m json.tool`` "
 "remains supported."
 msgstr ""
+"Modulen :mod:`json` kan nu köras direkt som ``python -m json``. För "
+"bakåtkompatibilitet stöds fortfarande att anropa CLI som ``python -m json."
+"tool``."
 
 #: ../../library/json.rst:774
 msgid "Command-line options"
@@ -1055,7 +1434,7 @@ msgstr "Alternativ för kommandoraden"
 
 #: ../../library/json.rst:778
 msgid "The JSON file to be validated or pretty-printed:"
-msgstr ""
+msgstr "Den JSON-fil som ska valideras eller skrivas ut:"
 
 #: ../../library/json.rst:780
 msgid ""
@@ -1071,38 +1450,53 @@ msgid ""
 "    }\n"
 "]"
 msgstr ""
+"$ python -m json mp_films.json\n"
+"[\n"
+"    {\n"
+"        \"title\": \"And Now for Something Completely Different\",\n"
+"        \"year\": 1971\n"
+"    },\n"
+"    {\n"
+"        \"title\": \"Monty Python and the Holy Grail\",\n"
+"        \"year\": 1975\n"
+"    }\n"
+"]"
 
 #: ../../library/json.rst:794
 msgid "If *infile* is not specified, read from :data:`sys.stdin`."
-msgstr ""
+msgstr "Om *infile* inte anges, läs från :data:`sys.stdin`."
 
 #: ../../library/json.rst:798
 msgid ""
 "Write the output of the *infile* to the given *outfile*. Otherwise, write it "
 "to :data:`sys.stdout`."
 msgstr ""
+"Skriver utdata från *infile* till den angivna *outfile*. I annat fall skrivs "
+"den till :data:`sys.stdout`."
 
 #: ../../library/json.rst:803
 msgid "Sort the output of dictionaries alphabetically by key."
-msgstr ""
+msgstr "Sortera utdata från ordböcker alfabetiskt efter nyckel."
 
 #: ../../library/json.rst:809
 msgid ""
 "Disable escaping of non-ascii characters, see :func:`json.dumps` for more "
 "information."
 msgstr ""
+"Inaktivera escaping av icke-ascii-tecken, se :func:`json.dumps` för mer "
+"information."
 
 #: ../../library/json.rst:815
 msgid "Parse every input line as separate JSON object."
-msgstr ""
+msgstr "Parsa varje inmatningsrad som ett separat JSON-objekt."
 
 #: ../../library/json.rst:821
 msgid "Mutually exclusive options for whitespace control."
-msgstr ""
+msgstr "Ömsesidigt uteslutande alternativ för kontroll av blanksteg."
 
 #: ../../library/json.rst:827
 msgid "Show the help message."
-msgstr ""
+msgstr "Visa hjälpmeddelandet."
 
 #: ../../library/json.rst:831
 msgid "Footnotes"
@@ -1115,3 +1509,7 @@ msgid ""
 "and U+2029 (PARAGRAPH SEPARATOR) characters in strings, whereas JavaScript "
 "(as of ECMAScript Edition 5.1) does not."
 msgstr ""
+"Såsom anges i `the errata for RFC 7159 <https://www.rfc-editor.org/"
+"errata_search.php?rfc=7159>`_, tillåter JSON bokstavliga U+2028 (LINE "
+"SEPARATOR) och U+2029 (PARAGRAPH SEPARATOR) tecken i strängar, medan "
+"JavaScript (från och med ECMAScript Edition 5.1) inte gör det."

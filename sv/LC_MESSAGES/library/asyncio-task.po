@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-09 14:15+0000\n"
+"POT-Creation-Date: 2025-09-13 14:14+0000\n"
 "PO-Revision-Date: 2025-08-15 19:00+0000\n"
 "Last-Translator: python-doc bot, 2025\n"
 "Language-Team: Swedish (https://app.transifex.com/python-doc/teams/5390/"
@@ -24,13 +24,15 @@ msgstr ""
 
 #: ../../library/asyncio-task.rst:6
 msgid "Coroutines and Tasks"
-msgstr ""
+msgstr "Coroutines och Tasks"
 
 #: ../../library/asyncio-task.rst:8
 msgid ""
 "This section outlines high-level asyncio APIs to work with coroutines and "
 "Tasks."
 msgstr ""
+"Detta avsnitt beskriver asyncio-API:er på hög nivå för att arbeta med "
+"coroutines och Tasks."
 
 #: ../../library/asyncio-task.rst:19 ../../library/asyncio-task.rst:148
 msgid "Coroutines"
@@ -38,7 +40,7 @@ msgstr "Coroutines"
 
 #: ../../library/asyncio-task.rst:21
 msgid "**Source code:** :source:`Lib/asyncio/coroutines.py`"
-msgstr ""
+msgstr "**Källkod:** :source:`Lib/asyncio/coroutines.py`"
 
 #: ../../library/asyncio-task.rst:25
 msgid ""
@@ -46,6 +48,10 @@ msgid ""
 "preferred way of writing asyncio applications.  For example, the following "
 "snippet of code prints \"hello\", waits 1 second, and then prints \"world\"::"
 msgstr ""
+":term:`Coroutines <coroutine>` deklarerade med async/await-syntaxen är det "
+"föredragna sättet att skriva asyncio-applikationer.  Följande kodavsnitt "
+"skriver till exempel ut \"hello\", väntar 1 sekund och skriver sedan ut "
+"\"world\"::"
 
 #: ../../library/asyncio-task.rst:30
 msgid ""
@@ -60,27 +66,45 @@ msgid ""
 "hello\n"
 "world"
 msgstr ""
+">>> import asyncio\n"
+"\n"
+">>> async def main():\n"
+"...     print('hello')\n"
+"...     await asyncio.sleep(1)\n"
+"...     print('world')\n"
+"\n"
+">>> asyncio.run(main())\n"
+"hello\n"
+"world"
 
 #: ../../library/asyncio-task.rst:41
 msgid ""
 "Note that simply calling a coroutine will not schedule it to be executed::"
 msgstr ""
+"Observera att det inte räcker med att anropa en coroutine för att den ska "
+"exekveras::"
 
 #: ../../library/asyncio-task.rst:44
 msgid ""
 ">>> main()\n"
 "<coroutine object main at 0x1053bb7c8>"
 msgstr ""
+">>> main()\n"
+"<coroutine object main at 0x1053bb7c8>"
 
 #: ../../library/asyncio-task.rst:47
 msgid "To actually run a coroutine, asyncio provides the following mechanisms:"
 msgstr ""
+"För att faktiskt köra en coroutine tillhandahåller asyncio följande "
+"mekanismer:"
 
 #: ../../library/asyncio-task.rst:49
 msgid ""
 "The :func:`asyncio.run` function to run the top-level entry point \"main()\" "
 "function (see the above example.)"
 msgstr ""
+"Funktionen :func:`asyncio.run` för att köra funktionen \"main()\" på den "
+"högsta nivån (se exemplet ovan)"
 
 #: ../../library/asyncio-task.rst:52
 msgid ""
@@ -88,6 +112,9 @@ msgid ""
 "after waiting for 1 second, and then print \"world\" after waiting for "
 "*another* 2 seconds::"
 msgstr ""
+"Väntar på en coroutine.  Följande kodavsnitt kommer att skriva ut \"hello\" "
+"efter att ha väntat i 1 sekund, och sedan skriva ut \"world\" efter att ha "
+"väntat i *ytterligare* 2 sekunder::"
 
 #: ../../library/asyncio-task.rst:56
 msgid ""
@@ -108,10 +135,26 @@ msgid ""
 "\n"
 "asyncio.run(main())"
 msgstr ""
+"import asyncio\n"
+"import time\n"
+"\n"
+"async def say_after(delay, what):\n"
+"    await asyncio.sleep(delay)\n"
+"    print(what)\n"
+"\n"
+"async def main():\n"
+"    print(f\"started at {time.strftime('%X')}\")\n"
+"\n"
+"    await say_after(1, 'hello')\n"
+"    await say_after(2, 'world')\n"
+"\n"
+"    print(f\"finished at {time.strftime('%X')}\")\n"
+"\n"
+"asyncio.run(main())"
 
 #: ../../library/asyncio-task.rst:73
 msgid "Expected output::"
-msgstr ""
+msgstr "Förväntad utgång::"
 
 #: ../../library/asyncio-task.rst:75
 msgid ""
@@ -120,18 +163,26 @@ msgid ""
 "world\n"
 "finished at 17:13:55"
 msgstr ""
+"började kl 17:13:52\n"
+"hej\n"
+"värld\n"
+"avslutat kl. 17:13:55"
 
 #: ../../library/asyncio-task.rst:80
 msgid ""
 "The :func:`asyncio.create_task` function to run coroutines concurrently as "
 "asyncio :class:`Tasks <Task>`."
 msgstr ""
+"Funktionen :func:`asyncio.create_task` för att köra coroutines samtidigt som "
+"asyncio :class:`Tasks <Task>`."
 
 #: ../../library/asyncio-task.rst:83
 msgid ""
 "Let's modify the above example and run two ``say_after`` coroutines "
 "*concurrently*::"
 msgstr ""
+"Låt oss modifiera exemplet ovan och köra två ``say_after`` coroutines "
+"*samtidigt*::"
 
 #: ../../library/asyncio-task.rst:86
 msgid ""
@@ -151,12 +202,29 @@ msgid ""
 "\n"
 "    print(f\"finished at {time.strftime('%X')}\")"
 msgstr ""
+"async def main():\n"
+"    uppgift1 = asyncio.create_task(\n"
+"        say_after(1, 'hej'))\n"
+"\n"
+"    uppgift2 = asyncio.create_task(\n"
+"        say_after(2, 'värld'))\n"
+"\n"
+"    print(f\"startade vid {time.strftime('%X')}\")\n"
+"\n"
+"    # Vänta tills båda uppgifterna är slutförda (bör ta\n"
+"    # cirka 2 sekunder.)\n"
+"    vänta uppgift1\n"
+"    vänta uppgift2\n"
+"\n"
+"    print(f\"klar vid {time.strftime('%X')}\")"
 
 #: ../../library/asyncio-task.rst:102
 msgid ""
 "Note that expected output now shows that the snippet runs 1 second faster "
 "than before::"
 msgstr ""
+"Observera att den förväntade utdata nu visar att utdraget körs 1 sekund "
+"snabbare än tidigare::"
 
 #: ../../library/asyncio-task.rst:105
 msgid ""
@@ -165,12 +233,18 @@ msgid ""
 "world\n"
 "finished at 17:14:34"
 msgstr ""
+"började kl 17:14:32\n"
+"hej\n"
+"värld\n"
+"avslutat kl. 17:14:34"
 
 #: ../../library/asyncio-task.rst:110
 msgid ""
 "The :class:`asyncio.TaskGroup` class provides a more modern alternative to :"
 "func:`create_task`. Using this API, the last example becomes::"
 msgstr ""
+"Klassen :class:`asyncio.TaskGroup` ger ett mer modernt alternativ till :func:"
+"`create_task`. Med hjälp av detta API blir det sista exemplet::"
 
 #: ../../library/asyncio-task.rst:114
 msgid ""
@@ -188,18 +262,32 @@ msgid ""
 "\n"
 "    print(f\"finished at {time.strftime('%X')}\")"
 msgstr ""
+"async def main():\n"
+"    async med asyncio.TaskGroup() som tg:\n"
+"        uppgift1 = tg.create_task(\n"
+"            say_after(1, 'hej'))\n"
+"\n"
+"        uppgift2 = tg.create_task(\n"
+"            say_after(2, 'värld'))\n"
+"\n"
+"        print(f\"startade vid {time.strftime('%X')}\")\n"
+"\n"
+"    # Await är implicit när kontexthanteraren avslutas.\n"
+"\n"
+"    print(f\"klar vid {time.strftime('%X')}\")"
 
 #: ../../library/asyncio-task.rst:128
 msgid "The timing and output should be the same as for the previous version."
 msgstr ""
+"Tidpunkten och resultatet ska vara detsamma som för den tidigare versionen."
 
 #: ../../library/asyncio-task.rst:130
 msgid ":class:`asyncio.TaskGroup`."
-msgstr ""
+msgstr ":class:`asyncio.TaskGroup`."
 
 #: ../../library/asyncio-task.rst:137
 msgid "Awaitables"
-msgstr ""
+msgstr "Förväntansfulla"
 
 #: ../../library/asyncio-task.rst:139
 msgid ""
@@ -207,18 +295,25 @@ msgid ""
 "keyword:`await` expression.  Many asyncio APIs are designed to accept "
 "awaitables."
 msgstr ""
+"Vi säger att ett objekt är ett **awaitable**-objekt om det kan användas i "
+"ett :keyword:`await`\\-uttryck.  Många asyncio API:er är utformade för att "
+"acceptera awaitables."
 
 #: ../../library/asyncio-task.rst:143
 msgid ""
 "There are three main types of *awaitable* objects: **coroutines**, "
 "**Tasks**, and **Futures**."
 msgstr ""
+"Det finns tre huvudtyper av *awaitable*-objekt: **Koroutiner**, "
+"**Uppgifter** och **Futures**."
 
 #: ../../library/asyncio-task.rst:149
 msgid ""
 "Python coroutines are *awaitables* and therefore can be awaited from other "
 "coroutines::"
 msgstr ""
+"Python coroutines är *awaitables* och kan därför väntas från andra "
+"coroutines::"
 
 #: ../../library/asyncio-task.rst:152
 msgid ""
@@ -238,35 +333,56 @@ msgid ""
 "\n"
 "asyncio.run(main())"
 msgstr ""
+"import asyncio\n"
+"\n"
+"async def nested():\n"
+"    return 42\n"
+"\n"
+"async def main():\n"
+"    # Nothing happens if we just call \"nested()\".\n"
+"    # A coroutine object is created but not awaited,\n"
+"    # so it *won't run at all*.\n"
+"    nested()  # will raise a \"RuntimeWarning\".\n"
+"\n"
+"    # Let's do it differently now and await it:\n"
+"    print(await nested())  # will print \"42\".\n"
+"\n"
+"asyncio.run(main())"
 
 #: ../../library/asyncio-task.rst:170
 msgid ""
 "In this documentation the term \"coroutine\" can be used for two closely "
 "related concepts:"
 msgstr ""
+"I den här dokumentationen kan termen \"coroutine\" användas för två "
+"närbesläktade begrepp:"
 
 #: ../../library/asyncio-task.rst:173
 msgid "a *coroutine function*: an :keyword:`async def` function;"
-msgstr ""
+msgstr "en *coroutine-funktion*: en :keyword:`async def`\\-funktion;"
 
 #: ../../library/asyncio-task.rst:175
 msgid ""
 "a *coroutine object*: an object returned by calling a *coroutine function*."
 msgstr ""
+"ett *koroutinobjekt*: ett objekt som returneras genom anrop av en "
+"*koroutinfunktion*."
 
 #: ../../library/asyncio-task.rst:180
 msgid "Tasks"
-msgstr ""
+msgstr "Uppgifter"
 
 #: ../../library/asyncio-task.rst:181
 msgid "*Tasks* are used to schedule coroutines *concurrently*."
-msgstr ""
+msgstr "*Tasks* används för att schemalägga coroutines *samtidigt*."
 
 #: ../../library/asyncio-task.rst:183
 msgid ""
 "When a coroutine is wrapped into a *Task* with functions like :func:`asyncio."
 "create_task` the coroutine is automatically scheduled to run soon::"
 msgstr ""
+"När en coroutine paketeras in i en *Task* med funktioner som :func:`asyncio."
+"create_task` schemaläggs coroutinen automatiskt för att köras snart::"
 
 #: ../../library/asyncio-task.rst:187
 msgid ""
@@ -286,40 +402,65 @@ msgid ""
 "\n"
 "asyncio.run(main())"
 msgstr ""
+"import asyncio\n"
+"\n"
+"async def nested():\n"
+"    return 42\n"
+"\n"
+"async def main():\n"
+"    # Schedule nested() to run soon concurrently\n"
+"    # with \"main()\".\n"
+"    task = asyncio.create_task(nested())\n"
+"\n"
+"    # \"task\" can now be used to cancel \"nested()\", or\n"
+"    # can simply be awaited to wait until it is complete:\n"
+"    await task\n"
+"\n"
+"asyncio.run(main())"
 
 #: ../../library/asyncio-task.rst:205
 msgid "Futures"
-msgstr ""
+msgstr "Terminskontrakt"
 
 #: ../../library/asyncio-task.rst:206
 msgid ""
 "A :class:`Future` is a special **low-level** awaitable object that "
 "represents an **eventual result** of an asynchronous operation."
 msgstr ""
+"En :class:`Future` är ett speciellt **lågnivå** väntande objekt som "
+"representerar ett **eventuellt resultat** av en asynkron operation."
 
 #: ../../library/asyncio-task.rst:209
 msgid ""
 "When a Future object is *awaited* it means that the coroutine will wait "
 "until the Future is resolved in some other place."
 msgstr ""
+"När ett Future-objekt är *awaited* betyder det att coroutinen kommer att "
+"vänta tills Future-objektet har lösts upp på något annat ställe."
 
 #: ../../library/asyncio-task.rst:212
 msgid ""
 "Future objects in asyncio are needed to allow callback-based code to be used "
 "with async/await."
 msgstr ""
+"Framtida objekt i asyncio behövs för att göra det möjligt att använda "
+"callback-baserad kod med async/await."
 
 #: ../../library/asyncio-task.rst:215
 msgid ""
 "Normally **there is no need** to create Future objects at the application "
 "level code."
 msgstr ""
+"Normalt **finns det inget behov** av att skapa Future-objekt på "
+"applikationsnivå."
 
 #: ../../library/asyncio-task.rst:218
 msgid ""
 "Future objects, sometimes exposed by libraries and some asyncio APIs, can be "
 "awaited::"
 msgstr ""
+"Framtida objekt, som ibland exponeras av bibliotek och vissa asyncio API:er, "
+"kan inväntas::"
 
 #: ../../library/asyncio-task.rst:221
 msgid ""
@@ -332,26 +473,38 @@ msgid ""
 "        some_python_coroutine()\n"
 "    )"
 msgstr ""
+"async def main():\n"
+"    await function_that_returns_a_future_object()\n"
+"\n"
+"    # detta är också giltigt:\n"
+"    await asyncio.gather(\n"
+"        function_that_returns_a_future_object(),\n"
+"        någon_python_koroutin()\n"
+"    )"
 
 #: ../../library/asyncio-task.rst:230
 msgid ""
 "A good example of a low-level function that returns a Future object is :meth:"
 "`loop.run_in_executor`."
 msgstr ""
+"Ett bra exempel på en lågnivåfunktion som returnerar ett Future-objekt är :"
+"meth:`loop.run_in_executor`."
 
 #: ../../library/asyncio-task.rst:235
 msgid "Creating Tasks"
-msgstr ""
+msgstr "Skapa uppgifter"
 
 #: ../../library/asyncio-task.rst:237
 msgid "**Source code:** :source:`Lib/asyncio/tasks.py`"
-msgstr ""
+msgstr "**Källkod:** :source:`Lib/asyncio/tasks.py`"
 
 #: ../../library/asyncio-task.rst:243
 msgid ""
 "Wrap the *coro* :ref:`coroutine <coroutine>` into a :class:`Task` and "
 "schedule its execution.  Return the Task object."
 msgstr ""
+"Packa in *coro* :ref:`coroutine <coroutine>` i en :class:`Task` och "
+"schemalägg dess exekvering.  Returnera Task-objektet."
 
 #: ../../library/asyncio-task.rst:246
 msgid ""
@@ -359,6 +512,9 @@ msgid ""
 "constructor (or factory) - all of the keyword arguments to this function are "
 "passed through to that interface."
 msgstr ""
+"Den fullständiga funktionssignaturen är i stort sett densamma som för :class:"
+"`Task`\\-konstruktören (eller fabriken) - alla nyckelordsargument till denna "
+"funktion skickas vidare till det gränssnittet."
 
 #: ../../library/asyncio-task.rst:250
 msgid ""
@@ -366,6 +522,9 @@ msgid ""
 "class:`contextvars.Context` for the *coro* to run in. The current context "
 "copy is created when no *context* is provided."
 msgstr ""
+"Ett valfritt argument *context* med endast nyckelord gör det möjligt att "
+"ange en anpassad :class:`contextvars.Context` som *coro* ska köras i. Den "
+"aktuella kontextkopian skapas när ingen *kontext* anges."
 
 #: ../../library/asyncio-task.rst:254
 msgid ""
@@ -374,12 +533,18 @@ msgid ""
 "later. If *eager_start* is not passed the mode set by :meth:`loop."
 "set_task_factory` will be used."
 msgstr ""
+"Ett valfritt argument *eager_start*, som endast innehåller nyckelord, gör "
+"det möjligt att ange om uppgiften ska utföras ivrigt under anropet till "
+"create_task eller schemaläggas senare. Om *eager_start* inte anges kommer "
+"det läge som anges av :meth:`loop.set_task_factory` att användas."
 
 #: ../../library/asyncio-task.rst:259
 msgid ""
 "The task is executed in the loop returned by :func:`get_running_loop`, :exc:"
 "`RuntimeError` is raised if there is no running loop in current thread."
 msgstr ""
+"Uppgiften utförs i den loop som returneras av :func:`get_running_loop`, :exc:"
+"`RuntimeError` uppstår om det inte finns någon loop i den aktuella tråden."
 
 #: ../../library/asyncio-task.rst:265
 msgid ""
@@ -387,6 +552,9 @@ msgid ""
 "structural concurrency; it allows for waiting for a group of related tasks "
 "with strong safety guarantees."
 msgstr ""
+":meth:`asyncio.TaskGroup.create_task` är ett nytt alternativ som utnyttjar "
+"strukturell samtidighet; det gör det möjligt att vänta på en grupp "
+"relaterade uppgifter med starka säkerhetsgarantier."
 
 #: ../../library/asyncio-task.rst:271
 msgid ""
@@ -396,6 +564,12 @@ msgid ""
 "any time, even before it's done. For reliable \"fire-and-forget\" background "
 "tasks, gather them in a collection::"
 msgstr ""
+"Spara en referens till resultatet av denna funktion för att undvika att en "
+"uppgift försvinner mitt under utförandet. Händelseslingan behåller bara "
+"svaga referenser till uppgifter. En uppgift som inte refereras någon "
+"annanstans kan när som helst bli skräpinsamlad, till och med innan den är "
+"klar. För tillförlitliga \"skjut-och-glöm\"-bakgrundsuppgifter, samla dem i "
+"en samling::"
 
 #: ../../library/asyncio-task.rst:278
 msgid ""
@@ -412,10 +586,22 @@ msgid ""
 "    # completion:\n"
 "    task.add_done_callback(background_tasks.discard)"
 msgstr ""
+"background_tasks = set()\n"
+"\n"
+"for i in range(10):\n"
+"    task = asyncio.create_task(some_coro(param=i))\n"
+"\n"
+"    # Add task to the set. This creates a strong reference.\n"
+"    background_tasks.add(task)\n"
+"\n"
+"    # To prevent keeping references to finished tasks forever,\n"
+"    # make each task remove its own reference from the set after\n"
+"    # completion:\n"
+"    task.add_done_callback(background_tasks.discard)"
 
 #: ../../library/asyncio-task.rst:293 ../../library/asyncio-task.rst:1251
 msgid "Added the *name* parameter."
-msgstr ""
+msgstr "Parametern *name* har lagts till."
 
 #: ../../library/asyncio-task.rst:296 ../../library/asyncio-task.rst:1258
 msgid "Added the *context* parameter."
@@ -424,16 +610,19 @@ msgstr "Parametern *context* har lagts till."
 #: ../../library/asyncio-task.rst:299
 msgid "Added the *eager_start* parameter by passing on all *kwargs*."
 msgstr ""
+"Lade till parametern *eager_start* genom att skicka vidare alla *kwargs*."
 
 #: ../../library/asyncio-task.rst:304
 msgid "Task Cancellation"
-msgstr ""
+msgstr "Avbokning av uppdrag"
 
 #: ../../library/asyncio-task.rst:306
 msgid ""
 "Tasks can easily and safely be cancelled. When a task is cancelled, :exc:"
 "`asyncio.CancelledError` will be raised in the task at the next opportunity."
 msgstr ""
+"Uppgifter kan enkelt och säkert avbrytas. När en uppgift avbryts kommer :exc:"
+"`asyncio.CancelledError` att skapas i uppgiften vid nästa tillfälle."
 
 #: ../../library/asyncio-task.rst:310
 msgid ""
@@ -443,6 +632,11 @@ msgid ""
 "`asyncio.CancelledError` directly subclasses :exc:`BaseException` so most "
 "code will not need to be aware of it."
 msgstr ""
+"Det rekommenderas att coroutines använder ``try/finally`` block för att "
+"robust utföra rensningslogik. Om :exc:`asyncio.CancelledError` fångas "
+"explicit, bör det i allmänhet spridas när upprensningen är klar. :exc:"
+"`asyncio.CancelledError` underklassar direkt :exc:`BaseException` så den "
+"mesta koden behöver inte vara medveten om det."
 
 #: ../../library/asyncio-task.rst:316
 msgid ""
@@ -454,16 +648,27 @@ msgid ""
 "exc:`asyncio.CancelledError` is truly desired, it is necessary to also call "
 "``uncancel()`` to completely remove the cancellation state."
 msgstr ""
+"De asynciokomponenter som möjliggör strukturerad samtidighet, som :class:"
+"`asyncio.TaskGroup` och :func:`asyncio.timeout`, implementeras med hjälp av "
+"annullering internt och kan bete sig illa om en coroutine sväljer :exc:"
+"`asyncio.CancelledError`. På samma sätt bör användarkod i allmänhet inte "
+"anropa :meth:`uncancel <asyncio.Task.uncancel>`. Men i de fall då det "
+"verkligen är önskvärt att undertrycka :exc:`asyncio.CancelledError`, är det "
+"nödvändigt att också anropa ``uncancel()`` för att helt ta bort "
+"annulleringstillståndet."
 
 #: ../../library/asyncio-task.rst:328
 msgid "Task Groups"
-msgstr ""
+msgstr "Arbetsgrupper"
 
 #: ../../library/asyncio-task.rst:330
 msgid ""
 "Task groups combine a task creation API with a convenient and reliable way "
 "to wait for all tasks in the group to finish."
 msgstr ""
+"Uppgiftsgrupper kombinerar ett API för skapande av uppgifter med ett bekvämt "
+"och tillförlitligt sätt att vänta på att alla uppgifter i gruppen ska bli "
+"klara."
 
 #: ../../library/asyncio-task.rst:335
 msgid ""
@@ -471,6 +676,9 @@ msgid ""
 "group of tasks. Tasks can be added to the group using :meth:`create_task`. "
 "All tasks are awaited when the context manager exits."
 msgstr ""
+"En :ref:`asynchronous context manager <async-context-managers>` som "
+"innehåller en grupp av uppgifter. Uppgifter kan läggas till i gruppen med :"
+"meth:`create_task`. Alla uppgifter är väntade när kontexthanteraren avslutas."
 
 #: ../../library/asyncio-task.rst:344
 msgid ""
@@ -479,14 +687,18 @@ msgid ""
 "already finished, or in the process of shutting down), we will close the "
 "given ``coro``."
 msgstr ""
+"Skapa en uppgift i denna uppgiftsgrupp. Signaturen matchar den för :func:"
+"`asyncio.create_task`. Om uppgiftsgruppen är inaktiv (t.ex. ännu inte "
+"påbörjad, redan avslutad eller håller på att stängas ner), stänger vi den "
+"givna ``coro``."
 
 #: ../../library/asyncio-task.rst:352
 msgid "Close the given coroutine if the task group is not active."
-msgstr ""
+msgstr "Stäng den givna coroutinen om uppgiftsgruppen inte är aktiv."
 
 #: ../../library/asyncio-task.rst:356
 msgid "Passes on all *kwargs* to :meth:`loop.create_task`"
-msgstr ""
+msgstr "Vidarebefordrar alla *kwargs* till :meth:`loop.create_task`"
 
 #: ../../library/asyncio-task.rst:358 ../../library/asyncio-task.rst:564
 #: ../../library/asyncio-task.rst:737 ../../library/asyncio-task.rst:795
@@ -503,6 +715,12 @@ msgid ""
 "    print(f\"Both tasks have completed now: {task1.result()}, {task2."
 "result()}\")"
 msgstr ""
+"async def main():\n"
+"    async med asyncio.TaskGroup() som tg:\n"
+"        uppgift1 = tg.create_task(någon_coro(...))\n"
+"        uppgift2 = tg.create_task(en annan_coro(...))\n"
+"    print(f\"Båda uppgifterna har slutförts nu: {task1.result()}, {task2."
+"result()}\")"
 
 #: ../../library/asyncio-task.rst:366
 msgid ""
@@ -512,6 +730,12 @@ msgid ""
 "in that coroutine). Once the last task has finished and the ``async with`` "
 "block is exited, no new tasks may be added to the group."
 msgstr ""
+"Satsen ``async with`` väntar på att alla uppgifter i gruppen ska bli klara. "
+"Under väntetiden kan nya uppgifter fortfarande läggas till i gruppen (till "
+"exempel genom att skicka ``tg`` till en av coroutinerna och anropa ``tg."
+"create_task()`` i den coroutinen). När den sista uppgiften har slutförts och "
+"``async with``\\-blocket har avslutats, kan inga nya uppgifter läggas till i "
+"gruppen."
 
 #: ../../library/asyncio-task.rst:373
 msgid ""
@@ -524,6 +748,14 @@ msgid ""
 "exc:`asyncio.CancelledError` will interrupt an ``await``, but it will not "
 "bubble out of the containing ``async with`` statement."
 msgstr ""
+"Första gången någon av uppgifterna i gruppen misslyckas med ett annat "
+"undantag än :exc:`asyncio.CancelledError`, avbryts de återstående "
+"uppgifterna i gruppen. Inga ytterligare uppgifter kan då läggas till i "
+"gruppen. Om kroppen av ``async with`` -satsen fortfarande är aktiv (dvs. :"
+"meth:`~object.__aexit__` har ännu inte anropats) avbryts även den uppgift "
+"som direkt innehåller ``async with`` -satsen. Det resulterande :exc:`asyncio."
+"CancelledError` avbryter ett ``await``, men det sprider sig inte utanför det "
+"omgivande ``async with`` -uttrycket."
 
 #: ../../library/asyncio-task.rst:383
 msgid ""
@@ -532,6 +764,10 @@ msgid ""
 "an :exc:`ExceptionGroup` or :exc:`BaseExceptionGroup` (as appropriate; see "
 "their documentation) which is then raised."
 msgstr ""
+"När alla uppgifter har slutförts, om några uppgifter har misslyckats med ett "
+"annat undantag än :exc:`asyncio.CancelledError`, kombineras dessa undantag i "
+"en :exc:`ExceptionGroup` eller :exc:`BaseExceptionGroup` (beroende på vad "
+"som är lämpligt; se deras dokumentation) som sedan tas upp."
 
 #: ../../library/asyncio-task.rst:390
 msgid ""
@@ -541,6 +777,11 @@ msgid ""
 "`KeyboardInterrupt` or :exc:`SystemExit` is re-raised instead of :exc:"
 "`ExceptionGroup` or :exc:`BaseExceptionGroup`."
 msgstr ""
+"Två basundantag behandlas speciellt: Om någon uppgift misslyckas med :exc:"
+"`KeyboardInterrupt` eller :exc:`SystemExit`, avbryter uppgiftsgruppen "
+"fortfarande de återstående uppgifterna och väntar på dem, men då återkallas "
+"den ursprungliga :exc:`KeyboardInterrupt` eller :exc:`SystemExit` istället "
+"för :exc:`ExceptionGroup` eller :exc:`BaseExceptionGroup`."
 
 #: ../../library/asyncio-task.rst:396
 msgid ""
@@ -553,6 +794,14 @@ msgid ""
 "the exception group. The same special case is made for :exc:"
 "`KeyboardInterrupt` and :exc:`SystemExit` as in the previous paragraph."
 msgstr ""
+"Om ``async with``\\-satsens kropp avslutas med ett undantag (så att :meth:"
+"`~object.__aexit__` anropas med en undantagsuppsättning), behandlas detta på "
+"samma sätt som om en av uppgifterna misslyckades: de återstående uppgifterna "
+"avbryts och väntar sedan, och undantag som inte avbryts grupperas i en "
+"undantagsgrupp och tas upp. Undantaget som skickas in i :meth:`~object."
+"__aexit__`, om det inte är :exc:`asyncio.CancelledError`, ingår också i "
+"undantagsgruppen. Samma specialfall görs för :exc:`KeyboardInterrupt` och :"
+"exc:`SystemExit` som i föregående stycke."
 
 #: ../../library/asyncio-task.rst:408
 msgid ""
@@ -564,6 +813,13 @@ msgid ""
 "group will process its exceptions, and then the outer task group will "
 "receive another cancellation and process its own exceptions."
 msgstr ""
+"Uppgiftsgrupper är noga med att inte blanda ihop den interna annullering som "
+"används för att \"väcka\" deras :meth:`~object.__aexit__` med andra parters "
+"annulleringsbegäran för den uppgift där de körs. I synnerhet när en "
+"uppgiftsgrupp är syntaktiskt nästlad i en annan, och båda upplever ett "
+"undantag i en av sina underordnade uppgifter samtidigt, kommer den inre "
+"uppgiftsgruppen att behandla sina undantag, och sedan kommer den yttre "
+"uppgiftsgruppen att få en annan annullering och behandla sina egna undantag."
 
 #: ../../library/asyncio-task.rst:416
 msgid ""
@@ -572,22 +828,31 @@ msgid ""
 "Task.cancel` method. This ensures that a :exc:`asyncio.CancelledError` will "
 "be raised at the next :keyword:`await`, so the cancellation is not lost."
 msgstr ""
+"I det fall en uppgiftsgrupp avbryts externt och även måste ge upphov till "
+"en :exc:`ExceptionGroup`, kommer den att anropa den överordnade uppgiftens :"
+"meth:`~asyncio.Task.cancel`\\-metod. Detta säkerställer att ett :exc:"
+"`asyncio.CancelledError` kommer att uppstå vid nästa :keyword:`await`, så "
+"att annulleringen inte går förlorad."
 
 #: ../../library/asyncio-task.rst:422
 msgid ""
 "Task groups preserve the cancellation count reported by :meth:`asyncio.Task."
 "cancelling`."
 msgstr ""
+"Uppgiftsgrupper behåller antalet avbokningar som rapporteras av :meth:"
+"`asyncio.Task.cancelling`."
 
 #: ../../library/asyncio-task.rst:427
 msgid ""
 "Improved handling of simultaneous internal and external cancellations and "
 "correct preservation of cancellation counts."
 msgstr ""
+"Förbättrad hantering av samtidiga interna och externa avbeställningar och "
+"korrekt bevarande av antalet avbeställningar."
 
 #: ../../library/asyncio-task.rst:431
 msgid "Terminating a Task Group"
-msgstr ""
+msgstr "Avsluta en arbetsgrupp"
 
 #: ../../library/asyncio-task.rst:433
 msgid ""
@@ -595,6 +860,9 @@ msgid ""
 "library, termination can be achieved by adding an exception-raising task to "
 "the task group and ignoring the raised exception:"
 msgstr ""
+"Även om standardbiblioteket inte har något inbyggt stöd för att avsluta en "
+"uppgiftsgrupp, kan man göra det genom att lägga till en undantagshöjande "
+"uppgift i uppgiftsgruppen och ignorera det undantag som uppstått:"
 
 #: ../../library/asyncio-task.rst:437
 msgid ""
@@ -628,10 +896,39 @@ msgid ""
 "\n"
 "asyncio.run(main())"
 msgstr ""
+"import asyncio\n"
+"from asyncio import TaskGroup\n"
+"\n"
+"class TerminateTaskGroup(Exception):\n"
+"    \"\"\"Exception raised to terminate a task group.\"\"\"\n"
+"\n"
+"async def force_terminate_task_group():\n"
+"    \"\"\"Used to force termination of a task group.\"\"\"\n"
+"    raise TerminateTaskGroup()\n"
+"\n"
+"async def job(task_id, sleep_time):\n"
+"    print(f'Task {task_id}: start')\n"
+"    await asyncio.sleep(sleep_time)\n"
+"    print(f'Task {task_id}: done')\n"
+"\n"
+"async def main():\n"
+"    try:\n"
+"        async with TaskGroup() as group:\n"
+"            # spawn some tasks\n"
+"            group.create_task(job(1, 0.5))\n"
+"            group.create_task(job(2, 1.5))\n"
+"            # sleep for 1 second\n"
+"            await asyncio.sleep(1)\n"
+"            # add an exception-raising task to force the group to terminate\n"
+"            group.create_task(force_terminate_task_group())\n"
+"    except* TerminateTaskGroup:\n"
+"        pass\n"
+"\n"
+"asyncio.run(main())"
 
 #: ../../library/asyncio-task.rst:469
 msgid "Expected output:"
-msgstr ""
+msgstr "Förväntad utgång:"
 
 #: ../../library/asyncio-task.rst:471
 msgid ""
@@ -639,25 +936,32 @@ msgid ""
 "Task 2: start\n"
 "Task 1: done"
 msgstr ""
+"Uppgift 1: start\n"
+"Uppgift 2: start\n"
+"Uppgift 1: klar"
 
 #: ../../library/asyncio-task.rst:478
 msgid "Sleeping"
-msgstr ""
+msgstr "Sovande"
 
 #: ../../library/asyncio-task.rst:483
 msgid "Block for *delay* seconds."
-msgstr ""
+msgstr "Blockera i *fördröjning* sekunder."
 
 #: ../../library/asyncio-task.rst:485
 msgid ""
 "If *result* is provided, it is returned to the caller when the coroutine "
 "completes."
 msgstr ""
+"Om *result* anges returneras det till den som anropar när coroutinen "
+"avslutas."
 
 #: ../../library/asyncio-task.rst:488
 msgid ""
 "``sleep()`` always suspends the current task, allowing other tasks to run."
 msgstr ""
+"``sleep()`` avbryter alltid den aktuella uppgiften, så att andra uppgifter "
+"kan köras."
 
 #: ../../library/asyncio-task.rst:491
 msgid ""
@@ -665,11 +969,15 @@ msgid ""
 "run. This can be used by long-running functions to avoid blocking the event "
 "loop for the full duration of the function call."
 msgstr ""
+"Om du ställer in fördröjningen till 0 får du en optimerad väg så att andra "
+"uppgifter kan köras. Detta kan användas av funktioner som körs under lång "
+"tid för att undvika att blockera händelseslingan under hela funktionsanropet."
 
 #: ../../library/asyncio-task.rst:497
 msgid ""
 "Example of coroutine displaying the current date every second for 5 seconds::"
 msgstr ""
+"Exempel på coroutine som visar aktuellt datum varannan sekund i 5 sekunder::"
 
 #: ../../library/asyncio-task.rst:500
 msgid ""
@@ -687,32 +995,49 @@ msgid ""
 "\n"
 "asyncio.run(display_date())"
 msgstr ""
+"import asyncio\n"
+"import datetime\n"
+"\n"
+"async def display_date():\n"
+"    loop = asyncio.get_running_loop()\n"
+"    end_time = loop.time() + 5.0\n"
+"    medan True:\n"
+"        print(datetime.datetime.now())\n"
+"        if (loop.time() + 1.0) >= end_time:\n"
+"            break\n"
+"        await asyncio.sleep(1)\n"
+"\n"
+"asyncio.run(display_date())"
 
 #: ../../library/asyncio-task.rst:515 ../../library/asyncio-task.rst:613
 #: ../../library/asyncio-task.rst:712 ../../library/asyncio-task.rst:887
 #: ../../library/asyncio-task.rst:942 ../../library/asyncio-task.rst:999
 msgid "Removed the *loop* parameter."
-msgstr ""
+msgstr "Parametern *loop* har tagits bort."
 
 #: ../../library/asyncio-task.rst:518
 msgid "Raises :exc:`ValueError` if *delay* is :data:`~math.nan`."
-msgstr ""
+msgstr "Utlöser :exc:`ValueError` om *delay* är :data:`~math.nan`."
 
 #: ../../library/asyncio-task.rst:523
 msgid "Running Tasks Concurrently"
-msgstr ""
+msgstr "Köra uppgifter samtidigt"
 
 #: ../../library/asyncio-task.rst:527
 msgid ""
 "Run :ref:`awaitable objects <asyncio-awaitables>` in the *aws* sequence "
 "*concurrently*."
 msgstr ""
+"Kör :ref:`awaitable objects <asyncio-awaitables>` i *aws*-sekvensen "
+"*samtidigt*."
 
 #: ../../library/asyncio-task.rst:530
 msgid ""
 "If any awaitable in *aws* is a coroutine, it is automatically scheduled as a "
 "Task."
 msgstr ""
+"Om någon awaitable i *aws* är en coroutine schemaläggs den automatiskt som "
+"en Task."
 
 #: ../../library/asyncio-task.rst:533
 msgid ""
@@ -720,6 +1045,9 @@ msgid ""
 "list of returned values.  The order of result values corresponds to the "
 "order of awaitables in *aws*."
 msgstr ""
+"Om alla awaitables har slutförts framgångsrikt är resultatet en aggregerad "
+"lista över returnerade värden.  Ordningen på resultatvärdena motsvarar "
+"ordningen på awaitables i *aws*."
 
 #: ../../library/asyncio-task.rst:537
 msgid ""
@@ -728,18 +1056,26 @@ msgid ""
 "awaitables in the *aws* sequence **won't be cancelled** and will continue to "
 "run."
 msgstr ""
+"Om *return_exceptions* är ``False`` (standard), kommer det första undantaget "
+"som uppstår omedelbart att överföras till den uppgift som väntar på "
+"``gather()``.  Andra awaitables i *aws*-sekvensen **avbryts inte** och "
+"fortsätter att köras."
 
 #: ../../library/asyncio-task.rst:542
 msgid ""
 "If *return_exceptions* is ``True``, exceptions are treated the same as "
 "successful results, and aggregated in the result list."
 msgstr ""
+"Om *return_exceptions* är ``True``, behandlas undantag på samma sätt som "
+"lyckade resultat och sammanställs i resultatlistan."
 
 #: ../../library/asyncio-task.rst:545
 msgid ""
 "If ``gather()`` is *cancelled*, all submitted awaitables (that have not "
 "completed yet) are also *cancelled*."
 msgstr ""
+"Om ``gather()`` är *avbruten*, är alla inskickade awaitables (som inte har "
+"slutförts ännu) också *avbrutna*."
 
 #: ../../library/asyncio-task.rst:548
 msgid ""
@@ -748,6 +1084,10 @@ msgid ""
 "cancelled in this case.  This is to prevent the cancellation of one "
 "submitted Task/Future to cause other Tasks/Futures to be cancelled."
 msgstr ""
+"Om någon uppgift eller framtid från *aws*-sekvensen *annulleras*, behandlas "
+"den som om den gav upphov till :exc:`CancelledError` -- anropet ``gather()`` "
+"annulleras **inte** i detta fall.  Detta för att förhindra att avbrytandet "
+"av en inskickad Task/Future orsakar avbrytande av andra Tasks/Futures."
 
 #: ../../library/asyncio-task.rst:555
 msgid ""
@@ -758,6 +1098,13 @@ msgid ""
 "*TaskGroup* will, while *gather* will not, cancel the remaining scheduled "
 "tasks)."
 msgstr ""
+"Ett nytt alternativ för att skapa och köra uppgifter samtidigt och vänta på "
+"att de ska slutföras är :class:`asyncio.TaskGroup`. *TaskGroup* ger starkare "
+"säkerhetsgarantier än *gather* för schemaläggning av en nestning av "
+"underuppgifter: om en uppgift (eller en underuppgift, en uppgift som "
+"schemaläggs av en uppgift) ger upphov till ett undantag kommer *TaskGroup*, "
+"medan *gather* inte gör det, att avbryta de återstående schemalagda "
+"uppgifterna)."
 
 #: ../../library/asyncio-task.rst:566
 msgid ""
@@ -797,6 +1144,41 @@ msgid ""
 "#     Task C: factorial(4) = 24\n"
 "#     [2, 6, 24]"
 msgstr ""
+"import asyncio\n"
+"\n"
+"async def factorial(name, number):\n"
+"    f = 1\n"
+"    for i in range(2, number + 1):\n"
+"        print(f\"Task {name}: Compute factorial({number}), currently i={i}..."
+"\")\n"
+"        await asyncio.sleep(1)\n"
+"        f *= i\n"
+"    print(f\"Task {name}: factorial({number}) = {f}\")\n"
+"    return f\n"
+"\n"
+"async def main():\n"
+"    # Schedule three calls *concurrently*:\n"
+"    L = await asyncio.gather(\n"
+"        factorial(\"A\", 2),\n"
+"        factorial(\"B\", 3),\n"
+"        factorial(\"C\", 4),\n"
+"    )\n"
+"    print(L)\n"
+"\n"
+"asyncio.run(main())\n"
+"\n"
+"# Expected output:\n"
+"#\n"
+"#     Task A: Compute factorial(2), currently i=2...\n"
+"#     Task B: Compute factorial(3), currently i=2...\n"
+"#     Task C: Compute factorial(4), currently i=2...\n"
+"#     Task A: factorial(2) = 2\n"
+"#     Task B: Compute factorial(3), currently i=3...\n"
+"#     Task C: Compute factorial(4), currently i=3...\n"
+"#     Task B: factorial(3) = 6\n"
+"#     Task C: Compute factorial(4), currently i=4...\n"
+"#     Task C: factorial(4) = 24\n"
+"#     [2, 6, 24]"
 
 #: ../../library/asyncio-task.rst:602
 msgid ""
@@ -806,12 +1188,19 @@ msgid ""
 "calling ``gather.cancel()`` after catching an exception (raised by one of "
 "the awaitables) from gather won't cancel any other awaitables."
 msgstr ""
+"Om *return_exceptions* är false, kommer en avbrytning av gather() efter att "
+"den har markerats som utförd inte att avbryta några inlämnade awaitables. "
+"Till exempel kan gather markeras som utförd efter att ett undantag har "
+"spridits till den som anropar, därför kommer inte anrop av ``gather."
+"cancel()`` efter att ett undantag har fångats upp (av en av awaitables) från "
+"gather att avbryta någon annan awaitable."
 
 #: ../../library/asyncio-task.rst:609
 msgid ""
 "If the *gather* itself is cancelled, the cancellation is propagated "
 "regardless of *return_exceptions*."
 msgstr ""
+"Om *gather* själv avbryts, sprids avbrottet oavsett *return_exceptions*."
 
 #: ../../library/asyncio-task.rst:616
 msgid ""
@@ -819,14 +1208,17 @@ msgid ""
 "not all positional arguments are Future-like objects and there is no running "
 "event loop."
 msgstr ""
+"Deprecation-varning utfärdas om inga positionella argument anges eller om "
+"inte alla positionella argument är Future-liknande objekt och det inte finns "
+"någon pågående händelseslinga."
 
 #: ../../library/asyncio-task.rst:625
 msgid "Eager Task Factory"
-msgstr ""
+msgstr "Eager Task Factory"
 
 #: ../../library/asyncio-task.rst:629
 msgid "A task factory for eager task execution."
-msgstr ""
+msgstr "En uppgiftsfabrik för ivrig exekvering av uppgifter."
 
 #: ../../library/asyncio-task.rst:631
 msgid ""
@@ -837,12 +1229,20 @@ msgid ""
 "overhead of loop scheduling is avoided for coroutines that complete "
 "synchronously."
 msgstr ""
+"När denna fabrik används (via :meth:`loop.set_task_factory(asyncio."
+"eager_task_factory) <loop.set_task_factory>`), börjar coroutines exekveras "
+"synkront under :class:`Task`\\-konstruktionen. Uppgifterna schemaläggs "
+"endast i händelseslingan om de blockeras. Detta kan förbättra prestandan "
+"eftersom overhead för schemaläggning av loopar undviks för coroutines som "
+"slutförs synkront."
 
 #: ../../library/asyncio-task.rst:637
 msgid ""
 "A common example where this is beneficial is coroutines which employ caching "
 "or memoization to avoid actual I/O when possible."
 msgstr ""
+"Ett vanligt exempel där detta är fördelaktigt är coroutines som använder "
+"caching eller memoization för att undvika faktisk I/O när det är möjligt."
 
 #: ../../library/asyncio-task.rst:642
 msgid ""
@@ -852,6 +1252,12 @@ msgid ""
 "change may introduce behavior changes to existing applications. For example, "
 "the application's task execution order is likely to change."
 msgstr ""
+"Omedelbar exekvering av coroutinen är en semantisk förändring. Om coroutinen "
+"returnerar eller höjer, schemaläggs aldrig uppgiften till händelseslingan. "
+"Om coroutine-exekveringen blockeras schemaläggs uppgiften till "
+"händelseslingan. Denna förändring kan medföra beteendeförändringar i "
+"befintliga applikationer. Till exempel kommer applikationens "
+"exekveringsordning för uppgifter sannolikt att ändras."
 
 #: ../../library/asyncio-task.rst:653
 msgid ""
@@ -859,6 +1265,9 @@ msgid ""
 "the provided *custom_task_constructor* when creating a new task instead of "
 "the default :class:`Task`."
 msgstr ""
+"Skapa en fabrik för ivriga uppgifter, liknande :func:`eager_task_factory`, "
+"som använder den medföljande *custom_task_constructor* när en ny uppgift "
+"skapas istället för standard :class:`Task`."
 
 #: ../../library/asyncio-task.rst:657
 msgid ""
@@ -866,6 +1275,9 @@ msgid ""
 "the signature of :class:`Task.__init__ <Task>`. The callable must return a :"
 "class:`asyncio.Task`-compatible object."
 msgstr ""
+"*custom_task_constructor* måste vara en *kallbar* med en signatur som "
+"matchar signaturen för :class:`Task.__init__ <Task>`. Anropsbarheten måste "
+"returnera ett :class:`asyncio.Task`\\-kompatibelt objekt."
 
 #: ../../library/asyncio-task.rst:661
 msgid ""
@@ -873,30 +1285,37 @@ msgid ""
 "an event loop via :meth:`loop.set_task_factory(factory) <loop."
 "set_task_factory>`)."
 msgstr ""
+"Denna funktion returnerar en *kallbar* som är avsedd att användas som en "
+"uppgiftsfabrik för en händelseslinga via :meth:`loop."
+"set_task_factory(factory) <loop.set_task_factory>`)."
 
 #: ../../library/asyncio-task.rst:668
 msgid "Shielding From Cancellation"
-msgstr ""
+msgstr "Avskärmning från annullering"
 
 #: ../../library/asyncio-task.rst:672
 msgid ""
 "Protect an :ref:`awaitable object <asyncio-awaitables>` from being :meth:"
 "`cancelled <Task.cancel>`."
 msgstr ""
+"Skydda ett :ref:`awaitable object <asyncio-awaitables>` från att bli :meth:"
+"`cancelled <Task.cancel>`."
 
 #: ../../library/asyncio-task.rst:675 ../../library/asyncio-task.rst:842
 msgid "If *aw* is a coroutine it is automatically scheduled as a Task."
-msgstr ""
+msgstr "Om *aw* är en coroutine schemaläggs den automatiskt som en Task."
 
 #: ../../library/asyncio-task.rst:677
 msgid "The statement::"
-msgstr ""
+msgstr "Uttalandet::"
 
 #: ../../library/asyncio-task.rst:679
 msgid ""
 "task = asyncio.create_task(something())\n"
 "res = await shield(task)"
 msgstr ""
+"uppgift = asyncio.create_task(något())\n"
+"res = await shield(uppgift)"
 
 #: ../../library/asyncio-task.rst:682
 msgid "is equivalent to::"
@@ -904,7 +1323,7 @@ msgstr "är likvärdig med::"
 
 #: ../../library/asyncio-task.rst:684
 msgid "res = await something()"
-msgstr ""
+msgstr "res = vänta på något()"
 
 #: ../../library/asyncio-task.rst:686
 msgid ""
@@ -914,12 +1333,18 @@ msgid ""
 "still cancelled, so the \"await\" expression still raises a :exc:"
 "`CancelledError`."
 msgstr ""
+"*utom* att om coroutinen som innehåller den avbryts, avbryts inte den Task "
+"som körs i ``något()``.  Ur ``något()`` synvinkel skedde inte avbrytandet. "
+"Även om dess anropare fortfarande avbryts, så ger \"await\"-uttrycket "
+"fortfarande upphov till ett :exc:`CancelledError`."
 
 #: ../../library/asyncio-task.rst:692
 msgid ""
 "If ``something()`` is cancelled by other means (i.e. from within itself) "
 "that would also cancel ``shield()``."
 msgstr ""
+"Om ``något()`` upphävs på annat sätt (dvs. inifrån sig själv) skulle det "
+"också upphäva ``sköld()``."
 
 #: ../../library/asyncio-task.rst:695
 msgid ""
@@ -927,6 +1352,8 @@ msgid ""
 "``shield()`` function should be combined with a try/except clause, as "
 "follows::"
 msgstr ""
+"Om man vill ignorera annulleringen helt (rekommenderas inte) bör funktionen "
+"``shield()`` kombineras med en try/except-sats enligt följande::"
 
 #: ../../library/asyncio-task.rst:699
 msgid ""
@@ -936,6 +1363,11 @@ msgid ""
 "except CancelledError:\n"
 "    res = None"
 msgstr ""
+"uppgift = asyncio.create_task(något())\n"
+"försök:\n"
+"    res = await shield(uppgift)\n"
+"except CancelledError:\n"
+"    res = Ingen"
 
 #: ../../library/asyncio-task.rst:707
 msgid ""
@@ -944,22 +1376,30 @@ msgid ""
 "tasks. A task that isn't referenced elsewhere may get garbage collected at "
 "any time, even before it's done."
 msgstr ""
+"Spara en referens till uppgifter som skickas till denna funktion, för att "
+"undvika att en uppgift försvinner mitt under utförandet. Händelseslingan "
+"behåller bara svaga referenser till uppgifter. En uppgift som inte refereras "
+"någon annanstans kan när som helst bli skräpinsamlad, även innan den är klar."
 
 #: ../../library/asyncio-task.rst:715
 msgid ""
 "Deprecation warning is emitted if *aw* is not Future-like object and there "
 "is no running event loop."
 msgstr ""
+"Deprecation-varning utfärdas om *aw* inte är ett Future-like-objekt och det "
+"inte finns någon pågående händelseslinga."
 
 #: ../../library/asyncio-task.rst:721
 msgid "Timeouts"
-msgstr ""
+msgstr "Tidsfrister"
 
 #: ../../library/asyncio-task.rst:725
 msgid ""
 "Return an :ref:`asynchronous context manager <async-context-managers>` that "
 "can be used to limit the amount of time spent waiting on something."
 msgstr ""
+"Returnerar en :ref:`asynkron kontexthanterare <async-context-managers>` som "
+"kan användas för att begränsa den tid det tar att vänta på något."
 
 #: ../../library/asyncio-task.rst:729
 msgid ""
@@ -967,12 +1407,17 @@ msgid ""
 "*delay* is ``None``, no time limit will be applied; this can be useful if "
 "the delay is unknown when the context manager is created."
 msgstr ""
+"*delay* kan antingen vara ``None``, eller ett float/int antal sekunder att "
+"vänta. Om *delay* är ``None`` kommer ingen tidsgräns att tillämpas; detta "
+"kan vara användbart om fördröjningen är okänd när kontexthanteraren skapas."
 
 #: ../../library/asyncio-task.rst:734
 msgid ""
 "In either case, the context manager can be rescheduled after creation using :"
 "meth:`Timeout.reschedule`."
 msgstr ""
+"I båda fallen kan kontexthanteraren omplaneras efter skapandet med hjälp av :"
+"meth:`Timeout.reschedule`."
 
 #: ../../library/asyncio-task.rst:739
 msgid ""
@@ -980,6 +1425,9 @@ msgid ""
 "    async with asyncio.timeout(10):\n"
 "        await long_running_task()"
 msgstr ""
+"async def main():\n"
+"    async med asyncio.timeout(10):\n"
+"        await long_running_task()"
 
 #: ../../library/asyncio-task.rst:743
 msgid ""
@@ -988,6 +1436,10 @@ msgid ""
 "CancelledError` internally, transforming it into a :exc:`TimeoutError` which "
 "can be caught and handled."
 msgstr ""
+"Om ``long_running_task`` tar mer än 10 sekunder att slutföra kommer "
+"kontexthanteraren att avbryta den aktuella uppgiften och hantera det "
+"resulterande :exc:`asyncio.CancelledError` internt och omvandla det till "
+"ett :exc:`TimeoutError` som kan fångas upp och hanteras."
 
 #: ../../library/asyncio-task.rst:750
 msgid ""
@@ -995,10 +1447,13 @@ msgid ""
 "`asyncio.CancelledError` into a :exc:`TimeoutError`, which means the :exc:"
 "`TimeoutError` can only be caught *outside* of the context manager."
 msgstr ""
+"Kontexthanteraren :func:`asyncio.timeout` omvandlar :exc:`asyncio."
+"CancelledError` till ett :exc:`TimeoutError`, vilket innebär att :exc:"
+"`TimeoutError` endast kan fångas *utanför* kontexthanteraren."
 
 #: ../../library/asyncio-task.rst:755
 msgid "Example of catching :exc:`TimeoutError`::"
-msgstr ""
+msgstr "Exempel på att fånga :exc:`TimeoutError`::"
 
 #: ../../library/asyncio-task.rst:757
 msgid ""
@@ -1011,47 +1466,67 @@ msgid ""
 "\n"
 "    print(\"This statement will run regardless.\")"
 msgstr ""
+"async def main():\n"
+"    try:\n"
+"        async med asyncio.timeout(10):\n"
+"            await long_running_task()\n"
+"    except TimeoutError:\n"
+"        print(\"Den långa operationen fick en timeout, men vi har hanterat "
+"det.\")\n"
+"\n"
+"    print(\"Detta uttalande kommer att köras oavsett.\")"
 
 #: ../../library/asyncio-task.rst:766
 msgid ""
 "The context manager produced by :func:`asyncio.timeout` can be rescheduled "
 "to a different deadline and inspected."
 msgstr ""
+"Den kontexthanterare som produceras av :func:`asyncio.timeout` kan "
+"schemaläggas om till en annan deadline och inspekteras."
 
 #: ../../library/asyncio-task.rst:771
 msgid ""
 "An :ref:`asynchronous context manager <async-context-managers>` for "
 "cancelling overdue coroutines."
 msgstr ""
+"En :ref:`asynkron kontexthanterare <async-context-managers>` för att avbryta "
+"försenade coroutines."
 
 #: ../../library/asyncio-task.rst:774
 msgid ""
 "``when`` should be an absolute time at which the context should time out, as "
 "measured by the event loop's clock:"
 msgstr ""
+"``when`` ska vara en absolut tidpunkt då kontexten ska ta slut, mätt med "
+"händelseslingans klocka:"
 
 #: ../../library/asyncio-task.rst:777
 msgid "If ``when`` is ``None``, the timeout will never trigger."
-msgstr ""
+msgstr "Om ``when`` är ``None`` kommer timeouten aldrig att utlösas."
 
 #: ../../library/asyncio-task.rst:778
 msgid ""
 "If ``when < loop.time()``, the timeout will trigger on the next iteration of "
 "the event loop."
 msgstr ""
+"Om ``when < loop.time()``, kommer timeouten att utlösas vid nästa iteration "
+"av händelseslingan."
 
 #: ../../library/asyncio-task.rst:783
 msgid ""
 "Return the current deadline, or ``None`` if the current deadline is not set."
 msgstr ""
+"Returnerar den aktuella tidsfristen, eller ``None`` om den aktuella "
+"tidsfristen inte har angetts."
 
 #: ../../library/asyncio-task.rst:788
 msgid "Reschedule the timeout."
-msgstr ""
+msgstr "Flytta fram timeouten."
 
 #: ../../library/asyncio-task.rst:792
 msgid "Return whether the context manager has exceeded its deadline (expired)."
 msgstr ""
+"Returnerar om kontexthanteraren har överskridit sin tidsfrist (expired)."
 
 #: ../../library/asyncio-task.rst:797
 msgid ""
@@ -1070,16 +1545,32 @@ msgid ""
 "    if cm.expired():\n"
 "        print(\"Looks like we haven't finished on time.\")"
 msgstr ""
+"async def main():\n"
+"    try:\n"
+"        # Vi vet inte timeouten när vi startar, så vi skickar ``None``.\n"
+"        async med asyncio.timeout(None) som cm:\n"
+"            # Vi känner till tidsgränsen nu, så vi flyttar den.\n"
+"            new_deadline = get_running_loop().time() + 10\n"
+"            cm.reschedule(ny_deadline)\n"
+"\n"
+"            await long_running_task()\n"
+"    utom TimeoutError:\n"
+"        passera\n"
+"\n"
+"    if cm.expired():\n"
+"        print(\"Det ser ut som om vi inte blev klara i tid.\")"
 
 #: ../../library/asyncio-task.rst:812
 msgid "Timeout context managers can be safely nested."
-msgstr ""
+msgstr "Timeout-kontexthanterare kan säkert nästlas."
 
 #: ../../library/asyncio-task.rst:818
 msgid ""
 "Similar to :func:`asyncio.timeout`, except *when* is the absolute time to "
 "stop waiting, or ``None``."
 msgstr ""
+"Liknar :func:`asyncio.timeout`, förutom att *when* är den absoluta tiden för "
+"att sluta vänta, eller ``None``."
 
 #: ../../library/asyncio-task.rst:823
 msgid ""
@@ -1094,29 +1585,48 @@ msgid ""
 "\n"
 "    print(\"This statement will run regardless.\")"
 msgstr ""
+"async def main():\n"
+"    loop = get_running_loop()\n"
+"    deadline = loop.tid() + 20\n"
+"    försök:\n"
+"        async med asyncio.timeout_at(deadline):\n"
+"            await long_running_task()\n"
+"    except TimeoutError:\n"
+"        print(\"Den långa operationen timade ut, men vi har hanterat det."
+"\")\n"
+"\n"
+"    print(\"Detta uttalande kommer att köras oavsett.\")"
 
 #: ../../library/asyncio-task.rst:839
 msgid ""
 "Wait for the *aw* :ref:`awaitable <asyncio-awaitables>` to complete with a "
 "timeout."
 msgstr ""
+"Vänta på att *aw* :ref:`awaitable <asyncio-awaitables>` ska slutföras med en "
+"timeout."
 
 #: ../../library/asyncio-task.rst:844
 msgid ""
 "*timeout* can either be ``None`` or a float or int number of seconds to wait "
 "for.  If *timeout* is ``None``, block until the future completes."
 msgstr ""
+"*timeout* kan antingen vara ``None`` eller ett float eller int antal "
+"sekunder att vänta på.  Om *timeout* är ``None``, blockeras tills framtiden "
+"är klar."
 
 #: ../../library/asyncio-task.rst:848
 msgid ""
 "If a timeout occurs, it cancels the task and raises :exc:`TimeoutError`."
 msgstr ""
+"Om en timeout inträffar avbryts uppgiften och :exc:`TimeoutError` visas."
 
 #: ../../library/asyncio-task.rst:851
 msgid ""
 "To avoid the task :meth:`cancellation <Task.cancel>`, wrap it in :func:"
 "`shield`."
 msgstr ""
+"För att undvika uppgiften :meth:`cancellation <Task.cancel>`, linda in den "
+"i :func:`shield`."
 
 #: ../../library/asyncio-task.rst:854
 msgid ""
@@ -1124,10 +1634,13 @@ msgid ""
 "wait time may exceed the *timeout*. If an exception happens during "
 "cancellation, it is propagated."
 msgstr ""
+"Funktionen kommer att vänta tills framtiden faktiskt avbryts, så den totala "
+"väntetiden kan överstiga *timeout*. Om ett undantag inträffar under "
+"annulleringen sprids det."
 
 #: ../../library/asyncio-task.rst:858
 msgid "If the wait is cancelled, the future *aw* is also cancelled."
-msgstr ""
+msgstr "Om väntan avbryts, avbryts också den framtida *aw*."
 
 #: ../../library/asyncio-task.rst:864
 msgid ""
@@ -1149,20 +1662,39 @@ msgid ""
 "#\n"
 "#     timeout!"
 msgstr ""
+"async def evighet():\n"
+"    # Sova i en timme\n"
+"    await asyncio.sleep(3600)\n"
+"    print('yay!')\n"
+"\n"
+"async def main():\n"
+"    # Vänta i högst 1 sekund\n"
+"    försök:\n"
+"        await asyncio.wait_for(evighet(), timeout=1.0)\n"
+"    except TimeoutError:\n"
+"        print('timeout!')\n"
+"\n"
+"asyncio.run(main())\n"
+"\n"
+"# Förväntad utgång:\n"
+"#\n"
+"# timeout!"
 
 #: ../../library/asyncio-task.rst:882
 msgid ""
 "When *aw* is cancelled due to a timeout, ``wait_for`` waits for *aw* to be "
 "cancelled.  Previously, it raised :exc:`TimeoutError` immediately."
 msgstr ""
+"När *aw* avbryts på grund av en timeout, väntar ``wait_for`` på att *aw* ska "
+"avbrytas.  Tidigare gav det upphov till :exc:`TimeoutError` omedelbart."
 
 #: ../../library/asyncio-task.rst:890
 msgid "Raises :exc:`TimeoutError` instead of :exc:`asyncio.TimeoutError`."
-msgstr ""
+msgstr "Utlöser :exc:`TimeoutError` istället för :exc:`asyncio.TimeoutError`."
 
 #: ../../library/asyncio-task.rst:895
 msgid "Waiting Primitives"
-msgstr ""
+msgstr "Primitiva väntetider"
 
 #: ../../library/asyncio-task.rst:900
 msgid ""
@@ -1170,14 +1702,16 @@ msgid ""
 "*aws* iterable concurrently and block until the condition specified by "
 "*return_when*."
 msgstr ""
+"Kör :class:`~asyncio.Future` och :class:`~asyncio.Task`\\-instanser i *aws*-"
+"iterabeln samtidigt och blockera till det villkor som anges av *return_when*."
 
 #: ../../library/asyncio-task.rst:904
 msgid "The *aws* iterable must not be empty."
-msgstr ""
+msgstr "*aws*-iterabeln får inte vara tom."
 
 #: ../../library/asyncio-task.rst:906
 msgid "Returns two sets of Tasks/Futures: ``(done, pending)``."
-msgstr ""
+msgstr "Returnerar två uppsättningar av Tasks/Futures: ``(utförd, väntande)``."
 
 #: ../../library/asyncio-task.rst:908
 msgid "Usage::"
@@ -1185,13 +1719,15 @@ msgstr "Användning::"
 
 #: ../../library/asyncio-task.rst:910
 msgid "done, pending = await asyncio.wait(aws)"
-msgstr ""
+msgstr "done, pending = await asyncio.wait(aws)"
 
 #: ../../library/asyncio-task.rst:912
 msgid ""
 "*timeout* (a float or int), if specified, can be used to control the maximum "
 "number of seconds to wait before returning."
 msgstr ""
+"*timeout* (en float eller int), om den anges, kan användas för att styra det "
+"maximala antalet sekunder som ska väntas innan återgång."
 
 #: ../../library/asyncio-task.rst:915
 msgid ""
@@ -1199,6 +1735,9 @@ msgid ""
 "that aren't done when the timeout occurs are simply returned in the second "
 "set."
 msgstr ""
+"Observera att denna funktion inte ger upphov till :exc:`TimeoutError`. "
+"Futures eller Tasks som inte är klara när timeouten inträffar returneras "
+"helt enkelt i den andra uppsättningen."
 
 #: ../../library/asyncio-task.rst:919
 msgid ""
@@ -1240,14 +1779,16 @@ msgid ""
 "Unlike :func:`~asyncio.wait_for`, ``wait()`` does not cancel the futures "
 "when a timeout occurs."
 msgstr ""
+"Till skillnad från :func:`~asyncio.wait_for` avbryter inte ``wait()`` "
+"futures när en timeout inträffar."
 
 #: ../../library/asyncio-task.rst:945
 msgid "Passing coroutine objects to ``wait()`` directly is forbidden."
-msgstr ""
+msgstr "Det är förbjudet att skicka coroutine-objekt direkt till ``wait()``."
 
 #: ../../library/asyncio-task.rst:948 ../../library/asyncio-task.rst:1006
 msgid "Added support for generators yielding tasks."
-msgstr ""
+msgstr "Stöd för generatorer som ger uppgifter har lagts till."
 
 #: ../../library/asyncio-task.rst:954
 msgid ""
@@ -1255,6 +1796,9 @@ msgid ""
 "concurrently. The returned object can be iterated to obtain the results of "
 "the awaitables as they finish."
 msgstr ""
+"Kör :ref:`awaitable objects <asyncio-awaitables>` i *aws*-iterabeln "
+"samtidigt. Det returnerade objektet kan itereras för att få resultaten från "
+"awaitables när de avslutas."
 
 #: ../../library/asyncio-task.rst:958
 msgid ""
@@ -1264,6 +1808,11 @@ msgid ""
 "are tasks or futures. This makes it easy to correlate previously-scheduled "
 "tasks with their results. Example::"
 msgstr ""
+"Objektet som returneras av ``as_completed()`` kan itereras som en :term:"
+"`asynchronous iterator` eller en vanlig :term:`iterator`. När asynkron "
+"iteration används, blir de ursprungligen levererade awaitables yielded om de "
+"är tasks eller futures. Detta gör det enkelt att korrelera tidigare "
+"schemalagda uppgifter med deras resultat. Exempel::"
 
 #: ../../library/asyncio-task.rst:964
 msgid ""
@@ -1281,12 +1830,27 @@ msgid ""
 "    else:\n"
 "        print(\"IPv4 connection established.\")"
 msgstr ""
+"ipv4_connect = create_task(open_connection(\"127.0.0.1\", 80))\n"
+"ipv6_connect = create_task(open_connection(\"::1\", 80))\n"
+"uppgifter = [ipv4_connect, ipv6_connect]\n"
+"\n"
+"async for earliest_connect in as_completed(tasks):\n"
+"    # earliest_connect är klar. Resultatet kan erhållas genom att\n"
+"    # vänta på det eller anropa earliest_connect.result()\n"
+"    reader, writer = vänta på earliest_connect\n"
+"\n"
+"    om earliest_connect är ipv6_connect:\n"
+"        print(\"IPv6-anslutning upprättad.\")\n"
+"    annat:\n"
+"        print(\"IPv4-anslutning upprättad.\")"
 
 #: ../../library/asyncio-task.rst:978
 msgid ""
 "During asynchronous iteration, implicitly-created tasks will be yielded for "
 "supplied awaitables that aren't tasks or futures."
 msgstr ""
+"Under asynkron iteration kommer implicit skapade uppgifter att ges för "
+"levererade awaitables som inte är uppgifter eller futures."
 
 #: ../../library/asyncio-task.rst:981
 msgid ""
@@ -1294,6 +1858,9 @@ msgid ""
 "returns the result or raises the exception of the next completed awaitable. "
 "This pattern is compatible with Python versions older than 3.13::"
 msgstr ""
+"När den används som en vanlig iterator ger varje iteration en ny coroutine "
+"som returnerar resultatet eller väcker undantaget för nästa slutförda "
+"awaitable. Detta mönster är kompatibelt med Python-versioner äldre än 3.13::"
 
 #: ../../library/asyncio-task.rst:985
 msgid ""
@@ -1307,6 +1874,16 @@ msgid ""
 "    # awaitable that finishes next.\n"
 "    reader, writer = await next_connect"
 msgstr ""
+"ipv4_connect = create_task(open_connection(\"127.0.0.1\", 80))\n"
+"ipv6_connect = create_task(open_connection(\"::1\", 80))\n"
+"uppgifter = [ipv4_connect, ipv6_connect]\n"
+"\n"
+"for next_connect in as_completed(tasks):\n"
+"    # next_connect är inte ett av de ursprungliga uppgiftsobjekten. Det "
+"måste vara\n"
+"    # väntas för att få fram resultatvärdet eller väcka undantag för den\n"
+"    # awaitable som avslutas härnäst.\n"
+"    reader, writer = vänta på next_connect"
 
 #: ../../library/asyncio-task.rst:995
 msgid ""
@@ -1314,26 +1891,34 @@ msgid ""
 "are done. This is raised by the ``async for`` loop during asynchronous "
 "iteration or by the coroutines yielded during plain iteration."
 msgstr ""
+"Ett :exc:`TimeoutError` uppstår om timeouten inträffar innan alla awaitables "
+"är klara. Detta orsakas av ``async for``\\-loopen under asynkron iteration "
+"eller av de coroutines som uppstår under vanlig iteration."
 
 #: ../../library/asyncio-task.rst:1002
 msgid ""
 "Deprecation warning is emitted if not all awaitable objects in the *aws* "
 "iterable are Future-like objects and there is no running event loop."
 msgstr ""
+"Deprecation-varning utfärdas om inte alla awaitable-objekt i *aws*-iterabeln "
+"är Future-liknande objekt och det inte finns någon pågående händelseslinga."
 
 #: ../../library/asyncio-task.rst:1009
 msgid ""
 "The result can now be used as either an :term:`asynchronous iterator` or as "
 "a plain :term:`iterator` (previously it was only a plain iterator)."
 msgstr ""
+"Resultatet kan nu användas som antingen en :term:`asynchronous iterator` "
+"eller som en vanlig :term:`iterator` (tidigare var det bara en vanlig "
+"iterator)."
 
 #: ../../library/asyncio-task.rst:1015
 msgid "Running in Threads"
-msgstr ""
+msgstr "Löpande i trådar"
 
 #: ../../library/asyncio-task.rst:1020
 msgid "Asynchronously run function *func* in a separate thread."
-msgstr ""
+msgstr "Asynkron körning av funktionen *func* i en separat tråd."
 
 #: ../../library/asyncio-task.rst:1022
 msgid ""
@@ -1342,11 +1927,17 @@ msgid ""
 "allowing context variables from the event loop thread to be accessed in the "
 "separate thread."
 msgstr ""
+"Alla \\*args och \\*\\*kwargs som anges för denna funktion skickas direkt "
+"till *func*. Dessutom sprids den aktuella :class:`contextvars.Context`, "
+"vilket gör att kontextvariabler från händelseslingans tråd kan nås i den "
+"separata tråden."
 
 #: ../../library/asyncio-task.rst:1027
 msgid ""
 "Return a coroutine that can be awaited to get the eventual result of *func*."
 msgstr ""
+"Returnera en coroutine som kan inväntas för att få det slutliga resultatet "
+"av *func*."
 
 #: ../../library/asyncio-task.rst:1029
 msgid ""
@@ -1354,6 +1945,9 @@ msgid ""
 "bound functions/methods that would otherwise block the event loop if they "
 "were run in the main thread. For example::"
 msgstr ""
+"Denna coroutine-funktion är främst avsedd att användas för att köra IO-"
+"bundna funktioner/metoder som annars skulle blockera händelseslingan om de "
+"kördes i huvudtråden. Till exempel::"
 
 #: ../../library/asyncio-task.rst:1033
 msgid ""
@@ -1383,6 +1977,31 @@ msgid ""
 "# blocking_io complete at 19:50:54\n"
 "# finished main at 19:50:54"
 msgstr ""
+"def blocking_io():\n"
+"    print(f\"starta blockering_io vid {time.strftime('%X')}\")\n"
+"    # Observera att time.sleep() kan ersättas med vilken blockerande\n"
+"    # IO-bunden operation, t.ex. filoperationer.\n"
+"    time.sleep(1)\n"
+"    print(f\"blockering_io slutförd vid {time.strftime('%X')}\")\n"
+"\n"
+"async def main():\n"
+"    print(f\"startade main vid {time.strftime('%X')}\")\n"
+"\n"
+"    await asyncio.gather(\n"
+"        asyncio.to_thread(blocking_io),\n"
+"        asyncio.sleep(1))\n"
+"\n"
+"    print(f\"avslutade huvudtråden vid {time.strftime('%X')}\")\n"
+"\n"
+"\n"
+"asyncio.run(main())\n"
+"\n"
+"# Förväntad utgång:\n"
+"#\n"
+"# startade main kl 19:50:53\n"
+"# start blocking_io at 19:50:53\n"
+"# blocking_io complete at 19:50:54\n"
+"# finished main at 19:50:54"
 
 #: ../../library/asyncio-task.rst:1059
 msgid ""
@@ -1391,6 +2010,10 @@ msgid ""
 "Instead, by using ``asyncio.to_thread()``, we can run it in a separate "
 "thread without blocking the event loop."
 msgstr ""
+"Att direkt anropa ``blocking_io()`` i en coroutine skulle blockera "
+"händelseslingan under hela dess varaktighet, vilket resulterar i ytterligare "
+"1 sekunds körtid. Genom att istället använda ``asyncio.to_thread()`` kan vi "
+"köra den i en separat tråd utan att blockera händelseslingan."
 
 #: ../../library/asyncio-task.rst:1066
 msgid ""
@@ -1399,26 +2022,34 @@ msgid ""
 "release the GIL or alternative Python implementations that don't have one, "
 "``asyncio.to_thread()`` can also be used for CPU-bound functions."
 msgstr ""
+"På grund av :term:`GIL` kan ``asyncio.to_thread()`` vanligtvis bara användas "
+"för att göra IO-bundna funktioner icke-blockerande. Men för tilläggsmoduler "
+"som släpper GIL eller alternativa Python-implementationer som inte har "
+"någon, kan ``asyncio.to_thread()`` även användas för CPU-bundna funktioner."
 
 #: ../../library/asyncio-task.rst:1075
 msgid "Scheduling From Other Threads"
-msgstr ""
+msgstr "Schemaläggning från andra trådar"
 
 #: ../../library/asyncio-task.rst:1079
 msgid "Submit a coroutine to the given event loop.  Thread-safe."
-msgstr ""
+msgstr "Skicka en coroutine till den angivna händelseslingan.  Tråd-säker."
 
 #: ../../library/asyncio-task.rst:1081
 msgid ""
 "Return a :class:`concurrent.futures.Future` to wait for the result from "
 "another OS thread."
 msgstr ""
+"Returnera en :class:`concurrent.futures.Future` för att vänta på resultatet "
+"från en annan OS-tråd."
 
 #: ../../library/asyncio-task.rst:1084
 msgid ""
 "This function is meant to be called from a different OS thread than the one "
 "where the event loop is running.  Example::"
 msgstr ""
+"Denna funktion är avsedd att anropas från en annan OS-tråd än den där "
+"händelseslingan körs.  Exempel::"
 
 #: ../../library/asyncio-task.rst:1087
 msgid ""
@@ -1443,10 +2074,30 @@ msgid ""
 "    # Run something in a thread\n"
 "    await asyncio.to_thread(in_thread, loop)"
 msgstr ""
+"def in_thread(loop: asyncio.AbstractEventLoop) -> None:\n"
+"    # Kör lite blockerande IO\n"
+"    pathlib.Path(\"exempel.txt\").write_text(\"hallå världen\", "
+"encoding=\"utf8\")\n"
+"\n"
+"    # Skapa en coroutine\n"
+"    coro = asyncio.sleep(1, resultat=3)\n"
+"\n"
+"    # Skicka coroutinen till en given loop\n"
+"    future = asyncio.run_coroutine_threadsafe(coro, loop)\n"
+"\n"
+"    # Vänta på resultatet med ett valfritt timeout-argument\n"
+"    assert future.result(timeout=2) == 3\n"
+"\n"
+"async def amain() -> Ingen:\n"
+"    # Hämta den pågående slingan\n"
+"    loop = asyncio.get_running_loop()\n"
+"\n"
+"    # Kör något i en tråd\n"
+"    await asyncio.to_thread(in_thread, loop)"
 
 #: ../../library/asyncio-task.rst:1107
 msgid "It's also possible to run the other way around.  Example::"
-msgstr ""
+msgstr "Det är också möjligt att köra tvärtom.  Exempel::"
 
 #: ../../library/asyncio-task.rst:1109
 msgid ""
@@ -1483,12 +2134,47 @@ msgid ""
 "    # Wait for the result with an optional timeout argument\n"
 "    assert future.result(timeout=2) == 3"
 msgstr ""
+"@kontextlib.kontexthanterare\n"
+"def loop_in_thread() -> Generator[asyncio.AbstractEventLoop]:\n"
+"    loop_fut = concurrent.futures.Future[asyncio.AbstractEventLoop]()\n"
+"    stop_event = asyncio.Event()\n"
+"\n"
+"    async def main() -> None:\n"
+"        loop_fut.set_result(asyncio.get_running_loop())\n"
+"        await stop_event.wait()\n"
+"\n"
+"    med concurrent.futures.ThreadPoolExecutor(1) som tpe:\n"
+"        complete_fut = tpe.submit(asyncio.run, main())\n"
+"        for fut in concurrent.futures.as_completed((loop_fut, "
+"complete_fut)):\n"
+"            if fut is loop_fut:\n"
+"                loop = loop_fut.result()\n"
+"                försök:\n"
+"                    ge loop\n"
+"                till sist:\n"
+"                    loop.call_soon_threadsafe(stop_event.set)\n"
+"            else:\n"
+"                fut.result()\n"
+"\n"
+"# Skapa en slinga i en annan tråd\n"
+"med loop_in_thread() som loop:\n"
+"    # Skapa en coroutine\n"
+"    coro = asyncio.sleep(1, resultat=3)\n"
+"\n"
+"    # Skicka coroutinen till en given slinga\n"
+"    future = asyncio.run_coroutine_threadsafe(coro, loop)\n"
+"\n"
+"    # Vänta på resultatet med ett valfritt timeout-argument\n"
+"    assert future.result(timeout=2) == 3"
 
 #: ../../library/asyncio-task.rst:1141
 msgid ""
 "If an exception is raised in the coroutine, the returned Future will be "
 "notified.  It can also be used to cancel the task in the event loop::"
 msgstr ""
+"Om ett undantag inträffar i coroutinen kommer den returnerade Future att "
+"meddelas.  Den kan också användas för att avbryta uppgiften i "
+"händelseslingan::"
 
 #: ../../library/asyncio-task.rst:1145
 msgid ""
@@ -1502,58 +2188,81 @@ msgid ""
 "else:\n"
 "    print(f'The coroutine returned: {result!r}')"
 msgstr ""
+"försök:\n"
+"    resultat = future.result(timeout)\n"
+"except TimeoutError:\n"
+"    print('Coroutinen tog för lång tid och avbröt uppgiften...')\n"
+"    future.cancel()\n"
+"except Exception as exc:\n"
+"    print(f'Coroutinen tog upp ett undantag: {exc!r}')\n"
+"else:\n"
+"    print(f'Coroutinen returnerade: {result!r}')"
 
 #: ../../library/asyncio-task.rst:1155
 msgid ""
 "See the :ref:`concurrency and multithreading <asyncio-multithreading>` "
 "section of the documentation."
 msgstr ""
+"Se :ref:`concurrency and multithreading <asyncio-multithreading>` i "
+"dokumentationen."
 
 #: ../../library/asyncio-task.rst:1158
 msgid ""
 "Unlike other asyncio functions this function requires the *loop* argument to "
 "be passed explicitly."
 msgstr ""
+"Till skillnad från andra asynciofunktioner kräver den här funktionen att "
+"argumentet *loop* skickas explicit."
 
 #: ../../library/asyncio-task.rst:1165
 msgid "Introspection"
-msgstr ""
+msgstr "Introspektion"
 
 #: ../../library/asyncio-task.rst:1170
 msgid ""
 "Return the currently running :class:`Task` instance, or ``None`` if no task "
 "is running."
 msgstr ""
+"Returnerar den instans av :class:`Task` som körs för tillfället, eller "
+"``None`` om ingen uppgift körs."
 
 #: ../../library/asyncio-task.rst:1173
 msgid ""
 "If *loop* is ``None`` :func:`get_running_loop` is used to get the current "
 "loop."
 msgstr ""
+"Om *loop* är ``None`` används :func:`get_running_loop` för att hämta den "
+"aktuella loopen."
 
 #: ../../library/asyncio-task.rst:1181
 msgid "Return a set of not yet finished :class:`Task` objects run by the loop."
 msgstr ""
+"Returnerar en uppsättning ännu inte avslutade :class:`Task`\\-objekt som "
+"körs av slingan."
 
 #: ../../library/asyncio-task.rst:1184
 msgid ""
 "If *loop* is ``None``, :func:`get_running_loop` is used for getting current "
 "loop."
 msgstr ""
+"Om *loop* är ``None``, används :func:`get_running_loop` för att hämta "
+"aktuell loop."
 
 #: ../../library/asyncio-task.rst:1192
 msgid "Return ``True`` if *obj* is a coroutine object."
-msgstr ""
+msgstr "Returnerar ``True`` om *obj* är ett coroutine-objekt."
 
 #: ../../library/asyncio-task.rst:1199
 msgid "Task Object"
-msgstr ""
+msgstr "Uppgiftsobjekt"
 
 #: ../../library/asyncio-task.rst:1203
 msgid ""
 "A :class:`Future-like <Future>` object that runs a Python :ref:`coroutine "
 "<coroutine>`.  Not thread-safe."
 msgstr ""
+"Ett :class:`Future-liknande <Future>`\\-objekt som kör en Python :ref:"
+"`coroutine <coroutine>`.  Inte tråd-säkert."
 
 #: ../../library/asyncio-task.rst:1206
 msgid ""
@@ -1562,6 +2271,10 @@ msgid ""
 "completion of the Future.  When the Future is *done*, the execution of the "
 "wrapped coroutine resumes."
 msgstr ""
+"Tasks används för att köra coroutines i händelseslingor. Om en coroutine "
+"väntar på en Future, avbryter Task exekveringen av coroutinen och väntar på "
+"att Future ska slutföras.  När framtiden är *färdig* återupptas exekveringen "
+"av den omslutna coroutinen."
 
 #: ../../library/asyncio-task.rst:1212
 msgid ""
@@ -1569,6 +2282,9 @@ msgid ""
 "time.  While a Task awaits for the completion of a Future, the event loop "
 "runs other Tasks, callbacks, or performs IO operations."
 msgstr ""
+"Eventloops använder kooperativ schemaläggning: en eventloop kör en Task åt "
+"gången.  Medan en Task väntar på att en Future ska slutföras, kör "
+"eventloopen andra Tasks, callbacks eller utför IO-operationer."
 
 #: ../../library/asyncio-task.rst:1217
 msgid ""
@@ -1576,6 +2292,9 @@ msgid ""
 "the low-level :meth:`loop.create_task` or :func:`ensure_future` functions.  "
 "Manual instantiation of Tasks is discouraged."
 msgstr ""
+"Använd högnivåfunktionen :func:`asyncio.create_task` för att skapa Tasks, "
+"eller lågnivåfunktionerna :meth:`loop.create_task` eller :func:"
+"`ensure_future`.  Manuell instansiering av Tasks avråds."
 
 #: ../../library/asyncio-task.rst:1222
 msgid ""
@@ -1584,6 +2303,10 @@ msgid ""
 "coroutine.  If a coroutine is awaiting on a Future object during "
 "cancellation, the Future object will be cancelled."
 msgstr ""
+"För att avbryta en pågående Task används metoden :meth:`cancel`.  Om du "
+"anropar den kommer uppgiften att kasta ett :exc:`CancelledError` undantag i "
+"den omslutna coroutinen.  Om en coroutine väntar på ett Future-objekt under "
+"avbrytandet, kommer Future-objektet att avbrytas."
 
 #: ../../library/asyncio-task.rst:1227
 msgid ""
@@ -1591,12 +2314,17 @@ msgid ""
 "returns ``True`` if the wrapped coroutine did not suppress the :exc:"
 "`CancelledError` exception and was actually cancelled."
 msgstr ""
+":meth:`cancelled` kan användas för att kontrollera om uppgiften avbröts. "
+"Metoden returnerar ``True`` om den inlindade coroutinen inte undertryckte :"
+"exc:`CancelledError` undantaget och faktiskt avbröts."
 
 #: ../../library/asyncio-task.rst:1232
 msgid ""
 ":class:`asyncio.Task` inherits from :class:`Future` all of its APIs except :"
 "meth:`Future.set_result` and :meth:`Future.set_exception`."
 msgstr ""
+":class:`asyncio.Task` ärver från :class:`Future` alla dess API:er utom :meth:"
+"`Future.set_result` och :meth:`Future.set_exception`."
 
 #: ../../library/asyncio-task.rst:1236
 msgid ""
@@ -1605,6 +2333,10 @@ msgid ""
 "provided, the Task copies the current context and later runs its coroutine "
 "in the copied context."
 msgstr ""
+"Ett valfritt argument *context* med endast nyckelord gör det möjligt att "
+"ange en anpassad :class:`contextvars.Context` som *coro* ska köras i. Om "
+"ingen *kontext* anges kopierar uppgiften den aktuella kontexten och kör "
+"senare sin coroutine i den kopierade kontexten."
 
 #: ../../library/asyncio-task.rst:1241
 msgid ""
@@ -1615,95 +2347,123 @@ msgid ""
 "coroutine returns or raises without blocking, the task will be finished "
 "eagerly and will skip scheduling to the event loop."
 msgstr ""
+"Ett valfritt argument *eager_start* som endast innehåller nyckelord gör det "
+"möjligt att ivrigt starta exekveringen av :class:`asyncio.Task` när "
+"uppgiften skapas. Om värdet är satt till ``True`` och händelseslingan körs, "
+"kommer uppgiften att börja exekvera coroutinen omedelbart, tills första "
+"gången coroutinen blockerar. Om coroutinen returnerar eller höjs utan att "
+"blockera, kommer uppgiften att slutföras ivrigt och hoppa över "
+"schemaläggningen till händelseslingan."
 
 #: ../../library/asyncio-task.rst:1248
 msgid "Added support for the :mod:`contextvars` module."
-msgstr ""
+msgstr "Lagt till stöd för modulen :mod:`contextvars`."
 
 #: ../../library/asyncio-task.rst:1254
 msgid ""
 "Deprecation warning is emitted if *loop* is not specified and there is no "
 "running event loop."
 msgstr ""
+"Deprecation-varning utfärdas om *loop* inte anges och det inte finns någon "
+"pågående händelseslinga."
 
 #: ../../library/asyncio-task.rst:1261
 msgid "Added the *eager_start* parameter."
-msgstr ""
+msgstr "Parametern *eager_start* har lagts till."
 
 #: ../../library/asyncio-task.rst:1266
 msgid "Return ``True`` if the Task is *done*."
-msgstr ""
+msgstr "Returnerar ``True`` om uppgiften är *done*."
 
 #: ../../library/asyncio-task.rst:1268
 msgid ""
 "A Task is *done* when the wrapped coroutine either returned a value, raised "
 "an exception, or the Task was cancelled."
 msgstr ""
+"En Task är *färdig* när den omslutna coroutinen antingen returnerade ett "
+"värde, utlöste ett undantag eller när Task avbröts."
 
 #: ../../library/asyncio-task.rst:1273
 msgid "Return the result of the Task."
-msgstr ""
+msgstr "Returnera resultatet av uppgiften."
 
 #: ../../library/asyncio-task.rst:1275
 msgid ""
 "If the Task is *done*, the result of the wrapped coroutine is returned (or "
 "if the coroutine raised an exception, that exception is re-raised.)"
 msgstr ""
+"Om uppgiften är *utförd* returneras resultatet av den omslutna coroutinen "
+"(eller om coroutinen gav upphov till ett undantag, ges det undantaget upp "
+"igen)"
 
 #: ../../library/asyncio-task.rst:1279 ../../library/asyncio-task.rst:1293
 msgid ""
 "If the Task has been *cancelled*, this method raises a :exc:`CancelledError` "
 "exception."
 msgstr ""
+"Om uppgiften har *avbrutits* ger den här metoden upphov till ett :exc:"
+"`CancelledError`\\-undantag."
 
 #: ../../library/asyncio-task.rst:1282
 msgid ""
 "If the Task's result isn't yet available, this method raises an :exc:"
 "`InvalidStateError` exception."
 msgstr ""
+"Om uppgiftens resultat ännu inte är tillgängligt ger denna metod upphov till "
+"ett :exc:`InvalidStateError`\\-undantag."
 
 #: ../../library/asyncio-task.rst:1287
 msgid "Return the exception of the Task."
-msgstr ""
+msgstr "Returnera undantaget för uppgiften."
 
 #: ../../library/asyncio-task.rst:1289
 msgid ""
 "If the wrapped coroutine raised an exception that exception is returned.  If "
 "the wrapped coroutine returned normally this method returns ``None``."
 msgstr ""
+"Om den inkapslade coroutinen gav upphov till ett undantag returneras "
+"undantaget.  Om den inkapslade coroutinen returnerades normalt returnerar "
+"denna metod ``None``."
 
 #: ../../library/asyncio-task.rst:1296
 msgid ""
 "If the Task isn't *done* yet, this method raises an :exc:`InvalidStateError` "
 "exception."
 msgstr ""
+"Om uppgiften inte är *färdig* ännu, ger denna metod upphov till ett :exc:"
+"`InvalidStateError`\\-undantag."
 
 #: ../../library/asyncio-task.rst:1301
 msgid "Add a callback to be run when the Task is *done*."
-msgstr ""
+msgstr "Lägg till en återuppringning som ska köras när uppgiften är *klar*."
 
 #: ../../library/asyncio-task.rst:1303 ../../library/asyncio-task.rst:1312
 msgid "This method should only be used in low-level callback-based code."
 msgstr ""
+"Denna metod bör endast användas i kod som bygger på återuppringning på låg "
+"nivå."
 
 #: ../../library/asyncio-task.rst:1305
 msgid ""
 "See the documentation of :meth:`Future.add_done_callback` for more details."
 msgstr ""
+"Se dokumentationen av :meth:`Future.add_done_callback` för mer information."
 
 #: ../../library/asyncio-task.rst:1310
 msgid "Remove *callback* from the callbacks list."
-msgstr ""
+msgstr "Ta bort *callback* från listan över callbacks."
 
 #: ../../library/asyncio-task.rst:1314
 msgid ""
 "See the documentation of :meth:`Future.remove_done_callback` for more "
 "details."
 msgstr ""
+"Se dokumentationen av :meth:`Future.remove_done_callback` för mer "
+"information."
 
 #: ../../library/asyncio-task.rst:1319
 msgid "Return the list of stack frames for this Task."
-msgstr ""
+msgstr "Returnera listan med stapelramar för denna Task."
 
 #: ../../library/asyncio-task.rst:1321
 msgid ""
@@ -1712,14 +2472,18 @@ msgid ""
 "this returns an empty list. If the coroutine was terminated by an exception, "
 "this returns the list of traceback frames."
 msgstr ""
+"Om den inkapslade coroutinen inte är klar returneras den stack där den är "
+"avbruten.  Om coroutinen har slutförts framgångsrikt eller avbrutits, "
+"returneras en tom lista. Om coroutinen avslutades av ett undantag returneras "
+"listan med spårningsramar."
 
 #: ../../library/asyncio-task.rst:1327
 msgid "The frames are always ordered from oldest to newest."
-msgstr ""
+msgstr "Ramarna är alltid sorterade från äldst till nyast."
 
 #: ../../library/asyncio-task.rst:1329
 msgid "Only one stack frame is returned for a suspended coroutine."
-msgstr ""
+msgstr "Endast en stackram returneras för en avbruten coroutine."
 
 #: ../../library/asyncio-task.rst:1331
 msgid ""
@@ -1729,86 +2493,113 @@ msgid ""
 "newest frames of a stack are returned, but the oldest frames of a traceback "
 "are returned.  (This matches the behavior of the traceback module.)"
 msgstr ""
+"Det valfria argumentet *limit* anger det maximala antalet ramar som ska "
+"returneras; som standard returneras alla tillgängliga ramar. Ordningen på "
+"listan som returneras skiljer sig åt beroende på om en stack eller en "
+"traceback returneras: de nyaste ramarna i en stack returneras, men de äldsta "
+"ramarna i en traceback returneras.  (Detta motsvarar beteendet hos traceback-"
+"modulen)"
 
 #: ../../library/asyncio-task.rst:1340
 msgid "Print the stack or traceback for this Task."
-msgstr ""
+msgstr "Skriv ut stacken eller traceback för den här uppgiften."
 
 #: ../../library/asyncio-task.rst:1342
 msgid ""
 "This produces output similar to that of the traceback module for the frames "
 "retrieved by :meth:`get_stack`."
 msgstr ""
+"Detta ger liknande utdata som traceback-modulen för de ramar som hämtas av :"
+"meth:`get_stack`."
 
 #: ../../library/asyncio-task.rst:1345
 msgid "The *limit* argument is passed to :meth:`get_stack` directly."
-msgstr ""
+msgstr "Argumentet *limit* skickas direkt till :meth:`get_stack`."
 
 #: ../../library/asyncio-task.rst:1347
 msgid ""
 "The *file* argument is an I/O stream to which the output is written; by "
 "default output is written to :data:`sys.stdout`."
 msgstr ""
+"Argumentet *file* är en I/O-ström som utdata skrivs till; som standard "
+"skrivs utdata till :data:`sys.stdout`."
 
 #: ../../library/asyncio-task.rst:1352
 msgid "Return the coroutine object wrapped by the :class:`Task`."
-msgstr ""
+msgstr "Returnerar coroutine-objektet som omsluts av :class:`Task`."
 
 #: ../../library/asyncio-task.rst:1356
 msgid ""
 "This will return ``None`` for Tasks which have already completed eagerly. "
 "See the :ref:`Eager Task Factory <eager-task-factory>`."
 msgstr ""
+"Detta kommer att returnera ``None`` för uppgifter som redan har slutförts "
+"ivrigt. Se :ref:`Eager Task Factory <eager-task-factory>`."
 
 #: ../../library/asyncio-task.rst:1363
 msgid "Newly added eager task execution means result may be ``None``."
 msgstr ""
+"Nyligen tillagd ivrig uppgiftsutförande innebär att resultatet kan vara "
+"``None``."
 
 #: ../../library/asyncio-task.rst:1367
 msgid ""
 "Return the :class:`contextvars.Context` object associated with the task."
 msgstr ""
+"Returnerar :class:`contextvars.Context`\\-objektet som är associerat med "
+"uppgiften."
 
 #: ../../library/asyncio-task.rst:1374
 msgid "Return the name of the Task."
-msgstr ""
+msgstr "Returnera namnet på uppgiften."
 
 #: ../../library/asyncio-task.rst:1376
 msgid ""
 "If no name has been explicitly assigned to the Task, the default asyncio "
 "Task implementation generates a default name during instantiation."
 msgstr ""
+"Om inget namn uttryckligen har tilldelats uppgiften genererar "
+"standardimplementeringen av asyncio-uppgiften ett standardnamn under "
+"instantiering."
 
 #: ../../library/asyncio-task.rst:1384
 msgid "Set the name of the Task."
-msgstr ""
+msgstr "Ange namnet på uppgiften."
 
 #: ../../library/asyncio-task.rst:1386
 msgid ""
 "The *value* argument can be any object, which is then converted to a string."
 msgstr ""
+"Argumentet *value* kan vara vilket objekt som helst, som sedan konverteras "
+"till en sträng."
 
 #: ../../library/asyncio-task.rst:1389
 msgid ""
 "In the default Task implementation, the name will be visible in the :func:"
 "`repr` output of a task object."
 msgstr ""
+"I standardimplementeringen av Task kommer namnet att synas i :func:`repr`\\-"
+"utmatningen från ett Task-objekt."
 
 #: ../../library/asyncio-task.rst:1396
 msgid "Request the Task to be cancelled."
-msgstr ""
+msgstr "Begär att uppgiften ska avbrytas."
 
 #: ../../library/asyncio-task.rst:1398
 msgid ""
 "If the Task is already *done* or *cancelled*, return ``False``, otherwise, "
 "return ``True``."
 msgstr ""
+"Om uppgiften redan är *utförd* eller *annullerad*, returneras ``False``, "
+"annars returneras ``True``."
 
 #: ../../library/asyncio-task.rst:1401
 msgid ""
 "The method arranges for a :exc:`CancelledError` exception to be thrown into "
 "the wrapped coroutine on the next cycle of the event loop."
 msgstr ""
+"Metoden ser till att ett :exc:`CancelledError`\\-undantag kastas in i den "
+"omslutna coroutinen vid nästa cykel i händelseslingan."
 
 #: ../../library/asyncio-task.rst:1404
 msgid ""
@@ -1821,20 +2612,32 @@ msgid ""
 "suppress the cancellation, it needs to call :meth:`Task.uncancel` in "
 "addition to catching the exception."
 msgstr ""
+"Coroutinen har sedan en chans att städa upp eller till och med neka begäran "
+"genom att undertrycka undantaget med ett :keyword:`try` ... ... ... ``except "
+"CancelledError`` ... :keyword:`finally` block. Till skillnad från :meth:"
+"`Future.cancel` garanterar därför :meth:`Task.cancel` inte att uppgiften "
+"kommer att avbrytas, även om det inte är vanligt att helt undertrycka "
+"avbrytande och aktivt avråds från detta.  Om coroutinen ändå bestämmer sig "
+"för att undertrycka annulleringen måste den anropa :meth:`Task.uncancel` "
+"utöver att fånga upp undantaget."
 
 #: ../../library/asyncio-task.rst:1414
 msgid "Added the *msg* parameter."
-msgstr ""
+msgstr "Parametern *msg* har lagts till."
 
 #: ../../library/asyncio-task.rst:1417
 msgid "The ``msg`` parameter is propagated from cancelled task to its awaiter."
 msgstr ""
+"Parametern ``msg`` sprids från den avbrutna uppgiften till den som väntar på "
+"den."
 
 #: ../../library/asyncio-task.rst:1422
 msgid ""
 "The following example illustrates how coroutines can intercept the "
 "cancellation request::"
 msgstr ""
+"Följande exempel illustrerar hur coroutines kan fånga upp begäran om "
+"annullering::"
 
 #: ../../library/asyncio-task.rst:1425
 msgid ""
@@ -1872,10 +2675,43 @@ msgid ""
 "#     cancel_me(): after sleep\n"
 "#     main(): cancel_me is cancelled now"
 msgstr ""
+"async def cancel_me():\n"
+"    print('cancel_me(): före sömn')\n"
+"\n"
+"    försök:\n"
+"        # Vänta i 1 timme\n"
+"        await asyncio.sleep(3600)\n"
+"    except asyncio.CancelledError:\n"
+"        print('cancel_me(): avbryt sömn')\n"
+"        höja\n"
+"    slutligen:\n"
+"        print('cancel_me(): efter sömn')\n"
+"\n"
+"async def main():\n"
+"    # Skapa en \"cancel_me\"-uppgift\n"
+"    uppgift = asyncio.create_task(cancel_me())\n"
+"\n"
+"    # Vänta i 1 sekund\n"
+"    await asyncio.sleep(1)\n"
+"\n"
+"    uppgift.avbryt()\n"
+"    försök:\n"
+"        await uppgift\n"
+"    except asyncio.CancelledError:\n"
+"        print(\"main(): cancel_me är avbruten nu\")\n"
+"\n"
+"asyncio.run(main())\n"
+"\n"
+"# Förväntad utgång:\n"
+"#\n"
+"# cancel_me(): före sömn\n"
+"# cancel_me(): avbryta sömn\n"
+"# cancel_me(): efter sömn\n"
+"# main(): cancel_me är avbruten nu"
 
 #: ../../library/asyncio-task.rst:1461
 msgid "Return ``True`` if the Task is *cancelled*."
-msgstr ""
+msgstr "Returnerar ``True`` om uppgiften är *annullerad*."
 
 #: ../../library/asyncio-task.rst:1463
 msgid ""
@@ -1883,20 +2719,25 @@ msgid ""
 "`cancel` and the wrapped coroutine propagated the :exc:`CancelledError` "
 "exception thrown into it."
 msgstr ""
+"Uppgiften är *avbruten* när avbrytandet begärdes med :meth:`cancel` och den "
+"omslutna coroutinen spred undantaget :exc:`CancelledError` som kastades in i "
+"den."
 
 #: ../../library/asyncio-task.rst:1469
 msgid "Decrement the count of cancellation requests to this Task."
-msgstr ""
+msgstr "Minska antalet avbokningsbegäranden för den här uppgiften."
 
 #: ../../library/asyncio-task.rst:1471
 msgid "Returns the remaining number of cancellation requests."
-msgstr ""
+msgstr "Returnerar det återstående antalet avbokningsbegäranden."
 
 #: ../../library/asyncio-task.rst:1473
 msgid ""
 "Note that once execution of a cancelled task completed, further calls to :"
 "meth:`uncancel` are ineffective."
 msgstr ""
+"Observera att när en avbruten uppgift har utförts är ytterligare anrop till :"
+"meth:`uncancel` ineffektiva."
 
 #: ../../library/asyncio-task.rst:1478
 msgid ""
@@ -1906,6 +2747,11 @@ msgid ""
 "func:`asyncio.timeout` to continue running, isolating cancellation to the "
 "respective structured block. For example::"
 msgstr ""
+"Den här metoden används av asyncios interna funktioner och förväntas inte "
+"användas av slutanvändarkod.  I synnerhet, om en uppgift framgångsrikt "
+"avbokas, gör detta att element av strukturerad samtidighet som :ref:"
+"`taskgroups` och :func:`asyncio.timeout` kan fortsätta att köras, vilket "
+"isolerar avbokningen till respektive strukturerat block. Till exempel::"
 
 #: ../../library/asyncio-task.rst:1485
 msgid ""
@@ -1920,6 +2766,16 @@ msgid ""
 "    # Outer code not affected by the timeout:\n"
 "    await unrelated_code()"
 msgstr ""
+"async def make_request_with_timeout():\n"
+"    try:\n"
+"        async med asyncio.timeout(1):\n"
+"            # Strukturerat block som påverkas av timeouten:\n"
+"            await make_request()\n"
+"            await make_another_request()\n"
+"    except TimeoutError:\n"
+"        log(\"Det uppstod en timeout\")\n"
+"    # Yttre kod som inte påverkas av timeouten:\n"
+"    await orelaterad_kod()"
 
 #: ../../library/asyncio-task.rst:1496
 msgid ""
@@ -1929,6 +2785,10 @@ msgid ""
 "`uncancel`.  :class:`TaskGroup` context managers use :func:`uncancel` in a "
 "similar fashion."
 msgstr ""
+"Medan blocken med ``make_request()`` och ``make_another_request()`` kan "
+"avbrytas på grund av timeout, bör ``unrelated_code()`` fortsätta att köras "
+"även om timeout inträffar.  Detta implementeras med :meth:`uncancel`. :class:"
+"`TaskGroup` kontexthanterare använder :func:`uncancel` på ett liknande sätt."
 
 #: ../../library/asyncio-task.rst:1502
 msgid ""
@@ -1936,6 +2796,9 @@ msgid ""
 "exc:`CancelledError`, it needs to call this method to remove the "
 "cancellation state."
 msgstr ""
+"Om slutanvändarkoden av någon anledning undertrycker annullering genom att "
+"fånga :exc:`CancelledError`, måste den anropa denna metod för att ta bort "
+"annulleringstillståndet."
 
 #: ../../library/asyncio-task.rst:1506
 msgid ""
@@ -1945,16 +2808,24 @@ msgid ""
 "that arrangement will be rescinded (by resetting the internal "
 "``_must_cancel`` flag)."
 msgstr ""
+"När den här metoden minskar antalet avbokningar till noll, kontrollerar "
+"metoden om ett tidigare :meth:`cancel`\\-anrop hade ordnat så att :exc:"
+"`CancelledError` kunde kastas in i uppgiften. Om det inte har gjorts ännu, "
+"kommer det arrangemanget att återkallas (genom att återställa den interna "
+"``_must_cancel`` flaggan)."
 
 #: ../../library/asyncio-task.rst:1512
 msgid "Changed to rescind pending cancellation requests upon reaching zero."
 msgstr ""
+"Ändrad för att återkalla pågående annulleringsförfrågningar när de når noll."
 
 #: ../../library/asyncio-task.rst:1517
 msgid ""
 "Return the number of pending cancellation requests to this Task, i.e., the "
 "number of calls to :meth:`cancel` less the number of :meth:`uncancel` calls."
 msgstr ""
+"Returnerar antalet väntande avbokningsbegäranden till denna uppgift, dvs. "
+"antalet anrop till :meth:`cancel` minus antalet anrop till :meth:`uncancel`."
 
 #: ../../library/asyncio-task.rst:1521
 msgid ""
@@ -1964,9 +2835,16 @@ msgid ""
 "the task not being cancelled after all if the cancellation requests go down "
 "to zero."
 msgstr ""
+"Observera att om detta antal är större än noll men uppgiften fortfarande "
+"körs, kommer :meth:`cancelled` fortfarande att returnera ``False``. Detta "
+"beror på att detta antal kan sänkas genom att anropa :meth:`uncancel`, "
+"vilket kan leda till att uppgiften inte avbryts trots allt om begäran om "
+"avbrytande går ner till noll."
 
 #: ../../library/asyncio-task.rst:1527
 msgid ""
 "This method is used by asyncio's internals and isn't expected to be used by "
 "end-user code.  See :meth:`uncancel` for more details."
 msgstr ""
+"Den här metoden används av asyncios interna funktioner och förväntas inte "
+"användas av slutanvändarkod.  Se :meth:`uncancel` för mer information."
