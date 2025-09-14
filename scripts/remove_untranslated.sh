@@ -5,8 +5,6 @@
 
 set -o pipefail
 
-trap "rm -vf $po" 1 2 3 6
-
 if [ -n "$1" ]; then
   cd "$1" || exit 1
 fi
