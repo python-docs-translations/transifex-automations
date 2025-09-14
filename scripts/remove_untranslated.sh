@@ -37,5 +37,7 @@ fi
 
 if [ ${#to_check[@]} -ne 0 ]; then
   echo "These PO files failed msgfmt (not removed, please check):"
-  echo "${to_check[@]}"
+  for file in "${to_check[@]}"; do
+    echo "- ${file}"
+  done
 fi
