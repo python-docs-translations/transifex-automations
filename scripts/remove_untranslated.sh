@@ -3,19 +3,22 @@
 # e.g.:
 #   remove_untranslated.sh cpython/Doc/locales
 
-set -ex
-
-trap "rm -vf $po" 1 2 3 6
+set -o pipefail
 
 if [ -n "$1" ]; then
-  cd "$1"
+  cd "$1" || exit 1
 fi
 
 pofiles=$(find * -name '*.po' | sort)
+to_check=()
 to_remove=()
 for po in $pofiles; do
   output=$(LC_ALL=C /usr/bin/msgfmt -cvo /dev/null $po 2>&1 | grep -E '[0-9] translated message')
-  if $(echo $output | grep '^0 translated messages' > /dev/null); then
+  if [ $? -ne 0 ]; then
+    echo "** msgfmt failed: $po"
+    to_check+=($po)
+  elif $(echo $output | grep '^0 translated messages' > /dev/null); then
+    echo "Including to removal: $po"
     to_remove+=($po)
   fi
 done
@@ -24,5 +27,17 @@ done
 if [ ${#to_remove[@]} -eq 0 ]; then
   echo "No empty PO to remove."
 else
-  git rm ${to_remove[@]}
+  echo -n "Removing... "
+  if rm ${to_remove[@]}; then
+    echo "Done!"
+  else
+    echo "Failed!"
+  fi
+fi
+
+if [ ${#to_check[@]} -ne 0 ]; then
+  echo "These PO files failed msgfmt (not removed, please check):"
+  for file in "${to_check[@]}"; do
+    echo "- ${file}"
+  done
 fi
