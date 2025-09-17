@@ -5,15 +5,16 @@
 #
 # Translators:
 # python-doc bot, 2025
+# André Moreira <afrmscb@gmail.com>, 2025
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-16 17:23+0000\n"
+"POT-Creation-Date: 2025-09-17 14:21+0000\n"
 "PO-Revision-Date: 2025-09-16 00:00+0000\n"
-"Last-Translator: python-doc bot, 2025\n"
+"Last-Translator: André Moreira <afrmscb@gmail.com>, 2025\n"
 "Language-Team: Portuguese (Portugal) (https://app.transifex.com/python-doc/"
 "teams/5390/pt_PT/)\n"
 "MIME-Version: 1.0\n"
@@ -3518,12 +3519,15 @@ msgstr ""
 #: ../../c-api/init_config.rst:2013
 msgid "If non-zero, write performance statistics at Python exit."
 msgstr ""
+"Se diferente de zero, grava estatísticas de desempenho ao sair do Python."
 
 #: ../../c-api/init_config.rst:2015
 msgid ""
 "Need a special build with the ``Py_STATS`` macro: see :option:`--enable-"
 "pystats`."
 msgstr ""
+"Precisa de uma compilação especial com a macro ``Py_STATS``: consulte :"
+"option:`--enable-pystats`."
 
 #: ../../c-api/init_config.rst:2020
 msgid ""
@@ -3532,26 +3536,34 @@ msgid ""
 "line arguments <using-on-cmdline>`, and Python arguments are stripped from :"
 "c:member:`~PyConfig.argv`."
 msgstr ""
+"Se :c:member:`~PyConfig.parse_argv` for diferente de zero, os argumentos :c:"
+"member:`~PyConfig.argv` são analisados da mesma forma que o Python normal "
+"analisa :ref:`argumentos da linha de comando <using-on-cmdline>`, e os "
+"argumentos do Python são removidos de :c:member:`~PyConfig.argv`."
 
 #: ../../c-api/init_config.rst:2025
 msgid ""
 "The :c:member:`~PyConfig.xoptions` options are parsed to set other options: "
 "see the :option:`-X` command line option."
 msgstr ""
+"As opções :c:member:`~PyConfig.xoptions` são analisadas para definir outras "
+"opções: consulte a opção de linha de comando :option:`-X`."
 
 #: ../../c-api/init_config.rst:2030
 msgid "The ``show_alloc_count`` field has been removed."
-msgstr ""
+msgstr "O campo ``show_alloc_count`` foi removido."
 
 #: ../../c-api/init_config.rst:2036
 msgid "Initialization with PyConfig"
-msgstr ""
+msgstr "Inicialização com PyConfig"
 
 #: ../../c-api/init_config.rst:2038
 msgid ""
 "Initializing the interpreter from a populated configuration struct is "
 "handled by calling :c:func:`Py_InitializeFromConfig`."
 msgstr ""
+"A inicialização do interpretador a partir de uma estrutura de configuração "
+"preenchida é feita através da chamada :c:func:`Py_InitializeFromConfig`."
 
 #: ../../c-api/init_config.rst:2044
 msgid ""
@@ -3561,16 +3573,24 @@ msgid ""
 "initialized multiple times, :c:func:`PyImport_AppendInittab` or :c:func:"
 "`PyImport_ExtendInittab` must be called before each Python initialization."
 msgstr ""
+"Se :c:func:`PyImport_FrozenModules`, :c:func:`PyImport_AppendInittab` ou :c:"
+"func:`PyImport_ExtendInittab` forem usados, eles devem ser definidos ou "
+"chamados após a pré-inicialização do Python e antes da inicialização do "
+"Python. Se o Python for inicializado várias vezes, :c:func:"
+"`PyImport_AppendInittab` ou :c:func:`PyImport_ExtendInittab` devem ser "
+"chamados antes de cada inicialização do Python."
 
 #: ../../c-api/init_config.rst:2051
 msgid ""
 "The current configuration (``PyConfig`` type) is stored in "
 "``PyInterpreterState.config``."
 msgstr ""
+"A configuração atual (tipo ``PyConfig``) é armazenada em "
+"``PyInterpreterState.config``."
 
 #: ../../c-api/init_config.rst:2054
 msgid "Example setting the program name::"
-msgstr ""
+msgstr "Exemplo de definição do nome do programa::"
 
 #: ../../c-api/init_config.rst:2056
 msgid ""
@@ -3600,6 +3620,32 @@ msgid ""
 "    Py_ExitStatusException(status);\n"
 "}"
 msgstr ""
+"void init_python(void)\n"
+"{\n"
+"    PyStatus status;\n"
+"\n"
+"    PyConfig config;\n"
+"    PyConfig_InitPythonConfig(&config);\n"
+"\n"
+"    /* Define o nome do programa. Pré-inicializa implicitamenta o Python. "
+"*/\n"
+"    status = PyConfig_SetString(&config, &config.program_name,\n"
+"                                L\"/path/to/my_program\");\n"
+"    if (PyStatus_Exception(status)) {\n"
+"        goto exception;\n"
+"    }\n"
+"\n"
+"    status = Py_InitializeFromConfig(&config);\n"
+"    if (PyStatus_Exception(status)) {\n"
+"        goto exception;\n"
+"    }\n"
+"    PyConfig_Clear(&config);\n"
+"    return;\n"
+"\n"
+"exception:\n"
+"    PyConfig_Clear(&config);\n"
+"    Py_ExitStatusException(status);\n"
+"}"
 
 #: ../../c-api/init_config.rst:2082
 msgid ""
@@ -3609,6 +3655,12 @@ msgid ""
 "read from the configuration structure. Any values set before initialize is "
 "called will be left unchanged by initialization::"
 msgstr ""
+"Exemplo mais completo modificando a configuração padrão, lendo a "
+"configuração e, em seguida, substituindo alguns parâmetros. Observe que, "
+"desde a versão 3.11, muitos parâmetros não são calculados até a "
+"inicialização e, portanto, os valores não podem ser lidos da estrutura de "
+"configuração. Quaisquer valores definidos antes da chamada da inicialização "
+"permanecerão inalterados pela inicialização::"
 
 #: ../../c-api/init_config.rst:2089
 msgid ""
