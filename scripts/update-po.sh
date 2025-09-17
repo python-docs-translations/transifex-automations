@@ -103,4 +103,3 @@ if [ $SKIP_TRANSLATIONS_UPDATE -eq 0 ]; then
     done
     powrap $(find . -name '*.po' | sort)
 fi
-
