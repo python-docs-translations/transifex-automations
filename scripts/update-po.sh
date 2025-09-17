@@ -77,7 +77,7 @@ if [ $SKIP_POT_UPDATE -eq 0 ]; then
     cd "$cpython_dir/Doc"
     ln -sr "$locales_dir" locales
     make clean venv
-    opts='-E -b gettext -D gettext_compact=0 -d build/doctrees-gettext . build/gettext' 
+    opts='-E -b gettext -D gettext_compact=0 -d build/doctrees-gettext . build/gettext'
     make build ALLSPHINXOPTS="$opts"
 
     echo "Moving pot files into locales directory"
