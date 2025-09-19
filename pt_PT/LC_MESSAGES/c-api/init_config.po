@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 14:21+0000\n"
+"POT-Creation-Date: 2025-09-19 14:16+0000\n"
 "PO-Revision-Date: 2025-09-16 00:00+0000\n"
 "Last-Translator: André Moreira <afrmscb@gmail.com>, 2025\n"
 "Language-Team: Portuguese (Portugal) (https://app.transifex.com/python-doc/"
@@ -3716,10 +3716,62 @@ msgid ""
 "    return status;\n"
 "}"
 msgstr ""
+"PyStatus init_python(const char *program_name)\n"
+"{\n"
+"    PyStatus status;\n"
+"\n"
+"    PyConfig config;\n"
+"    PyConfig_InitPythonConfig(&config);\n"
+"\n"
+"    /* Define o nome do programa antes de ler a configuração\n"
+"       (descodifica a string de bytes da codificação local).\n"
+"\n"
+"       Pré-inicializa implicitamente o Python. */\n"
+"    status = PyConfig_SetBytesString(&config, &config.program_name,\n"
+"                                     program_name);\n"
+"    if (PyStatus_Exception(status)) {\n"
+"        goto done;\n"
+"    }\n"
+"\n"
+"    /* Leia toda a configuração de uma só vez */\n"
+"    status = PyConfig_Read(&config);\n"
+"    if (PyStatus_Exception(status)) {\n"
+"        goto done;\n"
+"    }\n"
+"\n"
+"    /* Especifica explicitamente sys.path */\n"
+"    /* Se pretender modificar o conjunto padrão de caminhos, Conclua\n"
+"       a inicialização primeiro e, em seguida, utilize "
+"PySys_GetObject(\"path\") */\n"
+"    config.module_search_paths_set = 1;\n"
+"    status = PyWideStringList_Append(&config.module_search_paths,\n"
+"                                     L\"/path/to/stdlib\");\n"
+"    if (PyStatus_Exception(status)) {\n"
+"        goto done;\n"
+"    }\n"
+"    status = PyWideStringList_Append(&config.module_search_paths,\n"
+"                                     L\"/path/to/more/modules\");\n"
+"    if (PyStatus_Exception(status)) {\n"
+"        goto done;\n"
+"    }\n"
+"\n"
+"    /* Substitui o executável calculado por PyConfig_Read() */\n"
+"    status = PyConfig_SetString(&config, &config.executable,\n"
+"                                L\"/path/to/my_executable\");\n"
+"    if (PyStatus_Exception(status)) {\n"
+"        goto done;\n"
+"    }\n"
+"\n"
+"    status = Py_InitializeFromConfig(&config);\n"
+"\n"
+"done:\n"
+"    PyConfig_Clear(&config);\n"
+"    return status;\n"
+"}"
 
 #: ../../c-api/init_config.rst:2145
 msgid "Isolated Configuration"
-msgstr ""
+msgstr "Configuração isolada"
 
 #: ../../c-api/init_config.rst:2147
 msgid ""
@@ -3727,6 +3779,9 @@ msgid ""
 "`PyConfig_InitIsolatedConfig` functions create a configuration to isolate "
 "Python from the system. For example, to embed Python into an application."
 msgstr ""
+"As funções :c:func:`PyPreConfig_InitIsolatedConfig` e :c:func:"
+"`PyConfig_InitIsolatedConfig` criam uma configuração para isolar o Python do "
+"sistema. Por exemplo, para incorporar o Python numa aplicação."
 
 #: ../../c-api/init_config.rst:2152
 msgid ""
@@ -3735,6 +3790,11 @@ msgid ""
 "and user site directory. The C standard streams (ex: ``stdout``) and the "
 "LC_CTYPE locale are left unchanged. Signal handlers are not installed."
 msgstr ""
+"Esta configuração ignora variáveis de configuração globais, variáveis de "
+"ambiente, argumentos de linha de comando (:c:member:`PyConfig.argv` não é "
+"analisado) e diretório do site do utilizador. Os fluxos padrão C (ex: "
+"``stdout``) e a localidade LC_CTYPE permanecem inalterados. Os manipuladores "
+"de sinal não são instalados."
 
 #: ../../c-api/init_config.rst:2157
 msgid ""
@@ -3742,10 +3802,14 @@ msgid ""
 "paths that are unspecified. Ensure :c:member:`PyConfig.home` is specified to "
 "avoid computing the default path configuration."
 msgstr ""
+"Os ficheiros de configuração ainda são usados com esta configuração para "
+"determinar caminhos que não estão especificados. Certifique-se de que :c:"
+"member:`PyConfig.home` está especificado para evitar o cálculo da "
+"configuração do caminho padrão."
 
 #: ../../c-api/init_config.rst:2165
 msgid "Python Configuration"
-msgstr ""
+msgstr "Configuração Python"
 
 #: ../../c-api/init_config.rst:2167
 msgid ""
@@ -3753,12 +3817,18 @@ msgid ""
 "`PyConfig_InitPythonConfig` functions create a configuration to build a "
 "customized Python which behaves as the regular Python."
 msgstr ""
+"As funções :c:func:`PyPreConfig_InitPythonConfig` e :c:func:"
+"`PyConfig_InitPythonConfig` criam uma configuração para construir um Python "
+"personalizado que se comporta como o Python normal."
 
 #: ../../c-api/init_config.rst:2171
 msgid ""
 "Environments variables and command line arguments are used to configure "
 "Python, whereas global configuration variables are ignored."
 msgstr ""
+"Variáveis de ambiente e argumentos de linha de comando são usados para "
+"configurar o Python, enquanto variáveis de configuração globais são "
+"ignoradas."
 
 #: ../../c-api/init_config.rst:2174
 msgid ""
@@ -3766,52 +3836,59 @@ msgid ""
 "Mode <utf8-mode>` (:pep:`540`) depending on the LC_CTYPE locale, :envvar:"
 "`PYTHONUTF8` and :envvar:`PYTHONCOERCECLOCALE` environment variables."
 msgstr ""
+"Esta função permite a coerção de localidade C (:pep:`538`) e :ref:`Modo "
+"UTF-8 do Python <utf8-mode>` (:pep:`540`) dependendo da localidade LC_CTYPE, "
+"das variáveis de ambiente :envvar:`PYTHONUTF8` e :envvar:"
+"`PYTHONCOERCECLOCALE`."
 
 #: ../../c-api/init_config.rst:2183
 msgid "Python Path Configuration"
-msgstr ""
+msgstr "Configuração do caminho do Python"
 
 #: ../../c-api/init_config.rst:2185
 msgid ":c:type:`PyConfig` contains multiple fields for the path configuration:"
 msgstr ""
+":c:type:`PyConfig` contém vários campos para a configuração do caminho:"
 
 #: ../../c-api/init_config.rst:2187
 msgid "Path configuration inputs:"
-msgstr ""
+msgstr "Entradas de configuração do caminho:"
 
 #: ../../c-api/init_config.rst:2189
 msgid ":c:member:`PyConfig.home`"
-msgstr ""
+msgstr ":c:member:`PyConfig.home`"
 
 #: ../../c-api/init_config.rst:2190
 msgid ":c:member:`PyConfig.platlibdir`"
-msgstr ""
+msgstr ":c:member:`PyConfig.platlibdir`"
 
 #: ../../c-api/init_config.rst:2191
 msgid ":c:member:`PyConfig.pathconfig_warnings`"
-msgstr ""
+msgstr ":c:member:`PyConfig.pathconfig_warnings`"
 
 #: ../../c-api/init_config.rst:2192
 msgid ":c:member:`PyConfig.program_name`"
-msgstr ""
+msgstr ":c:member:`PyConfig.program_name`"
 
 #: ../../c-api/init_config.rst:2193
 msgid ":c:member:`PyConfig.pythonpath_env`"
-msgstr ""
+msgstr ":c:member:`PyConfig.pythonpath_env`"
 
 #: ../../c-api/init_config.rst:2194
 msgid "current working directory: to get absolute paths"
-msgstr ""
+msgstr "diretório de trabalho atual: para obter caminhos absolutos"
 
 #: ../../c-api/init_config.rst:2195
 msgid ""
 "``PATH`` environment variable to get the program full path (from :c:member:"
 "`PyConfig.program_name`)"
 msgstr ""
+"Variável de ambiente ``PATH`` para obter o caminho completo do programa (de :"
+"c:member:`PyConfig.program_name`)"
 
 #: ../../c-api/init_config.rst:2197
 msgid "``__PYVENV_LAUNCHER__`` environment variable"
-msgstr ""
+msgstr "Variável de ambiente ``__PYVENV_LAUNCHER__``"
 
 #: ../../c-api/init_config.rst:2198
 msgid ""
@@ -3819,40 +3896,45 @@ msgid ""
 "\"Software\\Python\\PythonCore\\X.Y\\PythonPath\" of HKEY_CURRENT_USER and "
 "HKEY_LOCAL_MACHINE (where X.Y is the Python version)."
 msgstr ""
+"(Apenas Windows) Caminhos de aplicação no registo em "
+"«Software\\Python\\PythonCore\\X.Y\\PythonPath» de HKEY_CURRENT_USER e "
+"HKEY_LOCAL_MACHINE (onde X.Y é a versão do Python)."
 
 #: ../../c-api/init_config.rst:2202
 msgid "Path configuration output fields:"
-msgstr ""
+msgstr "Campos de saída da configuração do caminho:"
 
 #: ../../c-api/init_config.rst:2204
 msgid ":c:member:`PyConfig.base_exec_prefix`"
-msgstr ""
+msgstr ":c:member:`PyConfig.base_exec_prefix`"
 
 #: ../../c-api/init_config.rst:2205
 msgid ":c:member:`PyConfig.base_executable`"
-msgstr ""
+msgstr ":c:member:`PyConfig.base_executable`"
 
 #: ../../c-api/init_config.rst:2206
 msgid ":c:member:`PyConfig.base_prefix`"
-msgstr ""
+msgstr ":c:member:`PyConfig.base_prefix`"
 
 #: ../../c-api/init_config.rst:2207
 msgid ":c:member:`PyConfig.exec_prefix`"
-msgstr ""
+msgstr ":c:member:`PyConfig.exec_prefix`"
 
 #: ../../c-api/init_config.rst:2208
 msgid ":c:member:`PyConfig.executable`"
-msgstr ""
+msgstr ":c:member:`PyConfig.executable`"
 
 #: ../../c-api/init_config.rst:2209
 msgid ""
 ":c:member:`PyConfig.module_search_paths_set`, :c:member:`PyConfig."
 "module_search_paths`"
 msgstr ""
+":c:member:`PyConfig.module_search_paths_set`, :c:member:`PyConfig."
+"module_search_paths`"
 
 #: ../../c-api/init_config.rst:2211
 msgid ":c:member:`PyConfig.prefix`"
-msgstr ""
+msgstr ":c:member:`PyConfig.prefix`"
 
 #: ../../c-api/init_config.rst:2213
 msgid ""
@@ -3862,6 +3944,11 @@ msgid ""
 "module_search_paths` is overridden and :c:member:`~PyConfig."
 "module_search_paths_set` is set to ``1``."
 msgstr ""
+"Se pelo menos um «campo de saída» não estiver definido, o Python calcula a "
+"configuração do caminho para preencher os campos não definidos. Se :c:member:"
+"`~PyConfig.module_search_paths_set` for igual a ``0``, :c:member:`~PyConfig."
+"module_search_paths` é substituído e :c:member:`~PyConfig."
+"module_search_paths_set` é definido como ``1``."
 
 #: ../../c-api/init_config.rst:2219
 msgid ""
@@ -3872,6 +3959,12 @@ msgid ""
 "is set to ``1``. In this case, ``module_search_paths`` will be used without "
 "modification."
 msgstr ""
+"É possível ignorar completamente a função que calcula a configuração do "
+"caminho padrão, definindo explicitamente todos os campos de saída da "
+"configuração do caminho listados acima. Uma string é considerada definida "
+"mesmo que não esteja vazia. ``module_search_paths`` é considerado definido "
+"se ``module_search_paths_set`` estiver definido como ``1``. Neste caso, "
+"``module_search_paths`` será usado sem modificações."
 
 #: ../../c-api/init_config.rst:2226
 msgid ""
@@ -3879,6 +3972,9 @@ msgid ""
 "when calculating the path configuration (Unix only, Windows does not log any "
 "warning)."
 msgstr ""
+"Defina :c:member:`~PyConfig.pathconfig_warnings` como ``0`` para suprimir "
+"avisos ao calcular a configuração do caminho (apenas Unix, o Windows não "
+"regista nenhum aviso)."
 
 #: ../../c-api/init_config.rst:2229
 msgid ""
@@ -3886,10 +3982,14 @@ msgid ""
 "base_exec_prefix` fields are not set, they inherit their value from :c:"
 "member:`~PyConfig.prefix` and :c:member:`~PyConfig.exec_prefix` respectively."
 msgstr ""
+"Se os campos :c:member:`~PyConfig.base_prefix` ou :c:member:`~PyConfig."
+"base_exec_prefix` não estiverem definidos, eles herdam o seu valor de :c:"
+"member:`~PyConfig.prefix` e :c:member:`~PyConfig.exec_prefix`, "
+"respetivamente."
 
 #: ../../c-api/init_config.rst:2233
 msgid ":c:func:`Py_RunMain` and :c:func:`Py_Main` modify :data:`sys.path`:"
-msgstr ""
+msgstr ":c:func:`Py_RunMain` e :c:func:`Py_Main` modificam :data:`sys.path`:"
 
 #: ../../c-api/init_config.rst:2235
 msgid ""
@@ -3897,26 +3997,34 @@ msgid ""
 "contains a ``__main__.py`` script, prepend :c:member:`~PyConfig."
 "run_filename` to :data:`sys.path`."
 msgstr ""
+"Se :c:member:`~PyConfig.run_filename` estiver definido e for um diretório "
+"que contém um script ``__main__.py``, acrescente :c:member:`~PyConfig."
+"run_filename` ao :data:`sys.path`."
 
 #: ../../c-api/init_config.rst:2238
 msgid "If :c:member:`~PyConfig.isolated` is zero:"
-msgstr ""
+msgstr "Se :c:member:`~PyConfig.isolated` for zero:"
 
 #: ../../c-api/init_config.rst:2240
 msgid ""
 "If :c:member:`~PyConfig.run_module` is set, prepend the current directory "
 "to :data:`sys.path`. Do nothing if the current directory cannot be read."
 msgstr ""
+"Se :c:member:`~PyConfig.run_module` estiver definido, acrescente o diretório "
+"atual ao :data:`sys.path`. Não faça nada se o diretório atual não puder ser "
+"lido."
 
 #: ../../c-api/init_config.rst:2242
 msgid ""
 "If :c:member:`~PyConfig.run_filename` is set, prepend the directory of the "
 "filename to :data:`sys.path`."
 msgstr ""
+"Se :c:member:`~PyConfig.run_filename` estiver definido, acrescente o "
+"diretório do nome do ficheiro a :data:`sys.path`."
 
 #: ../../c-api/init_config.rst:2244
 msgid "Otherwise, prepend an empty string to :data:`sys.path`."
-msgstr ""
+msgstr "Caso contrário, acrescente uma string vazia ao :data:`sys.path`."
 
 #: ../../c-api/init_config.rst:2246
 msgid ""
@@ -3926,42 +4034,49 @@ msgid ""
 "exists, the :mod:`site` module appends the user's site-package directory to :"
 "data:`sys.path`."
 msgstr ""
+"Se :c:member:`~PyConfig.site_import` for diferente de zero, :data:`sys.path` "
+"pode ser modificado pelo módulo :mod:`site`. Se :c:member:`~PyConfig."
+"user_site_directory` for diferente de zero e o diretório site-package do "
+"utilizador existir, o módulo :mod:`site` acrescenta o diretório site-package "
+"do utilizador a :data:`sys.path`."
 
 #: ../../c-api/init_config.rst:2252
 msgid "The following configuration files are used by the path configuration:"
 msgstr ""
+"Os seguintes ficheiros de configuração são utilizados pela configuração do "
+"caminho:"
 
 #: ../../c-api/init_config.rst:2254
 msgid "``pyvenv.cfg``"
-msgstr ""
+msgstr "``pyvenv.cfg``"
 
 #: ../../c-api/init_config.rst:2255
 msgid "``._pth`` file (ex: ``python._pth``)"
-msgstr ""
+msgstr "ficheiro ``._pth`` (ex: ``python._pth``)"
 
 #: ../../c-api/init_config.rst:2256
 msgid "``pybuilddir.txt`` (Unix only)"
-msgstr ""
+msgstr "``pybuilddir.txt`` (apenas Unix)"
 
 #: ../../c-api/init_config.rst:2258
 msgid "If a ``._pth`` file is present:"
-msgstr ""
+msgstr "Se um ficheiro ``._pth`` estiver presente:"
 
 #: ../../c-api/init_config.rst:2260
 msgid "Set :c:member:`~PyConfig.isolated` to ``1``."
-msgstr ""
+msgstr "Defina :c:member:`~PyConfig.isolated` como ``1``."
 
 #: ../../c-api/init_config.rst:2261
 msgid "Set :c:member:`~PyConfig.use_environment` to ``0``."
-msgstr ""
+msgstr "Defina :c:member:`~PyConfig.use_environment` como ``0``."
 
 #: ../../c-api/init_config.rst:2262
 msgid "Set :c:member:`~PyConfig.site_import` to ``0``."
-msgstr ""
+msgstr "Defina :c:member:`~PyConfig.site_import` como ``0``."
 
 #: ../../c-api/init_config.rst:2263
 msgid "Set :c:member:`~PyConfig.safe_path` to ``1``."
-msgstr ""
+msgstr "Defina :c:member:`~PyConfig.safe_path` como ``1``."
 
 #: ../../c-api/init_config.rst:2265
 msgid ""
@@ -3973,12 +4088,21 @@ msgid ""
 "to the base installation. See :ref:`sys-path-init-virtual-environments` for "
 "more information."
 msgstr ""
+"Se :c:member:`~PyConfig.home` não estiver definido e um ficheiro ``pyvenv."
+"cfg`` estiver presente no mesmo diretório que :c:member:`~PyConfig."
+"executable`, ou seu pai, :c:member:`~PyConfig.prefix` e :c:member:`~PyConfig."
+"exec_prefix` serão definidos nessa localização. Quando isso acontece, :c:"
+"member:`~PyConfig.base_prefix` e :c:member:`~PyConfig.base_exec_prefix` "
+"ainda mantêm o seu valor, apontando para a instalação base. Consulte :ref:"
+"`sys-path-init-virtual-environments` para obter mais informações."
 
 #: ../../c-api/init_config.rst:2273
 msgid ""
 "The ``__PYVENV_LAUNCHER__`` environment variable is used to set :c:member:"
 "`PyConfig.base_executable`."
 msgstr ""
+"A variável de ambiente ``__PYVENV_LAUNCHER__`` é usada para definir :c:"
+"member:`PyConfig.base_executable`."
 
 #: ../../c-api/init_config.rst:2278
 msgid ""
@@ -3986,28 +4110,35 @@ msgid ""
 "set to the ``pyvenv.cfg`` directory. This was previously done by :mod:"
 "`site`, therefore affected by :option:`-S`."
 msgstr ""
+":c:member:`~PyConfig.prefix` e :c:member:`~PyConfig.exec_prefix` agora estão "
+"definidos para o diretório ``pyvenv.cfg``. Anteriormente, isso era feito "
+"por :mod:`site`, portanto, afetado por :option:`-S`."
 
 #: ../../c-api/init_config.rst:2284
 msgid "Py_GetArgcArgv()"
-msgstr ""
+msgstr "Py_GetArgcArgv()"
 
 #: ../../c-api/init_config.rst:2288
 msgid "Get the original command line arguments, before Python modified them."
 msgstr ""
+"Obtenha os argumentos originais da linha de comando, antes que o Python os "
+"modifique."
 
 #: ../../c-api/init_config.rst:2290
 msgid "See also :c:member:`PyConfig.orig_argv` member."
-msgstr ""
+msgstr "Veja também o membro :c:member:`PyConfig.orig_argv`."
 
 #: ../../c-api/init_config.rst:2293
 msgid "Delaying main module execution"
-msgstr ""
+msgstr "Atrasar a execução do módulo principal"
 
 #: ../../c-api/init_config.rst:2295
 msgid ""
 "In some embedding use cases, it may be desirable to separate interpreter "
 "initialization from the execution of the main module."
 msgstr ""
+"Em alguns casos de uso de incorporação, pode ser desejável separar a "
+"inicialização do interpretador da execução do módulo principal."
 
 #: ../../c-api/init_config.rst:2298
 msgid ""
@@ -4016,6 +4147,10 @@ msgid ""
 "into the interactive prompt), and then subsequently executing the desired "
 "main module code using ``__main__.__dict__`` as the global namespace."
 msgstr ""
+"Essa separação pode ser obtida definindo ``PyConfig.run_command`` como uma "
+"string vazia durante a inicialização (para impedir que o interpretador entre "
+"no prompt interativo) e, em seguida, executando o código do módulo principal "
+"desejado usando ``__main__.__dict__`` como namespace global."
 
 #: ../../c-api/init_config.rst:1181
 msgid "main()"
