@@ -61,3 +61,7 @@ remove_msgid  library/sys.pot '^Raises an :ref:`auditing event <auditing>` ``sys
 # "object" is too common, and should not be translated in this case.
 # Remove to avoid incorrect translation.
 remove_msgid library/string.templatelib.pot '^object$'
+
+# This is an include of the complete Python Grammar, it is very long and is
+# modified very frequently.
+remove_msgid reference/grammar.pot '# ========================= START OF THE GRAMMAR ========================='
