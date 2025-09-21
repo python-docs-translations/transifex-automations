@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-19 14:16+0000\n"
+"POT-Creation-Date: 2025-09-21 14:12+0000\n"
 "PO-Revision-Date: 2025-09-16 00:01+0000\n"
 "Last-Translator: André Moreira <afrmscb@gmail.com>, 2025\n"
 "Language-Team: Portuguese (Portugal) (https://app.transifex.com/python-doc/"
@@ -26,17 +26,19 @@ msgstr ""
 
 #: ../../library/re.rst:2
 msgid ":mod:`!re` --- Regular expression operations"
-msgstr ""
+msgstr ":mod:`!re` — Operações com expressões regulares"
 
 #: ../../library/re.rst:10
 msgid "**Source code:** :source:`Lib/re/`"
-msgstr ""
+msgstr "**Código-fonte:** :source:`Lib/re/`"
 
 #: ../../library/re.rst:14
 msgid ""
 "This module provides regular expression matching operations similar to those "
 "found in Perl."
 msgstr ""
+"Este módulo fornece operações de correspondência de expressões regulares "
+"semelhantes às encontradas em Perl."
 
 #: ../../library/re.rst:17
 msgid ""
@@ -47,6 +49,12 @@ msgid ""
 "substitution, the replacement string must be of the same type as both the "
 "pattern and the search string."
 msgstr ""
+"Tanto os padrões como as cadeias de caracteres a pesquisar podem ser cadeias "
+"Unicode (:class:`str`) ou cadeias de 8 bits (:class:`bytes`). No entanto, "
+"cadeias Unicode e cadeias de 8 bits não podem ser misturadas: ou seja, não é "
+"possível corresponder uma cadeia Unicode com um padrão de bytes ou vice-"
+"versa; da mesma forma, ao pedir uma substituição, a cadeia de substituição "
+"deve ser do mesmo tipo que o padrão e a cadeia de pesquisa."
 
 #: ../../library/re.rst:24
 msgid ""
@@ -62,6 +70,19 @@ msgid ""
 "future this will become a :exc:`SyntaxError`. This behaviour will happen "
 "even if it is a valid escape sequence for a regular expression."
 msgstr ""
+"As expressões regulares usam o carácter de barra invertida (``'\\'``) para "
+"indicar formas especiais ou para permitir que caracteres especiais sejam "
+"usados sem invocar o seu significado especial. Isto colide com a utilização "
+"do Python do mesmo carácter para o mesmo propósito em literais de cadeias de "
+"caracteres; por exemplo, para corresponder a uma barra invertida literal, "
+"pode ser necessário escrever ``'\\\\\\\\'`` como a cadeia de padrão, porque "
+"a expressão regular deve ser ``\\\\``, e cada barra invertida deve ser "
+"expressa como ``\\\\`` dentro de um literal de cadeia de caracteres Python "
+"normal. Note também que quaisquer sequências de escape inválidas na "
+"utilização do Python da barra invertida em literais de cadeias de caracteres "
+"geram agora um :exc:`SyntaxWarning` e, no futuro, isto tornar-se-á um :exc:"
+"`SyntaxError`. Este comportamento ocorrerá mesmo que seja uma sequência de "
+"escape válida para uma expressão regular."
 
 #: ../../library/re.rst:36
 msgid ""
@@ -72,6 +93,13 @@ msgid ""
 "a newline.  Usually patterns will be expressed in Python code using this raw "
 "string notation."
 msgstr ""
+"A solução é usar a notação de cadeias de caracteres brutas  do Python para "
+"padrões de expressões regulares; as barras invertidas não são tratadas de "
+"forma especial em um literal de cadeia de caracteres prefixado com ``'r'``. "
+"Assim, ``r\"\\n\"`` é uma cadeia de caracteres de dois caracteres que contém "
+"``'\\'`` e ``'n'``, enquanto ``\"\\n\"`` é uma cadeia de caracteres de um "
+"carácter que contém uma nova linha. Normalmente, os padrões serão expressos "
+"em código Python usando esta notação de cadeias de caracteres brutas."
 
 #: ../../library/re.rst:43
 msgid ""
@@ -80,6 +108,11 @@ msgid ""
 "expressions <re-objects>`.  The functions are shortcuts that don't require "
 "you to compile a regex object first, but miss some fine-tuning parameters."
 msgstr ""
+"É importante notar que a maioria das operações de expressões regulares estão "
+"disponíveis como funções a nível de módulo e métodos em :ref:`expressões "
+"regulares compiladas <re-objects>`. As funções são atalhos que não exigem "
+"que compile primeiro um objeto regex, mas perdem alguns parâmetros de ajuste "
+"fino."
 
 #: ../../library/re.rst:51
 msgid ""
@@ -87,10 +120,13 @@ msgid ""
 "standard library :mod:`re` module, but offers additional functionality and a "
 "more thorough Unicode support."
 msgstr ""
+"O módulo de terceiros :pypi:`regex`, que tem uma API compatível com o "
+"módulo :mod:`re` da biblioteca padrão, mas oferece funcionalidades "
+"adicionais e um suporte mais completo a Unicode."
 
 #: ../../library/re.rst:59
 msgid "Regular Expression Syntax"
-msgstr ""
+msgstr "Sintaxe de expressões regulares"
 
 #: ../../library/re.rst:61
 msgid ""
@@ -99,6 +135,11 @@ msgid ""
 "given regular expression (or if a given regular expression matches a "
 "particular string, which comes down to the same thing)."
 msgstr ""
+"Uma expressão regular (ou RE) especifica um conjunto de cadeias de "
+"caracteres que lhe correspondem; as funções neste módulo permitem verificar "
+"se uma determinada cadeia de caracteres corresponde a uma expressão regular "
+"dada (ou se uma expressão regular dada corresponde a uma determinada cadeia "
+"de caracteres, o que se resume ao mesmo)."
 
 #: ../../library/re.rst:66
 msgid ""
@@ -113,6 +154,17 @@ msgid ""
 "consult the Friedl book [Frie09]_, or almost any textbook about compiler "
 "construction."
 msgstr ""
+"As expressões regulares podem ser concatenadas para formar novas expressões "
+"regulares; se *A* e *B* forem ambas expressões regulares, então *AB* também "
+"é uma expressão regular. Em geral, se uma cadeia de caracteres *p* "
+"corresponder a *A* e outra cadeia de caracteres *q* corresponder a *B*, a "
+"cadeia de caracteres *pq* corresponderá a *AB*. Isto mantém-se a menos que "
+"*A* ou *B* contenham operações de baixa precedência; condições de fronteira "
+"entre *A* e *B*; ou tenham referências a grupos numerados. Assim, expressões "
+"complexas podem ser facilmente construídas a partir de expressões primitivas "
+"mais simples como as descritas aqui. Para detalhes sobre a teoria e "
+"implementação de expressões regulares, consulte o livro de Friedl [Frie09]_, "
+"ou quase qualquer livro sobre construção de compiladores."
 
 #: ../../library/re.rst:76
 msgid ""
@@ -120,6 +172,8 @@ msgid ""
 "further information and a gentler presentation, consult the :ref:`regex-"
 "howto`."
 msgstr ""
+"Segue-se uma breve explicação do formato das expressões regulares. Para mais "
+"informações e uma apresentação mais suave, consulte o :ref:`regex-howto`."
 
 #: ../../library/re.rst:79
 msgid ""
@@ -130,6 +184,13 @@ msgid ""
 "rest of this section, we'll write RE's in ``this special style``, usually "
 "without quotes, and strings to be matched ``'in single quotes'``.)"
 msgstr ""
+"As expressões regulares podem conter caracteres especiais e ordinários. A "
+"maioria dos caracteres ordinários, como ``'A'``, ``'a'`` ou ``'0'``, são as "
+"expressões regulares mais simples; correspondem simplesmente a si mesmos. "
+"Pode concatenar caracteres ordinários, pelo que ``last`` corresponde à "
+"cadeia de caracteres ``'last'``. (No resto desta secção, escreveremos REs em "
+"``this special style``, geralmente sem aspas, e cadeias de caracteres a "
+"corresponder ``'in single quotes'``.)"
 
 #: ../../library/re.rst:86
 msgid ""
@@ -137,6 +198,9 @@ msgid ""
 "either stand for classes of ordinary characters, or affect how the regular "
 "expressions around them are interpreted."
 msgstr ""
+"Alguns caracteres, como ``'|'`` ou ``'('``, são especiais. Os caracteres "
+"especiais representam classes de caracteres ordinários ou afetam a forma "
+"como as expressões regulares à sua volta são interpretadas."
 
 #: ../../library/re.rst:90
 msgid ""
@@ -147,14 +211,20 @@ msgid ""
 "For example, the expression ``(?:a{6})*`` matches any multiple of six "
 "``'a'`` characters."
 msgstr ""
+"Os operadores de repetição ou quantificadores (``*``, ``+``, ``?``, ``{m,n}"
+"``, etc.) não podem ser aninhados diretamente. Isto evita ambiguidade com o "
+"sufixo modificador não ganancioso ``?`` e com outros modificadores em outras "
+"implementações. Para aplicar uma segunda repetição a uma repetição interna, "
+"podem ser usados parênteses. Por exemplo, a expressão ``(?:a{6})*`` "
+"corresponde a qualquer múltiplo de seis caracteres ``'a'``."
 
 #: ../../library/re.rst:97
 msgid "The special characters are:"
-msgstr ""
+msgstr "Os caracteres especiais são:"
 
 #: ../../library/re.rst:101 ../../library/re.rst:1663
 msgid "``.``"
-msgstr ""
+msgstr "``.``"
 
 #: ../../library/re.rst:102
 msgid ""
@@ -162,6 +232,10 @@ msgid ""
 "If the :const:`DOTALL` flag has been specified, this matches any character "
 "including a newline.  ``(?s:.)`` matches any character regardless of flags."
 msgstr ""
+"(Ponto.) No modo predefinido, isto corresponde a qualquer caractere exceto "
+"uma nova linha. Se a *flag* :const:`DOTALL` tiver sido especificada, isto "
+"corresponde a qualquer caractere incluindo uma nova linha. ``(?s:.)`` "
+"corresponde a qualquer caractere independentemente das *flags*."
 
 #: ../../library/re.rst:108
 msgid "``^``"
@@ -172,6 +246,8 @@ msgid ""
 "(Caret.)  Matches the start of the string, and in :const:`MULTILINE` mode "
 "also matches immediately after each newline."
 msgstr ""
+"(Circunflexo.) Corresponde ao início da cadeia de caracteres e, no modo :"
+"const:`MULTILINE`, também corresponde imediatamente após cada nova linha."
 
 #: ../../library/re.rst:114
 msgid "``$``"
@@ -191,7 +267,7 @@ msgstr ""
 
 #: ../../library/re.rst:125
 msgid "``*``"
-msgstr ""
+msgstr "``*``"
 
 #: ../../library/re.rst:126
 msgid ""
@@ -199,10 +275,13 @@ msgid ""
 "as many repetitions as are possible.  ``ab*`` will match 'a', 'ab', or 'a' "
 "followed by any number of 'b's."
 msgstr ""
+"Faz com que a RE resultante corresponda a 0 ou mais repetições da RE "
+"anterior, tantas repetições quantas forem possíveis. ``ab*`` corresponderá a "
+"'a', 'ab' ou 'a' seguido de qualquer número de 'b's."
 
 #: ../../library/re.rst:132
 msgid "``+``"
-msgstr ""
+msgstr "``+``"
 
 #: ../../library/re.rst:133
 msgid ""
@@ -210,20 +289,25 @@ msgid ""
 "``ab+`` will match 'a' followed by any non-zero number of 'b's; it will not "
 "match just 'a'."
 msgstr ""
+"Faz com que a RE resultante corresponda a 1 ou mais repetições da RE "
+"anterior. ``ab+`` corresponderá a 'a' seguido de qualquer número não nulo de "
+"'b's; não corresponderá apenas a 'a'."
 
 #: ../../library/re.rst:139
 msgid "``?``"
-msgstr ""
+msgstr "``?``"
 
 #: ../../library/re.rst:140
 msgid ""
 "Causes the resulting RE to match 0 or 1 repetitions of the preceding RE. "
 "``ab?`` will match either 'a' or 'ab'."
 msgstr ""
+"Faz com que a RE resultante corresponda a 0 ou 1 repetições da RE anterior. "
+"``ab?`` corresponderá a 'a' ou 'ab'."
 
 #: ../../library/re.rst:148
 msgid "``*?``, ``+?``, ``??``"
-msgstr ""
+msgstr "``*?``, ``+?``, ``??``"
 
 #: ../../library/re.rst:149
 msgid ""
@@ -235,10 +319,18 @@ msgid ""
 "characters as possible will be matched.  Using the RE ``<.*?>`` will match "
 "only ``'<a>'``."
 msgstr ""
+"Os quantificadores ``'*'``, ``'+'`` e ``'?'`` são todos :dfn:`gananciosos`; "
+"correspondem a tanto texto quanto possível. Às vezes, este comportamento não "
+"é desejado; se a RE ``<.*>`` for correspondida a ``'<a> b <c>'``, "
+"corresponderá a toda a cadeia de caracteres e não apenas a ``'<a>'``. "
+"Adicionar ``?`` após o quantificador faz com que a correspondência seja "
+"feita de forma :dfn:`não gananciosa` ou :dfn:`mínima`; serão correspondidos "
+"*poucos* caracteres quanto possível. Usar a RE ``<.*?>`` corresponderá "
+"apenas a ``'<a>'``."
 
 #: ../../library/re.rst:162
 msgid "``*+``, ``++``, ``?+``"
-msgstr ""
+msgstr "``*+``, ``++``, ``?+``"
 
 #: ../../library/re.rst:163
 msgid ""
@@ -256,10 +348,24 @@ msgid ""
 "``x*+``, ``x++`` and ``x?+`` are equivalent to ``(?>x*)``, ``(?>x+)`` and "
 "``(?>x?)`` correspondingly."
 msgstr ""
+"Tal como os quantificadores ``'*'``, ``'+'`` e ``'?'``, aqueles em que "
+"``'+'`` é anexado também correspondem ao maior número de vezes possível. No "
+"entanto, ao contrário dos quantificadores verdadeiramente gananciosos, estes "
+"não permitem retrocesso quando a expressão seguinte falha em corresponder. "
+"Estes são conhecidos como quantificadores :dfn:`possessivos`. Por exemplo, "
+"``a*a`` corresponderá a ``'aaaa'`` porque o ``a*`` corresponderá a todos os "
+"4 ``'a'``, mas, quando o ``'a'`` final é encontrado, a expressão é "
+"retrocedida de forma a que, no final, o ``a*`` acabe por corresponder a 3 "
+"``'a'`` no total, e o quarto ``'a'`` é correspondido pelo ``'a'`` final. No "
+"entanto, quando ``a*+a`` é usado para corresponder a ``'aaaa'``, o ``a*+`` "
+"corresponderá a todos os 4 ``'a'``, mas quando o ``'a'`` final falha em "
+"encontrar mais caracteres para corresponder, a expressão não pode ser "
+"retrocedida e, portanto, falhará em corresponder. ``x*+``, ``x++`` e ``x?+`` "
+"são equivalentes a ``(?>x*)``, ``(?>x+)`` e ``(?>x?)``, respetivamente."
 
 #: ../../library/re.rst:184
 msgid "``{m}``"
-msgstr ""
+msgstr "``{m}``"
 
 #: ../../library/re.rst:185
 msgid ""
@@ -267,10 +373,14 @@ msgid ""
 "fewer matches cause the entire RE not to match.  For example, ``a{6}`` will "
 "match exactly six ``'a'`` characters, but not five."
 msgstr ""
+"Especifica que exatamente *m* cópias da RE anterior devem ser "
+"correspondidas; um número menor de correspondências faz com que toda a RE "
+"não corresponda. Por exemplo, ``a{6}`` corresponderá exatamente a seis "
+"caracteres ``'a'``, mas não a cinco."
 
 #: ../../library/re.rst:189
 msgid "``{m,n}``"
-msgstr ""
+msgstr "``{m,n}``"
 
 #: ../../library/re.rst:190
 msgid ""
@@ -283,10 +393,18 @@ msgid ""
 "not be omitted or the modifier would be confused with the previously "
 "described form."
 msgstr ""
+"Faz com que a RE resultante corresponda de *m* a *n* repetições da RE "
+"anterior, tentando corresponder ao maior número de repetições possível. Por "
+"exemplo, ``a{3,5}`` corresponderá de 3 a 5 caracteres ``'a'``. Omitir *m* "
+"especifica um limite inferior de zero e omitir *n* especifica um limite "
+"superior infinito. Por exemplo, ``a{4,}b`` corresponderá a ``'aaaab'`` ou a "
+"mil caracteres ``'a'`` seguidos de um ``'b'``, mas não a ``'aaab'``. A "
+"vírgula não pode ser omitida ou o modificador seria confundido com a forma "
+"descrita anteriormente."
 
 #: ../../library/re.rst:198
 msgid "``{m,n}?``"
-msgstr ""
+msgstr "``{m,n}?``"
 
 #: ../../library/re.rst:199
 msgid ""
@@ -296,10 +414,16 @@ msgid ""
 "character string ``'aaaaaa'``, ``a{3,5}`` will match 5 ``'a'`` characters, "
 "while ``a{3,5}?`` will only match 3 characters."
 msgstr ""
+"Faz com que a RE resultante corresponda de *m* a *n* repetições da RE "
+"anterior, tentando corresponder ao *menor* número de repetições possível. "
+"Isto é a versão não gananciosa do quantificador anterior. Por exemplo, na "
+"cadeia de caracteres de 6 caracteres ``'aaaaaa'``, ``a{3,5}`` corresponderá "
+"a 5 caracteres ``'a'``, enquanto ``a{3,5}?`` corresponderá apenas a 3 "
+"caracteres."
 
 #: ../../library/re.rst:205
 msgid "``{m,n}+``"
-msgstr ""
+msgstr "``{m,n}+``"
 
 #: ../../library/re.rst:206
 msgid ""
@@ -313,10 +437,20 @@ msgid ""
 "backtracking and then the final 2 ``'a'``\\ s are matched by the final "
 "``aa`` in the pattern. ``x{m,n}+`` is equivalent to ``(?>x{m,n})``."
 msgstr ""
+"Faz com que a RE resultante corresponda de *m* a *n* repetições da RE "
+"anterior, tentando corresponder ao maior número de repetições possível *sem* "
+"estabelecer quaisquer pontos de retrocesso. Esta é a versão possessiva do "
+"quantificador acima. Por exemplo, na cadeia de caracteres de 6 caracteres "
+"``'aaaaaa'``, ``a{3,5}+aa`` tentará corresponder a 5 caracteres ``'a'``, "
+"depois, exigindo mais 2 ``'a'``, precisará de mais caracteres do que os "
+"disponíveis e, portanto, falhará, enquanto ``a{3,5}aa`` corresponderá com "
+"``a{3,5}`` capturando 5, depois 4 ``'a'`` por retrocesso e, em seguida, os 2 "
+"``'a'`` finais são correspondidos pelo ``aa`` final no padrão. ``x{m,n}+`` é "
+"equivalente a ``(?>x{m,n})``."
 
 #: ../../library/re.rst:222
 msgid "``\\``"
-msgstr ""
+msgstr "``\\``"
 
 #: ../../library/re.rst:223
 msgid ""
@@ -324,6 +458,9 @@ msgid ""
 "``'*'``, ``'?'``, and so forth), or signals a special sequence; special "
 "sequences are discussed below."
 msgstr ""
+"Ou escapa caracteres especiais (permitindo corresponder a caracteres como "
+"``'*'``, ``'?'``, e assim por diante), ou sinaliza uma sequência especial; "
+"as sequências especiais são discutidas abaixo."
 
 #: ../../library/re.rst:227
 msgid ""
@@ -335,20 +472,31 @@ msgid ""
 "repeated twice.  This is complicated and hard to understand, so it's highly "
 "recommended that you use raw strings for all but the simplest expressions."
 msgstr ""
+"Se não estiver a usar uma cadeia de caracteres bruta para expressar o "
+"padrão, lembre-se de que o Python também usa a barra invertida como uma "
+"sequência de escape em literais de cadeias de caracteres; se a sequência de "
+"escape não for reconhecida pelo analisador do Python, a barra invertida e o "
+"carácter seguinte são incluídos na cadeia de caracteres resultante. No "
+"entanto, se o Python reconhecer a sequência resultante, a barra invertida "
+"deve ser repetida duas vezes. Isto é complicado e difícil de compreender, "
+"pelo que é altamente recomendado que utilize cadeias de caracteres brutas "
+"para todas as expressões, exceto as mais simples."
 
 #: ../../library/re.rst:238
 msgid "``[]``"
-msgstr ""
+msgstr "``[]``"
 
 #: ../../library/re.rst:239
 msgid "Used to indicate a set of characters.  In a set:"
-msgstr ""
+msgstr "Usado para indicar um conjunto de caracteres. Num conjunto:"
 
 #: ../../library/re.rst:241
 msgid ""
 "Characters can be listed individually, e.g. ``[amk]`` will match ``'a'``, "
 "``'m'``, or ``'k'``."
 msgstr ""
+"Os caracteres podem ser listados individualmente, por exemplo, ``[amk]`` "
+"corresponderá a ``'a'``, ``'m'`` ou ``'k'``."
 
 #: ../../library/re.rst:246
 msgid ""
@@ -359,6 +507,13 @@ msgid ""
 "``-`` is escaped (e.g. ``[a\\-z]``) or if it's placed as the first or last "
 "character (e.g. ``[-a]`` or ``[a-]``), it will match a literal ``'-'``."
 msgstr ""
+"Intervalos de caracteres podem ser indicados dando dois caracteres e "
+"separando-os por um ``'-'``, por exemplo, ``[a-z]`` corresponderá a qualquer "
+"letra minúscula ASCII, ``[0-5][0-9]`` corresponderá a todos os números de "
+"dois dígitos de ``00`` a ``59``, e ``[0-9A-Fa-f]`` corresponderá a qualquer "
+"dígito hexadecimal. Se ``-`` for escapado (por exemplo, ``[a\\-z]``) ou se "
+"for colocado como o primeiro ou último carácter (por exemplo, ``[-a]`` ou "
+"``[a-]``), corresponderá a um ``'-'`` literal."
 
 #: ../../library/re.rst:253
 msgid ""
@@ -366,6 +521,9 @@ msgid ""
 "For example, ``[(+*)]`` will match any of the literal characters ``'('``, "
 "``'+'``, ``'*'``, or ``')'``."
 msgstr ""
+"Os caracteres especiais, exceto a barra invertida, perdem o seu significado "
+"especial dentro de conjuntos. Por exemplo, ``[(+*)]`` corresponderá a "
+"qualquer um dos caracteres literais ``'('``, ``'+'``, ``'*'`` ou ``')'``."
 
 #: ../../library/re.rst:260
 msgid ""
@@ -378,6 +536,15 @@ msgid ""
 "not group references. Special sequences which do not match a single "
 "character such as ``\\A`` and ``\\z`` are not allowed."
 msgstr ""
+"A barra invertida ou escapa caracteres que têm significado especial num "
+"conjunto, como ``'-'``, ``']'``, ``'^'`` e ``'\\\\'``, ou sinaliza uma "
+"sequência especial que representa um único caractere, como ``\\xa0`` ou "
+"``\\n``, ou uma classe de caracteres como ``\\w`` ou ``\\S`` (definidos "
+"abaixo). Note que ``\\b`` representa um único caractere \"backspace\", não "
+"uma fronteira de palavra como fora de um conjunto, e escapes numéricos como "
+"``\\1`` são sempre escapes octais, não referências a grupos. Sequências "
+"especiais que não correspondem a um único caractere, como ``\\A`` e ``\\z``, "
+"não são permitidas."
 
 #: ../../library/re.rst:273
 msgid ""
@@ -388,6 +555,13 @@ msgid ""
 "any character except ``'^'``.  ``^`` has no special meaning if it's not the "
 "first character in the set."
 msgstr ""
+"Os caracteres que não estão dentro de um intervalo podem ser correspondidos "
+"através da :dfn:`complementação` do conjunto. Se o primeiro caractere do "
+"conjunto for ``'^'``, todos os caracteres que *não* estão no conjunto serão "
+"correspondidos. Por exemplo, ``[^5]`` corresponderá a qualquer caractere "
+"exceto ``'5'``, e ``[^^]`` corresponderá a qualquer caractere exceto "
+"``'^'``. ``^`` não tem significado especial se não for o primeiro caractere "
+"no conjunto."
 
 #: ../../library/re.rst:280
 msgid ""
@@ -396,6 +570,10 @@ msgid ""
 "``[]()[{}]`` will match a right bracket, as well as left bracket, braces, "
 "and parentheses."
 msgstr ""
+"Para corresponder a um ``']'`` literal dentro de um conjunto, preceda-o com "
+"uma barra invertida ou coloque-o no início do conjunto. Por exemplo, tanto "
+"``[()[\\]{}]`` como ``[]()[{}]`` corresponderão a um colchete direito, bem "
+"como a um colchete esquerdo, chavetas e parênteses."
 
 #: ../../library/re.rst:290
 msgid ""
@@ -406,12 +584,21 @@ msgid ""
 "or containing literal character sequences ``'--'``, ``'&&'``, ``'~~'``, and "
 "``'||'``.  To avoid a warning escape them with a backslash."
 msgstr ""
+"O suporte para conjuntos aninhados e operações de conjuntos, como no "
+"`Unicode Technical Standard #18`_, pode ser adicionado no futuro. Isto "
+"alteraria a sintaxe, pelo que, para facilitar esta alteração, um :exc:"
+"`FutureWarning` será gerado em casos ambíguos por enquanto. Isto inclui "
+"conjuntos que começam com um ``'['`` literal ou que contêm sequências de "
+"caracteres literais ``'--'``, ``'&&'``, ``'~~'`` e ``'||'``. Para evitar um "
+"aviso, escape-os com uma barra invertida."
 
 #: ../../library/re.rst:300
 msgid ""
 ":exc:`FutureWarning` is raised if a character set contains constructs that "
 "will change semantically in the future."
 msgstr ""
+"Um :exc:`FutureWarning` é gerado se um conjunto de caracteres contiver "
+"construções que mudarão semanticamente no futuro."
 
 #: ../../library/re.rst:306
 msgid "``|``"
@@ -432,7 +619,7 @@ msgstr ""
 
 #: ../../library/re.rst:320
 msgid "``(...)``"
-msgstr ""
+msgstr "``(...)``"
 
 #: ../../library/re.rst:321
 msgid ""
@@ -446,7 +633,7 @@ msgstr ""
 
 #: ../../library/re.rst:329
 msgid "``(?...)``"
-msgstr ""
+msgstr "``(?...)``"
 
 #: ../../library/re.rst:330
 msgid ""
@@ -456,10 +643,15 @@ msgid ""
 "do not create a new group; ``(?P<name>...)`` is the only exception to this "
 "rule. Following are the currently supported extensions."
 msgstr ""
+"Isto é uma notação de extensão (um ``'?'`` seguinte a um ``'('`` não tem "
+"outro significado). O primeiro caractere após o ``'?'`` determina o "
+"significado e a sintaxe adicional da construção. As extensões geralmente não "
+"criam um novo grupo; ``(?P<name>...)`` é a única exceção a esta regra. "
+"Seguem-se as extensões atualmente suportadas."
 
 #: ../../library/re.rst:336
 msgid "``(?aiLmsux)``"
-msgstr ""
+msgstr "``(?aiLmsux)``"
 
 #: ../../library/re.rst:337
 msgid ""
@@ -467,34 +659,37 @@ msgid ""
 "``'s'``, ``'u'``, ``'x'``.) The group matches the empty string; the letters "
 "set the corresponding flags for the entire regular expression:"
 msgstr ""
+"(Uma ou mais letras do conjunto ``'a'``, ``'i'``, ``'L'``, ``'m'``, ``'s'``, "
+"``'u'``, ``'x'``.) O grupo corresponde à cadeia de caracteres vazia; as "
+"letras definem as *flags* correspondentes para toda a expressão regular:"
 
 #: ../../library/re.rst:342 ../../library/re.rst:374
 msgid ":const:`re.A` (ASCII-only matching)"
-msgstr ""
+msgstr ":const:`re.A` (correspondência apenas ASCII)"
 
 #: ../../library/re.rst:343 ../../library/re.rst:375
 msgid ":const:`re.I` (ignore case)"
-msgstr ""
+msgstr ":const:`re.I` (ignorar maiúsculas/minúsculas)"
 
 #: ../../library/re.rst:344 ../../library/re.rst:376
 msgid ":const:`re.L` (locale dependent)"
-msgstr ""
+msgstr ":const:`re.L` (dependente da localização)"
 
 #: ../../library/re.rst:345 ../../library/re.rst:377
 msgid ":const:`re.M` (multi-line)"
-msgstr ""
+msgstr ":const:`re.M` (multilinha)"
 
 #: ../../library/re.rst:346 ../../library/re.rst:378
 msgid ":const:`re.S` (dot matches all)"
-msgstr ""
+msgstr ":const:`re.S` (ponto corresponde a tudo)"
 
 #: ../../library/re.rst:347 ../../library/re.rst:379
 msgid ":const:`re.U` (Unicode matching)"
-msgstr ""
+msgstr ":const:`re.U` (correspondência Unicode)"
 
 #: ../../library/re.rst:348 ../../library/re.rst:380
 msgid ":const:`re.X` (verbose)"
-msgstr ""
+msgstr ":const:`re.X` (detalhado)"
 
 #: ../../library/re.rst:350
 msgid ""
@@ -503,14 +698,18 @@ msgid ""
 "passing a *flag* argument to the :func:`re.compile` function. Flags should "
 "be used first in the expression string."
 msgstr ""
+"(As *flags* são descritas em :ref:`contents-of-module-re`.) Isto é útil se "
+"pretender incluir as *flags* como parte da expressão regular, em vez de "
+"passar um argumento *flag* para a função :func:`re.compile`. As *flags* "
+"devem ser usadas primeiro na cadeia de expressão."
 
 #: ../../library/re.rst:356
 msgid "This construction can only be used at the start of the expression."
-msgstr ""
+msgstr "Esta construção só pode ser usada no início da expressão."
 
 #: ../../library/re.rst:361
 msgid "``(?:...)``"
-msgstr ""
+msgstr "``(?:...)``"
 
 #: ../../library/re.rst:362
 msgid ""
@@ -519,10 +718,14 @@ msgid ""
 "*cannot* be retrieved after performing a match or referenced later in the "
 "pattern."
 msgstr ""
+"Uma versão não capturadora de parênteses regulares. Corresponde a qualquer "
+"expressão regular dentro dos parênteses, mas a subcadeia correspondida pelo "
+"grupo *não* pode ser recuperada após a realização de uma correspondência ou "
+"referenciada mais tarde no padrão."
 
 #: ../../library/re.rst:367
 msgid "``(?aiLmsux-imsx:...)``"
-msgstr ""
+msgstr "``(?aiLmsux-imsx:...)``"
 
 #: ../../library/re.rst:368
 msgid ""
@@ -531,10 +734,14 @@ msgid ""
 "more letters from the ``'i'``, ``'m'``, ``'s'``, ``'x'``.) The letters set "
 "or remove the corresponding flags for the part of the expression:"
 msgstr ""
+"(Zero ou mais letras do conjunto ``'a'``, ``'i'``, ``'L'``, ``'m'``, "
+"``'s'``, ``'u'``, ``'x'``, opcionalmente seguidas por ``'-'`` seguidas por "
+"uma ou mais letras de ``'i'``, ``'m'``, ``'s'``, ``'x'``.) As letras definem "
+"ou removem as *flags* correspondentes para a parte da expressão:"
 
 #: ../../library/re.rst:382
 msgid "(The flags are described in :ref:`contents-of-module-re`.)"
-msgstr ""
+msgstr "(As *flags* são descritas em :ref:`contents-of-module-re`.)"
 
 #: ../../library/re.rst:384
 msgid ""
@@ -548,14 +755,25 @@ msgid ""
 "effect for the narrow inline group, and the original matching mode is "
 "restored outside of the group."
 msgstr ""
+"As letras ``'a'``, ``'L'`` e ``'u'`` são mutuamente exclusivas quando usadas "
+"como *flags* em linha, pelo que não podem ser combinadas ou seguidas por "
+"``'-'``. Em vez disso, quando uma delas aparece num grupo em linha, "
+"substitui o modo de correspondência no grupo envolvente. Em padrões Unicode, "
+"``(?a:...)`` muda para correspondência apenas ASCII e ``(?u:...)`` muda para "
+"correspondência Unicode (predefinido). Em padrões de bytes, ``(?L:...)`` "
+"muda para correspondência dependente da localização e ``(?a:...)`` muda para "
+"correspondência apenas ASCII (predefinido). Esta substituição só está em "
+"vigor para o grupo em linha estreito e o modo de correspondência original é "
+"restaurado fora do grupo."
 
 #: ../../library/re.rst:396
 msgid "The letters ``'a'``, ``'L'`` and ``'u'`` also can be used in a group."
 msgstr ""
+"As letras ``'a'``, ``'L'`` e ``'u'`` também podem ser usadas num grupo."
 
 #: ../../library/re.rst:399
 msgid "``(?>...)``"
-msgstr ""
+msgstr "``(?>...)``"
 
 #: ../../library/re.rst:400
 msgid ""
@@ -570,10 +788,21 @@ msgid ""
 "Group, and there is no stack point before it, the entire expression would "
 "thus fail to match."
 msgstr ""
+"Tenta corresponder a ``...`` como se fosse uma expressão regular separada e, "
+"se bem-sucedido, continua a corresponder ao resto do padrão que a segue. Se "
+"o padrão subsequente falhar em corresponder, a pilha só pode ser desfeita "
+"até um ponto *antes* do ``(?>...)`` porque, uma vez saído, a expressão, "
+"conhecida como um :dfn:`grupo atómico`, descartou todos os pontos da pilha "
+"dentro de si mesma. Assim, ``(?>.*).`` nunca corresponderia a nada porque, "
+"primeiro, o ``.*`` corresponderia a todos os caracteres possíveis e, depois, "
+"não tendo nada mais para corresponder, o ``.`` final falharia em "
+"corresponder. Como não há pontos da pilha guardados no Grupo Atómico e não "
+"há ponto da pilha antes dele, toda a expressão falharia, portanto, em "
+"corresponder."
 
 #: ../../library/re.rst:416
 msgid "``(?P<name>...)``"
-msgstr ""
+msgstr "``(?P<name>...)``"
 
 #: ../../library/re.rst:417
 msgid ""
@@ -584,6 +813,12 @@ msgid ""
 "a regular expression.  A symbolic group is also a numbered group, just as if "
 "the group were not named."
 msgstr ""
+"Semelhante a parênteses regulares, mas a subcadeia correspondida pelo grupo "
+"é acessível através do nome simbólico do grupo *name*. Os nomes dos grupos "
+"devem ser identificadores Python válidos e, em padrões :class:`bytes`, só "
+"podem conter bytes na gama ASCII. Cada nome de grupo deve ser definido "
+"apenas uma vez dentro de uma expressão regular. Um grupo simbólico também é "
+"um grupo numerado, como se o grupo não tivesse nome."
 
 #: ../../library/re.rst:424
 msgid ""
@@ -591,74 +826,81 @@ msgid ""
 "P<quote>['\"]).*?(?P=quote)`` (i.e. matching a string quoted with either "
 "single or double quotes):"
 msgstr ""
+"Os grupos nomeados podem ser referenciados em três contextos. Se o padrão "
+"for ``(?P<quote>['\"]).*?(?P=quote)`` (ou seja, correspondendo a uma cadeia "
+"de caracteres entre aspas simples ou duplas):"
 
 #: ../../library/re.rst:429
 msgid "Context of reference to group \"quote\""
-msgstr ""
+msgstr "Contexto de referência ao grupo \"quote\""
 
 #: ../../library/re.rst:429
 msgid "Ways to reference it"
-msgstr ""
+msgstr "Formas de o referenciar"
 
 #: ../../library/re.rst:431
 msgid "in the same pattern itself"
-msgstr ""
+msgstr "no próprio padrão"
 
 #: ../../library/re.rst:431
 msgid "``(?P=quote)`` (as shown)"
-msgstr ""
+msgstr "``(?P=quote)`` (como mostrado)"
 
 #: ../../library/re.rst:432 ../../library/re.rst:439
 msgid "``\\1``"
-msgstr ""
+msgstr "``\\1``"
 
 #: ../../library/re.rst:434
 msgid "when processing match object *m*"
-msgstr ""
+msgstr "ao processar o objeto de correspondência *m*"
 
 #: ../../library/re.rst:434
 msgid "``m.group('quote')``"
-msgstr ""
+msgstr "``m.group('quote')``"
 
 #: ../../library/re.rst:435
 msgid "``m.end('quote')`` (etc.)"
-msgstr ""
+msgstr "``m.end('quote')`` (etc.)"
 
 #: ../../library/re.rst:437
 msgid "in a string passed to the *repl* argument of ``re.sub()``"
-msgstr ""
+msgstr "numa cadeia de caracteres passada ao argumento *repl* de ``re.sub()``"
 
 #: ../../library/re.rst:437
 msgid "``\\g<quote>``"
-msgstr ""
+msgstr "``\\g<quote>``"
 
 #: ../../library/re.rst:438
 msgid "``\\g<1>``"
-msgstr ""
+msgstr "``\\g<1>``"
 
 #: ../../library/re.rst:442
 msgid ""
 "In :class:`bytes` patterns, group *name* can only contain bytes in the ASCII "
 "range (``b'\\x00'``-``b'\\x7f'``)."
 msgstr ""
+"Em padrões :class:`bytes`, o grupo *name* só pode conter bytes na gama ASCII "
+"(``b'\\x00'``-``b'\\x7f'``)."
 
 #: ../../library/re.rst:448
 msgid "``(?P=name)``"
-msgstr ""
+msgstr "``(?P=name)``"
 
 #: ../../library/re.rst:449
 msgid ""
 "A backreference to a named group; it matches whatever text was matched by "
 "the earlier group named *name*."
 msgstr ""
+"Uma referência retroativa a um grupo nomeado; corresponde a qualquer texto "
+"que tenha sido correspondido pelo grupo anterior nomeado *name*."
 
 #: ../../library/re.rst:454
 msgid "``(?#...)``"
-msgstr ""
+msgstr "``(?#...)``"
 
 #: ../../library/re.rst:455
 msgid "A comment; the contents of the parentheses are simply ignored."
-msgstr ""
+msgstr "Um comentário; o conteúdo dos parênteses é simplesmente ignorado."
 
 #: ../../library/re.rst:459
 msgid "``(?=...)``"
@@ -670,6 +912,10 @@ msgid ""
 "This is called a :dfn:`lookahead assertion`.  For example, ``Isaac (?"
 "=Asimov)`` will match ``'Isaac '`` only if it's followed by ``'Asimov'``."
 msgstr ""
+"Corresponde se ``...`` corresponder a seguir, mas não consome nenhuma parte "
+"da cadeia de caracteres. Isto é chamado de :dfn:`afirmação de antevisão`. "
+"Por exemplo, ``Isaac (?=Asimov)`` corresponderá a ``'Isaac '`` apenas se for "
+"seguido por ``'Asimov'``."
 
 #: ../../library/re.rst:466
 msgid "``(?!...)``"
@@ -681,10 +927,13 @@ msgid ""
 "assertion`. For example, ``Isaac (?!Asimov)`` will match ``'Isaac '`` only "
 "if it's *not* followed by ``'Asimov'``."
 msgstr ""
+"Corresponde se ``...`` não corresponder a seguir. Isto é uma :dfn:`afirmação "
+"de antevisão negativa`. Por exemplo, ``Isaac (?!Asimov)`` corresponderá a "
+"``'Isaac '`` apenas se *não* for seguido por ``'Asimov'``."
 
 #: ../../library/re.rst:473
 msgid "``(?<=...)``"
-msgstr ""
+msgstr "``(?<=...)``"
 
 #: ../../library/re.rst:474
 msgid ""
@@ -699,18 +948,29 @@ msgid ""
 "will most likely want to use the :func:`search` function rather than the :"
 "func:`match` function:"
 msgstr ""
+"Corresponde se a posição atual na cadeia de caracteres for precedida por uma "
+"correspondência para ``...`` que termina na posição atual. Isto é chamado "
+"de :dfn:`afirmação de retrovisão positiva`. ``(?<=abc)def`` encontrará uma "
+"correspondência em ``'abcdef'``, uma vez que a retrovisão retrocederá 3 "
+"caracteres e verificará se o padrão contido corresponde. O padrão contido só "
+"deve corresponder a cadeias de caracteres de algum comprimento fixo, o que "
+"significa que ``abc`` ou ``a|b`` são permitidos, mas ``a*`` e ``a{3,4}`` não "
+"são. Note que padrões que começam com afirmações de retrovisão positiva não "
+"corresponderão no início da cadeia de caracteres a ser pesquisada; "
+"provavelmente pretenderá usar a função :func:`search` em vez da função :func:"
+"`match`:"
 
 #: ../../library/re.rst:489
 msgid "This example looks for a word following a hyphen:"
-msgstr ""
+msgstr "Este exemplo procura uma palavra seguinte a um hífen:"
 
 #: ../../library/re.rst:495
 msgid "Added support for group references of fixed length."
-msgstr ""
+msgstr "Adicionado suporte para referências a grupos de comprimento fixo."
 
 #: ../../library/re.rst:500
 msgid "``(?<!...)``"
-msgstr ""
+msgstr "``(?<!...)``"
 
 #: ../../library/re.rst:501
 msgid ""
@@ -720,10 +980,16 @@ msgid ""
 "strings of some fixed length.  Patterns which start with negative lookbehind "
 "assertions may match at the beginning of the string being searched."
 msgstr ""
+"Corresponde se a posição atual na cadeia de caracteres não for precedida por "
+"uma correspondência para ``...``. Isto é chamado de :dfn:`afirmação de "
+"retrovisão negativa`. Semelhante às afirmações de retrovisão positiva, o "
+"padrão contido só deve corresponder a cadeias de caracteres de algum "
+"comprimento fixo. Padrões que começam com afirmações de retrovisão negativa "
+"podem corresponder no início da cadeia de caracteres a ser pesquisada."
 
 #: ../../library/re.rst:510
 msgid "``(?(id/name)yes-pattern|no-pattern)``"
-msgstr ""
+msgstr "``(?(id/name)yes-pattern|no-pattern)``"
 
 #: ../../library/re.rst:511
 msgid ""
@@ -734,12 +1000,20 @@ msgid ""
 "``'<user@host.com>'`` as well as ``'user@host.com'``, but not with "
 "``'<user@host.com'`` nor ``'user@host.com>'``."
 msgstr ""
+"Tentará corresponder com ``yes-pattern`` se o grupo com o *id* ou *name* "
+"dado existir e com ``no-pattern`` se não existir. ``no-pattern`` é opcional "
+"e pode ser omitido. Por exemplo, ``(<)?(\\w+@\\w+(?:\\.\\w+)+)(?(1)>|$)`` é "
+"um padrão de correspondência de email fraco, que corresponderá a "
+"``'<user@host.com>'`` assim como a ``'user@host.com'``, mas não a "
+"``'<user@host.com'`` nem a ``'user@host.com>'``."
 
 #: ../../library/re.rst:518
 msgid ""
 "Group *id* can only contain ASCII digits. In :class:`bytes` patterns, group "
 "*name* can only contain bytes in the ASCII range (``b'\\x00'``-``b'\\x7f'``)."
 msgstr ""
+"O grupo *id* só pode conter dígitos ASCII. Em padrões :class:`bytes`, o "
+"grupo *name* só pode conter bytes na gama ASCII (``b'\\x00'``-``b'\\x7f'``)."
 
 #: ../../library/re.rst:526
 msgid ""
@@ -748,10 +1022,14 @@ msgid ""
 "then the resulting RE will match the second character.  For example, ``\\$`` "
 "matches the character ``'$'``."
 msgstr ""
+"As sequências especiais consistem em ``'\\'`` e um caractere da lista "
+"abaixo. Se o caractere ordinário não for um dígito ASCII ou uma letra ASCII, "
+"então a RE resultante corresponderá ao segundo caractere. Por exemplo, ``\\"
+"$`` corresponde ao caractere ``'$'``."
 
 #: ../../library/re.rst:533
 msgid "``\\number``"
-msgstr ""
+msgstr "``\\number``"
 
 #: ../../library/re.rst:534
 msgid ""
@@ -764,6 +1042,15 @@ msgid ""
 "*number*. Inside the ``'['`` and ``']'`` of a character class, all numeric "
 "escapes are treated as characters."
 msgstr ""
+"Corresponde ao conteúdo do grupo do mesmo número. Os grupos são numerados a "
+"partir de 1. Por exemplo, ``(.+) \\1`` corresponde a ``'the the'`` ou ``'55 "
+"55'``, mas não a ``'thethe'`` (note o espaço após o grupo). Esta sequência "
+"especial só pode ser usada para corresponder a um dos primeiros 99 grupos. "
+"Se o primeiro dígito de *number* for 0, ou se *number* tiver 3 dígitos "
+"octais de comprimento, não será interpretado como uma correspondência de "
+"grupo, mas como o carácter com valor octal *number*. Dentro de ``'['`` e "
+"``']'`` de uma classe de caracteres, todos os escapes numéricos são tratados "
+"como caracteres."
 
 #: ../../library/re.rst:545
 msgid "``\\A``"
@@ -771,7 +1058,7 @@ msgstr "``\\A``"
 
 #: ../../library/re.rst:546
 msgid "Matches only at the start of the string."
-msgstr ""
+msgstr "Corresponde apenas ao início da cadeia de caracteres."
 
 #: ../../library/re.rst:550
 msgid "``\\b``"
@@ -786,6 +1073,13 @@ msgid ""
 "means that ``r'\\bat\\b'`` matches ``'at'``, ``'at.'``, ``'(at)'``, and "
 "``'as at ay'`` but not ``'attempt'`` or ``'atlas'``."
 msgstr ""
+"Corresponde à cadeia de caracteres vazia, mas apenas no início ou no fim de "
+"uma palavra. Uma palavra é definida como uma sequência de caracteres de "
+"palavra. Note que, formalmente, ``\\b`` é definido como a fronteira entre um "
+"carácter ``\\w`` e um carácter ``\\W`` (ou vice-versa), ou entre ``\\w`` e o "
+"início ou fim da cadeia de caracteres. Isto significa que ``r'\\bat\\b'`` "
+"corresponde a ``'at'``, ``'at.'``, ``'(at)'`` e ``'as at ay'``, mas não a "
+"``'attempt'`` ou ``'atlas'``."
 
 #: ../../library/re.rst:559
 msgid ""
@@ -794,12 +1088,19 @@ msgid ""
 "const:`~re.ASCII` flag. Word boundaries are determined by the current locale "
 "if the :py:const:`~re.LOCALE` flag is used."
 msgstr ""
+"Os caracteres de palavra predefinidos em padrões Unicode (str) são os "
+"alfanuméricos Unicode e o sublinhado, mas isto pode ser alterado usando a "
+"*flag* :py:const:`~re.ASCII`. As fronteiras de palavras são determinadas "
+"pela localização atual se a *flag* :py:const:`~re.LOCALE` for usada."
 
 #: ../../library/re.rst:567
 msgid ""
 "Inside a character range, ``\\b`` represents the backspace character, for "
 "compatibility with Python's string literals."
 msgstr ""
+"Dentro de um intervalo de caracteres, ``\\b`` representa o carácter de "
+"retrocesso, para compatibilidade com os literais de cadeias de caracteres do "
+"Python."
 
 #: ../../library/re.rst:572
 msgid "``\\B``"
@@ -815,10 +1116,18 @@ msgid ""
 "using the :py:const:`~re.ASCII` flag. Word boundaries are determined by the "
 "current locale if the :py:const:`~re.LOCALE` flag is used."
 msgstr ""
+"Corresponde à cadeia de caracteres vazia, mas apenas quando *não* está no "
+"início ou no fim de uma palavra. Isto significa que ``r'at\\B'`` corresponde "
+"a ``'athens'``, ``'atom'``, ``'attorney'``, mas não a ``'at'``, ``'at.'`` ou "
+"``'at!'``. ``\\B`` é o oposto de ``\\b``, pelo que os caracteres de palavra "
+"em padrões Unicode (str) são alfanuméricos Unicode ou o sublinhado, embora "
+"isto possa ser alterado usando a *flag* :py:const:`~re.ASCII`. As fronteiras "
+"de palavras são determinadas pela localização atual se a *flag* :py:const:"
+"`~re.LOCALE` for usada."
 
 #: ../../library/re.rst:584
 msgid "``\\B`` now matches empty input string."
-msgstr ""
+msgstr "``\\B`` agora corresponde a uma cadeia de caracteres de entrada vazia."
 
 #: ../../library/re.rst:589
 msgid "``\\d``"
@@ -826,7 +1135,7 @@ msgstr "``\\d``"
 
 #: ../../library/re.rst:590 ../../library/re.rst:614 ../../library/re.rst:636
 msgid "For Unicode (str) patterns:"
-msgstr ""
+msgstr "Para padrões Unicode (str):"
 
 #: ../../library/re.rst:591
 msgid ""
@@ -834,20 +1143,25 @@ msgid ""
 "character category `[Nd]`__). This includes ``[0-9]``, and also many other "
 "digit characters."
 msgstr ""
+"Corresponde a qualquer dígito decimal Unicode (ou seja, qualquer carácter na "
+"categoria de caracteres Unicode `[Nd]`__). Isto inclui ``[0-9]`` e também "
+"muitos outros caracteres de dígitos."
 
 #: ../../library/re.rst:595
 msgid "Matches ``[0-9]`` if the :py:const:`~re.ASCII` flag is used."
-msgstr ""
+msgstr "Corresponde a ``[0-9]`` se a *flag* :py:const:`~re.ASCII` for usada."
 
 #: ../../library/re.rst:599 ../../library/re.rst:621 ../../library/re.rst:644
 msgid "For 8-bit (bytes) patterns:"
-msgstr ""
+msgstr "Para padrões de 8 bits (bytes):"
 
 #: ../../library/re.rst:600
 msgid ""
 "Matches any decimal digit in the ASCII character set; this is equivalent to "
 "``[0-9]``."
 msgstr ""
+"Corresponde a qualquer dígito decimal no conjunto de caracteres ASCII; isto "
+"é equivalente a ``[0-9]``."
 
 #: ../../library/re.rst:605
 msgid "``\\D``"
@@ -858,10 +1172,12 @@ msgid ""
 "Matches any character which is not a decimal digit. This is the opposite of "
 "``\\d``."
 msgstr ""
+"Corresponde a qualquer caractere que não seja um dígito decimal. Isto é o "
+"oposto de ``\\d``."
 
 #: ../../library/re.rst:609
 msgid "Matches ``[^0-9]`` if the :py:const:`~re.ASCII` flag is used."
-msgstr ""
+msgstr "Corresponde a ``[^0-9]`` se a *flag* :py:const:`~re.ASCII` for usada."
 
 #: ../../library/re.rst:613
 msgid "``\\s``"
@@ -874,17 +1190,25 @@ msgid ""
 "characters, for example the non-breaking spaces mandated by typography rules "
 "in many languages."
 msgstr ""
+"Corresponde a caracteres de espaço em branco Unicode (como definido por :py:"
+"meth:`str.isspace`). Isto inclui ``[ \\t\\n\\r\\f\\v]`` e também muitos "
+"outros caracteres, por exemplo, os espaços não separáveis exigidos por "
+"regras tipográficas em muitas línguas."
 
 #: ../../library/re.rst:619
 msgid ""
 "Matches ``[ \\t\\n\\r\\f\\v]`` if the :py:const:`~re.ASCII` flag is used."
 msgstr ""
+"Corresponde a ``[ \\t\\n\\r\\f\\v]`` se a *flag* :py:const:`~re.ASCII` for "
+"usada."
 
 #: ../../library/re.rst:622
 msgid ""
 "Matches characters considered whitespace in the ASCII character set; this is "
 "equivalent to ``[ \\t\\n\\r\\f\\v]``."
 msgstr ""
+"Corresponde a caracteres considerados espaços em branco no conjunto de "
+"caracteres ASCII; isto é equivalente a ``[ \\t\\n\\r\\f\\v]``."
 
 #: ../../library/re.rst:627
 msgid "``\\S``"
@@ -895,11 +1219,15 @@ msgid ""
 "Matches any character which is not a whitespace character. This is the "
 "opposite of ``\\s``."
 msgstr ""
+"Corresponde a qualquer caractere que não seja um caractere de espaço em "
+"branco. Isto é o oposto de ``\\s``."
 
 #: ../../library/re.rst:631
 msgid ""
 "Matches ``[^ \\t\\n\\r\\f\\v]`` if the :py:const:`~re.ASCII` flag is used."
 msgstr ""
+"Corresponde a ``[^ \\t\\n\\r\\f\\v]`` se a *flag* :py:const:`~re.ASCII` for "
+"usada."
 
 #: ../../library/re.rst:635
 msgid "``\\w``"
@@ -911,10 +1239,14 @@ msgid ""
 "characters (as defined by :py:meth:`str.isalnum`), as well as the underscore "
 "(``_``)."
 msgstr ""
+"Corresponde a caracteres de palavra Unicode; isto inclui todos os caracteres "
+"alfanuméricos Unicode (como definido por :py:meth:`str.isalnum`), bem como o "
+"sublinhado (``_``)."
 
 #: ../../library/re.rst:642
 msgid "Matches ``[a-zA-Z0-9_]`` if the :py:const:`~re.ASCII` flag is used."
 msgstr ""
+"Corresponde a ``[a-zA-Z0-9_]`` se a *flag* :py:const:`~re.ASCII` for usada."
 
 #: ../../library/re.rst:645
 msgid ""
@@ -923,6 +1255,10 @@ msgid ""
 "used, matches characters considered alphanumeric in the current locale and "
 "the underscore."
 msgstr ""
+"Corresponde a caracteres considerados alfanuméricos no conjunto de "
+"caracteres ASCII; isto é equivalente a ``[a-zA-Z0-9_]``. Se a *flag* :py:"
+"const:`~re.LOCALE` for usada, corresponde a caracteres considerados "
+"alfanuméricos na localização atual e ao sublinhado."
 
 #: ../../library/re.rst:652
 msgid "``\\W``"
@@ -934,16 +1270,22 @@ msgid ""
 "``\\w``. By default, matches non-underscore (``_``) characters for which :py:"
 "meth:`str.isalnum` returns ``False``."
 msgstr ""
+"Corresponde a qualquer caractere que não seja um caractere de palavra. Isto "
+"é o oposto de ``\\w``. Por predefinição, corresponde a caracteres não "
+"sublinhados (``_``) para os quais :py:meth:`str.isalnum` devolve ``False``."
 
 #: ../../library/re.rst:658
 msgid "Matches ``[^a-zA-Z0-9_]`` if the :py:const:`~re.ASCII` flag is used."
 msgstr ""
+"Corresponde a ``[^a-zA-Z0-9_]`` se a *flag* :py:const:`~re.ASCII` for usada."
 
 #: ../../library/re.rst:660
 msgid ""
 "If the :py:const:`~re.LOCALE` flag is used, matches characters which are "
 "neither alphanumeric in the current locale nor the underscore."
 msgstr ""
+"Se a *flag* :py:const:`~re.LOCALE` for usada, corresponde a caracteres que "
+"não são alfanuméricos na localização atual nem o sublinhado."
 
 #: ../../library/re.rst:667
 msgid "``\\z``"
@@ -967,6 +1309,9 @@ msgid ""
 "Most of the :ref:`escape sequences <escape-sequences>` supported by Python "
 "string literals are also accepted by the regular expression parser::"
 msgstr ""
+"A maioria das :ref:`sequências de escape <escape-sequences>` suportadas "
+"pelos literais de cadeias de caracteres do Python também são aceites pelo "
+"analisador de expressões regulares::"
 
 #: ../../library/re.rst:692
 msgid ""
@@ -974,12 +1319,17 @@ msgid ""
 "\\N      \\r      \\t      \\u\n"
 "\\U      \\v      \\x      \\\\"
 msgstr ""
+"\\a      \\b      \\f      \\n\n"
+"\\N      \\r      \\t      \\u\n"
+"\\U      \\v      \\x      \\\\"
 
 #: ../../library/re.rst:696
 msgid ""
 "(Note that ``\\b`` is used to represent word boundaries, and means "
 "\"backspace\" only inside character classes.)"
 msgstr ""
+"(Note que ``\\b`` é usado para representar fronteiras de palavras e "
+"significa \"retrocesso\" apenas dentro de classes de caracteres.)"
 
 #: ../../library/re.rst:699
 msgid ""
@@ -987,6 +1337,10 @@ msgid ""
 "Unicode (str) patterns. In bytes patterns they are errors. Unknown escapes "
 "of ASCII letters are reserved for future use and treated as errors."
 msgstr ""
+"As sequências de escape ``'\\u'``, ``'\\U'`` e ``'\\N'`` são reconhecidas "
+"apenas em padrões Unicode (str). Em padrões de bytes, são erros. Escapes "
+"desconhecidos de letras ASCII estão reservados para uso futuro e são "
+"tratados como erros."
 
 #: ../../library/re.rst:705
 msgid ""
@@ -995,15 +1349,22 @@ msgid ""
 "Otherwise, it is a group reference.  As for string literals, octal escapes "
 "are always at most three digits in length."
 msgstr ""
+"Os escapes octais estão incluídos numa forma limitada. Se o primeiro dígito "
+"for 0, ou se houver três dígitos octais, é considerado um escape octal. Caso "
+"contrário, é uma referência a um grupo. Quanto aos literais de cadeias de "
+"caracteres, os escapes octais têm sempre, no máximo, três dígitos de "
+"comprimento."
 
 #: ../../library/re.rst:710
 msgid "The ``'\\u'`` and ``'\\U'`` escape sequences have been added."
-msgstr ""
+msgstr "As sequências de escape ``'\\u'`` e ``'\\U'`` foram adicionadas."
 
 #: ../../library/re.rst:713
 msgid ""
 "Unknown escapes consisting of ``'\\'`` and an ASCII letter now are errors."
 msgstr ""
+"Escapes desconhecidos consistindo em ``'\\'`` e uma letra ASCII são agora "
+"erros."
 
 #: ../../library/re.rst:716
 msgid ""
@@ -1011,10 +1372,13 @@ msgid ""
 "string literals, it expands to the named Unicode character (e.g. ``'\\N{EM "
 "DASH}'``)."
 msgstr ""
+"A sequência de escape :samp:`'\\\\N\\\\{{name}\\\\}'` foi adicionada. Tal "
+"como nos literais de cadeias de caracteres, expande-se para o carácter "
+"Unicode nomeado (por exemplo, ``'\\N{EM DASH}'``)."
 
 #: ../../library/re.rst:724
 msgid "Module Contents"
-msgstr ""
+msgstr "Conteúdo do módulo"
 
 #: ../../library/re.rst:726
 msgid ""
@@ -1023,25 +1387,32 @@ msgid ""
 "compiled regular expressions.  Most non-trivial applications always use the "
 "compiled form."
 msgstr ""
+"O módulo define várias funções, constantes e uma exceção. Algumas das "
+"funções são versões simplificadas dos métodos completos para expressões "
+"regulares compiladas. A maioria das aplicações não triviais usa sempre a "
+"forma compilada."
 
 #: ../../library/re.rst:733
 msgid "Flags"
-msgstr ""
+msgstr "*Flags*"
 
 #: ../../library/re.rst:735
 msgid ""
 "Flag constants are now instances of :class:`RegexFlag`, which is a subclass "
 "of :class:`enum.IntFlag`."
 msgstr ""
+"As constantes de *flags* são agora instâncias de :class:`RegexFlag`, que é "
+"uma subclasse de :class:`enum.IntFlag`."
 
 #: ../../library/re.rst:742
 msgid ""
 "An :class:`enum.IntFlag` class containing the regex options listed below."
 msgstr ""
+"Uma classe :class:`enum.IntFlag` que contém as opções regex listadas abaixo."
 
 #: ../../library/re.rst:744
 msgid "- added to ``__all__``"
-msgstr ""
+msgstr "- adicionado a ``__all__``"
 
 #: ../../library/re.rst:749
 msgid ""
@@ -1050,10 +1421,14 @@ msgid ""
 "is only meaningful for Unicode (str) patterns, and is ignored for bytes "
 "patterns."
 msgstr ""
+"Faz com que ``\\w``, ``\\W``, ``\\b``, ``\\B``, ``\\d``, ``\\D``, ``\\s`` e "
+"``\\S`` realizem correspondência apenas ASCII em vez de correspondência "
+"Unicode completa. Isto só é significativo para padrões Unicode (str) e é "
+"ignorado para padrões de bytes."
 
 #: ../../library/re.rst:753
 msgid "Corresponds to the inline flag ``(?a)``."
-msgstr ""
+msgstr "Corresponde à *flag* em linha ``(?a)``."
 
 #: ../../library/re.rst:757
 msgid ""
@@ -1062,14 +1437,19 @@ msgid ""
 "patterns, and Unicode matching isn't allowed for bytes patterns. :py:const:"
 "`~re.UNICODE` and the inline flag ``(?u)`` are similarly redundant."
 msgstr ""
+"A *flag* :py:const:`~re.U` ainda existe por razões de compatibilidade "
+"retroativa, mas é redundante no Python 3, uma vez que as correspondências "
+"são Unicode por predefinição para padrões ``str`` e a correspondência "
+"Unicode não é permitida para padrões de bytes. :py:const:`~re.UNICODE` e a "
+"*flag* em linha ``(?u)`` são igualmente redundantes."
 
 #: ../../library/re.rst:766
 msgid "Display debug information about compiled expression."
-msgstr ""
+msgstr "Mostra informações de depuração sobre a expressão compilada."
 
 #: ../../library/re.rst:768
 msgid "No corresponding inline flag."
-msgstr ""
+msgstr "Sem *flag* em linha correspondente."
 
 #: ../../library/re.rst:774
 msgid ""
@@ -1079,10 +1459,16 @@ msgid ""
 "non-ASCII matches. The current locale does not change the effect of this "
 "flag unless the :py:const:`~re.LOCALE` flag is also used."
 msgstr ""
+"Realiza correspondência sem distinção de maiúsculas e minúsculas; expressões "
+"como ``[A-Z]`` também corresponderão a letras minúsculas. A correspondência "
+"Unicode completa (como ``Ü`` correspondendo a ``ü``) também funciona, a "
+"menos que a *flag* :py:const:`~re.ASCII` seja usada para desativar "
+"correspondências não ASCII. A localização atual não altera o efeito desta "
+"*flag*, a menos que a *flag* :py:const:`~re.LOCALE` também seja usada."
 
 #: ../../library/re.rst:782
 msgid "Corresponds to the inline flag ``(?i)``."
-msgstr ""
+msgstr "Corresponde à *flag* em linha ``(?i)``."
 
 #: ../../library/re.rst:784
 msgid ""
@@ -1094,6 +1480,13 @@ msgid ""
 "the :py:const:`~re.ASCII` flag is used, only letters 'a' to 'z' and 'A' to "
 "'Z' are matched."
 msgstr ""
+"Note que, quando os padrões Unicode ``[a-z]`` ou ``[A-Z]`` são usados em "
+"combinação com a *flag* :const:`IGNORECASE`, corresponderão às 52 letras "
+"ASCII e a 4 letras não ASCII adicionais: 'İ' (U+0130, letra maiúscula latina "
+"I com ponto acima), 'ı' (U+0131, letra minúscula latina i sem ponto), "
+"'ſ' (U+017F, letra minúscula latina s longo) e 'K' (U+212A, símbolo Kelvin). "
+"Se a *flag* :py:const:`~re.ASCII` for usada, apenas as letras de 'a' a 'z' e "
+"de 'A' a 'Z' são correspondidas."
 
 #: ../../library/re.rst:795
 msgid ""
@@ -1101,10 +1494,13 @@ msgid ""
 "dependent on the current locale. This flag can be used only with bytes "
 "patterns."
 msgstr ""
+"Faz com que ``\\w``, ``\\W``, ``\\b``, ``\\B`` e a correspondência sem "
+"distinção de maiúsculas/minúsculas dependam da localização atual. Esta "
+"*flag* só pode ser usada com padrões de bytes."
 
 #: ../../library/re.rst:799
 msgid "Corresponds to the inline flag ``(?L)``."
-msgstr ""
+msgstr "Corresponde à *flag* em linha ``(?L)``."
 
 #: ../../library/re.rst:803
 msgid ""
@@ -1114,12 +1510,19 @@ msgid ""
 "for Unicode (str) patterns and it is able to handle different locales and "
 "languages."
 msgstr ""
+"Esta *flag* é desencorajada; considere a correspondência Unicode em vez "
+"disso. O mecanismo de localização é muito pouco fiável, pois só lida com uma "
+"\"cultura\" de cada vez e só funciona com localizações de 8 bits. A "
+"correspondência Unicode está ativada por predefinição para padrões Unicode "
+"(str) e é capaz de lidar com diferentes localizações e línguas."
 
 #: ../../library/re.rst:810
 msgid ""
 ":py:const:`~re.LOCALE` can be used only with bytes patterns and is not "
 "compatible with :py:const:`~re.ASCII`."
 msgstr ""
+":py:const:`~re.LOCALE` só pode ser usado com padrões de bytes e não é "
+"compatível com :py:const:`~re.ASCII`."
 
 #: ../../library/re.rst:814
 msgid ""
@@ -1127,6 +1530,10 @@ msgid ""
 "longer depend on the locale at compile time. Only the locale at matching "
 "time affects the result of matching."
 msgstr ""
+"Os objetos de expressão regular compilados com a *flag* :py:const:`~re."
+"LOCALE` já não dependem da localização no momento da compilação. Apenas a "
+"localização no momento da correspondência afeta o resultado da "
+"correspondência."
 
 #: ../../library/re.rst:823
 msgid ""
@@ -1141,7 +1548,7 @@ msgstr ""
 
 #: ../../library/re.rst:830
 msgid "Corresponds to the inline flag ``(?m)``."
-msgstr ""
+msgstr "Corresponde à *flag* em linha ``(?m)``."
 
 #: ../../library/re.rst:834
 msgid ""
@@ -1150,22 +1557,31 @@ msgid ""
 "will be conditionally ORed with other flags.  Example of use as a default "
 "value::"
 msgstr ""
+"Indica que nenhuma *flag* está a ser aplicada; o valor é ``0``. Esta *flag* "
+"pode ser usada como um valor predefinido para um argumento nomeado de uma "
+"função ou como um valor base que será condicionalmente ORed com outras "
+"*flags*. Exemplo de uso como valor predefinido::"
 
 #: ../../library/re.rst:839
 msgid ""
 "def myfunc(text, flag=re.NOFLAG):\n"
 "    return re.match(text, flag)"
 msgstr ""
+"def myfunc(text, flag=re.NOFLAG):\n"
+"    return re.match(text, flag)"
 
 #: ../../library/re.rst:847
 msgid ""
 "Make the ``'.'`` special character match any character at all, including a "
 "newline; without this flag, ``'.'`` will match anything *except* a newline."
 msgstr ""
+"Faz com que o caractere especial ``'.'`` corresponda a qualquer caractere, "
+"incluindo uma nova linha; sem esta *flag*, ``'.'`` corresponderá a qualquer "
+"coisa *exceto* uma nova linha."
 
 #: ../../library/re.rst:850
 msgid "Corresponds to the inline flag ``(?s)``."
-msgstr ""
+msgstr "Corresponde à *flag* em linha ``(?s)``."
 
 #: ../../library/re.rst:856
 msgid ""
@@ -1173,11 +1589,16 @@ msgid ""
 "This flag is therefore redundant with **no effect** and is only kept for "
 "backward compatibility."
 msgstr ""
+"No Python 3, os caracteres Unicode são correspondidos por predefinição para "
+"padrões ``str``. Esta *flag* é, portanto, redundante **sem efeito** e é "
+"mantida apenas por razões de compatibilidade retroativa."
 
 #: ../../library/re.rst:861
 msgid ""
 "See :py:const:`~re.ASCII` to restrict matching to ASCII characters instead."
 msgstr ""
+"Consulte :py:const:`~re.ASCII` para restringir a correspondência a "
+"caracteres ASCII."
 
 #: ../../library/re.rst:868
 msgid ""
@@ -1191,12 +1612,24 @@ msgid ""
 "characters from the leftmost such ``#`` through the end of the line are "
 "ignored."
 msgstr ""
+"Esta *flag* permite escrever expressões regulares que parecem mais "
+"agradáveis e são mais legíveis, permitindo separar visualmente secções "
+"lógicas do padrão e adicionar comentários. Os espaços em branco dentro do "
+"padrão são ignorados, exceto quando estão numa classe de caracteres, ou "
+"quando precedidos por uma barra invertida não escapada, ou dentro de "
+"*tokens* como ``*?``, ``(?:`` ou ``(?P<...>``. Por exemplo, ``(? :`` e ``* ?"
+"`` não são permitidos. Quando uma linha contém um ``#`` que não está numa "
+"classe de caracteres e não é precedido por uma barra invertida não escapada, "
+"todos os caracteres desde o ``#`` mais à esquerda até ao final da linha são "
+"ignorados."
 
 #: ../../library/re.rst:878
 msgid ""
 "This means that the two following regular expression objects that match a "
 "decimal number are functionally equal::"
 msgstr ""
+"Isto significa que os dois objetos de expressão regular seguintes, que "
+"correspondem a um número decimal, são funcionalmente iguais::"
 
 #: ../../library/re.rst:881
 msgid ""
@@ -1205,14 +1638,18 @@ msgid ""
 "                   \\d *  # some fractional digits\"\"\", re.X)\n"
 "b = re.compile(r\"\\d+\\.\\d*\")"
 msgstr ""
+"a = re.compile(r\"\"\"\\d +  # a parte inteira\n"
+"                   \\.    # o ponto decimal\n"
+"                   \\d *  # alguns dígitos fracionários\"\"\", re.X)\n"
+"b = re.compile(r\"\\d+\\.\\d*\")"
 
 #: ../../library/re.rst:886
 msgid "Corresponds to the inline flag ``(?x)``."
-msgstr ""
+msgstr "Corresponde à *flag* em linha ``(?x)``."
 
 #: ../../library/re.rst:890
 msgid "Functions"
-msgstr ""
+msgstr "Funções"
 
 #: ../../library/re.rst:894
 msgid ""
@@ -1220,6 +1657,10 @@ msgid ""
 "<re-objects>`, which can be used for matching using its :func:`~Pattern."
 "match`, :func:`~Pattern.search` and other methods, described below."
 msgstr ""
+"Compila um padrão de expressão regular num :ref:`objeto de expressão regular "
+"<re-objects>`, que pode ser usado para correspondência usando os seus "
+"métodos :func:`~Pattern.match`, :func:`~Pattern.search` e outros, descritos "
+"abaixo."
 
 #: ../../library/re.rst:899 ../../library/re.rst:931 ../../library/re.rst:949
 #: ../../library/re.rst:960 ../../library/re.rst:1006 ../../library/re.rst:1040
@@ -1230,24 +1671,29 @@ msgid ""
 "Values can be any of the `flags`_ variables, combined using bitwise OR (the "
 "``|`` operator)."
 msgstr ""
+"O comportamento da expressão pode ser modificado especificando um valor "
+"*flags*. Os valores podem ser quaisquer das variáveis `flags`_, combinadas "
+"usando OR bit a bit (o operador ``|``)."
 
 #: ../../library/re.rst:903
 msgid "The sequence ::"
-msgstr ""
+msgstr "A sequência ::"
 
 #: ../../library/re.rst:905
 msgid ""
 "prog = re.compile(pattern)\n"
 "result = prog.match(string)"
 msgstr ""
+"prog = re.compile(pattern)\n"
+"result = prog.match(string)"
 
 #: ../../library/re.rst:908
 msgid "is equivalent to ::"
-msgstr ""
+msgstr "é equivalente a ::"
 
 #: ../../library/re.rst:910
 msgid "result = re.match(pattern, string)"
-msgstr ""
+msgstr "result = re.match(pattern, string)"
 
 #: ../../library/re.rst:912
 msgid ""
@@ -1255,6 +1701,9 @@ msgid ""
 "object for reuse is more efficient when the expression will be used several "
 "times in a single program."
 msgstr ""
+"mas usar :func:`re.compile` e guardar o objeto de expressão regular "
+"resultante para reutilização é mais eficiente quando a expressão será usada "
+"várias vezes num único programa."
 
 #: ../../library/re.rst:918
 msgid ""
@@ -1263,6 +1712,11 @@ msgid ""
 "that use only a few regular expressions at a time needn't worry about "
 "compiling regular expressions."
 msgstr ""
+"As versões compiladas dos padrões mais recentes passados para :func:`re."
+"compile` e as funções de correspondência a nível de módulo são guardadas em "
+"cache, pelo que os programas que usam apenas algumas expressões regulares de "
+"cada vez não precisam de se preocupar com a compilação de expressões "
+"regulares."
 
 #: ../../library/re.rst:926
 msgid ""
@@ -1272,6 +1726,11 @@ msgid ""
 "pattern; note that this is different from finding a zero-length match at "
 "some point in the string."
 msgstr ""
+"Percorre *string* à procura da primeira localização onde a expressão regular "
+"*pattern* produz uma correspondência e devolve um :class:`~re.Match` "
+"correspondente. Devolve ``None`` se nenhuma posição na cadeia de caracteres "
+"corresponder ao padrão; note que isto é diferente de encontrar uma "
+"correspondência de comprimento zero em algum ponto da cadeia de caracteres."
 
 #: ../../library/re.rst:938
 msgid ""
@@ -1280,18 +1739,27 @@ msgid ""
 "``None`` if the string does not match the pattern; note that this is "
 "different from a zero-length match."
 msgstr ""
+"Se zero ou mais caracteres no início de *string* corresponderem à expressão "
+"regular *pattern*, devolve um :class:`~re.Match` correspondente. Devolve "
+"``None`` se a cadeia de caracteres não corresponder ao padrão; note que isto "
+"é diferente de uma correspondência de comprimento zero."
 
 #: ../../library/re.rst:943
 msgid ""
 "Note that even in :const:`MULTILINE` mode, :func:`re.match` will only match "
 "at the beginning of the string and not at the beginning of each line."
 msgstr ""
+"Note que, mesmo no modo :const:`MULTILINE`, :func:`re.match` só "
+"corresponderá no início da cadeia de caracteres e não no início de cada "
+"linha."
 
 #: ../../library/re.rst:946
 msgid ""
 "If you want to locate a match anywhere in *string*, use :func:`search` "
 "instead (see also :ref:`search-vs-match`)."
 msgstr ""
+"Se pretender localizar uma correspondência em qualquer lugar em *string*, "
+"use :func:`search` em vez disso (consulte também :ref:`search-vs-match`)."
 
 #: ../../library/re.rst:956
 msgid ""
@@ -1299,6 +1767,10 @@ msgid ""
 "corresponding :class:`~re.Match`.  Return ``None`` if the string does not "
 "match the pattern; note that this is different from a zero-length match."
 msgstr ""
+"Se toda a *string* corresponder à expressão regular *pattern*, devolve um :"
+"class:`~re.Match` correspondente. Devolve ``None`` se a cadeia de caracteres "
+"não corresponder ao padrão; note que isto é diferente de uma correspondência "
+"de comprimento zero."
 
 #: ../../library/re.rst:969
 msgid ""
@@ -1308,6 +1780,11 @@ msgid ""
 "*maxsplit* splits occur, and the remainder of the string is returned as the "
 "final element of the list. ::"
 msgstr ""
+"Divide *string* pelas ocorrências de *pattern*. Se parênteses de captura "
+"forem usados em *pattern*, então o texto de todos os grupos no padrão também "
+"é devolvido como parte da lista resultante. Se *maxsplit* for não nulo, "
+"ocorrem, no máximo, *maxsplit* divisões e o restante da cadeia de caracteres "
+"é devolvido como o último elemento da lista. ::"
 
 #: ../../library/re.rst:975
 msgid ""
@@ -1320,6 +1797,14 @@ msgid ""
 ">>> re.split('[a-f]+', '0a3B9', flags=re.IGNORECASE)\n"
 "['0', '3', '9']"
 msgstr ""
+">>> re.split(r'\\W+', 'Words, words, words.')\n"
+"['Words', 'words', 'words', '']\n"
+">>> re.split(r'(\\W+)', 'Words, words, words.')\n"
+"['Words', ', ', 'words', ', ', 'words', '.', '']\n"
+">>> re.split(r'\\W+', 'Words, words, words.', maxsplit=1)\n"
+"['Words', 'words, words.']\n"
+">>> re.split('[a-f]+', '0a3B9', flags=re.IGNORECASE)\n"
+"['0', '3', '9']"
 
 #: ../../library/re.rst:984
 msgid ""
@@ -1327,24 +1812,34 @@ msgid ""
 "of the string, the result will start with an empty string.  The same holds "
 "for the end of the string::"
 msgstr ""
+"Se houver grupos de captura no separador e este corresponder ao início da "
+"cadeia de caracteres, o resultado começará com uma cadeia de caracteres "
+"vazia. O mesmo aplica-se ao final da cadeia de caracteres::"
 
 #: ../../library/re.rst:988
 msgid ""
 ">>> re.split(r'(\\W+)', '...words, words...')\n"
 "['', '...', 'words', ', ', 'words', '...', '']"
 msgstr ""
+">>> re.split(r'(\\W+)', '...words, words...')\n"
+"['', '...', 'words', ', ', 'words', '...', '']"
 
 #: ../../library/re.rst:991
 msgid ""
 "That way, separator components are always found at the same relative indices "
 "within the result list."
 msgstr ""
+"Dessa forma, os componentes do separador são sempre encontrados nos mesmos "
+"índices relativos dentro da lista de resultados."
 
 #: ../../library/re.rst:994
 msgid ""
 "Adjacent empty matches are not possible, but an empty match can occur "
 "immediately after a non-empty match."
 msgstr ""
+"Correspondências vazias adjacentes não são possíveis, mas uma "
+"correspondência vazia pode ocorrer imediatamente após uma correspondência "
+"não vazia."
 
 #: ../../library/re.rst:997
 msgid ""
@@ -1356,15 +1851,24 @@ msgid ""
 "['', '...', '', '', 'w', '', 'o', '', 'r', '', 'd', '', 's', '...', '', '', "
 "'']"
 msgstr ""
+">>> re.split(r'\\b', 'Words, words, words.')\n"
+"['', 'Words', ', ', 'words', ', ', 'words', '.']\n"
+">>> re.split(r'\\W*', '...words...')\n"
+"['', '', 'w', 'o', 'r', 'd', 's', '', '']\n"
+">>> re.split(r'(\\W*)', '...words...')\n"
+"['', '...', '', '', 'w', '', 'o', '', 'r', '', 'd', '', 's', '...', '', '', "
+"'']"
 
 #: ../../library/re.rst:1010 ../../library/re.rst:1121
 msgid "Added the optional flags argument."
-msgstr ""
+msgstr "Adicionado o argumento opcional *flags*."
 
 #: ../../library/re.rst:1013
 msgid ""
 "Added support of splitting on a pattern that could match an empty string."
 msgstr ""
+"Adicionado suporte para dividir num padrão que pode corresponder a uma "
+"cadeia de caracteres vazia."
 
 #: ../../library/re.rst:1016
 msgid ""
@@ -1372,6 +1876,9 @@ msgid ""
 "future Python versions they will be :ref:`keyword-only parameters <keyword-"
 "only_parameter>`."
 msgstr ""
+"Passar *maxsplit* e *flags* como argumentos posicionais está obsoleto. Em "
+"versões futuras do Python, serão :ref:`parâmetros somente-nomeados <keyword-"
+"only_parameter>`."
 
 #: ../../library/re.rst:1024
 msgid ""
@@ -1379,6 +1886,10 @@ msgid ""
 "strings or tuples.  The *string* is scanned left-to-right, and matches are "
 "returned in the order found.  Empty matches are included in the result."
 msgstr ""
+"Devolve todas as correspondências não sobrepostas de *pattern* em *string*, "
+"como uma lista de cadeias de caracteres ou tuplos. A *string* é analisada da "
+"esquerda para a direita e as correspondências são devolvidas pela ordem em "
+"que foram encontradas. Correspondências vazias são incluídas no resultado."
 
 #: ../../library/re.rst:1028
 msgid ""
@@ -1389,10 +1900,19 @@ msgid ""
 "matching the groups.  Non-capturing groups do not affect the form of the "
 "result."
 msgstr ""
+"O resultado depende do número de grupos de captura no padrão. Se não houver "
+"grupos, devolve uma lista de cadeias de caracteres que correspondem a todo o "
+"padrão. Se houver exatamente um grupo, devolve uma lista de cadeias de "
+"caracteres que correspondem a esse grupo. Se estiverem presentes vários "
+"grupos, devolve uma lista de tuplos de cadeias de caracteres que "
+"correspondem aos grupos. Os grupos não capturadores não afetam a forma do "
+"resultado."
 
 #: ../../library/re.rst:1044 ../../library/re.rst:1059
 msgid "Non-empty matches can now start just after a previous empty match."
 msgstr ""
+"Correspondências não vazias podem agora começar logo após uma "
+"correspondência vazia anterior."
 
 #: ../../library/re.rst:1050
 msgid ""
@@ -1401,6 +1921,11 @@ msgid ""
 "scanned left-to-right, and matches are returned in the order found.  Empty "
 "matches are included in the result."
 msgstr ""
+"Devolve um :term:`iterador` que produz objetos :class:`~re.Match` sobre "
+"todas as correspondências não sobrepostas para a RE *pattern* em *string*. A "
+"*string* é analisada da esquerda para a direita e as correspondências são "
+"devolvidas pela ordem em que foram encontradas. Correspondências vazias são "
+"incluídas no resultado."
 
 #: ../../library/re.rst:1065
 msgid ""
@@ -1415,6 +1940,17 @@ msgid ""
 "``\\6``, are replaced with the substring matched by group 6 in the pattern. "
 "For example::"
 msgstr ""
+"Devolve a cadeia de caracteres obtida substituindo as ocorrências mais à "
+"esquerda e não sobrepostas de *pattern* em *string* pela substituição "
+"*repl*. Se o padrão não for encontrado, *string* é devolvida inalterada. "
+"*repl* pode ser uma cadeia de caracteres ou uma função; se for uma cadeia de "
+"caracteres, quaisquer escapes de barra invertida nela são processados. Ou "
+"seja, ``\\n`` é convertido num único carácter de nova linha, ``\\r`` é "
+"convertido num carácter de retorno de carro, e assim por diante. Escapes "
+"desconhecidos de letras ASCII estão reservados para uso futuro e são "
+"tratados como erros. Outros escapes desconhecidos, como ``\\&``, são "
+"deixados como estão. Referências retroativas, como ``\\6``, são substituídas "
+"pela subcadeia correspondida pelo grupo 6 no padrão. Por exemplo::"
 
 #: ../../library/re.rst:1076
 msgid ""
@@ -1430,6 +1966,9 @@ msgid ""
 "of *pattern*.  The function takes a single :class:`~re.Match` argument, and "
 "returns the replacement string.  For example::"
 msgstr ""
+"Se *repl* for uma função, é chamada para cada ocorrência não sobreposta de "
+"*pattern*. A função recebe um único argumento :class:`~re.Match` e devolve a "
+"cadeia de caracteres de substituição. Por exemplo::"
 
 #: ../../library/re.rst:1085
 msgid ""
@@ -1443,10 +1982,19 @@ msgid ""
 "IGNORECASE)\n"
 "'Baked Beans & Spam'"
 msgstr ""
+">>> def dashrepl(matchobj):\n"
+"...     if matchobj.group(0) == '-': return ' '\n"
+"...     else: return '-'\n"
+"...\n"
+">>> re.sub('-{1,2}', dashrepl, 'pro----gram-files')\n"
+"'pro--gram files'\n"
+">>> re.sub(r'\\sAND\\s', ' & ', 'Baked Beans And Spam', flags=re."
+"IGNORECASE)\n"
+"'Baked Beans & Spam'"
 
 #: ../../library/re.rst:1094
 msgid "The pattern may be a string or a :class:`~re.Pattern`."
-msgstr ""
+msgstr "O padrão pode ser uma cadeia de caracteres ou um :class:`~re.Pattern`."
 
 #: ../../library/re.rst:1096
 msgid ""
@@ -1454,6 +2002,9 @@ msgid ""
 "to be replaced; *count* must be a non-negative integer.  If omitted or zero, "
 "all occurrences will be replaced."
 msgstr ""
+"O argumento opcional *count* é o número máximo de ocorrências do padrão a "
+"serem substituídas; *count* deve ser um inteiro não negativo. Se omitido ou "
+"zero, todas as ocorrências serão substituídas."
 
 #: ../../library/re.rst:1100
 msgid ""
@@ -1461,6 +2012,10 @@ msgid ""
 "immediately after a non-empty match. As a result, ``sub('x*', '-', 'abxd')`` "
 "returns ``'-a-b--d-'`` instead of ``'-a-b-d-'``."
 msgstr ""
+"Correspondências vazias adjacentes não são possíveis, mas uma "
+"correspondência vazia pode ocorrer imediatamente após uma correspondência "
+"não vazia. Como resultado, ``sub('x*', '-', 'abxd')`` devolve ``'-a-b--d-'`` "
+"em vez de ``'-a-b-d-'``."
 
 #: ../../library/re.rst:1107
 msgid ""
@@ -1474,22 +2029,38 @@ msgid ""
 "backreference ``\\g<0>`` substitutes in the entire substring matched by the "
 "RE."
 msgstr ""
+"Nos argumentos *repl* do tipo cadeia de caracteres, além dos escapes de "
+"caracteres e das referências retroativas descritas acima, ``\\g<name>`` "
+"utilizará a subcadeia correspondida pelo grupo nomeado ``name``, como "
+"definido pela sintaxe ``(?P<name>...)``. ``\\g<number>`` usa o número de "
+"grupo correspondente; ``\\g<2>`` é, portanto, equivalente a ``\\2``, mas não "
+"é ambíguo numa substituição como ``\\g<2>0``. ``\\20`` seria interpretado "
+"como uma referência ao grupo 20, não como uma referência ao grupo 2 seguida "
+"do carácter literal ``'0'``. A referência retroativa ``\\g<0>`` substitui "
+"toda a subcadeia correspondida pela RE."
 
 #: ../../library/re.rst:1124 ../../library/re.rst:1401
 msgid "Unmatched groups are replaced with an empty string."
 msgstr ""
+"Grupos não correspondidos são substituídos por uma cadeia de caracteres "
+"vazia."
 
 #: ../../library/re.rst:1127
 msgid ""
 "Unknown escapes in *pattern* consisting of ``'\\'`` and an ASCII letter now "
 "are errors."
 msgstr ""
+"Escapes desconhecidos em *pattern* consistindo em ``'\\'`` e uma letra ASCII "
+"são agora erros."
 
 #: ../../library/re.rst:1131
 msgid ""
 "Unknown escapes in *repl* consisting of ``'\\'`` and an ASCII letter now are "
 "errors. An empty match can occur immediately after a non-empty match."
 msgstr ""
+"Escapes desconhecidos em *repl* consistindo em ``'\\'`` e uma letra ASCII "
+"são agora erros. Uma correspondência vazia pode ocorrer imediatamente após "
+"uma correspondência não vazia."
 
 #: ../../library/re.rst:1136
 msgid ""
@@ -1497,6 +2068,9 @@ msgid ""
 "strings, group *name* can only contain bytes in the ASCII range "
 "(``b'\\x00'``-``b'\\x7f'``)."
 msgstr ""
+"O grupo *id* só pode conter dígitos ASCII. Em cadeias de caracteres de "
+"substituição :class:`bytes`, o grupo *name* só pode conter bytes na gama "
+"ASCII (``b'\\x00'``-``b'\\x7f'``)."
 
 #: ../../library/re.rst:1141
 msgid ""
@@ -1504,12 +2078,17 @@ msgid ""
 "Python versions they will be :ref:`keyword-only parameters <keyword-"
 "only_parameter>`."
 msgstr ""
+"Passar *count* e *flags* como argumentos posicionais está obsoleto. Em "
+"versões futuras do Python, serão :ref:`parâmetros somente-nomeados <keyword-"
+"only_parameter>`."
 
 #: ../../library/re.rst:1149
 msgid ""
 "Perform the same operation as :func:`sub`, but return a tuple ``(new_string, "
 "number_of_subs_made)``."
 msgstr ""
+"Realiza a mesma operação que :func:`sub`, mas devolve um tuplo "
+"``(new_string, number_of_subs_made)``."
 
 #: ../../library/re.rst:1159
 msgid ""
@@ -1517,6 +2096,9 @@ msgid ""
 "an arbitrary literal string that may have regular expression metacharacters "
 "in it.  For example::"
 msgstr ""
+"Escapa caracteres especiais em *pattern*. Isto é útil se pretender "
+"corresponder a uma cadeia de caracteres literal arbitrária que pode conter "
+"metacaracteres de expressões regulares. Por exemplo::"
 
 #: ../../library/re.rst:1163
 msgid ""
@@ -1538,6 +2120,9 @@ msgid ""
 "This function must not be used for the replacement string in :func:`sub` "
 "and :func:`subn`, only backslashes should be escaped.  For example::"
 msgstr ""
+"Esta função não deve ser usada para a cadeia de caracteres de substituição "
+"em :func:`sub` e :func:`subn`; apenas as barras invertidas devem ser "
+"escapadas. Por exemplo::"
 
 #: ../../library/re.rst:1177
 msgid ""
@@ -1546,10 +2131,14 @@ msgid ""
 ">>> print(re.sub(digits_re, digits_re.replace('\\\\', r'\\\\'), sample))\n"
 "/usr/sbin/sendmail - \\d+ errors, \\d+ warnings"
 msgstr ""
+">>> digits_re = r'\\d+'\n"
+">>> sample = '/usr/sbin/sendmail - 0 errors, 12 warnings'\n"
+">>> print(re.sub(digits_re, digits_re.replace('\\\\', r'\\\\'), sample))\n"
+"/usr/sbin/sendmail - \\d+ errors, \\d+ warnings"
 
 #: ../../library/re.rst:1182
 msgid "The ``'_'`` character is no longer escaped."
-msgstr ""
+msgstr "O caractere ``'_'`` já não é escapado."
 
 #: ../../library/re.rst:1185
 msgid ""
@@ -1558,10 +2147,14 @@ msgid ""
 "``'/'``, ``':'``, ``';'``, ``'<'``, ``'='``, ``'>'``, ``'@'``, and ``\"`\"`` "
 "are no longer escaped."
 msgstr ""
+"Apenas os caracteres que podem ter significado especial numa expressão "
+"regular são escapados. Como resultado, ``'!'``, ``'\"'``, ``'%'``, "
+"``\"'\"``, ``','``, ``'/'``, ``':'``, ``';'``, ``'<'``, ``'='``, ``'>'``, "
+"``'@'`` e ``\"`\"`` já não são escapados."
 
 #: ../../library/re.rst:1194
 msgid "Clear the regular expression cache."
-msgstr ""
+msgstr "Limpa a cache de expressões regulares."
 
 #: ../../library/re.rst:1198
 msgid "Exceptions"
@@ -1576,50 +2169,61 @@ msgid ""
 "pattern.  The ``PatternError`` instance has the following additional "
 "attributes:"
 msgstr ""
+"Exceção gerada quando uma cadeia de caracteres passada a uma das funções "
+"aqui não é uma expressão regular válida (por exemplo, pode conter parênteses "
+"não correspondidos) ou quando ocorre algum outro erro durante a compilação "
+"ou correspondência. Nunca é um erro se uma cadeia de caracteres não contiver "
+"correspondência para um padrão. A instância ``PatternError`` tem os "
+"seguintes atributos adicionais:"
 
 #: ../../library/re.rst:1210
 msgid "The unformatted error message."
-msgstr ""
+msgstr "A mensagem de erro não formatada."
 
 #: ../../library/re.rst:1214
 msgid "The regular expression pattern."
-msgstr ""
+msgstr "O padrão de expressão regular."
 
 #: ../../library/re.rst:1218
 msgid "The index in *pattern* where compilation failed (may be ``None``)."
-msgstr ""
+msgstr "O índice em *pattern* onde a compilação falhou (pode ser ``None``)."
 
 #: ../../library/re.rst:1222
 msgid "The line corresponding to *pos* (may be ``None``)."
-msgstr ""
+msgstr "A linha correspondente a *pos* (pode ser ``None``)."
 
 #: ../../library/re.rst:1226
 msgid "The column corresponding to *pos* (may be ``None``)."
-msgstr ""
+msgstr "A coluna correspondente a *pos* (pode ser ``None``)."
 
 #: ../../library/re.rst:1228
 msgid "Added additional attributes."
-msgstr ""
+msgstr "Adicionados atributos adicionais."
 
 #: ../../library/re.rst:1231
 msgid ""
 "``PatternError`` was originally named ``error``; the latter is kept as an "
 "alias for backward compatibility."
 msgstr ""
+"``PatternError`` era originalmente chamado ``error``; este último é mantido "
+"como um alias para compatibilidade retroativa."
 
 #: ../../library/re.rst:1238
 msgid "Regular Expression Objects"
-msgstr ""
+msgstr "Objetos de expressão regular"
 
 #: ../../library/re.rst:1242
 msgid "Compiled regular expression object returned by :func:`re.compile`."
 msgstr ""
+"Objeto de expressão regular compilada devolvido por :func:`re.compile`."
 
 #: ../../library/re.rst:1244
 msgid ""
 ":py:class:`re.Pattern` supports ``[]`` to indicate a Unicode (str) or bytes "
 "pattern. See :ref:`types-genericalias`."
 msgstr ""
+":py:class:`re.Pattern` suporta ``[]`` para indicar um padrão Unicode (str) "
+"ou bytes. Consulte :ref:`types-genericalias`."
 
 #: ../../library/re.rst:1250
 msgid ""
@@ -1629,6 +2233,11 @@ msgid ""
 "this is different from finding a zero-length match at some point in the "
 "string."
 msgstr ""
+"Percorre *string* à procura da primeira localização onde esta expressão "
+"regular produz uma correspondência e devolve um :class:`~re.Match` "
+"correspondente. Devolve ``None`` se nenhuma posição na cadeia de caracteres "
+"corresponder ao padrão; note que isto é diferente de encontrar uma "
+"correspondência de comprimento zero em algum ponto da cadeia de caracteres."
 
 #: ../../library/re.rst:1255
 msgid ""
@@ -1638,6 +2247,12 @@ msgid ""
 "beginning of the string and at positions just after a newline, but not "
 "necessarily at the index where the search is to start."
 msgstr ""
+"O segundo parâmetro opcional *pos* dá um índice na cadeia de caracteres onde "
+"a pesquisa deve começar; o valor predefinido é ``0``. Isto não é "
+"completamente equivalente a fatiar a cadeia de caracteres; o carácter de "
+"padrão ``'^'`` corresponde ao início real da cadeia de caracteres e em "
+"posições logo após uma nova linha, mas não necessariamente no índice onde a "
+"pesquisa deve começar."
 
 #: ../../library/re.rst:1261
 msgid ""
@@ -1648,6 +2263,13 @@ msgid ""
 "compiled regular expression object, ``rx.search(string, 0, 50)`` is "
 "equivalent to ``rx.search(string[:50], 0)``. ::"
 msgstr ""
+"O parâmetro opcional *endpos* limita até onde a cadeia de caracteres será "
+"pesquisada; será como se a cadeia de caracteres tivesse *endpos* caracteres "
+"de comprimento, pelo que apenas os caracteres de *pos* a ``endpos - 1`` "
+"serão pesquisados para uma correspondência. Se *endpos* for menor que *pos*, "
+"nenhuma correspondência será encontrada; caso contrário, se *rx* for um "
+"objeto de expressão regular compilada, ``rx.search(string, 0, 50)`` é "
+"equivalente a ``rx.search(string[:50], 0)``. ::"
 
 #: ../../library/re.rst:1268
 msgid ""
@@ -1656,6 +2278,11 @@ msgid ""
 "<re.Match object; span=(0, 1), match='d'>\n"
 ">>> pattern.search(\"dog\", 1)  # No match; search doesn't include the \"d\""
 msgstr ""
+">>> pattern = re.compile(\"d\")\n"
+">>> pattern.search(\"dog\")     # Correspondência no índice 0\n"
+"<re.Match object; span=(0, 1), match='d'>\n"
+">>> pattern.search(\"dog\", 1)  # Sem correspondência; a pesquisa não inclui "
+"o \"d\""
 
 #: ../../library/re.rst:1276
 msgid ""
@@ -1664,12 +2291,18 @@ msgid ""
 "the string does not match the pattern; note that this is different from a "
 "zero-length match."
 msgstr ""
+"Se zero ou mais caracteres no *início* de *string* corresponderem a esta "
+"expressão regular, devolve um :class:`~re.Match` correspondente. Devolve "
+"``None`` se a cadeia de caracteres não corresponder ao padrão; note que isto "
+"é diferente de uma correspondência de comprimento zero."
 
 #: ../../library/re.rst:1281 ../../library/re.rst:1299
 msgid ""
 "The optional *pos* and *endpos* parameters have the same meaning as for the :"
 "meth:`~Pattern.search` method. ::"
 msgstr ""
+"Os parâmetros opcionais *pos* e *endpos* têm o mesmo significado que para o "
+"método :meth:`~Pattern.search`. ::"
 
 #: ../../library/re.rst:1284
 msgid ""
@@ -1680,12 +2313,21 @@ msgid ""
 "\"dog\".\n"
 "<re.Match object; span=(1, 2), match='o'>"
 msgstr ""
+">>> pattern = re.compile(\"o\")\n"
+">>> pattern.match(\"dog\")      # Sem correspondência, pois \"o\" não está "
+"no início de \"dog\".\n"
+">>> pattern.match(\"dog\", 1)   # Correspondência, pois \"o\" é o 2.º "
+"caractere de \"dog\".\n"
+"<re.Match object; span=(1, 2), match='o'>"
 
 #: ../../library/re.rst:1289
 msgid ""
 "If you want to locate a match anywhere in *string*, use :meth:`~Pattern."
 "search` instead (see also :ref:`search-vs-match`)."
 msgstr ""
+"Se pretender localizar uma correspondência em qualquer lugar em *string*, "
+"use :meth:`~Pattern.search` em vez disso (consulte também :ref:`search-vs-"
+"match`)."
 
 #: ../../library/re.rst:1295
 msgid ""
@@ -1693,6 +2335,10 @@ msgid ""
 "corresponding :class:`~re.Match`.  Return ``None`` if the string does not "
 "match the pattern; note that this is different from a zero-length match."
 msgstr ""
+"Se toda a *string* corresponder a esta expressão regular, devolve um :class:"
+"`~re.Match` correspondente. Devolve ``None`` se a cadeia de caracteres não "
+"corresponder ao padrão; note que isto é diferente de uma correspondência de "
+"comprimento zero."
 
 #: ../../library/re.rst:1302
 msgid ""
@@ -1704,10 +2350,18 @@ msgid ""
 ">>> pattern.fullmatch(\"doggie\", 1, 3)   # Matches within given limits.\n"
 "<re.Match object; span=(1, 3), match='og'>"
 msgstr ""
+">>> pattern = re.compile(\"o[gh]\")\n"
+">>> pattern.fullmatch(\"dog\")      # Sem correspondência, pois \"o\" não "
+"está no início de \"dog\".\n"
+">>> pattern.fullmatch(\"ogre\")     # Sem correspondência, pois não é toda a "
+"cadeia de caracteres que corresponde.\n"
+">>> pattern.fullmatch(\"doggie\", 1, 3)   # Correspondência dentro dos "
+"limites dados.\n"
+"<re.Match object; span=(1, 3), match='og'>"
 
 #: ../../library/re.rst:1313
 msgid "Identical to the :func:`split` function, using the compiled pattern."
-msgstr ""
+msgstr "Idêntico à função :func:`split`, usando o padrão compilado."
 
 #: ../../library/re.rst:1318
 msgid ""
@@ -1715,6 +2369,9 @@ msgid ""
 "also accepts optional *pos* and *endpos* parameters that limit the search "
 "region like for :meth:`search`."
 msgstr ""
+"Semelhante à função :func:`findall`, usando o padrão compilado, mas também "
+"aceita parâmetros opcionais *pos* e *endpos* que limitam a região de "
+"pesquisa, tal como para :meth:`search`."
 
 #: ../../library/re.rst:1325
 msgid ""
@@ -1722,14 +2379,17 @@ msgid ""
 "also accepts optional *pos* and *endpos* parameters that limit the search "
 "region like for :meth:`search`."
 msgstr ""
+"Semelhante à função :func:`finditer`, usando o padrão compilado, mas também "
+"aceita parâmetros opcionais *pos* e *endpos* que limitam a região de "
+"pesquisa, tal como para :meth:`search`."
 
 #: ../../library/re.rst:1332
 msgid "Identical to the :func:`sub` function, using the compiled pattern."
-msgstr ""
+msgstr "Idêntico à função :func:`sub`, usando o padrão compilado."
 
 #: ../../library/re.rst:1337
 msgid "Identical to the :func:`subn` function, using the compiled pattern."
-msgstr ""
+msgstr "Idêntico à função :func:`subn`, usando o padrão compilado."
 
 #: ../../library/re.rst:1342
 msgid ""
@@ -1737,10 +2397,14 @@ msgid ""
 "`.compile`, any ``(?...)`` inline flags in the pattern, and implicit flags "
 "such as :py:const:`~re.UNICODE` if the pattern is a Unicode string."
 msgstr ""
+"As *flags* de correspondência de expressões regulares. Isto é uma combinação "
+"das *flags* dadas a :func:`.compile`, quaisquer *flags* em linha ``(?...)`` "
+"no padrão e *flags* implícitas, como :py:const:`~re.UNICODE`, se o padrão "
+"for uma cadeia de caracteres Unicode."
 
 #: ../../library/re.rst:1349
 msgid "The number of capturing groups in the pattern."
-msgstr ""
+msgstr "O número de grupos de captura no padrão."
 
 #: ../../library/re.rst:1354
 msgid ""
@@ -1748,20 +2412,27 @@ msgid ""
 "group numbers.  The dictionary is empty if no symbolic groups were used in "
 "the pattern."
 msgstr ""
+"Um dicionário que mapeia quaisquer nomes de grupos simbólicos definidos por "
+"``(?P<id>)`` para números de grupos. O dicionário está vazio se não forem "
+"usados grupos simbólicos no padrão."
 
 #: ../../library/re.rst:1361
 msgid "The pattern string from which the pattern object was compiled."
 msgstr ""
+"A cadeia de caracteres de padrão a partir da qual o objeto de padrão foi "
+"compilado."
 
 #: ../../library/re.rst:1364
 msgid ""
 "Added support of :func:`copy.copy` and :func:`copy.deepcopy`.  Compiled "
 "regular expression objects are considered atomic."
 msgstr ""
+"Adicionado suporte para :func:`copy.copy` e :func:`copy.deepcopy`. Os "
+"objetos de expressão regular compilada são considerados atómicos."
 
 #: ../../library/re.rst:1372
 msgid "Match Objects"
-msgstr ""
+msgstr "Objetos de correspondência"
 
 #: ../../library/re.rst:1374
 msgid ""
@@ -1769,6 +2440,10 @@ msgid ""
 "match` and :meth:`~Pattern.search` return ``None`` when there is no match, "
 "you can test whether there was a match with a simple ``if`` statement::"
 msgstr ""
+"Os objetos de correspondência têm sempre um valor booleano de ``True``. Uma "
+"vez que :meth:`~Pattern.match` e :meth:`~Pattern.search` devolvem ``None`` "
+"quando não há correspondência, pode testar se houve uma correspondência com "
+"uma simples instrução ``if``::"
 
 #: ../../library/re.rst:1379
 msgid ""
@@ -1776,16 +2451,22 @@ msgid ""
 "if match:\n"
 "    process(match)"
 msgstr ""
+"match = re.search(pattern, string)\n"
+"if match:\n"
+"    process(match)"
 
 #: ../../library/re.rst:1385
 msgid "Match object returned by successful ``match``\\ es and ``search``\\ es."
 msgstr ""
+"Objeto de correspondência devolvido por ``match`` e ``search`` bem-sucedidos."
 
 #: ../../library/re.rst:1387
 msgid ""
 ":py:class:`re.Match` supports ``[]`` to indicate a Unicode (str) or bytes "
 "match. See :ref:`types-genericalias`."
 msgstr ""
+":py:class:`re.Match` suporta ``[]`` para indicar uma correspondência Unicode "
+"(str) ou bytes. Consulte :ref:`types-genericalias`."
 
 #: ../../library/re.rst:1393
 msgid ""
@@ -1796,6 +2477,13 @@ msgid ""
 "``\\g<name>``) are replaced by the contents of the corresponding group. The "
 "backreference ``\\g<0>`` will be replaced by the entire match."
 msgstr ""
+"Devolve a cadeia de caracteres obtida através da substituição de barras "
+"invertidas na cadeia de caracteres modelo *template*, como feito pelo "
+"método :meth:`~Pattern.sub`. Escapes como ``\\n`` são convertidos nos "
+"caracteres apropriados e referências retroativas numéricas (``\\1``, "
+"``\\2``) e referências retroativas nomeadas (``\\g<1>``, ``\\g<name>``) são "
+"substituídas pelo conteúdo do grupo correspondente. A referência retroativa "
+"``\\g<0>`` será substituída por toda a correspondência."
 
 #: ../../library/re.rst:1406
 msgid ""
@@ -1811,6 +2499,19 @@ msgid ""
 "the corresponding result is ``None``. If a group is contained in a part of "
 "the pattern that matched multiple times, the last match is returned. ::"
 msgstr ""
+"Devolve um ou mais subgrupos da correspondência. Se houver um único "
+"argumento, o resultado é uma única cadeia de caracteres; se houver vários "
+"argumentos, o resultado é um tuplo com um item por argumento. Sem "
+"argumentos, *group1* tem o valor predefinido zero (toda a correspondência é "
+"devolvida). Se um argumento *groupN* for zero, o valor de retorno "
+"correspondente é toda a cadeia de caracteres correspondida; se estiver no "
+"intervalo inclusivo [1..99], é a cadeia de caracteres correspondente ao "
+"grupo entre parênteses correspondente. Se um número de grupo for negativo ou "
+"maior que o número de grupos definidos no padrão, é gerada uma exceção :exc:"
+"`IndexError`. Se um grupo estiver contido numa parte do padrão que não "
+"correspondeu, o resultado correspondente é ``None``. Se um grupo estiver "
+"contido numa parte do padrão que correspondeu várias vezes, a última "
+"correspondência é devolvida. ::"
 
 #: ../../library/re.rst:1418
 msgid ""
@@ -1824,6 +2525,15 @@ msgid ""
 ">>> m.group(1, 2)    # Multiple arguments give us a tuple.\n"
 "('Isaac', 'Newton')"
 msgstr ""
+">>> m = re.match(r\"(\\w+) (\\w+)\", \"Isaac Newton, physicist\")\n"
+">>> m.group(0)       # Toda a correspondência\n"
+"'Isaac Newton'\n"
+">>> m.group(1)       # O primeiro subgrupo entre parênteses.\n"
+"'Isaac'\n"
+">>> m.group(2)       # O segundo subgrupo entre parênteses.\n"
+"'Newton'\n"
+">>> m.group(1, 2)    # Vários argumentos dão-nos um tuplo.\n"
+"('Isaac', 'Newton')"
 
 #: ../../library/re.rst:1428
 msgid ""
@@ -1832,10 +2542,14 @@ msgid ""
 "string argument is not used as a group name in the pattern, an :exc:"
 "`IndexError` exception is raised."
 msgstr ""
+"Se a expressão regular usar a sintaxe ``(?P<name>...)``, os argumentos "
+"*groupN* também podem ser cadeias de caracteres que identificam grupos pelos "
+"seus nomes de grupo. Se um argumento de cadeia de caracteres não for usado "
+"como um nome de grupo no padrão, é gerada uma exceção :exc:`IndexError`."
 
 #: ../../library/re.rst:1433
 msgid "A moderately complicated example::"
-msgstr ""
+msgstr "Um exemplo moderadamente complicado::"
 
 #: ../../library/re.rst:1435
 msgid ""
@@ -1846,6 +2560,12 @@ msgid ""
 ">>> m.group('last_name')\n"
 "'Reynolds'"
 msgstr ""
+">>> m = re.match(r\"(?P<first_name>\\w+) (?P<last_name>\\w+)\", \"Malcolm "
+"Reynolds\")\n"
+">>> m.group('first_name')\n"
+"'Malcolm'\n"
+">>> m.group('last_name')\n"
+"'Reynolds'"
 
 #: ../../library/re.rst:1441
 msgid "Named groups can also be referred to by their index::"
@@ -1858,10 +2578,16 @@ msgid ""
 ">>> m.group(2)\n"
 "'Reynolds'"
 msgstr ""
+">>> m.group(1)\n"
+"'Malcolm'\n"
+">>> m.group(2)\n"
+"'Reynolds'"
 
 #: ../../library/re.rst:1448
 msgid "If a group matches multiple times, only the last match is accessible::"
 msgstr ""
+"Se um grupo corresponder várias vezes, apenas a última correspondência é "
+"acessível::"
 
 #: ../../library/re.rst:1450
 msgid ""
@@ -1869,12 +2595,18 @@ msgid ""
 ">>> m.group(1)                        # Returns only the last match.\n"
 "'c3'"
 msgstr ""
+">>> m = re.match(r\"(..)+\", \"a1b2c3\")  # Corresponde 3 vezes.\n"
+">>> m.group(1)                        # Devolve apenas a última "
+"correspondência.\n"
+"'c3'"
 
 #: ../../library/re.rst:1457
 msgid ""
 "This is identical to ``m.group(g)``.  This allows easier access to an "
 "individual group from a match::"
 msgstr ""
+"Isto é idêntico a ``m.group(g)``. Isto permite um acesso mais fácil a um "
+"grupo individual a partir de uma correspondência::"
 
 #: ../../library/re.rst:1460
 msgid ""
@@ -1886,10 +2618,17 @@ msgid ""
 ">>> m[2]       # The second parenthesized subgroup.\n"
 "'Newton'"
 msgstr ""
+">>> m = re.match(r\"(\\w+) (\\w+)\", \"Isaac Newton, physicist\")\n"
+">>> m[0]       # Toda a correspondência\n"
+"'Isaac Newton'\n"
+">>> m[1]       # O primeiro subgrupo entre parênteses.\n"
+"'Isaac'\n"
+">>> m[2]       # O segundo subgrupo entre parênteses.\n"
+"'Newton'"
 
 #: ../../library/re.rst:1468
 msgid "Named groups are supported as well::"
-msgstr ""
+msgstr "Os grupos nomeados também são suportados::"
 
 #: ../../library/re.rst:1470
 msgid ""
@@ -1900,6 +2639,12 @@ msgid ""
 ">>> m['last_name']\n"
 "'Newton'"
 msgstr ""
+">>> m = re.match(r\"(?P<first_name>\\w+) (?P<last_name>\\w+)\", \"Isaac "
+"Newton\")\n"
+">>> m['first_name']\n"
+"'Isaac'\n"
+">>> m['last_name']\n"
+"'Newton'"
 
 #: ../../library/re.rst:1481
 msgid ""
@@ -1907,6 +2652,9 @@ msgid ""
 "however many groups are in the pattern.  The *default* argument is used for "
 "groups that did not participate in the match; it defaults to ``None``."
 msgstr ""
+"Devolve um tuplo contendo todos os subgrupos da correspondência, de 1 até ao "
+"número de grupos no padrão. O argumento *default* é usado para grupos que "
+"não participaram na correspondência; o valor predefinido é ``None``."
 
 #: ../../library/re.rst:1485 ../../library/re.rst:1710
 msgid "For example::"
@@ -1918,6 +2666,9 @@ msgid ""
 ">>> m.groups()\n"
 "('24', '1632')"
 msgstr ""
+">>> m = re.match(r\"(\\d+)\\.(\\d+)\", \"24.1632\")\n"
+">>> m.groups()\n"
+"('24', '1632')"
 
 #: ../../library/re.rst:1491
 msgid ""
@@ -1925,6 +2676,9 @@ msgid ""
 "groups might participate in the match.  These groups will default to "
 "``None`` unless the *default* argument is given::"
 msgstr ""
+"Se tornarmos o ponto decimal e tudo o que o segue opcional, nem todos os "
+"grupos podem participar na correspondência. Estes grupos terão o valor "
+"predefinido ``None`` a menos que o argumento *default* seja fornecido::"
 
 #: ../../library/re.rst:1495
 msgid ""
@@ -1934,6 +2688,11 @@ msgid ""
 ">>> m.groups('0')   # Now, the second group defaults to '0'.\n"
 "('24', '0')"
 msgstr ""
+">>> m = re.match(r\"(\\d+)\\.?(\\d+)?\", \"24\")\n"
+">>> m.groups()      # O segundo grupo tem como predefinição Nenhum.\n"
+"('24', None)\n"
+">>> m.groups('0')   # Agora, o segundo grupo tem como padrão '0'.\n"
+"('24', '0')"
 
 #: ../../library/re.rst:1504
 msgid ""
