@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-22 20:37+0000\n"
+"POT-Creation-Date: 2025-09-23 16:19+0000\n"
 "PO-Revision-Date: 2025-09-22 16:49+0000\n"
 "Last-Translator: python-doc bot, 2025\n"
 "Language-Team: Spanish (Spain) (https://app.transifex.com/python-doc/"
@@ -370,7 +370,7 @@ msgstr "__lt__, __le__, __eq__, __ne__, __gt__, __ge__"
 
 #: ../../c-api/typeobj.rst:99
 msgid ":c:member:`~PyTypeObject.tp_weaklistoffset`"
-msgstr ""
+msgstr ":c:member:`~PyTypeObject.tp_weaklistoffset`"
 
 #: ../../c-api/typeobj.rst:101
 msgid ":c:member:`~PyTypeObject.tp_iter`"
@@ -481,7 +481,7 @@ msgstr "__set__, __delete__"
 
 #: ../../c-api/typeobj.rst:120
 msgid ":c:member:`~PyTypeObject.tp_dictoffset`"
-msgstr ""
+msgstr ":c:member:`~PyTypeObject.tp_dictoffset`"
 
 #: ../../c-api/typeobj.rst:122
 msgid ":c:member:`~PyTypeObject.tp_init`"
@@ -2903,6 +2903,12 @@ msgid ""
 "the instance layout and setting the :c:member:`~PyTypeObject."
 "tp_weaklistoffset` of that slot's offset."
 msgstr ""
+"Cuando un tipo definido por una declaración de clase no tiene declaración :"
+"attr:`~object.__slots__`, y ninguno de sus tipos base es débilmente "
+"referenciable, el tipo se hace débilmente referenciable añadiendo una ranura "
+"de cabecera de lista de referencias débiles al diseño de instancia y "
+"estableciendo el :c:member:`~PyTypeObject.tp_weaklistoffset` del offset de "
+"esa ranura."
 
 #: ../../c-api/typeobj.rst:1530
 msgid ""
@@ -2911,6 +2917,11 @@ msgid ""
 "of the type, and the slot's offset is stored in the type's :c:member:"
 "`~PyTypeObject.tp_weaklistoffset`."
 msgstr ""
+"Cuando la declaración :attr:`__slots__` de un tipo contiene una ranura "
+"denominada :attr:`__weakref__`, dicha ranura se convierte en la cabecera de "
+"la lista de referencias débiles para las instancias del tipo, y el "
+"desplazamiento de la ranura se almacena en :c:member:`~PyTypeObject."
+"tp_weaklistoffset` del tipo."
 
 #: ../../c-api/typeobj.rst:1535
 msgid ""
@@ -2918,6 +2929,9 @@ msgid ""
 "attr:`__weakref__`, the type inherits its :c:member:`~PyTypeObject."
 "tp_weaklistoffset` from its base type."
 msgstr ""
+"Cuando la declaración :attr:`__slots__` de un tipo no contiene una ranura "
+"denominada :attr:`__weakref__`, el tipo hereda su :c:member:`~PyTypeObject."
+"tp_weaklistoffset` de su tipo base."
 
 #: ../../c-api/typeobj.rst:1542
 msgid ""
@@ -3201,6 +3215,19 @@ msgid ""
 "tp_dictoffset` should be set to ``-4`` to indicate that the dictionary is at "
 "the very end of the structure."
 msgstr ""
+"Si el valor de este campo es mayor que cero, especifica el desplazamiento "
+"desde el inicio de la estructura de la instancia. Si el valor es menor que "
+"cero, especifica el desplazamiento desde el *final* de la estructura de la "
+"instancia. Un desplazamiento negativo es más costoso de usar y solo debe "
+"usarse cuando la estructura de la instancia contiene una parte de longitud "
+"variable. Esto se utiliza, por ejemplo, para agregar un diccionario de "
+"variables de instancia a subtipos de :class:`str` o :class:`tuple`. Hay que "
+"considerar que el campo :c:member:`~PyTypeObject.tp_basicsize` debe tener en "
+"cuenta el diccionario agregado al final en ese caso, aunque el diccionario "
+"no esté incluido en el diseño básico del objeto. En un sistema con un tamaño "
+"de puntero de 4 bytes, :c:member:`~PyTypeObject.tp_dictoffset` debe "
+"establecerse en ``-4`` para indicar que el diccionario está al final de la "
+"estructura."
 
 #: ../../c-api/typeobj.rst:1736
 msgid ""
@@ -3225,6 +3252,12 @@ msgid ""
 "dictionary is always found via :c:member:`~PyTypeObject.tp_dictoffset`, this "
 "should not be a problem."
 msgstr ""
+"Este campo lo heredan los subtipos, pero ver las reglas enumeradas a "
+"continuación. Un subtipo puede anular este desplazamiento; esto significa "
+"que las instancias del subtipo almacenan el diccionario en un desplazamiento "
+"diferente al del tipo base. Dado que el diccionario siempre se encuentra a "
+"través de :c:member:`~PyTypeObject.tp_dictoffset`, esto no debería ser un "
+"problema."
 
 #: ../../c-api/typeobj.rst:1749
 msgid ""
@@ -3233,6 +3266,11 @@ msgid ""
 "a dictionary slot is added to the instance layout and the :c:member:"
 "`~PyTypeObject.tp_dictoffset` is set to that slot's offset."
 msgstr ""
+"Cuando un tipo definido por una declaración de clase no tiene una "
+"declaración :attr:`~object.__slots__`, y ninguno de sus tipos base tiene un "
+"diccionario de variables de instancia, se agrega una ranura de diccionario a "
+"la disposición de la instancia y se establece :c:member:`~PyTypeObject."
+"tp_dictoffset` en el desplazamiento de esa ranura."
 
 #: ../../c-api/typeobj.rst:1754
 msgid ""
@@ -3240,6 +3278,9 @@ msgid ""
 "declaration, the type inherits its :c:member:`~PyTypeObject.tp_dictoffset` "
 "from its base type."
 msgstr ""
+"Cuando un tipo definido por una declaración de clase tiene una declaración :"
+"attr:`__slots__`, el tipo hereda su :c:member:`~PyTypeObject.tp_dictoffset` "
+"de su tipo base."
 
 #: ../../c-api/typeobj.rst:1757
 msgid ""
@@ -3248,6 +3289,10 @@ msgid ""
 "Maybe this should be added as a feature just like :attr:`__weakref__` "
 "though.)"
 msgstr ""
+"(Añadir una ranura llamada :attr:`~object.__dict__` a la declaración de :"
+"attr:`__slots__` no tiene el efecto esperado, solo causa confusión. Tal vez "
+"esto debería agregarse como una característica al igual que :attr:"
+"`__weakref__`.)"
 
 #: ../../c-api/typeobj.rst:1763
 msgid ""
@@ -3557,7 +3602,7 @@ msgstr "Sin utilizar. Solo para uso interno."
 
 #: ../../c-api/typeobj.rst:1963
 msgid "List of weak references to subclasses.  Internal use only."
-msgstr ""
+msgstr "Lista de referencias débiles a subclases. Uso interno únicamente."
 
 #: ../../c-api/typeobj.rst:1972
 msgid ""
@@ -3752,6 +3797,9 @@ msgid ""
 "func:`PyType_FromSpec`, :c:func:`PyType_FromSpecWithBases`, or :c:func:"
 "`PyType_FromModuleAndSpec`."
 msgstr ""
+"Esto se hace rellenando una estructura :c:type:`PyType_Spec` y llamando a :c:"
+"func:`PyType_FromSpec`, :c:func:`PyType_FromSpecWithBases` o :c:func:"
+"`PyType_FromModuleAndSpec`."
 
 #: ../../c-api/typeobj.rst:2107
 msgid "Number Object Structures"

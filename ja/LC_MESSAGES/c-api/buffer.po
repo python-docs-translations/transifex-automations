@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-22 20:37+0000\n"
+"POT-Creation-Date: 2025-09-23 16:19+0000\n"
 "PO-Revision-Date: 2025-09-22 16:49+0000\n"
 "Last-Translator: python-doc bot, 2025\n"
 "Language-Team: Japanese (https://app.transifex.com/python-doc/teams/5390/"
@@ -286,6 +286,9 @@ msgid ""
 "itemsize == len`` still holds and the consumer can use :c:member:`~Py_buffer."
 "itemsize` to navigate the buffer."
 msgstr ""
+":c:member:`~Py_buffer.shape` が存在する場合、 ``product(shape) * itemsize == "
+"len`` の等式が守られ、利用者は :c:member:`~Py_buffer.itemsize` を buffer を読"
+"むために利用できます。"
 
 #: ../../c-api/buffer.rst:146
 msgid ""
@@ -293,6 +296,10 @@ msgid ""
 "`PyBUF_SIMPLE` or a :c:macro:`PyBUF_WRITABLE` request, the consumer must "
 "disregard :c:member:`~Py_buffer.itemsize` and assume ``itemsize == 1``."
 msgstr ""
+":c:macro:`PyBUF_SIMPLE` または :c:macro:`PyBUF_WRITABLE` で要求した結果、 :c:"
+"member:`~Py_buffer.shape` が ``NULL`` であれば、消費者は :c:member:"
+"`~Py_buffer.itemsize` を無視して ``itemsize == 1`` と見なさなければなりませ"
+"ん。"
 
 #: ../../c-api/buffer.rst:152
 msgid ""
@@ -300,10 +307,13 @@ msgid ""
 "the contents of a single item. If this is ``NULL``, ``\"B\"`` (unsigned "
 "bytes) is assumed."
 msgstr ""
+"要素一つ分の内容を指定する、 :mod:`struct` モジュールスタイル文法の、 *NUL* "
+"終端文字列。 このポインタの値が ``NULL`` なら、 ``\"B\"`` (符号無しバイト) と"
+"して扱われます。"
 
 #: ../../c-api/buffer.rst:156
 msgid "This field is controlled by the :c:macro:`PyBUF_FORMAT` flag."
-msgstr ""
+msgstr "このフィールドは :c:macro:`PyBUF_FORMAT` フラグによって制御されます。"
 
 #: ../../c-api/buffer.rst:160
 msgid ""
@@ -321,22 +331,31 @@ msgid ""
 "``shape[0] * ... * shape[ndim-1] * itemsize`` MUST be equal to :c:member:"
 "`~Py_buffer.len`."
 msgstr ""
+"メモリ上のN次元配列の形を示す、長さが :c:member:`~Py_buffer.ndim` である :c:"
+"type:`Py_ssize_t` の配列です。\n"
+"``shape[0] * ... * shape[ndim-1] * itemsize`` は :c:member:`~Py_buffer.len` "
+"と等しくなければなりません。"
 
 #: ../../c-api/buffer.rst:173
 msgid ""
 "Shape values are restricted to ``shape[n] >= 0``. The case ``shape[n] == 0`` "
 "requires special attention. See `complex arrays`_ for further information."
 msgstr ""
+"shape の値は ``shape[n] >= 0`` に制限されます。 ``shape[n] == 0`` の場合に特"
+"に注意が必要です。\n"
+"詳細は `complex arrays`_ を参照してください。"
 
 #: ../../c-api/buffer.rst:177
 msgid "The shape array is read-only for the consumer."
-msgstr ""
+msgstr "shepe (形状) 配列は利用者からは読み出し専用です。"
 
 #: ../../c-api/buffer.rst:181
 msgid ""
 "An array of :c:type:`Py_ssize_t` of length :c:member:`~Py_buffer.ndim` "
 "giving the number of bytes to skip to get to a new element in each dimension."
 msgstr ""
+"各次元において新しい値を得るためにスキップするバイト数を示す、長さ :c:member:"
+"`~Py_buffer.ndim` の :c:type:`Py_ssize_t` の配列。"
 
 #: ../../c-api/buffer.rst:185
 msgid ""
@@ -344,10 +363,13 @@ msgid ""
 "positive, but a consumer MUST be able to handle the case ``strides[n] <= "
 "0``. See `complex arrays`_ for further information."
 msgstr ""
+"ストライド値は、任意の整数を指定できます。規定の配列では、ストライドは通常で"
+"いけば有効です。しかし利用者は、``strides[n] <= 0`` のケースを処理することが"
+"できる必要があります。詳細については `complex arrays`_ を参照してください。"
 
 #: ../../c-api/buffer.rst:189
 msgid "The strides array is read-only for the consumer."
-msgstr ""
+msgstr "消費者にとって、この strides 配列は読み出し専用です。"
 
 #: ../../c-api/buffer.rst:193
 msgid ""
@@ -357,12 +379,21 @@ msgid ""
 "pointer after de-referencing. A suboffset value that is negative indicates "
 "that no de-referencing should occur (striding in a contiguous memory block)."
 msgstr ""
+":c:type:`Py_ssize_t` 型の要素を持つ長さ :c:member:`~Py_buffer.ndim` の配"
+"列。\n"
+"``suboffsets[n] >= 0`` の場合は、 n 番目の次元に沿って保存されている値はポイ"
+"ンタで、 suboffset 値は各ポインタの参照を解決した後に何バイト加えればいいかを"
+"示しています。\n"
+"suboffset の値が負の数の場合は、ポインタの参照解決は不要 (連続したメモリブ"
+"ロック内に直接配置されいる) ということになります。"
 
 #: ../../c-api/buffer.rst:200
 msgid ""
 "If all suboffsets are negative (i.e. no de-referencing is needed), then this "
 "field must be ``NULL`` (the default value)."
 msgstr ""
+"全ての suboffset が負数の場合 (つまり参照解決が不要) な場合、このフィールド"
+"は ``NULL`` (デフォルト値) でなければなりません。"
 
 #: ../../c-api/buffer.rst:203
 msgid ""
@@ -370,10 +401,13 @@ msgid ""
 "(PIL). See `complex arrays`_ for further information how to access elements "
 "of such an array."
 msgstr ""
+"この種の配列表現は Python Imaging Library (PIL) で使われています。\n"
+"このような配列で要素にアクセスする方法についてさらに詳しことは `complex "
+"arrays`_ を参照してください。"
 
 #: ../../c-api/buffer.rst:207
 msgid "The suboffsets array is read-only for the consumer."
-msgstr ""
+msgstr "消費者にとって、suboffsets 配列は読み出し専用です。"
 
 #: ../../c-api/buffer.rst:211
 msgid ""
@@ -382,6 +416,11 @@ msgid ""
 "whether or not the shape, strides, and suboffsets arrays must be freed when "
 "the buffer is released. The consumer MUST NOT alter this value."
 msgstr ""
+"バッファを提供する側のオブジェクトが内部的に利用するための変数です。例えば、"
+"提供側はこの変数に整数型をキャストして、shape, strides, suboffsets といった配"
+"列をバッファを開放するときに同時に解放するべきかどうかを管理するフラグに使う"
+"ことができるでしょう。バッファを受け取る側は、この値を決して変更してはなりま"
+"せん。"
 
 #: ../../c-api/buffer.rst:218
 msgid "Constants:"
@@ -396,7 +435,7 @@ msgstr ""
 
 #: ../../c-api/buffer.rst:231
 msgid "Buffer request types"
-msgstr ""
+msgstr "バッファリクエストのタイプ"
 
 #: ../../c-api/buffer.rst:233
 msgid ""
@@ -405,15 +444,21 @@ msgid ""
 "structure of the memory can vary drastically, the consumer uses the *flags* "
 "argument to specify the exact buffer type it can handle."
 msgstr ""
+"バッファは通常、 :c:func:`PyObject_GetBuffer` を使うことで、エクスポートする"
+"オブジェクトにバッファリクエストを送ることで得られます。メモリの論理的な構造"
+"の複雑性は多岐にわたるため、消費者は *flags* 引数を使って、自身が扱えるバッ"
+"ファの種類を指定します。"
 
 #: ../../c-api/buffer.rst:238
 msgid ""
 "All :c:type:`Py_buffer` fields are unambiguously defined by the request type."
 msgstr ""
+":c:type:`Py_buffer` の全フィールドは、リクエストの種類によって曖昧さを残さず"
+"に定義されます。"
 
 #: ../../c-api/buffer.rst:242
 msgid "request-independent fields"
-msgstr ""
+msgstr "リクエストに依存しないフィールド"
 
 #: ../../c-api/buffer.rst:243
 msgid ""
@@ -422,10 +467,13 @@ msgid ""
 "`~Py_buffer.buf`, :c:member:`~Py_buffer.len`, :c:member:`~Py_buffer."
 "itemsize`, :c:member:`~Py_buffer.ndim`."
 msgstr ""
+"下記のフィールドは *flags* の影響を受けずに、常に正しい値で設定されます。: :"
+"c:member:`~Py_buffer.obj`, :c:member:`~Py_buffer.buf`, :c:member:`~Py_buffer."
+"len`, :c:member:`~Py_buffer.itemsize`, :c:member:`~Py_buffer.ndim`."
 
 #: ../../c-api/buffer.rst:249
 msgid "readonly, format"
-msgstr ""
+msgstr "readonly, format"
 
 #: ../../c-api/buffer.rst:253
 msgid ""
@@ -434,12 +482,20 @@ msgid ""
 "exporter MAY provide either a read-only or writable buffer, but the choice "
 "MUST be consistent for all consumers."
 msgstr ""
+":c:member:`~Py_buffer.readonly` フィールドを制御します。もしこのフラグが設定"
+"されている場合、exporter は、書き込み可能なバッファを提供するか、さもなければ"
+"失敗を報告しなければなりません。フラグが設定されていない場合、exporterは、読"
+"み出し専用と書き込み可能なバッファのどちらを提供しても構いませんが、どちらで"
+"提供するかどうかは全ての消費者に対して一貫性がなければなりません。"
 
 #: ../../c-api/buffer.rst:260
 msgid ""
 "Controls the :c:member:`~Py_buffer.format` field. If set, this field MUST be "
 "filled in correctly. Otherwise, this field MUST be ``NULL``."
 msgstr ""
+":c:member:`~Py_buffer.format` フィールドを制御します。もしフラグが設定されて"
+"いれば、このフィールドを正しく埋めなければなりません。フラグが設定されていな"
+"ければ、このフィールドを ``NULL`` に設定しなければなりません。"
 
 #: ../../c-api/buffer.rst:264
 msgid ""
@@ -448,16 +504,24 @@ msgid ""
 "`PyBUF_WRITABLE` can be used as a stand-alone flag to request a simple "
 "writable buffer."
 msgstr ""
+":c:macro:`PyBUF_WRITABLE` は、次の節に出てくるどのフラグとも \\| を取ってかま"
+"いません。\n"
+":c:macro:`PyBUF_SIMPLE` は 0 と定義されているので、 :c:macro:"
+"`PyBUF_WRITABLE` は単純な書き込み可能なバッファを要求する単独のフラグとして使"
+"えます。"
 
 #: ../../c-api/buffer.rst:268
 msgid ""
 ":c:macro:`PyBUF_FORMAT` can be \\|'d to any of the flags except :c:macro:"
 "`PyBUF_SIMPLE`. The latter already implies format ``B`` (unsigned bytes)."
 msgstr ""
+":c:macro:`PyBUF_FORMAT` は、:c:macro:`PyBUF_SIMPLE` 以外のどのフラグとも \\| "
+"を取ってかまいません。\n"
+"後者のフラグは ``B`` (符号なしバイト) フォーマットを既に指示しています。"
 
 #: ../../c-api/buffer.rst:273
 msgid "shape, strides, suboffsets"
-msgstr ""
+msgstr "shape, strides, suboffsets"
 
 #: ../../c-api/buffer.rst:275
 msgid ""
@@ -465,26 +529,29 @@ msgid ""
 "decreasing order of complexity. Note that each flag contains all bits of the "
 "flags below it."
 msgstr ""
+"このフラグは、以下で複雑性が大きい順に並べたメモリの論理的な構造を制御しま"
+"す。個々のフラグは、それより下に記載されたフラグのすべてのビットを含むことに"
+"注意してください。"
 
 #: ../../c-api/buffer.rst:282 ../../c-api/buffer.rst:306
 #: ../../c-api/buffer.rst:331
 msgid "Request"
-msgstr ""
+msgstr "リクエスト"
 
 #: ../../c-api/buffer.rst:282 ../../c-api/buffer.rst:306
 #: ../../c-api/buffer.rst:331
 msgid "shape"
-msgstr ""
+msgstr "shape"
 
 #: ../../c-api/buffer.rst:282 ../../c-api/buffer.rst:306
 #: ../../c-api/buffer.rst:331
 msgid "strides"
-msgstr ""
+msgstr "strides"
 
 #: ../../c-api/buffer.rst:282 ../../c-api/buffer.rst:306
 #: ../../c-api/buffer.rst:331
 msgid "suboffsets"
-msgstr ""
+msgstr "suboffsets"
 
 #: ../../c-api/buffer.rst:284 ../../c-api/buffer.rst:286
 #: ../../c-api/buffer.rst:288 ../../c-api/buffer.rst:308
@@ -500,7 +567,7 @@ msgstr "yes"
 #: ../../c-api/buffer.rst:284 ../../c-api/buffer.rst:333
 #: ../../c-api/buffer.rst:335
 msgid "if needed"
-msgstr ""
+msgstr "必要な場合"
 
 #: ../../c-api/buffer.rst:286 ../../c-api/buffer.rst:288
 #: ../../c-api/buffer.rst:290 ../../c-api/buffer.rst:308
@@ -514,7 +581,7 @@ msgstr "NULL"
 
 #: ../../c-api/buffer.rst:297
 msgid "contiguity requests"
-msgstr ""
+msgstr "隣接性のリクエスト"
 
 #: ../../c-api/buffer.rst:299
 msgid ""
@@ -522,10 +589,13 @@ msgid ""
 "with and without stride information. Without stride information, the buffer "
 "must be C-contiguous."
 msgstr ""
+"ストライドの情報があってもなくても、C または Fortran の :term:`連続性 "
+"<contiguous>` が明確に要求される可能性があります。\n"
+"ストライド情報なしに、バッファーは C と隣接している必要があります。"
 
 #: ../../c-api/buffer.rst:306 ../../c-api/buffer.rst:331
 msgid "contig"
-msgstr ""
+msgstr "contig"
 
 #: ../../c-api/buffer.rst:308 ../../c-api/buffer.rst:314
 #: ../../c-api/buffer.rst:345 ../../c-api/buffer.rst:347
@@ -538,15 +608,15 @@ msgstr "F"
 
 #: ../../c-api/buffer.rst:312
 msgid "C or F"
-msgstr ""
+msgstr "C か F"
 
 #: ../../c-api/buffer.rst:314
 msgid ":c:macro:`PyBUF_ND`"
-msgstr ""
+msgstr ":c:macro:`PyBUF_ND`"
 
 #: ../../c-api/buffer.rst:319
 msgid "compound requests"
-msgstr ""
+msgstr "複合リクエスト"
 
 #: ../../c-api/buffer.rst:321
 msgid ""
@@ -554,12 +624,19 @@ msgid ""
 "the previous section. For convenience, the buffer protocol provides "
 "frequently used combinations as single flags."
 msgstr ""
+"有り得る全てのリクエストの値は、前の節でのフラグの組み合わせで網羅的に定義さ"
+"れています。\n"
+"便利なように、バッファープロトコルでは頻繁に使用される組み合わせを単一のフラ"
+"グとして提供してます。"
 
 #: ../../c-api/buffer.rst:325
 msgid ""
 "In the following table *U* stands for undefined contiguity. The consumer "
 "would have to call :c:func:`PyBuffer_IsContiguous` to determine contiguity."
 msgstr ""
+"次のテーブルの *U* は連続性が未定義であることを表します。\n"
+"利用者は :c:func:`PyBuffer_IsContiguous` を呼び出して連続性を判定する必要があ"
+"るでしょう。"
 
 #: ../../c-api/buffer.rst:331
 msgid "readonly"
@@ -573,7 +650,7 @@ msgstr "format"
 #: ../../c-api/buffer.rst:337 ../../c-api/buffer.rst:339
 #: ../../c-api/buffer.rst:341 ../../c-api/buffer.rst:343
 msgid "U"
-msgstr ""
+msgstr "U"
 
 #: ../../c-api/buffer.rst:333 ../../c-api/buffer.rst:337
 #: ../../c-api/buffer.rst:341 ../../c-api/buffer.rst:345
@@ -583,15 +660,15 @@ msgstr "0"
 #: ../../c-api/buffer.rst:335 ../../c-api/buffer.rst:339
 #: ../../c-api/buffer.rst:343 ../../c-api/buffer.rst:347
 msgid "1 or 0"
-msgstr ""
+msgstr "1 か 0"
 
 #: ../../c-api/buffer.rst:352
 msgid "Complex arrays"
-msgstr ""
+msgstr "複雑な配列"
 
 #: ../../c-api/buffer.rst:355
 msgid "NumPy-style: shape and strides"
-msgstr ""
+msgstr "NumPy スタイル: shape, strides"
 
 #: ../../c-api/buffer.rst:357
 msgid ""
@@ -599,6 +676,9 @@ msgid ""
 "`~Py_buffer.itemsize`, :c:member:`~Py_buffer.ndim`, :c:member:`~Py_buffer."
 "shape` and :c:member:`~Py_buffer.strides`."
 msgstr ""
+"NumPy スタイルの配列の論理的構造は :c:member:`~Py_buffer.itemsize`, :c:"
+"member:`~Py_buffer.ndim`, :c:member:`~Py_buffer.shape`, :c:member:"
+"`~Py_buffer.strides` で定義されます。"
 
 #: ../../c-api/buffer.rst:360
 msgid ""
@@ -607,6 +687,10 @@ msgid ""
 "that case, both :c:member:`~Py_buffer.shape` and :c:member:`~Py_buffer."
 "strides` are ``NULL``."
 msgstr ""
+"``ndim == 0`` の場合は、 :c:member:`~Py_buffer.buf` が指すメモリの場所は、サ"
+"イズが :c:member:`~Py_buffer.itemsize` のスカラ値として解釈されます。\n"
+"この場合、 :c:member:`~Py_buffer.shape` と :c:member:`~Py_buffer.strides` の"
+"両方とも ``NULL`` です。"
 
 #: ../../c-api/buffer.rst:364
 msgid ""
@@ -614,6 +698,10 @@ msgid ""
 "standard n-dimensional C-array. Otherwise, the consumer must access an n-"
 "dimensional array as follows:"
 msgstr ""
+":c:member:`~Py_buffer.strides` が ``NULL`` の場合は、配列は標準の n 次元 C 配"
+"列として解釈されます。\n"
+"そうでない場合は、利用者は次のように n 次元配列にアクセスしなければなりませ"
+"ん:"
 
 #: ../../c-api/buffer.rst:374
 msgid ""
@@ -621,10 +709,13 @@ msgid ""
 "the actual memory block. An exporter can check the validity of a buffer with "
 "this function:"
 msgstr ""
+"上記のように、 :c:member:`~Py_buffer.buf` はメモリブロック内のどの場所でも指"
+"すことが可能です。エクスポーターはこの関数を使用することによってバッファの妥"
+"当性を確認出来ます。"
 
 #: ../../c-api/buffer.rst:408
 msgid "PIL-style: shape, strides and suboffsets"
-msgstr ""
+msgstr "PIL スタイル: shape, strides, suboffsets"
 
 #: ../../c-api/buffer.rst:410
 msgid ""
@@ -636,6 +727,13 @@ msgid ""
 "embedded at the start of :c:member:`~Py_buffer.buf`, pointing to two ``char "
 "x[2][3]`` arrays that can be located anywhere in memory."
 msgstr ""
+"PIL スタイルの配列では通常の要素の他に、ある次元の上で次の要素を取得するため"
+"に辿るポインタを持てます。\n"
+"例えば、通常の3次元 C 配列 ``char v[2][2][3]`` は、2次元配列への 2 つのポイン"
+"タからなる配列 ``char (*v[2])[2][3]`` と見ることもできます。\n"
+"suboffset 表現では、これらの 2 つのポインタは :c:member:`~Py_buffer.buf` の先"
+"頭に埋め込め、メモリのどこにでも配置できる 2 つの ``char x[2][3]`` 配列を指し"
+"ます。"
 
 #: ../../c-api/buffer.rst:419
 msgid ""
@@ -643,10 +741,12 @@ msgid ""
 "pointed to by an N-dimensional index when there are both non-``NULL`` "
 "strides and suboffsets::"
 msgstr ""
+"次の例は、 strides も suboffsets も ``NULL`` でない場合の、N 次元インデックス"
+"によって指されている N 次元配列内の要素へのポインタを返す関数です::"
 
 #: ../../c-api/buffer.rst:438
 msgid "Buffer-related functions"
-msgstr ""
+msgstr "バッファ関連の関数"
 
 #: ../../c-api/buffer.rst:442
 msgid ""
@@ -654,6 +754,11 @@ msgid ""
 "``1`` is returned, it doesn't guarantee that :c:func:`PyObject_GetBuffer` "
 "will succeed.  This function always succeeds."
 msgstr ""
+"*obj* がbuffer インターフェースをサポートしている場合は ``1`` を返し、そうで"
+"ない場合は ``0`` を返します。\n"
+"``1`` を返したとしても、 :c:func:`PyObject_GetBuffer` が成功することは保証さ"
+"れません。\n"
+"この関数は常に成功します。"
 
 #: ../../c-api/buffer.rst:449
 msgid ""
@@ -661,6 +766,10 @@ msgid ""
 "the exporter cannot provide a buffer of the exact type, it MUST raise :exc:"
 "`BufferError`, set ``view->obj`` to ``NULL`` and return ``-1``."
 msgstr ""
+"*exporter* に *flags* で指定された方法で *view* を埋めるように要求します。も"
+"し exporter が指定されたとおりにバッファを提供できない場合、 :exc:"
+"`BufferError` を送出し、 ``view->obj`` を ``NULL`` に設定した上で、 ``-1`` を"
+"返さなければなりません。"
 
 #: ../../c-api/buffer.rst:454
 msgid ""
@@ -669,6 +778,11 @@ msgid ""
 "redirect requests to a single object, ``view->obj`` MAY refer to this object "
 "instead of *exporter* (See :ref:`Buffer Object Structures <buffer-structs>`)."
 msgstr ""
+"成功したときは、 *view* を埋め、 ``view->obj`` に *exporter* への新しい参照を"
+"設定し、0を返します。チェイン状のバッファプロバイダがリクエストを単一のオブ"
+"ジェクトにリダイレクトするケースでは、 ``view->obj`` は *exporter* の代わりに"
+"このオブジェクトを参照します (:ref:`バッファオブジェクト構造体 <buffer-"
+"structs>` を参照してください)。"
 
 #: ../../c-api/buffer.rst:459
 msgid ""
@@ -677,6 +791,11 @@ msgid ""
 "`free`. Thus, after the consumer is done with the buffer, :c:func:"
 "`PyBuffer_Release` must be called exactly once."
 msgstr ""
+":c:func:`malloc` と :c:func:`free` のように、呼び出しに成功した :c:func:"
+"`PyObject_GetBuffer` と対になる :c:func:`PyBuffer_Release` の呼び出しがなけれ"
+"なればなりません。\n"
+"従って、バッファの利用が済んだら :c:func:`PyBuffer_Release` が厳密に1回だけ呼"
+"び出されなければなりません。"
 
 #: ../../c-api/buffer.rst:467
 msgid ""
@@ -691,6 +810,8 @@ msgid ""
 "It is an error to call this function on a buffer that was not obtained via :"
 "c:func:`PyObject_GetBuffer`."
 msgstr ""
+":c:func:`PyObject_GetBuffer` を通して取得していないバッファに対してこの関数を"
+"呼び出すのは間違いです。"
 
 #: ../../c-api/buffer.rst:478
 msgid ""
@@ -705,12 +826,20 @@ msgid ""
 "one (*order* is ``'A'``).  Return ``0`` otherwise.  This function always "
 "succeeds."
 msgstr ""
+"*view* で定義されているメモリが、 C スタイル (*order* == ``'C'``) のときか、 "
+"Fortran スタイル (*order* == ``'F'``) :term:`連続 <contiguous>` のときか、そ"
+"のいずれか (*order* == ``'A'``) であれば ``1`` を返します。\n"
+"それ以外の場合は ``0`` を返します。\n"
+"この関数は常に成功します。"
 
 #: ../../c-api/buffer.rst:493
 msgid ""
 "Get the memory area pointed to by the *indices* inside the given *view*. "
 "*indices* must point to an array of ``view->ndim`` indices."
 msgstr ""
+"与えられた *view* 内にある *indices* が指すメモリ領域を取得します。\n"
+"*indices* は ``view->ndim`` 個のインデックスからなる配列を指していなければな"
+"りません。"
 
 #: ../../c-api/buffer.rst:499
 msgid ""
@@ -718,6 +847,9 @@ msgid ""
 "``'F'`` (for C-style or Fortran-style ordering). ``0`` is returned on "
 "success, ``-1`` on error."
 msgstr ""
+"連続する *len* バイトを *buf* から *view* にコピーします。*fort* には "
+"``'C'`` か ``'F'`` を指定できます（それぞれC言語スタイルとFortranスタイルの順"
+"序を表します)。成功時には ``0``、エラー時には ``-1`` を返します。"
 
 #: ../../c-api/buffer.rst:506
 msgid ""
@@ -725,10 +857,14 @@ msgid ""
 "*order* can be ``'C'`` or ``'F'`` or ``'A'`` (for C-style or Fortran-style "
 "ordering or either one). ``0`` is returned on success, ``-1`` on error."
 msgstr ""
+"*src* から *len* バイトを連続表現で *buf* 上にコピーします。\n"
+"*order* は ``'C'`` または ``'F'`` または ``'A'`` (C スタイル順序または "
+"Fortran スタイル順序またはそれ以外) が指定できます。\n"
+"成功したら ``0`` が返り、エラーなら ``-1`` が返ります。"
 
 #: ../../c-api/buffer.rst:510
 msgid "This function fails if *len* != *src->len*."
-msgstr ""
+msgstr "*len* != *src->len* の場合、この関数は失敗します。"
 
 #: ../../c-api/buffer.rst:515
 msgid ""
@@ -738,7 +874,7 @@ msgstr ""
 
 #: ../../c-api/buffer.rst:518
 msgid "``0`` is returned on success, ``-1`` on error."
-msgstr ""
+msgstr "成功したら ``0`` が、エラー時には ``-1`` が返されます。"
 
 #: ../../c-api/buffer.rst:522
 msgid ""
@@ -746,6 +882,9 @@ msgid ""
 "if *order* is ``'C'`` or Fortran-style if *order* is ``'F'``) array of the "
 "given shape with the given number of bytes per element."
 msgstr ""
+"*strides* 配列を、 *itemsize* の大きさの要素がバイト単位の、 *shape* の形をし"
+"た :term:`連続な <contiguous>` (*order* が ``'C'`` なら C-style 、 ``'F'`` な"
+"ら Fortran-style の) 多次元配列として埋める。"
 
 #: ../../c-api/buffer.rst:529
 msgid ""
@@ -753,6 +892,9 @@ msgid ""
 "*len* with writability set according to *readonly*. *buf* is interpreted as "
 "a sequence of unsigned bytes."
 msgstr ""
+"サイズが *len* の *buf* を *readonly* に従った書き込み可/不可の設定で公開する"
+"バッファリクエストを処理します。\n"
+"*buf* は符号無しバイトの列として解釈されます。"
 
 #: ../../c-api/buffer.rst:533
 msgid ""
@@ -760,6 +902,10 @@ msgid ""
 "in *view* as specified by flags, unless *buf* has been designated as read-"
 "only and :c:macro:`PyBUF_WRITABLE` is set in *flags*."
 msgstr ""
+"*flags* 引数はリクエストのタイプを示します。\n"
+"この関数は、 *buf* が読み出し専用と指定されていて、 *flags* に :c:macro:"
+"`PyBUF_WRITABLE` が設定されていない限り、常にフラグに指定された通りに *view* "
+"を埋めます。"
 
 #: ../../c-api/buffer.rst:537
 msgid ""
@@ -774,6 +920,10 @@ msgid ""
 "*exporter* MUST be set to the exporting object and *flags* must be passed "
 "unmodified. Otherwise, *exporter* MUST be ``NULL``."
 msgstr ""
+"この関数を :ref:`getbufferproc <buffer-structs>` の一部として使う場合には、 "
+"*exporter* はエクスポートするオブジェクトに設定しなければならず、さらに "
+"*flags* は変更せずに渡さなければなりません。\n"
+"そうでない場合は、 *exporter* は ``NULL`` でなければなりません。"
 
 #: ../../c-api/buffer.rst:3
 msgid "buffer protocol"
