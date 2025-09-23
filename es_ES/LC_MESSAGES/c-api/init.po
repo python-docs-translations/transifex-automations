@@ -4,6 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 # Translators:
+# Rafael Fontenelle <rffontenelle@gmail.com>, 2025
 # python-doc bot, 2025
 #
 #, fuzzy
@@ -11,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-19 15:02+0000\n"
+"POT-Creation-Date: 2025-09-23 14:56+0000\n"
 "PO-Revision-Date: 2025-09-15 01:03+0000\n"
 "Last-Translator: python-doc bot, 2025\n"
 "Language-Team: Spanish (Spain) (https://app.transifex.com/python-doc/"
@@ -440,6 +441,10 @@ msgid ""
 "handler, instead of the UTF-8 encoding with ``surrogatepass`` error handler, "
 "for the :term:`filesystem encoding and error handler`."
 msgstr ""
+"Si el indicador es distinto de cero, utilice la codificación ``mbcs`` con el "
+"gestor de errores ``replace``, en lugar de la codificación UTF-8 con el "
+"gestor de errores ``surrogatepass``, para el :term:`filesystem encoding and "
+"error handler`."
 
 #: ../../c-api/init.rst:233
 msgid ""
@@ -944,11 +949,13 @@ msgid ""
 "This function should not be called before :c:func:`Py_Initialize`, otherwise "
 "it returns ``NULL``."
 msgstr ""
+"Esta función no debe invocarse antes de :c:func:`Py_Initialize`, de lo "
+"contrario devuelve ``NULL``."
 
 #: ../../c-api/init.rst:601 ../../c-api/init.rst:623 ../../c-api/init.rst:669
 #: ../../c-api/init.rst:691 ../../c-api/init.rst:719 ../../c-api/init.rst:905
 msgid "It now returns ``NULL`` if called before :c:func:`Py_Initialize`."
-msgstr ""
+msgstr "Ahora devuelve ``NULL`` si se llama antes que :c:func:`Py_Initialize`."
 
 #: ../../c-api/init.rst:604 ../../c-api/init.rst:694
 msgid "Get :data:`sys.executable` instead."
@@ -1537,6 +1544,11 @@ msgid ""
 "`Py_NewInterpreter`), but mixing multiple interpreters and the "
 "``PyGILState_*`` API is unsupported."
 msgstr ""
+"Tenga en cuenta que las funciones ``PyGILState_*`` asumen que sólo hay un "
+"intérprete global (creado automáticamente por :c:func:`Py_Initialize`).  "
+"Python soporta la creación de intérpretes adicionales (usando :c:func:"
+"`Py_NewInterpreter`), pero mezclar múltiples intérpretes y la API "
+"``PyGILState_*`` no está soportado."
 
 #: ../../c-api/init.rst:1047
 msgid "Cautions about fork()"
@@ -2065,6 +2077,8 @@ msgid ""
 "Return a :term:`strong reference`. Return ``NULL`` if no frame is currently "
 "executing."
 msgstr ""
+"Devuelve :term:`strong reference`. Devuelve ``NULL`` si no se está "
+"ejecutando ninguna trama."
 
 #: ../../c-api/init.rst:1404
 msgid "See also :c:func:`PyEval_GetFrame`."
@@ -2219,6 +2233,8 @@ msgid ""
 "The type of the *id* parameter changed from :c:expr:`long` to :c:expr:"
 "`unsigned long`."
 msgstr ""
+"El tipo del parámetro *id* ha cambiado de :c:expr:`long` a :c:expr:`unsigned "
+"long`."
 
 #: ../../c-api/init.rst:1548
 msgid ""
@@ -2682,6 +2698,15 @@ msgid ""
 "`ctypes`) using these APIs to allow calling of Python code from non-Python "
 "created threads will probably be broken when using sub-interpreters."
 msgstr ""
+"También ten en cuenta que combinar esta funcionalidad con las APIs "
+"``PyGILState_*`` es delicado, porque estas APIs asumen una biyección entre "
+"los estados de los hilos de Python y los hilos a nivel de SO, una asunción "
+"rota por la presencia de subinterpretadores. Se recomienda encarecidamente "
+"no cambiar de subinterpretador entre un par de llamadas coincidentes a :c:"
+"func:`PyGILState_Ensure` y :c:func:`PyGILState_Release`. Además, las "
+"extensiones (como :mod:`ctypes`) que utilizan estas APIs para permitir la "
+"llamada de código Python desde hilos no creados en Python probablemente se "
+"romperán al utilizar subinterpretadores."
 
 #: ../../c-api/init.rst:1897
 msgid "Asynchronous Notifications"
@@ -3155,6 +3180,12 @@ msgid ""
 "use a thread key and functions to associate a :c:expr:`void*` value per "
 "thread."
 msgstr ""
+"El intérprete de Python proporciona soporte de bajo nivel para el "
+"almacenamiento local de hilos (TLS) que envuelve la implementación TLS "
+"nativa subyacente para soportar la API de almacenamiento local de hilos a "
+"nivel de Python (:class:`threading.local`).  Las API de nivel C de CPython "
+"son similares a las ofrecidas por pthreads y Windows: utilizan una clave de "
+"hilo y funciones para asociar un valor :c:expr:`void*` por hilo."
 
 #: ../../c-api/init.rst:2220
 msgid ""
@@ -3180,6 +3211,10 @@ msgid ""
 "the :c:expr:`void*` values happen to be :c:expr:`PyObject*`, these functions "
 "don't do refcount operations on them either."
 msgstr ""
+"Ninguna de estas funciones de la API gestiona la memoria en nombre de los "
+"valores de :c:expr:`void*`.  Debe asignarlos y desasignarlos usted mismo. Si "
+"los valores :c:expr:`void*` resultan ser :c:expr:`PyObject*`, estas "
+"funciones tampoco realizan operaciones de recuento sobre ellos."
 
 #: ../../c-api/init.rst:2235
 msgid "Thread Specific Storage (TSS) API"
@@ -3191,6 +3226,9 @@ msgid ""
 "the CPython interpreter.  This API uses a new type :c:type:`Py_tss_t` "
 "instead of :c:expr:`int` to represent thread keys."
 msgstr ""
+"La API TSS se introduce para reemplazar el uso de la API TLS existente "
+"dentro del intérprete CPython.  Esta API utiliza un nuevo tipo :c:type:"
+"`Py_tss_t` en lugar de :c:expr:`int` para representar claves de hilo."
 
 #: ../../c-api/init.rst:2243
 msgid "\"A New C-API for Thread-Local Storage in CPython\" (:pep:`539`)"
@@ -3255,6 +3293,10 @@ msgid ""
 "calling :c:func:`PyThread_tss_delete` to ensure any associated thread locals "
 "have been unassigned. This is a no-op if the *key* argument is ``NULL``."
 msgstr ""
+"Libera la *clave* asignada por :c:func:`PyThread_tss_alloc`, después de "
+"llamar primero a :c:func:`PyThread_tss_delete` para asegurarse de que "
+"cualquier hilo local asociado ha sido desasignado. Esto es un no-op si el "
+"argumento *key* es ``NULL``."
 
 #: ../../c-api/init.rst:2286
 msgid ""
@@ -3319,6 +3361,10 @@ msgid ""
 "value with a TSS key in the current thread.  Each thread has a distinct "
 "mapping of the key to a :c:expr:`void*` value."
 msgstr ""
+"Devuelve un valor cero para indicar que se ha asociado correctamente un "
+"valor :c:expr:`void*` con una clave TSS en el subproceso actual.  Cada "
+"subproceso tiene una asignación distinta de la clave a un valor :c:expr:"
+"`void*`."
 
 #: ../../c-api/init.rst:2332
 msgid ""
@@ -3326,6 +3372,9 @@ msgid ""
 "thread.  This returns ``NULL`` if no value is associated with the key in the "
 "current thread."
 msgstr ""
+"Devuelve el valor :c:expr:`void*` asociado a una clave TSS en el subproceso "
+"actual.  Devuelve ``NULL`` si no hay ningún valor asociado a la clave en el "
+"subproceso actual."
 
 #: ../../c-api/init.rst:2340
 msgid "Thread Local Storage (TLS) API"
@@ -3363,7 +3412,7 @@ msgstr ""
 
 #: ../../c-api/init.rst:2363
 msgid "Synchronization Primitives"
-msgstr ""
+msgstr "Primitivas de sincronización"
 
 #: ../../c-api/init.rst:2365
 msgid "The C-API provides a basic mutual exclusion lock."
@@ -3672,7 +3721,7 @@ msgstr ""
 
 #: ../../c-api/init.rst:1172
 msgid "_thread"
-msgstr ""
+msgstr "_thread"
 
 #: ../../c-api/init.rst:1695 ../../c-api/init.rst:1794
 msgid "stdout (in module sys)"
