@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-22 21:56+0000\n"
+"POT-Creation-Date: 2025-09-23 17:40+0000\n"
 "PO-Revision-Date: 2025-09-22 17:54+0000\n"
 "Last-Translator: python-doc bot, 2025\n"
 "Language-Team: Japanese (https://app.transifex.com/python-doc/teams/5390/"
@@ -24,11 +24,11 @@ msgstr ""
 
 #: ../../library/asynchat.rst:2
 msgid ":mod:`asynchat` --- Asynchronous socket command/response handler"
-msgstr ""
+msgstr ":mod:`asynchat` --- 非同期ソケットコマンド/レスポンスハンドラ"
 
 #: ../../library/asynchat.rst:11
 msgid "**Source code:** :source:`Lib/asynchat.py`"
-msgstr ""
+msgstr "**ソースコード:** :source:`Lib/asynchat.py`"
 
 #: ../../library/asynchat.rst:13
 msgid ""
@@ -41,6 +41,8 @@ msgid ""
 "This module exists for backwards compatibility only.  For new code we "
 "recommend using :mod:`asyncio`."
 msgstr ""
+"このモジュールは後方互換性のためだけに存在します。新しいコードでは :mod:"
+"`asyncio` を利用することを推奨します。"
 
 #: ../../library/asynchat.rst:25
 msgid ""
@@ -56,6 +58,17 @@ msgid ""
 "class:`asynchat.async_chat` channel objects as it receives incoming "
 "connection requests."
 msgstr ""
+":mod:`asynchat` を使うと、 :mod:`asyncore` を基盤とした非同期なサーバ・クライ"
+"アントをより簡単に開発する事ができます。 :mod:`asynchat` では、プロトコルの要"
+"素が任意の文字列で終了するか、または可変長の文字列であるようなプロトコルを容"
+"易に制御できるようになっています。 :mod:`asynchat` は、抽象クラス :class:"
+"`async_chat` を定義しており、 :class:`async_chat` を継承して :meth:"
+"`collect_incoming_data` メソッドと :meth:`found_terminator` メソッドを実装す"
+"れば使うことができます。 :class:`async_chat` と :mod:`asyncore` は同じ非同期"
+"ループを使用しており、 :class:`asyncore.dispatcher` も :class:`asynchat."
+"async_chat` も同じチャネルマップに登録する事ができます。通常、 :class:"
+"`asyncore.dispatcher` はサーバチャネルとして使用し、リクエストの受け付け時"
+"に :class:`asynchat.async_chat` オブジェクトを生成します。"
 
 #: ../../library/asynchat.rst:40
 msgid ""
@@ -65,6 +78,11 @@ msgid ""
 "methods. The :class:`asyncore.dispatcher` methods can be used, although not "
 "all make sense in a message/response context."
 msgstr ""
+"このクラスは、 :class:`asyncore.dispatcher` から継承した抽象クラスです。使用"
+"する際には :class:`async_chat` のサブクラスを作成し、 :meth:"
+"`collect_incoming_data` と :meth:`found_terminator` を定義しなければなりませ"
+"ん。 :class:`asyncore.dispatcher` のメソッドを使用する事もできますが、メッ"
+"セージ/レスポンス処理を中心に行う場合には使えないメソッドもあります。"
 
 #: ../../library/asynchat.rst:47
 msgid ""
@@ -74,20 +92,26 @@ msgid ""
 "`async_chat` object's methods are called by the event-processing framework "
 "with no action on the part of the programmer."
 msgstr ""
+":class:`asyncore.dispatcher` と同様に、 :class:`async_chat` も :c:func:"
+"`select` 呼出し後のソケットの状態からイベントを生成します。ポーリングループ開"
+"始後、イベント処理フレームワークが自動的に :class:`async_chat` のメソッドを呼"
+"び出しますので、プログラマが処理を記述する必要はありません。"
 
 #: ../../library/asynchat.rst:53
 msgid ""
 "Two class attributes can be modified, to improve performance, or possibly "
 "even to conserve memory."
 msgstr ""
+"パフォーマンスの向上やメモリの節約のために、2つのクラス属性を調整することがで"
+"きます。"
 
 #: ../../library/asynchat.rst:59
 msgid "The asynchronous input buffer size (default ``4096``)."
-msgstr ""
+msgstr "非同期入力バッファサイズ (デフォルト値: ``4096``)。"
 
 #: ../../library/asynchat.rst:64
 msgid "The asynchronous output buffer size (default ``4096``)."
-msgstr ""
+msgstr "非同期出力バッファサイズ (デフォルト値: ``4096``)。"
 
 #: ../../library/asynchat.rst:66
 msgid ""
@@ -103,6 +127,15 @@ msgid ""
 "recognize the end of, or an important breakpoint in, an incoming "
 "transmission from the remote endpoint."
 msgstr ""
+":class:`asyncore.dispatcher` と違い、 :class:`async_chat` では *producer* "
+"の :abbr:`FIFO (first-in, first-out)` キューを作成する事ができます。producer"
+"は :meth:`more` メソッドを必ず持ち、このメソッドでチャネル上に送出するデータ"
+"を返します。producerが枯渇状態 (*i.e.* これ以上のデータを持たない状態)にある"
+"場合、 :meth:`more` は空のバイトオブジェクトを返します。この時、 :class:"
+"`async_chat` は枯渇状態にあるproducerをキューから除去し、次のproducerが存在す"
+"ればそのproducerを使用します。キューにproducerが存在しない場合、 :meth:"
+"`handle_write` は何もしません。リモート端点からの入力の終了や重要な中断点を検"
+"出する場合は、 :meth:`set_terminator` に記述します。"
 
 #: ../../library/asynchat.rst:79
 msgid ""
@@ -111,12 +144,17 @@ msgid ""
 "data that the channel receives asynchronously. The methods are described "
 "below."
 msgstr ""
+":class:`async_chat` のサブクラスでは、入力メソッド :meth:"
+"`collect_incoming_data` と :meth:`found_terminator` を定義し、チャネルが非同"
+"期に受信するデータを処理します。これらのメソッドについては後ろで解説します。"
 
 #: ../../library/asynchat.rst:87
 msgid ""
 "Pushes a ``None`` on to the producer queue. When this producer is popped off "
 "the queue it causes the channel to be closed."
 msgstr ""
+"producer キューのトップに ``None`` をプッシュします。このproducerがキューから"
+"ポップされると、チャネルが閉じられます。"
 
 #: ../../library/asynchat.rst:93
 msgid ""
@@ -124,12 +162,16 @@ msgid ""
 "default method, which must be overridden, raises a :exc:"
 "`NotImplementedError` exception."
 msgstr ""
+"チャネルが受信した不定長のデータを *data* に指定して呼び出されます。このメ"
+"ソッドは必ずオーバライドする必要があり、デフォルトの実装では、 :exc:"
+"`NotImplementedError` 例外を送出します。"
 
 #: ../../library/asynchat.rst:100
 msgid ""
 "In emergencies this method will discard any data held in the input and/or "
 "output buffers and the producer queue."
 msgstr ""
+"非常用のメソッドで、全ての入出力バッファとproducer キューを廃棄します。"
 
 #: ../../library/asynchat.rst:106
 msgid ""
@@ -138,10 +180,15 @@ msgid ""
 "raises a :exc:`NotImplementedError` exception. The buffered input data "
 "should be available via an instance attribute."
 msgstr ""
+"入力データストリームが、 :meth:`set_terminator` で指定した終了条件と一致した"
+"場合に呼び出されます。このメソッドは必ずオーバライドする必要があり、デフォル"
+"トの実装では、 :exc:`NotImplementedError` 例外を送出します。入力データを参照"
+"する必要がある場合でも引数としては与えられないため、入力バッファをインスタン"
+"ス属性として参照しなければなりません。"
 
 #: ../../library/asynchat.rst:114
 msgid "Returns the current terminator for the channel."
-msgstr ""
+msgstr "現在のチャネルの終了条件を返します。"
 
 #: ../../library/asynchat.rst:119
 msgid ""
@@ -150,6 +197,9 @@ msgid ""
 "although it is possible to use your own producers in more complex schemes to "
 "implement encryption and chunking, for example."
 msgstr ""
+"チャネルのキューにデータをプッシュして転送します。データをチャネルに書き出す"
+"ために必要なのはこれだけですが、データの暗号化やチャンク化などを行う場合には"
+"独自の producer を使用する事もできます。"
 
 #: ../../library/asynchat.rst:127
 msgid ""
@@ -165,10 +215,12 @@ msgid ""
 "may be any of three types of value, corresponding to three different ways to "
 "handle incoming protocol data."
 msgstr ""
+"チャネルで検出する終了条件を設定します。``term`` は入力プロトコルデータの処理"
+"方式によって以下の3つの型の何れかを指定します。"
 
 #: ../../library/asynchat.rst:140
 msgid "term"
-msgstr ""
+msgstr "term"
 
 #: ../../library/asynchat.rst:140
 msgid "Description"
@@ -176,41 +228,46 @@ msgstr "説明"
 
 #: ../../library/asynchat.rst:142
 msgid "*string*"
-msgstr ""
+msgstr "*string*"
 
 #: ../../library/asynchat.rst:142
 msgid ""
 "Will call :meth:`found_terminator` when the string is found in the input "
 "stream"
 msgstr ""
+"入力ストリーム中でstringが検出された時、 :meth:`found_terminator` を呼び出し"
+"ます"
 
 #: ../../library/asynchat.rst:145
 msgid "*integer*"
-msgstr ""
+msgstr "*integer*"
 
 #: ../../library/asynchat.rst:145
 msgid ""
 "Will call :meth:`found_terminator` when the indicated number of characters "
 "have been received"
 msgstr ""
+"指定された文字数が読み込まれた時、 :meth:`found_terminator` を呼び出します"
 
 #: ../../library/asynchat.rst:149
 msgid "``None``"
-msgstr ""
+msgstr "``None``"
 
 #: ../../library/asynchat.rst:149
 msgid "The channel continues to collect data forever"
-msgstr ""
+msgstr "永久にデータを読み込みます"
 
 #: ../../library/asynchat.rst:153
 msgid ""
 "Note that any data following the terminator will be available for reading by "
 "the channel after :meth:`found_terminator` is called."
 msgstr ""
+"終了条件が成立しても、その後に続くデータは、 :meth:`found_terminator` の呼出"
+"し後に再びチャネルを読み込めば取得する事ができます。"
 
 #: ../../library/asynchat.rst:160
 msgid "asynchat Example"
-msgstr ""
+msgstr "asynchat 使用例"
 
 #: ../../library/asynchat.rst:162
 msgid ""
@@ -221,6 +278,10 @@ msgid ""
 "end of the HTTP headers, and a flag indicates that the headers are being "
 "read."
 msgstr ""
+"以下のサンプルは、 :class:`async_chat` でHTTPリクエストを読み込む処理の一部で"
+"す。Webサーバは、クライアントからの接続毎に :class:`http_request_handler` オ"
+"ブジェクトを作成します。最初はチャネルの終了条件に空行を指定してHTTPヘッダの"
+"末尾までを検出し、その後ヘッダ読み込み済みを示すフラグを立てています。"
 
 #: ../../library/asynchat.rst:169
 msgid ""
@@ -229,6 +290,9 @@ msgid ""
 "`` header is used to set a numeric terminator to read the right amount of "
 "data from the channel."
 msgstr ""
+"ヘッダ読み込んだ後、リクエストの種類がPOSTであればデータが入力ストリームに流"
+"れるため、``Content-Length:`` ヘッダの値を数値として終了条件に指定し、適切な"
+"長さのデータをチャネルから読み込みます。"
 
 #: ../../library/asynchat.rst:174
 msgid ""
@@ -236,3 +300,6 @@ msgid ""
 "marshalled, after setting the channel terminator to ``None`` to ensure that "
 "any extraneous data sent by the web client are ignored. ::"
 msgstr ""
+"必要な入力データを全て入手したら、チャネルの終了条件に ``None`` を指定して残"
+"りのデータを無視するようにしています。この後、 :meth:`handle_request` が呼び"
+"出されます。 ::"
