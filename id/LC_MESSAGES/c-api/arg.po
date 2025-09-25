@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-23 16:19+0000\n"
+"POT-Creation-Date: 2025-09-25 16:33+0000\n"
 "PO-Revision-Date: 2025-09-22 16:49+0000\n"
 "Last-Translator: python-doc bot, 2025\n"
 "Language-Team: Indonesian (https://app.transifex.com/python-doc/teams/5390/"
@@ -94,7 +94,7 @@ msgstr "Kecuali dinyatakan lain, buffer tidak akhiri oleh NUL."
 
 #: ../../c-api/arg.rst:39
 msgid "There are three ways strings and buffers can be converted to C:"
-msgstr ""
+msgstr "Ada tiga cara string dan buffer dapat dikonversi ke C:"
 
 #: ../../c-api/arg.rst:41
 msgid ""
@@ -105,6 +105,12 @@ msgid ""
 "call** :c:func:`PyBuffer_Release` after you have finished processing the "
 "data (or in any early abort case)."
 msgstr ""
+"Format seperti ``y*`` dan ``s*`` mengisi struktur :c:type:`Py_buffer`. Hal "
+"ini mengunci buffer yang mendasarinya sehingga pemanggil dapat menggunakan "
+"buffer tersebut bahkan di dalam blok :c:type:`Py_BEGIN_ALLOW_THREADS` tanpa "
+"risiko data diubah ukurannya atau dihancurkan. Akibatnya, **anda harus "
+"memanggil** :c:func:`PyBuffer_Release` setelah anda selesai memproses data "
+"(atau dalam kasus pembatalan awal)."
 
 #: ../../c-api/arg.rst:48
 msgid ""
@@ -112,6 +118,9 @@ msgid ""
 "**You have to call** :c:func:`PyMem_Free` after you have finished processing "
 "the data (or in any early abort case)."
 msgstr ""
+"Format ``es``, ``es#``, ``et`` dan ``et#`` mengalokasikan buffer hasil. "
+"**anda harus menghubungi** :c:func:`PyMem_Free` setelah anda selesai "
+"memproses data (atau dalam kasus pembatalan awal)."
 
 #: ../../c-api/arg.rst:54
 msgid ""
@@ -121,6 +130,11 @@ msgid ""
 "corresponding Python object, and shares the lifetime of this object. You "
 "won't have to release any memory yourself."
 msgstr ""
+"Format lain menggunakan :class:`str` atau read-only :term:`bytes-like "
+"object`, seperti :class:`bytes`, dan menyediakan penunjuk ``const char *`` "
+"ke buffer-nya. Dalam kasus ini, buffer \"dipinjam\": buffer dikelola oleh "
+"objek Python yang sesuai, dan berbagi masa pakai dengan objek tersebut. Anda "
+"tidak perlu mengeluarkan memori sendiri."
 
 #: ../../c-api/arg.rst:61
 msgid ""
@@ -129,6 +143,11 @@ msgid ""
 "disallows common mutable objects such as :class:`bytearray`, but also some "
 "read-only objects such as :class:`memoryview` of :class:`bytes`."
 msgstr ""
+"Untuk memastikan bahwa buffer yang mendasari dapat dipinjam dengan aman, "
+"bidang :c:member:`PyBufferProcs.bf_releasebuffer` objek harus ``NULL``. Hal "
+"ini melarang objek umum yang dapat diubah seperti :class:`bytearray`, tetapi "
+"juga beberapa objek yang hanya dapat dibaca seperti :class:`memoryview` "
+"dari :class:`bytes`."
 
 #: ../../c-api/arg.rst:67
 msgid ""
@@ -136,6 +155,10 @@ msgid ""
 "whether the input object is immutable (e.g. whether it would honor a request "
 "for a writable buffer, or whether another thread can mutate the data)."
 msgstr ""
+"Selain persyaratan ``bf_releasebuffer`` ini, tidak ada pemeriksaan untuk "
+"memverifikasi apakah objek input tidak dapat diubah (misalnya apakah ia akan "
+"memenuhi permintaan buffer yang dapat ditulis, atau apakah thread lain dapat "
+"mengubah data)."
 
 #: ../../c-api/arg.rst:73
 msgid ""
@@ -191,6 +214,8 @@ msgid ""
 "``s#`` (:class:`str`, read-only :term:`bytes-like object`) [const char \\*, :"
 "c:type:`Py_ssize_t`]"
 msgstr ""
+"``s#`` (:class:`str`, read-only :term:`bytes-like object`) [const char \\*, :"
+"c:type:`Py_ssize_t`]"
 
 #: ../../c-api/arg.rst:107
 msgid ""
@@ -200,6 +225,11 @@ msgid ""
 "null bytes. Unicode objects are converted to C strings using ``'utf-8'`` "
 "encoding."
 msgstr ""
+"Seperti ``s*``, kecuali bahwa ia menyediakan buffer :ref:`pinjaman <c-arg-"
+"borrowed-buffer>`. Hasilnya disimpan ke dalam dua variabel C, yang pertama "
+"adalah penunjuk ke sebuah string C, yang kedua adalah panjangnya. String "
+"tersebut dapat berisi byte null yang disematkan. Objek Unicode dikonversi ke "
+"string C menggunakan pengkodean ``'utf-8'``."
 
 #: ../../c-api/arg.rst:115 ../../c-api/arg.rst:584
 msgid "``z`` (:class:`str` or ``None``) [const char \\*]"
@@ -210,6 +240,8 @@ msgid ""
 "Like ``s``, but the Python object may also be ``None``, in which case the C "
 "pointer is set to ``NULL``."
 msgstr ""
+"Seperti ``s``, tetapi objek Python juga dapat berupa ``None``, dalam hal ini "
+"penunjuk C disetel ke ``NULL``."
 
 #: ../../c-api/arg.rst:119
 msgid ""
@@ -222,18 +254,24 @@ msgid ""
 "Like ``s*``, but the Python object may also be ``None``, in which case the "
 "``buf`` member of the :c:type:`Py_buffer` structure is set to ``NULL``."
 msgstr ""
+"Seperti ``s*``, tetapi objek Python juga dapat berupa ``None``, dalam hal "
+"ini anggota ``buf`` dari struktur :c:type:`Py_buffer` disetel ke ``NULL``."
 
 #: ../../c-api/arg.rst:123
 msgid ""
 "``z#`` (:class:`str`, read-only :term:`bytes-like object` or ``None``) "
 "[const char \\*, :c:type:`Py_ssize_t`]"
 msgstr ""
+"``z#`` (:class:`str`, read-only :term:`bytes-like object` atau ``None``) "
+"[const char \\*, :c:type:`Py_ssize_t`]"
 
 #: ../../c-api/arg.rst:122
 msgid ""
 "Like ``s#``, but the Python object may also be ``None``, in which case the C "
 "pointer is set to ``NULL``."
 msgstr ""
+"Seperti ``s#``, tetapi objek Python juga dapat berupa ``None``, dalam hal "
+"ini penunjuk C disetel ke ``NULL``."
 
 #: ../../c-api/arg.rst:134
 msgid "``y`` (read-only :term:`bytes-like object`) [const char \\*]"
@@ -246,6 +284,10 @@ msgid ""
 "objects.  The bytes buffer must not contain embedded null bytes; if it does, "
 "a :exc:`ValueError` exception is raised."
 msgstr ""
+"Format ini mengkonversi objek bytes-like ke C-pointer ke string karakter :"
+"ref:` yang dipinjam dari <c-arg-borrowed-buffer>`; format ini tidak menerima "
+"objek Unicode.  Buffer byte tidak boleh berisi byte null yang disematkan; "
+"jika ya, pengecualian :exc:`ValueError` akan dimunculkan."
 
 #: ../../c-api/arg.rst:132
 msgid ""
@@ -268,6 +310,8 @@ msgid ""
 "``y#`` (read-only :term:`bytes-like object`) [const char \\*, :c:type:"
 "`Py_ssize_t`]"
 msgstr ""
+"``y#`` (read-only :term:`bytes-like object`) [const char \\*, :c:type:"
+"`Py_ssize_t`]"
 
 #: ../../c-api/arg.rst:142
 msgid ""
@@ -287,6 +331,10 @@ msgid ""
 "attempting any conversion.  Raises :exc:`TypeError` if the object is not a "
 "bytes object.  The C variable may also be declared as :c:expr:`PyObject*`."
 msgstr ""
+"Mengharuskan objek Python adalah objek :class:`bytes`, tanpa mencoba "
+"melakukan perubahan apa pun.  Memunculkan :exc:`TypeError` jika objek "
+"tersebut bukan objek byte.  Variabel C juga dapat dideklarasikan sebagai :c:"
+"expr:`PyObject*`."
 
 #: ../../c-api/arg.rst:153
 msgid "``Y`` (:class:`bytearray`) [PyByteArrayObject \\*]"
@@ -299,6 +347,10 @@ msgid ""
 "class:`bytearray` object. The C variable may also be declared as :c:expr:"
 "`PyObject*`."
 msgstr ""
+"Memerlukan bahwa objek Python adalah objek :class:`bytearray`, tanpa mencoba "
+"melakukan konversi apa pun.  Memunculkan :exc:`TypeError` jika objek "
+"tersebut bukan merupakan objek :class:`bytearray`. Variabel C juga dapat "
+"dideklarasikan sebagai :c:expr:`PyObject*`."
 
 #: ../../c-api/arg.rst:170
 msgid "``u`` (:class:`str`) [const Py_UNICODE \\*]"
@@ -365,6 +417,9 @@ msgid ""
 "conversion.  Raises :exc:`TypeError` if the object is not a Unicode object.  "
 "The C variable may also be declared as :c:expr:`PyObject*`."
 msgstr ""
+"Memerlukan bahwa objek Python adalah objek Unicode, tanpa mencoba melakukan "
+"konversi apa pun.  Memunculkan :exc:`TypeError` jika objek bukan objek "
+"Unicode.  Variabel C juga dapat dideklarasikan sebagai :c:expr:`PyObject*`."
 
 #: ../../c-api/arg.rst:206
 msgid "``w*`` (read-write :term:`bytes-like object`) [Py_buffer]"
@@ -387,6 +442,8 @@ msgid ""
 "This variant on ``s`` is used for encoding Unicode into a character buffer. "
 "It only works for encoded data without embedded NUL bytes."
 msgstr ""
+"Ten wariant ``s`` jest używany do zakodowania Unicode w buforze znaków. To "
+"działa tylko dla zakodowanych danych bez osadzonych znaków NUL."
 
 #: ../../c-api/arg.rst:212
 msgid ""
@@ -398,6 +455,14 @@ msgid ""
 "references will be set to a buffer with the contents of the argument text. "
 "The text will be encoded in the encoding specified by the first argument."
 msgstr ""
+"Format ini membutuhkan dua argumen.  Yang pertama hanya digunakan sebagai "
+"masukan, dan harus berupa :c:expr:`const char*` yang menunjuk pada nama "
+"pengkodean sebagai string yang diakhiri dengan NUL, atau ``NULL``, dalam hal "
+"ini pengkodean ``'utf-8'`` yang digunakan. Pengecualian akan muncul jika "
+"pengkodean yang disebutkan tidak dikenal oleh Python.  Argumen kedua harus "
+"berupa :c:expr:`char**`; nilai pointer yang direferensikan akan diset ke "
+"buffer dengan isi teks argumen. Teks akan dikodekan dalam pengkodean yang "
+"ditentukan oleh argumen pertama."
 
 #: ../../c-api/arg.rst:220
 msgid ""
@@ -421,12 +486,17 @@ msgid ""
 "recoding them.  Instead, the implementation assumes that the byte string "
 "object uses the encoding passed in as parameter."
 msgstr ""
+"Podobnie jak ``es`` z wyjątkiem tego, że obiekty ciągów znaków są "
+"przekazywane dalej bez ich zapisywania. Zamiast tego implementacja zakłada, "
+"że obiekt łańcucha znaków wykorzystuje kodowanie przekazane jako parametr."
 
 #: ../../c-api/arg.rst:259
 msgid ""
 "``es#`` (:class:`str`) [const char \\*encoding, char \\*\\*buffer, :c:type:"
 "`Py_ssize_t` \\*buffer_length]"
 msgstr ""
+"``es#`` (:class:`str`) [const char \\*encoding, char \\*\\*buffer, :c:type:"
+"`Py_ssize_t` \\*buffer_length]"
 
 #: ../../c-api/arg.rst:231
 msgid ""
@@ -434,6 +504,9 @@ msgid ""
 "Unlike the ``es`` format, this variant allows input data which contains NUL "
 "characters."
 msgstr ""
+"Ten wariant ``s#`` używany jest do kodowania Unicode w buforze znaków. W "
+"przeciwieństwie do formatu ``es``, ten wariant pozwala wprowadzać dane "
+"zawierające znaki NUL."
 
 #: ../../c-api/arg.rst:235
 msgid ""
@@ -447,6 +520,16 @@ msgid ""
 "The third argument must be a pointer to an integer; the referenced integer "
 "will be set to the number of bytes in the output buffer."
 msgstr ""
+"Ini membutuhkan tiga argumen.  Yang pertama hanya digunakan sebagai masukan, "
+"dan harus berupa :c:expr:`const char*` yang menunjuk pada nama pengkodean "
+"sebagai string yang diakhiri dengan NUL, atau ``NULL``, dalam hal ini "
+"pengkodean ``'utf-8'`` yang digunakan. Pengecualian akan muncul jika "
+"pengkodean yang disebutkan tidak dikenal oleh Python.  Argumen kedua harus "
+"berupa :c:expr:`char**`; nilai pointer yang direferensikan akan disetel ke "
+"buffer dengan isi teks argumen. Teks akan dikodekan dalam pengkodean yang "
+"ditentukan oleh argumen pertama. Argumen ketiga harus berupa penunjuk ke "
+"sebuah bilangan bulat; bilangan bulat yang direferensikan akan diset ke "
+"jumlah byte dalam buffer keluaran."
 
 #: ../../c-api/arg.rst:245
 msgid "There are two modes of operation:"
@@ -475,12 +558,16 @@ msgid ""
 "In both cases, *\\*buffer_length* is set to the length of the encoded data "
 "without the trailing NUL byte."
 msgstr ""
+"W obu przypadkach, *\\*buffer_length* jest ustawiany na długość zakodowanych "
+"danych z pominięciem zakańczającego znaku NUL."
 
 #: ../../c-api/arg.rst:264
 msgid ""
 "``et#`` (:class:`str`, :class:`bytes` or :class:`bytearray`) [const char "
 "\\*encoding, char \\*\\*buffer, :c:type:`Py_ssize_t` \\*buffer_length]"
 msgstr ""
+"``et#`` (:class:`str`, :class:`bytes` atau :class:`bytearray`) [const char "
+"\\*encoding, char \\*\\*buffer, :c:type:`Py_ssize_t` \\*buffer_length]"
 
 #: ../../c-api/arg.rst:262
 msgid ""
@@ -488,6 +575,9 @@ msgid ""
 "recoding them. Instead, the implementation assumes that the byte string "
 "object uses the encoding passed in as parameter."
 msgstr ""
+"Tak samo, jak w ``es#`` oprócz tego, że obiekty ciągu bajtów są przekazywane "
+"do funkcji bez ich zapisywania. Zamiast tego, implementacja zakłada że "
+"obiekt ciągu bajtów używa kodowania przekazywanego w parametrze."
 
 #: ../../c-api/arg.rst:267
 msgid "Numbers"
@@ -519,7 +609,7 @@ msgstr "``h`` (:class:`int`) [short int]"
 
 #: ../../c-api/arg.rst:278
 msgid "Convert a Python integer to a C :c:expr:`short int`."
-msgstr ""
+msgstr "Mengonversi bilangan bulat Python menjadi C: c: expr: `short int`."
 
 #: ../../c-api/arg.rst:282 ../../c-api/arg.rst:621
 msgid "``H`` (:class:`int`) [unsigned short int]"
@@ -530,6 +620,8 @@ msgid ""
 "Convert a Python integer to a C :c:expr:`unsigned short int`, without "
 "overflow checking."
 msgstr ""
+"Mengonversi bilangan bulat Python menjadi C :c:expr:`unsigned short int`, "
+"tanpa pengecekan overflow."
 
 #: ../../c-api/arg.rst:285 ../../c-api/arg.rst:606
 msgid "``i`` (:class:`int`) [int]"
@@ -537,7 +629,7 @@ msgstr "``i`` (:class:`int`) [int]"
 
 #: ../../c-api/arg.rst:285
 msgid "Convert a Python integer to a plain C :c:expr:`int`."
-msgstr ""
+msgstr "Mengonversi bilangan bulat Python ke bahasa C biasa :c:expr:`int`."
 
 #: ../../c-api/arg.rst:289 ../../c-api/arg.rst:624
 msgid "``I`` (:class:`int`) [unsigned int]"
@@ -548,6 +640,8 @@ msgid ""
 "Convert a Python integer to a C :c:expr:`unsigned int`, without overflow "
 "checking."
 msgstr ""
+"Mengonversi bilangan bulat Python menjadi C :c:expr:`unsigned int`, tanpa "
+"pengecekan overflow."
 
 #: ../../c-api/arg.rst:292 ../../c-api/arg.rst:615
 msgid "``l`` (:class:`int`) [long int]"
@@ -555,7 +649,7 @@ msgstr "``l`` (:class:`int`) [long int]"
 
 #: ../../c-api/arg.rst:292
 msgid "Convert a Python integer to a C :c:expr:`long int`."
-msgstr ""
+msgstr "Mengonversi bilangan bulat Python menjadi C: c: expr: `long int`."
 
 #: ../../c-api/arg.rst:296 ../../c-api/arg.rst:627
 msgid "``k`` (:class:`int`) [unsigned long]"
@@ -566,6 +660,8 @@ msgid ""
 "Convert a Python integer to a C :c:expr:`unsigned long` without overflow "
 "checking."
 msgstr ""
+"Mengonversi bilangan bulat Python menjadi C :c:expr:`unsigned long` tanpa "
+"pengecekan overflow."
 
 #: ../../c-api/arg.rst:299 ../../c-api/arg.rst:630
 msgid "``L`` (:class:`int`) [long long]"
@@ -573,7 +669,7 @@ msgstr "``L`` (:class:`int`) [long long]"
 
 #: ../../c-api/arg.rst:299
 msgid "Convert a Python integer to a C :c:expr:`long long`."
-msgstr ""
+msgstr "Mengonversi bilangan bulat Python menjadi C :c:expr:`long long`."
 
 #: ../../c-api/arg.rst:303 ../../c-api/arg.rst:633
 msgid "``K`` (:class:`int`) [unsigned long long]"
@@ -584,10 +680,12 @@ msgid ""
 "Convert a Python integer to a C :c:expr:`unsigned long long` without "
 "overflow checking."
 msgstr ""
+"Mengonversi bilangan bulat Python menjadi C :c:expr:`unsigned long long` "
+"tanpa pengecekan overflow."
 
 #: ../../c-api/arg.rst:306 ../../c-api/arg.rst:636
 msgid "``n`` (:class:`int`) [:c:type:`Py_ssize_t`]"
-msgstr ""
+msgstr "``n`` (:class:`int`) [:c:type:`Py_ssize_t`]"
 
 #: ../../c-api/arg.rst:306
 msgid "Convert a Python integer to a C :c:type:`Py_ssize_t`."
@@ -602,6 +700,8 @@ msgid ""
 "Convert a Python byte, represented as a :class:`bytes` or :class:`bytearray` "
 "object of length 1, to a C :c:expr:`char`."
 msgstr ""
+"Mengonversi byte Python, direpresentasikan sebagai objek :class:`bytes` "
+"atau :class:`bytearray` dengan panjang 1, ke C :c:expr:`char`."
 
 #: ../../c-api/arg.rst:312
 msgid "Allow :class:`bytearray` objects."
@@ -616,6 +716,8 @@ msgid ""
 "Convert a Python character, represented as a :class:`str` object of length "
 "1, to a C :c:expr:`int`."
 msgstr ""
+"Mengonversi karakter Python, direpresentasikan sebagai objek :class:`str` "
+"dengan panjang 1, menjadi C :c:expr:`int`."
 
 #: ../../c-api/arg.rst:320 ../../c-api/arg.rst:650
 msgid "``f`` (:class:`float`) [float]"
@@ -656,6 +758,10 @@ msgid ""
 "`strong reference` to the object is not created (i.e. its reference count is "
 "not increased). The pointer stored is not ``NULL``."
 msgstr ""
+"Menyimpan objek Python (tanpa konversi apa pun) dalam penunjuk objek C.  "
+"Program C dengan demikian menerima objek aktual yang telah diberikan.  "
+"Sebuah :term:`strong reference` baru ke objek tidak dibuat (yaitu jumlah "
+"referensinya tidak bertambah). Pointer yang disimpan tidak ``NULL``."
 
 #: ../../c-api/arg.rst:343
 msgid "``O!`` (object) [*typeobject*, PyObject \\*]"
@@ -669,6 +775,11 @@ msgid ""
 "which the object pointer is stored.  If the Python object does not have the "
 "required type, :exc:`TypeError` is raised."
 msgstr ""
+"Menyimpan objek Python dalam penunjuk objek C.  Ini mirip dengan ``O``, "
+"tetapi membutuhkan dua argumen C: yang pertama adalah alamat objek tipe "
+"Python, yang kedua adalah alamat variabel C (bertipe :c:expr:`PyObject*`) "
+"tempat penunjuk objek disimpan.  Jika objek Python tidak memiliki tipe yang "
+"dibutuhkan, :exc:`TypeError` akan ditampilkan."
 
 #: ../../c-api/arg.rst:368 ../../c-api/arg.rst:677
 msgid "``O&`` (object) [*converter*, *anything*]"
@@ -681,6 +792,10 @@ msgid ""
 "of a C variable (of arbitrary type), converted to :c:expr:`void *`.  The "
 "*converter* function in turn is called as follows::"
 msgstr ""
+"Mengonversi objek Python ke variabel C melalui fungsi *converter*.  Ini "
+"membutuhkan dua argumen: yang pertama adalah fungsi, yang kedua adalah "
+"alamat variabel C (dari tipe sembarang), yang dikonversi menjadi :c:expr:"
+"`void *`.  Fungsi *converter* pada gilirannya dipanggil sebagai berikut::"
 
 #: ../../c-api/arg.rst:355
 msgid ""
@@ -691,6 +806,11 @@ msgid ""
 "function should raise an exception and leave the content of *address* "
 "unmodified."
 msgstr ""
+"di mana *object* adalah objek Python yang akan dikonversi dan *address* "
+"adalah argumen :c:expr:`void*` yang diteruskan ke fungsi ``PyArg_Parse*``. "
+"*status* yang dikembalikan harus ``1`` untuk konversi yang berhasil dan "
+"``0`` jika konversi gagal.  Ketika konversi gagal, fungsi *converter* akan "
+"memunculkan pengecualian dan membiarkan konten *address* tidak diubah."
 
 #: ../../c-api/arg.rst:361
 msgid ""
@@ -743,6 +863,8 @@ msgid ""
 "A few other characters have a meaning in a format string.  These may not "
 "occur inside nested parentheses.  They are:"
 msgstr ""
+"Kilka innych znaków ma jeszcze znaczenie w ciągu formatu. Nie mogą one "
+"wystąpić wewnątrz zagnieżdżonych nawiasach okrągłych. Są to:"
 
 #: ../../c-api/arg.rst:398
 msgid "``|``"
@@ -790,6 +912,9 @@ msgid ""
 "as the error message *instead* of the default error message.  ``:`` and ``;"
 "`` mutually exclude each other."
 msgstr ""
+"Na tym kończy się lista jednostek formatu; ciąg po średniku jest traktowany "
+"jako informacja o błędzie do użycia *zamiast* automatycznej wiadomości o "
+"błędzie. Znaki dwukropka ``:`` i średnika ``;`` wzajemnie się wykluczają."
 
 #: ../../c-api/arg.rst:419
 msgid ""
@@ -797,6 +922,9 @@ msgid ""
 "*borrowed* references; do not release them (i.e. do not decrement their "
 "reference count)!"
 msgstr ""
+"Perhatikan bahwa setiap referensi objek Python yang diberikan kepada "
+"pemanggil adalah referensi *borrowed*; jangan lepaskan mereka (yaitu jangan "
+"mengurangi jumlah referensi mereka)!"
 
 #: ../../c-api/arg.rst:423
 msgid ""
@@ -807,6 +935,12 @@ msgid ""
 "values; they should match what is specified for the corresponding format "
 "unit in that case."
 msgstr ""
+"Dodatkowe parametry przekazywane do tych funkcji muszą być adresami "
+"zmiennych których typ jest określany przez ciąg formatu; są one używane do "
+"przechowywania wartości z krotki wejściowej. Jest parę przypadków, jak "
+"opisuje to lista jednostek formatu powyżej, gdzie te parametry są używane "
+"jako wprowadzane wartości; w takich przypadku powinny one odpowiadać temu, "
+"co jest określone we właściwych im jednostach formatu."
 
 #: ../../c-api/arg.rst:429
 msgid ""
@@ -817,6 +951,12 @@ msgid ""
 "the format units, the variables at the addresses corresponding to that and "
 "the following format units are left untouched."
 msgstr ""
+"Agar konversi berhasil, objek *arg* harus sesuai dengan format dan formatnya "
+"harus habis.  Jika berhasil, fungsi ``PyArg_Parse*`` akan mengembalikan "
+"nilai true, jika tidak maka akan mengembalikan nilai false dan memunculkan "
+"pengecualian yang sesuai. Ketika fungsi ``PyArg_Parse*`` gagal karena "
+"kegagalan konversi pada salah satu unit format, variabel pada alamat yang "
+"sesuai dengan itu dan unit format berikutnya tidak disentuh."
 
 #: ../../c-api/arg.rst:438
 msgid "API Functions"
@@ -891,12 +1031,29 @@ msgid ""
 "a tuple or contains the wrong number of elements; an exception will be set "
 "if there was a failure."
 msgstr ""
+"Bentuk pengambilan parameter yang lebih sederhana yang tidak menggunakan "
+"string format untuk menentukan jenis argumen.  Fungsi yang menggunakan "
+"metode ini untuk mengambil parameter harus dideklarasikan sebagai :c:macro:"
+"`METH_VARARGS` dalam tabel fungsi atau metode.  Tuple yang berisi parameter "
+"aktual harus diberikan sebagai * args*; harus benar-benar sebuah tuple.  "
+"Panjang tuple harus setidaknya *min* dan tidak lebih dari *max*; nilsi *min* "
+"dan *max* boleh sama.  Argumen tambahan harus dilewatkan ke fungsi, yang "
+"masing-masing harus berupa penunjuk ke variabel :c:expr:`PyObject*`; ini "
+"akan diisi dengan nilai dari *args*; mereka akan berisi :term: `referensi "
+"yang dipinjam <borrowed reference>`. Variabel-variabel yang berhubungan "
+"dengan parameter opsional yang tidak diberikan oleh *args* tidak akan diisi; "
+"variabel-variabel ini harus diinisialisasi oleh pemanggil. Fungsi ini "
+"mengembalikan nilai true jika berhasil dan false jika *args* bukan sebuah "
+"tuple atau berisi jumlah elemen yang salah; sebuah pengecualian akan "
+"ditetapkan jika terjadi kegagalan."
 
 #: ../../c-api/arg.rst:511
 msgid ""
 "This is an example of the use of this function, taken from the sources for "
 "the :mod:`!_weakref` helper module for weak references::"
 msgstr ""
+"Ini adalah contoh penggunaan fungsi berikut, yang diambil dari sumber untuk "
+"modul pembantu :mod:`!_weakref` untuk referensi yang lemah ::"
 
 #: ../../c-api/arg.rst:527
 msgid ""
@@ -915,6 +1072,10 @@ msgid ""
 "value or ``NULL`` in the case of an error; an exception will be raised if "
 "``NULL`` is returned."
 msgstr ""
+"Membuat nilai baru berdasarkan string format yang mirip dengan yang diterima "
+"oleh keluarga fungsi ``PyArg_Parse*`` dan urutan nilai.  Mengembalikan nilai "
+"atau ``NULL`` jika terjadi kesalahan; pengecualian akan dimunculkan jika "
+"``NULL`` dikembalikan."
 
 #: ../../c-api/arg.rst:544
 msgid ""
@@ -965,6 +1126,7 @@ msgstr ""
 msgid ""
 "``s#`` (:class:`str` or ``None``) [const char \\*, :c:type:`Py_ssize_t`]"
 msgstr ""
+"``s#`` (:class:`str` atau ``None``) [const char \\*, :c:type:`Py_ssize_t`]"
 
 #: ../../c-api/arg.rst:571
 msgid ""
@@ -985,7 +1147,7 @@ msgstr ""
 
 #: ../../c-api/arg.rst:581
 msgid "``y#`` (:class:`bytes`) [const char \\*, :c:type:`Py_ssize_t`]"
-msgstr ""
+msgstr "``y#`` (:class:`bytes`) [const char \\*, :c:type:`Py_ssize_t`]"
 
 #: ../../c-api/arg.rst:580
 msgid ""
@@ -1001,6 +1163,7 @@ msgstr "Sama seperti ``s``."
 msgid ""
 "``z#`` (:class:`str` or ``None``) [const char \\*, :c:type:`Py_ssize_t`]"
 msgstr ""
+"``z#`` (:class:`str` atau ``None``) [const char \\*, :c:type:`Py_ssize_t`]"
 
 #: ../../c-api/arg.rst:587 ../../c-api/arg.rst:603
 msgid "Same as ``s#``."
@@ -1016,10 +1179,13 @@ msgid ""
 "UCS-4) data to a Python Unicode object.  If the Unicode buffer pointer is "
 "``NULL``, ``None`` is returned."
 msgstr ""
+"Mengonversi buffer :c:type:`wchar_t` yang diakhiri dengan nol dari data "
+"Unicode (UTF-16 atau UCS-4) menjadi objek Python Unicode.  Jika penunjuk "
+"buffer Unicode adalah ``NULL``, ``None`` akan dikembalikan."
 
 #: ../../c-api/arg.rst:597
 msgid "``u#`` (:class:`str`) [const wchar_t \\*, :c:type:`Py_ssize_t`]"
-msgstr ""
+msgstr "``u#`` (:class:`str`) [const wchar_t \\*, :c:type:`Py_ssize_t`]"
 
 #: ../../c-api/arg.rst:595
 msgid ""
@@ -1036,10 +1202,11 @@ msgstr "``U`` (:class:`str` atau ``None``) [const char \\*]"
 msgid ""
 "``U#`` (:class:`str` or ``None``) [const char \\*, :c:type:`Py_ssize_t`]"
 msgstr ""
+"``U#`` (:class:`str` atau ``None``) [const char \\*, :c:type:`Py_ssize_t`]"
 
 #: ../../c-api/arg.rst:606
 msgid "Convert a plain C :c:expr:`int` to a Python integer object."
-msgstr ""
+msgstr "Mengonversi C biasa :c:expr:`int` ke objek bilangan bulat Python."
 
 #: ../../c-api/arg.rst:609
 msgid "``b`` (:class:`int`) [char]"
@@ -1047,39 +1214,44 @@ msgstr "``b`` (:class:`int`) [char]"
 
 #: ../../c-api/arg.rst:609
 msgid "Convert a plain C :c:expr:`char` to a Python integer object."
-msgstr ""
+msgstr "Mengonversi C biasa :c:expr:`char` ke objek bilangan bulat Python."
 
 #: ../../c-api/arg.rst:612
 msgid "Convert a plain C :c:expr:`short int` to a Python integer object."
 msgstr ""
+"Mengkonversi C biasa: c:expr:`short int` menjadi objek bilangan bulat Python."
 
 #: ../../c-api/arg.rst:615
 msgid "Convert a C :c:expr:`long int` to a Python integer object."
-msgstr ""
+msgstr "Mengonversi C :c:expr:`long int` menjadi objek bilangan bulat Python."
 
 #: ../../c-api/arg.rst:618
 msgid "Convert a C :c:expr:`unsigned char` to a Python integer object."
 msgstr ""
+"Mengonversi C: c: expr: `unsigned char` menjadi objek bilangan bulat Python."
 
 #: ../../c-api/arg.rst:621
 msgid "Convert a C :c:expr:`unsigned short int` to a Python integer object."
 msgstr ""
+"Mengkonversi C :c:expr:`unsigned short int` menjadi objek integer Python."
 
 #: ../../c-api/arg.rst:624
 msgid "Convert a C :c:expr:`unsigned int` to a Python integer object."
 msgstr ""
+"Mengonversi C :c:expr:`unsigned int` menjadi objek bilangan bulat Python."
 
 #: ../../c-api/arg.rst:627
 msgid "Convert a C :c:expr:`unsigned long` to a Python integer object."
-msgstr ""
+msgstr "Mengonversi C :c:expr:`unsigned long` menjadi objek integer Python."
 
 #: ../../c-api/arg.rst:630
 msgid "Convert a C :c:expr:`long long` to a Python integer object."
-msgstr ""
+msgstr "Mengonversi C :c:expr:`long long` menjadi objek bilangan bulat Python."
 
 #: ../../c-api/arg.rst:633
 msgid "Convert a C :c:expr:`unsigned long long` to a Python integer object."
 msgstr ""
+"Mengkonversi C :c:expr:`unsigned long long` menjadi objek integer Python."
 
 #: ../../c-api/arg.rst:636
 msgid "Convert a C :c:type:`Py_ssize_t` to a Python integer."
@@ -1094,12 +1266,16 @@ msgid ""
 "Convert a C :c:expr:`int` representing a byte to a Python :class:`bytes` "
 "object of length 1."
 msgstr ""
+"Mengonversi C :c:expr:`int` yang mewakili byte menjadi objek Python :class:"
+"`bytes` dengan panjang 1."
 
 #: ../../c-api/arg.rst:643
 msgid ""
 "Convert a C :c:expr:`int` representing a character to Python :class:`str` "
 "object of length 1."
 msgstr ""
+"Mengonversi C :c:expr:`int` yang mewakili karakter ke objek Python :class:"
+"`str` dengan panjang 1."
 
 #: ../../c-api/arg.rst:647
 msgid "Convert a C :c:expr:`double` to a Python floating point number."
@@ -1126,6 +1302,14 @@ msgid ""
 "func:`Py_BuildValue` will return ``NULL`` but won't raise an exception.  If "
 "no exception has been raised yet, :exc:`SystemError` is set."
 msgstr ""
+"Mengoper objek Python tanpa disentuh tetapi membuat :term:`referensi kuat` "
+"baru ke objek tersebut (misalnya, jumlah referensinya bertambah satu). Jika "
+"objek yang dioper adalah sebuah penunjuk ``NULL``, diasumsikan bahwa hal ini "
+"disebabkan karena pemanggilan yang menghasilkan argumen tersebut menemukan "
+"kesalahan dan membuat pengecualian. Oleh karena itu, :c:func:`Py_BuildValue` "
+"akan mengembalikan ``NULL`` tetapi tidak akan memunculkan pengecualian.  "
+"Jika tidak ada pengecualian yang dibangkitkan, :exc:`SystemError` akan di-"
+"set."
 
 #: ../../c-api/arg.rst:666
 msgid "``S`` (object) [PyObject \\*]"
@@ -1145,6 +1329,9 @@ msgid ""
 "Useful when the object is created by a call to an object constructor in the "
 "argument list."
 msgstr ""
+"Sama seperti ``O``, kecuali tidak membuat :term:`strong reference` yang "
+"baru. Berguna ketika objek dibuat dengan pemanggilan ke konstruktor objek "
+"dalam daftar argumen."
 
 #: ../../c-api/arg.rst:674
 msgid ""
@@ -1153,6 +1340,10 @@ msgid ""
 "`void*`) as its argument and should return a \"new\" Python object, or "
 "``NULL`` if an error occurred."
 msgstr ""
+"Mengonversi *anything* menjadi objek Python melalui fungsi *converter*.  "
+"Fungsi ini dipanggil dengan *anything* (yang seharusnya kompatibel dengan :c:"
+"expr:`void*`) sebagai argumennya dan akan mengembalikan objek Python "
+"\"new\", atau ``NULL`` jika terjadi kesalahan."
 
 #: ../../c-api/arg.rst:680
 msgid ""
@@ -1162,7 +1353,7 @@ msgstr ""
 
 #: ../../c-api/arg.rst:683
 msgid "``[items]`` (:class:`list`) [*matching-items*]"
-msgstr ""
+msgstr "``[items]`` (:class:`list`) [*matching-items*]"
 
 #: ../../c-api/arg.rst:683
 msgid ""

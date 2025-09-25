@@ -1,0 +1,405 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2001-2025, Python Software Foundation
+# This file is distributed under the same license as the Python package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# python-doc bot, 2025
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Python 3.11\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-25 16:33+0000\n"
+"PO-Revision-Date: 2025-09-22 16:49+0000\n"
+"Last-Translator: python-doc bot, 2025\n"
+"Language-Team: Swedish (https://app.transifex.com/python-doc/teams/5390/sv/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sv\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../../c-api/gcsupport.rst:6
+msgid "Supporting Cyclic Garbage Collection"
+msgstr "Stöd för cyklisk skräpinsamling"
+
+#: ../../c-api/gcsupport.rst:8
+msgid ""
+"Python's support for detecting and collecting garbage which involves "
+"circular references requires support from object types which are "
+"\"containers\" for other objects which may also be containers.  Types which "
+"do not store references to other objects, or which only store references to "
+"atomic types (such as numbers or strings), do not need to provide any "
+"explicit support for garbage collection."
+msgstr ""
+"Pythons stöd för att upptäcka och samla in skräp som involverar cirkulära "
+"referenser kräver stöd från objekttyper som är \"behållare\" för andra "
+"objekt som också kan vara behållare.  Typer som inte lagrar referenser till "
+"andra objekt, eller som bara lagrar referenser till atomära typer (t.ex. tal"
+" eller strängar), behöver inte tillhandahålla något explicit stöd för "
+"skräpinsamling."
+
+#: ../../c-api/gcsupport.rst:15
+msgid ""
+"To create a container type, the :c:member:`~PyTypeObject.tp_flags` field of "
+"the type object must include the :c:macro:`Py_TPFLAGS_HAVE_GC` and provide "
+"an implementation of the :c:member:`~PyTypeObject.tp_traverse` handler.  If "
+"instances of the type are mutable, a :c:member:`~PyTypeObject.tp_clear` "
+"implementation must also be provided."
+msgstr ""
+"För att skapa en containertyp måste fältet "
+":c:member:`~PyTypeObject.tp_flags` i typobjektet innehålla "
+":c:macro:`Py_TPFLAGS_HAVE_GC` och tillhandahålla en implementation av "
+"hanteraren :c:member:`~PyTypeObject.tp_traverse`.  Om instanser av typen är "
+"mutabla måste också en implementation av :c:member:`~PyTypeObject.tp_clear` "
+"tillhandahållas."
+
+#: ../../c-api/gcsupport.rst:24
+msgid ":c:macro:`Py_TPFLAGS_HAVE_GC`"
+msgstr ":c:macro:`Py_TPFLAGS_HAVE_GC`"
+
+#: ../../c-api/gcsupport.rst:22
+msgid ""
+"Objects with a type with this flag set must conform with the rules "
+"documented here.  For convenience these objects will be referred to as "
+"container objects."
+msgstr ""
+"Objekt med en typ med denna flagga måste följa de regler som dokumenteras "
+"här.  För enkelhetens skull kommer dessa objekt att kallas containerobjekt."
+
+#: ../../c-api/gcsupport.rst:26
+msgid "Constructors for container types must conform to two rules:"
+msgstr "Konstruktörer för containertyper måste följa två regler:"
+
+#: ../../c-api/gcsupport.rst:28
+msgid ""
+"The memory for the object must be allocated using :c:macro:`PyObject_GC_New`"
+" or :c:macro:`PyObject_GC_NewVar`."
+msgstr ""
+"Minnet för objektet måste allokeras med hjälp av :c:macro:`PyObject_GC_New` "
+"eller :c:macro:`PyObject_GC_NewVar`."
+
+#: ../../c-api/gcsupport.rst:31
+msgid ""
+"Once all the fields which may contain references to other containers are "
+"initialized, it must call :c:func:`PyObject_GC_Track`."
+msgstr ""
+"När alla fält, som kan innehålla referenser till andra containrar, har "
+"initialiserats måste den anropa :c:func:`PyObject_GC_Track`."
+
+#: ../../c-api/gcsupport.rst:34
+msgid ""
+"Similarly, the deallocator for the object must conform to a similar pair of "
+"rules:"
+msgstr ""
+"På samma sätt måste deallokatorn för objektet följa ett liknande par regler:"
+
+#: ../../c-api/gcsupport.rst:37
+msgid ""
+"Before fields which refer to other containers are invalidated, "
+":c:func:`PyObject_GC_UnTrack` must be called."
+msgstr ""
+"Innan fält som hänvisar till andra behållare ogiltigförklaras måste "
+":c:func:`PyObject_GC_UnTrack` anropas."
+
+#: ../../c-api/gcsupport.rst:40
+msgid ""
+"The object's memory must be deallocated using :c:func:`PyObject_GC_Del`."
+msgstr ""
+"Objektets minne måste avallokeras med hjälp av :c:func:`PyObject_GC_Del`."
+
+#: ../../c-api/gcsupport.rst:43
+msgid ""
+"If a type adds the Py_TPFLAGS_HAVE_GC, then it *must* implement at least a "
+":c:member:`~PyTypeObject.tp_traverse` handler or explicitly use one from its"
+" subclass or subclasses."
+msgstr ""
+"Om en typ lägger till Py_TPFLAGS_HAVE_GC, så *måste* den implementera minst "
+"en :c:member:`~PyTypeObject.tp_traverse`\\-hanterare eller uttryckligen "
+"använda en från sin underklass eller underklasser."
+
+#: ../../c-api/gcsupport.rst:47
+msgid ""
+"When calling :c:func:`PyType_Ready` or some of the APIs that indirectly call"
+" it like :c:func:`PyType_FromSpecWithBases` or :c:func:`PyType_FromSpec` the"
+" interpreter will automatically populate the "
+":c:member:`~PyTypeObject.tp_flags`, :c:member:`~PyTypeObject.tp_traverse` "
+"and :c:member:`~PyTypeObject.tp_clear` fields if the type inherits from a "
+"class that implements the garbage collector protocol and the child class "
+"does *not* include the :c:macro:`Py_TPFLAGS_HAVE_GC` flag."
+msgstr ""
+"När man anropar :c:func:`PyType_Ready` eller några av de API:er som indirekt"
+" anropar det som :c:func:`PyType_FromSpecWithBases` eller "
+":c:func:`PyType_FromSpec` kommer tolken automatiskt att fylla i fälten "
+":c:member:`~PyTypeObject.tp_flags`, :c:member:`~PyTypeObject.tp_traverse` "
+"och :c:member:`~PyTypeObject.tp_clear` om typen ärver från en klass som "
+"implementerar garbage collector-protokollet och den underordnade klassen "
+"*inte* innehåller flaggan :c:macro:`Py_TPFLAGS_HAVE_GC`."
+
+#: ../../c-api/gcsupport.rst:57
+msgid ""
+"Analogous to :c:macro:`PyObject_New` but for container objects with the "
+":c:macro:`Py_TPFLAGS_HAVE_GC` flag set."
+msgstr ""
+"Analogt med :c:macro:`PyObject_New` men för containerobjekt med flaggan "
+":c:macro:`Py_TPFLAGS_HAVE_GC` inställd."
+
+#: ../../c-api/gcsupport.rst:63
+msgid ""
+"Analogous to :c:macro:`PyObject_NewVar` but for container objects with the "
+":c:macro:`Py_TPFLAGS_HAVE_GC` flag set."
+msgstr ""
+"Analogt med :c:macro:`PyObject_NewVar` men för containerobjekt med flaggan "
+":c:macro:`Py_TPFLAGS_HAVE_GC` inställd."
+
+#: ../../c-api/gcsupport.rst:69
+msgid ""
+"Resize an object allocated by :c:macro:`PyObject_NewVar`. Returns the "
+"resized object of type ``TYPE*`` (refers to any C type) or ``NULL`` on "
+"failure."
+msgstr ""
+"Ändrar storlek på ett objekt som allokerats av :c:macro:`PyObject_NewVar`. "
+"Returnerar det storleksändrade objektet av typen ``TYPE*`` (refererar till "
+"valfri C-typ) eller ``NULL`` om det misslyckas."
+
+#: ../../c-api/gcsupport.rst:73
+msgid ""
+"*op* must be of type :c:expr:`PyVarObject *` and must not be tracked by the "
+"collector yet. *newsize* must be of type :c:type:`Py_ssize_t`."
+msgstr ""
+"*op* måste vara av typen :c:expr:`PyVarObject *` och får inte spåras av "
+"samlaren ännu. *newsize* måste vara av typen :c:type:`Py_ssize_t`."
+
+#: ../../c-api/gcsupport.rst:80
+msgid ""
+"Adds the object *op* to the set of container objects tracked by the "
+"collector.  The collector can run at unexpected times so objects must be "
+"valid while being tracked.  This should be called once all the fields "
+"followed by the :c:member:`~PyTypeObject.tp_traverse` handler become valid, "
+"usually near the end of the constructor."
+msgstr ""
+"Lägger till objektet *op* till uppsättningen containerobjekt som spåras av "
+"samlaren.  Uppsamlaren kan köras vid oväntade tidpunkter så objekten måste "
+"vara giltiga när de spåras.  Detta bör anropas när alla fält som följs av "
+"handlaren :c:member:`~PyTypeObject.tp_traverse` blir giltiga, vanligtvis i "
+"slutet av konstruktorn."
+
+#: ../../c-api/gcsupport.rst:89
+msgid ""
+"Returns non-zero if the object implements the garbage collector protocol, "
+"otherwise returns 0."
+msgstr ""
+"Returnerar icke-noll om objektet implementerar garbage collector-"
+"protokollet, annars returneras 0."
+
+#: ../../c-api/gcsupport.rst:92
+msgid ""
+"The object cannot be tracked by the garbage collector if this function "
+"returns 0."
+msgstr ""
+"Objektet kan inte spåras av skräpsamlaren om denna funktion returnerar 0."
+
+#: ../../c-api/gcsupport.rst:97
+msgid ""
+"Returns 1 if the object type of *op* implements the GC protocol and *op* is "
+"being currently tracked by the garbage collector and 0 otherwise."
+msgstr ""
+"Returnerar 1 om objekttypen för *op* implementerar GC-protokollet och *op* "
+"för närvarande spåras av skräpsamlaren och 0 i annat fall."
+
+#: ../../c-api/gcsupport.rst:100
+msgid "This is analogous to the Python function :func:`gc.is_tracked`."
+msgstr "Detta är analogt med Python-funktionen :func:`gc.is_tracked`."
+
+#: ../../c-api/gcsupport.rst:107
+msgid ""
+"Returns 1 if the object type of *op* implements the GC protocol and *op* has"
+" been already finalized by the garbage collector and 0 otherwise."
+msgstr ""
+"Returnerar 1 om objekttypen för *op* implementerar GC-protokollet och *op* "
+"redan har slutförts av skräpsamlaren och 0 i annat fall."
+
+#: ../../c-api/gcsupport.rst:110
+msgid "This is analogous to the Python function :func:`gc.is_finalized`."
+msgstr "Detta är analogt med Python-funktionen :func:`gc.is_finalized`."
+
+#: ../../c-api/gcsupport.rst:117
+msgid ""
+"Releases memory allocated to an object using :c:macro:`PyObject_GC_New` or "
+":c:macro:`PyObject_GC_NewVar`."
+msgstr ""
+"Frigör minne som allokerats till ett objekt med :c:macro:`PyObject_GC_New` "
+"eller :c:macro:`PyObject_GC_NewVar`."
+
+#: ../../c-api/gcsupport.rst:123
+msgid ""
+"Remove the object *op* from the set of container objects tracked by the "
+"collector.  Note that :c:func:`PyObject_GC_Track` can be called again on "
+"this object to add it back to the set of tracked objects.  The deallocator "
+"(:c:member:`~PyTypeObject.tp_dealloc` handler) should call this for the "
+"object before any of the fields used by the "
+":c:member:`~PyTypeObject.tp_traverse` handler become invalid."
+msgstr ""
+"Ta bort objektet *op* från uppsättningen containerobjekt som spåras av "
+"samlaren.  Observera att :c:func:`PyObject_GC_Track` kan anropas igen på "
+"detta objekt för att lägga till det igen i uppsättningen av spårade objekt."
+"  Deallocatorn (:c:member:`~PyTypeObject.tp_dealloc` handler) bör anropa "
+"detta för objektet innan något av de fält som används av "
+":c:member:`~PyTypeObject.tp_traverse` handler blir ogiltigt."
+
+#: ../../c-api/gcsupport.rst:132
+msgid ""
+"The :c:func:`!_PyObject_GC_TRACK` and :c:func:`!_PyObject_GC_UNTRACK` macros"
+" have been removed from the public C API."
+msgstr ""
+"Makron :c:func:`!_PyObject_GC_TRACK` och :c:func:`!_PyObject_GC_UNTRACK` har"
+" tagits bort från det publika C API:et."
+
+#: ../../c-api/gcsupport.rst:135
+msgid ""
+"The :c:member:`~PyTypeObject.tp_traverse` handler accepts a function "
+"parameter of this type:"
+msgstr ""
+"Hanteraren :c:member:`~PyTypeObject.tp_traverse` accepterar en "
+"funktionsparameter av denna typ:"
+
+#: ../../c-api/gcsupport.rst:140
+msgid ""
+"Type of the visitor function passed to the "
+":c:member:`~PyTypeObject.tp_traverse` handler. The function should be called"
+" with an object to traverse as *object* and the third parameter to the "
+":c:member:`~PyTypeObject.tp_traverse` handler as *arg*.  The Python core "
+"uses several visitor functions to implement cyclic garbage detection; it's "
+"not expected that users will need to write their own visitor functions."
+msgstr ""
+"Typ av besöksfunktion som skickas till :c:member:`~PyTypeObject.tp_traverse`"
+" handler. Funktionen bör anropas med ett objekt att traversera som *object* "
+"och den tredje parametern till handläggaren "
+":c:member:`~PyTypeObject.tp_traverse` som *arg*.  Python-kärnan använder "
+"flera besökarfunktioner för att implementera cyklisk skräpdetektering; det "
+"förväntas inte att användare behöver skriva sina egna besökarfunktioner."
+
+#: ../../c-api/gcsupport.rst:147
+msgid ""
+"The :c:member:`~PyTypeObject.tp_traverse` handler must have the following "
+"type:"
+msgstr ""
+"Hanteraren :c:member:`~PyTypeObject.tp_traverse` måste ha följande typ:"
+
+#: ../../c-api/gcsupport.rst:152
+msgid ""
+"Traversal function for a container object.  Implementations must call the "
+"*visit* function for each object directly contained by *self*, with the "
+"parameters to *visit* being the contained object and the *arg* value passed "
+"to the handler.  The *visit* function must not be called with a ``NULL`` "
+"object argument.  If *visit* returns a non-zero value that value should be "
+"returned immediately."
+msgstr ""
+"Traversalfunktion för ett containerobjekt.  Implementeringar måste anropa "
+"funktionen *visit* för varje objekt som direkt ingår i *self*, där "
+"parametrarna till *visit* är det ingående objektet och värdet för *arg* som "
+"skickas till hanteraren.  Funktionen *visit* får inte anropas med ett "
+"``NULL`` objektargument.  Om *visit* returnerar ett värde som inte är noll "
+"ska detta värde returneras omedelbart."
+
+#: ../../c-api/gcsupport.rst:159
+msgid ""
+"To simplify writing :c:member:`~PyTypeObject.tp_traverse` handlers, a "
+":c:func:`Py_VISIT` macro is provided.  In order to use this macro, the "
+":c:member:`~PyTypeObject.tp_traverse` implementation must name its arguments"
+" exactly *visit* and *arg*:"
+msgstr ""
+"För att förenkla skrivandet av "
+":c:member:`~PyTypeObject.tp_traverse`\\-hanterare tillhandahålls ett "
+":c:func:`Py_VISIT`\\-makro.  För att kunna använda detta makro måste "
+":c:member:`~PyTypeObject.tp_traverse` implementationen namnge sina argument "
+"exakt *visit* och *arg*:"
+
+#: ../../c-api/gcsupport.rst:166
+msgid ""
+"If *o* is not ``NULL``, call the *visit* callback, with arguments *o* and "
+"*arg*.  If *visit* returns a non-zero value, then return it. Using this "
+"macro, :c:member:`~PyTypeObject.tp_traverse` handlers look like::"
+msgstr ""
+
+#: ../../c-api/gcsupport.rst:179
+msgid ""
+"The :c:member:`~PyTypeObject.tp_clear` handler must be of the "
+":c:type:`inquiry` type, or ``NULL`` if the object is immutable."
+msgstr ""
+"Hanteraren :c:member:`~PyTypeObject.tp_clear` måste vara av typen "
+":c:type:`inquiry`, eller ``NULL`` om objektet är oföränderligt."
+
+#: ../../c-api/gcsupport.rst:185
+msgid ""
+"Drop references that may have created reference cycles.  Immutable objects "
+"do not have to define this method since they can never directly create "
+"reference cycles.  Note that the object must still be valid after calling "
+"this method (don't just call :c:func:`Py_DECREF` on a reference).  The "
+"collector will call this method if it detects that this object is involved "
+"in a reference cycle."
+msgstr ""
+"Släpper referenser som kan ha skapat referenscykler.  Oföränderliga objekt "
+"behöver inte definiera denna metod eftersom de aldrig direkt kan skapa "
+"referenscykler.  Observera att objektet fortfarande måste vara giltigt efter"
+" anropet av denna metod (anropa inte bara :c:func:`Py_DECREF` på en "
+"referens).  Uppsamlaren anropar denna metod om den upptäcker att detta "
+"objekt är involverat i en referenscykel."
+
+#: ../../c-api/gcsupport.rst:194
+msgid "Controlling the Garbage Collector State"
+msgstr "Styrning av skräpsamlarens tillstånd"
+
+#: ../../c-api/gcsupport.rst:196
+msgid ""
+"The C-API provides the following functions for controlling garbage "
+"collection runs."
+msgstr ""
+"C-API tillhandahåller följande funktioner för att styra körningar av "
+"skräpplockning."
+
+#: ../../c-api/gcsupport.rst:201
+msgid ""
+"Perform a full garbage collection, if the garbage collector is enabled. "
+"(Note that :func:`gc.collect` runs it unconditionally.)"
+msgstr ""
+"Utför en fullständig skräpinsamling, om skräpinsamlaren är aktiverad. "
+"(Observera att :func:`gc.collect` kör den villkorslöst)"
+
+#: ../../c-api/gcsupport.rst:204
+msgid ""
+"Returns the number of collected + unreachable objects which cannot be "
+"collected. If the garbage collector is disabled or already collecting, "
+"returns ``0`` immediately. Errors during garbage collection are passed to "
+":data:`sys.unraisablehook`. This function does not raise exceptions."
+msgstr ""
+"Returnerar antalet insamlade + oåtkomliga objekt som inte kan samlas in. Om "
+"skräpsamlaren är inaktiverad eller redan samlar in objekt, returneras ``0`` "
+"omedelbart. Fel under skräpinsamlingen skickas till "
+":data:`sys.unraisablehook`. Denna funktion ger inte upphov till undantag."
+
+#: ../../c-api/gcsupport.rst:214
+msgid ""
+"Enable the garbage collector: similar to :func:`gc.enable`. Returns the "
+"previous state, 0 for disabled and 1 for enabled."
+msgstr ""
+"Aktivera skräpsamlaren: liknar :func:`gc.enable`. Returnerar det tidigare "
+"tillståndet, 0 för inaktiverad och 1 för aktiverad."
+
+#: ../../c-api/gcsupport.rst:222
+msgid ""
+"Disable the garbage collector: similar to :func:`gc.disable`. Returns the "
+"previous state, 0 for disabled and 1 for enabled."
+msgstr ""
+"Inaktivera skräpsamlaren: liknar :func:`gc.disable`. Returnerar det tidigare"
+" tillståndet, 0 för inaktiverad och 1 för aktiverad."
+
+#: ../../c-api/gcsupport.rst:230
+msgid ""
+"Query the state of the garbage collector: similar to :func:`gc.isenabled`. "
+"Returns the current state, 0 for disabled and 1 for enabled."
+msgstr ""
+"Frågar efter skräpsamlarens tillstånd: liknar :func:`gc.isenabled`. "
+"Returnerar det aktuella tillståndet, 0 för inaktiverad och 1 för aktiverad."

@@ -1,0 +1,2179 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2001-2025, Python Software Foundation
+# This file is distributed under the same license as the Python package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# python-doc bot, 2025
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Python 3.11\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-25 16:33+0000\n"
+"PO-Revision-Date: 2025-09-22 16:49+0000\n"
+"Last-Translator: python-doc bot, 2025\n"
+"Language-Team: Portuguese (Portugal) (https://app.transifex.com/python-doc/teams/5390/pt_PT/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt_PT\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#: ../../c-api/exceptions.rst:8
+msgid "Exception Handling"
+msgstr "Manipulando Exceções"
+
+#: ../../c-api/exceptions.rst:10
+msgid ""
+"The functions described in this chapter will let you handle and raise Python"
+" exceptions.  It is important to understand some of the basics of Python "
+"exception handling.  It works somewhat like the POSIX :c:data:`errno` "
+"variable: there is a global indicator (per thread) of the last error that "
+"occurred.  Most C API functions don't clear this on success, but will set it"
+" to indicate the cause of the error on failure.  Most C API functions also "
+"return an error indicator, usually ``NULL`` if they are supposed to return a"
+" pointer, or ``-1`` if they return an integer (exception: the ``PyArg_*`` "
+"functions return ``1`` for success and ``0`` for failure)."
+msgstr ""
+"As funções descritas nesse capítulo permitem você tratar e gerar exceções em"
+" Python. É importante entender alguns princípios básicos no tratamento de "
+"exceções no Python. Funciona de forma parecida com a variável POSIX "
+":c:data:`errno`: existe um indicador global (por thread) do último erro "
+"ocorrido. A maioria das funções da API C não limpa isso com êxito, mas "
+"indica a causa do erro na falha. A maioria das funções da API C retorna um "
+"indicador de erro, geralmente, ``NULL`` se eles devem retornar um ponteiro, "
+"ou ``-1`` se retornarem um inteiro (exceção: as funções ``PyArg_*`` retornam"
+" ``1`` para sucesso e ``0`` para falha)."
+
+#: ../../c-api/exceptions.rst:20
+msgid ""
+"Concretely, the error indicator consists of three object pointers: the "
+"exception's type, the exception's value, and the traceback object.  Any of "
+"those pointers can be ``NULL`` if non-set (although some combinations are "
+"forbidden, for example you can't have a non-``NULL`` traceback if the "
+"exception type is ``NULL``)."
+msgstr ""
+"Concretamente, o indicador de erro consiste em três ponteiros de objeto: o "
+"tipo da exceção, o valor da exceção e o objeto de traceback. Qualquer um "
+"desses ponteiros pode ser ``NULL`` se não definido (embora algumas "
+"combinações sejam proibidas, por exemplo, você não pode ter um traceback não"
+" ``NULL`` se o tipo de exceção for ``NULL``)."
+
+#: ../../c-api/exceptions.rst:26
+msgid ""
+"When a function must fail because some function it called failed, it "
+"generally doesn't set the error indicator; the function it called already "
+"set it.  It is responsible for either handling the error and clearing the "
+"exception or returning after cleaning up any resources it holds (such as "
+"object references or memory allocations); it should *not* continue normally "
+"if it is not prepared to handle the error.  If returning due to an error, it"
+" is important to indicate to the caller that an error has been set.  If the "
+"error is not handled or carefully propagated, additional calls into the "
+"Python/C API may not behave as intended and may fail in mysterious ways."
+msgstr ""
+"Quando uma função deve falhar porque devido à falha de alguma função que ela"
+" chamou, ela geralmente não define o indicador de erro; a função que ela "
+"chamou já o definiu. Ela é responsável por manipular o erro e limpar a "
+"exceção ou retornar após limpar todos os recursos que possui (como "
+"referências a objetos ou alocações de memória); ela *não* deve continuar "
+"normalmente se não estiver preparada para lidar com o erro. Se estiver "
+"retornando devido a um erro, é importante indicar ao chamador que um erro "
+"foi definido. Se o erro não for manipulado ou propagado com cuidado, "
+"chamadas adicionais para a API C/Python podem não se comportar conforme o "
+"esperado e podem falhar de maneiras misteriosas."
+
+#: ../../c-api/exceptions.rst:37
+msgid ""
+"The error indicator is **not** the result of :func:`sys.exc_info()`. The "
+"former corresponds to an exception that is not yet caught (and is therefore "
+"still propagating), while the latter returns an exception after it is caught"
+" (and has therefore stopped propagating)."
+msgstr ""
+
+#: ../../c-api/exceptions.rst:44
+msgid "Printing and clearing"
+msgstr "Impressão e limpeza"
+
+#: ../../c-api/exceptions.rst:49
+msgid ""
+"Clear the error indicator.  If the error indicator is not set, there is no "
+"effect."
+msgstr ""
+"Limpe o indicador de erro. Se o indicador de erro não estiver definido, não "
+"haverá efeito."
+
+#: ../../c-api/exceptions.rst:55
+msgid ""
+"Print a standard traceback to ``sys.stderr`` and clear the error indicator. "
+"**Unless** the error is a ``SystemExit``, in that case no traceback is "
+"printed and the Python process will exit with the error code specified by "
+"the ``SystemExit`` instance."
+msgstr ""
+"Exibe um traceback padrão para ``sys.stderr`` e limpa o indicador de erro. "
+"**A menos que** o erro seja um ``SystemExit``, nesse caso, nenhum traceback "
+"será impresso e o processo Python será encerrado com o código de erro "
+"especificado pela instância ``SystemExit``."
+
+#: ../../c-api/exceptions.rst:60
+msgid ""
+"Call this function **only** when the error indicator is set.  Otherwise it "
+"will cause a fatal error!"
+msgstr ""
+"Chame esta função **apenas** quando o indicador de erro estiver definido. "
+"Caso contrário, causará um erro fatal!"
+
+#: ../../c-api/exceptions.rst:63
+msgid ""
+"If *set_sys_last_vars* is nonzero, the variables :data:`sys.last_type`, "
+":data:`sys.last_value` and :data:`sys.last_traceback` will be set to the "
+"type, value and traceback of the printed exception, respectively."
+msgstr ""
+
+#: ../../c-api/exceptions.rst:70
+msgid "Alias for ``PyErr_PrintEx(1)``."
+msgstr "Alias para ``PyErr_PrintEx(1)``."
+
+#: ../../c-api/exceptions.rst:75
+msgid ""
+"Call :func:`sys.unraisablehook` using the current exception and *obj* "
+"argument."
+msgstr ""
+"Chama :func:`sys.unraisablehook` usando a exceção atual e o argumento *obj*."
+
+#: ../../c-api/exceptions.rst:78
+msgid ""
+"This utility function prints a warning message to ``sys.stderr`` when an "
+"exception has been set but it is impossible for the interpreter to actually "
+"raise the exception.  It is used, for example, when an exception occurs in "
+"an :meth:`~object.__del__` method."
+msgstr ""
+"Esta função utilitária imprime uma mensagem de aviso para ``sys.stderr`` "
+"quando uma exceção foi definida, mas é impossível para o interpretador "
+"realmente levantar a exceção. É usada, por exemplo, quando ocorre uma "
+"exceção em um método :meth:`~object.__del__`."
+
+#: ../../c-api/exceptions.rst:83
+msgid ""
+"The function is called with a single argument *obj* that identifies the "
+"context in which the unraisable exception occurred. If possible, the repr of"
+" *obj* will be printed in the warning message."
+msgstr ""
+
+#: ../../c-api/exceptions.rst:87
+msgid "An exception must be set when calling this function."
+msgstr "Uma exceção deve ser definida ao chamar essa função."
+
+#: ../../c-api/exceptions.rst:91
+msgid "Raising exceptions"
+msgstr "Levantando exceções"
+
+#: ../../c-api/exceptions.rst:93
+msgid ""
+"These functions help you set the current thread's error indicator. For "
+"convenience, some of these functions will always return a ``NULL`` pointer "
+"for use in a ``return`` statement."
+msgstr ""
+"Essas funções ajudam a definir o indicador de erro do thread. Por "
+"conveniência, algumas dessas funções sempre retornam um ponteiro ``NULL`` ao"
+" usar instrução com ``return``."
+
+#: ../../c-api/exceptions.rst:100
+msgid ""
+"This is the most common way to set the error indicator.  The first argument "
+"specifies the exception type; it is normally one of the standard exceptions,"
+" e.g. :c:data:`PyExc_RuntimeError`.  You need not create a new :term:`strong"
+" reference` to it (e.g. with :c:func:`Py_INCREF`). The second argument is an"
+" error message; it is decoded from ``'utf-8'``."
+msgstr ""
+"Esta é a forma mais comum de definir o indicador de erro. O primeiro "
+"argumento especifica o tipo de exceção; normalmente é uma das exceções "
+"padrão, por exemplo, :c:data:`PyExc_RuntimeError`. Não é necessário criar "
+"uma nova :term:`referência forte` para ela (por exemplo, com "
+":c:func:`Py_INCREF`). O segundo argumento é uma mensagem de erro; ela é "
+"descodificada a partir de ``'utf-8'``."
+
+#: ../../c-api/exceptions.rst:109
+msgid ""
+"This function is similar to :c:func:`PyErr_SetString` but lets you specify "
+"an arbitrary Python object for the \"value\" of the exception."
+msgstr ""
+"Essa função é semelhante à :c:func:`PyErr_SetString` mas permite especificar"
+" um objeto Python arbitrário para o valor da exceção."
+
+#: ../../c-api/exceptions.rst:115
+msgid ""
+"This function sets the error indicator and returns ``NULL``.  *exception* "
+"should be a Python exception class.  The *format* and subsequent parameters "
+"help format the error message; they have the same meaning and values as in "
+":c:func:`PyUnicode_FromFormat`. *format* is an ASCII-encoded string."
+msgstr ""
+"Esta função define o indicador de erro e retorna ``NULL``. *exception* deve "
+"ser uma classe de exceção Python. O *format* e os parâmetros subsequentes "
+"ajudam a formatar a mensagem de erro; eles têm o mesmo significado e valores"
+" que em :c:func:`PyUnicode_FromFormat`. *format* é uma string codificada em "
+"ASCII."
+
+#: ../../c-api/exceptions.rst:124
+msgid ""
+"Same as :c:func:`PyErr_Format`, but taking a :c:type:`va_list` argument "
+"rather than a variable number of arguments."
+msgstr ""
+"Igual a :c:func:`PyErr_Format`, mas usando o argumento :c:type:`va_list` em "
+"vez de um número variável de argumentos."
+
+#: ../../c-api/exceptions.rst:132
+msgid "This is a shorthand for ``PyErr_SetObject(type, Py_None)``."
+msgstr "Isso é uma abreviação para ``PyErr_SetObject(type, Py_None)``."
+
+#: ../../c-api/exceptions.rst:137
+msgid ""
+"This is a shorthand for ``PyErr_SetString(PyExc_TypeError, message)``, where"
+" *message* indicates that a built-in operation was invoked with an illegal "
+"argument.  It is mostly for internal use."
+msgstr ""
+"Esta é uma abreviação para ``PyErr_SetString(PyExc_TypeError, message)``, "
+"onde *mensagem* indica que uma operação embutida foi invocada com um "
+"argumento ilegal. É principalmente para uso interno."
+
+#: ../../c-api/exceptions.rst:144
+msgid ""
+"This is a shorthand for ``PyErr_SetNone(PyExc_MemoryError)``; it returns "
+"``NULL`` so an object allocation function can write ``return "
+"PyErr_NoMemory();`` when it runs out of memory."
+msgstr ""
+"Essa é uma abreviação para ``PyErr_SetNone(PyExc_MemoryError)``; que retorna"
+" ``NULL`` para que uma função de alocação de objeto possa escrever ``return "
+"PyErr_NoMemory();`` quando ficar sem memória."
+
+#: ../../c-api/exceptions.rst:153
+msgid ""
+"This is a convenience function to raise an exception when a C library "
+"function has returned an error and set the C variable :c:data:`errno`.  It "
+"constructs a tuple object whose first item is the integer :c:data:`errno` "
+"value and whose second item is the corresponding error message (gotten from "
+":c:func:`!strerror`), and then calls ``PyErr_SetObject(type, object)``.  On "
+"Unix, when the :c:data:`errno` value is :c:macro:`!EINTR`, indicating an "
+"interrupted system call, this calls :c:func:`PyErr_CheckSignals`, and if "
+"that set the error indicator, leaves it set to that.  The function always "
+"returns ``NULL``, so a wrapper function around a system call can write "
+"``return PyErr_SetFromErrno(type);`` when the system call returns an error."
+msgstr ""
+"Esta é uma função conveniente para levantar uma exceção quando uma função da"
+" biblioteca C retornou um erro e definir a variável C :c:data:`errno`. Ela "
+"constrói um objeto tupla cujo primeiro item é o valor inteiro "
+":c:data:`errno` e cujo segundo item é a mensagem de erro correspondente "
+"(obtida de :c:func:`!strerror`), e então chama ``PyErr_SetObject(type, "
+"object)``. No Unix, quando o valor :c:data:`errno` é :c:macro:`!EINTR`, "
+"indicando uma chamada de sistema interrompida, isso chama "
+":c:func:`PyErr_CheckSignals`, e se isso definir o indicador de erro, deixa-o"
+" definido como tal. A função retorna sempre ``NULL``, pelo que uma função "
+"wrapper em torno de uma chamada do sistema pode escrever ``return "
+"PyErr_SetFromErrno(type);`` quando a chamada do sistema retorna um erro."
+
+#: ../../c-api/exceptions.rst:167
+msgid ""
+"Similar to :c:func:`PyErr_SetFromErrno`, with the additional behavior that "
+"if *filenameObject* is not ``NULL``, it is passed to the constructor of "
+"*type* as a third parameter.  In the case of :exc:`OSError` exception, this "
+"is used to define the :attr:`!filename` attribute of the exception instance."
+msgstr ""
+"Semelhante a :c:func:`PyErr_SetFromErrno`, com o comportamento adicional de "
+"que, se *filenameObject* não for ``NULL``, ele é passado para o construtor "
+"de *type* como um terceiro parâmetro. No caso de exceção :exc:`OSError`, "
+"isso é usado para definir o atributo :attr:`!filename` da instância da "
+"exceção."
+
+#: ../../c-api/exceptions.rst:176
+msgid ""
+"Similar to :c:func:`PyErr_SetFromErrnoWithFilenameObject`, but takes a "
+"second filename object, for raising errors when a function that takes two "
+"filenames fails."
+msgstr ""
+"Semelhante a :c:func:`PyErr_SetFromErrnoWithFilenameObject`, mas aceita um "
+"segundo objeto filename, para gerar erros quando uma função que aceita dois "
+"nomes de ficheiros falha."
+
+#: ../../c-api/exceptions.rst:185
+msgid ""
+"Similar to :c:func:`PyErr_SetFromErrnoWithFilenameObject`, but the filename "
+"is given as a C string.  *filename* is decoded from the :term:`filesystem "
+"encoding and error handler`."
+msgstr ""
+"Semelhante a :c:func:`PyErr_SetFromErrnoWithFilenameObject`, mas o nome do "
+"ficheiro é fornecido como uma string C. *filename* é descodificado a partir "
+"do :term:`codificação do sistema de ficheiros e tratador de erros`."
+
+#: ../../c-api/exceptions.rst:192
+msgid ""
+"This is a convenience function to raise :exc:`WindowsError`. If called with "
+"*ierr* of ``0``, the error code returned by a call to "
+":c:func:`!GetLastError` is used instead.  It calls the Win32 function "
+":c:func:`!FormatMessage` to retrieve the Windows description of error code "
+"given by *ierr* or :c:func:`!GetLastError`, then it constructs a tuple "
+"object whose first item is the *ierr* value and whose second item is the "
+"corresponding error message (gotten from :c:func:`!FormatMessage`), and then"
+" calls ``PyErr_SetObject(PyExc_WindowsError, object)``. This function always"
+" returns ``NULL``."
+msgstr ""
+
+#: ../../c-api/exceptions.rst:201 ../../c-api/exceptions.rst:209
+#: ../../c-api/exceptions.rst:220 ../../c-api/exceptions.rst:230
+#: ../../c-api/exceptions.rst:238 ../../c-api/exceptions.rst:248
+msgid ":ref:`Availability <availability>`: Windows."
+msgstr ""
+
+#: ../../c-api/exceptions.rst:206
+msgid ""
+"Similar to :c:func:`PyErr_SetFromWindowsErr`, with an additional parameter "
+"specifying the exception type to be raised."
+msgstr ""
+"Semelhante a :c:func:`PyErr_SetFromWindowsErr`, com um parâmetro adicional "
+"que especifica o tipo de exceção a ser levantada."
+
+#: ../../c-api/exceptions.rst:214
+msgid ""
+"Similar to :c:func:`PyErr_SetFromWindowsErr`, with the additional behavior "
+"that if *filename* is not ``NULL``, it is decoded from the filesystem "
+"encoding (:func:`os.fsdecode`) and passed to the constructor of "
+":exc:`OSError` as a third parameter to be used to define the "
+":attr:`!filename` attribute of the exception instance."
+msgstr ""
+"Semelhante a :c:func:`PyErr_SetFromWindowsErr`, com o comportamento "
+"adicional de que, se *filename* não for ``NULL``, ele é descodificado a "
+"partir da codificação do sistema de ficheiros (:func:`os.fsdecode`) e "
+"passado para o construtor de :exc:`OSError` como um terceiro parâmetro a ser"
+" usado para definir o atributo :attr:`!filename` da instância da exceção."
+
+#: ../../c-api/exceptions.rst:225
+msgid ""
+"Similar to :c:func:`PyErr_SetExcFromWindowsErr`, with the additional "
+"behavior that if *filename* is not ``NULL``, it is passed to the constructor"
+" of :exc:`OSError` as a third parameter to be used to define the "
+":attr:`!filename` attribute of the exception instance."
+msgstr ""
+"Semelhante a :c:func:`PyErr_SetExcFromWindowsErr`, com o comportamento "
+"adicional de que, se *filename* não for ``NULL``, ele é passado para o "
+"construtor de :exc:`OSError` como um terceiro parâmetro a ser usado para "
+"definir o atributo :attr:`!filename` da instância da exceção."
+
+#: ../../c-api/exceptions.rst:235
+msgid ""
+"Similar to :c:func:`PyErr_SetExcFromWindowsErrWithFilenameObject`, but "
+"accepts a second filename object."
+msgstr ""
+"Semelhante a :c:func:`PyErr_SetExcFromWindowsErrWithFilenameObject`, mas "
+"aceita um segundo objeto de nome de ficheiro."
+
+#: ../../c-api/exceptions.rst:245
+msgid ""
+"Similar to :c:func:`PyErr_SetFromWindowsErrWithFilename`, with an additional"
+" parameter specifying the exception type to be raised."
+msgstr ""
+"Similar à :c:func:`PyErr_SetFromWindowsErrWithFilename`, com um parâmetro "
+"adicional especificando o tipo de exceção a ser levantado."
+
+#: ../../c-api/exceptions.rst:253
+msgid ""
+"This is a convenience function to raise :exc:`ImportError`. *msg* will be "
+"set as the exception's message string. *name* and *path*, both of which can "
+"be ``NULL``, will be set as the :exc:`ImportError`'s respective ``name`` and"
+" ``path`` attributes."
+msgstr ""
+"Esta é uma função conveniente para levantar :exc:`ImportError`. *msg* será "
+"definido como a string de mensagem da exceção. *name* e *path*, ambos os "
+"quais podem ser ``NULL``, serão definidos como os respectivos atributos "
+"``name`` e ``path`` do :exc:`ImportError`."
+
+#: ../../c-api/exceptions.rst:263
+msgid ""
+"Much like :c:func:`PyErr_SetImportError` but this function allows for "
+"specifying a subclass of :exc:`ImportError` to raise."
+msgstr ""
+"Muito parecido com :c:func:`PyErr_SetImportError` mas a função permite "
+"especificar uma subclasse de :exc:`ImportError` para levantar uma exceção."
+
+#: ../../c-api/exceptions.rst:271
+msgid ""
+"Set file, line, and offset information for the current exception.  If the "
+"current exception is not a :exc:`SyntaxError`, then it sets additional "
+"attributes, which make the exception printing subsystem think the exception "
+"is a :exc:`SyntaxError`."
+msgstr ""
+"Define informações de ficheiro, linha e deslocamento para a exceção atual. "
+"Se a exceção atual não for um :exc:`SyntaxError`, então define atributos "
+"adicionais, que fazem com que o subsistema de impressão de exceções pense "
+"que a exceção é um :exc:`SyntaxError`."
+
+#: ../../c-api/exceptions.rst:281
+msgid ""
+"Like :c:func:`PyErr_SyntaxLocationObject`, but *filename* is a byte string "
+"decoded from the :term:`filesystem encoding and error handler`."
+msgstr ""
+"Como :c:func:`PyErr_SyntaxLocationObject`, mas *filename* é uma bytestring "
+"descodificada a partir do :term:`codificação do sistema de ficheiros e "
+"tratador de erros`."
+
+#: ../../c-api/exceptions.rst:289
+msgid ""
+"Like :c:func:`PyErr_SyntaxLocationEx`, but the *col_offset* parameter is "
+"omitted."
+msgstr ""
+"Como :c:func:`PyErr_SyntaxLocationEx`, mas o parâmetro *col_offset* é "
+"omitido."
+
+#: ../../c-api/exceptions.rst:295
+msgid ""
+"This is a shorthand for ``PyErr_SetString(PyExc_SystemError, message)``, "
+"where *message* indicates that an internal operation (e.g. a Python/C API "
+"function) was invoked with an illegal argument.  It is mostly for internal "
+"use."
+msgstr ""
+"Esta é uma abreviação para ``PyErr_SetString(PyExc_SystemError, message)``, "
+"onde *mensagem* indica que uma operação interna (por exemplo, uma função API"
+" C/Python) foi invocada com um argumento ilegal. É principalmente para uso "
+"interno."
+
+#: ../../c-api/exceptions.rst:302
+msgid "Issuing warnings"
+msgstr "Emitir avisos"
+
+#: ../../c-api/exceptions.rst:304
+msgid ""
+"Use these functions to issue warnings from C code.  They mirror similar "
+"functions exported by the Python :mod:`warnings` module.  They normally "
+"print a warning message to *sys.stderr*; however, it is also possible that "
+"the user has specified that warnings are to be turned into errors, and in "
+"that case they will raise an exception.  It is also possible that the "
+"functions raise an exception because of a problem with the warning "
+"machinery. The return value is ``0`` if no exception is raised, or ``-1`` if"
+" an exception is raised.  (It is not possible to determine whether a warning"
+" message is actually printed, nor what the reason is for the exception; this"
+" is intentional.)  If an exception is raised, the caller should do its "
+"normal exception handling (for example, :c:func:`Py_DECREF` owned references"
+" and return an error value)."
+msgstr ""
+"Use estas funções para emitir avisos a partir do código C. Elas refletem "
+"funções semelhantes exportadas pelo módulo Python :mod:`warnings`. "
+"Normalmente, elas imprimem uma mensagem de aviso em *sys.stderr*; no "
+"entanto, também é possível que o utilizador tenha especificado que os avisos"
+" devem ser transformados em erros e, nesse caso, elas irão levantar uma "
+"exceção. Também é possível que as funções levantem uma exceção devido a um "
+"problema com o mecanismo de aviso. O valor de retorno é ``0`` se nenhuma "
+"exceção for levantada, ou ``-1`` se uma exceção for levantada. (Não é "
+"possível determinar se uma mensagem de aviso é realmente impressa, nem qual "
+"é a razão para a exceção; isso é intencional.) Se uma exceção for levantada,"
+" o chamador deve fazer o seu tratamento normal de exceções (por exemplo, "
+"referências próprias de :c:func:`Py_DECREF` e retornar um valor de erro)."
+
+#: ../../c-api/exceptions.rst:319
+msgid ""
+"Issue a warning message.  The *category* argument is a warning category (see"
+" below) or ``NULL``; the *message* argument is a UTF-8 encoded string.  "
+"*stack_level* is a positive number giving a number of stack frames; the "
+"warning will be issued from the  currently executing line of code in that "
+"stack frame.  A *stack_level* of 1 is the function calling "
+":c:func:`PyErr_WarnEx`, 2 is  the function above that, and so forth."
+msgstr ""
+"Emite uma mensagem de aviso. O argumento *category* é uma categoria de aviso"
+" (ver abaixo) ou ``NULL``; o argumento *message* é uma string codificada em "
+"UTF-8. *stack_level* é um número positivo que indica o número de frames da "
+"pilha; o aviso será emitido a partir da linha de código atualmente em "
+"execução nesse frame da pilha. Um *stack_level* de 1 é a função de chamada "
+":c:func:`PyErr_WarnEx`, 2 é a função acima dessa e assim por diante."
+
+#: ../../c-api/exceptions.rst:326
+msgid ""
+"Warning categories must be subclasses of :c:data:`PyExc_Warning`; "
+":c:data:`PyExc_Warning` is a subclass of :c:data:`PyExc_Exception`; the "
+"default warning category is :c:data:`PyExc_RuntimeWarning`. The standard "
+"Python warning categories are available as global variables whose names are "
+"enumerated at :ref:`standardwarningcategories`."
+msgstr ""
+"As categorias de aviso devem ser subclasses de :c:data:`PyExc_Warning`; "
+":c:data:`PyExc_Warning` é uma subclasse de :c:data:`PyExc_Exception`; a "
+"categoria de aviso padrão é :c:data:`PyExc_RuntimeWarning`. As categorias de"
+" aviso padrão do Python estão disponíveis como variáveis globais cujos nomes"
+" estão enumerados em :ref:`standardwarningcategories`."
+
+#: ../../c-api/exceptions.rst:332
+msgid ""
+"For information about warning control, see the documentation for the "
+":mod:`warnings` module and the :option:`-W` option in the command line "
+"documentation.  There is no C API for warning control."
+msgstr ""
+"Para obter informações sobre o controlo de avisos, consulte a documentação "
+"do módulo :mod:`warnings` e a opção :option:`-W` na documentação da linha de"
+" comando. Não existe uma API C para o controlo de avisos."
+
+#: ../../c-api/exceptions.rst:339
+msgid ""
+"Issue a warning message with explicit control over all warning attributes.  "
+"This is a straightforward wrapper around the Python function "
+":func:`warnings.warn_explicit`; see there for more information.  The "
+"*module* and *registry* arguments may be set to ``NULL`` to get the default "
+"effect described there."
+msgstr ""
+"Emite uma mensagem de aviso com controlo explícito sobre todos os atributos "
+"de aviso. Trata-se de um invólucro simples em torno da função Python "
+":func:`warnings.warn_explicit`; consulte-a para obter mais informações. Os "
+"argumentos *module* e *registry* podem ser definidos como ``NULL`` para "
+"obter o efeito padrão descrito nessa função."
+
+#: ../../c-api/exceptions.rst:350
+msgid ""
+"Similar to :c:func:`PyErr_WarnExplicitObject` except that *message* and "
+"*module* are UTF-8 encoded strings, and *filename* is decoded from the "
+":term:`filesystem encoding and error handler`."
+msgstr ""
+"Semelhante a :c:func:`PyErr_WarnExplicitObject` exceto que *message* e "
+"*module* são strings codificadas em UTF-8 e *filename* é descodificado a "
+"partir do :term:`codificação do sistema de ficheiros e tratador de erros`."
+
+#: ../../c-api/exceptions.rst:357
+msgid ""
+"Function similar to :c:func:`PyErr_WarnEx`, but use "
+":c:func:`PyUnicode_FromFormat` to format the warning message.  *format* is "
+"an ASCII-encoded string."
+msgstr ""
+"Função semelhante a :c:func:`PyErr_WarnEx`, mas usa "
+":c:func:`PyUnicode_FromFormat` para formatar a mensagem de aviso. *format* é"
+" uma string codificada em ASCII."
+
+#: ../../c-api/exceptions.rst:366
+msgid ""
+"Function similar to :c:func:`PyErr_WarnFormat`, but *category* is "
+":exc:`ResourceWarning` and it passes *source* to "
+":class:`!warnings.WarningMessage`."
+msgstr ""
+"Função semelhante a :c:func:`PyErr_WarnFormat`, mas *categoria* é "
+":exc:`ResourceWarning` e passa *fonte* para "
+":class:`!warnings.WarningMessage`."
+
+#: ../../c-api/exceptions.rst:373
+msgid "Querying the error indicator"
+msgstr "Consultando o indicador de erro"
+
+#: ../../c-api/exceptions.rst:377
+msgid ""
+"Test whether the error indicator is set.  If set, return the exception "
+"*type* (the first argument to the last call to one of the ``PyErr_Set*`` "
+"functions or to :c:func:`PyErr_Restore`).  If not set, return ``NULL``.  You"
+" do not own a reference to the return value, so you do not need to "
+":c:func:`Py_DECREF` it."
+msgstr ""
+"Teste se o indicador de erro está definido. Se estiver, retorne o *tipo* de "
+"exceção (o primeiro argumento da última chamada para uma das funções "
+"``PyErr_Set*`` ou para :c:func:`PyErr_Restore`). Se não estiver definido, "
+"retorna ``NULL`` . Você não possui uma referência ao valor de retorno, "
+"portanto, não precisa de o :c:func:`Py_DECREF`."
+
+#: ../../c-api/exceptions.rst:383
+msgid "The caller must hold the GIL."
+msgstr ""
+
+#: ../../c-api/exceptions.rst:387
+msgid ""
+"Do not compare the return value to a specific exception; use "
+":c:func:`PyErr_ExceptionMatches` instead, shown below.  (The comparison "
+"could easily fail since the exception may be an instance instead of a class,"
+" in the case of a class exception, or it may be a subclass of the expected "
+"exception.)"
+msgstr ""
+"Não compare o valor de retorno com uma exceção específica; use, em vez "
+"disso, :c:func:`PyErr_ExceptionMatches` mostrado abaixo. (A comparação pode "
+"falhar facilmente, pois a exceção pode ser uma instância em vez de uma "
+"classe, no caso de uma exceção de classe, ou pode ser uma subclasse da "
+"exceção esperada.)"
+
+#: ../../c-api/exceptions.rst:395
+msgid ""
+"Equivalent to ``PyErr_GivenExceptionMatches(PyErr_Occurred(), exc)``.  This "
+"should only be called when an exception is actually set; a memory access "
+"violation will occur if no exception has been raised."
+msgstr ""
+"Equivalente a ``PyErr_GivenExceptionMatches(PyErr_Occurred(), exc)``. Isto "
+"só deve ser chamado quando uma exceção for realmente definida; ocorrerá uma "
+"violação de acesso à memória se nenhuma exceção tiver sido levantada."
+
+#: ../../c-api/exceptions.rst:402
+msgid ""
+"Return true if the *given* exception matches the exception type in *exc*.  "
+"If *exc* is a class object, this also returns true when *given* is an "
+"instance of a subclass.  If *exc* is a tuple, all exception types in the "
+"tuple (and recursively in subtuples) are searched for a match."
+msgstr ""
+"Retorna verdadeiro se a exceção *given* corresponder ao tipo de exceção em "
+"*exc*. Se *exc* for um objeto de classe, isso também retornará verdadeiro "
+"quando *given* for uma instância de uma subclasse. Se *exc* for uma tupla, "
+"todos os tipos de exceção na tupla (e recursivamente nas subtupas) serão "
+"pesquisados para encontrar uma correspondência."
+
+#: ../../c-api/exceptions.rst:410
+msgid ""
+"Retrieve the error indicator into three variables whose addresses are "
+"passed. If the error indicator is not set, set all three variables to "
+"``NULL``.  If it is set, it will be cleared and you own a reference to each "
+"object retrieved.  The value and traceback object may be ``NULL`` even when "
+"the type object is not."
+msgstr ""
+"Recupere o indicador de erro em três variáveis cujos endereços são passados."
+" Se o indicador de erro não estiver definido, defina todas as três variáveis"
+" como ``NULL``. Se estiver definido, ele será limpo e você terá uma "
+"referência para cada objeto recuperado. O valor e o objeto de traceback "
+"podem ser ``NULL`` mesmo quando o objeto de tipo não é."
+
+#: ../../c-api/exceptions.rst:417
+msgid ""
+"This function is normally only used by code that needs to catch exceptions "
+"or by code that needs to save and restore the error indicator temporarily, "
+"e.g.::"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:432
+msgid ""
+"Set  the error indicator from the three objects.  If the error indicator is "
+"already set, it is cleared first.  If the objects are ``NULL``, the error "
+"indicator is cleared.  Do not pass a ``NULL`` type and non-``NULL`` value or"
+" traceback.  The exception type should be a class.  Do not pass an invalid "
+"exception type or value. (Violating these rules will cause subtle problems "
+"later.)  This call takes away a reference to each object: you must own a "
+"reference to each object before the call and after the call you no longer "
+"own these references.  (If you don't understand this, don't use this "
+"function.  I warned you.)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:444
+msgid ""
+"This function is normally only used by code that needs to save and restore "
+"the error indicator temporarily.  Use :c:func:`PyErr_Fetch` to save the "
+"current error indicator."
+msgstr ""
+
+#: ../../c-api/exceptions.rst:451
+msgid ""
+"Under certain circumstances, the values returned by :c:func:`PyErr_Fetch` "
+"below can be \"unnormalized\", meaning that ``*exc`` is a class object but "
+"``*val`` is not an instance of the  same class.  This function can be used "
+"to instantiate the class in that case.  If the values are already "
+"normalized, nothing happens. The delayed normalization is implemented to "
+"improve performance."
+msgstr ""
+"Em determinadas circunstâncias, os valores retornados por "
+":c:func:`PyErr_Fetch` abaixo podem ser «não normalizados», o que significa "
+"que ``*exc`` é um objeto de classe, mas ``*val`` não é uma instância da "
+"mesma classe. Esta função pode ser usada para instanciar a classe nesse "
+"caso. Se os valores já estiverem normalizados, nada acontece. A normalização"
+" atrasada é implementada para melhorar o desempenho."
+
+#: ../../c-api/exceptions.rst:459
+msgid ""
+"This function *does not* implicitly set the "
+":attr:`~BaseException.__traceback__` attribute on the exception value. If "
+"setting the traceback appropriately is desired, the following additional "
+"snippet is needed::"
+msgstr ""
+"Esta função *não* define implicitamente o atributo "
+":attr:`~BaseException.__traceback__` no valor da exceção. Se desejar definir"
+" o traceback adequadamente, é necessário o seguinte trecho adicional:"
+
+#: ../../c-api/exceptions.rst:471
+msgid ""
+"Retrieve the active exception instance, as would be returned by "
+":func:`sys.exception`. This refers to an exception that was *already "
+"caught*, not to an exception that was freshly raised. Returns a new "
+"reference to the exception or ``NULL``. Does not modify the interpreter's "
+"exception state."
+msgstr ""
+"Recupera a instância de exceção ativa, tal como seria devolvida por "
+":func:`sys.exception`. Isto refere-se a uma exceção que já foi capturada, "
+"não a uma exceção que foi levantada recentemente. Devolve uma nova "
+"referência à exceção ou ``NULL``. Não modifica o estado de exceção do "
+"interpretador."
+
+#: ../../c-api/exceptions.rst:478
+msgid ""
+"This function is not normally used by code that wants to handle exceptions. "
+"Rather, it can be used when code needs to save and restore the exception "
+"state temporarily.  Use :c:func:`PyErr_SetHandledException` to restore or "
+"clear the exception state."
+msgstr ""
+"Esta função não é normalmente utilizada por código que pretende tratar "
+"exceções. Em vez disso, pode ser utilizada quando o código precisa de "
+"guardar e restaurar temporariamente o estado da exceção. Utilize "
+":c:func:`PyErr_SetHandledException` para restaurar ou limpar o estado da "
+"exceção."
+
+#: ../../c-api/exceptions.rst:487
+msgid ""
+"Set the active exception, as known from ``sys.exception()``.  This refers to"
+" an exception that was *already caught*, not to an exception that was "
+"freshly raised. To clear the exception state, pass ``NULL``."
+msgstr ""
+"Defina a exceção ativa, conforme conhecido em ``sys.exception()``. Isso se "
+"refere a uma exceção que já foi capturada, não a uma exceção que foi "
+"levantada recentemente. Para limpar o estado da exceção, passe ``NULL``."
+
+#: ../../c-api/exceptions.rst:494
+msgid ""
+"This function is not normally used by code that wants to handle exceptions. "
+"Rather, it can be used when code needs to save and restore the exception "
+"state temporarily.  Use :c:func:`PyErr_GetHandledException` to get the "
+"exception state."
+msgstr ""
+"Esta função não é normalmente utilizada por código que pretende tratar "
+"exceções. Em vez disso, pode ser utilizada quando o código precisa de "
+"guardar e restaurar temporariamente o estado da exceção. Utilize "
+":c:func:`PyErr_GetHandledException` para obter o estado da exceção."
+
+#: ../../c-api/exceptions.rst:503
+msgid ""
+"Retrieve the old-style representation of the exception info, as known from "
+":func:`sys.exc_info`.  This refers to an exception that was *already "
+"caught*, not to an exception that was freshly raised.  Returns new "
+"references for the three objects, any of which may be ``NULL``.  Does not "
+"modify the exception info state.  This function is kept for backwards "
+"compatibility. Prefer using :c:func:`PyErr_GetHandledException`."
+msgstr ""
+"Recupera a representação antiga das informações da exceção, conforme "
+"conhecido em :func:`sys.exc_info`. Isso se refere a uma exceção que já foi "
+"capturada, não a uma exceção que foi levantada recentemente. Retorna novas "
+"referências para os três objetos, qualquer um dos quais pode ser ``NULL``. "
+"Não modifica o estado das informações da exceção. Esta função é mantida para"
+" compatibilidade com versões anteriores. Prefira usar "
+":c:func:`PyErr_GetHandledException`."
+
+#: ../../c-api/exceptions.rst:512
+msgid ""
+"This function is not normally used by code that wants to handle exceptions. "
+"Rather, it can be used when code needs to save and restore the exception "
+"state temporarily.  Use :c:func:`PyErr_SetExcInfo` to restore or clear the "
+"exception state."
+msgstr ""
+"Esta função não é normalmente utilizada por código que pretende tratar "
+"exceções. Em vez disso, pode ser utilizada quando o código precisa de "
+"guardar e restaurar temporariamente o estado da exceção. Utilize "
+":c:func:`PyErr_SetExcInfo` para restaurar ou limpar o estado da exceção."
+
+#: ../../c-api/exceptions.rst:522
+msgid ""
+"Set the exception info, as known from ``sys.exc_info()``.  This refers to an"
+" exception that was *already caught*, not to an exception that was freshly "
+"raised.  This function steals the references of the arguments. To clear the "
+"exception state, pass ``NULL`` for all three arguments. This function is "
+"kept for backwards compatibility. Prefer using "
+":c:func:`PyErr_SetHandledException`."
+msgstr ""
+"Defina as informações da exceção, conforme conhecido em ``sys.exc_info()``. "
+"Isso se refere a uma exceção que já foi capturada, não a uma exceção que foi"
+" levantada recentemente. Esta função rouba as referências dos argumentos. "
+"Para limpar o estado da exceção, passe ``NULL`` para todos os três "
+"argumentos. Esta função é mantida para compatibilidade com versões "
+"anteriores. Prefira usar :c:func:`PyErr_SetHandledException`."
+
+#: ../../c-api/exceptions.rst:531
+msgid ""
+"This function is not normally used by code that wants to handle exceptions. "
+"Rather, it can be used when code needs to save and restore the exception "
+"state temporarily.  Use :c:func:`PyErr_GetExcInfo` to read the exception "
+"state."
+msgstr ""
+"Esta função não é normalmente utilizada por código que pretende tratar "
+"exceções. Em vez disso, pode ser utilizada quando o código precisa de "
+"guardar e restaurar temporariamente o estado da exceção. Utilize "
+":c:func:`PyErr_GetExcInfo` para ler o estado da exceção."
+
+#: ../../c-api/exceptions.rst:538
+msgid ""
+"The ``type`` and ``traceback`` arguments are no longer used and can be NULL."
+" The interpreter now derives them from the exception instance (the ``value``"
+" argument). The function still steals references of all three arguments."
+msgstr ""
+"Os argumentos ``type`` e ``traceback`` não são mais usados e podem ser NULL."
+" O interpretador agora os deriva da instância da exceção (o argumento "
+"``value``). A função ainda rouba referências de todos os três argumentos."
+
+#: ../../c-api/exceptions.rst:546
+msgid "Signal Handling"
+msgstr "Tratamento de sinal"
+
+#: ../../c-api/exceptions.rst:556
+msgid "This function interacts with Python's signal handling."
+msgstr "Essa função interage com o manipulador de sinais do Python."
+
+#: ../../c-api/exceptions.rst:558
+msgid ""
+"If the function is called from the main thread and under the main Python "
+"interpreter, it checks whether a signal has been sent to the processes and "
+"if so, invokes the corresponding signal handler.  If the :mod:`signal` "
+"module is supported, this can invoke a signal handler written in Python."
+msgstr ""
+"Se a função for chamada a partir do thread principal e sob o interpretador "
+"Python principal, ela verifica se um sinal foi enviado aos processos e, em "
+"caso afirmativo, invoca o manipulador de sinal correspondente. Se o módulo "
+":mod:`signal` for suportado, isso pode invocar um manipulador de sinal "
+"escrito em Python."
+
+#: ../../c-api/exceptions.rst:563
+msgid ""
+"The function attempts to handle all pending signals, and then returns ``0``."
+" However, if a Python signal handler raises an exception, the error "
+"indicator is set and the function returns ``-1`` immediately (such that "
+"other pending signals may not have been handled yet: they will be on the "
+"next :c:func:`PyErr_CheckSignals()` invocation)."
+msgstr ""
+"A função tenta lidar com todos os sinais pendentes e, em seguida, retorna "
+"``0``. No entanto, se um manipulador de sinais Python levantar uma exceção, "
+"o indicador de erro é definido e a função retorna ``-1`` imediatamente (de "
+"modo que outros sinais pendentes podem ainda não ter sido tratados: eles "
+"serão tratados na próxima invocação de :c:func:`PyErr_CheckSignals()`)."
+
+#: ../../c-api/exceptions.rst:569
+msgid ""
+"If the function is called from a non-main thread, or under a non-main Python"
+" interpreter, it does nothing and returns ``0``."
+msgstr ""
+"Se a função for chamada a partir de um thread não principal ou sob um "
+"interpretador Python não principal, ela não fará nada e retornará ``0``."
+
+#: ../../c-api/exceptions.rst:572
+msgid ""
+"This function can be called by long-running C code that wants to be "
+"interruptible by user requests (such as by pressing Ctrl-C)."
+msgstr ""
+"Esta função pode ser chamada por código C de longa execução que deseja ser "
+"interrompido por solicitações do utilizador (como ao pressionar Ctrl-C)."
+
+#: ../../c-api/exceptions.rst:576
+msgid ""
+"The default Python signal handler for :c:macro:`!SIGINT` raises the "
+":exc:`KeyboardInterrupt` exception."
+msgstr ""
+"O manipulador de sinal padrão do Python para :c:macro:`!SIGINT` levanta a "
+"exceção :exc:`KeyboardInterrupt`."
+
+#: ../../c-api/exceptions.rst:587
+msgid ""
+"Simulate the effect of a :c:macro:`!SIGINT` signal arriving. This is "
+"equivalent to ``PyErr_SetInterruptEx(SIGINT)``."
+msgstr ""
+"Simule o efeito de um sinal :c:macro:`!SIGINT` a chegar. Isto é equivalente "
+"a ``PyErr_SetInterruptEx(SIGINT)``."
+
+#: ../../c-api/exceptions.rst:591 ../../c-api/exceptions.rst:618
+msgid ""
+"This function is async-signal-safe.  It can be called without the "
+":term:`GIL` and from a C signal handler."
+msgstr ""
+
+#: ../../c-api/exceptions.rst:601
+msgid ""
+"Simulate the effect of a signal arriving. The next time "
+":c:func:`PyErr_CheckSignals` is called,  the Python signal handler for the "
+"given signal number will be called."
+msgstr ""
+"Simule o efeito da chegada de um sinal. Na próxima vez que "
+":c:func:`PyErr_CheckSignals` for chamado, o manipulador de sinais Python "
+"para o número de sinal fornecido será chamado."
+
+#: ../../c-api/exceptions.rst:605
+msgid ""
+"This function can be called by C code that sets up its own signal handling "
+"and wants Python signal handlers to be invoked as expected when an "
+"interruption is requested (for example when the user presses Ctrl-C to "
+"interrupt an operation)."
+msgstr ""
+"Esta função pode ser chamada por código C que configura o seu próprio "
+"tratamento de sinais e deseja que os tratadores de sinais Python sejam "
+"invocados conforme o esperado quando uma interrupção é solicitada (por "
+"exemplo, quando o utilizador pressiona Ctrl-C para interromper uma "
+"operação)."
+
+#: ../../c-api/exceptions.rst:610
+msgid ""
+"If the given signal isn't handled by Python (it was set to "
+":py:const:`signal.SIG_DFL` or :py:const:`signal.SIG_IGN`), it will be "
+"ignored."
+msgstr ""
+"Se o sinal fornecido não for tratado pelo Python (foi definido como "
+":py:const:`signal.SIG_DFL` ou :py:const:`signal.SIG_IGN`), ele será "
+"ignorado."
+
+#: ../../c-api/exceptions.rst:613
+msgid ""
+"If *signum* is outside of the allowed range of signal numbers, ``-1`` is "
+"returned.  Otherwise, ``0`` is returned.  The error indicator is never "
+"changed by this function."
+msgstr ""
+"Se *signum* estiver fora do intervalo permitido de números de sinal, ``-1`` "
+"é retornado. Caso contrário, ``0`` é retornado. O indicador de erro nunca é "
+"alterado por esta função."
+
+#: ../../c-api/exceptions.rst:626
+msgid ""
+"This utility function specifies a file descriptor to which the signal number"
+" is written as a single byte whenever a signal is received. *fd* must be "
+"non-blocking. It returns the previous such file descriptor."
+msgstr ""
+"Esta função utilitária especifica um descritor de ficheiro no qual o número "
+"do sinal é gravado como um único byte sempre que um sinal é recebido. *fd* "
+"deve ser não bloqueante. Ela retorna o descritor de ficheiro anterior."
+
+#: ../../c-api/exceptions.rst:630
+msgid ""
+"The value ``-1`` disables the feature; this is the initial state. This is "
+"equivalent to :func:`signal.set_wakeup_fd` in Python, but without any error "
+"checking.  *fd* should be a valid file descriptor.  The function should only"
+" be called from the main thread."
+msgstr ""
+"O valor ``-1`` desabilita o recurso; este é o estado inicial. Isso é "
+"equivalente à :func:`signal.set_wakeup_fd` em Python, mas sem nenhuma "
+"verificação de erro. *fd* deve ser um descritor de ficheiro válido. A função"
+" só deve ser chamada a partir da thread principal."
+
+#: ../../c-api/exceptions.rst:635
+msgid "On Windows, the function now also supports socket handles."
+msgstr "No Windows, a função agora também suporta manipuladores de socket."
+
+#: ../../c-api/exceptions.rst:640
+msgid "Exception Classes"
+msgstr "Classes de exceção"
+
+#: ../../c-api/exceptions.rst:644
+msgid ""
+"This utility function creates and returns a new exception class. The *name* "
+"argument must be the name of the new exception, a C string of the form "
+"``module.classname``.  The *base* and *dict* arguments are normally "
+"``NULL``. This creates a class object derived from :exc:`Exception` "
+"(accessible in C as :c:data:`PyExc_Exception`)."
+msgstr ""
+"Esta função utilitária cria e retorna uma nova classe de exceção. O "
+"argumento *name* deve ser o nome da nova exceção, uma string C no formato "
+"``module.classname``. Os argumentos *base* e *dict* são normalmente "
+"``NULL``. Isso cria um objeto de classe derivado de "
+":exc:`Exception`(acessível em C como :c:data:`PyExc_Exception`)."
+
+#: ../../c-api/exceptions.rst:650
+msgid ""
+"The :attr:`!__module__` attribute of the new class is set to the first part "
+"(up to the last dot) of the *name* argument, and the class name is set to "
+"the last part (after the last dot).  The *base* argument can be used to "
+"specify alternate base classes; it can either be only one class or a tuple "
+"of classes. The *dict* argument can be used to specify a dictionary of class"
+" variables and methods."
+msgstr ""
+
+#: ../../c-api/exceptions.rst:659
+msgid ""
+"Same as :c:func:`PyErr_NewException`, except that the new exception class "
+"can easily be given a docstring: If *doc* is non-``NULL``, it will be used "
+"as the docstring for the exception class."
+msgstr ""
+"O mesmo que :c:func:`PyErr_NewException`, exceto que a nova classe exceção "
+"pode facilmente receber um docstring: Se *doc* não for ``NULL``, será "
+"utilizado como docstring para a classe exceção."
+
+#: ../../c-api/exceptions.rst:667
+msgid "Exception Objects"
+msgstr "Objetos de exceção"
+
+#: ../../c-api/exceptions.rst:671
+msgid ""
+"Return the traceback associated with the exception as a new reference, as "
+"accessible from Python through the :attr:`~BaseException.__traceback__` "
+"attribute. If there is no traceback associated, this returns ``NULL``."
+msgstr ""
+"Retorna o traceback associado à exceção como uma nova referência, acessível "
+"a partir do Python através do atributo :attr:`~BaseException.__traceback__`."
+" Se não houver nenhum traceback associado, isso retorna ``NULL``."
+
+#: ../../c-api/exceptions.rst:679
+msgid ""
+"Set the traceback associated with the exception to *tb*.  Use ``Py_None`` to"
+" clear it."
+msgstr ""
+"Defina o traceback associado à exceção como *tb*. Use ``Py_None`` para "
+"limpá-lo."
+
+#: ../../c-api/exceptions.rst:685
+msgid ""
+"Return the context (another exception instance during whose handling *ex* "
+"was raised) associated with the exception as a new reference, as accessible "
+"from Python through the :attr:`~BaseException.__context__` attribute. If "
+"there is no context associated, this returns ``NULL``."
+msgstr ""
+"Retorna o contexto (outra instância de exceção durante cujo tratamento *ex* "
+"foi levantada) associado à exceção como uma nova referência, acessível a "
+"partir do Python através do atributo :attr:`~BaseException.__context__`. Se "
+"não houver nenhum contexto associado, isto retorna ``NULL``."
+
+#: ../../c-api/exceptions.rst:693
+msgid ""
+"Set the context associated with the exception to *ctx*.  Use ``NULL`` to "
+"clear it.  There is no type check to make sure that *ctx* is an exception "
+"instance. This steals a reference to *ctx*."
+msgstr ""
+"Defina o contexto associado à exceção para *ctx*. Use ``NULL`` para limpá-"
+"lo. Não há verificação de tipo para garantir que *ctx* seja uma instância de"
+" exceção. Isso rouba uma referência para *ctx*."
+
+#: ../../c-api/exceptions.rst:700
+msgid ""
+"Return the cause (either an exception instance, or ``None``, set by ``raise "
+"... from ...``) associated with the exception as a new reference, as "
+"accessible from Python through the :attr:`~BaseException.__cause__` "
+"attribute."
+msgstr ""
+"Retorna a causa (uma instância de exceção ou ``None``, definida por ``raise "
+"... from ...``) associada à exceção como uma nova referência, acessível a "
+"partir do Python através do atributo :attr:`~BaseException.__cause__`."
+
+#: ../../c-api/exceptions.rst:708
+msgid ""
+"Set the cause associated with the exception to *cause*.  Use ``NULL`` to "
+"clear it.  There is no type check to make sure that *cause* is either an "
+"exception instance or ``None``.  This steals a reference to *cause*."
+msgstr ""
+"Defina a causa associada à exceção como *cause*. Use ``NULL`` para limpá-la."
+" Não há verificação de tipo para garantir que *cause* seja uma instância de "
+"exceção ou ``None``. Isso rouba uma referência para *cause*."
+
+#: ../../c-api/exceptions.rst:712
+msgid ""
+"The :attr:`~BaseException.__suppress_context__` attribute is implicitly set "
+"to ``True`` by this function."
+msgstr ""
+"O atributo :attr:`~BaseException.__suppress_context__` é implicitamente "
+"definido como ``True`` por esta função."
+
+#: ../../c-api/exceptions.rst:719
+msgid "Unicode Exception Objects"
+msgstr "Objetos de exceção Unicode"
+
+#: ../../c-api/exceptions.rst:721
+msgid ""
+"The following functions are used to create and modify Unicode exceptions "
+"from C."
+msgstr ""
+"As seguintes funções são usadas para criar e modificar exceções Unicode de "
+"C."
+
+#: ../../c-api/exceptions.rst:725
+msgid ""
+"Create a :class:`UnicodeDecodeError` object with the attributes *encoding*, "
+"*object*, *length*, *start*, *end* and *reason*. *encoding* and *reason* are"
+" UTF-8 encoded strings."
+msgstr ""
+"Crie um objeto :class:`UnicodeDecodeError` com os atributos *encoding*, "
+"*object*, *length*, *start*, *end* e *reason*. *encoding* e *reason* são "
+"strings codificadas em UTF-8."
+
+#: ../../c-api/exceptions.rst:732
+msgid "Return the *encoding* attribute of the given exception object."
+msgstr "Retorna o atributo * encoding* dado no objeto da exceção."
+
+#: ../../c-api/exceptions.rst:738
+msgid "Return the *object* attribute of the given exception object."
+msgstr "Retorna o atributo *object* dado no objeto da exceção."
+
+#: ../../c-api/exceptions.rst:744
+msgid ""
+"Get the *start* attribute of the given exception object and place it into "
+"*\\*start*.  *start* must not be ``NULL``.  Return ``0`` on success, ``-1`` "
+"on failure."
+msgstr ""
+"Obtém o atributo *start* do objeto da exceção coloca-o em *\\*start*. "
+"*start* não deve ser ``NULL``. Retorna ``0`` se não der erro, ``-1`` caso dê"
+" erro."
+
+#: ../../c-api/exceptions.rst:752
+msgid ""
+"Set the *start* attribute of the given exception object to *start*.  Return "
+"``0`` on success, ``-1`` on failure."
+msgstr ""
+
+#: ../../c-api/exceptions.rst:759
+msgid ""
+"Get the *end* attribute of the given exception object and place it into "
+"*\\*end*.  *end* must not be ``NULL``.  Return ``0`` on success, ``-1`` on "
+"failure."
+msgstr ""
+"Obtenha o atributo *end* dado no objeto de exceção e coloque *\\*end*. O "
+"*end* não deve ser ``NULL``. Em caso de sucesso, retorna ``0``, em caso de "
+"falha, retorna ``-1``."
+
+#: ../../c-api/exceptions.rst:767
+msgid ""
+"Set the *end* attribute of the given exception object to *end*.  Return "
+"``0`` on success, ``-1`` on failure."
+msgstr ""
+"Defina o atributo *end* do objeto de exceção fornecido como *end*. Retorne "
+"``0`` em caso de sucesso e ``-1`` em caso de falha."
+
+#: ../../c-api/exceptions.rst:774
+msgid "Return the *reason* attribute of the given exception object."
+msgstr "Retorna o atributo *reason* dado no objeto da exceção."
+
+#: ../../c-api/exceptions.rst:780
+msgid ""
+"Set the *reason* attribute of the given exception object to *reason*.  "
+"Return ``0`` on success, ``-1`` on failure."
+msgstr ""
+"Defina o atributo *reason* do objeto de exceção fornecido como *reason*. "
+"Retorne ``0`` em caso de sucesso e ``-1`` em caso de falha."
+
+#: ../../c-api/exceptions.rst:787
+msgid "Recursion Control"
+msgstr "Controlo de recursão"
+
+#: ../../c-api/exceptions.rst:789
+msgid ""
+"These two functions provide a way to perform safe recursive calls at the C "
+"level, both in the core and in extension modules.  They are needed if the "
+"recursive code does not necessarily invoke Python code (which tracks its "
+"recursion depth automatically). They are also not needed for *tp_call* "
+"implementations because the :ref:`call protocol <call>` takes care of "
+"recursion handling."
+msgstr ""
+"Essas duas funções fornecem uma maneira de realizar chamadas recursivas "
+"seguras no nível C, tanto no núcleo quanto nos módulos de extensão. Elas são"
+" necessárias se o código recursivo não invocar necessariamente o código "
+"Python (que rastreia sua profundidade de recursão automaticamente). Elas "
+"também não são necessárias para implementações *tp_call*, porque o "
+":ref:`protocolo de chamada <call>` cuida do tratamento da recursão."
+
+#: ../../c-api/exceptions.rst:798
+msgid "Marks a point where a recursive C-level call is about to be performed."
+msgstr ""
+"Marca um ponto em que a chamada recursiva em nível C está prestes a ser "
+"executada."
+
+#: ../../c-api/exceptions.rst:800
+msgid ""
+"If :c:macro:`!USE_STACKCHECK` is defined, this function checks if the OS "
+"stack overflowed using :c:func:`PyOS_CheckStack`.  If this is the case, it "
+"sets a :exc:`MemoryError` and returns a nonzero value."
+msgstr ""
+
+#: ../../c-api/exceptions.rst:804
+msgid ""
+"The function then checks if the recursion limit is reached.  If this is the "
+"case, a :exc:`RecursionError` is set and a nonzero value is returned. "
+"Otherwise, zero is returned."
+msgstr ""
+
+#: ../../c-api/exceptions.rst:808
+msgid ""
+"*where* should be a UTF-8 encoded string such as ``\" in instance check\"`` "
+"to be concatenated to the :exc:`RecursionError` message caused by the "
+"recursion depth limit."
+msgstr ""
+"*onde* deve ser uma string codificada em UTF-8, como ``\" in instance "
+"check\"``, a ser concatenada à mensagem :exc:`RecursionError` causada pelo "
+"limite de profundidade de recursão."
+
+#: ../../c-api/exceptions.rst:812 ../../c-api/exceptions.rst:820
+msgid ""
+"This function is now also available in the :ref:`limited API <limited-c-"
+"api>`."
+msgstr ""
+"Esta função agora também está disponível na :ref:`API limitada <limited-c-"
+"api>`."
+
+#: ../../c-api/exceptions.rst:817
+msgid ""
+"Ends a :c:func:`Py_EnterRecursiveCall`.  Must be called once for each "
+"*successful* invocation of :c:func:`Py_EnterRecursiveCall`."
+msgstr ""
+"Encerra uma :c:func:`Py_EnterRecursiveCall`. Deve ser chamada uma vez para "
+"cada invocação *bem-sucedida* de :c:func:`Py_EnterRecursiveCall`."
+
+#: ../../c-api/exceptions.rst:823
+msgid ""
+"Properly implementing :c:member:`~PyTypeObject.tp_repr` for container types "
+"requires special recursion handling.  In addition to protecting the stack, "
+":c:member:`~PyTypeObject.tp_repr` also needs to track objects to prevent "
+"cycles.  The following two functions facilitate this functionality.  "
+"Effectively, these are the C equivalent to :func:`reprlib.recursive_repr`."
+msgstr ""
+"A implementação adequada de :c:member:`~PyTypeObject.tp_repr` para tipos de "
+"contentores requer um tratamento especial de recursão. Além de proteger a "
+"pilha, :c:member:`~PyTypeObject.tp_repr` também precisa rastrear objetos "
+"para evitar ciclos. As duas funções a seguir facilitam essa funcionalidade. "
+"Efetivamente, elas são o equivalente em C para "
+":func:`reprlib.recursive_repr`."
+
+#: ../../c-api/exceptions.rst:831
+msgid ""
+"Called at the beginning of the :c:member:`~PyTypeObject.tp_repr` "
+"implementation to detect cycles."
+msgstr ""
+"Chamado no início da implementação :c:member:`~PyTypeObject.tp_repr` para "
+"detectar ciclos."
+
+#: ../../c-api/exceptions.rst:834
+msgid ""
+"If the object has already been processed, the function returns a positive "
+"integer.  In that case the :c:member:`~PyTypeObject.tp_repr` implementation "
+"should return a string object indicating a cycle.  As examples, "
+":class:`dict` objects return ``{...}`` and :class:`list` objects return "
+"``[...]``."
+msgstr ""
+"Se o objeto já tiver sido processado, a função retorna um inteiro positivo. "
+"Nesse caso, a implementação :c:member:`~PyTypeObject.tp_repr` deve retornar "
+"um objeto string indicando um ciclo. Como exemplos, objetos :class:`dict` "
+"retornam ``{...}`` e objetos :class:`list` retornam ``[...]``."
+
+#: ../../c-api/exceptions.rst:840
+msgid ""
+"The function will return a negative integer if the recursion limit is "
+"reached.  In that case the :c:member:`~PyTypeObject.tp_repr` implementation "
+"should typically return ``NULL``."
+msgstr ""
+"A função retornará um inteiro negativo se o limite da recursão for atingido."
+" Nesse caso a implementação :c:member:`~PyTypeObject.tp_repr` deverá, "
+"normalmente,. retornar ``NULL``."
+
+#: ../../c-api/exceptions.rst:844
+msgid ""
+"Otherwise, the function returns zero and the "
+":c:member:`~PyTypeObject.tp_repr` implementation can continue normally."
+msgstr ""
+"Caso contrário, a função retorna zero e a implementação "
+":c:member:`~PyTypeObject.tp_repr` poderá continuar normalmente."
+
+#: ../../c-api/exceptions.rst:849
+msgid ""
+"Ends a :c:func:`Py_ReprEnter`.  Must be called once for each invocation of "
+":c:func:`Py_ReprEnter` that returns zero."
+msgstr ""
+"Termina a :c:func:`Py_ReprEnter`. Deve ser chamado uma vez para cada chamada"
+" de :c:func:`Py_ReprEnter` que retorna zero."
+
+#: ../../c-api/exceptions.rst:856
+msgid "Standard Exceptions"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:858
+msgid ""
+"All standard Python exceptions are available as global variables whose names"
+" are ``PyExc_`` followed by the Python exception name.  These have the type "
+":c:expr:`PyObject*`; they are all class objects.  For completeness, here are"
+" all the variables:"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:919 ../../c-api/exceptions.rst:1052
+#: ../../c-api/exceptions.rst:1097
+msgid "C Name"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:919 ../../c-api/exceptions.rst:1097
+msgid "Python Name"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:919 ../../c-api/exceptions.rst:1052
+#: ../../c-api/exceptions.rst:1097
+msgid "Notes"
+msgstr "Notas"
+
+#: ../../c-api/exceptions.rst:921
+msgid ":c:data:`PyExc_BaseException`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:921
+msgid ":exc:`BaseException`"
+msgstr ":exc:`BaseException`"
+
+#: ../../c-api/exceptions.rst:921 ../../c-api/exceptions.rst:923
+#: ../../c-api/exceptions.rst:925 ../../c-api/exceptions.rst:971
+#: ../../c-api/exceptions.rst:983
+msgid "[1]_"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:923
+msgid ":c:data:`PyExc_Exception`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:923
+msgid ":exc:`Exception`"
+msgstr ":exc:`Exception`"
+
+#: ../../c-api/exceptions.rst:925
+msgid ":c:data:`PyExc_ArithmeticError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:925
+msgid ":exc:`ArithmeticError`"
+msgstr ":exc:`ArithmeticError`"
+
+#: ../../c-api/exceptions.rst:927
+msgid ":c:data:`PyExc_AssertionError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:927
+msgid ":exc:`AssertionError`"
+msgstr ":exc:`AssertionError`"
+
+#: ../../c-api/exceptions.rst:929
+msgid ":c:data:`PyExc_AttributeError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:929
+msgid ":exc:`AttributeError`"
+msgstr ":exc:`AttributeError`"
+
+#: ../../c-api/exceptions.rst:931
+msgid ":c:data:`PyExc_BlockingIOError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:931
+msgid ":exc:`BlockingIOError`"
+msgstr ":exc:`BlockingIOError`"
+
+#: ../../c-api/exceptions.rst:933
+msgid ":c:data:`PyExc_BrokenPipeError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:933
+msgid ":exc:`BrokenPipeError`"
+msgstr ":exc:`BrokenPipeError`"
+
+#: ../../c-api/exceptions.rst:935
+msgid ":c:data:`PyExc_BufferError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:935
+msgid ":exc:`BufferError`"
+msgstr ":exc:`BufferError`"
+
+#: ../../c-api/exceptions.rst:937
+msgid ":c:data:`PyExc_ChildProcessError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:937
+msgid ":exc:`ChildProcessError`"
+msgstr ":exc:`ChildProcessError`"
+
+#: ../../c-api/exceptions.rst:939
+msgid ":c:data:`PyExc_ConnectionAbortedError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:939
+msgid ":exc:`ConnectionAbortedError`"
+msgstr ":exc:`ConnectionAbortedError`"
+
+#: ../../c-api/exceptions.rst:941
+msgid ":c:data:`PyExc_ConnectionError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:941
+msgid ":exc:`ConnectionError`"
+msgstr ":exc:`ConnectionError`"
+
+#: ../../c-api/exceptions.rst:943
+msgid ":c:data:`PyExc_ConnectionRefusedError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:943
+msgid ":exc:`ConnectionRefusedError`"
+msgstr ":exc:`ConnectionRefusedError`"
+
+#: ../../c-api/exceptions.rst:945
+msgid ":c:data:`PyExc_ConnectionResetError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:945
+msgid ":exc:`ConnectionResetError`"
+msgstr ":exc:`ConnectionResetError`"
+
+#: ../../c-api/exceptions.rst:947
+msgid ":c:data:`PyExc_EOFError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:947
+msgid ":exc:`EOFError`"
+msgstr ":exc:`EOFError`"
+
+#: ../../c-api/exceptions.rst:949
+msgid ":c:data:`PyExc_FileExistsError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:949
+msgid ":exc:`FileExistsError`"
+msgstr ":exc:`FileExistsError`"
+
+#: ../../c-api/exceptions.rst:951
+msgid ":c:data:`PyExc_FileNotFoundError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:951
+msgid ":exc:`FileNotFoundError`"
+msgstr ":exc:`FileNotFoundError`"
+
+#: ../../c-api/exceptions.rst:953
+msgid ":c:data:`PyExc_FloatingPointError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:953
+msgid ":exc:`FloatingPointError`"
+msgstr ":exc:`FloatingPointError`"
+
+#: ../../c-api/exceptions.rst:955
+msgid ":c:data:`PyExc_GeneratorExit`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:955
+msgid ":exc:`GeneratorExit`"
+msgstr ":exc:`GeneratorExit`"
+
+#: ../../c-api/exceptions.rst:957
+msgid ":c:data:`PyExc_ImportError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:957
+msgid ":exc:`ImportError`"
+msgstr ":exc:`ImportError`"
+
+#: ../../c-api/exceptions.rst:959
+msgid ":c:data:`PyExc_IndentationError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:959
+msgid ":exc:`IndentationError`"
+msgstr ":exc:`IndentationError`"
+
+#: ../../c-api/exceptions.rst:961
+msgid ":c:data:`PyExc_IndexError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:961
+msgid ":exc:`IndexError`"
+msgstr ":exc:`IndexError`"
+
+#: ../../c-api/exceptions.rst:963
+msgid ":c:data:`PyExc_InterruptedError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:963
+msgid ":exc:`InterruptedError`"
+msgstr ":exc:`InterruptedError`"
+
+#: ../../c-api/exceptions.rst:965
+msgid ":c:data:`PyExc_IsADirectoryError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:965
+msgid ":exc:`IsADirectoryError`"
+msgstr ":exc:`IsADirectoryError`"
+
+#: ../../c-api/exceptions.rst:967
+msgid ":c:data:`PyExc_KeyError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:967
+msgid ":exc:`KeyError`"
+msgstr ":exc:`KeyError`"
+
+#: ../../c-api/exceptions.rst:969
+msgid ":c:data:`PyExc_KeyboardInterrupt`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:969
+msgid ":exc:`KeyboardInterrupt`"
+msgstr ":exc:`KeyboardInterrupt`"
+
+#: ../../c-api/exceptions.rst:971
+msgid ":c:data:`PyExc_LookupError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:971
+msgid ":exc:`LookupError`"
+msgstr ":exc:`LookupError`"
+
+#: ../../c-api/exceptions.rst:973
+msgid ":c:data:`PyExc_MemoryError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:973
+msgid ":exc:`MemoryError`"
+msgstr ":exc:`MemoryError`"
+
+#: ../../c-api/exceptions.rst:975
+msgid ":c:data:`PyExc_ModuleNotFoundError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:975
+msgid ":exc:`ModuleNotFoundError`"
+msgstr ":exc:`ModuleNotFoundError`"
+
+#: ../../c-api/exceptions.rst:977
+msgid ":c:data:`PyExc_NameError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:977
+msgid ":exc:`NameError`"
+msgstr ":exc:`NameError`"
+
+#: ../../c-api/exceptions.rst:979
+msgid ":c:data:`PyExc_NotADirectoryError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:979
+msgid ":exc:`NotADirectoryError`"
+msgstr ":exc:`NotADirectoryError`"
+
+#: ../../c-api/exceptions.rst:981
+msgid ":c:data:`PyExc_NotImplementedError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:981
+msgid ":exc:`NotImplementedError`"
+msgstr ":exc:`NotImplementedError`"
+
+#: ../../c-api/exceptions.rst:983
+msgid ":c:data:`PyExc_OSError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:983
+msgid ":exc:`OSError`"
+msgstr ":exc:`OSError`"
+
+#: ../../c-api/exceptions.rst:985
+msgid ":c:data:`PyExc_OverflowError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:985
+msgid ":exc:`OverflowError`"
+msgstr ":exc:`OverflowError`"
+
+#: ../../c-api/exceptions.rst:987
+msgid ":c:data:`PyExc_PermissionError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:987
+msgid ":exc:`PermissionError`"
+msgstr ":exc:`PermissionError`"
+
+#: ../../c-api/exceptions.rst:989
+msgid ":c:data:`PyExc_ProcessLookupError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:989
+msgid ":exc:`ProcessLookupError`"
+msgstr ":exc:`ProcessLookupError`"
+
+#: ../../c-api/exceptions.rst:991
+msgid ":c:data:`PyExc_RecursionError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:991
+msgid ":exc:`RecursionError`"
+msgstr ":exc:`RecursionError`"
+
+#: ../../c-api/exceptions.rst:993
+msgid ":c:data:`PyExc_ReferenceError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:993
+msgid ":exc:`ReferenceError`"
+msgstr ":exc:`ReferenceError`"
+
+#: ../../c-api/exceptions.rst:995
+msgid ":c:data:`PyExc_RuntimeError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:995
+msgid ":exc:`RuntimeError`"
+msgstr ":exc:`RuntimeError`"
+
+#: ../../c-api/exceptions.rst:997
+msgid ":c:data:`PyExc_StopAsyncIteration`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:997
+msgid ":exc:`StopAsyncIteration`"
+msgstr ":exc:`StopAsyncIteration`"
+
+#: ../../c-api/exceptions.rst:999
+msgid ":c:data:`PyExc_StopIteration`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:999
+msgid ":exc:`StopIteration`"
+msgstr ":exc:`StopIteration`"
+
+#: ../../c-api/exceptions.rst:1001
+msgid ":c:data:`PyExc_SyntaxError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1001
+msgid ":exc:`SyntaxError`"
+msgstr ":exc:`SyntaxError`"
+
+#: ../../c-api/exceptions.rst:1003
+msgid ":c:data:`PyExc_SystemError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1003
+msgid ":exc:`SystemError`"
+msgstr ":exc:`SystemError`"
+
+#: ../../c-api/exceptions.rst:1005
+msgid ":c:data:`PyExc_SystemExit`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1005
+msgid ":exc:`SystemExit`"
+msgstr ":exc:`SystemExit`"
+
+#: ../../c-api/exceptions.rst:1007
+msgid ":c:data:`PyExc_TabError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1007
+msgid ":exc:`TabError`"
+msgstr ":exc:`TabError`"
+
+#: ../../c-api/exceptions.rst:1009
+msgid ":c:data:`PyExc_TimeoutError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1009
+msgid ":exc:`TimeoutError`"
+msgstr ":exc:`TimeoutError`"
+
+#: ../../c-api/exceptions.rst:1011
+msgid ":c:data:`PyExc_TypeError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1011
+msgid ":exc:`TypeError`"
+msgstr ":exc:`TypeError`"
+
+#: ../../c-api/exceptions.rst:1013
+msgid ":c:data:`PyExc_UnboundLocalError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1013
+msgid ":exc:`UnboundLocalError`"
+msgstr ":exc:`UnboundLocalError`"
+
+#: ../../c-api/exceptions.rst:1015
+msgid ":c:data:`PyExc_UnicodeDecodeError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1015
+msgid ":exc:`UnicodeDecodeError`"
+msgstr ":exc:`UnicodeDecodeError`"
+
+#: ../../c-api/exceptions.rst:1017
+msgid ":c:data:`PyExc_UnicodeEncodeError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1017
+msgid ":exc:`UnicodeEncodeError`"
+msgstr ":exc:`UnicodeEncodeError`"
+
+#: ../../c-api/exceptions.rst:1019
+msgid ":c:data:`PyExc_UnicodeError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1019
+msgid ":exc:`UnicodeError`"
+msgstr ":exc:`UnicodeError`"
+
+#: ../../c-api/exceptions.rst:1021
+msgid ":c:data:`PyExc_UnicodeTranslateError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1021
+msgid ":exc:`UnicodeTranslateError`"
+msgstr ":exc:`UnicodeTranslateError`"
+
+#: ../../c-api/exceptions.rst:1023
+msgid ":c:data:`PyExc_ValueError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1023
+msgid ":exc:`ValueError`"
+msgstr ":exc:`ValueError`"
+
+#: ../../c-api/exceptions.rst:1025
+msgid ":c:data:`PyExc_ZeroDivisionError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1025
+msgid ":exc:`ZeroDivisionError`"
+msgstr ":exc:`ZeroDivisionError`"
+
+#: ../../c-api/exceptions.rst:1028
+msgid ""
+":c:data:`PyExc_BlockingIOError`, :c:data:`PyExc_BrokenPipeError`, "
+":c:data:`PyExc_ChildProcessError`, :c:data:`PyExc_ConnectionError`, "
+":c:data:`PyExc_ConnectionAbortedError`, "
+":c:data:`PyExc_ConnectionRefusedError`, "
+":c:data:`PyExc_ConnectionResetError`, :c:data:`PyExc_FileExistsError`, "
+":c:data:`PyExc_FileNotFoundError`, :c:data:`PyExc_InterruptedError`, "
+":c:data:`PyExc_IsADirectoryError`, :c:data:`PyExc_NotADirectoryError`, "
+":c:data:`PyExc_PermissionError`, :c:data:`PyExc_ProcessLookupError` and "
+":c:data:`PyExc_TimeoutError` were introduced following :pep:`3151`."
+msgstr ""
+":c:data:`PyExc_BlockingIOError`, :c:data:`PyExc_BrokenPipeError`, "
+":c:data:`PyExc_ChildProcessError`, :c:data:`PyExc_ConnectionError`, "
+":c:data:`PyExc_ConnectionAbortedError`, "
+":c:data:`PyExc_ConnectionRefusedError`, "
+":c:data:`PyExc_ConnectionResetError`, :c:data:`PyExc_FileExistsError`, "
+":c:data:`PyExc_FileNotFoundError`, :c:data:`PyExc_InterruptedError`, "
+":c:data:`PyExc_IsADirectoryError`, :c:data:`PyExc_NotADirectoryError`, "
+":c:data:`PyExc_PermissionError`, :c:data:`PyExc_ProcessLookupError` e "
+":c:data:`PyExc_TimeoutError` foram introduzidos após :pep:`3151`."
+
+#: ../../c-api/exceptions.rst:1038
+msgid ":c:data:`PyExc_StopAsyncIteration` and :c:data:`PyExc_RecursionError`."
+msgstr ":c:data:`PyExc_StopAsyncIteration` e :c:data:`PyExc_RecursionError`."
+
+#: ../../c-api/exceptions.rst:1041
+msgid ":c:data:`PyExc_ModuleNotFoundError`."
+msgstr ":c:data:`PyExc_ModuleNotFoundError`."
+
+#: ../../c-api/exceptions.rst:1044
+msgid "These are compatibility aliases to :c:data:`PyExc_OSError`:"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1054
+msgid ":c:data:`!PyExc_EnvironmentError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1056
+msgid ":c:data:`!PyExc_IOError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1058
+msgid ":c:data:`!PyExc_WindowsError`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1058
+msgid "[2]_"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1061
+msgid "These aliases used to be separate exception types."
+msgstr "Esses aliases costumavam ser tipos de exceção separados."
+
+#: ../../c-api/exceptions.rst:1064 ../../c-api/exceptions.rst:1125
+msgid "Notes:"
+msgstr "Notas:"
+
+#: ../../c-api/exceptions.rst:1067
+msgid "This is a base class for other standard exceptions."
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1070
+msgid ""
+"Only defined on Windows; protect code that uses this by testing that the "
+"preprocessor macro ``MS_WINDOWS`` is defined."
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1076
+msgid "Standard Warning Categories"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1078
+msgid ""
+"All standard Python warning categories are available as global variables "
+"whose names are ``PyExc_`` followed by the Python exception name. These have"
+" the type :c:expr:`PyObject*`; they are all class objects. For completeness,"
+" here are all the variables:"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1099
+msgid ":c:data:`PyExc_Warning`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1099
+msgid ":exc:`Warning`"
+msgstr ":exc:`Warning`"
+
+#: ../../c-api/exceptions.rst:1099
+msgid "[3]_"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1101
+msgid ":c:data:`PyExc_BytesWarning`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1101
+msgid ":exc:`BytesWarning`"
+msgstr ":exc:`BytesWarning`"
+
+#: ../../c-api/exceptions.rst:1103
+msgid ":c:data:`PyExc_DeprecationWarning`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1103
+msgid ":exc:`DeprecationWarning`"
+msgstr ":exc:`DeprecationWarning`"
+
+#: ../../c-api/exceptions.rst:1105
+msgid ":c:data:`PyExc_FutureWarning`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1105
+msgid ":exc:`FutureWarning`"
+msgstr ":exc:`FutureWarning`"
+
+#: ../../c-api/exceptions.rst:1107
+msgid ":c:data:`PyExc_ImportWarning`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1107
+msgid ":exc:`ImportWarning`"
+msgstr ":exc:`ImportWarning`"
+
+#: ../../c-api/exceptions.rst:1109
+msgid ":c:data:`PyExc_PendingDeprecationWarning`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1109
+msgid ":exc:`PendingDeprecationWarning`"
+msgstr ":exc:`PendingDeprecationWarning`"
+
+#: ../../c-api/exceptions.rst:1111
+msgid ":c:data:`PyExc_ResourceWarning`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1111
+msgid ":exc:`ResourceWarning`"
+msgstr ":exc:`ResourceWarning`"
+
+#: ../../c-api/exceptions.rst:1113
+msgid ":c:data:`PyExc_RuntimeWarning`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1113
+msgid ":exc:`RuntimeWarning`"
+msgstr ":exc:`RuntimeWarning`"
+
+#: ../../c-api/exceptions.rst:1115
+msgid ":c:data:`PyExc_SyntaxWarning`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1115
+msgid ":exc:`SyntaxWarning`"
+msgstr ":exc:`SyntaxWarning`"
+
+#: ../../c-api/exceptions.rst:1117
+msgid ":c:data:`PyExc_UnicodeWarning`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1117
+msgid ":exc:`UnicodeWarning`"
+msgstr ":exc:`UnicodeWarning`"
+
+#: ../../c-api/exceptions.rst:1119
+msgid ":c:data:`PyExc_UserWarning`"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1119
+msgid ":exc:`UserWarning`"
+msgstr ":exc:`UserWarning`"
+
+#: ../../c-api/exceptions.rst:1122
+msgid ":c:data:`PyExc_ResourceWarning`."
+msgstr ":c:data:`PyExc_ResourceWarning`."
+
+#: ../../c-api/exceptions.rst:1128
+msgid "This is a base class for other standard warning categories."
+msgstr ""
+
+#: ../../c-api/exceptions.rst:151
+msgid "strerror (C function)"
+msgstr "strerror (função C)"
+
+#: ../../c-api/exceptions.rst:551 ../../c-api/exceptions.rst:582
+#: ../../c-api/exceptions.rst:597
+msgid "module"
+msgstr "módulo"
+
+#: ../../c-api/exceptions.rst:551 ../../c-api/exceptions.rst:582
+#: ../../c-api/exceptions.rst:597
+msgid "signal"
+msgstr "sinal"
+
+#: ../../c-api/exceptions.rst:551 ../../c-api/exceptions.rst:582
+msgid "SIGINT (C macro)"
+msgstr "SIGINT (macro C)"
+
+#: ../../c-api/exceptions.rst:551 ../../c-api/exceptions.rst:582
+#: ../../c-api/exceptions.rst:597
+msgid "KeyboardInterrupt (built-in exception)"
+msgstr "KeyboardInterrupt (exceção embutida)"
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_BaseException (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_Exception (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_ArithmeticError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_AssertionError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_AttributeError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_BlockingIOError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_BrokenPipeError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_BufferError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_ChildProcessError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_ConnectionAbortedError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_ConnectionError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_ConnectionRefusedError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_ConnectionResetError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_EOFError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_FileExistsError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_FileNotFoundError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_FloatingPointError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_GeneratorExit (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_ImportError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_IndentationError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_IndexError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_InterruptedError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_IsADirectoryError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_KeyError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_KeyboardInterrupt (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_LookupError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_MemoryError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_ModuleNotFoundError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_NameError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_NotADirectoryError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_NotImplementedError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_OSError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_OverflowError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_PermissionError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_ProcessLookupError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_RecursionError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_ReferenceError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_RuntimeError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_StopAsyncIteration (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_StopIteration (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_SyntaxError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_SystemError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_SystemExit (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_TabError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_TimeoutError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_TypeError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_UnboundLocalError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_UnicodeDecodeError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_UnicodeEncodeError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_UnicodeError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_UnicodeTranslateError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_ValueError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:863
+msgid "PyExc_ZeroDivisionError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1046
+msgid "PyExc_EnvironmentError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1046
+msgid "PyExc_IOError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1046
+msgid "PyExc_WindowsError (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1083
+msgid "PyExc_Warning (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1083
+msgid "PyExc_BytesWarning (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1083
+msgid "PyExc_DeprecationWarning (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1083
+msgid "PyExc_FutureWarning (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1083
+msgid "PyExc_ImportWarning (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1083
+msgid "PyExc_PendingDeprecationWarning (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1083
+msgid "PyExc_ResourceWarning (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1083
+msgid "PyExc_RuntimeWarning (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1083
+msgid "PyExc_SyntaxWarning (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1083
+msgid "PyExc_UnicodeWarning (C var)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:1083
+msgid "PyExc_UserWarning (C var)"
+msgstr ""

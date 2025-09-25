@@ -1,0 +1,1197 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2001-2025, Python Software Foundation
+# This file is distributed under the same license as the Python package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# python-doc bot, 2025
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Python 3.11\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-25 16:33+0000\n"
+"PO-Revision-Date: 2025-09-22 16:49+0000\n"
+"Last-Translator: python-doc bot, 2025\n"
+"Language-Team: Swedish (https://app.transifex.com/python-doc/teams/5390/sv/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sv\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../../extending/newtypes_tutorial.rst:7
+msgid "Defining Extension Types: Tutorial"
+msgstr "Definiera typer av tillägg: Handledning"
+
+#: ../../extending/newtypes_tutorial.rst:14
+msgid ""
+"Python allows the writer of a C extension module to define new types that "
+"can be manipulated from Python code, much like the built-in :class:`str` and"
+" :class:`list` types.  The code for all extension types follows a pattern, "
+"but there are some details that you need to understand before you can get "
+"started.  This document is a gentle introduction to the topic."
+msgstr ""
+"Python tillåter skribenten av en C-tilläggsmodul att definiera nya typer som"
+" kan manipuleras från Python-kod, ungefär som de inbyggda typerna "
+":class:`str` och :class:`list`.  Koden för alla tilläggstyper följer ett "
+"mönster, men det finns några detaljer som du behöver förstå innan du kan "
+"komma igång.  Detta dokument är en lätt introduktion till ämnet."
+
+#: ../../extending/newtypes_tutorial.rst:24
+msgid "The Basics"
+msgstr "Grunderna"
+
+#: ../../extending/newtypes_tutorial.rst:26
+msgid ""
+"The :term:`CPython` runtime sees all Python objects as variables of type "
+":c:expr:`PyObject*`, which serves as a \"base type\" for all Python objects."
+" The :c:type:`PyObject` structure itself only contains the object's "
+":term:`reference count` and a pointer to the object's \"type object\". This "
+"is where the action is; the type object determines which (C) functions get "
+"called by the interpreter when, for instance, an attribute gets looked up on"
+" an object, a method called, or it is multiplied by another object.  These C"
+" functions are called \"type methods\"."
+msgstr ""
+"Körningsprogrammet :term:`CPython` ser alla Python-objekt som variabler av "
+"typen :c:expr:`PyObject*`, som fungerar som en \"bastyp\" för alla Python-"
+"objekt. Själva :c:type:`PyObject`-strukturen innehåller bara objektets "
+":term:`referensantal` och en pekare till objektets \"typobjekt\". Det är här"
+" det händer; typobjektet avgör vilka (C)-funktioner som anropas av tolken "
+"när t.ex. ett attribut slås upp på ett objekt, en metod anropas eller det "
+"multipliceras med ett annat objekt.  Dessa C-funktioner kallas "
+"\"typmetoder\"."
+
+#: ../../extending/newtypes_tutorial.rst:35
+msgid ""
+"So, if you want to define a new extension type, you need to create a new "
+"type object."
+msgstr ""
+"Om du vill definiera en ny förlängningstyp måste du alltså skapa ett nytt "
+"typobjekt."
+
+#: ../../extending/newtypes_tutorial.rst:38
+msgid ""
+"This sort of thing can only be explained by example, so here's a minimal, "
+"but complete, module that defines a new type named :class:`!Custom` inside a"
+" C extension module :mod:`!custom`:"
+msgstr ""
+"Den här typen av saker kan bara förklaras med exempel, så här är en minimal,"
+" men komplett, modul som definierar en ny typ med namnet :class:`!Custom` "
+"inuti en C-tilläggsmodul :mod:`!custom`:"
+
+#: ../../extending/newtypes_tutorial.rst:43
+msgid ""
+"What we're showing here is the traditional way of defining *static* "
+"extension types.  It should be adequate for most uses.  The C API also "
+"allows defining heap-allocated extension types using the "
+":c:func:`PyType_FromSpec` function, which isn't covered in this tutorial."
+msgstr ""
+"Det vi visar här är det traditionella sättet att definiera *statiska* "
+"förlängningstyper.  Det bör vara tillräckligt för de flesta "
+"användningsområden.  C API tillåter också att definiera heap-allokerade "
+"tilläggstyper med hjälp av funktionen :c:func:`PyType_FromSpec`, som inte "
+"behandlas i denna handledning."
+
+#: ../../extending/newtypes_tutorial.rst:50
+msgid ""
+"Now that's quite a bit to take in at once, but hopefully bits will seem "
+"familiar from the previous chapter.  This file defines three things:"
+msgstr ""
+"Nu är det en hel del att ta in på en gång, men förhoppningsvis kommer bitar "
+"att verka bekanta från föregående kapitel.  Den här filen definierar tre "
+"saker:"
+
+#: ../../extending/newtypes_tutorial.rst:53
+msgid ""
+"What a :class:`!Custom` **object** contains: this is the ``CustomObject`` "
+"struct, which is allocated once for each :class:`!Custom` instance."
+msgstr ""
+"Vad ett :class:`!Custom` **objekt** innehåller: detta är strukturen "
+"``CustomObject``, som allokeras en gång för varje :class:`!Custom`-instans."
+
+#: ../../extending/newtypes_tutorial.rst:55
+msgid ""
+"How the :class:`!Custom` **type** behaves: this is the ``CustomType`` "
+"struct, which defines a set of flags and function pointers that the "
+"interpreter inspects when specific operations are requested."
+msgstr ""
+"Hur :class:`!Custom` **type** beter sig: detta är ``CustomType``-strukturen,"
+" som definierar en uppsättning flaggor och funktionspoängare som tolken "
+"inspekterar när specifika operationer begärs."
+
+#: ../../extending/newtypes_tutorial.rst:58
+msgid ""
+"How to initialize the :mod:`!custom` module: this is the ``PyInit_custom`` "
+"function and the associated ``custommodule`` struct."
+msgstr ""
+
+#: ../../extending/newtypes_tutorial.rst:61
+msgid "The first bit is::"
+msgstr "Den första biten är::"
+
+#: ../../extending/newtypes_tutorial.rst:67
+msgid ""
+"This is what a Custom object will contain.  ``PyObject_HEAD`` is mandatory "
+"at the start of each object struct and defines a field called ``ob_base`` of"
+" type :c:type:`PyObject`, containing a pointer to a type object and a "
+"reference count (these can be accessed using the macros :c:macro:`Py_TYPE` "
+"and :c:macro:`Py_REFCNT` respectively).  The reason for the macro is to "
+"abstract away the layout and to enable additional fields in :ref:`debug "
+"builds <debug-build>`."
+msgstr ""
+"Det här är vad ett Custom-objekt kommer att innehålla.  ``PyObject_HEAD`` är"
+" obligatoriskt i början av varje objektstruktur och definierar ett fält som "
+"heter ``ob_base`` av typen :c:type:`PyObject`, som innehåller en pekare till"
+" ett typobjekt och ett referensantal (dessa kan nås med hjälp av makrot "
+":c:macro:`Py_TYPE` respektive :c:macro:`Py_REFCNT`).  Anledningen till "
+"makrot är att abstrahera bort layouten och att möjliggöra ytterligare fält i"
+" :ref:`debug builds <debug-build>`."
+
+#: ../../extending/newtypes_tutorial.rst:76
+msgid ""
+"There is no semicolon above after the :c:macro:`PyObject_HEAD` macro. Be "
+"wary of adding one by accident: some compilers will complain."
+msgstr ""
+"Det finns inget semikolon ovan efter makrot :c:macro:`PyObject_HEAD`. Var "
+"försiktig med att lägga till ett av misstag: vissa kompilatorer kommer att "
+"klaga."
+
+#: ../../extending/newtypes_tutorial.rst:79
+msgid ""
+"Of course, objects generally store additional data besides the standard "
+"``PyObject_HEAD`` boilerplate; for example, here is the definition for "
+"standard Python floats::"
+msgstr ""
+"Naturligtvis lagrar objekt i allmänhet ytterligare data utöver standard "
+"``PyObject_HEAD``; här är till exempel definitionen för standard Python-"
+"flottor::"
+
+#: ../../extending/newtypes_tutorial.rst:88
+msgid "The second bit is the definition of the type object. ::"
+msgstr "Den andra biten är definitionen av typen objekt. ::"
+
+#: ../../extending/newtypes_tutorial.rst:101
+msgid ""
+"We recommend using C99-style designated initializers as above, to avoid "
+"listing all the :c:type:`PyTypeObject` fields that you don't care about and "
+"also to avoid caring about the fields' declaration order."
+msgstr ""
+"Vi rekommenderar att man använder C99-stil för angivna initialiserare enligt"
+" ovan, för att undvika att lista alla :c:type:`PyTypeObject`-fält som man "
+"inte bryr sig om och även för att undvika att bry sig om fältens "
+"deklarationsordning."
+
+#: ../../extending/newtypes_tutorial.rst:105
+msgid ""
+"The actual definition of :c:type:`PyTypeObject` in :file:`object.h` has many"
+" more :ref:`fields <type-structs>` than the definition above.  The remaining"
+" fields will be filled with zeros by the C compiler, and it's common "
+"practice to not specify them explicitly unless you need them."
+msgstr ""
+"Den faktiska definitionen av :c:type:`PyTypeObject` i :file:`object.h` har "
+"många fler :ref:`fields <type-structs>` än definitionen ovan.  De "
+"återstående fälten kommer att fyllas med nollor av C-kompilatorn, och det är"
+" vanligt att inte ange dem explicit om du inte behöver dem."
+
+#: ../../extending/newtypes_tutorial.rst:110
+msgid "We're going to pick it apart, one field at a time::"
+msgstr "Vi kommer att plocka isär det, ett fält i taget::"
+
+#: ../../extending/newtypes_tutorial.rst:114
+msgid ""
+"This line is mandatory boilerplate to initialize the ``ob_base`` field "
+"mentioned above. ::"
+msgstr ""
+"Denna rad är en obligatorisk boilerplate för att initiera fältet ``ob_base``"
+" som nämns ovan. ::"
+
+#: ../../extending/newtypes_tutorial.rst:119
+msgid ""
+"The name of our type.  This will appear in the default textual "
+"representation of our objects and in some error messages, for example:"
+msgstr ""
+"Namnet på vår typ.  Detta kommer att visas i standardtextrepresentationen av"
+" våra objekt och i vissa felmeddelanden, till exempel:"
+
+#: ../../extending/newtypes_tutorial.rst:129
+msgid ""
+"Note that the name is a dotted name that includes both the module name and "
+"the name of the type within the module. The module in this case is "
+":mod:`!custom` and the type is :class:`!Custom`, so we set the type name to "
+":class:`!custom.Custom`. Using the real dotted import path is important to "
+"make your type compatible with the :mod:`pydoc` and :mod:`pickle` modules. "
+"::"
+msgstr ""
+"Observera att namnet är ett punktformat namn som innehåller både modulnamnet"
+" och namnet på typen i modulen. Modulen i det här fallet är :mod:`!custom` "
+"och typen är :class:`!Custom`, så vi sätter typnamnet till "
+":class:`!custom.Custom`. Att använda den riktiga prickade importvägen är "
+"viktigt för att göra din typ kompatibel med modulerna :mod:`pydoc` och "
+":mod:`pickle`. ::"
+
+#: ../../extending/newtypes_tutorial.rst:138
+msgid ""
+"This is so that Python knows how much memory to allocate when creating new "
+":class:`!Custom` instances.  :c:member:`~PyTypeObject.tp_itemsize` is only "
+"used for variable-sized objects and should otherwise be zero."
+msgstr ""
+"Detta för att Python ska veta hur mycket minne som ska allokeras när nya "
+":class:`!Custom`-instanser skapas. :c:member:`~PyTypeObject.tp_itemsize` "
+"används endast för objekt med variabel storlek och ska annars vara noll."
+
+#: ../../extending/newtypes_tutorial.rst:144
+msgid ""
+"If you want your type to be subclassable from Python, and your type has the "
+"same :c:member:`~PyTypeObject.tp_basicsize` as its base type, you may have "
+"problems with multiple inheritance.  A Python subclass of your type will "
+"have to list your type first in its :attr:`~class.__bases__`, or else it "
+"will not be able to call your type's :meth:`~object.__new__` method without "
+"getting an error.  You can avoid this problem by ensuring that your type has"
+" a larger value for :c:member:`~PyTypeObject.tp_basicsize` than its base "
+"type does.  Most of the time, this will be true anyway, because either your "
+"base type will be :class:`object`, or else you will be adding data members "
+"to your base type, and therefore increasing its size."
+msgstr ""
+
+#: ../../extending/newtypes_tutorial.rst:154
+msgid "We set the class flags to :c:macro:`Py_TPFLAGS_DEFAULT`. ::"
+msgstr "Vi sätter klassflaggorna till :c:macro:`Py_TPFLAGS_DEFAULT`. ::"
+
+#: ../../extending/newtypes_tutorial.rst:158
+msgid ""
+"All types should include this constant in their flags.  It enables all of "
+"the members defined until at least Python 3.3.  If you need further members,"
+" you will need to OR the corresponding flags."
+msgstr ""
+"Alla typer bör inkludera denna konstant i sina flaggor.  Den aktiverar alla "
+"medlemmar som definierats fram till åtminstone Python 3.3.  Om du behöver "
+"ytterligare medlemmar måste du OR motsvarande flaggor."
+
+#: ../../extending/newtypes_tutorial.rst:162
+msgid ""
+"We provide a doc string for the type in :c:member:`~PyTypeObject.tp_doc`. ::"
+msgstr ""
+"Vi tillhandahåller en dokumentsträng för typen i "
+":c:member:`~PyTypeObject.tp_doc`. ::"
+
+#: ../../extending/newtypes_tutorial.rst:166
+msgid ""
+"To enable object creation, we have to provide a "
+":c:member:`~PyTypeObject.tp_new` handler.  This is the equivalent of the "
+"Python method :meth:`~object.__new__`, but has to be specified explicitly.  "
+"In this case, we can just use the default implementation provided by the API"
+" function :c:func:`PyType_GenericNew`. ::"
+msgstr ""
+"För att möjliggöra skapandet av objekt måste vi tillhandahålla en "
+":c:member:`~PyTypeObject.tp_new`-hanterare.  Detta är motsvarigheten till "
+"Python-metoden :meth:`~object.__new__`, men måste specificeras explicit.  I "
+"det här fallet kan vi bara använda standardimplementeringen som "
+"tillhandahålls av API-funktionen :c:func:`PyType_GenericNew`. ::"
+
+#: ../../extending/newtypes_tutorial.rst:173
+msgid ""
+"Everything else in the file should be familiar, except for some code in "
+":c:func:`!PyInit_custom`::"
+msgstr ""
+
+#: ../../extending/newtypes_tutorial.rst:179
+msgid ""
+"This initializes the :class:`!Custom` type, filling in a number of members "
+"to the appropriate default values, including :c:member:`~PyObject.ob_type` "
+"that we initially set to ``NULL``. ::"
+msgstr ""
+"Detta initierar typen :class:`!Custom` och fyller i ett antal medlemmar med "
+"lämpliga standardvärden, inklusive :c:member:`~PyObject.ob_type` som vi "
+"ursprungligen satte till ``NULL``. ::"
+
+#: ../../extending/newtypes_tutorial.rst:190
+msgid ""
+"This adds the type to the module dictionary.  This allows us to create "
+":class:`!Custom` instances by calling the :class:`!Custom` class:"
+msgstr ""
+"Detta lägger till typen i modulens ordlista.  Detta gör att vi kan skapa "
+":class:`!Custom`-instanser genom att anropa :class:`!Custom`-klassen:"
+
+#: ../../extending/newtypes_tutorial.rst:198
+msgid ""
+"That's it!  All that remains is to build it; put the above code in a file "
+"called :file:`custom.c` and:"
+msgstr ""
+
+#: ../../extending/newtypes_tutorial.rst:207
+msgid "in a file called :file:`setup.py`; then typing"
+msgstr "i en fil som heter :file:`setup.py`; sedan skriver du"
+
+#: ../../extending/newtypes_tutorial.rst:213
+msgid ""
+"at a shell should produce a file :file:`custom.so` in a subdirectory; move "
+"to that directory and fire up Python --- you should be able to ``import "
+"custom`` and play around with Custom objects."
+msgstr ""
+
+#: ../../extending/newtypes_tutorial.rst:217
+msgid "That wasn't so hard, was it?"
+msgstr "Det var väl inte så svårt, eller hur?"
+
+#: ../../extending/newtypes_tutorial.rst:219
+msgid ""
+"Of course, the current Custom type is pretty uninteresting. It has no data "
+"and doesn't do anything. It can't even be subclassed."
+msgstr ""
+"Naturligtvis är den nuvarande Custom-typen ganska ointressant. Den har inga "
+"data och gör ingenting. Den kan inte ens underklassificeras."
+
+#: ../../extending/newtypes_tutorial.rst:223
+msgid ""
+"While this documentation showcases the standard :mod:`!distutils` module for"
+" building C extensions, it is recommended in real-world use cases to use the"
+" newer and better-maintained ``setuptools`` library.  Documentation on how "
+"to do this is out of scope for this document and can be found in the `Python"
+" Packaging User's Guide "
+"<https://packaging.python.org/tutorials/distributing-packages/>`_."
+msgstr ""
+
+#: ../../extending/newtypes_tutorial.rst:231
+msgid "Adding data and methods to the Basic example"
+msgstr "Lägga till data och metoder i Basic-exemplet"
+
+#: ../../extending/newtypes_tutorial.rst:233
+msgid ""
+"Let's extend the basic example to add some data and methods.  Let's also "
+"make the type usable as a base class. We'll create a new module, "
+":mod:`!custom2` that adds these capabilities:"
+msgstr ""
+"Låt oss utöka grundexemplet för att lägga till data och metoder.  Låt oss "
+"också göra typen användbar som basklass. Vi skapar en ny modul, "
+":mod:`!custom2`, som lägger till dessa funktioner:"
+
+#: ../../extending/newtypes_tutorial.rst:240
+msgid "This version of the module has a number of changes."
+msgstr "Denna version av modulen har ett antal ändringar."
+
+#: ../../extending/newtypes_tutorial.rst:242
+msgid "We've added an extra include::"
+msgstr ""
+
+#: ../../extending/newtypes_tutorial.rst:246
+msgid ""
+"This include provides declarations that we use to handle attributes, as "
+"described a bit later."
+msgstr ""
+
+#: ../../extending/newtypes_tutorial.rst:249
+msgid ""
+"The  :class:`!Custom` type now has three data attributes in its C struct, "
+"*first*, *last*, and *number*.  The *first* and *last* variables are Python "
+"strings containing first and last names.  The *number* attribute is a C "
+"integer."
+msgstr ""
+"Typen :class:`!Custom` har nu tre dataattribut i sin C-struktur, *first*, "
+"*last* och *number*.  Variablerna *first* och *last* är Python-strängar som "
+"innehåller för- och efternamn.  Attributet *number* är ett heltal i C."
+
+#: ../../extending/newtypes_tutorial.rst:253
+msgid "The object structure is updated accordingly::"
+msgstr "Objektstrukturen uppdateras i enlighet med detta::"
+
+#: ../../extending/newtypes_tutorial.rst:262
+msgid ""
+"Because we now have data to manage, we have to be more careful about object "
+"allocation and deallocation.  At a minimum, we need a deallocation method::"
+msgstr ""
+"Eftersom vi nu har data att hantera måste vi vara mer försiktiga med "
+"objektallokering och -deallokering.  Vi behöver åtminstone en metod för "
+"avallokering::"
+
+#: ../../extending/newtypes_tutorial.rst:273
+msgid "which is assigned to the :c:member:`~PyTypeObject.tp_dealloc` member::"
+msgstr "som är tilldelad :c:member:`~PyTypeObject.tp_dealloc` member::"
+
+#: ../../extending/newtypes_tutorial.rst:277
+msgid ""
+"This method first clears the reference counts of the two Python attributes. "
+":c:func:`Py_XDECREF` correctly handles the case where its argument is "
+"``NULL`` (which might happen here if ``tp_new`` failed midway).  It then "
+"calls the :c:member:`~PyTypeObject.tp_free` member of the object's type "
+"(computed by ``Py_TYPE(self)``) to free the object's memory.  Note that the "
+"object's type might not be :class:`!CustomType`, because the object may be "
+"an instance of a subclass."
+msgstr ""
+"Denna metod rensar först referensräkningarna för de två Python-attributen. "
+":c:func:`Py_XDECREF` hanterar korrekt fallet där dess argument är ``NULL`` "
+"(vilket kan hända här om ``tp_new`` misslyckades halvvägs).  Den anropar "
+"sedan :c:member:`~PyTypeObject.tp_free`-medlemmen av objektets typ (beräknad"
+" av ``Py_TYPE(self)``) för att frigöra objektets minne.  Observera att "
+"objektets typ kanske inte är :class:`!CustomType`, eftersom objektet kan "
+"vara en instans av en underklass."
+
+#: ../../extending/newtypes_tutorial.rst:286
+msgid ""
+"The explicit cast to ``destructor`` above is needed because we defined "
+"``Custom_dealloc`` to take a ``CustomObject *`` argument, but the "
+"``tp_dealloc`` function pointer expects to receive a ``PyObject *`` "
+"argument.  Otherwise, the compiler will emit a warning.  This is object-"
+"oriented polymorphism, in C!"
+msgstr ""
+
+#: ../../extending/newtypes_tutorial.rst:292
+msgid ""
+"We want to make sure that the first and last names are initialized to empty "
+"strings, so we provide a ``tp_new`` implementation::"
+msgstr ""
+"Vi vill se till att för- och efternamn initialiseras till tomma strängar, så"
+" vi tillhandahåller en ``tp_new``-implementering::"
+
+#: ../../extending/newtypes_tutorial.rst:316
+msgid "and install it in the :c:member:`~PyTypeObject.tp_new` member::"
+msgstr "och installera den i :c:member:`~PyTypeObject.tp_new` member::"
+
+#: ../../extending/newtypes_tutorial.rst:320
+msgid ""
+"The ``tp_new`` handler is responsible for creating (as opposed to "
+"initializing) objects of the type.  It is exposed in Python as the "
+":meth:`~object.__new__` method. It is not required to define a ``tp_new`` "
+"member, and indeed many extension types will simply reuse "
+":c:func:`PyType_GenericNew` as done in the first version of the "
+":class:`!Custom` type above.  In this case, we use the ``tp_new`` handler to"
+" initialize the ``first`` and ``last`` attributes to non-``NULL`` default "
+"values."
+msgstr ""
+"Hanteraren ``tp_new`` är ansvarig för att skapa (i motsats till att "
+"initialisera) objekt av typen.  Den exponeras i Python som metoden "
+":meth:`~object.__new__`. Det är inte nödvändigt att definiera en "
+"``tp_new``-medlem, och många tilläggstyper kommer helt enkelt att "
+"återanvända :c:func:`PyType_GenericNew`` som i den första versionen av "
+":class:`!Custom`-typen ovan.  I det här fallet använder vi hanteraren "
+"``tp_new`` för att initiera attributen ``first`` och ``last`` till "
+"standardvärden som inte är ``NULL``."
+
+#: ../../extending/newtypes_tutorial.rst:328
+msgid ""
+"``tp_new`` is passed the type being instantiated (not necessarily "
+"``CustomType``, if a subclass is instantiated) and any arguments passed when"
+" the type was called, and is expected to return the instance created.  "
+"``tp_new`` handlers always accept positional and keyword arguments, but they"
+" often ignore the arguments, leaving the argument handling to initializer "
+"(a.k.a. ``tp_init`` in C or ``__init__`` in Python) methods."
+msgstr ""
+"``tp_new`` får den typ som instansieras (inte nödvändigtvis ``CustomType``, "
+"om en underklass instansieras) och eventuella argument som skickades när "
+"typen anropades, och förväntas returnera den instans som skapats.  "
+"``tp_new``-hanterare accepterar alltid positions- och nyckelordsargument, "
+"men de ignorerar ofta argumenten och lämnar argumenthanteringen till "
+"initialiseringsmetoder (a.k.a. ``tp_init`` i C eller ``__init__`` i Python)."
+
+#: ../../extending/newtypes_tutorial.rst:336
+msgid ""
+"``tp_new`` shouldn't call ``tp_init`` explicitly, as the interpreter will do"
+" it itself."
+msgstr ""
+"``tp_new`` bör inte anropa ``tp_init`` explicit, eftersom tolken kommer att "
+"göra det själv."
+
+#: ../../extending/newtypes_tutorial.rst:339
+msgid ""
+"The ``tp_new`` implementation calls the :c:member:`~PyTypeObject.tp_alloc` "
+"slot to allocate memory::"
+msgstr ""
+"Implementationen ``tp_new`` anropar :c:member:`~PyTypeObject.tp_alloc` för "
+"att allokera minne::"
+
+#: ../../extending/newtypes_tutorial.rst:344
+msgid ""
+"Since memory allocation may fail, we must check the "
+":c:member:`~PyTypeObject.tp_alloc` result against ``NULL`` before "
+"proceeding."
+msgstr ""
+"Eftersom minnesallokering kan misslyckas måste vi kontrollera "
+":c:member:`~PyTypeObject.tp_alloc`-resultatet mot ``NULL`` innan vi "
+"fortsätter."
+
+#: ../../extending/newtypes_tutorial.rst:348
+msgid ""
+"We didn't fill the :c:member:`~PyTypeObject.tp_alloc` slot ourselves. Rather"
+" :c:func:`PyType_Ready` fills it for us by inheriting it from our base "
+"class, which is :class:`object` by default.  Most types use the default "
+"allocation strategy."
+msgstr ""
+"Vi har inte fyllt :c:member:`~PyTypeObject.tp_alloc`-platsen själva. "
+"Istället fyller :c:func:`PyType_Ready` den åt oss genom att ärva den från "
+"vår basklass, som är :class:`object` som standard.  De flesta typer använder"
+" standardallokeringsstrategin."
+
+#: ../../extending/newtypes_tutorial.rst:354
+msgid ""
+"If you are creating a co-operative :c:member:`~PyTypeObject.tp_new` (one "
+"that calls a base type's :c:member:`~PyTypeObject.tp_new` or "
+":meth:`~object.__new__`), you must *not* try to determine what method to "
+"call using method resolution order at runtime.  Always statically determine "
+"what type you are going to call, and call its "
+":c:member:`~PyTypeObject.tp_new` directly, or via ``type->tp_base->tp_new``."
+"  If you do not do this, Python subclasses of your type that also inherit "
+"from other Python-defined classes may not work correctly. (Specifically, you"
+" may not be able to create instances of such subclasses without getting a "
+":exc:`TypeError`.)"
+msgstr ""
+"Om du skapar en kooperativ :c:member:`~PyTypeObject.tp_new` (en som anropar "
+"en bastyps :c:member:`~PyTypeObject.tp_new` eller :meth:`~object.__new__`), "
+"får du *inte* försöka avgöra vilken metod som ska anropas med hjälp av "
+"metodresolutionsordning vid körning.  Bestäm alltid statiskt vilken typ du "
+"ska anropa, och anropa dess :c:member:`~PyTypeObject.tp_new` direkt, eller "
+"via ``type->tp_base->tp_new``.  Om du inte gör detta kan det hända att "
+"Python-subklasser av din typ som också ärver från andra Python-definierade "
+"klasser inte fungerar korrekt. (Specifikt kanske du inte kan skapa instanser"
+" av sådana subklasser utan att få ett :exc:`TypeError`)"
+
+#: ../../extending/newtypes_tutorial.rst:364
+msgid ""
+"We also define an initialization function which accepts arguments to provide"
+" initial values for our instance::"
+msgstr ""
+"Vi definierar också en initialiseringsfunktion som accepterar argument för "
+"att tillhandahålla initiala värden för vår instans::"
+
+#: ../../extending/newtypes_tutorial.rst:393
+msgid "by filling the :c:member:`~PyTypeObject.tp_init` slot. ::"
+msgstr "genom att fylla :c:member:`~PyTypeObject.tp_init` slot. ::"
+
+#: ../../extending/newtypes_tutorial.rst:397
+msgid ""
+"The :c:member:`~PyTypeObject.tp_init` slot is exposed in Python as the "
+":meth:`~object.__init__` method.  It is used to initialize an object after "
+"it's created.  Initializers always accept positional and keyword arguments, "
+"and they should return either ``0`` on success or ``-1`` on error."
+msgstr ""
+"Slotten :c:member:`~PyTypeObject.tp_init` exponeras i Python som metoden "
+":meth:`~object.__init__`.  Den används för att initiera ett objekt efter att"
+" det har skapats.  Initialiserare accepterar alltid positionella argument "
+"och nyckelordsargument, och de bör returnera antingen ``0`` vid framgång "
+"eller ``-1`` vid fel."
+
+#: ../../extending/newtypes_tutorial.rst:402
+msgid ""
+"Unlike the ``tp_new`` handler, there is no guarantee that ``tp_init`` is "
+"called at all (for example, the :mod:`pickle` module by default doesn't call"
+" :meth:`~object.__init__` on unpickled instances).  It can also be called "
+"multiple times.  Anyone can call the :meth:`!__init__` method on our "
+"objects.  For this reason, we have to be extra careful when assigning the "
+"new attribute values.  We might be tempted, for example to assign the "
+"``first`` member like this::"
+msgstr ""
+"Till skillnad från ``tp_new``-hanteraren finns det ingen garanti för att "
+"``tp_init`` anropas överhuvudtaget (till exempel anropar modulen "
+":mod:`pickle` som standard inte :meth:`~object.__init__` på instanser som "
+"inte har plockats upp).  Den kan också anropas flera gånger.  Vem som helst "
+"kan anropa metoden :meth:`!__init__` på våra objekt.  Av denna anledning "
+"måste vi vara extra försiktiga när vi tilldelar de nya attributvärdena.  Vi "
+"kan t.ex. frestas att tilldela ``first``-medlemmen så här::"
+
+#: ../../extending/newtypes_tutorial.rst:416
+msgid ""
+"But this would be risky.  Our type doesn't restrict the type of the "
+"``first`` member, so it could be any kind of object.  It could have a "
+"destructor that causes code to be executed that tries to access the "
+"``first`` member; or that destructor could release the :term:`Global "
+"interpreter Lock <GIL>` and let arbitrary code run in other threads that "
+"accesses and modifies our object."
+msgstr ""
+
+#: ../../extending/newtypes_tutorial.rst:423
+msgid ""
+"To be paranoid and protect ourselves against this possibility, we almost "
+"always reassign members before decrementing their reference counts.  When "
+"don't we have to do this?"
+msgstr ""
+"För att vara paranoid och skydda oss mot denna möjlighet omplacerar vi "
+"nästan alltid medlemmar innan vi minskar deras referensantal.  När behöver "
+"vi inte göra detta?"
+
+#: ../../extending/newtypes_tutorial.rst:427
+msgid "when we absolutely know that the reference count is greater than 1;"
+msgstr "när vi absolut vet att referensantalet är större än 1;"
+
+#: ../../extending/newtypes_tutorial.rst:429
+msgid ""
+"when we know that deallocation of the object [#]_ will neither release the "
+":term:`GIL` nor cause any calls back into our type's code;"
+msgstr ""
+
+#: ../../extending/newtypes_tutorial.rst:432
+msgid ""
+"when decrementing a reference count in a "
+":c:member:`~PyTypeObject.tp_dealloc` handler on a type which doesn't support"
+" cyclic garbage collection [#]_."
+msgstr ""
+"vid dekrementering av ett referensantal i en "
+":c:member:`~PyTypeObject.tp_dealloc`-hanterare på en typ som inte stöder "
+"cyklisk skräpinsamling [#]_."
+
+#: ../../extending/newtypes_tutorial.rst:435
+msgid ""
+"We want to expose our instance variables as attributes. There are a number "
+"of ways to do that. The simplest way is to define member definitions::"
+msgstr ""
+"Vi vill exponera våra instansvariabler som attribut. Det finns ett antal "
+"olika sätt att göra det på. Det enklaste sättet är att definiera "
+"medlemsdefinitioner::"
+
+#: ../../extending/newtypes_tutorial.rst:448
+msgid ""
+"and put the definitions in the :c:member:`~PyTypeObject.tp_members` slot::"
+msgstr ""
+"och placera definitionerna i :c:member:`~PyTypeObject.tp_members` slot::"
+
+#: ../../extending/newtypes_tutorial.rst:452
+msgid ""
+"Each member definition has a member name, type, offset, access flags and "
+"documentation string.  See the :ref:`Generic-Attribute-Management` section "
+"below for details."
+msgstr ""
+"Varje medlemsdefinition har ett medlemsnamn, typ, offset, åtkomstflaggor och"
+" dokumentationssträng.  Se avsnittet :ref:`Generic-Attribute-Management` "
+"nedan för mer information."
+
+#: ../../extending/newtypes_tutorial.rst:456
+msgid ""
+"A disadvantage of this approach is that it doesn't provide a way to restrict"
+" the types of objects that can be assigned to the Python attributes.  We "
+"expect the first and last names to be strings, but any Python objects can be"
+" assigned. Further, the attributes can be deleted, setting the C pointers to"
+" ``NULL``.  Even though we can make sure the members are initialized to "
+"non-``NULL`` values, the members can be set to ``NULL`` if the attributes "
+"are deleted."
+msgstr ""
+"En nackdel med detta tillvägagångssätt är att det inte ger något sätt att "
+"begränsa de typer av objekt som kan tilldelas Python-attributen.  Vi "
+"förväntar oss att för- och efternamn ska vara strängar, men alla Python-"
+"objekt kan tilldelas. Dessutom kan attributen tas bort genom att C-pekarna "
+"sätts till ``NULL``.  Även om vi kan se till att medlemmarna initialiseras "
+"till värden som inte är ``NULL``, kan medlemmarna sättas till ``NULL`` om "
+"attributen raderas."
+
+#: ../../extending/newtypes_tutorial.rst:463
+msgid ""
+"We define a single method, :meth:`!Custom.name()`, that outputs the objects "
+"name as the concatenation of the first and last names. ::"
+msgstr ""
+
+#: ../../extending/newtypes_tutorial.rst:480
+msgid ""
+"The method is implemented as a C function that takes a :class:`!Custom` (or "
+":class:`!Custom` subclass) instance as the first argument.  Methods always "
+"take an instance as the first argument. Methods often take positional and "
+"keyword arguments as well, but in this case we don't take any and don't need"
+" to accept a positional argument tuple or keyword argument dictionary. This "
+"method is equivalent to the Python method:"
+msgstr ""
+"Metoden är implementerad som en C-funktion som tar en instans av "
+":class:`!Custom` (eller :class:`!Custom` subclass) som första argument.  "
+"Metoder tar alltid en instans som första argument. Metoder tar ofta "
+"positionella argument och nyckelordsargument också, men i det här fallet tar"
+" vi inga och behöver inte acceptera en tupel med positionella argument eller"
+" en ordbok med nyckelordsargument. Denna metod är likvärdig med Python-"
+"metoden:"
+
+#: ../../extending/newtypes_tutorial.rst:492
+msgid ""
+"Note that we have to check for the possibility that our :attr:`!first` and "
+":attr:`!last` members are ``NULL``.  This is because they can be deleted, in"
+" which case they are set to ``NULL``.  It would be better to prevent "
+"deletion of these attributes and to restrict the attribute values to be "
+"strings.  We'll see how to do that in the next section."
+msgstr ""
+"Observera att vi måste kontrollera om våra medlemmar :attr:`!first` och "
+":attr:`!last` är ``NULL``.  Detta beror på att de kan raderas, i vilket fall"
+" de sätts till ``NULL``.  Det vore bättre att förhindra radering av dessa "
+"attribut och att begränsa attributvärdena till strängar.  Vi ska se hur man "
+"gör det i nästa avsnitt."
+
+#: ../../extending/newtypes_tutorial.rst:498
+msgid ""
+"Now that we've defined the method, we need to create an array of method "
+"definitions::"
+msgstr ""
+"Nu när vi har definierat metoden måste vi skapa en matris med "
+"metoddefinitioner::"
+
+#: ../../extending/newtypes_tutorial.rst:508
+msgid ""
+"(note that we used the :c:macro:`METH_NOARGS` flag to indicate that the "
+"method is expecting no arguments other than *self*)"
+msgstr ""
+"(notera att vi använde :c:macro:`METH_NOARGS`-flaggan för att ange att "
+"metoden inte förväntar sig några andra argument än *self*)"
+
+#: ../../extending/newtypes_tutorial.rst:511
+msgid "and assign it to the :c:member:`~PyTypeObject.tp_methods` slot::"
+msgstr "och tilldela den till :c:member:`~PyTypeObject.tp_methods` slot::"
+
+#: ../../extending/newtypes_tutorial.rst:515
+msgid ""
+"Finally, we'll make our type usable as a base class for subclassing.  We've "
+"written our methods carefully so far so that they don't make any assumptions"
+" about the type of the object being created or used, so all we need to do is"
+" to add the :c:macro:`Py_TPFLAGS_BASETYPE` to our class flag definition::"
+msgstr ""
+"Slutligen ska vi göra vår typ användbar som basklass för underklassning.  Vi"
+" har hittills skrivit våra metoder noggrant så att de inte gör några "
+"antaganden om typen av det objekt som skapas eller används, så allt vi "
+"behöver göra är att lägga till :c:macro:`Py_TPFLAGS_BASETYPE` till vår "
+"klassflaggdefinition::"
+
+#: ../../extending/newtypes_tutorial.rst:522
+msgid ""
+"We rename :c:func:`!PyInit_custom` to :c:func:`!PyInit_custom2`, update the "
+"module name in the :c:type:`PyModuleDef` struct, and update the full class "
+"name in the :c:type:`PyTypeObject` struct."
+msgstr ""
+"Vi byter namn på :c:func:`!PyInit_custom` till :c:func:`!PyInit_custom2`, "
+"uppdaterar modulnamnet i struct:en :c:type:`PyModuleDef` och uppdaterar det "
+"fullständiga klassnamnet i struct:en :c:type:`PyTypeObject`."
+
+#: ../../extending/newtypes_tutorial.rst:526
+msgid "Finally, we update our :file:`setup.py` file to build the new module:"
+msgstr ""
+
+#: ../../extending/newtypes_tutorial.rst:539
+msgid "Providing finer control over data attributes"
+msgstr "Tillhandahåller finare kontroll över dataattribut"
+
+#: ../../extending/newtypes_tutorial.rst:541
+msgid ""
+"In this section, we'll provide finer control over how the :attr:`!first` and"
+" :attr:`!last` attributes are set in the :class:`!Custom` example. In the "
+"previous version of our module, the instance variables :attr:`!first` and "
+":attr:`!last` could be set to non-string values or even deleted. We want to "
+"make sure that these attributes always contain strings."
+msgstr ""
+"I det här avsnittet ska vi ge finare kontroll över hur attributen "
+":attr:`!first` och :attr:`!last` anges i exemplet :class:`!Custom`. I den "
+"tidigare versionen av vår modul kunde instansvariablerna :attr:`!first` och "
+":attr:`!last` sättas till icke-strängvärden eller till och med raderas. Vi "
+"vill se till att dessa attribut alltid innehåller strängar."
+
+#: ../../extending/newtypes_tutorial.rst:550
+msgid ""
+"To provide greater control, over the :attr:`!first` and :attr:`!last` "
+"attributes, we'll use custom getter and setter functions.  Here are the "
+"functions for getting and setting the :attr:`!first` attribute::"
+msgstr ""
+"För att ge större kontroll över attributen :attr:`!first` och :attr:`!last` "
+"använder vi anpassade getter- och setter-funktioner.  Här är funktionerna "
+"för att hämta och ställa in attributet :attr:`!first`::"
+
+#: ../../extending/newtypes_tutorial.rst:581
+msgid ""
+"The getter function is passed a :class:`!Custom` object and a \"closure\", "
+"which is a void pointer.  In this case, the closure is ignored.  (The "
+"closure supports an advanced usage in which definition data is passed to the"
+" getter and setter. This could, for example, be used to allow a single set "
+"of getter and setter functions that decide the attribute to get or set based"
+" on data in the closure.)"
+msgstr ""
+"Getter-funktionen får ett :class:`!Custom`-objekt och en \"closure\", som är"
+" en void-pekare.  I det här fallet ignoreras closure.  (Closure stöder en "
+"avancerad användning där definitionsdata skickas till getter- och "
+"setterfunktionerna. Detta kan t.ex. användas för att tillåta en enda "
+"uppsättning getter- och setterfunktioner som bestämmer vilket attribut som "
+"ska hämtas eller sättas baserat på data i closure)"
+
+#: ../../extending/newtypes_tutorial.rst:587
+msgid ""
+"The setter function is passed the :class:`!Custom` object, the new value, "
+"and the closure.  The new value may be ``NULL``, in which case the attribute"
+" is being deleted.  In our setter, we raise an error if the attribute is "
+"deleted or if its new value is not a string."
+msgstr ""
+"Setter-funktionen får :class:`!Custom`-objektet, det nya värdet och "
+"avslutningen.  Det nya värdet kan vara ``NULL``, i vilket fall attributet "
+"tas bort.  I vår setter ger vi ett felmeddelande om attributet raderas eller"
+" om det nya värdet inte är en sträng."
+
+#: ../../extending/newtypes_tutorial.rst:592
+msgid "We create an array of :c:type:`PyGetSetDef` structures::"
+msgstr "Vi skapar en array av :c:type:`PyGetSetDef`-strukturer::"
+
+#: ../../extending/newtypes_tutorial.rst:602
+msgid "and register it in the :c:member:`~PyTypeObject.tp_getset` slot::"
+msgstr "och registrera den i :c:member:`~PyTypeObject.tp_getset` slot::"
+
+#: ../../extending/newtypes_tutorial.rst:606
+msgid ""
+"The last item in a :c:type:`PyGetSetDef` structure is the \"closure\" "
+"mentioned above.  In this case, we aren't using a closure, so we just pass "
+"``NULL``."
+msgstr ""
+"Det sista objektet i en :c:type:`PyGetSetDef`-struktur är den \"closure\" "
+"som nämns ovan.  I det här fallet använder vi inte en closure, så vi skickar"
+" bara ``NULL``."
+
+#: ../../extending/newtypes_tutorial.rst:609
+msgid "We also remove the member definitions for these attributes::"
+msgstr "Vi tar också bort medlemsdefinitionerna för dessa attribut::"
+
+#: ../../extending/newtypes_tutorial.rst:617
+msgid ""
+"We also need to update the :c:member:`~PyTypeObject.tp_init` handler to only"
+" allow strings [#]_ to be passed::"
+msgstr ""
+"Vi måste också uppdatera :c:member:`~PyTypeObject.tp_init`-handlaren så att "
+"den bara tillåter strängar [#]_ att skickas::"
+
+#: ../../extending/newtypes_tutorial.rst:646
+msgid ""
+"With these changes, we can assure that the ``first`` and ``last`` members "
+"are never ``NULL`` so we can remove checks for ``NULL`` values in almost all"
+" cases. This means that most of the :c:func:`Py_XDECREF` calls can be "
+"converted to :c:func:`Py_DECREF` calls.  The only place we can't change "
+"these calls is in the ``tp_dealloc`` implementation, where there is the "
+"possibility that the initialization of these members failed in ``tp_new``."
+msgstr ""
+"Med dessa ändringar kan vi försäkra oss om att medlemmarna ``first`` och "
+"``last`` aldrig är ``NULL`` så vi kan ta bort kontroller för ``NULL``-värden"
+" i nästan alla fall. Detta innebär att de flesta :c:func:`Py_XDECREF`-anrop "
+"kan konverteras till :c:func:`Py_DECREF`-anrop.  Det enda stället där vi "
+"inte kan ändra dessa anrop är i implementationen av ``tp_dealloc``, där det "
+"finns en möjlighet att initialiseringen av dessa medlemmar misslyckades i "
+"``tp_new``."
+
+#: ../../extending/newtypes_tutorial.rst:653
+msgid ""
+"We also rename the module initialization function and module name in the "
+"initialization function, as we did before, and we add an extra definition to"
+" the :file:`setup.py` file."
+msgstr ""
+"Vi byter också namn på modulinitialiseringsfunktionen och modulnamnet i "
+"initialiseringsfunktionen, som vi gjorde tidigare, och vi lägger till en "
+"extra definition i filen :file:`setup.py`."
+
+#: ../../extending/newtypes_tutorial.rst:659
+msgid "Supporting cyclic garbage collection"
+msgstr "Stöd för cyklisk skräpinsamling"
+
+#: ../../extending/newtypes_tutorial.rst:661
+msgid ""
+"Python has a :term:`cyclic garbage collector (GC) <garbage collection>` that"
+" can identify unneeded objects even when their reference counts are not "
+"zero. This can happen when objects are involved in cycles.  For example, "
+"consider:"
+msgstr ""
+"Python har en :term:``cyklisk garbage collector (GC) <garbage collection>`` "
+"som kan identifiera onödiga objekt även när deras referensantal inte är "
+"noll. Detta kan hända när objekt är involverade i cykler.  Tänk till exempel"
+" på:"
+
+#: ../../extending/newtypes_tutorial.rst:671
+msgid ""
+"In this example, we create a list that contains itself. When we delete it, "
+"it still has a reference from itself. Its reference count doesn't drop to "
+"zero. Fortunately, Python's cyclic garbage collector will eventually figure "
+"out that the list is garbage and free it."
+msgstr ""
+"I det här exemplet skapar vi en lista som innehåller sig själv. När vi tar "
+"bort den har den fortfarande en referens från sig själv. Dess referensantal "
+"sjunker inte till noll. Lyckligtvis kommer Pythons cykliska skräpsamlare så "
+"småningom att räkna ut att listan är skräp och frigöra den."
+
+#: ../../extending/newtypes_tutorial.rst:676
+msgid ""
+"In the second version of the :class:`!Custom` example, we allowed any kind "
+"of object to be stored in the :attr:`!first` or :attr:`!last` attributes "
+"[#]_. Besides, in the second and third versions, we allowed subclassing "
+":class:`!Custom`, and subclasses may add arbitrary attributes.  For any of "
+"those two reasons, :class:`!Custom` objects can participate in cycles:"
+msgstr ""
+"I den andra versionen av exemplet :class:`!Custom` tillät vi att alla typer "
+"av objekt lagrades i attributen :attr:`!first` eller :attr:`!last` [#]_. "
+"Dessutom, i den andra och tredje versionen, tillät vi underklassning av "
+":class:`!Custom`, och underklasser kan lägga till godtyckliga attribut.  Av "
+"någon av dessa två anledningar kan :class:`!Custom`-objekt delta i cykler:"
+
+#: ../../extending/newtypes_tutorial.rst:690
+msgid ""
+"To allow a :class:`!Custom` instance participating in a reference cycle to "
+"be properly detected and collected by the cyclic GC, our :class:`!Custom` "
+"type needs to fill two additional slots and to enable a flag that enables "
+"these slots:"
+msgstr ""
+"För att en :class:`!Custom`-instans som deltar i en referenscykel ska kunna "
+"upptäckas och samlas in på rätt sätt av den cykliska GC:n, måste vår "
+":class:`!Custom`-typ fylla två ytterligare slots och aktivera en flagga som "
+"aktiverar dessa slots:"
+
+#: ../../extending/newtypes_tutorial.rst:697
+msgid ""
+"First, the traversal method lets the cyclic GC know about subobjects that "
+"could participate in cycles::"
+msgstr ""
+"För det första låter traversalmetoden den cykliska GC:n veta om underobjekt "
+"som kan delta i cykler::"
+
+#: ../../extending/newtypes_tutorial.rst:717
+msgid ""
+"For each subobject that can participate in cycles, we need to call the "
+":c:func:`!visit` function, which is passed to the traversal method. The "
+":c:func:`!visit` function takes as arguments the subobject and the extra "
+"argument *arg* passed to the traversal method.  It returns an integer value "
+"that must be returned if it is non-zero."
+msgstr ""
+"För varje subobjekt som kan delta i cykler måste vi anropa funktionen "
+":c:func:`!visit`, som skickas till traversalmetoden. Funktionen "
+":c:func:`!visit` tar som argument subobjektet och det extra argumentet *arg*"
+" som skickas till traversalmetoden.  Den returnerar ett heltalsvärde som "
+"måste returneras om det inte är noll."
+
+#: ../../extending/newtypes_tutorial.rst:723
+msgid ""
+"Python provides a :c:func:`Py_VISIT` macro that automates calling visit "
+"functions.  With :c:func:`Py_VISIT`, we can minimize the amount of "
+"boilerplate in ``Custom_traverse``::"
+msgstr ""
+"Python tillhandahåller ett :c:func:`Py_VISIT`-makro som automatiserar anrop "
+"av visitfunktioner.  Med :c:func:`Py_VISIT` kan vi minimera mängden "
+"boilerplate i ``Custom_traverse``::"
+
+#: ../../extending/newtypes_tutorial.rst:736
+msgid ""
+"The :c:member:`~PyTypeObject.tp_traverse` implementation must name its "
+"arguments exactly *visit* and *arg* in order to use :c:func:`Py_VISIT`."
+msgstr ""
+"Implementationen :c:member:`~PyTypeObject.tp_traverse` måste namnge sina "
+"argument exakt *visit* och *arg* för att kunna använda :c:func:`Py_VISIT`."
+
+#: ../../extending/newtypes_tutorial.rst:739
+msgid ""
+"Second, we need to provide a method for clearing any subobjects that can "
+"participate in cycles::"
+msgstr ""
+"För det andra måste vi tillhandahålla en metod för att rensa alla "
+"underobjekt som kan delta i cycles::"
+
+#: ../../extending/newtypes_tutorial.rst:750
+msgid ""
+"Notice the use of the :c:func:`Py_CLEAR` macro.  It is the recommended and "
+"safe way to clear data attributes of arbitrary types while decrementing "
+"their reference counts.  If you were to call :c:func:`Py_XDECREF` instead on"
+" the attribute before setting it to ``NULL``, there is a possibility that "
+"the attribute's destructor would call back into code that reads the "
+"attribute again (*especially* if there is a reference cycle)."
+msgstr ""
+"Lägg märke till användningen av makrot :c:func:`Py_CLEAR`.  Det är det "
+"rekommenderade och säkra sättet att rensa dataattribut av godtyckliga typer "
+"samtidigt som deras referensantal dekrementeras.  Om du istället skulle "
+"anropa :c:func:`Py_XDECREF` på attributet innan du sätter det till ``NULL``,"
+" finns det en möjlighet att attributets destruktor skulle anropa tillbaka "
+"till kod som läser attributet igen (*särskilt* om det finns en "
+"referenscykel)."
+
+#: ../../extending/newtypes_tutorial.rst:758
+msgid "You could emulate :c:func:`Py_CLEAR` by writing::"
+msgstr "Du kan emulera :c:func:`Py_CLEAR` genom att skriva::"
+
+#: ../../extending/newtypes_tutorial.rst:765
+msgid ""
+"Nevertheless, it is much easier and less error-prone to always use "
+":c:func:`Py_CLEAR` when deleting an attribute.  Don't try to micro-optimize "
+"at the expense of robustness!"
+msgstr ""
+"Det är dock mycket enklare och mindre felbenäget att alltid använda "
+":c:func:`Py_CLEAR` när man tar bort ett attribut.  Försök inte mikrooptimera"
+" på bekostnad av robusthet!"
+
+#: ../../extending/newtypes_tutorial.rst:769
+msgid ""
+"The deallocator ``Custom_dealloc`` may call arbitrary code when clearing "
+"attributes.  It means the circular GC can be triggered inside the function. "
+"Since the GC assumes reference count is not zero, we need to untrack the "
+"object from the GC by calling :c:func:`PyObject_GC_UnTrack` before clearing "
+"members. Here is our reimplemented deallocator using "
+":c:func:`PyObject_GC_UnTrack` and ``Custom_clear``::"
+msgstr ""
+"Deallokatorn ``Custom_dealloc`` kan anropa godtycklig kod när attribut "
+"rensas.  Det betyder att den cirkulära GC kan utlösas inuti funktionen. "
+"Eftersom GC antar att referensantalet inte är noll måste vi spåra objektet "
+"från GC genom att anropa :c:func:`PyObject_GC_UnTrack` innan vi rensar "
+"medlemmar. Här är vår reimplementerade deallocator som använder "
+":c:func:`PyObject_GC_UnTrack` och ``Custom_clear``::"
+
+#: ../../extending/newtypes_tutorial.rst:784
+msgid ""
+"Finally, we add the :c:macro:`Py_TPFLAGS_HAVE_GC` flag to the class flags::"
+msgstr ""
+"Slutligen lägger vi till flaggan :c:macro:`Py_TPFLAGS_HAVE_GC` i klassen "
+"flags::"
+
+#: ../../extending/newtypes_tutorial.rst:788
+msgid ""
+"That's pretty much it.  If we had written custom "
+":c:member:`~PyTypeObject.tp_alloc` or :c:member:`~PyTypeObject.tp_free` "
+"handlers, we'd need to modify them for cyclic garbage collection.  Most "
+"extensions will use the versions automatically provided."
+msgstr ""
+"Det är i stort sett allt.  Om vi hade skrivit egna "
+":c:member:`~PyTypeObject.tp_alloc`- eller "
+":c:member:`~PyTypeObject.tp_free`-hanterare, skulle vi behöva modifiera dem "
+"för cyklisk skräpinsamling.  De flesta tillägg kommer att använda de "
+"versioner som automatiskt tillhandahålls."
+
+#: ../../extending/newtypes_tutorial.rst:794
+msgid "Subclassing other types"
+msgstr "Underklassificering av andra typer"
+
+#: ../../extending/newtypes_tutorial.rst:796
+msgid ""
+"It is possible to create new extension types that are derived from existing "
+"types. It is easiest to inherit from the built in types, since an extension "
+"can easily use the :c:type:`PyTypeObject` it needs. It can be difficult to "
+"share these :c:type:`PyTypeObject` structures between extension modules."
+msgstr ""
+"Det är möjligt att skapa nya tilläggstyper som härrör från befintliga typer."
+" Det är lättast att ärva från de inbyggda typerna, eftersom ett tillägg "
+"enkelt kan använda de :c:type:`PyTypeObject` som det behöver. Det kan vara "
+"svårt att dela dessa :c:type:`PyTypeObject`-strukturer mellan "
+"tilläggsmoduler."
+
+#: ../../extending/newtypes_tutorial.rst:801
+msgid ""
+"In this example we will create a :class:`!SubList` type that inherits from "
+"the built-in :class:`list` type. The new type will be completely compatible "
+"with regular lists, but will have an additional :meth:`!increment` method "
+"that increases an internal counter:"
+msgstr ""
+"I det här exemplet skapar vi en :class:`!SubList`-typ som ärver från den "
+"inbyggda :class:`list`-typen. Den nya typen kommer att vara helt kompatibel "
+"med vanliga listor, men kommer att ha en ytterligare "
+":meth:`!increment`-metod som ökar en intern räknare:"
+
+#: ../../extending/newtypes_tutorial.rst:821
+msgid ""
+"As you can see, the source code closely resembles the :class:`!Custom` "
+"examples in previous sections. We will break down the main differences "
+"between them. ::"
+msgstr ""
+"Som du kan se är källkoden mycket lik :class:`!Custom`-exemplen i tidigare "
+"avsnitt. Vi kommer att bryta ner de viktigaste skillnaderna mellan dem. ::"
+
+#: ../../extending/newtypes_tutorial.rst:829
+msgid ""
+"The primary difference for derived type objects is that the base type's "
+"object structure must be the first value.  The base type will already "
+"include the :c:func:`PyObject_HEAD` at the beginning of its structure."
+msgstr ""
+"Den primära skillnaden för objekt av härledd typ är att objektstrukturen för"
+" bastypen måste vara det första värdet.  Bastypen kommer redan att innehålla"
+" :c:func:`PyObject_HEAD` i början av sin struktur."
+
+#: ../../extending/newtypes_tutorial.rst:833
+msgid ""
+"When a Python object is a :class:`!SubList` instance, its ``PyObject *`` "
+"pointer can be safely cast to both ``PyListObject *`` and ``SubListObject "
+"*``::"
+msgstr ""
+"När ett Python-objekt är en :class:`!SubList`-instans, kan dess ``PyObject "
+"*``-pekare säkert kastas till både ``PyListObject *`` och ``SubListObject "
+"*``::"
+
+#: ../../extending/newtypes_tutorial.rst:845
+msgid ""
+"We see above how to call through to the :meth:`~object.__init__` method of "
+"the base type."
+msgstr ""
+"Vi ser ovan hur man anropar till :meth:`~object.__init__`-metoden för "
+"bastypen."
+
+#: ../../extending/newtypes_tutorial.rst:848
+msgid ""
+"This pattern is important when writing a type with custom "
+":c:member:`~PyTypeObject.tp_new` and :c:member:`~PyTypeObject.tp_dealloc` "
+"members.  The :c:member:`~PyTypeObject.tp_new` handler should not actually "
+"create the memory for the object with its "
+":c:member:`~PyTypeObject.tp_alloc`, but let the base class handle it by "
+"calling its own :c:member:`~PyTypeObject.tp_new`."
+msgstr ""
+"Detta mönster är viktigt när man skriver en typ med anpassade "
+":c:member:`~PyTypeObject.tp_new` och "
+":c:member:`~PyTypeObject.tp_dealloc`-medlemmar.  Hanteraren "
+":c:member:`~PyTypeObject.tp_new` ska inte skapa minnet för objektet med sin "
+":c:member:`~PyTypeObject.tp_alloc`, utan låta basklassen hantera det genom "
+"att anropa sin egen :c:member:`~PyTypeObject.tp_new`."
+
+#: ../../extending/newtypes_tutorial.rst:854
+msgid ""
+"The :c:type:`PyTypeObject` struct supports a "
+":c:member:`~PyTypeObject.tp_base` specifying the type's concrete base class."
+"  Due to cross-platform compiler issues, you can't fill that field directly "
+"with a reference to :c:type:`PyList_Type`; it should be done later in the "
+"module initialization function::"
+msgstr ""
+
+#: ../../extending/newtypes_tutorial.rst:882
+msgid ""
+"Before calling :c:func:`PyType_Ready`, the type structure must have the "
+":c:member:`~PyTypeObject.tp_base` slot filled in.  When we are deriving an "
+"existing type, it is not necessary to fill out the "
+":c:member:`~PyTypeObject.tp_alloc` slot with :c:func:`PyType_GenericNew` -- "
+"the allocation function from the base type will be inherited."
+msgstr ""
+"Innan :c:func:`PyType_Ready` anropas måste typstrukturen ha "
+":c:member:`~PyTypeObject.tp_base` slot ifylld.  När vi härleder en befintlig"
+" typ är det inte nödvändigt att fylla i :c:member:`~PyTypeObject.tp_alloc` "
+"med :c:func:`PyType_GenericNew` -- allokeringsfunktionen från bastypen "
+"kommer att ärvas."
+
+#: ../../extending/newtypes_tutorial.rst:888
+msgid ""
+"After that, calling :c:func:`PyType_Ready` and adding the type object to the"
+" module is the same as with the basic :class:`!Custom` examples."
+msgstr ""
+"Därefter anropas :c:func:`PyType_Ready` och typobjektet läggs till i modulen"
+" på samma sätt som i de grundläggande :class:`!Custom`-exemplen."
+
+#: ../../extending/newtypes_tutorial.rst:893
+msgid "Footnotes"
+msgstr "Fotnoter"
+
+#: ../../extending/newtypes_tutorial.rst:894
+msgid ""
+"This is true when we know that the object is a basic type, like a string or "
+"a float."
+msgstr ""
+"Detta är sant när vi vet att objektet är en grundläggande typ, som en sträng"
+" eller en float."
+
+#: ../../extending/newtypes_tutorial.rst:897
+msgid ""
+"We relied on this in the :c:member:`~PyTypeObject.tp_dealloc` handler in "
+"this example, because our type doesn't support garbage collection."
+msgstr ""
+"Vi förlitade oss på detta i :c:member:`~PyTypeObject.tp_dealloc`-hanteraren "
+"i det här exemplet, eftersom vår typ inte stöder garbage collection."
+
+#: ../../extending/newtypes_tutorial.rst:900
+msgid ""
+"We now know that the first and last members are strings, so perhaps we could"
+" be less careful about decrementing their reference counts, however, we "
+"accept instances of string subclasses.  Even though deallocating normal "
+"strings won't call back into our objects, we can't guarantee that "
+"deallocating an instance of a string subclass won't call back into our "
+"objects."
+msgstr ""
+"Vi vet nu att den första och den sista medlemmen är strängar, så vi kanske "
+"kan vara mindre försiktiga med att minska deras referensantal, men vi "
+"accepterar instanser av strängunderklasser.  Även om deallokering av normala"
+" strängar inte kommer att ringa tillbaka till våra objekt, kan vi inte "
+"garantera att deallokering av en instans av en strängunderklass inte kommer "
+"att ringa tillbaka till våra objekt."
+
+#: ../../extending/newtypes_tutorial.rst:906
+msgid ""
+"Also, even with our attributes restricted to strings instances, the user "
+"could pass arbitrary :class:`str` subclasses and therefore still create "
+"reference cycles."
+msgstr ""
+"Även med våra attribut begränsade till stränginstanser kan användaren skicka"
+" godtyckliga :class:`str`-subklasser och därför fortfarande skapa "
+"referenscykler."
