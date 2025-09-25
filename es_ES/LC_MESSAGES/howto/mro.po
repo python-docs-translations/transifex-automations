@@ -5,17 +5,18 @@
 #
 # Translators:
 # python-doc bot, 2025
+# Rafael Fontenelle <rffontenelle@gmail.com>, 2025
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-16 17:23+0000\n"
+"POT-Creation-Date: 2025-09-25 14:15+0000\n"
 "PO-Revision-Date: 2025-09-16 00:00+0000\n"
-"Last-Translator: python-doc bot, 2025\n"
-"Language-Team: Spanish (Spain) (https://app.transifex.com/python-doc/teams/"
-"5390/es_ES/)\n"
+"Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>, 2025\n"
+"Language-Team: Spanish (Spain) (https://app.transifex.com/python-doc/"
+"teams/5390/es_ES/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -25,7 +26,7 @@ msgstr ""
 
 #: ../../howto/mro.rst:4
 msgid "The Python 2.3 Method Resolution Order"
-msgstr ""
+msgstr "El orden de resolución de los métodos de Python 2.3"
 
 #: ../../howto/mro.rst:8
 msgid ""
@@ -33,10 +34,14 @@ msgid ""
 "documentation. The Method Resolution Order discussed here was *introduced* "
 "in Python 2.3, but it is still used in later versions -- including Python 3."
 msgstr ""
+"Este es un documento histórico, proporcionado como apéndice a la "
+"documentación oficial. El Orden de Resolución de Métodos discutido aquí fue "
+"*introducido* en Python 2.3, pero aún se usa en versiones posteriores -- "
+"incluyendo Python 3."
 
 #: ../../howto/mro.rst:13
 msgid "By `Michele Simionato <https://www.phyast.pitt.edu/~micheles/>`__."
-msgstr ""
+msgstr "Por `Michele Simionato <https://www.phyast.pitt.edu/~micheles/>`__."
 
 #: ../../howto/mro.rst:0
 msgid "Abstract"
@@ -50,10 +55,15 @@ msgid ""
 "not aware of other publicly available documents with the same scope, "
 "therefore it should be useful.*"
 msgstr ""
+"*Este documento está dirigido a programadores de Python que quieran entender "
+"el Orden de Resolución de Métodos C3 utilizado en Python 2.3. Aunque no está "
+"pensado para novatos, es bastante pedagógico con muchos ejemplos "
+"trabajados.  No conozco otros documentos disponibles públicamente con el "
+"mismo alcance, por lo que debería ser útil.*"
 
 #: ../../howto/mro.rst:23
 msgid "Disclaimer:"
-msgstr ""
+msgstr "Descargo de responsabilidad:"
 
 #: ../../howto/mro.rst:25
 msgid ""
@@ -62,10 +72,14 @@ msgid ""
 "follows* should *be correct, but I don't give any warranty.  Use it at your "
 "own risk and peril!*"
 msgstr ""
+"*Dono este documento a la Python Software Foundation, bajo la licencia "
+"Python 2.3.  Como es habitual en estas circunstancias, advierto al lector "
+"que lo que sigue* debería *ser correcto, pero no doy ninguna garantía.  "
+"Úselo bajo su propio riesgo y peligro*."
 
 #: ../../howto/mro.rst:30
 msgid "Acknowledgments:"
-msgstr ""
+msgstr "Agradecimientos:"
 
 #: ../../howto/mro.rst:32
 msgid ""
@@ -76,14 +90,20 @@ msgid ""
 "Rossum who enthusiastically added this document to the official Python 2.3 "
 "home-page.*"
 msgstr ""
+"*Toda la gente de la lista de correo de Python que me envió su apoyo. Paul "
+"Foley que me señaló varias imprecisiones y me hizo añadir la parte sobre el "
+"orden de precedencia local. David Goodger por su ayuda con el formato en "
+"reStructuredText. David Mertz por su ayuda con la edición. Por último, Guido "
+"van Rossum, que añadió con entusiasmo este documento a la página oficial de "
+"Python 2.3."
 
 #: ../../howto/mro.rst:40
 msgid "The beginning"
-msgstr ""
+msgstr "Inicio"
 
 #: ../../howto/mro.rst:42
 msgid "*Felix qui potuit rerum cognoscere causas* -- Virgilius"
-msgstr ""
+msgstr "*Felix qui potuit rerum cognoscere causas* -- Virgilius"
 
 #: ../../howto/mro.rst:44
 msgid ""
@@ -97,6 +117,15 @@ msgid ""
 "readable discussion of the C3 algorithm for Pythonistas who want to "
 "understand the reasons for the change."
 msgstr ""
+"Todo comenzó con un post de Samuele Pedroni en la lista de correo de "
+"desarrollo de Python [#]_.  En su post, Samuele mostraba que el orden de "
+"resolución de métodos de Python 2.2 no es monotónico y proponía reemplazarlo "
+"por el orden de resolución de métodos C3.  Guido estuvo de acuerdo con sus "
+"argumentos y por lo tanto ahora Python 2.3 utiliza C3.  El método C3 en sí "
+"no tiene nada que ver con Python, ya que fue inventado por gente que trabaja "
+"en Dylan y se describe en un documento destinado a los lispers [#]_.  El "
+"presente documento ofrece una discusión (esperemos) legible del algoritmo C3 "
+"para los Pythonistas que quieran entender las razones del cambio."
 
 #: ../../howto/mro.rst:55
 msgid ""
@@ -109,10 +138,19 @@ msgid ""
 "differs from the Python 2.2 method resolution order are so rare that no real "
 "breaking of code is expected.  Therefore:"
 msgstr ""
+"En primer lugar, permíteme señalar que lo que voy a decir sólo se aplica a "
+"las *nuevas clases de estilo* introducidas en Python 2.2:  Las *clases "
+"clásicas* mantienen su antiguo orden de resolución de métodos, primero la "
+"profundidad y luego de izquierda a derecha.  Por lo tanto, no hay ruptura de "
+"código antiguo para las clases clásicas; e incluso si en principio pudiera "
+"haber ruptura de código para las clases del nuevo estilo de Python 2.2, en "
+"la práctica los casos en los que el orden de resolución C3 difiere del orden "
+"de resolución de métodos de Python 2.2 son tan raros que no se espera una "
+"ruptura real de código.  Por lo tanto:"
 
 #: ../../howto/mro.rst:64
 msgid "*Don't be scared!*"
-msgstr ""
+msgstr "*¡No tengas miedo!*"
 
 #: ../../howto/mro.rst:66
 msgid ""
@@ -122,10 +160,16 @@ msgid ""
 "know how multiple inheritance works, then this paper is for you.  The good "
 "news is that things are not as complicated as you might expect."
 msgstr ""
+"Además, a menos que haga un uso intensivo de la herencia múltiple y tenga "
+"jerarquías no triviales, no necesita entender el algoritmo C3, y puede "
+"saltarse fácilmente este artículo.  Por otro lado, si realmente quieres "
+"saber cómo funciona la herencia múltiple, entonces este artículo es para "
+"ti.  La buena noticia es que las cosas no son tan complicadas como cabría "
+"esperar."
 
 #: ../../howto/mro.rst:73
 msgid "Let me begin with some basic definitions."
-msgstr ""
+msgstr "Comencemos con algunas definiciones básicas."
 
 #: ../../howto/mro.rst:75
 msgid ""
@@ -133,6 +177,9 @@ msgid ""
 "trivial task to specify the order in which methods are overridden, i.e. to "
 "specify the order of the ancestors of C."
 msgstr ""
+"Dada una clase C en una complicada jerarquía de herencia múltiple, es una "
+"tarea no banal especificar el orden en que se anulan los métodos, es decir, "
+"especificar el orden de los antepasados de C."
 
 #: ../../howto/mro.rst:79
 msgid ""
@@ -140,6 +187,9 @@ msgid ""
 "from the nearest ancestor to the furthest, is called the class precedence "
 "list or the *linearization* of C."
 msgstr ""
+"La lista de los antepasados de una clase C, incluida la propia clase, "
+"ordenados del antepasado más cercano al más lejano, se denomina lista de "
+"precedencia de clases o *linealización* de C."
 
 #: ../../howto/mro.rst:83
 msgid ""
@@ -147,6 +197,10 @@ msgid ""
 "linearization.  In the Python literature, the idiom \"the MRO of C\" is also "
 "used as a synonymous for the linearization of the class C."
 msgstr ""
+"El *Orden de Resolución de Métodos* (MRO) es el conjunto de reglas que "
+"construyen la linealización.  En la literatura de Python, el modismo \"el "
+"MRO de C\" también se utiliza como sinónimo de la linealización de la clase "
+"C."
 
 #: ../../howto/mro.rst:88
 msgid ""
@@ -157,6 +211,12 @@ msgid ""
 "it is more difficult to construct a linearization that respects *local "
 "precedence ordering* and *monotonicity*."
 msgstr ""
+"Por ejemplo, en el caso de una única jerarquía de herencia, si C es una "
+"subclase de C1, y C1 es una subclase de C2, entonces la linealización de C "
+"es simplemente la lista [C, C1 , C2].  Sin embargo, con jerarquías de "
+"herencia múltiple, la construcción de la linealización es más engorrosa, ya "
+"que es más difícil construir una linealización que respete el *ordenamiento "
+"de precedencia local* y la *monotonicidad*."
 
 #: ../../howto/mro.rst:96
 msgid ""
@@ -168,6 +228,13 @@ msgid ""
 "potentially introducing very subtle bugs.  Examples where this happens will "
 "be shown later."
 msgstr ""
+"Discutiré la ordenación de precedencia local más adelante, pero puedo dar la "
+"definición de monotonicidad aquí.  Una MRO es monotónica cuando lo siguiente "
+"es cierto:  *si C1 precede a C2 en la linealización de C, entonces C1 "
+"precede a C2 en la linealización de cualquier subclase de C*. De lo "
+"contrario, la inocua operación de derivar una nueva clase podría cambiar el "
+"orden de resolución de los métodos, introduciendo potencialmente errores muy "
+"sutiles.  Más adelante se mostrarán ejemplos en los que esto ocurre."
 
 #: ../../howto/mro.rst:104
 msgid ""
@@ -175,10 +242,14 @@ msgid ""
 "hierarchies, where it is not possible to derive a class such that its "
 "linearization respects all the desired properties."
 msgstr ""
+"No todas las clases admiten una linealización.  Hay casos, en jerarquías "
+"complicadas, en los que no es posible derivar una clase de forma que su "
+"linealización respete todas las propiedades deseadas."
 
 #: ../../howto/mro.rst:108
 msgid "Here I give an example of this situation. Consider the hierarchy"
 msgstr ""
+"A continuación expongo un ejemplo de esta situación. Considerar la jerarquía"
 
 #: ../../howto/mro.rst:116
 msgid ""
@@ -186,6 +257,9 @@ msgid ""
 "denoted with O the ``object`` class, which is the beginning of any hierarchy "
 "for new style classes:"
 msgstr ""
+"que se puede representar con el siguiente gráfico de herencia, donde he "
+"denotado con O la clase ``object``, que es el principio de cualquier "
+"jerarquía para nuevas clases de estilo:"
 
 #: ../../howto/mro.rst:120
 msgid ""
@@ -200,6 +274,16 @@ msgid ""
 "   \\   /\n"
 "     ?"
 msgstr ""
+" -----------\n"
+"|           |\n"
+"|    O      |\n"
+"|  /   \\    |\n"
+" - X    Y  /\n"
+"   |  / | /\n"
+"   | /  |/\n"
+"   A    B\n"
+"   \\   /\n"
+"     ?"
 
 #: ../../howto/mro.rst:133
 msgid ""
@@ -207,6 +291,9 @@ msgid ""
 "X precedes Y in A, but Y precedes X in B, therefore the method resolution "
 "order would be ambiguous in C."
 msgstr ""
+"En este caso, no es posible derivar una nueva clase C a partir de A y B, ya "
+"que X precede a Y en A, pero Y precede a X en B, por lo que el orden de "
+"resolución del método sería ambiguo en C."
 
 #: ../../howto/mro.rst:137
 msgid ""
@@ -215,56 +302,62 @@ msgid ""
 "hierarchies.  Python 2.2 instead does not raise an exception, but chooses an "
 "*ad hoc* ordering (CABXYO in this case)."
 msgstr ""
+"Python 2.3 lanza una excepción en esta situación (TypeError: MRO conflict "
+"among bases Y, X) prohibiendo al programador ingenuo crear jerarquías "
+"ambiguas.  Python 2.2 en cambio no lanza una excepción, pero elige una "
+"ordenación *ad hoc* (CABXYO en este caso)."
 
 #: ../../howto/mro.rst:143
 msgid "The C3 Method Resolution Order"
-msgstr ""
+msgstr "Orden de resolución del método C3"
 
 #: ../../howto/mro.rst:145
 msgid ""
 "Let me introduce a few simple notations which will be useful for the "
 "following discussion.  I will use the shortcut notation::"
 msgstr ""
+"Permítanme introducir algunas notaciones sencillas que serán útiles para la "
+"discusión que sigue.  Utilizaré la notación abreviada::"
 
 #: ../../howto/mro.rst:148
 msgid "C1 C2 ... CN"
-msgstr ""
+msgstr "C1 C2 ... CN"
 
 #: ../../howto/mro.rst:150
 msgid "to indicate the list of classes [C1, C2, ... , CN]."
-msgstr ""
+msgstr "para indicar la lista de clases [C1, C2, ... , CN]."
 
 #: ../../howto/mro.rst:152
 msgid "The *head* of the list is its first element::"
-msgstr ""
+msgstr "La *head* de la lista es su primer elemento::"
 
 #: ../../howto/mro.rst:154
 msgid "head = C1"
-msgstr ""
+msgstr "head = C1"
 
 #: ../../howto/mro.rst:156
 msgid "whereas the *tail* is the rest of the list::"
-msgstr ""
+msgstr "mientras que la *tail* es el resto de la lista::"
 
 #: ../../howto/mro.rst:158
 msgid "tail = C2 ... CN."
-msgstr ""
+msgstr "tail = C2 ... CN."
 
 #: ../../howto/mro.rst:160
 msgid "I shall also use the notation::"
-msgstr ""
+msgstr "También utilizaré la notación::"
 
 #: ../../howto/mro.rst:162
 msgid "C + (C1 C2 ... CN) = C C1 C2 ... CN"
-msgstr ""
+msgstr "C + (C1 C2 ... CN) = C C1 C2 ... CN"
 
 #: ../../howto/mro.rst:164
 msgid "to denote the sum of the lists [C] + [C1, C2, ... ,CN]."
-msgstr ""
+msgstr "para denotar la suma de las listas [C] + [C1, C2, ... ,CN]."
 
 #: ../../howto/mro.rst:166
 msgid "Now I can explain how the MRO works in Python 2.3."
-msgstr ""
+msgstr "Ahora puedo explicar cómo funciona el MRO en Python 2.3."
 
 #: ../../howto/mro.rst:168
 msgid ""
@@ -272,36 +365,45 @@ msgid ""
 "from the base classes B1, B2, ...  , BN.  We want to compute the "
 "linearization L[C] of the class C. The rule is the following:"
 msgstr ""
+"Consideremos una clase C en una jerarquía de herencia múltiple, en la que C "
+"hereda de las clases base B1, B2, ... .  , BN.  Queremos calcular la "
+"linealización L[C] de la clase C. La regla es la siguiente:"
 
 #: ../../howto/mro.rst:173
 msgid ""
 "*the linearization of C is the sum of C plus the merge of the linearizations "
 "of the parents and the list of the parents.*"
 msgstr ""
+"*la linealización de C es la suma de C más la fusión de las linealizaciones "
+"de los padres y la lista de los padres.*"
 
 #: ../../howto/mro.rst:176
 msgid "In symbolic notation::"
-msgstr ""
+msgstr "En notación simbólica::"
 
 #: ../../howto/mro.rst:178
 msgid "L[C(B1 ... BN)] = C + merge(L[B1] ... L[BN], B1 ... BN)"
-msgstr ""
+msgstr "L[C(B1 ... BN)] = C + merge(L[B1] ... L[BN], B1 ... BN)"
 
 #: ../../howto/mro.rst:180
 msgid ""
 "In particular, if C is the ``object`` class, which has no parents, the "
 "linearization is trivial::"
 msgstr ""
+"En particular, si C es la clase ``object``, que no tiene padres, la "
+"linealización es trivial::"
 
 #: ../../howto/mro.rst:183
 msgid "L[object] = object."
-msgstr ""
+msgstr "L[object] = object."
 
 #: ../../howto/mro.rst:185
 msgid ""
 "However, in general one has to compute the merge according to the following "
 "prescription:"
 msgstr ""
+"Sin embargo, en general hay que calcular la fusión según la siguiente "
+"prescripción:"
 
 #: ../../howto/mro.rst:188
 msgid ""
@@ -313,6 +415,13 @@ msgid ""
 "this case, it is impossible to construct the merge, Python 2.3 will refuse "
 "to create the class C and will raise an exception.*"
 msgstr ""
+"*toma la cabeza de la primera lista, es decir L[B1][0]; si esta cabeza no "
+"está en la cola de ninguna de las otras listas, entonces añádela a la "
+"linealización de C y elimínala de las listas en la fusión, de lo contrario "
+"mira la cabeza de la siguiente lista y tómala, si es una buena cabeza.  A "
+"continuación, repita la operación hasta que toda la clase se eliminan o es "
+"imposible encontrar buenas cabezas.  En este caso, es imposible construir la "
+"fusión, Python 2.3 se negará a crear la clase C y lanzará una excepción.*"
 
 #: ../../howto/mro.rst:197
 msgid ""
@@ -321,22 +430,30 @@ msgid ""
 "preserved (as in the example of serious order disagreement discussed above) "
 "then the merge cannot be computed."
 msgstr ""
+"Esta prescripción garantiza que la operación de fusión *conserva* el orden, "
+"si el orden puede conservarse.  Por otra parte, si el orden no se puede "
+"preservar (como en el ejemplo de desacuerdo de orden grave discutido "
+"anteriormente), entonces la fusión no se puede calcular."
 
 #: ../../howto/mro.rst:202
 msgid ""
 "The computation of the merge is trivial if C has only one parent (single "
 "inheritance); in this case::"
 msgstr ""
+"El cálculo de la combinación es trivial si C sólo tiene un padre (herencia "
+"única); en este caso::"
 
 #: ../../howto/mro.rst:205
 msgid "L[C(B)] = C + merge(L[B],B) = C + L[B]"
-msgstr ""
+msgstr "L[C(B)] = C + merge(L[B],B) = C + L[B]"
 
 #: ../../howto/mro.rst:207
 msgid ""
 "However, in the case of multiple inheritance things are more cumbersome and "
 "I don't expect you can understand the rule without a couple of examples ;-)"
 msgstr ""
+"Sin embargo, en el caso de la herencia múltiple las cosas son más engorrosas "
+"y no espero que se pueda entender la regla sin un par de ejemplos ;-)"
 
 #: ../../howto/mro.rst:212
 msgid "Examples"
@@ -344,11 +461,11 @@ msgstr "Ejemplos"
 
 #: ../../howto/mro.rst:214
 msgid "First example. Consider the following hierarchy:"
-msgstr ""
+msgstr "Primer ejemplo. Considerar la siguiente jerarquía:"
 
 #: ../../howto/mro.rst:224
 msgid "In this case the inheritance graph can be drawn as:"
-msgstr ""
+msgstr "En este caso, el gráfico de herencia puede dibujarse como:"
 
 #: ../../howto/mro.rst:226
 msgid ""
@@ -374,10 +491,31 @@ msgid ""
 "Level 0                 0 | A |                (more specialized)\n"
 "                           ---"
 msgstr ""
+"                          6\n"
+"                         ---\n"
+"Nivel 3                 | O |                  (más generalizado)\n"
+"                      /  ---  \\\n"
+"                     /    |    \\                      |\n"
+"                    /     |     \\                     |\n"
+"                   /      |      \\                    |\n"
+"                  ---    ---    ---                   |\n"
+"Nivel 2        3 | D | 4| E |  | F | 5                |\n"
+"                  ---    ---    ---                   |\n"
+"                   \\  \\ _ /       |                   |\n"
+"                    \\    / \\ _    |                   |\n"
+"                     \\  /      \\  |                   |\n"
+"                      ---      ---                    |\n"
+"Nivel 1            1 | B |    | C | 2                 |\n"
+"                      ---      ---                    |\n"
+"                        \\      /                      |\n"
+"                         \\    /                      \\ /\n"
+"                           ---\n"
+"Nivel 0                 0 | A |                (más especializado)\n"
+"                           ---"
 
 #: ../../howto/mro.rst:251
 msgid "The linearizations of O,D,E and F are trivial::"
-msgstr ""
+msgstr "Las linealizaciones de O,D,E y F son triviales::"
 
 #: ../../howto/mro.rst:253
 msgid ""
@@ -386,14 +524,18 @@ msgid ""
 "L[E] = E O\n"
 "L[F] = F O"
 msgstr ""
+"L[O] = O\n"
+"L[D] = D O\n"
+"L[E] = E O\n"
+"L[F] = F O"
 
 #: ../../howto/mro.rst:258
 msgid "The linearization of B can be computed as::"
-msgstr ""
+msgstr "La linealización de B puede calcularse como::"
 
 #: ../../howto/mro.rst:260
 msgid "L[B] = B + merge(DO, EO, DE)"
-msgstr ""
+msgstr "L[B] = B + merge(DO, EO, DE)"
 
 #: ../../howto/mro.rst:262
 msgid ""
@@ -403,14 +545,19 @@ msgid ""
 "the next sequence.  Then we see that E is a good head; we take it and we are "
 "reduced to compute ``merge(O,O)`` which gives O. Therefore::"
 msgstr ""
+"Vemos que D es una buena cabeza, por lo tanto la tomamos y nos reducimos a "
+"calcular ``merge(O,EO,E)``.  Ahora O no es una buena cabeza, ya que está en "
+"la cola de la secuencia EO.  En este caso la regla dice que tenemos que "
+"saltar a la siguiente secuencia.  Entonces vemos que E es una buena cabeza; "
+"la tomamos y nos reducimos a computar ``merge(O,O)`` que da O. Por lo tanto::"
 
 #: ../../howto/mro.rst:268
 msgid "L[B] =  B D E O"
-msgstr ""
+msgstr "L[B] =  B D E O"
 
 #: ../../howto/mro.rst:270
 msgid "Using the same procedure one finds::"
-msgstr ""
+msgstr "Utilizando el mismo procedimiento se encuentra::"
 
 #: ../../howto/mro.rst:272
 msgid ""
@@ -419,10 +566,14 @@ msgid ""
 "     = C + D + F + merge(O,O)\n"
 "     = C D F O"
 msgstr ""
+"L[C] = C + merge(DO,FO,DF)\n"
+"     = C + D + merge(O,FO,F)\n"
+"     = C + D + F + merge(O,O)\n"
+"     = C D F O"
 
 #: ../../howto/mro.rst:277
 msgid "Now we can compute::"
-msgstr ""
+msgstr "Ahora podemos calcular::"
 
 #: ../../howto/mro.rst:279
 msgid ""
@@ -434,6 +585,13 @@ msgid ""
 "     = A + B + C + D + E + F + merge(O,O)\n"
 "     = A B C D E F O"
 msgstr ""
+"L[A] = A + merge(BDEO,CDFO,BC)\n"
+"     = A + B + merge(DEO,CDFO,C)\n"
+"     = A + B + C + merge(DEO,DFO)\n"
+"     = A + B + C + D + merge(EO,FO)\n"
+"     = A + B + C + D + E + merge(O,FO)\n"
+"     = A + B + C + D + E + F + merge(O,O)\n"
+"     = A B C D E F O"
 
 #: ../../howto/mro.rst:287
 msgid ""
@@ -442,19 +600,28 @@ msgid ""
 "specialized classes) have higher precedence (see the inheritance graph).  "
 "However, this is not the general case."
 msgstr ""
+"En este ejemplo, la linealización se ordena de forma bastante bien según el "
+"nivel de herencia, en el sentido de que los niveles inferiores (es decir, "
+"las clases más especializadas) tienen mayor precedencia (véase el gráfico de "
+"herencia).  Sin embargo, este no es el caso general."
 
 #: ../../howto/mro.rst:292
 msgid ""
 "I leave as an exercise for the reader to compute the linearization for my "
 "second example:"
 msgstr ""
+"Dejo como ejercicio para el lector calcular la linealización para mi segundo "
+"ejemplo:"
 
 #: ../../howto/mro.rst:303
 msgid ""
-"The only difference with the previous example is the change B(D,E) --> "
-"B(E,D); however even such a little modification completely changes the "
-"ordering of the hierarchy:"
+"The only difference with the previous example is the change B(D,E) --> B(E,"
+"D); however even such a little modification completely changes the ordering "
+"of the hierarchy:"
 msgstr ""
+"La única diferencia con el ejemplo anterior es el cambio B(D,E) --> B(E,D); "
+"sin embargo, incluso una modificación tan pequeña cambia completamente el "
+"orden de la jerarquía:"
 
 #: ../../howto/mro.rst:307
 msgid ""
@@ -480,6 +647,27 @@ msgid ""
 "Level 0                0 | A |\n"
 "                          ---"
 msgstr ""
+"                           6\n"
+"                          ---\n"
+"Nivel 3                  | O |\n"
+"                       /  ---  \\\n"
+"                      /    |    \\\n"
+"                     /     |     \\\n"
+"                    /      |      \\\n"
+"                  ---     ---    ---\n"
+"Nivel 2        2 | E | 4 | D |  | F | 5\n"
+"                  ---     ---    ---\n"
+"                   \\      / \\     /\n"
+"                    \\    /   \\   /\n"
+"                     \\  /     \\ /\n"
+"                      ---     ---\n"
+"Nivel 1            1 | B |   | C | 3\n"
+"                      ---     ---\n"
+"                       \\       /\n"
+"                        \\     /\n"
+"                          ---\n"
+"Nivel 0                0 | A |\n"
+"                          ---"
 
 #: ../../howto/mro.rst:332
 msgid ""
@@ -487,6 +675,10 @@ msgid ""
 "precedes the class C, which is in the first level of the hierarchy, i.e. E "
 "is more specialized than C, even if it is in a higher level."
 msgstr ""
+"Observar que la clase E, que se encuentra en el segundo nivel de la "
+"jerarquía, precede a la clase C, que se encuentra en el primer nivel de la "
+"jerarquía, es decir, E es más especializada que C, aunque se encuentre en un "
+"nivel superior."
 
 #: ../../howto/mro.rst:336
 msgid ""
@@ -494,6 +686,9 @@ msgid ""
 "case it coincides with the Python 2.3 linearization.  It is enough to invoke "
 "the :meth:`~type.mro` method of class A:"
 msgstr ""
+"Un programador perezoso puede obtener el MRO directamente de Python 2.2, ya "
+"que en este caso coincide con la linealización de Python 2.3.  Basta con "
+"invocar el método :meth:`~type.mro` de la clase A:"
 
 #: ../../howto/mro.rst:345
 msgid ""
@@ -501,6 +696,9 @@ msgid ""
 "involving a serious order disagreement.  In this case, it is straightforward "
 "to compute the linearizations of O, X, Y, A and B:"
 msgstr ""
+"Por último, permítanme considerar el ejemplo analizado en la primera "
+"sección, que implica un grave desacuerdo de orden.  En este caso, es "
+"sencillo calcular las linealizaciones de O, X, Y, A y B:"
 
 #: ../../howto/mro.rst:349
 msgid ""
@@ -510,12 +708,19 @@ msgid ""
 "L[A] = A X Y O\n"
 "L[B] = B Y X O"
 msgstr ""
+"L[O] = 0\n"
+"L[X] = X O\n"
+"L[Y] = Y O\n"
+"L[A] = A X Y O\n"
+"L[B] = B Y X O"
 
 #: ../../howto/mro.rst:357
 msgid ""
 "However, it is impossible to compute the linearization for a class C that "
 "inherits from A and B::"
 msgstr ""
+"Sin embargo, es imposible calcular la linealización para una clase C que "
+"hereda de A y B::"
 
 #: ../../howto/mro.rst:360
 msgid ""
@@ -523,6 +728,9 @@ msgid ""
 "     = C + A + merge(XYO, BYXO, B)\n"
 "     = C + A + B + merge(XYO, YXO)"
 msgstr ""
+"L[C] = C + merge(AXYO, BYXO, AB)\n"
+"     = C + A + merge(XYO, BYXO, B)\n"
+"     = C + A + B + merge(XYO, YXO)"
 
 #: ../../howto/mro.rst:364
 msgid ""
@@ -531,10 +739,14 @@ msgid ""
 "and the C3 algorithm stops.  Python 2.3 raises an error and refuses to "
 "create the class C."
 msgstr ""
+"En este punto no podemos fusionar las listas XYO e YXO, ya que X está en la "
+"cola de YXO mientras que Y está en la cola de XYO: por lo tanto no hay "
+"buenas cabezas y el algoritmo C3 se detiene.  Python 2.3 produce un error y "
+"se niega a crear la clase C."
 
 #: ../../howto/mro.rst:370
 msgid "Bad Method Resolution Orders"
-msgstr ""
+msgstr "Órdenes de resolución de malos métodos"
 
 #: ../../howto/mro.rst:372
 msgid ""
@@ -543,16 +755,22 @@ msgid ""
 "both the MRO for classic classes and the MRO for new style classes in Python "
 "2.2 are bad."
 msgstr ""
+"Una MRO es *mala* cuando rompe propiedades fundamentales como el orden de "
+"precedencia local y la monotonicidad.  En esta sección, mostraré que tanto "
+"la MRO para clases clásicas como la MRO para clases del nuevo estilo en "
+"Python 2.2 son malas."
 
 #: ../../howto/mro.rst:377
 msgid ""
 "It is easier to start with the local precedence ordering.  Consider the "
 "following example:"
 msgstr ""
+"Es más fácil empezar con el orden de precedencia local.  Considerar el "
+"siguiente ejemplo:"
 
 #: ../../howto/mro.rst:384
 msgid "with inheritance diagram"
-msgstr ""
+msgstr "con diagrama de herencia"
 
 #: ../../howto/mro.rst:386
 msgid ""
@@ -566,13 +784,25 @@ msgid ""
 "\n"
 "      (buy eggs or spam ?)"
 msgstr ""
+"             O\n"
+"             |\n"
+"(buy spam)   F\n"
+"             | \\\n"
+"             | E   (buy eggs)\n"
+"             | /\n"
+"             G\n"
+"\n"
+"      (buy eggs or spam ?)"
 
 #: ../../howto/mro.rst:399
 msgid ""
 "We see that class G inherits from F and E, with F *before* E:  therefore we "
-"would expect the attribute *G.remember2buy* to be inherited by "
-"*F.remember2buy* and not by *E.remember2buy*:  nevertheless Python 2.2 gives"
+"would expect the attribute *G.remember2buy* to be inherited by *F."
+"remember2buy* and not by *E.remember2buy*:  nevertheless Python 2.2 gives"
 msgstr ""
+"Vemos que la clase G hereda de F y E, con F *antes* de E: por lo tanto "
+"esperaríamos que el atributo *G.remember2buy* fuera heredado por *F."
+"remember2buy* y no por *E.remember2buy*: sin embargo Python 2.2 da"
 
 #: ../../howto/mro.rst:407
 msgid ""
@@ -580,10 +810,13 @@ msgid ""
 "precedence list, i.e. the list of the parents of G, is not preserved in the "
 "Python 2.2 linearization of G::"
 msgstr ""
+"Se trata de una ruptura del orden de precedencia local, ya que el orden en "
+"la lista de precedencia local, es decir, la lista de los padres de G, no se "
+"conserva en la linealización Python 2.2 de G::"
 
 #: ../../howto/mro.rst:411
 msgid "L[G,P22]= G E F object   # F *follows* E"
-msgstr ""
+msgstr "L[G,P22]= G E F object   # F *follows* E"
 
 #: ../../howto/mro.rst:413
 msgid ""
@@ -593,11 +826,17 @@ msgid ""
 "quite non-intuitive and error prone.  This is particularly true since it is "
 "a different from old style classes:"
 msgstr ""
+"Se podría argumentar que la razón por la que F sigue a E en la linealización "
+"de Python 2.2 es que F es menos especializada que E, ya que F es la "
+"superclase de E; no obstante, la ruptura del orden de precedencia local es "
+"bastante poco intuitiva y propensa a errores.  Esto es particularmente "
+"cierto ya que es una diferencia con las clases de estilo antiguo:"
 
 #: ../../howto/mro.rst:425
 msgid ""
 "In this case the MRO is GFEF and the local precedence ordering is preserved."
 msgstr ""
+"En este caso, la MRO es GFEF y se conserva el orden de precedencia local."
 
 #: ../../howto/mro.rst:428
 msgid ""
@@ -607,16 +846,23 @@ msgid ""
 "effectively stopping the programmer from generating ambiguous hierarchies.  "
 "The reason for that is that the C3 algorithm fails when the merge::"
 msgstr ""
+"Como regla general, jerarquías como la anterior deben evitarse, ya que no "
+"está claro si F debe anular a E o viceversa. Python 2.3 resuelve la "
+"ambigüedad lanzando una excepción en la creación de la clase G, impidiendo "
+"de hecho que el programador genere jerarquías ambiguas.  La razón de ello es "
+"que el algoritmo C3 falla cuando se utiliza el método merge::"
 
 #: ../../howto/mro.rst:435
 msgid "merge(FO,EFO,FE)"
-msgstr ""
+msgstr "merge(FO,EFO,FE)"
 
 #: ../../howto/mro.rst:437
 msgid ""
 "cannot be computed, because F is in the tail of EFO and E is in the tail of "
 "FE."
 msgstr ""
+"no se puede calcular, porque F está en la cola de EFO y E está en la cola de "
+"FE."
 
 #: ../../howto/mro.rst:440
 msgid ""
@@ -624,6 +870,9 @@ msgid ""
 "from E and F (the more specific first) and not from F and E; in this case "
 "the MRO is GEF without any doubt."
 msgstr ""
+"La verdadera solución es diseñar una jerarquía no ambigua, es decir, derivar "
+"G de E y F (la primera más específica) y no de F y E; en este caso, el MRO "
+"es GEF sin ninguna duda."
 
 #: ../../howto/mro.rst:444
 msgid ""
@@ -636,12 +885,22 @@ msgid ""
 "           G\n"
 "             (eggs, no doubt)"
 msgstr ""
+"           O\n"
+"           |\n"
+"           F (spam)\n"
+"         / |\n"
+"(eggs)   E |\n"
+"         \\ |\n"
+"           G\n"
+"             (eggs, no doubt)"
 
 #: ../../howto/mro.rst:456
 msgid ""
 "Python 2.3 forces the programmer to write good hierarchies (or, at least, "
 "less error-prone ones)."
 msgstr ""
+"Python 2.3 obliga al programador a escribir buenas jerarquías (o, al menos, "
+"menos propensas a errores)."
 
 #: ../../howto/mro.rst:459
 msgid ""
@@ -649,29 +908,40 @@ msgid ""
 "enough to recognize obvious mistakes, as the duplication of classes in the "
 "list of parents:"
 msgstr ""
+"En una nota relacionada, permítanme señalar que el algoritmo de Python 2.3 "
+"es lo suficientemente inteligente como para reconocer errores obvios, como "
+"la duplicación de clases en la lista de padres:"
 
 #: ../../howto/mro.rst:469
 msgid ""
 "Python 2.2 (both for classic classes and new style classes) in this "
 "situation, would not raise any exception."
 msgstr ""
+"Python 2.2 (tanto para clases clásicas como para clases del nuevo estilo) en "
+"esta situación, no lanzaría ninguna excepción."
 
 #: ../../howto/mro.rst:472
 msgid ""
 "Finally, I would like to point out two lessons we have learned from this "
 "example:"
 msgstr ""
+"Por último, me gustaría señalar dos lecciones que hemos aprendido de este "
+"ejemplo:"
 
 #: ../../howto/mro.rst:475
 msgid ""
 "despite the name, the MRO determines the resolution order of attributes, not "
 "only of methods;"
 msgstr ""
+"A pesar del nombre, el MRO determina el orden de resolución de los "
+"atributos, no sólo de los métodos;"
 
 #: ../../howto/mro.rst:478
 msgid ""
 "the default food for Pythonistas is spam !  (but you already knew that ;-)"
 msgstr ""
+"¡el alimento por defecto de los Pythonistas es el spam !  (pero eso ya lo "
+"sabías ;-)"
 
 #: ../../howto/mro.rst:481
 msgid ""
@@ -679,12 +949,18 @@ msgid ""
 "the issue of monotonicity.  My goal is to show that neither the MRO for "
 "classic classes nor that for Python 2.2 new style classes is monotonic."
 msgstr ""
+"Habiendo discutido el tema del orden de precedencia local, permítanme ahora "
+"considerar el tema de la monotonicidad.  Mi objetivo es demostrar que ni el "
+"MRO de las clases clásicas ni el de las clases del nuevo estilo de Python "
+"2.2 son monótonos."
 
 #: ../../howto/mro.rst:486
 msgid ""
 "To prove that the MRO for classic classes is non-monotonic is rather "
 "trivial, it is enough to look at the diamond diagram:"
 msgstr ""
+"Demostrar que la MRO para las clases clásicas es no monótona es bastante "
+"trivial, basta con observar el diagrama de diamante:"
 
 #: ../../howto/mro.rst:489
 msgid ""
@@ -696,26 +972,36 @@ msgid ""
 "  \\ /\n"
 "   D"
 msgstr ""
+"   C\n"
+"  / \\\n"
+" /   \\\n"
+"A     B\n"
+" \\   /\n"
+"  \\ /\n"
+"   D"
 
 #: ../../howto/mro.rst:500
 msgid "One easily discerns the inconsistency::"
-msgstr ""
+msgstr "Uno discierne fácilmente la incoherencia::"
 
 #: ../../howto/mro.rst:502
 msgid ""
 "L[B,P21] = B C        # B precedes C : B's methods win\n"
 "L[D,P21] = D A C B C  # B follows C  : C's methods win!"
 msgstr ""
+"L[B,P21] = B C # B precede a C : ganan los métodos de B\n"
+"L[D,P21] = D A C B C # B sigue a C : ganan los métodos de C"
 
 #: ../../howto/mro.rst:505
 msgid ""
 "On the other hand, there are no problems with the Python 2.2 and 2.3 MROs, "
 "they give both::"
 msgstr ""
+"Por otro lado, no hay problemas con los MRO de Python 2.2 y 2.3, dan ambos::"
 
 #: ../../howto/mro.rst:508
 msgid "L[D] = D A B C"
-msgstr ""
+msgstr "L[D] = D A B C"
 
 #: ../../howto/mro.rst:510
 msgid ""
@@ -724,6 +1010,11 @@ msgid ""
 "all new style classes inherit from ``object``, therefore diamonds are "
 "unavoidable and inconsistencies shows up in every multiple inheritance graph."
 msgstr ""
+"Guido señala en su ensayo [#]_ que el MRO clásico no es tan malo en la "
+"práctica, ya que normalmente se pueden evitar los diamantes para las clases "
+"clásicas. Pero todas las nuevas clases de estilo heredan de ``object``, por "
+"lo tanto los diamantes son inevitables y las inconsistencias aparecen en "
+"cada gráfico de herencia múltiple."
 
 #: ../../howto/mro.rst:516
 msgid ""
@@ -731,6 +1022,9 @@ msgid ""
 "impossible.  The following example, originally provided by Samuele Pedroni, "
 "shows that the MRO of Python 2.2 is non-monotonic:"
 msgstr ""
+"La MRO de Python 2.2 hace que romper la monotonicidad sea difícil, pero no "
+"imposible.  El siguiente ejemplo, originalmente proporcionado por Samuele "
+"Pedroni, muestra que la MRO de Python 2.2 no es monotónica:"
 
 #: ../../howto/mro.rst:530
 msgid ""
@@ -738,6 +1032,8 @@ msgid ""
 "verify these linearizations as an exercise and draw the inheritance "
 "diagram ;-) ::"
 msgstr ""
+"Aquí están las linealizaciones según el C3 MRO (el lector debería verificar "
+"estas linealizaciones como ejercicio y dibujar el diagrama de herencia ;-) ::"
 
 #: ../../howto/mro.rst:534
 msgid ""
@@ -751,16 +1047,27 @@ msgid ""
 "L[K3]= K3 D A O\n"
 "L[Z] = Z K1 K2 K3 D A B C E O"
 msgstr ""
+"L[A] = A O\n"
+"L[B] = B O\n"
+"L[C] = C O\n"
+"L[D] = D O\n"
+"L[E] = E O\n"
+"L[K1]= K1 A B C O\n"
+"L[K2]= K2 D B E O\n"
+"L[K3]= K3 D A O\n"
+"L[Z] = Z K1 K2 K3 D A B C E O"
 
 #: ../../howto/mro.rst:544
 msgid ""
 "Python 2.2 gives exactly the same linearizations for A, B, C, D, E, K1, K2 "
 "and K3, but a different linearization for Z::"
 msgstr ""
+"Python 2.2 da exactamente las mismas linealizaciones para A, B, C, D, E, K1, "
+"K2 y K3, pero una linealización diferente para Z::"
 
 #: ../../howto/mro.rst:547
 msgid "L[Z,P22] = Z K1 K3 A K2 D B C E O"
-msgstr ""
+msgstr "L[Z,P22] = Z K1 K3 A K2 D B C E O"
 
 #: ../../howto/mro.rst:549
 msgid ""
@@ -774,10 +1081,20 @@ msgid ""
 "the linearization of Z K2 *follows* K3.  These problems explain why the 2.2 "
 "rule has been dismissed in favor of the C3 rule."
 msgstr ""
+"Está claro que esta linealización es *equivocada*, ya que A es anterior a D "
+"mientras que en la linealización de K3 A es *posterior* a D. En otras "
+"palabras, en K3 los métodos derivados de D anulan a los métodos derivados de "
+"A, pero en Z, que sigue siendo una subclase de K3, ¡los métodos derivados de "
+"A anulan a los métodos derivados de D!  Esto es una violación de la "
+"monotonicidad.  Además, la linealización de Python 2.2 de Z también es "
+"inconsistente con el orden de precedencia local, ya que la lista de "
+"precedencia local de la clase Z es [K1, K2, K3] (K2 precede a K3), mientras "
+"que en la linealización de Z K2 *sigue* a K3.  Estos problemas explican por "
+"qué se ha descartado la regla 2.2 en favor de la regla C3."
 
 #: ../../howto/mro.rst:561
 msgid "The end"
-msgstr ""
+msgstr "Fin"
 
 #: ../../howto/mro.rst:563
 msgid ""
@@ -792,6 +1109,16 @@ msgid ""
 "the last line to play with the various examples I have discussed in this "
 "paper.::"
 msgstr ""
+"Esta sección es para el lector impaciente, que se saltó todas las secciones "
+"anteriores y saltó inmediatamente al final.  Esta sección es también para el "
+"programador perezoso, que no quiere ejercitar su cerebro. Por último, es "
+"para el programador con algo de arrogancia, de lo contrario no estaría "
+"leyendo un artículo sobre el orden de resolución del método C3 en jerarquías "
+"de herencia múltiple ;-) Estas tres virtudes tomadas en conjunto (y *no* por "
+"separado) merecen un premio: el premio es un breve script de Python 2.2 que "
+"le permite calcular el MRO 2.3 sin riesgo para su cerebro.  Basta con "
+"cambiar la última línea para jugar con los distintos ejemplos que he "
+"comentado en este artículo::"
 
 #: ../../howto/mro.rst:574
 msgid ""
@@ -878,30 +1205,117 @@ msgid ""
 "\n"
 "#</mro.py>"
 msgstr ""
+"#<mro.py>\n"
+"\n"
+"\"\"\"Algoritmo C3 de Samuele Pedroni (con legibilidad mejorada por mí)."
+"\"\"\"\n"
+"\n"
+"class __metaclass__(type):\n"
+"    \"Todas las clases están modificadas matemáticamente para imprimirlas "
+"bien\"\n"
+"    __repr__ = lambda cls: cls.__name__\n"
+"\n"
+"class ex_2:\n"
+"    \"Desacuerdo serio sobre el orden\" #From Guido\n"
+"    class O: pass\n"
+"    class X(O): pass\n"
+"    class Y(O): pass\n"
+"    class A(X,Y): pass\n"
+"    class B(Y,X): pass\n"
+"    try:\n"
+"        class Z(A,B): pass #creates Z(A,B) in Python 2.2\n"
+"    except TypeError:\n"
+"        pass # Z(A,B) cannot be created in Python 2.3\n"
+"\n"
+"class ex_5:\n"
+"    \"Mi primer ejemplo\"\n"
+"    class O: pass\n"
+"    class F(O): pass\n"
+"    class E(O): pass\n"
+"    class D(O): pass\n"
+"    class C(D,F): pass\n"
+"    class B(D,E): pass\n"
+"    class A(B,C): pass\n"
+"\n"
+"class ex_6:\n"
+"    \"Mi segundo ejemplo\"\n"
+"    class O: pass\n"
+"    class F(O): pass\n"
+"    class E(O): pass\n"
+"    class D(O): pass\n"
+"    class C(D,F): pass\n"
+"    class B(E,D): pass\n"
+"    class A(B,C): pass\n"
+"\n"
+"class ex_9:\n"
+"    \"Diferencia entre Python 2.2 MRO y C3\" #From Samuele\n"
+"    class O: pass\n"
+"    class A(O): pass\n"
+"    class B(O): pass\n"
+"    class C(O): pass\n"
+"    class D(O): pass\n"
+"    class E(O): pass\n"
+"    class K1(A,B,C): pass\n"
+"    class K2(D,B,E): pass\n"
+"    class K3(D,A): pass\n"
+"    class Z(K1,K2,K3): pass\n"
+"\n"
+"def merge(seqs):\n"
+"    print '\\n\\nCPL[%s]=%s' % (seqs[0][0],seqs),\n"
+"    res = []; i=0\n"
+"    while 1:\n"
+"      nonemptyseqs=[seq for seq in seqs if seq]\n"
+"      if not nonemptyseqs: return res\n"
+"      i+=1; print '\\n',i,'round: candidates...',\n"
+"      for seq in nonemptyseqs: # find merge candidates among seq heads\n"
+"          cand = seq[0]; print ' ',cand,\n"
+"          nothead=[s for s in nonemptyseqs if cand in s[1:]]\n"
+"          if nothead: cand=None #reject candidate\n"
+"          else: break\n"
+"      if not cand: raise \"Inconsistent hierarchy\"\n"
+"      res.append(cand)\n"
+"      for seq in nonemptyseqs: # remove cand\n"
+"          if seq[0] == cand: del seq[0]\n"
+"\n"
+"def mro(C):\n"
+"    \"Calcule la lista de precedencia de clases (mro) de acuerdo con C3\"\n"
+"    return merge([[C]]+map(mro,C.__bases__)+[list(C.__bases__)])\n"
+"\n"
+"def print_mro(C):\n"
+"    print '\\nMRO[%s]=%s' % (C,mro(C))\n"
+"    print '\\nP22 MRO[%s]=%s' % (C,C.mro())\n"
+"\n"
+"print_mro(ex_9.Z)\n"
+"\n"
+"#</mro.py>"
 
 #: ../../howto/mro.rst:656
 msgid "That's all folks,"
-msgstr ""
+msgstr "Eso es todo amigos,"
 
 #: ../../howto/mro.rst:658
 msgid "enjoy !"
-msgstr ""
+msgstr "¡Que lo disfrutes!"
 
 #: ../../howto/mro.rst:662
 msgid "Resources"
-msgstr ""
+msgstr "Recursos"
 
 #: ../../howto/mro.rst:664
 msgid ""
 "The thread on python-dev started by Samuele Pedroni: https://mail.python.org/"
 "pipermail/python-dev/2002-October/029035.html"
 msgstr ""
+"El hilo en python-dev iniciado por Samuele Pedroni: https://mail.python.org/"
+"pipermail/python-dev/2002-October/029035.html"
 
 #: ../../howto/mro.rst:667
 msgid ""
-"The paper *A Monotonic Superclass Linearization for Dylan*: https://doi.org/"
-"10.1145/236337.236343"
+"The paper *A Monotonic Superclass Linearization for Dylan*: https://doi."
+"org/10.1145/236337.236343"
 msgstr ""
+"El artículo * Una Linealización Monotónica de Superclases por Dylan*: "
+"https://doi.org/10.1145/236337.236343"
 
 #: ../../howto/mro.rst:670
 msgid ""
@@ -909,3 +1323,6 @@ msgid ""
 "https://web.archive.org/web/20140210194412/http://www.python.org/download/"
 "releases/2.2.2/descrintro"
 msgstr ""
+"Ensayo de Guido van Rossum, *Unifying types and classes in Python 2.2*: "
+"https://web.archive.org/web/20140210194412/http://www.python.org/download/"
+"releases/2.2.2/descrintro"
