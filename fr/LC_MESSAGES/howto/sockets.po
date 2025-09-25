@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-23 17:01+0000\n"
+"POT-Creation-Date: 2025-09-25 17:21+0000\n"
 "PO-Revision-Date: 2025-09-22 15:57+0000\n"
 "Last-Translator: python-doc bot, 2025\n"
 "Language-Team: French (https://app.transifex.com/python-doc/teams/5390/fr/)\n"
@@ -32,11 +32,11 @@ msgstr "Auteur"
 
 #: ../../howto/sockets.rst:7
 msgid "Gordon McMillan"
-msgstr ""
+msgstr "Gordon McMillan"
 
 #: ../../howto/sockets.rstNone
 msgid "Abstract"
-msgstr ""
+msgstr "Résumé"
 
 #: ../../howto/sockets.rst:12
 msgid ""
@@ -50,7 +50,7 @@ msgstr ""
 
 #: ../../howto/sockets.rst:20
 msgid "Sockets"
-msgstr ""
+msgstr "Interfaces de connexion (*sockets*)"
 
 #: ../../howto/sockets.rst:22
 msgid ""
@@ -63,6 +63,17 @@ msgid ""
 "blocking sockets. But I'll start by talking about blocking sockets. You'll "
 "need to know how they work before dealing with non-blocking sockets."
 msgstr ""
+"Je ne vais aborder que les connecteurs INET (i.e. IPv4), mais ils "
+"représentent au moins 99% des connecteurs (*socket* en anglais) utilisés. Et "
+"je n'aborderai que les connecteurs STREAM (i.e. TCP) — à moins que vous ne "
+"sachiez vraiment ce que vous faites (auquel cas ce HOWTO n'est pas pour "
+"vous !), vous obtiendrez un meilleur comportement et de meilleures "
+"performances avec un connecteur STREAM que tout autre. Je vais essayer "
+"d'éclaircir le mystère de ce qu'est un connecteur, ainsi que quelques "
+"conseils sur la façon de travailler avec des connecteurs bloquants et non "
+"bloquants. Mais je vais commencer par aborder les connecteurs bloquants. "
+"Nous avons besoin de savoir comment ils fonctionnent avant de traiter les "
+"connecteurs non bloquants."
 
 #: ../../howto/sockets.rst:31
 msgid ""
@@ -77,7 +88,7 @@ msgstr ""
 
 #: ../../howto/sockets.rst:40
 msgid "History"
-msgstr ""
+msgstr "Historique"
 
 #: ../../howto/sockets.rst:42
 msgid ""
@@ -97,7 +108,7 @@ msgstr ""
 
 #: ../../howto/sockets.rst:54
 msgid "Creating a Socket"
-msgstr ""
+msgstr "Créer un connecteur"
 
 #: ../../howto/sockets.rst:56
 msgid ""
@@ -128,6 +139,12 @@ msgid ""
 "machine.  ``s.bind(('', 80))`` specifies that the socket is reachable by any "
 "address the machine happens to have."
 msgstr ""
+"Quelques remarques : nous avons utilisé ``socket.gethostname()`` pour que le "
+"connecteur soit visible par le monde extérieur. Si nous avions utilisé ``s."
+"bind((('localhost', 80))`` ou ``s.bind((('127.0.0.0.1', 80))`` nous aurions "
+"encore un connecteur \"serveur\", mais qui ne serait visible que sur la "
+"machine même. ``s.bind('', 80)]`` spécifie que le socket est accessible par "
+"toute adresse que la machine possède."
 
 #: ../../howto/sockets.rst:87
 msgid ""
@@ -135,6 +152,9 @@ msgid ""
 "known\" services (HTTP, SNMP etc). If you're playing around, use a nice high "
 "number (4 digits)."
 msgstr ""
+"Une deuxième chose à noter : les ports dont le numéro est petit sont "
+"généralement réservés aux services \"bien connus\" (HTTP, SNMP, etc.). Si "
+"vous expérimentez, utilisez un nombre suffisamment élevé (4 chiffres)."
 
 #: ../../howto/sockets.rst:91
 msgid ""
@@ -143,6 +163,10 @@ msgid ""
 "outside connections. If the rest of the code is written properly, that "
 "should be plenty."
 msgstr ""
+"Enfin, l'argument ``listen`` indique à la bibliothèque de connecteurs que "
+"nous voulons qu'elle mette en file d'attente jusqu'à 5 requêtes de connexion "
+"(le maximum normal) avant de refuser les connexions externes. Si le reste du "
+"code est écrit correctement, cela devrait suffire."
 
 #: ../../howto/sockets.rst:95
 msgid ""
@@ -168,7 +192,7 @@ msgstr ""
 
 #: ../../howto/sockets.rst:121
 msgid "IPC"
-msgstr ""
+msgstr "Communication Entre Processus"
 
 #: ../../howto/sockets.rst:123
 msgid ""
@@ -178,6 +202,12 @@ msgid ""
 "a shortcut around a couple of layers of network code and be quite a bit "
 "faster."
 msgstr ""
+"Si vous avez besoin d'une communication rapide entre deux processus sur une "
+"même machine, vous devriez regarder comment utiliser les *pipes* ou la "
+"mémoire partagée. Si vous décidez d'utiliser les connecteurs AF_INET, liez "
+"le connecteur \"serveur\" à ``'localhost'``. Sur la plupart des plates-"
+"formes, cela court-circuite quelques couches réseau et est un peu plus "
+"rapide."
 
 #: ../../howto/sockets.rst:129
 msgid ""
@@ -237,6 +267,10 @@ msgid ""
 "request, then reads a reply.  That's it. The socket is discarded. This means "
 "that a client can detect the end of the reply by receiving 0 bytes."
 msgstr ""
+"Un protocole comme HTTP utilise un connecteur pour un seul transfert. Le "
+"client envoie une demande, puis lit une réponse. C'est tout. Le connecteur "
+"est mis au rebut. Cela signifie qu'un client peut détecter la fin de la "
+"réponse en recevant 0 octet."
 
 #: ../../howto/sockets.rst:169
 msgid ""
@@ -251,12 +285,27 @@ msgid ""
 "they are* (much better), *or end by shutting down the connection*. The "
 "choice is entirely yours, (but some ways are righter than others)."
 msgstr ""
+"Mais si vous prévoyez de réutiliser votre connecteur pour d'autres "
+"transferts, vous devez réaliser que il n'y a *pas* d':abbr:`EOT (End of "
+"Transfer)` sur un connecteur. Je répète : si un connecteur ``send`` ou "
+"``recv`` retourne après avoir manipulé 0 octets, la connexion a été "
+"interrompue. Si la connexion n'a *pas* été interrompue, vous pouvez attendre "
+"sur un ``recv`` pour toujours, car le connecteur ne vous dira pas qu'il n'y "
+"a plus rien à lire (pour le moment). Maintenant, si vous y réfléchissez un "
+"peu, vous allez vous rendre compte d'une vérité fondamentale sur les "
+"connecteurs : *les messages doivent être de longueur fixe* (beurk), *ou être "
+"délimités* (haussement d'épaules), *ou indiquer de quelle longueur ils sont* "
+"(beaucoup mieux), *ou terminer en coupant la connexion*. Le choix est "
+"entièrement de votre côté, (mais certaines façons sont plus justes que "
+"d'autres)."
 
 #: ../../howto/sockets.rst:180
 msgid ""
 "Assuming you don't want to end the connection, the simplest solution is a "
 "fixed length message::"
 msgstr ""
+"En supposant que vous ne vouliez pas terminer la connexion, la solution la "
+"plus simple est un message de longueur fixe ::"
 
 #: ../../howto/sockets.rst:217
 msgid ""
@@ -308,7 +357,7 @@ msgstr ""
 
 #: ../../howto/sockets.rst:252
 msgid "Binary Data"
-msgstr ""
+msgstr "Données binaires"
 
 #: ../../howto/sockets.rst:254
 msgid ""
@@ -343,7 +392,7 @@ msgstr ""
 
 #: ../../howto/sockets.rst:277
 msgid "Disconnecting"
-msgstr ""
+msgstr "Déconnexion"
 
 #: ../../howto/sockets.rst:279
 msgid ""
@@ -407,6 +456,10 @@ msgid ""
 "calls, in much the same ways. It's just that, if you do it right, your app "
 "will be almost inside-out."
 msgstr ""
+"Si vous avez compris ce qui précède, vous savez déjà tout ce que vous devez "
+"savoir sur la mécanique de l'utilisation des connecteurs. Vous utiliserez "
+"toujours les mêmes appels, de la même façon. C'est juste que, si vous le "
+"faites bien, votre application sera presque dans la poche."
 
 #: ../../howto/sockets.rst:325
 msgid ""
@@ -430,7 +483,7 @@ msgstr ""
 
 #: ../../howto/sockets.rst:339
 msgid "Use ``select``."
-msgstr ""
+msgstr "Utiliser ``select``."
 
 #: ../../howto/sockets.rst:341
 msgid ""
@@ -438,6 +491,9 @@ msgid ""
 "but it's close enough to the C version that if you understand ``select`` in "
 "Python, you'll have little trouble with it in C::"
 msgstr ""
+"En C, implémenter ``select`` est assez complexe. En Python, c'est du gâteau, "
+"mais c'est assez proche de la version C ; aussi, si vous comprenez "
+"``select`` en Python, vous aurez peu de problèmes avec lui en C ::"
 
 #: ../../howto/sockets.rst:352
 msgid ""
@@ -466,6 +522,14 @@ msgid ""
 "nothing.  (Actually, any reasonably healthy socket will return as writable - "
 "it just means outbound network buffer space is available.)"
 msgstr ""
+"Si un connecteur se trouve dans la liste des sorties que vous pouvez lire, "
+"vous pouvez être pratiquement certain qu'un ``recv`` sur ce connecteur "
+"retournera *quelque chose*. Même chose pour la liste des sorties sur "
+"lesquelles vous pouvez écrire. Vous pourrez envoyer *quelque chose*. Peut-"
+"être pas tout ce que vous voudrez, mais *quelque chose* est mieux que rien. "
+"(En fait, n'importe quel connecteur raisonnablement sain retournera en "
+"écriture — cela signifie simplement que l'espace tampon réseau sortant est "
+"disponible)."
 
 #: ../../howto/sockets.rst:371
 msgid ""
@@ -475,6 +539,13 @@ msgid ""
 "it in the potential_writers list. If it shows up in the writable list, you "
 "have a decent chance that it has connected."
 msgstr ""
+"Si vous avez un connecteur \"serveur\", mettez-le dans la liste des lecteurs "
+"potentiels. Si il apparaît dans la liste des sorties que vous pouvez lire, "
+"votre ``accept`` fonctionnera (presque certainement). Si vous avez créé un "
+"nouveau connecteur pour ``connect`` à quelqu'un d'autre, mettez-le dans la "
+"liste des éditeurs potentiels. Si il apparaît dans la liste des sorties sur "
+"lesquelles vous pouvez écrire, vous avez une bonne chance qu'il se soit "
+"connecté."
 
 #: ../../howto/sockets.rst:377
 msgid ""
@@ -484,6 +555,11 @@ msgid ""
 "problem of determining whether the other end is done, or just busy with "
 "something else."
 msgstr ""
+"En fait, ``select`` peut être pratique même avec des connecteurs bloquants. "
+"C'est une façon de déterminer si vous allez bloquer — le connecteur "
+"redevient lisible lorsqu'il y a quelque chose dans les tampons. Cependant, "
+"cela n'aide pas encore à déterminer si l'autre extrémité a terminé, ou si "
+"elle est simplement occupée par autre chose."
 
 #: ../../howto/sockets.rst:382
 msgid ""
@@ -493,3 +569,9 @@ msgid ""
 "differently on Windows. In fact, on Windows I usually use threads (which "
 "work very, very well) with my sockets."
 msgstr ""
+"**Alerte de portabilité** : Sous Unix, ``select`` fonctionne aussi bien avec "
+"les connecteurs qu'avec les fichiers. N'essayez pas cela sous Windows. Sous "
+"Windows, ``select`` ne fonctionne qu'avec les connecteurs. Notez également "
+"qu'en C, la plupart des options de connecteurs les plus avancées se font "
+"différemment sous Windows. En fait, sous Windows, j'utilise habituellement "
+"des fils d'exécution (qui fonctionnent très, très bien) avec mes connecteurs."

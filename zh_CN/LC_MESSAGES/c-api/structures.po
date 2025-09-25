@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-03 16:02+0000\n"
+"POT-Creation-Date: 2025-09-23 17:01+0000\n"
 "PO-Revision-Date: 2025-09-22 15:57+0000\n"
 "Last-Translator: python-doc bot, 2025\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/python-doc/"
@@ -75,6 +75,10 @@ msgid ""
 "must be done by using the macros :c:macro:`Py_REFCNT`, :c:macro:`Py_TYPE`, "
 "and :c:macro:`Py_SIZE`."
 msgstr ""
+"这是一个 :c:type:`PyObject` 的添加了 :attr:`ob_size` 字段的扩展。 它仅用于具"
+"有某种 *长度* 标记的对象。 此类型并不经常在 Python/C API 中出现。 对成员的访"
+"问必须通过使用 :c:macro:`Py_REFCNT`, :c:macro:`Py_TYPE` 和 :c:macro:"
+"`Py_SIZE` 宏来完成。"
 
 #: ../../c-api/structures.rst:46
 msgid ""
@@ -187,6 +191,8 @@ msgid ""
 "`PyVarObject` type, including the :attr:`ob_size` field. This macro expands "
 "to::"
 msgstr ""
+"这是一个为新的 :c:type:`PyVarObject` 类型扩展初始化值的宏，包括 :attr:"
+"`ob_size` 字段。 该宏扩展为::"
 
 #: ../../c-api/structures.rst:170
 msgid "Implementing functions and methods"
@@ -215,18 +221,24 @@ msgid ""
 "Type of the functions used to implement Python callables in C with "
 "signature :const:`METH_VARARGS | METH_KEYWORDS`. The function signature is::"
 msgstr ""
+"用于在 C 中实现具有 :const:`METH_VARARGS | METH_KEYWORDS` 签名的 Python 可调"
+"用对象的函数类型。 函数的签名为::"
 
 #: ../../c-api/structures.rst:199
 msgid ""
 "Type of the functions used to implement Python callables in C with "
 "signature :const:`METH_FASTCALL`. The function signature is::"
 msgstr ""
+"用于在 C 中实现具有 :const:`METH_FASTCALL` 签名的 Python 可调用对象的函数类"
+"型。 函数的签名为::"
 
 #: ../../c-api/structures.rst:209
 msgid ""
 "Type of the functions used to implement Python callables in C with "
 "signature :const:`METH_FASTCALL | METH_KEYWORDS`. The function signature is::"
 msgstr ""
+"用于在 C 中实现具有 :const:`METH_FASTCALL | METH_KEYWORDS` 签名的 Python 可调"
+"用对象的函数类型。 函数的签名为::"
 
 #: ../../c-api/structures.rst:220
 msgid ""
@@ -234,6 +246,8 @@ msgid ""
 "signature :const:`METH_METHOD | METH_FASTCALL | METH_KEYWORDS`. The function "
 "signature is::"
 msgstr ""
+"用于在 C 中实现具有 :const:`METH_METHOD | METH_FASTCALL | METH_KEYWORDS` 签名"
+"的 Python 可调用对象的函数类型。 函数的签名为::"
 
 #: ../../c-api/structures.rst:235
 msgid ""
@@ -243,11 +257,11 @@ msgstr "用于描述一个扩展类型的方法的结构体。 该结构体有�
 
 #: ../../c-api/structures.rst:240
 msgid "name of the method"
-msgstr ""
+msgstr "方法名"
 
 #: ../../c-api/structures.rst:244
 msgid "pointer to the C implementation"
-msgstr ""
+msgstr "指向 C 实现的指针"
 
 #: ../../c-api/structures.rst:248
 msgid "flags bits indicating how the call should be constructed"
@@ -340,6 +354,8 @@ msgid ""
 "class*, that is, the class that contains the method in question. The "
 "defining class might be a superclass of ``Py_TYPE(self)``."
 msgstr ""
+":const:`METH_FASTCALL | METH_KEYWORDS` 的扩展支持 *定义式类*，也就是包含相应"
+"方法的类。 定义式类可以是 ``Py_TYPE(self)`` 的超类。"
 
 #: ../../c-api/structures.rst:322
 msgid ""
@@ -358,6 +374,10 @@ msgid ""
 "and will hold a reference to the module or object instance.  In all cases "
 "the second parameter will be ``NULL``."
 msgstr ""
+"没有形参的方法如果通过 :const:`METH_NOARGS` 旗标列出了参数则不需要检查是否提"
+"供了参数。 它们必须为 :c:type:`PyCFunction` 类型。 第一个形参通常命名为 "
+"*self* 并将存放一个指向模块或对象实例的引用。 在所有情况下第二个形参都将为 "
+"``NULL``。"
 
 #: ../../c-api/structures.rst:340
 msgid ""
@@ -414,6 +434,12 @@ msgid ""
 "helpful because calls to PyCFunctions are optimized more than wrapper object "
 "calls."
 msgstr ""
+"该方法将被载入来替代现有的定义。 如果没有 *METH_COEXIST*，默认将跳过重复的定"
+"义。 由于槽位包装器会在方法表之前被载入，例如当存在 *sq_contains* 槽位时，将"
+"会生成一个名为 :meth:`__contains__` 的已包装方法并阻止载入具有相同名称的对应 "
+"PyCFunction。 如果定义了此旗标，则 PyCFunction 将被载入来替代此包装器对象并将"
+"与槽位共存。 因为对This is helpful because calls to PyCFunctions 的调用比包装"
+"器对象调用更为优化所以这是很有帮助的。"
 
 #: ../../c-api/structures.rst:388
 msgid "Accessing attributes of extension types"
@@ -751,7 +777,7 @@ msgstr "void \\*"
 #: ../../c-api/structures.rst:504
 msgid ""
 "optional function pointer, providing additional data for getter and setter"
-msgstr ""
+msgstr "可选的函数指针，为 getter 和 setter 提供附加数据"
 
 #: ../../c-api/structures.rst:509
 msgid ""

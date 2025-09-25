@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-22 21:19+0000\n"
+"POT-Creation-Date: 2025-09-23 17:01+0000\n"
 "PO-Revision-Date: 2025-09-22 15:57+0000\n"
 "Last-Translator: python-doc bot, 2025\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/python-doc/"
@@ -1259,6 +1259,9 @@ msgid ""
 "it to the :attr:`ob_type` field of the base class. :c:func:`PyType_Ready` "
 "will not change this field if it is non-zero."
 msgstr ""
+"这应该在创建该类型的任何实例之前完成。:c:func:`PyType_Ready` 检查 :attr:"
+"`ob_type` 是否为 ``NULL``，如果是，则用基类的 :attr:`ob_type` 字段初始化它。"
+"如果该字段非零，则 :c:func:`PyType_Ready` 不会更改它。"
 
 #: ../../c-api/typeobj.rst:526 ../../c-api/typeobj.rst:708
 #: ../../c-api/typeobj.rst:824 ../../c-api/typeobj.rst:916
@@ -1327,6 +1330,10 @@ msgid ""
 "\"Default\" section.  (Note that many fields set on :c:type:"
 "`PyBaseObject_Type` and :c:type:`PyType_Type` effectively act as defaults.)"
 msgstr ""
+"每个槽位都有一个部分来描述继承关系。如果 :c:func:`PyType_Ready` 会在该字段为 "
+"``NULL`` 时设置它的值，那么也会有一个“默认”部分。（注意，在 :c:type:"
+"`PyBaseObject_Type` 和 :c:type:`PyType_Type` 中设置的许多字段实际上就是默认"
+"值。）"
 
 #: ../../c-api/typeobj.rst:575
 msgid ""
@@ -1339,6 +1346,11 @@ msgid ""
 "mod:`Q` in package :mod:`P` should have the :c:member:`~PyTypeObject."
 "tp_name` initializer ``\"P.Q.M.T\"``."
 msgstr ""
+"指针，指向以 NULL 结尾的表示类型名称的字符串。对于可以作为模块的全局变量访问"
+"的类型，字符串应该是完整的模块名，后跟一个点，再后跟类型名。对于内置类型，字"
+"符串应该只是类型名。如果模块是包的子模块，则完整的包名是完整的模块名的一部"
+"分。例如，包 :mod:`P` 的子包 :mod:`Q` 的模块 :mod:`M` 中定义的类型 :class:"
+"`T` 的 :c:member:`~PyTypeObject.tp_name` 应该初始化为 ``\"P.Q.M.T\"``。"
 
 #: ../../c-api/typeobj.rst:583
 msgid ""
@@ -1486,6 +1498,15 @@ msgid ""
 "`PyObject_VarNew`, or :c:func:`PyObject_GC_Del` if the instance was "
 "allocated using :c:func:`PyObject_GC_New` or :c:func:`PyObject_GC_NewVar`."
 msgstr ""
+"当引用计数为0时，由 :c:func:`Py_DECREF` 和 :c:func:`Py_XDECREF` 宏调用析构函"
+"数。此时，实例仍然存在，但已经没有了对它的引用。析构函数应该释放该实例拥有的"
+"所有引用，释放该实例拥有的所有内存缓冲区（通过分配内存对应的释放函数），并调"
+"用该类型的 :c:member:`~PyTypeObject.tp_free` 函数。如果该类型不可子类型化（没"
+"有设置 :const:`Py_TPFLAGS_BASETYPE` 标志位），则允许直接调用对象的释放函数，"
+"不必调用 :c:member:`~PyTypeObject.tp_free`。对象的释放函数应该与分配函数对"
+"应：如果使用 :c:func:`PyObject_New` 或 :c:func:`PyObject_VarNew` 分配，通常"
+"为 :c:func:`PyObject_Del`；如果使用 :c:func:`PyObject_GC_New` 或 :c:func:"
+"`PyObject_GC_NewVar` 分配，通常为 :c:func:`PyObject_GC_Del`。"
 
 #: ../../c-api/typeobj.rst:678
 msgid ""
@@ -1493,6 +1514,8 @@ msgid ""
 "flag bit set), the destructor should call :c:func:`PyObject_GC_UnTrack` "
 "before clearing any member fields."
 msgstr ""
+"如果该类型支持垃圾回收（设置了 :const:`Py_TPFLAGS_HAVE_GC` 标志位），析构器应"
+"该在清理任何成员字段之前调用 :c:func:`PyObject_GC_UnTrack`。"
 
 #: ../../c-api/typeobj.rst:690
 msgid ""
@@ -2028,12 +2051,18 @@ msgid ""
 "fields :c:member:`~PyTypeObject.tp_traverse` and :c:member:`~PyTypeObject."
 "tp_clear` are present in the type object."
 msgstr ""
+"当此对象支持垃圾回收时该比特位将被设置。 如果设置了该比特位，则实例必须使用 :"
+"c:func:`PyObject_GC_New` 来创建并使用 :c:func:`PyObject_GC_Del` 来销毁。 更多"
+"信息见 :ref:`supporting-cycle-detection` 一节。 该比特位还表明与类型对象中存"
+"在 GC 相关字段 :c:member:`~PyTypeObject.tp_traverse` 和 :c:member:"
+"`~PyTypeObject.tp_clear`。"
 
 #: ../../c-api/typeobj.rst:1100 ../../c-api/typeobj.rst:1358
 #: ../../c-api/typeobj.rst:1426
 msgid ""
 "Group: :const:`Py_TPFLAGS_HAVE_GC`, :attr:`tp_traverse`, :attr:`tp_clear`"
 msgstr ""
+"分组: :const:`Py_TPFLAGS_HAVE_GC`, :attr:`tp_traverse`, :attr:`tp_clear`"
 
 #: ../../c-api/typeobj.rst:1102
 msgid ""
@@ -3114,7 +3143,7 @@ msgstr ""
 
 #: ../../c-api/typeobj.rst:1886
 msgid "For static subtypes, :c:type:`PyBaseObject_Type` uses PyObject_Del."
-msgstr ""
+msgstr "对于静态子类型，:c:type:`PyBaseObject_Type` 使用 PyObject_Del."
 
 #: ../../c-api/typeobj.rst:1891
 msgid "An optional pointer to a function called by the garbage collector."

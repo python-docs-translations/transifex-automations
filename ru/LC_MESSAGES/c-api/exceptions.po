@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-22 21:19+0000\n"
+"POT-Creation-Date: 2025-09-25 17:21+0000\n"
 "PO-Revision-Date: 2025-09-22 15:57+0000\n"
 "Last-Translator: python-doc bot, 2025\n"
 "Language-Team: Russian (https://app.transifex.com/python-doc/teams/5390/"
@@ -138,6 +138,10 @@ msgid ""
 "data:`sys.last_value` and :data:`sys.last_traceback` will be set to the "
 "type, value and traceback of the printed exception, respectively."
 msgstr ""
+"Если значение *set_sys_last_vars* не равно нулю, переменным :data:`sys."
+"last_type`, :data:`sys.last_value` и :data:`sys.last_traceback` будут "
+"присвоены тип, значение и обратная трассировка напечатанного исключения "
+"соответственно."
 
 #: ../../c-api/exceptions.rst:70
 msgid "Alias for ``PyErr_PrintEx(1)``."
@@ -158,6 +162,10 @@ msgid ""
 "raise the exception.  It is used, for example, when an exception occurs in "
 "an :meth:`__del__` method."
 msgstr ""
+"Эта служебная функция выводит предупреждающее сообщение в ``sys.stderr``, "
+"когда установлено исключение, но интерпретатор не может фактически вызвать "
+"это исключение. Она используется, например, при возникновении исключения в "
+"методе :meth:`__del__`."
 
 #: ../../c-api/exceptions.rst:83
 msgid ""
@@ -165,6 +173,9 @@ msgid ""
 "context in which the unraisable exception occurred. If possible, the repr of "
 "*obj* will be printed in the warning message."
 msgstr ""
+"Функция вызывается с единственным аргументом *obj*, который определяет "
+"контекст, в котором возникло недопустимое исключение. Если возможно, в "
+"предупреждающем сообщении будет напечатано повторное значение *obj*."
 
 #: ../../c-api/exceptions.rst:87
 msgid "An exception must be set when calling this function."
@@ -265,6 +276,17 @@ msgid ""
 "returns ``NULL``, so a wrapper function around a system call can write "
 "``return PyErr_SetFromErrno(type);`` when the system call returns an error."
 msgstr ""
+"Это удобная функция для создания исключения, когда библиотечная функция C "
+"возвращает ошибку и устанавливает переменную C :c:data:`errno`. Она создает "
+"объект кортежа, первым элементом которого является значение integer :c:data:"
+"`errno`, а вторым элементом - соответствующее сообщение об ошибке "
+"(полученное из :c:func:`strerror`), а затем вызывает ``PyErr_SetObject(type, "
+"object)``. В Unix, когда значение :c:data:`errno` равно :const:`EINTR`, что "
+"указывает на прерванный системный вызов, вызывается :c:func:"
+"`PyErr_CheckSignals`, и если это устанавливает индикатор ошибки, он остается "
+"установленным на это значение. Функция всегда возвращает ``NULL``, поэтому "
+"функция-оболочка для системного вызова может написать ``return "
+"PyErr_SetFromErrno(type);``, когда системный вызов возвращает ошибку."
 
 #: ../../c-api/exceptions.rst:167
 msgid ""
@@ -273,6 +295,11 @@ msgid ""
 "*type* as a third parameter.  In the case of :exc:`OSError` exception, this "
 "is used to define the :attr:`filename` attribute of the exception instance."
 msgstr ""
+"Аналогично :c:func:`PyErr_SetFromErrno`, с дополнительным поведением, "
+"заключающимся в том, что если *filenameObject* не имеет значения ``NULL``, "
+"оно передается конструктору *type* в качестве третьего параметра. В случае "
+"исключения :exc:`OSError` это используется для определения атрибута :attr:"
+"`filename` экземпляра исключения."
 
 #: ../../c-api/exceptions.rst:176
 msgid ""
@@ -327,12 +354,17 @@ msgid ""
 "filename is given as a C string.  *filename* is decoded from the filesystem "
 "encoding (:func:`os.fsdecode`)."
 msgstr ""
+"Аналогично :c:func:`PyErr_SetFromWindowsErrWithFilenameObject`, но имя файла "
+"задается в виде строки на языке С. *filename* декодируется из кодировки "
+"файловой системы (:func:`os.fsdecode`)."
 
 #: ../../c-api/exceptions.rst:223
 msgid ""
 "Similar to :c:func:`PyErr_SetFromWindowsErrWithFilenameObject`, with an "
 "additional parameter specifying the exception type to be raised."
 msgstr ""
+"Аналогично :c:func:`PyErr_SetFromWindowsErrWithFilenameObject`, с "
+"дополнительным параметром, указывающим тип вызываемого исключения."
 
 #: ../../c-api/exceptions.rst:231
 msgid ""
@@ -519,6 +551,9 @@ msgid ""
 "Function similar to :c:func:`PyErr_WarnFormat`, but *category* is :exc:"
 "`ResourceWarning` and it passes *source* to :func:`warnings.WarningMessage`."
 msgstr ""
+"Функция похожа на :c:func:`PyErr_WarnFormat`, но *категория* - это :exc:"
+"`ResourceWarning`, и она передает *источник* в :func:`warnings."
+"WarningMessage`."
 
 #: ../../c-api/exceptions.rst:369
 msgid "Querying the error indicator"
@@ -598,6 +633,9 @@ msgid ""
 "or by code that needs to save and restore the error indicator temporarily, e."
 "g.::"
 msgstr ""
+"Эта функция обычно используется только в коде, который должен перехватывать "
+"исключения, или в коде, который должен временно сохранять и восстанавливать "
+"индикатор ошибки, например::"
 
 #: ../../c-api/exceptions.rst:428
 msgid ""
@@ -611,6 +649,16 @@ msgid ""
 "own these references.  (If you don't understand this, don't use this "
 "function.  I warned you.)"
 msgstr ""
+"Устанавливает индикатор ошибки для трех объектов. Если индикатор ошибки уже "
+"установлен, сначала он будет удален. Если объекты имеют значение ``NULL``, "
+"индикатор ошибки будет удален. Не передавайте тип ``NULL`` и значение, "
+"отличное от ``NULL``, или данные обратной трассировки. Типом исключения "
+"должен быть класс. Не передавайте недопустимый тип исключения или значение. "
+"(Нарушение этих правил приведет к возникновению незначительных проблем в "
+"дальнейшем). Этот вызов удаляет ссылку на каждый объект: перед вызовом у вас "
+"должна быть ссылка на каждый объект, а после вызова вы больше не будете "
+"владеть этими ссылками. (Если вы этого не понимаете, не используйте эту "
+"функцию. Я вас предупреждал.)"
 
 #: ../../c-api/exceptions.rst:440
 msgid ""
@@ -618,6 +666,9 @@ msgid ""
 "the error indicator temporarily.  Use :c:func:`PyErr_Fetch` to save the "
 "current error indicator."
 msgstr ""
+"Обычно эта функция используется только в коде, которому необходимо временно "
+"сохранить и восстановить индикатор ошибки. Используйте :c:func:`PyErr_Fetch` "
+"для сохранения текущего индикатора ошибки."
 
 #: ../../c-api/exceptions.rst:447
 msgid ""
@@ -642,6 +693,9 @@ msgid ""
 "the exception value. If setting the traceback appropriately is desired, the "
 "following additional snippet is needed::"
 msgstr ""
+"Эта функция *не устанавливает * неявно атрибут ``__traceback__`` для "
+"значения исключения. Если требуется соответствующая настройка обратной "
+"трассировки, необходим следующий дополнительный фрагмент кода::"
 
 #: ../../c-api/exceptions.rst:466
 msgid ""
@@ -650,6 +704,11 @@ msgid ""
 "freshly raised.  Returns new references for the three objects, any of which "
 "may be ``NULL``.  Does not modify the exception info state."
 msgstr ""
+"Извлекает информацию об исключении, как известно из ``sys.exc_info()``. Это "
+"относится к исключению, которое было *уже перехвачено*, а не к исключению, "
+"которое было недавно создано. Возвращает новые ссылки для трех объектов, "
+"любой из которых может быть ``NULL``. Не изменяет состояние информации об "
+"исключении."
 
 #: ../../c-api/exceptions.rst:473
 msgid ""
@@ -671,6 +730,11 @@ msgid ""
 "exception state, pass ``NULL`` for all three arguments. For general rules "
 "about the three arguments, see :c:func:`PyErr_Restore`."
 msgstr ""
+"Задает информацию об исключении, как это известно из ``sys.exc_info()``. Это "
+"относится к исключению, которое было *уже перехвачено*, а не к исключению, "
+"которое было вызвано недавно. Эта функция крадет ссылки на аргументы. Чтобы "
+"очистить состояние исключения, передайте ``NULL`` для всех трех аргументов. "
+"Общие правила, касающиеся трех аргументов, см. в :c:func:`PyErr_Restore`."
 
 #: ../../c-api/exceptions.rst:491
 msgid ""
@@ -848,6 +912,12 @@ msgid ""
 "of classes. The *dict* argument can be used to specify a dictionary of class "
 "variables and methods."
 msgstr ""
+"Атрибуту :attr:`__module__` нового класса присваивается значение первой "
+"части (до последней точки) аргумента *name*, а имени класса присваивается "
+"значение последней части (после последней точки). Аргумент *base* может "
+"использоваться для указания альтернативных базовых классов; это может быть "
+"либо только один класс, либо набор классов. Аргумент *dict* может "
+"использоваться для указания словаря переменных и методов класса."
 
 #: ../../c-api/exceptions.rst:613
 msgid ""
@@ -870,6 +940,9 @@ msgid ""
 "accessible from Python through :attr:`__traceback__`.  If there is no "
 "traceback associated, this returns ``NULL``."
 msgstr ""
+"Возвращает обратную трассировку, связанную с исключением, в виде новой "
+"ссылки, доступной из Python через :attr:`__traceback__`. Если обратная "
+"трассировка не связана, возвращается значение ``NULL``."
 
 #: ../../c-api/exceptions.rst:632
 msgid ""
@@ -886,6 +959,10 @@ msgid ""
 "from Python through :attr:`__context__`.  If there is no context associated, "
 "this returns ``NULL``."
 msgstr ""
+"Возвращает контекст (другой экземпляр исключения, при обработке которого был "
+"запущен *ex*), связанный с исключением, в качестве новой ссылки, доступной "
+"из Python через :attr:`__context__`. Если контекст не связан, возвращается "
+"значение ``NULL``."
 
 #: ../../c-api/exceptions.rst:646
 msgid ""
@@ -903,6 +980,9 @@ msgid ""
 "``raise ... from ...``) associated with the exception as a new reference, as "
 "accessible from Python through :attr:`__cause__`."
 msgstr ""
+"Возвращает причину (либо экземпляр исключения, либо :const:`None`, заданный "
+"параметром ``raise ... from ...``), связанный с исключением в качестве новой "
+"ссылки, доступной из Python через :attr:`__cause__`."
 
 #: ../../c-api/exceptions.rst:660
 msgid ""
@@ -910,11 +990,17 @@ msgid ""
 "clear it.  There is no type check to make sure that *cause* is either an "
 "exception instance or :const:`None`.  This steals a reference to *cause*."
 msgstr ""
+"Задает для причины, связанной с исключением, значение *cause*. Используйте "
+"``NULL``, чтобы очистить его. Нет проверки типа, чтобы убедиться, что "
+"*cause* является либо экземпляром исключения, либо :const:`None`. При этом "
+"будет украдена ссылка на *cause*."
 
 #: ../../c-api/exceptions.rst:664
 msgid ""
 ":attr:`__suppress_context__` is implicitly set to ``True`` by this function."
 msgstr ""
+":attr:`__suppress_context__` этой функции неявно устанавливается значение "
+"``True``."
 
 #: ../../c-api/exceptions.rst:670
 msgid "Unicode Exception Objects"
@@ -944,6 +1030,9 @@ msgid ""
 "*object*, *length*, *start*, *end* and *reason*. *encoding* and *reason* are "
 "UTF-8 encoded strings."
 msgstr ""
+"Создает объект :class:`UnicodeEncodeError` с атрибутами *encoding*, "
+"*object*, *length*, *start*, *end* и *reason*. *encoding* и *reason* "
+"являются строками в кодировке UTF-8."
 
 #: ../../c-api/exceptions.rst:686 ../../c-api/exceptions.rst:696
 msgid "3.11"
@@ -954,18 +1043,24 @@ msgid ""
 "``Py_UNICODE`` is deprecated since Python 3.3. Please migrate to "
 "``PyObject_CallFunction(PyExc_UnicodeEncodeError, \"sOnns\", ...)``."
 msgstr ""
+"``Py_UNICODE`` устарел начиная с версии Python 3.3. Пожалуйста, перейдите на "
+"``PyObject_CallFunction(PyExc_UnicodeEncodeError, \"sOnns\", ...)``."
 
 #: ../../c-api/exceptions.rst:693
 msgid ""
 "Create a :class:`UnicodeTranslateError` object with the attributes *object*, "
 "*length*, *start*, *end* and *reason*. *reason* is a UTF-8 encoded string."
 msgstr ""
+"Создает объект :class:`UnicodeTranslateError` с атрибутами *object*, "
+"*length*, *start*, *end* и *reason*. *reason* - это строка в кодировке UTF-8."
 
 #: ../../c-api/exceptions.rst:698
 msgid ""
 "``Py_UNICODE`` is deprecated since Python 3.3. Please migrate to "
 "``PyObject_CallFunction(PyExc_UnicodeTranslateError, \"Onns\", ...)``."
 msgstr ""
+"``Py_UNICODE`` устарел начиная с версии Python 3.3. Пожалуйста, перейдите на "
+"``PyObject_CallFunction(PyExc_UnicodeTranslateError, \"Onns\", ...)``."
 
 #: ../../c-api/exceptions.rst:704
 msgid "Return the *encoding* attribute of the given exception object."
@@ -1054,6 +1149,10 @@ msgid ""
 "overflowed using :c:func:`PyOS_CheckStack`.  In this is the case, it sets a :"
 "exc:`MemoryError` and returns a nonzero value."
 msgstr ""
+"Если определено значение :const:`USE_STACKCHECK`, эта функция проверяет, не "
+"переполнился ли стек операционной системы, используя :c:func:"
+"`PyOS_CheckStack`. В этом случае он устанавливает :exc:`MemoryError` и "
+"возвращает ненулевое значение."
 
 #: ../../c-api/exceptions.rst:776
 msgid ""
@@ -1077,7 +1176,7 @@ msgstr ""
 
 #: ../../c-api/exceptions.rst:784 ../../c-api/exceptions.rst:792
 msgid "This function is now also available in the limited API."
-msgstr ""
+msgstr "Эта функция теперь также доступна в ограниченном API."
 
 #: ../../c-api/exceptions.rst:789
 msgid ""
@@ -1642,15 +1741,15 @@ msgstr "Это псевдонимы совместимости с :c:data:`PyExc
 
 #: ../../c-api/exceptions.rst:1026
 msgid ":c:data:`PyExc_EnvironmentError`"
-msgstr ""
+msgstr ":c:data:`PyExc_EnvironmentError`"
 
 #: ../../c-api/exceptions.rst:1028
 msgid ":c:data:`PyExc_IOError`"
-msgstr ""
+msgstr ":c:data:`PyExc_IOError`"
 
 #: ../../c-api/exceptions.rst:1030
 msgid ":c:data:`PyExc_WindowsError`"
-msgstr ""
+msgstr ":c:data:`PyExc_WindowsError`"
 
 #: ../../c-api/exceptions.rst:1030
 msgid "[2]_"
