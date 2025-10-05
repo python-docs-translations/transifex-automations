@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-03 14:59+0000\n"
+"POT-Creation-Date: 2025-10-05 14:53+0000\n"
 "PO-Revision-Date: 2025-09-15 01:05+0000\n"
 "Last-Translator: André Moreira <afrmscb@gmail.com>, 2025\n"
 "Language-Team: Portuguese (Portugal) (https://app.transifex.com/python-doc/"
@@ -307,7 +307,7 @@ msgstr ""
 
 #: ../../whatsnew/2.6.rst:246
 msgid "PEP 343: The 'with' statement"
-msgstr ""
+msgstr "PEP 343: A instrução ':keyword:`with`'"
 
 #: ../../whatsnew/2.6.rst:248
 msgid ""
@@ -328,6 +328,11 @@ msgid ""
 "next section, I'll examine the implementation details and show how to write "
 "objects for use with this statement."
 msgstr ""
+"A instrução ':keyword:`with`' clarifica o código que anteriormente usaria "
+"blocos ``try...finally`` para garantir que o código de limpeza é executado. "
+"Nesta secção, vou discutir a instrução como será comumente usada. Na secção "
+"seguinte, vou examinar os detalhes de implementação e mostrar como escrever "
+"objetos para uso com esta instrução."
 
 #: ../../whatsnew/2.6.rst:263
 msgid ""
@@ -340,6 +345,8 @@ msgid ""
 "with expression [as variable]:\n"
 "    with-block"
 msgstr ""
+"with expressão [as variável]:\n"
+"    bloco-with"
 
 #: ../../whatsnew/2.6.rst:269
 msgid ""
@@ -355,6 +362,10 @@ msgid ""
 "is bound to the name *variable*, if given.  (Note carefully that *variable* "
 "is *not* assigned the result of *expression*.)"
 msgstr ""
+"O método :meth:`~object.__enter__` do objeto é chamado antes de *bloco-with* "
+"ser executado e, portanto, pode executar código de configuração. Também pode "
+"devolver um valor que é ligado ao nome *variável*, se fornecido. (Note "
+"cuidadosamente que *variável* *não* é atribuída ao resultado de *expressão*.)"
 
 #: ../../whatsnew/2.6.rst:278
 msgid ""
@@ -362,6 +373,9 @@ msgid ""
 "__exit__` method is called, even if the block raised an exception, and can "
 "therefore run clean-up code."
 msgstr ""
+"Após a execução do *bloco-with* estar terminada, o método :meth:`~object."
+"__exit__` do objeto é chamado, mesmo que o bloco tenha gerado uma exceção, e "
+"pode, portanto, executar código de limpeza."
 
 #: ../../whatsnew/2.6.rst:282
 msgid ""
@@ -369,6 +383,9 @@ msgid ""
 "can be used with the ':keyword:`with`' statement. File objects are one "
 "example::"
 msgstr ""
+"Alguns objetos Python padrão agora suportam o protocolo de gestão de "
+"contexto e podem ser usados com a instrução ':keyword:`with`'. Os objetos de "
+"ficheiro são um exemplo::"
 
 #: ../../whatsnew/2.6.rst:285
 msgid ""
@@ -377,6 +394,10 @@ msgid ""
 "        print line\n"
 "        ... more processing code ..."
 msgstr ""
+"with open('/etc/passwd', 'r') as f:\n"
+"    for line in f:\n"
+"        print line\n"
+"        ... mais código de processamento ..."
 
 #: ../../whatsnew/2.6.rst:290
 msgid ""
@@ -384,18 +405,25 @@ msgid ""
 "automatically closed, even if the :keyword:`for` loop raised an exception "
 "part-way through the block."
 msgstr ""
+"Após esta instrução ter sido executada, o objeto de ficheiro em *f* terá "
+"sido fechado automaticamente, mesmo que o ciclo :keyword:`for` tenha gerado "
+"uma exceção a meio do bloco."
 
 #: ../../whatsnew/2.6.rst:296
 msgid ""
 "In this case, *f* is the same object created by :func:`open`, because :meth:"
 "`~object.__enter__` returns *self*."
 msgstr ""
+"Neste caso, *f* é o mesmo objeto criado por :func:`open`, porque :meth:"
+"`~object.__enter__` devolve *self*."
 
 #: ../../whatsnew/2.6.rst:299
 msgid ""
 "The :mod:`threading` module's locks and condition variables  also support "
 "the ':keyword:`with`' statement::"
 msgstr ""
+"Os bloqueios e variáveis de condição do módulo :mod:`threading` também "
+"suportam a instrução ':keyword:`with`'::"
 
 #: ../../whatsnew/2.6.rst:302
 msgid ""
@@ -404,12 +432,18 @@ msgid ""
 "    # Critical section of code\n"
 "    ..."
 msgstr ""
+"lock = threading.Lock()\n"
+"with lock:\n"
+"    # Secção crítica de código\n"
+"    ..."
 
 #: ../../whatsnew/2.6.rst:307
 msgid ""
 "The lock is acquired before the block is executed and always released once  "
 "the block is complete."
 msgstr ""
+"O bloqueio é adquirido antes de o bloco ser executado e é sempre libertado "
+"assim que o bloco estiver completo."
 
 #: ../../whatsnew/2.6.rst:310
 msgid ""
@@ -431,10 +465,20 @@ msgid ""
 "    # The original context is restored on exiting the block.\n"
 "    print v.sqrt()"
 msgstr ""
+"from decimal import Decimal, Context, localcontext\n"
+"\n"
+"# Mostra com a precisão predefinida de 28 dígitos\n"
+"v = Decimal('578')\n"
+"print v.sqrt()\n"
+"\n"
+"with localcontext(Context(prec=16)):\n"
+"    # Todo o código neste bloco usa uma precisão de 16 dígitos.\n"
+"    # O contexto original é restaurado ao sair do bloco.\n"
+"    print v.sqrt()"
 
 #: ../../whatsnew/2.6.rst:329
 msgid "Writing Context Managers"
-msgstr ""
+msgstr "Escrever Gestores de Contexto"
 
 #: ../../whatsnew/2.6.rst:331
 msgid ""
@@ -444,10 +488,15 @@ msgid ""
 "if you like.  Authors of new objects will need to understand the details of "
 "the underlying implementation and should keep reading."
 msgstr ""
+"Por baixo do capot, a instrução ':keyword:`with`' é bastante complicada. A "
+"maioria das pessoas usará ':keyword:`!with`' apenas com objetos existentes e "
+"não precisa de conhecer estes detalhes, pelo que pode saltar o resto desta "
+"secção se quiser. Os autores de novos objetos precisarão de entender os "
+"detalhes da implementação subjacente e devem continuar a ler."
 
 #: ../../whatsnew/2.6.rst:337
 msgid "A high-level explanation of the context management protocol is:"
-msgstr ""
+msgstr "Uma explicação de alto nível do protocolo de gestão de contexto é:"
 
 #: ../../whatsnew/2.6.rst:339
 msgid ""
@@ -455,6 +504,9 @@ msgid ""
 "\"context manager\".  The context manager must have :meth:`~object."
 "__enter__` and :meth:`~object.__exit__` methods."
 msgstr ""
+"A expressão é avaliada e deve resultar num objeto chamado \"gestor de "
+"contexto\". O gestor de contexto deve ter os métodos :meth:`~object."
+"__enter__` e :meth:`~object.__exit__`."
 
 #: ../../whatsnew/2.6.rst:343
 msgid ""
@@ -465,7 +517,7 @@ msgstr ""
 
 #: ../../whatsnew/2.6.rst:347
 msgid "The code in *BLOCK* is executed."
-msgstr ""
+msgstr "O código em *BLOCO* é executado."
 
 #: ../../whatsnew/2.6.rst:349
 msgid ""
@@ -485,12 +537,16 @@ msgid ""
 "If *BLOCK* didn't raise an exception,  the :meth:`~object.__exit__` method "
 "is still called, but *type*, *value*, and *traceback* are all ``None``."
 msgstr ""
+"Se *BLOCO* não gerou uma exceção, o método :meth:`~object.__exit__` ainda é "
+"chamado, mas *type*, *value* e *traceback* são todos ``None``."
 
 #: ../../whatsnew/2.6.rst:361
 msgid ""
 "Let's think through an example.  I won't present detailed code but will only "
 "sketch the methods necessary for a database that supports transactions."
 msgstr ""
+"Vamos pensar num exemplo. Não vou apresentar código detalhado, mas apenas "
+"esboçar os métodos necessários para uma base de dados que suporta transações."
 
 #: ../../whatsnew/2.6.rst:364
 msgid ""
@@ -500,12 +556,22 @@ msgid ""
 "rolled back, meaning that the changes are all discarded and the database is "
 "unchanged.  See any database textbook for more information.)"
 msgstr ""
+"(Para pessoas não familiarizadas com a terminologia de bases de dados: um "
+"conjunto de alterações à base de dados é agrupado numa transação. As "
+"transações podem ser confirmadas (*committed*), o que significa que todas as "
+"alterações são escritas na base de dados, ou revertidas (*rolled back*), o "
+"que significa que as alterações são todas descartadas e a base de dados "
+"permanece inalterada. Consulte qualquer livro sobre bases de dados para mais "
+"informações.)"
 
 #: ../../whatsnew/2.6.rst:370
 msgid ""
 "Let's assume there's an object representing a database connection. Our goal "
 "will be to let the user write code like this::"
 msgstr ""
+"Vamos assumir que existe um objeto que representa uma ligação a uma base de "
+"dados. O nosso objetivo será permitir que o utilizador escreva código como "
+"este::"
 
 #: ../../whatsnew/2.6.rst:373
 msgid ""
@@ -515,6 +581,11 @@ msgid ""
 "    cursor.execute('delete from ...')\n"
 "    # ... more operations ..."
 msgstr ""
+"db_connection = DatabaseConnection()\n"
+"with db_connection as cursor:\n"
+"    cursor.execute('insert into ...')\n"
+"    cursor.execute('delete from ...')\n"
+"    # ... mais operações ..."
 
 #: ../../whatsnew/2.6.rst:379
 msgid ""
@@ -522,6 +593,9 @@ msgid ""
 "or rolled back if there's an exception. Here's the basic interface for :"
 "class:`DatabaseConnection` that I'll assume::"
 msgstr ""
+"A transação deve ser confirmada se o código no bloco for executado sem "
+"problemas ou revertida se houver uma exceção. Aqui está a interface básica "
+"para :class:`DatabaseConnection` que vou assumir::"
 
 #: ../../whatsnew/2.6.rst:383
 msgid ""
@@ -543,6 +617,11 @@ msgid ""
 "cursor`` to their ':keyword:`with`' statement to bind the cursor to a "
 "variable name. ::"
 msgstr ""
+"O método :meth:`~object.__enter__` é bastante simples, tendo apenas de "
+"iniciar uma nova transação. Para esta aplicação, o objeto cursor resultante "
+"seria um resultado útil, pelo que o método o devolverá. O utilizador pode "
+"então adicionar ``as cursor`` à sua instrução ':keyword:`with`' para ligar o "
+"cursor a um nome de variável. ::"
 
 #: ../../whatsnew/2.6.rst:397
 msgid ""
@@ -561,6 +640,10 @@ msgid ""
 "exception occurred.  If there was no exception, the transaction is "
 "committed.  The transaction is rolled back if there was an exception."
 msgstr ""
+"O método :meth:`~object.__exit__` é o mais complicado porque é onde a maior "
+"parte do trabalho tem de ser feito. O método tem de verificar se ocorreu uma "
+"exceção. Se não houve exceção, a transação é confirmada. A transação é "
+"revertida se houve uma exceção."
 
 #: ../../whatsnew/2.6.rst:409
 msgid ""
@@ -569,6 +652,11 @@ msgid ""
 "exception will be re-raised automatically.  If you wished, you could be more "
 "explicit and add a :keyword:`return` statement at the marked location. ::"
 msgstr ""
+"No código abaixo, a execução simplesmente chegará ao fim da função, "
+"devolvendo o valor predefinido ``None``. ``None`` é falso, pelo que a "
+"exceção será gerada novamente automaticamente. Se quisesse, poderia ser mais "
+"explícito e adicionar uma instrução :keyword:`return` na localização "
+"marcada. ::"
 
 #: ../../whatsnew/2.6.rst:414
 msgid ""
@@ -586,7 +674,7 @@ msgstr ""
 
 #: ../../whatsnew/2.6.rst:429
 msgid "The contextlib module"
-msgstr ""
+msgstr "O módulo contextlib"
 
 #: ../../whatsnew/2.6.rst:431
 msgid ""
@@ -641,6 +729,11 @@ msgid ""
 "with`' statement both starts a database transaction and acquires a thread "
 "lock::"
 msgstr ""
+"O módulo :mod:`contextlib` também tem uma função ``nested(mgr1, mgr2, ...)`` "
+"que combina vários gestores de contexto, para que não precise de escrever "
+"instruções ':keyword:`with`' aninhadas. Neste exemplo, a única instrução ':"
+"keyword:`!with`' inicia uma transação de base de dados e adquire um bloqueio "
+"de *thread*::"
 
 #: ../../whatsnew/2.6.rst:468
 msgid ""
@@ -648,6 +741,9 @@ msgid ""
 "with nested (db_transaction(db), lock) as (cursor, locked):\n"
 "    ..."
 msgstr ""
+"lock = threading.Lock()\n"
+"with nested(db_transaction(db), lock) as (cursor, locked):\n"
+"    ..."
 
 #: ../../whatsnew/2.6.rst:472
 msgid ""
@@ -665,10 +761,16 @@ msgid ""
 "    for line in f:\n"
 "        sys.stdout.write(line)"
 msgstr ""
+"import urllib, sys\n"
+"from contextlib import closing\n"
+"\n"
+"with closing(urllib.urlopen('http://www.yahoo.com')) as f:\n"
+"    for line in f:\n"
+"        sys.stdout.write(line)"
 
 #: ../../whatsnew/2.6.rst:486
 msgid ":pep:`343` - The \"with\" statement"
-msgstr ""
+msgstr ":pep:`343` - A instrução ':keyword:`with`'"
 
 #: ../../whatsnew/2.6.rst:487
 msgid ""
@@ -677,6 +779,10 @@ msgid ""
 "':keyword:`with`' statement, which can be helpful in learning how the "
 "statement works."
 msgstr ""
+"PEP escrita por Guido van Rossum e Nick Coghlan; implementada por Mike "
+"Bland, Guido van Rossum e Neal Norwitz. A PEP mostra o código gerado para "
+"uma instrução ':keyword:`with`', o que pode ser útil para aprender como a "
+"instrução funciona."
 
 #: ../../whatsnew/2.6.rst:492
 msgid "The documentation  for the :mod:`contextlib` module."
