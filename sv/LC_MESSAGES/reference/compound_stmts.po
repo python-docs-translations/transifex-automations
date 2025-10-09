@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-22 14:43+0000\n"
+"POT-Creation-Date: 2025-10-09 14:15+0000\n"
 "PO-Revision-Date: 2025-09-16 00:02+0000\n"
 "Last-Translator: python-doc bot, 2025\n"
 "Language-Team: Swedish (https://app.transifex.com/python-doc/teams/5390/"
@@ -487,28 +487,40 @@ msgstr ":keyword:`!except*` klausul"
 
 #: ../../reference/compound_stmts.rst:338
 msgid ""
-"The :keyword:`!except*` clause(s) are used for handling :exc:"
-"`ExceptionGroup`\\s. The exception type for matching is interpreted as in "
-"the case of :keyword:`except`, but in the case of exception groups we can "
-"have partial matches when the type matches some of the exceptions in the "
-"group. This means that multiple :keyword:`!except*` clauses can execute, "
-"each handling part of the exception group. Each clause executes at most once "
-"and handles an exception group of all matching exceptions.  Each exception "
-"in the group is handled by at most one :keyword:`!except*` clause, the first "
-"that matches it. ::"
+"The :keyword:`!except*` clause(s) specify one or more handlers for groups of "
+"exceptions (:exc:`BaseExceptionGroup` instances). A :keyword:`try` statement "
+"can have either :keyword:`except` or :keyword:`!except*` clauses, but not "
+"both. The exception type for matching is mandatory in the case of :keyword:`!"
+"except*`, so ``except*:`` is a syntax error. The type is interpreted as in "
+"the case of :keyword:`!except`, but matching is performed on the exceptions "
+"contained in the group that is being handled. An :exc:`TypeError` is raised "
+"if a matching type is a subclass of :exc:`!BaseExceptionGroup`, because that "
+"would have ambiguous semantics."
 msgstr ""
-"Klausulerna :keyword:`!except*` används för att hantera :exc:"
-"`ExceptionGroup`. Undantagstypen för matchning tolkas som i fallet med :"
-"keyword:`except`, men i fallet med undantagsgrupper kan vi ha partiella "
-"matchningar när typen matchar några av undantagen i gruppen. Detta innebär "
-"att flera :keyword:`!except*`\\-klausuler kan köras, var och en hanterar en "
-"del av undantagsgruppen. Varje klausul exekveras högst en gång och hanterar "
-"en undantagsgrupp med alla matchande undantag.  Varje undantag i gruppen "
-"hanteras av högst en :keyword:`!except*`\\-sats, den första som matchar "
-"det. ::"
 
 #: ../../reference/compound_stmts.rst:348
 msgid ""
+"When an exception group is raised in the try block, each :keyword:`!except*` "
+"clause splits (see :meth:`~BaseExceptionGroup.split`) it into the subgroups "
+"of matching and non-matching exceptions. If the matching subgroup is not "
+"empty, it becomes the handled exception (the value returned from :func:`sys."
+"exception`) and assigned to the target of the :keyword:`!except*` clause (if "
+"there is one). Then, the body of the :keyword:`!except*` clause executes. If "
+"the non-matching subgroup is not empty, it is processed by the next :keyword:"
+"`!except*` in the same manner. This continues until all exceptions in the "
+"group have been matched, or the last :keyword:`!except*` clause has run."
+msgstr ""
+
+#: ../../reference/compound_stmts.rst:358
+msgid ""
+"After all :keyword:`!except*` clauses execute, the group of unhandled "
+"exceptions is merged with any exceptions that were raised or re-raised from "
+"within :keyword:`!except*` clauses. This merged exception group propagates "
+"on.::"
+msgstr ""
+
+#: ../../reference/compound_stmts.rst:362
+msgid ""
 ">>> try:\n"
 "...     raise ExceptionGroup(\"eg\",\n"
 "...         [ValueError(1), TypeError(2), OSError(3), OSError(4)])\n"
@@ -520,53 +532,25 @@ msgid ""
 "caught <class 'ExceptionGroup'> with nested (TypeError(2),)\n"
 "caught <class 'ExceptionGroup'> with nested (OSError(3), OSError(4))\n"
 "  + Exception Group Traceback (most recent call last):\n"
-"  |   File \"<stdin>\", line 2, in <module>\n"
-"  | ExceptionGroup: eg\n"
+"  |   File \"<doctest default[0]>\", line 2, in <module>\n"
+"  |     raise ExceptionGroup(\"eg\",\n"
+"  |         [ValueError(1), TypeError(2), OSError(3), OSError(4)])\n"
+"  | ExceptionGroup: eg (1 sub-exception)\n"
 "  +-+---------------- 1 ----------------\n"
 "    | ValueError: 1\n"
 "    +------------------------------------"
 msgstr ""
-">>> try:\n"
-"...     raise ExceptionGroup(\"eg\",\n"
-"...         [ValueError(1), TypeError(2), OSError(3), OSError(4)])\n"
-"... except* TypeError as e:\n"
-"...     print(f'caught {type(e)} with nested {e.exceptions}')\n"
-"... except* OSError as e:\n"
-"...     print(f'caught {type(e)} with nested {e.exceptions}')\n"
-"...\n"
-"caught <class 'ExceptionGroup'> with nested (TypeError(2),)\n"
-"caught <class 'ExceptionGroup'> with nested (OSError(3), OSError(4))\n"
-"  + Exception Group Traceback (most recent call last):\n"
-"  |   File \"<stdin>\", line 2, in <module>\n"
-"  | ExceptionGroup: eg\n"
-"  +-+---------------- 1 ----------------\n"
-"    | ValueError: 1\n"
-"    +------------------------------------"
 
-#: ../../reference/compound_stmts.rst:366
+#: ../../reference/compound_stmts.rst:381
 msgid ""
-"Any remaining exceptions that were not handled by any :keyword:`!except*` "
-"clause are re-raised at the end, along with all exceptions that were raised "
-"from within the :keyword:`!except*` clauses. If this list contains more than "
-"one exception to reraise, they are combined into an exception group."
+"If the exception raised from the :keyword:`try` block is not an exception "
+"group and its type matches one of the :keyword:`!except*` clauses, it is "
+"caught and wrapped by an exception group with an empty message string. This "
+"ensures that the type of the target ``e`` is consistently :exc:"
+"`BaseExceptionGroup`::"
 msgstr ""
-"Eventuella återstående undantag som inte hanterades av någon :keyword:`!"
-"except*`\\-klausul tas upp igen i slutet, tillsammans med alla undantag som "
-"togs upp från :keyword:`!except*`\\-klausulerna. Om denna lista innehåller "
-"mer än ett undantag som ska tas upp på nytt, kombineras de till en "
-"undantagsgrupp."
 
-#: ../../reference/compound_stmts.rst:372
-msgid ""
-"If the raised exception is not an exception group and its type matches one "
-"of the :keyword:`!except*` clauses, it is caught and wrapped by an exception "
-"group with an empty message string. ::"
-msgstr ""
-"Om det undantag som tas upp inte är en undantagsgrupp och dess typ matchar "
-"en av :keyword:`!except*`\\-klausulerna, fångas det upp och omsluts av en "
-"undantagsgrupp med en tom meddelandesträng. ::"
-
-#: ../../reference/compound_stmts.rst:376
+#: ../../reference/compound_stmts.rst:386
 msgid ""
 ">>> try:\n"
 "...     raise BlockingIOError\n"
@@ -582,28 +566,17 @@ msgstr ""
 "...\n"
 "ExceptionGroup('', (BlockingIOError()))"
 
-#: ../../reference/compound_stmts.rst:383
+#: ../../reference/compound_stmts.rst:393
 msgid ""
-"An :keyword:`!except*` clause must have a matching expression; it cannot be "
-"``except*:``. Furthermore, this expression cannot contain exception group "
-"types, because that would have ambiguous semantics."
-msgstr ""
-"En :keyword:`!except*`\\-klausul måste ha ett matchande uttryck; det kan "
-"inte vara ``except*:``. Dessutom kan detta uttryck inte innehålla "
-"undantagsgrupptyper, eftersom det skulle ha en tvetydig semantik."
-
-#: ../../reference/compound_stmts.rst:387
-msgid ""
-"It is not possible to mix :keyword:`except` and :keyword:`!except*` in the "
-"same :keyword:`try`. The :keyword:`break`, :keyword:`continue`, and :keyword:"
-"`return` statements cannot appear in an :keyword:`!except*` clause."
+":keyword:`break`, :keyword:`continue` and :keyword:`return` cannot appear in "
+"an :keyword:`!except*` clause."
 msgstr ""
 
-#: ../../reference/compound_stmts.rst:402
+#: ../../reference/compound_stmts.rst:406
 msgid ":keyword:`!else` clause"
 msgstr ":keyword:`!else` klausul"
 
-#: ../../reference/compound_stmts.rst:404
+#: ../../reference/compound_stmts.rst:408
 msgid ""
 "The optional :keyword:`!else` clause is executed if the control flow leaves "
 "the :keyword:`try` suite, no exception was raised, and no :keyword:"
@@ -617,11 +590,11 @@ msgstr ""
 "exekverats.  Undantag i :keyword:`!else`\\-klausulen hanteras inte av de "
 "föregående :keyword:`except`\\-klausulerna."
 
-#: ../../reference/compound_stmts.rst:416
+#: ../../reference/compound_stmts.rst:420
 msgid ":keyword:`!finally` clause"
 msgstr ":keyword:`!finally` klausul"
 
-#: ../../reference/compound_stmts.rst:418
+#: ../../reference/compound_stmts.rst:422
 msgid ""
 "If :keyword:`!finally` is present, it specifies a 'cleanup' handler.  The :"
 "keyword:`try` clause is executed, including any :keyword:`except` and :"
@@ -635,7 +608,7 @@ msgid ""
 "saved exception is discarded. For example, this function returns 42."
 msgstr ""
 
-#: ../../reference/compound_stmts.rst:431
+#: ../../reference/compound_stmts.rst:435
 msgid ""
 "def f():\n"
 "    try:\n"
@@ -649,7 +622,7 @@ msgstr ""
 "    slutligen:\n"
 "        retur 42"
 
-#: ../../reference/compound_stmts.rst:439
+#: ../../reference/compound_stmts.rst:443
 msgid ""
 "The exception information is not available to the program during execution "
 "of the :keyword:`!finally` clause."
@@ -657,7 +630,7 @@ msgstr ""
 "Undantagsinformationen är inte tillgänglig för programmet under exekveringen "
 "av :keyword:`!finally`\\-satsen."
 
-#: ../../reference/compound_stmts.rst:447
+#: ../../reference/compound_stmts.rst:451
 msgid ""
 "When a :keyword:`return`, :keyword:`break` or :keyword:`continue` statement "
 "is executed in the :keyword:`try` suite of a :keyword:`!try`...\\ :keyword:`!"
@@ -669,7 +642,7 @@ msgstr ""
 "finally`\\-sats, exekveras även :keyword:`!finally`\\-klausulen \"på vägen "
 "ut\""
 
-#: ../../reference/compound_stmts.rst:451
+#: ../../reference/compound_stmts.rst:455
 msgid ""
 "The return value of a function is determined by the last :keyword:`return` "
 "statement executed.  Since the :keyword:`!finally` clause always executes, "
@@ -683,7 +656,7 @@ msgstr ""
 "satsen alltid att vara den sista som exekveras. Följande funktion returnerar "
 "'finally'."
 
-#: ../../reference/compound_stmts.rst:456
+#: ../../reference/compound_stmts.rst:460
 msgid ""
 "def foo():\n"
 "    try:\n"
@@ -697,7 +670,7 @@ msgstr ""
 "    finally: return 'finally':\n"
 "        returnera 'finally'"
 
-#: ../../reference/compound_stmts.rst:464
+#: ../../reference/compound_stmts.rst:468
 msgid ""
 "Prior to Python 3.8, a :keyword:`continue` statement was illegal in the :"
 "keyword:`!finally` clause due to a problem with the implementation."
@@ -705,7 +678,7 @@ msgstr ""
 "Före Python 3.8 var en :keyword:`continue`\\-sats olaglig i :keyword:`!"
 "finally`\\-satsen på grund av ett problem med implementeringen."
 
-#: ../../reference/compound_stmts.rst:468
+#: ../../reference/compound_stmts.rst:472
 msgid ""
 "The compiler emits a :exc:`SyntaxWarning` when a :keyword:`return`, :keyword:"
 "`break` or :keyword:`continue` appears in a :keyword:`!finally` block (see :"
@@ -715,11 +688,11 @@ msgstr ""
 "keyword:`break` eller :keyword:`continue` förekommer i ett :keyword:`!"
 "finally`\\-block (se :pep:`765`)."
 
-#: ../../reference/compound_stmts.rst:478
+#: ../../reference/compound_stmts.rst:482
 msgid "The :keyword:`!with` statement"
 msgstr ":keyword:`!with`\\-satsen"
 
-#: ../../reference/compound_stmts.rst:487
+#: ../../reference/compound_stmts.rst:491
 msgid ""
 "The :keyword:`with` statement is used to wrap the execution of a block with "
 "methods defined by a context manager (see section :ref:`context-managers`). "
@@ -732,7 +705,7 @@ msgstr ""
 "\\ :keyword:`finally` användningsmönster kan kapslas in för bekväm "
 "återanvändning."
 
-#: ../../reference/compound_stmts.rst:497
+#: ../../reference/compound_stmts.rst:501
 msgid ""
 "The execution of the :keyword:`with` statement with one \"item\" proceeds as "
 "follows:"
@@ -740,7 +713,7 @@ msgstr ""
 "Exekveringen av :keyword:`with`\\-satsen med ett \"objekt\" går till på "
 "följande sätt:"
 
-#: ../../reference/compound_stmts.rst:499
+#: ../../reference/compound_stmts.rst:503
 msgid ""
 "The context expression (the expression given in the :token:`~python-grammar:"
 "with_item`) is evaluated to obtain a context manager."
@@ -748,22 +721,22 @@ msgstr ""
 "Kontextuttrycket (det uttryck som anges i :token:`~python-grammar:"
 "with_item`) utvärderas för att få fram en kontexthanterare."
 
-#: ../../reference/compound_stmts.rst:502
+#: ../../reference/compound_stmts.rst:506
 msgid ""
 "The context manager's :meth:`~object.__enter__` is loaded for later use."
 msgstr ""
 "Kontexthanterarens :meth:`~object.__enter__` laddas för senare användning."
 
-#: ../../reference/compound_stmts.rst:504
+#: ../../reference/compound_stmts.rst:508
 msgid "The context manager's :meth:`~object.__exit__` is loaded for later use."
 msgstr ""
 "Kontexthanterarens :meth:`~object.__exit__` laddas för senare användning."
 
-#: ../../reference/compound_stmts.rst:506
+#: ../../reference/compound_stmts.rst:510
 msgid "The context manager's :meth:`~object.__enter__` method is invoked."
 msgstr "Kontexthanterarens metod :meth:`~object.__enter__` anropas."
 
-#: ../../reference/compound_stmts.rst:508
+#: ../../reference/compound_stmts.rst:512
 msgid ""
 "If a target was included in the :keyword:`with` statement, the return value "
 "from :meth:`~object.__enter__` is assigned to it."
@@ -771,7 +744,7 @@ msgstr ""
 "Om ett mål ingick i :keyword:`with`\\-satsen tilldelas det returvärdet från :"
 "meth:`~object.__enter__`."
 
-#: ../../reference/compound_stmts.rst:513
+#: ../../reference/compound_stmts.rst:517
 msgid ""
 "The :keyword:`with` statement guarantees that if the :meth:`~object."
 "__enter__` method returns without an error, then :meth:`~object.__exit__` "
@@ -785,11 +758,11 @@ msgstr ""
 "att behandlas på samma sätt som ett fel som inträffar inom sviten skulle ha "
 "behandlats. Se steg 7 nedan."
 
-#: ../../reference/compound_stmts.rst:519
+#: ../../reference/compound_stmts.rst:523
 msgid "The suite is executed."
 msgstr "Sviten är genomförd."
 
-#: ../../reference/compound_stmts.rst:521
+#: ../../reference/compound_stmts.rst:525
 msgid ""
 "The context manager's :meth:`~object.__exit__` method is invoked.  If an "
 "exception caused the suite to be exited, its type, value, and traceback are "
@@ -801,7 +774,7 @@ msgstr ""
 "argument till :meth:`~object.__exit__`. Annars anges tre :const:`None`\\-"
 "argument."
 
-#: ../../reference/compound_stmts.rst:526
+#: ../../reference/compound_stmts.rst:530
 msgid ""
 "If the suite was exited due to an exception, and the return value from the :"
 "meth:`~object.__exit__` method was false, the exception is reraised.  If the "
@@ -813,7 +786,7 @@ msgstr ""
 "var sant undertrycks undantaget och exekveringen fortsätter med det "
 "uttalande som följer på :keyword:`with`\\-satsen."
 
-#: ../../reference/compound_stmts.rst:531
+#: ../../reference/compound_stmts.rst:535
 msgid ""
 "If the suite was exited for any reason other than an exception, the return "
 "value from :meth:`~object.__exit__` is ignored, and execution proceeds at "
@@ -823,13 +796,13 @@ msgstr ""
 "returvärdet från :meth:`~object.__exit__`, och exekveringen fortsätter på "
 "den normala platsen för den typ av avslut som gjordes."
 
-#: ../../reference/compound_stmts.rst:535
-#: ../../reference/compound_stmts.rst:1553
-#: ../../reference/compound_stmts.rst:1594
+#: ../../reference/compound_stmts.rst:539
+#: ../../reference/compound_stmts.rst:1557
+#: ../../reference/compound_stmts.rst:1598
 msgid "The following code::"
 msgstr "Följande kod::"
 
-#: ../../reference/compound_stmts.rst:537
+#: ../../reference/compound_stmts.rst:541
 msgid ""
 "with EXPRESSION as TARGET:\n"
 "    SUITE"
@@ -837,13 +810,13 @@ msgstr ""
 "med EXPRESSION som MÅL:\n"
 "    SUITE"
 
-#: ../../reference/compound_stmts.rst:540
-#: ../../reference/compound_stmts.rst:565
-#: ../../reference/compound_stmts.rst:1599
+#: ../../reference/compound_stmts.rst:544
+#: ../../reference/compound_stmts.rst:569
+#: ../../reference/compound_stmts.rst:1603
 msgid "is semantically equivalent to::"
 msgstr "är semantiskt ekvivalent med::"
 
-#: ../../reference/compound_stmts.rst:542
+#: ../../reference/compound_stmts.rst:546
 msgid ""
 "manager = (EXPRESSION)\n"
 "enter = type(manager).__enter__\n"
@@ -879,7 +852,7 @@ msgstr ""
 "    if not hit_except:\n"
 "        exit(manager, Ingen, Ingen, Ingen)"
 
-#: ../../reference/compound_stmts.rst:559
+#: ../../reference/compound_stmts.rst:563
 msgid ""
 "With more than one item, the context managers are processed as if multiple :"
 "keyword:`with` statements were nested::"
@@ -887,7 +860,7 @@ msgstr ""
 "Med mer än ett objekt bearbetas kontexthanterarna som om flera :keyword:"
 "`with`\\-satser var nästlade:"
 
-#: ../../reference/compound_stmts.rst:562
+#: ../../reference/compound_stmts.rst:566
 msgid ""
 "with A() as a, B() as b:\n"
 "    SUITE"
@@ -895,7 +868,7 @@ msgstr ""
 "med A() som a, B() som b:\n"
 "    SUITE"
 
-#: ../../reference/compound_stmts.rst:567
+#: ../../reference/compound_stmts.rst:571
 msgid ""
 "with A() as a:\n"
 "    with B() as b:\n"
@@ -905,7 +878,7 @@ msgstr ""
 "    med B() som b:\n"
 "        SUITE"
 
-#: ../../reference/compound_stmts.rst:571
+#: ../../reference/compound_stmts.rst:575
 msgid ""
 "You can also write multi-item context managers in multiple lines if the "
 "items are surrounded by parentheses. For example::"
@@ -913,7 +886,7 @@ msgstr ""
 "Du kan också skriva kontexthanterare med flera objekt på flera rader om "
 "objekten omges av parenteser. Till exempel::"
 
-#: ../../reference/compound_stmts.rst:574
+#: ../../reference/compound_stmts.rst:578
 msgid ""
 "with (\n"
 "    A() as a,\n"
@@ -927,11 +900,11 @@ msgstr ""
 "):\n"
 "    SUITE"
 
-#: ../../reference/compound_stmts.rst:580
+#: ../../reference/compound_stmts.rst:584
 msgid "Support for multiple context expressions."
 msgstr "Stöd för flera kontextuttryck."
 
-#: ../../reference/compound_stmts.rst:583
+#: ../../reference/compound_stmts.rst:587
 msgid ""
 "Support for using grouping parentheses to break the statement in multiple "
 "lines."
@@ -939,26 +912,26 @@ msgstr ""
 "Stöd för att använda grupperingsparenteser för att dela upp uttalandet i "
 "flera rader."
 
-#: ../../reference/compound_stmts.rst:588
+#: ../../reference/compound_stmts.rst:592
 msgid ":pep:`343` - The \"with\" statement"
 msgstr ":pep:`343` - Uttalandet \"med\""
 
-#: ../../reference/compound_stmts.rst:589
+#: ../../reference/compound_stmts.rst:593
 msgid ""
 "The specification, background, and examples for the Python :keyword:`with` "
 "statement."
 msgstr ""
 "Specifikation, bakgrund och exempel för Pythons :keyword:`with`\\-sats."
 
-#: ../../reference/compound_stmts.rst:596
+#: ../../reference/compound_stmts.rst:600
 msgid "The :keyword:`!match` statement"
 msgstr ":keyword:`!match`\\-satsen"
 
-#: ../../reference/compound_stmts.rst:610
+#: ../../reference/compound_stmts.rst:614
 msgid "The match statement is used for pattern matching.  Syntax:"
 msgstr "Match-satsen används för mönstermatchning.  Syntax:"
 
-#: ../../reference/compound_stmts.rst:619
+#: ../../reference/compound_stmts.rst:623
 msgid ""
 "This section uses single quotes to denote :ref:`soft keywords <soft-"
 "keywords>`."
@@ -966,7 +939,7 @@ msgstr ""
 "I detta avsnitt används enkla citationstecken för att beteckna :ref:`mjuka "
 "nyckelord <soft-keywords>`."
 
-#: ../../reference/compound_stmts.rst:622
+#: ../../reference/compound_stmts.rst:626
 msgid ""
 "Pattern matching takes a pattern as input (following ``case``) and a subject "
 "value (following ``match``).  The pattern (which may contain subpatterns) is "
@@ -976,13 +949,13 @@ msgstr ""
 "ämnesvärde (efter ``match``).  Mönstret (som kan innehålla undermönster) "
 "matchas mot ämnesvärdet.  Utfallet är följande:"
 
-#: ../../reference/compound_stmts.rst:626
+#: ../../reference/compound_stmts.rst:630
 msgid "A match success or failure (also termed a pattern success or failure)."
 msgstr ""
 "En lyckad eller misslyckad matchning (även kallad ett lyckat eller "
 "misslyckat mönster)."
 
-#: ../../reference/compound_stmts.rst:628
+#: ../../reference/compound_stmts.rst:632
 msgid ""
 "Possible binding of matched values to a name.  The prerequisites for this "
 "are further discussed below."
@@ -990,31 +963,31 @@ msgstr ""
 "Möjlig bindning av matchade värden till ett namn.  Förutsättningarna för "
 "detta diskuteras vidare nedan."
 
-#: ../../reference/compound_stmts.rst:631
+#: ../../reference/compound_stmts.rst:635
 msgid ""
 "The ``match`` and ``case`` keywords are :ref:`soft keywords <soft-keywords>`."
 msgstr ""
 "Nyckelorden ``match`` och ``case`` är :ref:`mjuka nyckelord <soft-keywords>`."
 
-#: ../../reference/compound_stmts.rst:635
-#: ../../reference/compound_stmts.rst:1192
+#: ../../reference/compound_stmts.rst:639
+#: ../../reference/compound_stmts.rst:1196
 msgid ":pep:`634` -- Structural Pattern Matching: Specification"
 msgstr ":pep:`634` -- Matchning av strukturella mönster: Specifikation"
 
-#: ../../reference/compound_stmts.rst:636
-#: ../../reference/compound_stmts.rst:1193
+#: ../../reference/compound_stmts.rst:640
+#: ../../reference/compound_stmts.rst:1197
 msgid ":pep:`636` -- Structural Pattern Matching: Tutorial"
 msgstr ":pep:`636` -- Matchning av strukturella mönster: Handledning"
 
-#: ../../reference/compound_stmts.rst:640
+#: ../../reference/compound_stmts.rst:644
 msgid "Overview"
 msgstr "Översikt"
 
-#: ../../reference/compound_stmts.rst:642
+#: ../../reference/compound_stmts.rst:646
 msgid "Here's an overview of the logical flow of a match statement:"
 msgstr "Här följer en översikt över det logiska flödet i ett matchningsbesked:"
 
-#: ../../reference/compound_stmts.rst:645
+#: ../../reference/compound_stmts.rst:649
 msgid ""
 "The subject expression ``subject_expr`` is evaluated and a resulting subject "
 "value obtained. If the subject expression contains a comma, a tuple is "
@@ -1024,7 +997,7 @@ msgstr ""
 "subjektvärde erhålls. Om ämnesuttrycket innehåller ett kommatecken "
 "konstrueras en tupel med hjälp av :ref:`standardreglerna <typesseq-tuple>`."
 
-#: ../../reference/compound_stmts.rst:649
+#: ../../reference/compound_stmts.rst:653
 msgid ""
 "Each pattern in a ``case_block`` is attempted to match with the subject "
 "value. The specific rules for success or failure are described below. The "
@@ -1041,7 +1014,7 @@ msgstr ""
 "mönstermatchning överlever det exekverade blocket och kan användas efter "
 "matchningssatsen**."
 
-#: ../../reference/compound_stmts.rst:658
+#: ../../reference/compound_stmts.rst:662
 msgid ""
 "During failed pattern matches, some subpatterns may succeed.  Do not rely on "
 "bindings being made for a failed match.  Conversely, do not rely on "
@@ -1056,7 +1029,7 @@ msgstr ""
 "variera.  Detta är ett avsiktligt beslut som fattats för att olika "
 "implementationer ska kunna lägga till optimeringar."
 
-#: ../../reference/compound_stmts.rst:665
+#: ../../reference/compound_stmts.rst:669
 msgid ""
 "If the pattern succeeds, the corresponding guard (if present) is evaluated. "
 "In this case all name bindings are guaranteed to have happened."
@@ -1064,7 +1037,7 @@ msgstr ""
 "Om mönstret lyckas utvärderas motsvarande skydd (om sådant finns). I detta "
 "fall garanteras att alla namnbindningar har inträffat."
 
-#: ../../reference/compound_stmts.rst:668
+#: ../../reference/compound_stmts.rst:672
 msgid ""
 "If the guard evaluates as true or is missing, the ``block`` inside "
 "``case_block`` is executed."
@@ -1072,15 +1045,15 @@ msgstr ""
 "Om skyddet utvärderas som sant eller saknas, körs ``block`` inuti "
 "``case_block``."
 
-#: ../../reference/compound_stmts.rst:671
+#: ../../reference/compound_stmts.rst:675
 msgid "Otherwise, the next ``case_block`` is attempted as described above."
 msgstr "I annat fall försöker nästa ``case_block`` enligt beskrivningen ovan."
 
-#: ../../reference/compound_stmts.rst:673
+#: ../../reference/compound_stmts.rst:677
 msgid "If there are no further case blocks, the match statement is completed."
 msgstr "Om det inte finns några fler fallblock är matchningsöversikten klar."
 
-#: ../../reference/compound_stmts.rst:677
+#: ../../reference/compound_stmts.rst:681
 msgid ""
 "Users should generally never rely on a pattern being evaluated.  Depending "
 "on implementation, the interpreter may cache values or use other "
@@ -1090,11 +1063,11 @@ msgstr ""
 "Beroende på implementering kan tolken cacha värden eller använda andra "
 "optimeringar som hoppar över upprepade utvärderingar."
 
-#: ../../reference/compound_stmts.rst:681
+#: ../../reference/compound_stmts.rst:685
 msgid "A sample match statement::"
 msgstr "Ett exempel på ett matchningsbesked::"
 
-#: ../../reference/compound_stmts.rst:683
+#: ../../reference/compound_stmts.rst:687
 msgid ""
 ">>> flag = False\n"
 ">>> match (100, 200):\n"
@@ -1122,18 +1095,18 @@ msgstr ""
 "...\n"
 "Case 3, y: 200"
 
-#: ../../reference/compound_stmts.rst:697
+#: ../../reference/compound_stmts.rst:701
 msgid ""
 "In this case, ``if flag`` is a guard.  Read more about that in the next "
 "section."
 msgstr ""
 "I det här fallet är ``if flag`` en guard.  Läs mer om det i nästa avsnitt."
 
-#: ../../reference/compound_stmts.rst:700
+#: ../../reference/compound_stmts.rst:704
 msgid "Guards"
 msgstr "Vakter"
 
-#: ../../reference/compound_stmts.rst:707
+#: ../../reference/compound_stmts.rst:711
 msgid ""
 "A ``guard`` (which is part of the ``case``) must succeed for code inside the "
 "``case`` block to execute.  It takes the form: :keyword:`if` followed by an "
@@ -1143,12 +1116,12 @@ msgstr ""
 "``case``\\-blocket ska kunna exekveras.  Den har formen: :keyword:`if` följt "
 "av ett uttryck."
 
-#: ../../reference/compound_stmts.rst:712
+#: ../../reference/compound_stmts.rst:716
 msgid "The logical flow of a ``case`` block with a ``guard`` follows:"
 msgstr ""
 "Det logiska flödet i ett ``case``\\-block med en ``guard`` är följande:"
 
-#: ../../reference/compound_stmts.rst:714
+#: ../../reference/compound_stmts.rst:718
 msgid ""
 "Check that the pattern in the ``case`` block succeeded.  If the pattern "
 "failed, the ``guard`` is not evaluated and the next ``case`` block is "
@@ -1158,23 +1131,23 @@ msgstr ""
 "misslyckades utvärderas inte ``guard`` och nästa ``case``\\-block "
 "kontrolleras."
 
-#: ../../reference/compound_stmts.rst:718
+#: ../../reference/compound_stmts.rst:722
 msgid "If the pattern succeeded, evaluate the ``guard``."
 msgstr "Om mönstret lyckades, utvärdera ``guard``."
 
-#: ../../reference/compound_stmts.rst:720
+#: ../../reference/compound_stmts.rst:724
 msgid ""
 "If the ``guard`` condition evaluates as true, the case block is selected."
 msgstr "Om villkoret ``guard`` utvärderas som sant, väljs fallblocket."
 
-#: ../../reference/compound_stmts.rst:723
+#: ../../reference/compound_stmts.rst:727
 msgid ""
 "If the ``guard`` condition evaluates as false, the case block is not "
 "selected."
 msgstr ""
 "Om villkoret ``guard`` utvärderas som falskt, väljs inte ärendeblocket."
 
-#: ../../reference/compound_stmts.rst:726
+#: ../../reference/compound_stmts.rst:730
 msgid ""
 "If the ``guard`` raises an exception during evaluation, the exception "
 "bubbles up."
@@ -1182,7 +1155,7 @@ msgstr ""
 "Om ``guard`` ger upphov till ett undantag under utvärderingen, bubblar "
 "undantaget upp."
 
-#: ../../reference/compound_stmts.rst:729
+#: ../../reference/compound_stmts.rst:733
 msgid ""
 "Guards are allowed to have side effects as they are expressions.  Guard "
 "evaluation must proceed from the first to the last case block, one at a "
@@ -1196,11 +1169,11 @@ msgstr ""
 "måste ske i ordning.) Utvärderingen av guarden måste avbrytas när ett "
 "fallblock har valts."
 
-#: ../../reference/compound_stmts.rst:739
+#: ../../reference/compound_stmts.rst:743
 msgid "Irrefutable Case Blocks"
 msgstr "Obestridliga fallblock"
 
-#: ../../reference/compound_stmts.rst:743
+#: ../../reference/compound_stmts.rst:747
 msgid ""
 "An irrefutable case block is a match-all case block.  A match statement may "
 "have at most one irrefutable case block, and it must be last."
@@ -1209,7 +1182,7 @@ msgstr ""
 "matchningsuttalande kan ha högst ett oåterkalleligt fallblock och det måste "
 "vara det sista."
 
-#: ../../reference/compound_stmts.rst:746
+#: ../../reference/compound_stmts.rst:750
 msgid ""
 "A case block is considered irrefutable if it has no guard and its pattern is "
 "irrefutable.  A pattern is considered irrefutable if we can prove from its "
@@ -1221,49 +1194,49 @@ msgstr ""
 "enbart utifrån dess syntax kan bevisa att det alltid kommer att lyckas.  "
 "Endast följande mönster är oåterkalleliga:"
 
-#: ../../reference/compound_stmts.rst:751
+#: ../../reference/compound_stmts.rst:755
 msgid ":ref:`as-patterns` whose left-hand side is irrefutable"
 msgstr ":ref:`as-patterns` vars vänstra sida är oåterkallelig"
 
-#: ../../reference/compound_stmts.rst:753
+#: ../../reference/compound_stmts.rst:757
 msgid ":ref:`or-patterns` containing at least one irrefutable pattern"
 msgstr ":ref:`or-patterns` som innehåller minst ett obestridligt mönster"
 
-#: ../../reference/compound_stmts.rst:755
+#: ../../reference/compound_stmts.rst:759
 msgid ":ref:`capture-patterns`"
 msgstr ":ref:`capture-patterns`"
 
-#: ../../reference/compound_stmts.rst:757
+#: ../../reference/compound_stmts.rst:761
 msgid ":ref:`wildcard-patterns`"
 msgstr ":ref:`wildcard-patterns`"
 
-#: ../../reference/compound_stmts.rst:759
+#: ../../reference/compound_stmts.rst:763
 msgid "parenthesized irrefutable patterns"
 msgstr "parentes ovedersägliga mönster"
 
-#: ../../reference/compound_stmts.rst:763
+#: ../../reference/compound_stmts.rst:767
 msgid "Patterns"
 msgstr "Blockmönster"
 
-#: ../../reference/compound_stmts.rst:770
+#: ../../reference/compound_stmts.rst:774
 msgid "This section uses grammar notations beyond standard EBNF:"
 msgstr "I detta avsnitt används grammatiska notationer utöver standard EBNF:"
 
-#: ../../reference/compound_stmts.rst:772
+#: ../../reference/compound_stmts.rst:776
 msgid "the notation ``SEP.RULE+`` is shorthand for ``RULE (SEP RULE)*``"
 msgstr "notationen ``SEP.RULE+`` är en förkortning för ``RULE (SEP RULE)*``"
 
-#: ../../reference/compound_stmts.rst:774
+#: ../../reference/compound_stmts.rst:778
 msgid "the notation ``!RULE`` is shorthand for a negative lookahead assertion"
 msgstr ""
 "notationen ``!RULE`` är en förkortning för ett negativt framåtblickande "
 "påstående"
 
-#: ../../reference/compound_stmts.rst:777
+#: ../../reference/compound_stmts.rst:781
 msgid "The top-level syntax for ``patterns`` is:"
 msgstr "Syntaxen på högsta nivå för ``patterns`` är:"
 
-#: ../../reference/compound_stmts.rst:791
+#: ../../reference/compound_stmts.rst:795
 msgid ""
 "The descriptions below will include a description \"in simple terms\" of "
 "what a pattern does for illustration purposes (credits to Raymond Hettinger "
@@ -1279,11 +1252,11 @@ msgstr ""
 "återspegla den underliggande implementeringen.  Dessutom täcker de inte alla "
 "giltiga former."
 
-#: ../../reference/compound_stmts.rst:801
+#: ../../reference/compound_stmts.rst:805
 msgid "OR Patterns"
 msgstr "OR-mönster"
 
-#: ../../reference/compound_stmts.rst:803
+#: ../../reference/compound_stmts.rst:807
 msgid ""
 "An OR pattern is two or more patterns separated by vertical bars ``|``.  "
 "Syntax:"
@@ -1291,7 +1264,7 @@ msgstr ""
 "Ett OR-mönster är två eller flera mönster åtskilda av vertikala streck ``|"
 "``.  Syntax:"
 
-#: ../../reference/compound_stmts.rst:809
+#: ../../reference/compound_stmts.rst:813
 msgid ""
 "Only the final subpattern may be :ref:`irrefutable <irrefutable_case>`, and "
 "each subpattern must bind the same set of names to avoid ambiguity."
@@ -1300,7 +1273,7 @@ msgstr ""
 "<irrefutable_case>`, och varje undermönster måste binda samma uppsättning "
 "namn för att undvika tvetydighet."
 
-#: ../../reference/compound_stmts.rst:812
+#: ../../reference/compound_stmts.rst:816
 msgid ""
 "An OR pattern matches each of its subpatterns in turn to the subject value, "
 "until one succeeds.  The OR pattern is then considered successful.  "
@@ -1311,7 +1284,7 @@ msgstr ""
 "framgångsrikt.  I annat fall, om inget av undermönstren lyckas, misslyckas "
 "OR-mönstret."
 
-#: ../../reference/compound_stmts.rst:816
+#: ../../reference/compound_stmts.rst:820
 msgid ""
 "In simple terms, ``P1 | P2 | ...`` will try to match ``P1``, if it fails it "
 "will try to match ``P2``, succeeding immediately if any succeeds, failing "
@@ -1321,11 +1294,11 @@ msgstr ""
 "misslyckas kommer det att försöka matcha ``P2``, lyckas omedelbart om någon "
 "lyckas, misslyckas annars."
 
-#: ../../reference/compound_stmts.rst:822
+#: ../../reference/compound_stmts.rst:826
 msgid "AS Patterns"
 msgstr "AS-mönster"
 
-#: ../../reference/compound_stmts.rst:824
+#: ../../reference/compound_stmts.rst:828
 msgid ""
 "An AS pattern matches an OR pattern on the left of the :keyword:`as` keyword "
 "against a subject.  Syntax:"
@@ -1333,7 +1306,7 @@ msgstr ""
 "Ett AS-mönster matchar ett OR-mönster till vänster om nyckelordet :keyword:"
 "`as` mot ett ämne.  Syntax för detta:"
 
-#: ../../reference/compound_stmts.rst:830
+#: ../../reference/compound_stmts.rst:834
 msgid ""
 "If the OR pattern fails, the AS pattern fails.  Otherwise, the AS pattern "
 "binds the subject to the name on the right of the as keyword and succeeds. "
@@ -1343,7 +1316,7 @@ msgstr ""
 "mönstret subjektet till namnet till höger om as-nyckelordet och lyckas. "
 "``capture_pattern`` kan inte vara en ``_``."
 
-#: ../../reference/compound_stmts.rst:834
+#: ../../reference/compound_stmts.rst:838
 msgid ""
 "In simple terms ``P as NAME`` will match with ``P``, and on success it will "
 "set ``NAME = <subject>``."
@@ -1351,11 +1324,11 @@ msgstr ""
 "Enkelt uttryckt kommer ``P as NAME`` att matcha med ``P``, och vid framgång "
 "kommer den att sätta ``NAME = <subject>``."
 
-#: ../../reference/compound_stmts.rst:841
+#: ../../reference/compound_stmts.rst:845
 msgid "Literal Patterns"
 msgstr "Bokstavliga mönster"
 
-#: ../../reference/compound_stmts.rst:843
+#: ../../reference/compound_stmts.rst:847
 msgid ""
 "A literal pattern corresponds to most :ref:`literals <literals>` in Python.  "
 "Syntax:"
@@ -1363,7 +1336,7 @@ msgstr ""
 "Ett bokstavsmönster motsvarar de flesta :ref:`literals <literals>` i "
 "Python.  Syntax:"
 
-#: ../../reference/compound_stmts.rst:856
+#: ../../reference/compound_stmts.rst:860
 msgid ""
 "The rule ``strings`` and the token ``NUMBER`` are defined in the :doc:"
 "`standard Python grammar <./grammar>`.  Triple-quoted strings are "
@@ -1374,7 +1347,7 @@ msgstr ""
 "Python grammar <./grammar>`.  Trippelciterade strängar stöds.  Råa strängar "
 "och byte-strängar stöds. :ref:`f-strings` och :ref:`t-strings` stöds inte."
 
-#: ../../reference/compound_stmts.rst:861
+#: ../../reference/compound_stmts.rst:865
 msgid ""
 "The forms ``signed_number '+' NUMBER`` and ``signed_number '-' NUMBER`` are "
 "for expressing :ref:`complex numbers <imaginary>`; they require a real "
@@ -1384,7 +1357,7 @@ msgstr ""
 "till för att uttrycka :ref:`komplexa tal <imaginary>`; de kräver ett reellt "
 "tal till vänster och ett imaginärt tal till höger. T.ex. ``3 + 4j``."
 
-#: ../../reference/compound_stmts.rst:865
+#: ../../reference/compound_stmts.rst:869
 msgid ""
 "In simple terms, ``LITERAL`` will succeed only if ``<subject> == LITERAL``. "
 "For the singletons ``None``, ``True`` and ``False``, the :keyword:`is` "
@@ -1394,15 +1367,15 @@ msgstr ""
 "LITERAL``. För singletonerna ``None``, ``True`` och ``False`` används "
 "operatorn :keyword:`is`."
 
-#: ../../reference/compound_stmts.rst:871
+#: ../../reference/compound_stmts.rst:875
 msgid "Capture Patterns"
 msgstr "Fångstmönster"
 
-#: ../../reference/compound_stmts.rst:873
+#: ../../reference/compound_stmts.rst:877
 msgid "A capture pattern binds the subject value to a name. Syntax:"
 msgstr "Ett capture-mönster binder ämnesvärdet till ett namn. Syntax:"
 
-#: ../../reference/compound_stmts.rst:879
+#: ../../reference/compound_stmts.rst:883
 msgid ""
 "A single underscore ``_`` is not a capture pattern (this is what ``!'_'`` "
 "expresses). It is instead treated as a :token:`~python-grammar:"
@@ -1412,7 +1385,7 @@ msgstr ""
 "uttrycker). Det behandlas istället som en :token:`~python-grammar:"
 "wildcard_pattern`."
 
-#: ../../reference/compound_stmts.rst:883
+#: ../../reference/compound_stmts.rst:887
 msgid ""
 "In a given pattern, a given name can only be bound once.  E.g. ``case x, "
 "x: ...`` is invalid while ``case [x] | x: ...`` is allowed."
@@ -1420,7 +1393,7 @@ msgstr ""
 "I ett givet mönster kan ett givet namn bara bindas en gång.  T.ex. ``case x, "
 "x: ...`` är ogiltigt medan ``case [x] | x: ...`` är tillåtet."
 
-#: ../../reference/compound_stmts.rst:886
+#: ../../reference/compound_stmts.rst:890
 msgid ""
 "Capture patterns always succeed.  The binding follows scoping rules "
 "established by the assignment expression operator in :pep:`572`; the name "
@@ -1432,7 +1405,7 @@ msgstr ""
 "en lokal variabel i den närmaste innehållande funktionens scope om det inte "
 "finns ett tillämpligt :keyword:`global` eller :keyword:`nonlocal` uttalande."
 
-#: ../../reference/compound_stmts.rst:891
+#: ../../reference/compound_stmts.rst:895
 msgid ""
 "In simple terms ``NAME`` will always succeed and it will set ``NAME = "
 "<subject>``."
@@ -1440,11 +1413,11 @@ msgstr ""
 "Enkelt uttryckt kommer ``NAME`` alltid att lyckas och den kommer att ställa "
 "in ``NAME = <subject>``."
 
-#: ../../reference/compound_stmts.rst:896
+#: ../../reference/compound_stmts.rst:900
 msgid "Wildcard Patterns"
 msgstr "Jokerteckenmönster"
 
-#: ../../reference/compound_stmts.rst:898
+#: ../../reference/compound_stmts.rst:902
 msgid ""
 "A wildcard pattern always succeeds (matches anything) and binds no name.  "
 "Syntax:"
@@ -1452,7 +1425,7 @@ msgstr ""
 "Ett jokerteckenmönster är alltid framgångsrikt (matchar allt) och binder "
 "inget namn.  Syntax för:"
 
-#: ../../reference/compound_stmts.rst:904
+#: ../../reference/compound_stmts.rst:908
 msgid ""
 "``_`` is a :ref:`soft keyword <soft-keywords>` within any pattern, but only "
 "within patterns.  It is an identifier, as usual, even within ``match`` "
@@ -1462,20 +1435,20 @@ msgstr ""
 "bara inom mönster.  Det är en identifierare, som vanligt, även inom "
 "``match`` ämnesuttryck, ``guard`` och ``case`` block."
 
-#: ../../reference/compound_stmts.rst:908
+#: ../../reference/compound_stmts.rst:912
 msgid "In simple terms, ``_`` will always succeed."
 msgstr "Enkelt uttryckt kommer ``_`` alltid att lyckas."
 
-#: ../../reference/compound_stmts.rst:913
+#: ../../reference/compound_stmts.rst:917
 msgid "Value Patterns"
 msgstr "Värdemönster"
 
-#: ../../reference/compound_stmts.rst:915
+#: ../../reference/compound_stmts.rst:919
 msgid "A value pattern represents a named value in Python. Syntax:"
 msgstr ""
 "Ett värdemönster representerar ett namngivet värde i Python. Syntaxen är"
 
-#: ../../reference/compound_stmts.rst:923
+#: ../../reference/compound_stmts.rst:927
 msgid ""
 "The dotted name in the pattern is looked up using standard Python :ref:`name "
 "resolution rules <resolve_names>`.  The pattern succeeds if the value found "
@@ -1486,7 +1459,7 @@ msgstr ""
 "Mönstret är korrekt om det värde som hittas är lika med det sökta värdet "
 "(med hjälp av jämlikhetsoperatorn ``==``)."
 
-#: ../../reference/compound_stmts.rst:928
+#: ../../reference/compound_stmts.rst:932
 msgid ""
 "In simple terms ``NAME1.NAME2`` will succeed only if ``<subject> == NAME1."
 "NAME2``"
@@ -1494,7 +1467,7 @@ msgstr ""
 "Enkelt uttryckt kommer ``NAME1.NAME2`` att lyckas endast om ``<subject> == "
 "NAME1.NAME2``"
 
-#: ../../reference/compound_stmts.rst:932
+#: ../../reference/compound_stmts.rst:936
 msgid ""
 "If the same value occurs multiple times in the same match statement, the "
 "interpreter may cache the first value found and reuse it rather than repeat "
@@ -1506,11 +1479,11 @@ msgstr ""
 "att upprepa samma uppslagning.  Denna cache är strikt knuten till en viss "
 "exekvering av en viss matchningssats."
 
-#: ../../reference/compound_stmts.rst:940
+#: ../../reference/compound_stmts.rst:944
 msgid "Group Patterns"
 msgstr "Gruppmönster"
 
-#: ../../reference/compound_stmts.rst:942
+#: ../../reference/compound_stmts.rst:946
 msgid ""
 "A group pattern allows users to add parentheses around patterns to emphasize "
 "the intended grouping.  Otherwise, it has no additional syntax. Syntax:"
@@ -1519,15 +1492,15 @@ msgstr ""
 "runt mönster för att betona den avsedda grupperingen.  I övrigt har det "
 "ingen ytterligare syntax. Syntax för gruppmönster:"
 
-#: ../../reference/compound_stmts.rst:949
+#: ../../reference/compound_stmts.rst:953
 msgid "In simple terms ``(P)`` has the same effect as ``P``."
 msgstr "Enkelt uttryckt har ``(P)`` samma effekt som ``P``."
 
-#: ../../reference/compound_stmts.rst:954
+#: ../../reference/compound_stmts.rst:958
 msgid "Sequence Patterns"
 msgstr "Sekvensmönster"
 
-#: ../../reference/compound_stmts.rst:956
+#: ../../reference/compound_stmts.rst:960
 msgid ""
 "A sequence pattern contains several subpatterns to be matched against "
 "sequence elements. The syntax is similar to the unpacking of a list or tuple."
@@ -1535,7 +1508,7 @@ msgstr ""
 "Ett sekvensmönster innehåller flera undermönster som ska matchas mot "
 "sekvenselement. Syntaxen liknar uppackningen av en lista eller tupel."
 
-#: ../../reference/compound_stmts.rst:967
+#: ../../reference/compound_stmts.rst:971
 msgid ""
 "There is no difference if parentheses  or square brackets are used for "
 "sequence patterns (i.e. ``(...)`` vs ``[...]`` )."
@@ -1543,7 +1516,7 @@ msgstr ""
 "Det är ingen skillnad om parenteser eller hakparenteser används för "
 "sekvensmönster (t.ex. ``(...)`` vs ``[...]`` )."
 
-#: ../../reference/compound_stmts.rst:971
+#: ../../reference/compound_stmts.rst:975
 msgid ""
 "A single pattern enclosed in parentheses without a trailing comma (e.g. ``(3 "
 "| 4)``) is a :ref:`group pattern <group-patterns>`. While a single pattern "
@@ -1554,7 +1527,7 @@ msgstr ""
 "mönster inom hakparenteser (t.ex. ``[3 | 4]``) fortfarande är ett "
 "sekvensmönster."
 
-#: ../../reference/compound_stmts.rst:976
+#: ../../reference/compound_stmts.rst:980
 msgid ""
 "At most one star subpattern may be in a sequence pattern.  The star "
 "subpattern may occur in any position. If no star subpattern is present, the "
@@ -1566,7 +1539,7 @@ msgstr ""
 "stjärnundermönster förekommer är sekvensmönstret ett sekvensmönster med fast "
 "längd; annars är det ett sekvensmönster med variabel längd."
 
-#: ../../reference/compound_stmts.rst:981
+#: ../../reference/compound_stmts.rst:985
 msgid ""
 "The following is the logical flow for matching a sequence pattern against a "
 "subject value:"
@@ -1574,12 +1547,12 @@ msgstr ""
 "Följande är det logiska flödet för att matcha ett sekvensmönster mot ett "
 "ämnesvärde:"
 
-#: ../../reference/compound_stmts.rst:984
+#: ../../reference/compound_stmts.rst:988
 msgid ""
 "If the subject value is not a sequence [#]_, the sequence pattern fails."
 msgstr "Om ämnesvärdet inte är en sekvens [#]_ misslyckas sekvensmönstret."
 
-#: ../../reference/compound_stmts.rst:987
+#: ../../reference/compound_stmts.rst:991
 msgid ""
 "If the subject value is an instance of ``str``, ``bytes`` or ``bytearray`` "
 "the sequence pattern fails."
@@ -1587,7 +1560,7 @@ msgstr ""
 "Om ämnesvärdet är en instans av ``str``, ``bytes`` eller ``bytearray`` "
 "misslyckas sekvensmönstret."
 
-#: ../../reference/compound_stmts.rst:990
+#: ../../reference/compound_stmts.rst:994
 msgid ""
 "The subsequent steps depend on whether the sequence pattern is fixed or "
 "variable-length."
@@ -1595,11 +1568,11 @@ msgstr ""
 "De följande stegen beror på om sekvensmönstret är fast eller har variabel "
 "längd."
 
-#: ../../reference/compound_stmts.rst:993
+#: ../../reference/compound_stmts.rst:997
 msgid "If the sequence pattern is fixed-length:"
 msgstr "Om sekvensmönstret är av fast längd:"
 
-#: ../../reference/compound_stmts.rst:995
+#: ../../reference/compound_stmts.rst:999
 msgid ""
 "If the length of the subject sequence is not equal to the number of "
 "subpatterns, the sequence pattern fails"
@@ -1607,7 +1580,7 @@ msgstr ""
 "Om längden på den aktuella sekvensen inte är lika med antalet undermönster "
 "misslyckas sekvensmönstret"
 
-#: ../../reference/compound_stmts.rst:998
+#: ../../reference/compound_stmts.rst:1002
 msgid ""
 "Subpatterns in the sequence pattern are matched to their corresponding items "
 "in the subject sequence from left to right.  Matching stops as soon as a "
@@ -1619,11 +1592,11 @@ msgstr ""
 "misslyckas.  Om alla undermönster lyckas matcha sina motsvarande objekt, "
 "lyckas sekvensmönstret."
 
-#: ../../reference/compound_stmts.rst:1003
+#: ../../reference/compound_stmts.rst:1007
 msgid "Otherwise, if the sequence pattern is variable-length:"
 msgstr "Annars, om sekvensmönstret är av variabel längd:"
 
-#: ../../reference/compound_stmts.rst:1005
+#: ../../reference/compound_stmts.rst:1009
 msgid ""
 "If the length of the subject sequence is less than the number of non-star "
 "subpatterns, the sequence pattern fails."
@@ -1631,7 +1604,7 @@ msgstr ""
 "Om längden på den aktuella sekvensen är mindre än antalet icke-stjärnformade "
 "undermönster misslyckas sekvensmönstret."
 
-#: ../../reference/compound_stmts.rst:1008
+#: ../../reference/compound_stmts.rst:1012
 msgid ""
 "The leading non-star subpatterns are matched to their corresponding items as "
 "for fixed-length sequences."
@@ -1639,7 +1612,7 @@ msgstr ""
 "De ledande icke-stjärniga undermönstren matchas med sina motsvarande objekt "
 "på samma sätt som för sekvenser med fast längd."
 
-#: ../../reference/compound_stmts.rst:1011
+#: ../../reference/compound_stmts.rst:1015
 msgid ""
 "If the previous step succeeds, the star subpattern matches a list formed of "
 "the remaining subject items, excluding the remaining items corresponding to "
@@ -1650,7 +1623,7 @@ msgstr ""
 "som motsvarar icke-stjärnformade undermönster som följer på det "
 "stjärnformade undermönstret."
 
-#: ../../reference/compound_stmts.rst:1015
+#: ../../reference/compound_stmts.rst:1019
 msgid ""
 "Remaining non-star subpatterns are matched to their corresponding subject "
 "items, as for a fixed-length sequence."
@@ -1658,14 +1631,14 @@ msgstr ""
 "Återstående submönster som inte är stjärnformade matchas med motsvarande "
 "ämnesord, precis som för en sekvens med fast längd."
 
-#: ../../reference/compound_stmts.rst:1018
+#: ../../reference/compound_stmts.rst:1022
 msgid ""
 "The length of the subject sequence is obtained via :func:`len` (i.e. via "
 "the :meth:`~object.__len__` protocol). This length may be cached by the "
 "interpreter in a similar manner as :ref:`value patterns <value-patterns>`."
 msgstr ""
 
-#: ../../reference/compound_stmts.rst:1024
+#: ../../reference/compound_stmts.rst:1028
 msgid ""
 "In simple terms ``[P1, P2, P3,`` ... ``, P<N>]`` matches only if all the "
 "following happens:"
@@ -1673,37 +1646,37 @@ msgstr ""
 "Enkelt uttryckt ``[P1, P2, P3,`` ... ``, P<N>]`` matchar endast om alla "
 "följande händelser inträffar:"
 
-#: ../../reference/compound_stmts.rst:1027
+#: ../../reference/compound_stmts.rst:1031
 msgid "check ``<subject>`` is a sequence"
 msgstr "kontrollera ``<subject>`` är en sekvens"
 
-#: ../../reference/compound_stmts.rst:1028
+#: ../../reference/compound_stmts.rst:1032
 msgid "``len(subject) == <N>``"
 msgstr "``len(subject) == <N>``"
 
-#: ../../reference/compound_stmts.rst:1029
+#: ../../reference/compound_stmts.rst:1033
 msgid ""
 "``P1`` matches ``<subject>[0]`` (note that this match can also bind names)"
 msgstr ""
 "``P1`` matchar ``<subject>[0]`` (observera att denna matchning också kan "
 "binda namn)"
 
-#: ../../reference/compound_stmts.rst:1030
+#: ../../reference/compound_stmts.rst:1034
 msgid ""
 "``P2`` matches ``<subject>[1]`` (note that this match can also bind names)"
 msgstr ""
 "``P2`` matchar ``<subject>[1]`` (observera att denna matchning också kan "
 "binda namn)"
 
-#: ../../reference/compound_stmts.rst:1031
+#: ../../reference/compound_stmts.rst:1035
 msgid "... and so on for the corresponding pattern/element."
 msgstr "... och så vidare för motsvarande mönster/element."
 
-#: ../../reference/compound_stmts.rst:1036
+#: ../../reference/compound_stmts.rst:1040
 msgid "Mapping Patterns"
 msgstr "Kartläggning av mönster"
 
-#: ../../reference/compound_stmts.rst:1038
+#: ../../reference/compound_stmts.rst:1042
 msgid ""
 "A mapping pattern contains one or more key-value patterns.  The syntax is "
 "similar to the construction of a dictionary. Syntax:"
@@ -1711,7 +1684,7 @@ msgstr ""
 "Ett mappningsmönster innehåller ett eller flera nyckel-värde-mönster.  "
 "Syntaxen liknar konstruktionen av en ordbok. Syntax för:"
 
-#: ../../reference/compound_stmts.rst:1049
+#: ../../reference/compound_stmts.rst:1053
 msgid ""
 "At most one double star pattern may be in a mapping pattern.  The double "
 "star pattern must be the last subpattern in the mapping pattern."
@@ -1719,7 +1692,7 @@ msgstr ""
 "Högst ett dubbelstjärnmönster får finnas i ett mappningsmönster.  "
 "Dubbelstjärnmönstret måste vara det sista undermönstret i mappningsmönstret."
 
-#: ../../reference/compound_stmts.rst:1052
+#: ../../reference/compound_stmts.rst:1056
 msgid ""
 "Duplicate keys in mapping patterns are disallowed. Duplicate literal keys "
 "will raise a :exc:`SyntaxError`. Two keys that otherwise have the same value "
@@ -1730,7 +1703,7 @@ msgstr ""
 "annars har samma värde kommer att ge upphov till ett :exc:`ValueError` vid "
 "körning."
 
-#: ../../reference/compound_stmts.rst:1056
+#: ../../reference/compound_stmts.rst:1060
 msgid ""
 "The following is the logical flow for matching a mapping pattern against a "
 "subject value:"
@@ -1738,11 +1711,11 @@ msgstr ""
 "Följande är det logiska flödet för att matcha ett mappningsmönster mot ett "
 "ämnesvärde:"
 
-#: ../../reference/compound_stmts.rst:1059
+#: ../../reference/compound_stmts.rst:1063
 msgid "If the subject value is not a mapping [#]_,the mapping pattern fails."
 msgstr "Om ämnesvärdet inte är en mappning [#]_ misslyckas mappningsmönstret."
 
-#: ../../reference/compound_stmts.rst:1061
+#: ../../reference/compound_stmts.rst:1065
 msgid ""
 "If every key given in the mapping pattern is present in the subject mapping, "
 "and the pattern for each key matches the corresponding item of the subject "
@@ -1752,7 +1725,7 @@ msgstr ""
 "mönstret för varje nyckel matchar motsvarande post i ämnesmappningen, lyckas "
 "mappningsmönstret."
 
-#: ../../reference/compound_stmts.rst:1065
+#: ../../reference/compound_stmts.rst:1069
 msgid ""
 "If duplicate keys are detected in the mapping pattern, the pattern is "
 "considered invalid. A :exc:`SyntaxError` is raised for duplicate literal "
@@ -1762,7 +1735,7 @@ msgstr ""
 "ogiltigt. Ett :exc:`SyntaxError` uppstår för duplicerade bokstavliga värden; "
 "eller ett :exc:`ValueError` för namngivna nycklar med samma värde."
 
-#: ../../reference/compound_stmts.rst:1069
+#: ../../reference/compound_stmts.rst:1073
 msgid ""
 "Key-value pairs are matched using the two-argument form of the mapping "
 "subject's ``get()`` method.  Matched key-value pairs must already be present "
@@ -1770,7 +1743,7 @@ msgid ""
 "or :meth:`~object.__getitem__`."
 msgstr ""
 
-#: ../../reference/compound_stmts.rst:1074
+#: ../../reference/compound_stmts.rst:1078
 msgid ""
 "In simple terms ``{KEY1: P1, KEY2: P2, ... }`` matches only if all the "
 "following happens:"
@@ -1778,27 +1751,27 @@ msgstr ""
 "Enkelt uttryckt ``{KEY1: P1, KEY2: P2, ... }`` matchar endast om alla "
 "följande händelser inträffar:"
 
-#: ../../reference/compound_stmts.rst:1077
+#: ../../reference/compound_stmts.rst:1081
 msgid "check ``<subject>`` is a mapping"
 msgstr "kontrollera att ``<subject>`` är en mappning"
 
-#: ../../reference/compound_stmts.rst:1078
+#: ../../reference/compound_stmts.rst:1082
 msgid "``KEY1 in <subject>``"
 msgstr "``KEY1 in <subject>``"
 
-#: ../../reference/compound_stmts.rst:1079
+#: ../../reference/compound_stmts.rst:1083
 msgid "``P1`` matches ``<subject>[KEY1]``"
 msgstr "``P1`` matchar ``<subject>[KEY1]``"
 
-#: ../../reference/compound_stmts.rst:1080
+#: ../../reference/compound_stmts.rst:1084
 msgid "... and so on for the corresponding KEY/pattern pair."
 msgstr "... och så vidare för motsvarande KEY/mönsterpar."
 
-#: ../../reference/compound_stmts.rst:1086
+#: ../../reference/compound_stmts.rst:1090
 msgid "Class Patterns"
 msgstr "Klassmönster"
 
-#: ../../reference/compound_stmts.rst:1088
+#: ../../reference/compound_stmts.rst:1092
 msgid ""
 "A class pattern represents a class and its positional and keyword arguments "
 "(if any).  Syntax:"
@@ -1806,11 +1779,11 @@ msgstr ""
 "Ett klassmönster representerar en klass och dess positions- och "
 "nyckelordsargument (om sådana finns).  Syntaxen är"
 
-#: ../../reference/compound_stmts.rst:1099
+#: ../../reference/compound_stmts.rst:1103
 msgid "The same keyword should not be repeated in class patterns."
 msgstr "Samma nyckelord bör inte upprepas i klassmönster."
 
-#: ../../reference/compound_stmts.rst:1101
+#: ../../reference/compound_stmts.rst:1105
 msgid ""
 "The following is the logical flow for matching a class pattern against a "
 "subject value:"
@@ -1818,7 +1791,7 @@ msgstr ""
 "Följande är det logiska flödet för att matcha ett klassmönster mot ett "
 "ämnesvärde:"
 
-#: ../../reference/compound_stmts.rst:1104
+#: ../../reference/compound_stmts.rst:1108
 msgid ""
 "If ``name_or_attr`` is not an instance of the builtin :class:`type` , raise :"
 "exc:`TypeError`."
@@ -1826,7 +1799,7 @@ msgstr ""
 "Om ``name_or_attr`` inte är en instans av den inbyggda :class:`type` , "
 "raise :exc:`TypeError`."
 
-#: ../../reference/compound_stmts.rst:1107
+#: ../../reference/compound_stmts.rst:1111
 msgid ""
 "If the subject value is not an instance of ``name_or_attr`` (tested via :"
 "func:`isinstance`), the class pattern fails."
@@ -1834,7 +1807,7 @@ msgstr ""
 "Om ämnesvärdet inte är en instans av ``name_or_attr`` (testas via :func:"
 "`isinstance`) misslyckas klassmönstret."
 
-#: ../../reference/compound_stmts.rst:1110
+#: ../../reference/compound_stmts.rst:1114
 msgid ""
 "If no pattern arguments are present, the pattern succeeds.  Otherwise, the "
 "subsequent steps depend on whether keyword or positional argument patterns "
@@ -1844,7 +1817,7 @@ msgstr ""
 "de efterföljande stegen på om det finns nyckelords- eller "
 "positionsargumentmönster."
 
-#: ../../reference/compound_stmts.rst:1114
+#: ../../reference/compound_stmts.rst:1118
 msgid ""
 "For a number of built-in types (specified below), a single positional "
 "subpattern is accepted which will match the entire subject; for these types "
@@ -1854,7 +1827,7 @@ msgstr ""
 "positionellt undermönster som matchar hela ämnet; för dessa typer fungerar "
 "nyckelordsmönster också som för andra typer."
 
-#: ../../reference/compound_stmts.rst:1118
+#: ../../reference/compound_stmts.rst:1122
 msgid ""
 "If only keyword patterns are present, they are processed as follows, one by "
 "one:"
@@ -1862,11 +1835,11 @@ msgstr ""
 "Om det bara finns nyckelordsmönster behandlas de enligt följande, ett efter "
 "ett:"
 
-#: ../../reference/compound_stmts.rst:1121
+#: ../../reference/compound_stmts.rst:1125
 msgid "I. The keyword is looked up as an attribute on the subject."
 msgstr "I. Nyckelordet ses som ett attribut i ämnet."
 
-#: ../../reference/compound_stmts.rst:1123
+#: ../../reference/compound_stmts.rst:1127
 msgid ""
 "If this raises an exception other than :exc:`AttributeError`, the exception "
 "bubbles up."
@@ -1874,13 +1847,13 @@ msgstr ""
 "Om detta ger upphov till ett annat undantag än :exc:`AttributeError`, "
 "bubblar undantaget upp."
 
-#: ../../reference/compound_stmts.rst:1126
+#: ../../reference/compound_stmts.rst:1130
 msgid "If this raises :exc:`AttributeError`, the class pattern has failed."
 msgstr ""
 "Om detta ger upphov till :exc:`AttributeError`, har klassmönstret "
 "misslyckats."
 
-#: ../../reference/compound_stmts.rst:1128
+#: ../../reference/compound_stmts.rst:1132
 msgid ""
 "Else, the subpattern associated with the keyword pattern is matched against "
 "the subject's attribute value.  If this fails, the class pattern fails; if "
@@ -1890,11 +1863,11 @@ msgstr ""
 "subjektets attributvärde.  Om detta misslyckas, misslyckas klassmönstret; om "
 "detta lyckas, fortsätter matchningen till nästa nyckelord."
 
-#: ../../reference/compound_stmts.rst:1133
+#: ../../reference/compound_stmts.rst:1137
 msgid "II. If all keyword patterns succeed, the class pattern succeeds."
 msgstr "II. Om alla nyckelordsmönster lyckas, lyckas klassmönstret."
 
-#: ../../reference/compound_stmts.rst:1135
+#: ../../reference/compound_stmts.rst:1139
 msgid ""
 "If any positional patterns are present, they are converted to keyword "
 "patterns using the :data:`~object.__match_args__` attribute on the class "
@@ -1904,17 +1877,17 @@ msgstr ""
 "hjälp av attributet :data:`~object.__match_args__` på klassen "
 "``name_or_attr`` före matchning:"
 
-#: ../../reference/compound_stmts.rst:1139
+#: ../../reference/compound_stmts.rst:1143
 msgid ""
 "I. The equivalent of ``getattr(cls, \"__match_args__\", ())`` is called."
 msgstr ""
 "I. Motsvarigheten till ``getattr(cls, \"__match_args__\", ())`` anropas."
 
-#: ../../reference/compound_stmts.rst:1141
+#: ../../reference/compound_stmts.rst:1145
 msgid "If this raises an exception, the exception bubbles up."
 msgstr "Om detta ger upphov till ett undantag, bubblar undantaget upp."
 
-#: ../../reference/compound_stmts.rst:1143
+#: ../../reference/compound_stmts.rst:1147
 msgid ""
 "If the returned value is not a tuple, the conversion fails and :exc:"
 "`TypeError` is raised."
@@ -1922,7 +1895,7 @@ msgstr ""
 "Om det returnerade värdet inte är en tupel misslyckas konverteringen och :"
 "exc:`TypeError` aktiveras."
 
-#: ../../reference/compound_stmts.rst:1146
+#: ../../reference/compound_stmts.rst:1150
 msgid ""
 "If there are more positional patterns than ``len(cls.__match_args__)``, :exc:"
 "`TypeError` is raised."
@@ -1930,7 +1903,7 @@ msgstr ""
 "Om det finns fler positionsmönster än ``len(cls.__match_args__)``, uppstår :"
 "exc:`TypeError`."
 
-#: ../../reference/compound_stmts.rst:1149
+#: ../../reference/compound_stmts.rst:1153
 msgid ""
 "Otherwise, positional pattern ``i`` is converted to a keyword pattern using "
 "``__match_args__[i]`` as the keyword.  ``__match_args__[i]`` must be a "
@@ -1940,24 +1913,24 @@ msgstr ""
 "nyckelordsmönster med ``__match_args__[i]`` som nyckelord.  "
 "``__match_args__[i]`` måste vara en sträng; om inte :exc:`TypeError` tas upp."
 
-#: ../../reference/compound_stmts.rst:1153
+#: ../../reference/compound_stmts.rst:1157
 msgid "If there are duplicate keywords, :exc:`TypeError` is raised."
 msgstr "Om det finns dubbla nyckelord kommer :exc:`TypeError` att tas upp."
 
-#: ../../reference/compound_stmts.rst:1155
+#: ../../reference/compound_stmts.rst:1159
 msgid ":ref:`class-pattern-matching`"
 msgstr ":ref:`class-pattern-matching`"
 
-#: ../../reference/compound_stmts.rst:1157
+#: ../../reference/compound_stmts.rst:1161
 msgid ""
 "II. Once all positional patterns have been converted to keyword patterns,"
 msgstr "II. När alla positionsmönster har omvandlats till sökordsmönster,"
 
-#: ../../reference/compound_stmts.rst:1158
+#: ../../reference/compound_stmts.rst:1162
 msgid "the match proceeds as if there were only keyword patterns."
 msgstr "matchningen fortsätter som om det bara fanns nyckelordsmönster."
 
-#: ../../reference/compound_stmts.rst:1160
+#: ../../reference/compound_stmts.rst:1164
 msgid ""
 "For the following built-in types the handling of positional subpatterns is "
 "different:"
@@ -1965,53 +1938,53 @@ msgstr ""
 "För följande inbyggda typer är hanteringen av positionella submönster "
 "annorlunda:"
 
-#: ../../reference/compound_stmts.rst:1163
+#: ../../reference/compound_stmts.rst:1167
 msgid ":class:`bool`"
 msgstr ":class:`bool`"
 
-#: ../../reference/compound_stmts.rst:1164
+#: ../../reference/compound_stmts.rst:1168
 msgid ":class:`bytearray`"
 msgstr ":class:`bytearray`"
 
-#: ../../reference/compound_stmts.rst:1165
+#: ../../reference/compound_stmts.rst:1169
 msgid ":class:`bytes`"
 msgstr ":class:`bytes`"
 
-#: ../../reference/compound_stmts.rst:1166
+#: ../../reference/compound_stmts.rst:1170
 msgid ":class:`dict`"
 msgstr ":class:`dict`"
 
-#: ../../reference/compound_stmts.rst:1167
+#: ../../reference/compound_stmts.rst:1171
 msgid ":class:`float`"
 msgstr ":class:`float`"
 
-#: ../../reference/compound_stmts.rst:1168
+#: ../../reference/compound_stmts.rst:1172
 msgid ":class:`frozenset`"
 msgstr ":class:`frozenset`"
 
-#: ../../reference/compound_stmts.rst:1169
+#: ../../reference/compound_stmts.rst:1173
 msgid ":class:`int`"
 msgstr ":class:`int`"
 
-#: ../../reference/compound_stmts.rst:1170
-#: ../../reference/compound_stmts.rst:1928
+#: ../../reference/compound_stmts.rst:1174
+#: ../../reference/compound_stmts.rst:1932
 msgid ":class:`list`"
 msgstr ":class:`lista`"
 
-#: ../../reference/compound_stmts.rst:1171
+#: ../../reference/compound_stmts.rst:1175
 msgid ":class:`set`"
 msgstr ":class:`set`"
 
-#: ../../reference/compound_stmts.rst:1172
+#: ../../reference/compound_stmts.rst:1176
 msgid ":class:`str`"
 msgstr ":class:`str`"
 
-#: ../../reference/compound_stmts.rst:1173
-#: ../../reference/compound_stmts.rst:1931
+#: ../../reference/compound_stmts.rst:1177
+#: ../../reference/compound_stmts.rst:1935
 msgid ":class:`tuple`"
 msgstr ":class:`tuple`"
 
-#: ../../reference/compound_stmts.rst:1175
+#: ../../reference/compound_stmts.rst:1179
 msgid ""
 "These classes accept a single positional argument, and the pattern there is "
 "matched against the whole object rather than an attribute. For example "
@@ -2021,42 +1994,42 @@ msgstr ""
 "matchas mot hela objektet snarare än ett attribut. Till exempel ``int(0|1)`` "
 "matchar värdet ``0``, men inte värdet ``0,0``."
 
-#: ../../reference/compound_stmts.rst:1179
+#: ../../reference/compound_stmts.rst:1183
 msgid ""
 "In simple terms ``CLS(P1, attr=P2)`` matches only if the following happens:"
 msgstr ""
 "Enkelt uttryckt ``CLS(P1, attr=P2)`` matchar endast om följande inträffar:"
 
-#: ../../reference/compound_stmts.rst:1181
+#: ../../reference/compound_stmts.rst:1185
 msgid "``isinstance(<subject>, CLS)``"
 msgstr "``isinstance(<subject>, CLS)``"
 
-#: ../../reference/compound_stmts.rst:1182
+#: ../../reference/compound_stmts.rst:1186
 msgid "convert ``P1`` to a keyword pattern using ``CLS.__match_args__``"
 msgstr ""
 "konvertera ``P1`` till ett nyckelordsmönster med ``CLS.__match_args__``"
 
-#: ../../reference/compound_stmts.rst:1183
+#: ../../reference/compound_stmts.rst:1187
 msgid "For each keyword argument ``attr=P2``:"
 msgstr "För varje nyckelordsargument ``attr=P2``:"
 
-#: ../../reference/compound_stmts.rst:1185
+#: ../../reference/compound_stmts.rst:1189
 msgid "``hasattr(<subject>, \"attr\")``"
 msgstr "``hasattr(<subject>, \"attr\")``"
 
-#: ../../reference/compound_stmts.rst:1186
+#: ../../reference/compound_stmts.rst:1190
 msgid "``P2`` matches ``<subject>.attr``"
 msgstr "``P2`` matchar ``<subject>.attr``"
 
-#: ../../reference/compound_stmts.rst:1188
+#: ../../reference/compound_stmts.rst:1192
 msgid "... and so on for the corresponding keyword argument/pattern pair."
 msgstr "... och så vidare för motsvarande nyckelordsargument/mönsterpar."
 
-#: ../../reference/compound_stmts.rst:1203
+#: ../../reference/compound_stmts.rst:1207
 msgid "Function definitions"
 msgstr "Definitioner av funktioner"
 
-#: ../../reference/compound_stmts.rst:1218
+#: ../../reference/compound_stmts.rst:1222
 msgid ""
 "A function definition defines a user-defined function object (see section :"
 "ref:`types`):"
@@ -2064,7 +2037,7 @@ msgstr ""
 "En funktionsdefinition definierar ett användardefinierat funktionsobjekt (se "
 "avsnitt :ref:`types`):"
 
-#: ../../reference/compound_stmts.rst:1240
+#: ../../reference/compound_stmts.rst:1244
 msgid ""
 "A function definition is an executable statement.  Its execution binds the "
 "function name in the current local namespace to a function object (a wrapper "
@@ -2078,7 +2051,7 @@ msgstr ""
 "funktionsobjekt innehåller en referens till den aktuella globala namnrymden "
 "som den globala namnrymd som ska användas när funktionen anropas."
 
-#: ../../reference/compound_stmts.rst:1246
+#: ../../reference/compound_stmts.rst:1250
 msgid ""
 "The function definition does not execute the function body; this gets "
 "executed only when the function is called. [#]_"
@@ -2086,7 +2059,7 @@ msgstr ""
 "Funktionsdefinitionen exekverar inte funktionens kropp; denna exekveras "
 "först när funktionen anropas. [#]_"
 
-#: ../../reference/compound_stmts.rst:1252
+#: ../../reference/compound_stmts.rst:1256
 msgid ""
 "A function definition may be wrapped by one or more :term:`decorator` "
 "expressions. Decorator expressions are evaluated when the function is "
@@ -2103,7 +2076,7 @@ msgstr ""
 "är bundet till funktionsnamnet i stället för till funktionsobjektet.  Flera "
 "dekoratorer tillämpas på ett nästlat sätt. Till exempel följande kod ::"
 
-#: ../../reference/compound_stmts.rst:1259
+#: ../../reference/compound_stmts.rst:1263
 msgid ""
 "@f1(arg)\n"
 "@f2\n"
@@ -2113,12 +2086,12 @@ msgstr ""
 "@f2\n"
 "def func(): pass"
 
-#: ../../reference/compound_stmts.rst:1263
-#: ../../reference/compound_stmts.rst:1452
+#: ../../reference/compound_stmts.rst:1267
+#: ../../reference/compound_stmts.rst:1456
 msgid "is roughly equivalent to ::"
 msgstr "är ungefär likvärdigt med ::"
 
-#: ../../reference/compound_stmts.rst:1265
+#: ../../reference/compound_stmts.rst:1269
 msgid ""
 "def func(): pass\n"
 "func = f1(arg)(f2(func))"
@@ -2126,7 +2099,7 @@ msgstr ""
 "def func(): pass\n"
 "func = f1(arg)(f2(func))"
 
-#: ../../reference/compound_stmts.rst:1268
+#: ../../reference/compound_stmts.rst:1272
 msgid ""
 "except that the original function is not temporarily bound to the name "
 "``func``."
@@ -2134,7 +2107,7 @@ msgstr ""
 "förutom att den ursprungliga funktionen inte är temporärt bunden till namnet "
 "``func``."
 
-#: ../../reference/compound_stmts.rst:1270
+#: ../../reference/compound_stmts.rst:1274
 msgid ""
 "Functions may be decorated with any valid :token:`~python-grammar:"
 "assignment_expression`. Previously, the grammar was much more restrictive; "
@@ -2144,7 +2117,7 @@ msgstr ""
 "assignment_expression`. Tidigare var grammatiken mycket mer restriktiv; se :"
 "pep:`614` för detaljer."
 
-#: ../../reference/compound_stmts.rst:1275
+#: ../../reference/compound_stmts.rst:1279
 msgid ""
 "A list of :ref:`type parameters <type-params>` may be given in square "
 "brackets between the function's name and the opening parenthesis for its "
@@ -2160,12 +2133,12 @@ msgstr ""
 "`~function.__type_params__`\\-attribut. Se :ref:`generic-functions` för mer "
 "information."
 
-#: ../../reference/compound_stmts.rst:1282
-#: ../../reference/compound_stmts.rst:1471
+#: ../../reference/compound_stmts.rst:1286
+#: ../../reference/compound_stmts.rst:1475
 msgid "Type parameter lists are new in Python 3.12."
 msgstr "Typ-parameterlistor är nya i Python 3.12."
 
-#: ../../reference/compound_stmts.rst:1290
+#: ../../reference/compound_stmts.rst:1294
 msgid ""
 "When one or more :term:`parameters <parameter>` have the form *parameter* "
 "``=`` *expression*, the function is said to have \"default parameter values."
@@ -2183,7 +2156,7 @@ msgstr ""
 "också ha ett standardvärde --- detta är en syntaktisk restriktion som inte "
 "uttrycks av grammatiken."
 
-#: ../../reference/compound_stmts.rst:1298
+#: ../../reference/compound_stmts.rst:1302
 msgid ""
 "**Default parameter values are evaluated from left to right when the "
 "function definition is executed.** This means that the expression is "
@@ -2206,7 +2179,7 @@ msgstr ""
 "använda ``None`` som standard och uttryckligen testa för det i funktionens "
 "kropp, t.ex.::"
 
-#: ../../reference/compound_stmts.rst:1308
+#: ../../reference/compound_stmts.rst:1312
 msgid ""
 "def whats_on_the_telly(penguin=None):\n"
 "    if penguin is None:\n"
@@ -2220,7 +2193,7 @@ msgstr ""
 "    penguin.append(\"djurparkens egendom\")\n"
 "    returnera pingvin"
 
-#: ../../reference/compound_stmts.rst:1319
+#: ../../reference/compound_stmts.rst:1323
 msgid ""
 "Function call semantics are described in more detail in section :ref:"
 "`calls`. A function call always assigns values to all parameters mentioned "
@@ -2248,7 +2221,7 @@ msgstr ""
 "med nyckelordsargument.  Parametrar före \"``/``\" är endast "
 "positionsparametrar och kan endast överföras med positionsargument."
 
-#: ../../reference/compound_stmts.rst:1331
+#: ../../reference/compound_stmts.rst:1335
 msgid ""
 "The ``/`` function parameter syntax may be used to indicate positional-only "
 "parameters. See :pep:`570` for details."
@@ -2256,7 +2229,7 @@ msgstr ""
 "Syntaxen ``/`` för funktionsparametrar kan användas för att ange parametrar "
 "som endast är positionella. Se :pep:`570` för detaljer."
 
-#: ../../reference/compound_stmts.rst:1340
+#: ../../reference/compound_stmts.rst:1344
 msgid ""
 "Parameters may have an :term:`annotation <function annotation>` of the form "
 "\"``: expression``\" following the parameter name.  Any parameter may have "
@@ -2278,7 +2251,7 @@ msgstr ""
 "inte semantiken för en funktion. Se :ref:`annotations` för mer information "
 "om annotationer."
 
-#: ../../reference/compound_stmts.rst:1348
+#: ../../reference/compound_stmts.rst:1352
 msgid ""
 "Parameters of the form \"``*identifier``\" may have an annotation \"``: "
 "*expression``\". See :pep:`646`."
@@ -2286,7 +2259,7 @@ msgstr ""
 "Parametrar av formen \"``*identifier``\" kan ha en annotation \"``: "
 "*uttryck``\". Se :pep:`646`."
 
-#: ../../reference/compound_stmts.rst:1354
+#: ../../reference/compound_stmts.rst:1358
 msgid ""
 "It is also possible to create anonymous functions (functions not bound to a "
 "name), for immediate use in expressions.  This uses lambda expressions, "
@@ -2306,7 +2279,7 @@ msgstr ""
 "lambdauttryck.  Formen \":keyword:`!def`\" är faktiskt mer kraftfull "
 "eftersom den tillåter exekvering av flera satser och annoteringar."
 
-#: ../../reference/compound_stmts.rst:1362
+#: ../../reference/compound_stmts.rst:1366
 msgid ""
 "**Programmer's note:** Functions are first-class objects.  A \"``def``\" "
 "statement executed inside a function definition defines a local function "
@@ -2320,27 +2293,27 @@ msgstr ""
 "används i den nästlade funktionen kan komma åt de lokala variablerna i den "
 "funktion som innehåller def. Se avsnitt :ref:`naming` för detaljer."
 
-#: ../../reference/compound_stmts.rst:1370
+#: ../../reference/compound_stmts.rst:1374
 msgid ":pep:`3107` - Function Annotations"
 msgstr ":pep:`3107` - Funktionskommentarer"
 
-#: ../../reference/compound_stmts.rst:1371
+#: ../../reference/compound_stmts.rst:1375
 msgid "The original specification for function annotations."
 msgstr "Den ursprungliga specifikationen för funktionsannoteringar."
 
-#: ../../reference/compound_stmts.rst:1373
+#: ../../reference/compound_stmts.rst:1377
 msgid ":pep:`484` - Type Hints"
 msgstr ":pep:`484` - Tips om typ"
 
-#: ../../reference/compound_stmts.rst:1374
+#: ../../reference/compound_stmts.rst:1378
 msgid "Definition of a standard meaning for annotations: type hints."
 msgstr "Definition av en standardbetydelse för annotationer: typ hints."
 
-#: ../../reference/compound_stmts.rst:1376
+#: ../../reference/compound_stmts.rst:1380
 msgid ":pep:`526` - Syntax for Variable Annotations"
 msgstr ":pep:`526` - Syntax för variabelkommentarer"
 
-#: ../../reference/compound_stmts.rst:1377
+#: ../../reference/compound_stmts.rst:1381
 msgid ""
 "Ability to type hint variable declarations, including class variables and "
 "instance variables."
@@ -2348,11 +2321,11 @@ msgstr ""
 "Möjlighet att typhinta variabeldeklarationer, inklusive klassvariabler och "
 "instansvariabler."
 
-#: ../../reference/compound_stmts.rst:1380
+#: ../../reference/compound_stmts.rst:1384
 msgid ":pep:`563` - Postponed Evaluation of Annotations"
 msgstr ":pep:`563` - Uppskjuten utvärdering av annoteringar"
 
-#: ../../reference/compound_stmts.rst:1381
+#: ../../reference/compound_stmts.rst:1385
 msgid ""
 "Support for forward references within annotations by preserving annotations "
 "in a string form at runtime instead of eager evaluation."
@@ -2360,11 +2333,11 @@ msgstr ""
 "Stöd för framåtriktade referenser inom annotationer genom att bevara "
 "annotationer i strängform vid körning istället för ivrig utvärdering."
 
-#: ../../reference/compound_stmts.rst:1384
+#: ../../reference/compound_stmts.rst:1388
 msgid ":pep:`318` - Decorators for Functions and Methods"
 msgstr ":pep:`318` - Dekoratorer för funktioner och metoder"
 
-#: ../../reference/compound_stmts.rst:1385
+#: ../../reference/compound_stmts.rst:1389
 msgid ""
 "Function and method decorators were introduced. Class decorators were "
 "introduced in :pep:`3129`."
@@ -2372,16 +2345,16 @@ msgstr ""
 "Funktions- och metoddekoratorer introducerades. Klassdekoratorer "
 "introducerades i :pep:`3129`."
 
-#: ../../reference/compound_stmts.rst:1391
+#: ../../reference/compound_stmts.rst:1395
 msgid "Class definitions"
 msgstr "Klassdefinitioner"
 
-#: ../../reference/compound_stmts.rst:1406
+#: ../../reference/compound_stmts.rst:1410
 msgid "A class definition defines a class object (see section :ref:`types`):"
 msgstr ""
 "En klassdefinition definierar ett klassobjekt (se avsnitt :ref:`types`):"
 
-#: ../../reference/compound_stmts.rst:1413
+#: ../../reference/compound_stmts.rst:1417
 msgid ""
 "A class definition is an executable statement.  The inheritance list usually "
 "gives a list of base classes (see :ref:`metaclasses` for more advanced "
@@ -2395,7 +2368,7 @@ msgstr ""
 "klassobjekt som tillåter underklassning.  Klasser utan en arvslista ärver, "
 "som standard, från basklassen :class:`object`; därav ::"
 
-#: ../../reference/compound_stmts.rst:1419
+#: ../../reference/compound_stmts.rst:1423
 msgid ""
 "class Foo:\n"
 "    pass"
@@ -2403,11 +2376,11 @@ msgstr ""
 "class Foo:\n"
 "    pass"
 
-#: ../../reference/compound_stmts.rst:1422
+#: ../../reference/compound_stmts.rst:1426
 msgid "is equivalent to ::"
 msgstr "är likvärdig med ::"
 
-#: ../../reference/compound_stmts.rst:1424
+#: ../../reference/compound_stmts.rst:1428
 msgid ""
 "class Foo(object):\n"
 "    pass"
@@ -2415,7 +2388,7 @@ msgstr ""
 "class Foo(object):\n"
 "    pass"
 
-#: ../../reference/compound_stmts.rst:1427
+#: ../../reference/compound_stmts.rst:1431
 msgid ""
 "The class's suite is then executed in a new execution frame (see :ref:"
 "`naming`), using a newly created local namespace and the original global "
@@ -2435,7 +2408,7 @@ msgstr ""
 "Klassnamnet är bundet till detta klassobjekt i den ursprungliga lokala "
 "namnrymden."
 
-#: ../../reference/compound_stmts.rst:1436
+#: ../../reference/compound_stmts.rst:1440
 msgid ""
 "The order in which attributes are defined in the class body is preserved in "
 "the new class's :attr:`~type.__dict__`.  Note that this is reliable only "
@@ -2447,7 +2420,7 @@ msgstr ""
 "tillförlitligt direkt efter att klassen har skapats och endast för klasser "
 "som definierades med definitionssyntaxen."
 
-#: ../../reference/compound_stmts.rst:1441
+#: ../../reference/compound_stmts.rst:1445
 msgid ""
 "Class creation can be customized heavily using :ref:`metaclasses "
 "<metaclasses>`."
@@ -2455,12 +2428,12 @@ msgstr ""
 "Skapandet av klasser kan anpassas kraftigt med hjälp av :ref:`metaclasses "
 "<metaclasses>`."
 
-#: ../../reference/compound_stmts.rst:1446
+#: ../../reference/compound_stmts.rst:1450
 msgid "Classes can also be decorated: just like when decorating functions, ::"
 msgstr ""
 "Klasser kan också dekoreras: precis som när du dekorerar funktioner, ::"
 
-#: ../../reference/compound_stmts.rst:1448
+#: ../../reference/compound_stmts.rst:1452
 msgid ""
 "@f1(arg)\n"
 "@f2\n"
@@ -2470,7 +2443,7 @@ msgstr ""
 "@f2\n"
 "class Foo: pass"
 
-#: ../../reference/compound_stmts.rst:1454
+#: ../../reference/compound_stmts.rst:1458
 msgid ""
 "class Foo: pass\n"
 "Foo = f1(arg)(f2(Foo))"
@@ -2478,7 +2451,7 @@ msgstr ""
 "class Foo: pass\n"
 "Foo = f1(arg)(f2(Foo))"
 
-#: ../../reference/compound_stmts.rst:1457
+#: ../../reference/compound_stmts.rst:1461
 msgid ""
 "The evaluation rules for the decorator expressions are the same as for "
 "function decorators.  The result is then bound to the class name."
@@ -2486,7 +2459,7 @@ msgstr ""
 "Utvärderingsreglerna för dekoratoruttrycken är desamma som för "
 "funktionsdekoratorer.  Resultatet binds sedan till klassnamnet."
 
-#: ../../reference/compound_stmts.rst:1460
+#: ../../reference/compound_stmts.rst:1464
 msgid ""
 "Classes may be decorated with any valid :token:`~python-grammar:"
 "assignment_expression`. Previously, the grammar was much more restrictive; "
@@ -2496,7 +2469,7 @@ msgstr ""
 "assignment_expression`. Tidigare var grammatiken mycket mer restriktiv; se :"
 "pep:`614` för detaljer."
 
-#: ../../reference/compound_stmts.rst:1465
+#: ../../reference/compound_stmts.rst:1469
 msgid ""
 "A list of :ref:`type parameters <type-params>` may be given in square "
 "brackets immediately after the class's name. This indicates to static type "
@@ -2510,7 +2483,7 @@ msgstr ""
 "hämtas från klassens :attr:`~type.__type_params__`\\-attribut. Se :ref:"
 "`generic-classes` för mer information."
 
-#: ../../reference/compound_stmts.rst:1474
+#: ../../reference/compound_stmts.rst:1478
 msgid ""
 "**Programmer's note:** Variables defined in the class definition are class "
 "attributes; they are shared by instances.  Instance attributes can be set in "
@@ -2532,11 +2505,11 @@ msgstr ""
 "<descriptors>` kan användas för att skapa instansvariabler med olika "
 "implementationsdetaljer."
 
-#: ../../reference/compound_stmts.rst:1486
+#: ../../reference/compound_stmts.rst:1490
 msgid ":pep:`3115` - Metaclasses in Python 3000"
 msgstr ":pep:`3115` - Metaklasser i Python 3000"
 
-#: ../../reference/compound_stmts.rst:1487
+#: ../../reference/compound_stmts.rst:1491
 msgid ""
 "The proposal that changed the declaration of metaclasses to the current "
 "syntax, and the semantics for how classes with metaclasses are constructed."
@@ -2544,11 +2517,11 @@ msgstr ""
 "Förslaget som ändrade deklarationen av metaklasser till den nuvarande "
 "syntaxen, och semantiken för hur klasser med metaklasser konstrueras."
 
-#: ../../reference/compound_stmts.rst:1491
+#: ../../reference/compound_stmts.rst:1495
 msgid ":pep:`3129` - Class Decorators"
 msgstr ":pep:`3129` - Klassdekoratorer"
 
-#: ../../reference/compound_stmts.rst:1492
+#: ../../reference/compound_stmts.rst:1496
 msgid ""
 "The proposal that added class decorators.  Function and method decorators "
 "were introduced in :pep:`318`."
@@ -2556,15 +2529,15 @@ msgstr ""
 "Förslaget som lade till klassdekoratorer.  Funktions- och metoddekoratorer "
 "introducerades i :pep:`318`."
 
-#: ../../reference/compound_stmts.rst:1499
+#: ../../reference/compound_stmts.rst:1503
 msgid "Coroutines"
 msgstr "Coroutines"
 
-#: ../../reference/compound_stmts.rst:1507
+#: ../../reference/compound_stmts.rst:1511
 msgid "Coroutine function definition"
 msgstr "Definition av Coroutine-funktion"
 
-#: ../../reference/compound_stmts.rst:1517
+#: ../../reference/compound_stmts.rst:1521
 msgid ""
 "Execution of Python coroutines can be suspended and resumed at many points "
 "(see :term:`coroutine`). :keyword:`await` expressions, :keyword:`async for` "
@@ -2575,7 +2548,7 @@ msgstr ""
 "ställen (se :term:`coroutine`). uttrycken :keyword:`await`, :keyword:`async "
 "for` och :keyword:`async with` kan endast användas i en coroutine-funktion."
 
-#: ../../reference/compound_stmts.rst:1521
+#: ../../reference/compound_stmts.rst:1525
 msgid ""
 "Functions defined with ``async def`` syntax are always coroutine functions, "
 "even if they do not contain ``await`` or ``async`` keywords."
@@ -2583,7 +2556,7 @@ msgstr ""
 "Funktioner som definieras med syntaxen ``async def`` är alltid coroutine-"
 "funktioner, även om de inte innehåller nyckelorden ``await`` eller ``async``."
 
-#: ../../reference/compound_stmts.rst:1524
+#: ../../reference/compound_stmts.rst:1528
 msgid ""
 "It is a :exc:`SyntaxError` to use a ``yield from`` expression inside the "
 "body of a coroutine function."
@@ -2591,11 +2564,11 @@ msgstr ""
 "Det är ett :exc:`SyntaxError` att använda ett ``yield from``\\ -uttryck "
 "inuti en coroutine-funktion."
 
-#: ../../reference/compound_stmts.rst:1527
+#: ../../reference/compound_stmts.rst:1531
 msgid "An example of a coroutine function::"
 msgstr "Ett exempel på en coroutine-funktion::"
 
-#: ../../reference/compound_stmts.rst:1529
+#: ../../reference/compound_stmts.rst:1533
 msgid ""
 "async def func(param1, param2):\n"
 "    do_stuff()\n"
@@ -2605,7 +2578,7 @@ msgstr ""
 "    do_stuff()\n"
 "    await någon_coroutine()"
 
-#: ../../reference/compound_stmts.rst:1533
+#: ../../reference/compound_stmts.rst:1537
 msgid ""
 "``await`` and ``async`` are now keywords; previously they were only treated "
 "as such inside the body of a coroutine function."
@@ -2613,11 +2586,11 @@ msgstr ""
 "``await`` och ``async`` är nu nyckelord; tidigare behandlades de bara som "
 "sådana inom en coroutine-funktion."
 
-#: ../../reference/compound_stmts.rst:1541
+#: ../../reference/compound_stmts.rst:1545
 msgid "The :keyword:`!async for` statement"
 msgstr "Nyckelordet: `!async for`\\-satsen"
 
-#: ../../reference/compound_stmts.rst:1546
+#: ../../reference/compound_stmts.rst:1550
 msgid ""
 "An :term:`asynchronous iterable` provides an ``__aiter__`` method that "
 "directly returns an :term:`asynchronous iterator`, which can call "
@@ -2627,14 +2600,14 @@ msgstr ""
 "som direkt returnerar en :term:`asynchronous iterator`, som kan anropa "
 "asynkron kod i sin ``__anext__``\\-metod."
 
-#: ../../reference/compound_stmts.rst:1550
+#: ../../reference/compound_stmts.rst:1554
 msgid ""
 "The ``async for`` statement allows convenient iteration over asynchronous "
 "iterables."
 msgstr ""
 "Satsen ``async for`` möjliggör bekväm iteration över asynkrona iterabler."
 
-#: ../../reference/compound_stmts.rst:1555
+#: ../../reference/compound_stmts.rst:1559
 msgid ""
 "async for TARGET in ITER:\n"
 "    SUITE\n"
@@ -2646,11 +2619,11 @@ msgstr ""
 "annat:\n"
 "    SUITE2"
 
-#: ../../reference/compound_stmts.rst:1560
+#: ../../reference/compound_stmts.rst:1564
 msgid "Is semantically equivalent to::"
 msgstr "Är semantiskt ekvivalent med::"
 
-#: ../../reference/compound_stmts.rst:1562
+#: ../../reference/compound_stmts.rst:1566
 msgid ""
 "iter = (ITER)\n"
 "iter = type(iter).__aiter__(iter)\n"
@@ -2680,14 +2653,14 @@ msgstr ""
 "else:\n"
 "    SUITE2"
 
-#: ../../reference/compound_stmts.rst:1576
+#: ../../reference/compound_stmts.rst:1580
 msgid ""
 "See also :meth:`~object.__aiter__` and :meth:`~object.__anext__` for details."
 msgstr ""
 "Se även :meth:`~object.__aiter__` och :meth:`~object.__anext__` för mer "
 "information."
 
-#: ../../reference/compound_stmts.rst:1578
+#: ../../reference/compound_stmts.rst:1582
 msgid ""
 "It is a :exc:`SyntaxError` to use an ``async for`` statement outside the "
 "body of a coroutine function."
@@ -2695,11 +2668,11 @@ msgstr ""
 "Det är ett :exc:`SyntaxError` att använda en ``async for``\\-sats utanför "
 "kroppen på en coroutine-funktion."
 
-#: ../../reference/compound_stmts.rst:1586
+#: ../../reference/compound_stmts.rst:1590
 msgid "The :keyword:`!async with` statement"
 msgstr "Nyckelordet: `!async with`\\-satsen"
 
-#: ../../reference/compound_stmts.rst:1591
+#: ../../reference/compound_stmts.rst:1595
 msgid ""
 "An :term:`asynchronous context manager` is a :term:`context manager` that is "
 "able to suspend execution in its *enter* and *exit* methods."
@@ -2707,7 +2680,7 @@ msgstr ""
 "En :term:`asynchronous context manager` är en :term:`context manager` som "
 "kan avbryta exekveringen i sina *enter*- och *exit*-metoder."
 
-#: ../../reference/compound_stmts.rst:1596
+#: ../../reference/compound_stmts.rst:1600
 msgid ""
 "async with EXPRESSION as TARGET:\n"
 "    SUITE"
@@ -2715,7 +2688,7 @@ msgstr ""
 "async med EXPRESSION som TARGET:\n"
 "    SUITE"
 
-#: ../../reference/compound_stmts.rst:1601
+#: ../../reference/compound_stmts.rst:1605
 msgid ""
 "manager = (EXPRESSION)\n"
 "aenter = type(manager).__aenter__\n"
@@ -2751,7 +2724,7 @@ msgstr ""
 "    om inte hit_except:\n"
 "        await aexit(chef, Ingen, Ingen, Ingen)"
 
-#: ../../reference/compound_stmts.rst:1618
+#: ../../reference/compound_stmts.rst:1622
 msgid ""
 "See also :meth:`~object.__aenter__` and :meth:`~object.__aexit__` for "
 "details."
@@ -2759,7 +2732,7 @@ msgstr ""
 "Se även :meth:`~object.__aenter__` och :meth:`~object.__aexit__` för mer "
 "information."
 
-#: ../../reference/compound_stmts.rst:1620
+#: ../../reference/compound_stmts.rst:1624
 msgid ""
 "It is a :exc:`SyntaxError` to use an ``async with`` statement outside the "
 "body of a coroutine function."
@@ -2767,11 +2740,11 @@ msgstr ""
 "Det är ett :exc:`SyntaxError` att använda en ``async with``\\-sats utanför "
 "kroppen på en coroutine-funktion."
 
-#: ../../reference/compound_stmts.rst:1625
+#: ../../reference/compound_stmts.rst:1629
 msgid ":pep:`492` - Coroutines with async and await syntax"
 msgstr ":pep:`492` - Coroutines med async- och await-syntax"
 
-#: ../../reference/compound_stmts.rst:1626
+#: ../../reference/compound_stmts.rst:1630
 msgid ""
 "The proposal that made coroutines a proper standalone concept in Python, and "
 "added supporting syntax."
@@ -2779,15 +2752,15 @@ msgstr ""
 "Förslaget som gjorde coroutines till ett riktigt fristående koncept i Python "
 "och lade till stödjande syntax."
 
-#: ../../reference/compound_stmts.rst:1632
+#: ../../reference/compound_stmts.rst:1636
 msgid "Type parameter lists"
 msgstr "Typ parameterlistor"
 
-#: ../../reference/compound_stmts.rst:1636
+#: ../../reference/compound_stmts.rst:1640
 msgid "Support for default values was added (see :pep:`696`)."
 msgstr "Stöd för standardvärden har lagts till (se :pep:`696`)."
 
-#: ../../reference/compound_stmts.rst:1649
+#: ../../reference/compound_stmts.rst:1653
 msgid ""
 ":ref:`Functions <def>` (including :ref:`coroutines <async def>`), :ref:"
 "`classes <class>` and :ref:`type aliases <type>` may contain a type "
@@ -2797,7 +2770,7 @@ msgstr ""
 "`classes <class>` och :ref:`type aliases <type>` kan innehålla en typ "
 "parameter list::"
 
-#: ../../reference/compound_stmts.rst:1653
+#: ../../reference/compound_stmts.rst:1657
 msgid ""
 "def max[T](args: list[T]) -> T:\n"
 "    ...\n"
@@ -2829,7 +2802,7 @@ msgstr ""
 "\n"
 "type ListOrSet[T] = list[T] | set[T]"
 
-#: ../../reference/compound_stmts.rst:1668
+#: ../../reference/compound_stmts.rst:1672
 msgid ""
 "Semantically, this indicates that the function, class, or type alias is "
 "generic over a type variable. This information is primarily used by static "
@@ -2841,7 +2814,7 @@ msgstr ""
 "typkontrollanter, och vid körning beter sig generiska objekt ungefär som "
 "sina icke-generiska motsvarigheter."
 
-#: ../../reference/compound_stmts.rst:1673
+#: ../../reference/compound_stmts.rst:1677
 msgid ""
 "Type parameters are declared in square brackets (``[]``) immediately after "
 "the name of the function, class, or type alias. The type parameters are "
@@ -2861,7 +2834,7 @@ msgstr ""
 "speciell funktion (tekniskt sett en :ref:`annotation scope <annotation-"
 "scopes>`) som omsluter skapandet av det generiska objektet."
 
-#: ../../reference/compound_stmts.rst:1682
+#: ../../reference/compound_stmts.rst:1686
 msgid ""
 "Generic functions, classes, and type aliases have a :attr:`~definition."
 "__type_params__` attribute listing their type parameters."
@@ -2869,11 +2842,11 @@ msgstr ""
 "Generiska funktioner, klasser och typaliaser har ett :attr:`~definition."
 "__type_params__`\\-attribut som listar deras typparametrar."
 
-#: ../../reference/compound_stmts.rst:1685
+#: ../../reference/compound_stmts.rst:1689
 msgid "Type parameters come in three kinds:"
 msgstr "Det finns tre olika typer av parametrar:"
 
-#: ../../reference/compound_stmts.rst:1687
+#: ../../reference/compound_stmts.rst:1691
 msgid ""
 ":data:`typing.TypeVar`, introduced by a plain name (e.g., ``T``). "
 "Semantically, this represents a single type to a type checker."
@@ -2881,7 +2854,7 @@ msgstr ""
 ":data:`typing.TypeVar`, inleds med ett vanligt namn (t.ex. ``T``). "
 "Semantiskt representerar detta en enda typ för en typkontrollör."
 
-#: ../../reference/compound_stmts.rst:1689
+#: ../../reference/compound_stmts.rst:1693
 msgid ""
 ":data:`typing.TypeVarTuple`, introduced by a name prefixed with a single "
 "asterisk (e.g., ``*Ts``). Semantically, this stands for a tuple of any "
@@ -2890,7 +2863,7 @@ msgstr ""
 ":data:`typing.TypeVarTuple`, inleds med ett namn som föregås av en asterisk "
 "(t.ex. ``*Ts``). Semantiskt står detta för en tupel av valfritt antal typer."
 
-#: ../../reference/compound_stmts.rst:1692
+#: ../../reference/compound_stmts.rst:1696
 msgid ""
 ":data:`typing.ParamSpec`, introduced by a name prefixed with two asterisks "
 "(e.g., ``**P``). Semantically, this stands for the parameters of a callable."
@@ -2898,7 +2871,7 @@ msgstr ""
 ":data:`typing.ParamSpec`, inleds med ett namn som föregås av två asterisker "
 "(t.ex. ``**P``). Semantiskt står detta för parametrarna för en callable."
 
-#: ../../reference/compound_stmts.rst:1695
+#: ../../reference/compound_stmts.rst:1699
 msgid ""
 ":data:`typing.TypeVar` declarations can define *bounds* and *constraints* "
 "with a colon (``:``) followed by an expression. A single expression after "
@@ -2918,7 +2891,7 @@ msgstr ""
 "bör vara en typ (återigen, detta verkställs inte vid körning). Variabler av "
 "typen Constrained kan bara anta en av typerna i listan med begränsningar."
 
-#: ../../reference/compound_stmts.rst:1704
+#: ../../reference/compound_stmts.rst:1708
 msgid ""
 "For :data:`!typing.TypeVar`\\ s declared using the type parameter list "
 "syntax, the bound and constraints are not evaluated when the generic object "
@@ -2934,7 +2907,7 @@ msgstr ""
 "utvärderas gränserna eller begränsningarna i en separat :ref:`annotation "
 "scope <annotation-scopes>`."
 
-#: ../../reference/compound_stmts.rst:1710
+#: ../../reference/compound_stmts.rst:1714
 msgid ""
 ":data:`typing.TypeVarTuple`\\ s and :data:`typing.ParamSpec`\\ s cannot have "
 "bounds or constraints."
@@ -2942,7 +2915,7 @@ msgstr ""
 ":data:`typing.TypeVarTuple` s och :data:`typing.ParamSpec` s kan inte ha "
 "gränser eller begränsningar."
 
-#: ../../reference/compound_stmts.rst:1713
+#: ../../reference/compound_stmts.rst:1717
 msgid ""
 "All three flavors of type parameters can also have a *default value*, which "
 "is used when the type parameter is not explicitly provided. This is added by "
@@ -2964,7 +2937,7 @@ msgstr ""
 "sätts attributet ``__default__`` till det speciella sentinel-objektet :data:"
 "`typing.NoDefault`."
 
-#: ../../reference/compound_stmts.rst:1723
+#: ../../reference/compound_stmts.rst:1727
 msgid ""
 "The following example indicates the full set of allowed type parameter "
 "declarations::"
@@ -2972,7 +2945,7 @@ msgstr ""
 "Följande exempel visar hela uppsättningen av tillåtna deklarationer av "
 "typparametrar::"
 
-#: ../../reference/compound_stmts.rst:1725
+#: ../../reference/compound_stmts.rst:1729
 msgid ""
 "def overly_generic[\n"
 "   SimpleTypeVar,\n"
@@ -3004,24 +2977,24 @@ msgstr ""
 "   *e: SimpleTypeVarTuple,\n"
 "): ..."
 
-#: ../../reference/compound_stmts.rst:1743
+#: ../../reference/compound_stmts.rst:1747
 msgid "Generic functions"
 msgstr "Generiska funktioner"
 
-#: ../../reference/compound_stmts.rst:1745
+#: ../../reference/compound_stmts.rst:1749
 msgid "Generic functions are declared as follows::"
 msgstr "Generiska funktioner deklareras på följande sätt::"
 
-#: ../../reference/compound_stmts.rst:1747
+#: ../../reference/compound_stmts.rst:1751
 msgid "def func[T](arg: T): ..."
 msgstr "def func[T](arg: T): ..."
 
-#: ../../reference/compound_stmts.rst:1749
-#: ../../reference/compound_stmts.rst:1809
+#: ../../reference/compound_stmts.rst:1753
+#: ../../reference/compound_stmts.rst:1813
 msgid "This syntax is equivalent to::"
 msgstr "Denna syntax är likvärdig med::"
 
-#: ../../reference/compound_stmts.rst:1751
+#: ../../reference/compound_stmts.rst:1755
 msgid ""
 "annotation-def TYPE_PARAMS_OF_func():\n"
 "    T = typing.TypeVar(\"T\")\n"
@@ -3037,7 +3010,7 @@ msgstr ""
 "    returnera func\n"
 "func = TYPE_PARAMS_OF_func()"
 
-#: ../../reference/compound_stmts.rst:1758
+#: ../../reference/compound_stmts.rst:1762
 msgid ""
 "Here ``annotation-def`` indicates an :ref:`annotation scope <annotation-"
 "scopes>`, which is not actually bound to any name at runtime. (One other "
@@ -3050,7 +3023,7 @@ msgstr ""
 "översättningen: syntaxen går inte genom attributåtkomst på modulen :mod:"
 "`typing`, utan skapar en instans av :data:`typing.TypeVar` direkt)"
 
-#: ../../reference/compound_stmts.rst:1764
+#: ../../reference/compound_stmts.rst:1768
 msgid ""
 "The annotations of generic functions are evaluated within the annotation "
 "scope used for declaring the type parameters, but the function's defaults "
@@ -3060,7 +3033,7 @@ msgstr ""
 "annoteringsområde som används för att deklarera typparametrarna, men det gör "
 "inte funktionens standardvärden och dekoratorer."
 
-#: ../../reference/compound_stmts.rst:1768
+#: ../../reference/compound_stmts.rst:1772
 msgid ""
 "The following example illustrates the scoping rules for these cases, as well "
 "as for additional flavors of type parameters::"
@@ -3068,7 +3041,7 @@ msgstr ""
 "Följande exempel illustrerar scopingreglerna för dessa fall, samt för "
 "ytterligare varianter av typparametrar::"
 
-#: ../../reference/compound_stmts.rst:1771
+#: ../../reference/compound_stmts.rst:1775
 msgid ""
 "@decorator\n"
 "def func[T: int, *Ts, **P](*args: *Ts, arg: Callable[P, T] = some_default):\n"
@@ -3078,7 +3051,7 @@ msgstr ""
 "def func[T: int, *Ts, **P](*args: *Ts, arg: Callable[P, T] = some_default):\n"
 "    ..."
 
-#: ../../reference/compound_stmts.rst:1775
+#: ../../reference/compound_stmts.rst:1779
 msgid ""
 "Except for the :ref:`lazy evaluation <lazy-evaluation>` of the :class:"
 "`~typing.TypeVar` bound, this is equivalent to::"
@@ -3086,7 +3059,7 @@ msgstr ""
 "Med undantag för :ref:`lazy evaluation <lazy-evaluation>` av :class:`~typing."
 "TypeVar`\\-bindningen, är detta likvärdigt med::"
 
-#: ../../reference/compound_stmts.rst:1778
+#: ../../reference/compound_stmts.rst:1782
 msgid ""
 "DEFAULT_OF_arg = some_default\n"
 "\n"
@@ -3126,26 +3099,26 @@ msgstr ""
 "    returnera func\n"
 "func = dekorator(TYPE_PARAMS_OF_func())"
 
-#: ../../reference/compound_stmts.rst:1797
+#: ../../reference/compound_stmts.rst:1801
 msgid ""
 "The capitalized names like ``DEFAULT_OF_arg`` are not actually bound at "
 "runtime."
 msgstr ""
 "De versala namnen som ``DEFAULT_OF_arg`` är faktiskt inte bundna vid körning."
 
-#: ../../reference/compound_stmts.rst:1803
+#: ../../reference/compound_stmts.rst:1807
 msgid "Generic classes"
 msgstr "Generiska klasser"
 
-#: ../../reference/compound_stmts.rst:1805
+#: ../../reference/compound_stmts.rst:1809
 msgid "Generic classes are declared as follows::"
 msgstr "Generiska klasser deklareras på följande sätt::"
 
-#: ../../reference/compound_stmts.rst:1807
+#: ../../reference/compound_stmts.rst:1811
 msgid "class Bag[T]: ..."
 msgstr "class Bag[T]: ..."
 
-#: ../../reference/compound_stmts.rst:1811
+#: ../../reference/compound_stmts.rst:1815
 msgid ""
 "annotation-def TYPE_PARAMS_OF_Bag():\n"
 "    T = typing.TypeVar(\"T\")\n"
@@ -3163,7 +3136,7 @@ msgstr ""
 "    returnera Bag\n"
 "Bag = TYPE_PARAMS_OF_Bag()"
 
-#: ../../reference/compound_stmts.rst:1819
+#: ../../reference/compound_stmts.rst:1823
 msgid ""
 "Here again ``annotation-def`` (not a real keyword) indicates an :ref:"
 "`annotation scope <annotation-scopes>`, and the name ``TYPE_PARAMS_OF_Bag`` "
@@ -3173,7 +3146,7 @@ msgstr ""
 "`annotation scope <annotation-scopes>`, och namnet ``TYPE_PARAMS_OF_Bag`` är "
 "inte faktiskt bundet vid körning."
 
-#: ../../reference/compound_stmts.rst:1823
+#: ../../reference/compound_stmts.rst:1827
 msgid ""
 "Generic classes implicitly inherit from :data:`typing.Generic`. The base "
 "classes and keyword arguments of generic classes are evaluated within the "
@@ -3185,7 +3158,7 @@ msgstr ""
 "för typparametrarna, och dekoratorer utvärderas utanför detta omfång. Detta "
 "illustreras av detta exempel::"
 
-#: ../../reference/compound_stmts.rst:1829
+#: ../../reference/compound_stmts.rst:1833
 msgid ""
 "@decorator\n"
 "class Bag(Base[T], arg=T): ..."
@@ -3193,11 +3166,11 @@ msgstr ""
 "@dekoratör\n"
 "class Bag(Base[T], arg=T): ..."
 
-#: ../../reference/compound_stmts.rst:1832
+#: ../../reference/compound_stmts.rst:1836
 msgid "This is equivalent to::"
 msgstr "Detta är likvärdigt med::"
 
-#: ../../reference/compound_stmts.rst:1834
+#: ../../reference/compound_stmts.rst:1838
 msgid ""
 "annotation-def TYPE_PARAMS_OF_Bag():\n"
 "    T = typing.TypeVar(\"T\")\n"
@@ -3215,11 +3188,11 @@ msgstr ""
 "    return Bag\n"
 "Bag = dekorator(TYPE_PARAMS_OF_Bag())"
 
-#: ../../reference/compound_stmts.rst:1845
+#: ../../reference/compound_stmts.rst:1849
 msgid "Generic type aliases"
 msgstr "Alias för generiska typer"
 
-#: ../../reference/compound_stmts.rst:1847
+#: ../../reference/compound_stmts.rst:1851
 msgid ""
 "The :keyword:`type` statement can also be used to create a generic type "
 "alias::"
@@ -3227,11 +3200,11 @@ msgstr ""
 "Satsen :keyword:`type` kan också användas för att skapa ett generiskt "
 "typalias::"
 
-#: ../../reference/compound_stmts.rst:1849
+#: ../../reference/compound_stmts.rst:1853
 msgid "type ListOrSet[T] = list[T] | set[T]"
 msgstr "typ ListOrSet[T] = list[T] | set[T]"
 
-#: ../../reference/compound_stmts.rst:1851
+#: ../../reference/compound_stmts.rst:1855
 msgid ""
 "Except for the :ref:`lazy evaluation <lazy-evaluation>` of the value, this "
 "is equivalent to::"
@@ -3239,7 +3212,7 @@ msgstr ""
 "Med undantag för :ref:`långsam utvärdering <lazy-evaluation>` av värdet, är "
 "detta likvärdigt med::"
 
-#: ../../reference/compound_stmts.rst:1854
+#: ../../reference/compound_stmts.rst:1858
 msgid ""
 "annotation-def TYPE_PARAMS_OF_ListOrSet():\n"
 "    T = typing.TypeVar(\"T\")\n"
@@ -3261,7 +3234,7 @@ msgstr ""
 "type_params=(T,))\n"
 "ListOrSet = TYPE_PARAMS_OF_ListOrSet()"
 
-#: ../../reference/compound_stmts.rst:1863
+#: ../../reference/compound_stmts.rst:1867
 msgid ""
 "Here, ``annotation-def`` (not a real keyword) indicates an :ref:`annotation "
 "scope <annotation-scopes>`. The capitalized names like "
@@ -3271,15 +3244,15 @@ msgstr ""
 "`annotation scope <annotation-scopes>`. De versala namnen som "
 "``TYPE_PARAMS_OF_ListOrSet`` är faktiskt inte bundna vid körning."
 
-#: ../../reference/compound_stmts.rst:1870
+#: ../../reference/compound_stmts.rst:1874
 msgid "Annotations"
 msgstr "Anteckningar"
 
-#: ../../reference/compound_stmts.rst:1872
+#: ../../reference/compound_stmts.rst:1876
 msgid "Annotations are now lazily evaluated by default."
 msgstr "Annotationer utvärderas nu lättsamt som standard."
 
-#: ../../reference/compound_stmts.rst:1875
+#: ../../reference/compound_stmts.rst:1879
 msgid ""
 "Variables and function parameters may carry :term:`annotations "
 "<annotation>`, created by adding a colon after the name, followed by an "
@@ -3289,7 +3262,7 @@ msgstr ""
 "som skapas genom att lägga till ett kolon efter namnet, följt av ett "
 "uttryck::"
 
-#: ../../reference/compound_stmts.rst:1878
+#: ../../reference/compound_stmts.rst:1882
 msgid ""
 "x: annotation = 1\n"
 "def f(param: annotation): ..."
@@ -3297,15 +3270,15 @@ msgstr ""
 "x: anteckning = 1\n"
 "def f(param: annotation): ..."
 
-#: ../../reference/compound_stmts.rst:1881
+#: ../../reference/compound_stmts.rst:1885
 msgid "Functions may also carry a return annotation following an arrow::"
 msgstr "Funktioner kan också ha en returannotering som följer en pil::"
 
-#: ../../reference/compound_stmts.rst:1883
+#: ../../reference/compound_stmts.rst:1887
 msgid "def f() -> annotation: ..."
 msgstr "def f() -> annotation: ..."
 
-#: ../../reference/compound_stmts.rst:1885
+#: ../../reference/compound_stmts.rst:1889
 msgid ""
 "Annotations are conventionally used for :term:`type hints <type hint>`, but "
 "this is not enforced by the language, and in general annotations may contain "
@@ -3321,7 +3294,7 @@ msgstr ""
 "och använder annoteringarna (t.ex. :mod:`dataclasses` eller :func:`functools."
 "singledispatch`)."
 
-#: ../../reference/compound_stmts.rst:1891
+#: ../../reference/compound_stmts.rst:1895
 msgid ""
 "By default, annotations are lazily evaluated in an :ref:`annotation scope "
 "<annotation-scopes>`. This means that they are not evaluated when the code "
@@ -3335,7 +3308,7 @@ msgstr ""
 "kan användas för att utvärdera annotationen senare om så begärs. Modulen :"
 "mod:`annotationlib` tillhandahåller verktyg för att utvärdera annotationer."
 
-#: ../../reference/compound_stmts.rst:1896
+#: ../../reference/compound_stmts.rst:1900
 msgid ""
 "If the :ref:`future statement <future>` ``from __future__ import "
 "annotations`` is present, all annotations are instead stored as strings::"
@@ -3343,7 +3316,7 @@ msgstr ""
 "Om :ref:`future-satsen <future>` ``from __future__ import annotations`` är "
 "närvarande, lagras alla annotationer istället som strängar::"
 
-#: ../../reference/compound_stmts.rst:1899
+#: ../../reference/compound_stmts.rst:1903
 msgid ""
 ">>> from __future__ import annotations\n"
 ">>> def f(param: annotation): ...\n"
@@ -3355,7 +3328,7 @@ msgstr ""
 ">>> f.__annotations__\n"
 "{'param': 'annotation'}"
 
-#: ../../reference/compound_stmts.rst:1904
+#: ../../reference/compound_stmts.rst:1908
 msgid ""
 "This future statement will be deprecated and removed in a future version of "
 "Python, but not before Python 3.13 reaches its end of life (see :pep:`749`). "
@@ -3369,11 +3342,11 @@ msgstr ""
 "introspektionsverktyg som :func:`annotationlib.get_annotations` och :func:"
 "`typing.get_type_hints` kan lösa annoteringar vid körning."
 
-#: ../../reference/compound_stmts.rst:1912
+#: ../../reference/compound_stmts.rst:1916
 msgid "Footnotes"
 msgstr "Fotnoter"
 
-#: ../../reference/compound_stmts.rst:1913
+#: ../../reference/compound_stmts.rst:1917
 msgid ""
 "The exception is propagated to the invocation stack unless there is a :"
 "keyword:`finally` clause which happens to raise another exception. That new "
@@ -3383,53 +3356,53 @@ msgstr ""
 "`finally`\\-klausul som råkar ge upphov till ett annat undantag. Det nya "
 "undantaget gör att det gamla går förlorat."
 
-#: ../../reference/compound_stmts.rst:1917
+#: ../../reference/compound_stmts.rst:1921
 msgid "In pattern matching, a sequence is defined as one of the following:"
 msgstr "Vid mönstermatchning definieras en sekvens som något av följande:"
 
-#: ../../reference/compound_stmts.rst:1919
+#: ../../reference/compound_stmts.rst:1923
 msgid "a class that inherits from :class:`collections.abc.Sequence`"
 msgstr "en klass som ärver från :class:`collections.abc.Sequence`"
 
-#: ../../reference/compound_stmts.rst:1920
+#: ../../reference/compound_stmts.rst:1924
 msgid ""
 "a Python class that has been registered as :class:`collections.abc.Sequence`"
 msgstr ""
 "en Python-klass som har registrerats som :class:`collections.abc.Sequence`"
 
-#: ../../reference/compound_stmts.rst:1921
+#: ../../reference/compound_stmts.rst:1925
 msgid ""
 "a builtin class that has its (CPython) :c:macro:`Py_TPFLAGS_SEQUENCE` bit set"
 msgstr ""
 "en inbyggd klass som har sin (CPython) :c:macro:`Py_TPFLAGS_SEQUENCE` bit "
 "inställd"
 
-#: ../../reference/compound_stmts.rst:1922
-#: ../../reference/compound_stmts.rst:1941
+#: ../../reference/compound_stmts.rst:1926
+#: ../../reference/compound_stmts.rst:1945
 msgid "a class that inherits from any of the above"
 msgstr "en klass som ärver från någon av ovanstående"
 
-#: ../../reference/compound_stmts.rst:1924
+#: ../../reference/compound_stmts.rst:1928
 msgid "The following standard library classes are sequences:"
 msgstr "Följande standardbiblioteksklasser är sekvenser:"
 
-#: ../../reference/compound_stmts.rst:1926
+#: ../../reference/compound_stmts.rst:1930
 msgid ":class:`array.array`"
 msgstr ":class:`array.array`"
 
-#: ../../reference/compound_stmts.rst:1927
+#: ../../reference/compound_stmts.rst:1931
 msgid ":class:`collections.deque`"
 msgstr ":class:`collections.deque`"
 
-#: ../../reference/compound_stmts.rst:1929
+#: ../../reference/compound_stmts.rst:1933
 msgid ":class:`memoryview`"
 msgstr ":class:`memoryview`"
 
-#: ../../reference/compound_stmts.rst:1930
+#: ../../reference/compound_stmts.rst:1934
 msgid ":class:`range`"
 msgstr ":class:`intervall`"
 
-#: ../../reference/compound_stmts.rst:1933
+#: ../../reference/compound_stmts.rst:1937
 msgid ""
 "Subject values of type ``str``, ``bytes``, and ``bytearray`` do not match "
 "sequence patterns."
@@ -3437,28 +3410,28 @@ msgstr ""
 "Ämnesvärden av typen ``str``, ``bytes`` och ``bytearray`` matchar inte "
 "sekvensmönster."
 
-#: ../../reference/compound_stmts.rst:1936
+#: ../../reference/compound_stmts.rst:1940
 msgid "In pattern matching, a mapping is defined as one of the following:"
 msgstr "Vid mönstermatchning definieras en mappning som något av följande:"
 
-#: ../../reference/compound_stmts.rst:1938
+#: ../../reference/compound_stmts.rst:1942
 msgid "a class that inherits from :class:`collections.abc.Mapping`"
 msgstr "en klass som ärver från :class:`collections.abc.Mapping`"
 
-#: ../../reference/compound_stmts.rst:1939
+#: ../../reference/compound_stmts.rst:1943
 msgid ""
 "a Python class that has been registered as :class:`collections.abc.Mapping`"
 msgstr ""
 "en Python-klass som har registrerats som :class:`collections.abc.Mapping`"
 
-#: ../../reference/compound_stmts.rst:1940
+#: ../../reference/compound_stmts.rst:1944
 msgid ""
 "a builtin class that has its (CPython) :c:macro:`Py_TPFLAGS_MAPPING` bit set"
 msgstr ""
 "en inbyggd klass som har sin (CPython) :c:macro:`Py_TPFLAGS_MAPPING` bit "
 "inställd"
 
-#: ../../reference/compound_stmts.rst:1943
+#: ../../reference/compound_stmts.rst:1947
 msgid ""
 "The standard library classes :class:`dict` and :class:`types."
 "MappingProxyType` are mappings."
@@ -3466,7 +3439,7 @@ msgstr ""
 "Standardbiblioteksklasserna :class:`dict` och :class:`types."
 "MappingProxyType` är mappningar."
 
-#: ../../reference/compound_stmts.rst:1946
+#: ../../reference/compound_stmts.rst:1950
 msgid ""
 "A string literal appearing as the first statement in the function body is "
 "transformed into the function's :attr:`~function.__doc__` attribute and "
@@ -3476,7 +3449,7 @@ msgstr ""
 "omvandlas till funktionens :attr:`~function.__doc__`\\-attribut och därmed "
 "till funktionens :term:`docstring`."
 
-#: ../../reference/compound_stmts.rst:1950
+#: ../../reference/compound_stmts.rst:1954
 msgid ""
 "A string literal appearing as the first statement in the class body is "
 "transformed into the namespace's :attr:`~type.__doc__` item and therefore "
@@ -3496,15 +3469,15 @@ msgstr "förening"
 #: ../../reference/compound_stmts.rst:144
 #: ../../reference/compound_stmts.rst:169
 #: ../../reference/compound_stmts.rst:207
-#: ../../reference/compound_stmts.rst:393
-#: ../../reference/compound_stmts.rst:442
-#: ../../reference/compound_stmts.rst:480
-#: ../../reference/compound_stmts.rst:598
-#: ../../reference/compound_stmts.rst:1205
-#: ../../reference/compound_stmts.rst:1393
-#: ../../reference/compound_stmts.rst:1503
-#: ../../reference/compound_stmts.rst:1537
-#: ../../reference/compound_stmts.rst:1582
+#: ../../reference/compound_stmts.rst:397
+#: ../../reference/compound_stmts.rst:446
+#: ../../reference/compound_stmts.rst:484
+#: ../../reference/compound_stmts.rst:602
+#: ../../reference/compound_stmts.rst:1209
+#: ../../reference/compound_stmts.rst:1397
+#: ../../reference/compound_stmts.rst:1507
+#: ../../reference/compound_stmts.rst:1541
+#: ../../reference/compound_stmts.rst:1586
 msgid "statement"
 msgstr "uttalande"
 
@@ -3536,11 +3509,11 @@ msgstr "dinglande"
 #: ../../reference/compound_stmts.rst:111
 #: ../../reference/compound_stmts.rst:144
 #: ../../reference/compound_stmts.rst:207
-#: ../../reference/compound_stmts.rst:393
+#: ../../reference/compound_stmts.rst:397
 msgid "else"
 msgstr "annat"
 
-#: ../../reference/compound_stmts.rst:86 ../../reference/compound_stmts.rst:598
+#: ../../reference/compound_stmts.rst:86 ../../reference/compound_stmts.rst:602
 msgid "if"
 msgstr "om"
 
@@ -3548,11 +3521,11 @@ msgstr "om"
 #: ../../reference/compound_stmts.rst:144
 #: ../../reference/compound_stmts.rst:207
 #: ../../reference/compound_stmts.rst:330
-#: ../../reference/compound_stmts.rst:393
-#: ../../reference/compound_stmts.rst:411
-#: ../../reference/compound_stmts.rst:480
-#: ../../reference/compound_stmts.rst:598
-#: ../../reference/compound_stmts.rst:1513
+#: ../../reference/compound_stmts.rst:397
+#: ../../reference/compound_stmts.rst:415
+#: ../../reference/compound_stmts.rst:484
+#: ../../reference/compound_stmts.rst:602
+#: ../../reference/compound_stmts.rst:1517
 msgid "keyword"
 msgstr "sökord"
 
@@ -3563,21 +3536,21 @@ msgstr "elif"
 #: ../../reference/compound_stmts.rst:86 ../../reference/compound_stmts.rst:111
 #: ../../reference/compound_stmts.rst:144
 #: ../../reference/compound_stmts.rst:207
-#: ../../reference/compound_stmts.rst:480
-#: ../../reference/compound_stmts.rst:598
-#: ../../reference/compound_stmts.rst:1205
-#: ../../reference/compound_stmts.rst:1335
-#: ../../reference/compound_stmts.rst:1393
+#: ../../reference/compound_stmts.rst:484
+#: ../../reference/compound_stmts.rst:602
+#: ../../reference/compound_stmts.rst:1209
+#: ../../reference/compound_stmts.rst:1339
+#: ../../reference/compound_stmts.rst:1397
 msgid ": (colon)"
 msgstr ": (kolon)"
 
 #: ../../reference/compound_stmts.rst:86 ../../reference/compound_stmts.rst:111
 #: ../../reference/compound_stmts.rst:144
 #: ../../reference/compound_stmts.rst:207
-#: ../../reference/compound_stmts.rst:480
-#: ../../reference/compound_stmts.rst:598
-#: ../../reference/compound_stmts.rst:1205
-#: ../../reference/compound_stmts.rst:1393
+#: ../../reference/compound_stmts.rst:484
+#: ../../reference/compound_stmts.rst:602
+#: ../../reference/compound_stmts.rst:1209
+#: ../../reference/compound_stmts.rst:1397
 msgid "compound statement"
 msgstr "sammansatt uttalande"
 
@@ -3592,15 +3565,15 @@ msgstr "loop"
 
 #: ../../reference/compound_stmts.rst:129
 #: ../../reference/compound_stmts.rst:169
-#: ../../reference/compound_stmts.rst:393
-#: ../../reference/compound_stmts.rst:442
+#: ../../reference/compound_stmts.rst:397
+#: ../../reference/compound_stmts.rst:446
 msgid "break"
 msgstr "bryta"
 
 #: ../../reference/compound_stmts.rst:129
 #: ../../reference/compound_stmts.rst:169
-#: ../../reference/compound_stmts.rst:393
-#: ../../reference/compound_stmts.rst:442
+#: ../../reference/compound_stmts.rst:397
+#: ../../reference/compound_stmts.rst:446
 msgid "continue"
 msgstr "fortsätta"
 
@@ -3622,8 +3595,8 @@ msgstr "lista"
 
 #: ../../reference/compound_stmts.rst:144
 #: ../../reference/compound_stmts.rst:301
-#: ../../reference/compound_stmts.rst:1205
-#: ../../reference/compound_stmts.rst:1393
+#: ../../reference/compound_stmts.rst:1209
+#: ../../reference/compound_stmts.rst:1397
 msgid "object"
 msgstr "objekt"
 
@@ -3648,14 +3621,14 @@ msgid "except"
 msgstr "utom"
 
 #: ../../reference/compound_stmts.rst:207
-#: ../../reference/compound_stmts.rst:411
+#: ../../reference/compound_stmts.rst:415
 msgid "finally"
 msgstr "slutligen"
 
 #: ../../reference/compound_stmts.rst:207
 #: ../../reference/compound_stmts.rst:268
-#: ../../reference/compound_stmts.rst:480
-#: ../../reference/compound_stmts.rst:598
+#: ../../reference/compound_stmts.rst:484
+#: ../../reference/compound_stmts.rst:602
 msgid "as"
 msgstr "som"
 
@@ -3679,213 +3652,213 @@ msgstr "spårning"
 msgid "except_star"
 msgstr "utom_stjärna"
 
-#: ../../reference/compound_stmts.rst:393
-#: ../../reference/compound_stmts.rst:442
+#: ../../reference/compound_stmts.rst:397
+#: ../../reference/compound_stmts.rst:446
 msgid "return"
 msgstr "tillbaka"
 
-#: ../../reference/compound_stmts.rst:480
+#: ../../reference/compound_stmts.rst:484
 msgid "with"
 msgstr "med"
 
-#: ../../reference/compound_stmts.rst:480
+#: ../../reference/compound_stmts.rst:484
 msgid "with statement"
 msgstr "med uttalande"
 
-#: ../../reference/compound_stmts.rst:480
-#: ../../reference/compound_stmts.rst:1205
-#: ../../reference/compound_stmts.rst:1393
+#: ../../reference/compound_stmts.rst:484
+#: ../../reference/compound_stmts.rst:1209
+#: ../../reference/compound_stmts.rst:1397
 msgid ", (comma)"
 msgstr ", (kommatecken)"
 
-#: ../../reference/compound_stmts.rst:598
+#: ../../reference/compound_stmts.rst:602
 msgid "match"
 msgstr "matcha"
 
-#: ../../reference/compound_stmts.rst:598
+#: ../../reference/compound_stmts.rst:602
 msgid "case"
 msgstr "referens"
 
-#: ../../reference/compound_stmts.rst:598
+#: ../../reference/compound_stmts.rst:602
 msgid "pattern matching"
 msgstr "mönstermatchning"
 
-#: ../../reference/compound_stmts.rst:598
+#: ../../reference/compound_stmts.rst:602
 msgid "match statement"
 msgstr "matchningsförklaring"
 
-#: ../../reference/compound_stmts.rst:702
+#: ../../reference/compound_stmts.rst:706
 msgid "guard"
 msgstr "vakt"
 
-#: ../../reference/compound_stmts.rst:741
+#: ../../reference/compound_stmts.rst:745
 msgid "irrefutable case block"
 msgstr "obestridligt fallblock"
 
-#: ../../reference/compound_stmts.rst:741
+#: ../../reference/compound_stmts.rst:745
 msgid "case block"
 msgstr "fallblock"
 
-#: ../../reference/compound_stmts.rst:765
+#: ../../reference/compound_stmts.rst:769
 msgid "! patterns"
 msgstr "! mönster"
 
-#: ../../reference/compound_stmts.rst:765
+#: ../../reference/compound_stmts.rst:769
 msgid "AS pattern, OR pattern, capture pattern, wildcard pattern"
 msgstr "AS-mönster, OR-mönster, capture-mönster, jokerteckenmönster"
 
-#: ../../reference/compound_stmts.rst:1196
-#: ../../reference/compound_stmts.rst:1285
+#: ../../reference/compound_stmts.rst:1200
+#: ../../reference/compound_stmts.rst:1289
 msgid "parameter"
 msgstr "parameter"
 
-#: ../../reference/compound_stmts.rst:1196
-#: ../../reference/compound_stmts.rst:1205
-#: ../../reference/compound_stmts.rst:1249
-#: ../../reference/compound_stmts.rst:1285
-#: ../../reference/compound_stmts.rst:1314
+#: ../../reference/compound_stmts.rst:1200
+#: ../../reference/compound_stmts.rst:1209
+#: ../../reference/compound_stmts.rst:1253
+#: ../../reference/compound_stmts.rst:1289
+#: ../../reference/compound_stmts.rst:1318
 msgid "function definition"
 msgstr "definition av funktion"
 
-#: ../../reference/compound_stmts.rst:1205
+#: ../../reference/compound_stmts.rst:1209
 msgid "def"
 msgstr "def"
 
-#: ../../reference/compound_stmts.rst:1205
-#: ../../reference/compound_stmts.rst:1335
+#: ../../reference/compound_stmts.rst:1209
+#: ../../reference/compound_stmts.rst:1339
 msgid "function"
 msgstr "funktion"
 
-#: ../../reference/compound_stmts.rst:1205
-#: ../../reference/compound_stmts.rst:1393
+#: ../../reference/compound_stmts.rst:1209
+#: ../../reference/compound_stmts.rst:1397
 msgid "definition"
 msgstr "definition"
 
-#: ../../reference/compound_stmts.rst:1205
-#: ../../reference/compound_stmts.rst:1393
+#: ../../reference/compound_stmts.rst:1209
+#: ../../reference/compound_stmts.rst:1397
 msgid "name"
 msgstr "namn"
 
-#: ../../reference/compound_stmts.rst:1205
-#: ../../reference/compound_stmts.rst:1393
+#: ../../reference/compound_stmts.rst:1209
+#: ../../reference/compound_stmts.rst:1397
 msgid "binding"
 msgstr "bindning"
 
-#: ../../reference/compound_stmts.rst:1205
+#: ../../reference/compound_stmts.rst:1209
 msgid "user-defined function"
 msgstr "användardefinierad funktion"
 
-#: ../../reference/compound_stmts.rst:1205
-#: ../../reference/compound_stmts.rst:1393
+#: ../../reference/compound_stmts.rst:1209
+#: ../../reference/compound_stmts.rst:1397
 msgid "() (parentheses)"
 msgstr "() (inom parentes)"
 
-#: ../../reference/compound_stmts.rst:1205
+#: ../../reference/compound_stmts.rst:1209
 msgid "parameter list"
 msgstr "parameterlista"
 
-#: ../../reference/compound_stmts.rst:1249
-#: ../../reference/compound_stmts.rst:1443
+#: ../../reference/compound_stmts.rst:1253
+#: ../../reference/compound_stmts.rst:1447
 msgid "@ (at)"
 msgstr "@ (vid)"
 
-#: ../../reference/compound_stmts.rst:1285
+#: ../../reference/compound_stmts.rst:1289
 msgid "default"
 msgstr "standard"
 
-#: ../../reference/compound_stmts.rst:1285
+#: ../../reference/compound_stmts.rst:1289
 msgid "value"
 msgstr "värde"
 
-#: ../../reference/compound_stmts.rst:1285
+#: ../../reference/compound_stmts.rst:1289
 msgid "argument"
 msgstr "argument"
 
-#: ../../reference/compound_stmts.rst:1285
+#: ../../reference/compound_stmts.rst:1289
 msgid "= (equals)"
 msgstr "= (lika med)"
 
-#: ../../reference/compound_stmts.rst:1314
+#: ../../reference/compound_stmts.rst:1318
 msgid "/ (slash)"
 msgstr "/ (snedstreck)"
 
-#: ../../reference/compound_stmts.rst:1314
+#: ../../reference/compound_stmts.rst:1318
 msgid "* (asterisk)"
 msgstr "* (asterisk)"
 
-#: ../../reference/compound_stmts.rst:1314
+#: ../../reference/compound_stmts.rst:1318
 msgid "**"
 msgstr "**"
 
-#: ../../reference/compound_stmts.rst:1335
+#: ../../reference/compound_stmts.rst:1339
 msgid "annotations"
 msgstr "anteckningar"
 
-#: ../../reference/compound_stmts.rst:1335
+#: ../../reference/compound_stmts.rst:1339
 msgid "->"
 msgstr "->"
 
-#: ../../reference/compound_stmts.rst:1335
+#: ../../reference/compound_stmts.rst:1339
 msgid "function annotations"
 msgstr "funktionskommentarer"
 
-#: ../../reference/compound_stmts.rst:1352
+#: ../../reference/compound_stmts.rst:1356
 msgid "lambda"
 msgstr "lambda"
 
-#: ../../reference/compound_stmts.rst:1352
+#: ../../reference/compound_stmts.rst:1356
 msgid "expression"
 msgstr "uttryck"
 
-#: ../../reference/compound_stmts.rst:1393
+#: ../../reference/compound_stmts.rst:1397
 msgid "class"
 msgstr "klass"
 
-#: ../../reference/compound_stmts.rst:1393
+#: ../../reference/compound_stmts.rst:1397
 msgid "execution"
 msgstr "avrättning"
 
-#: ../../reference/compound_stmts.rst:1393
+#: ../../reference/compound_stmts.rst:1397
 msgid "frame"
 msgstr "ram"
 
-#: ../../reference/compound_stmts.rst:1393
+#: ../../reference/compound_stmts.rst:1397
 msgid "inheritance"
 msgstr "arv"
 
-#: ../../reference/compound_stmts.rst:1393
+#: ../../reference/compound_stmts.rst:1397
 msgid "docstring"
 msgstr "dokumentsträng"
 
-#: ../../reference/compound_stmts.rst:1393
-#: ../../reference/compound_stmts.rst:1443
+#: ../../reference/compound_stmts.rst:1397
+#: ../../reference/compound_stmts.rst:1447
 msgid "class definition"
 msgstr "klassdefinition"
 
-#: ../../reference/compound_stmts.rst:1393
+#: ../../reference/compound_stmts.rst:1397
 msgid "expression list"
 msgstr "uttrycksförteckning"
 
-#: ../../reference/compound_stmts.rst:1503
+#: ../../reference/compound_stmts.rst:1507
 msgid "async def"
 msgstr "asynkron def"
 
-#: ../../reference/compound_stmts.rst:1513
+#: ../../reference/compound_stmts.rst:1517
 msgid "async"
 msgstr "asynkron"
 
-#: ../../reference/compound_stmts.rst:1513
+#: ../../reference/compound_stmts.rst:1517
 msgid "await"
 msgstr "invänta"
 
-#: ../../reference/compound_stmts.rst:1537
+#: ../../reference/compound_stmts.rst:1541
 msgid "async for"
 msgstr "asynkron för"
 
-#: ../../reference/compound_stmts.rst:1582
+#: ../../reference/compound_stmts.rst:1586
 msgid "async with"
 msgstr "asynkron med"
 
-#: ../../reference/compound_stmts.rst:1639
+#: ../../reference/compound_stmts.rst:1643
 msgid "type parameters"
 msgstr "typ parametrar"

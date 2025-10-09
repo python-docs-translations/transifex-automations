@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-05 14:11+0000\n"
+"POT-Creation-Date: 2025-10-09 14:15+0000\n"
 "PO-Revision-Date: 2025-09-16 00:00+0000\n"
 "Last-Translator: python-doc bot, 2025\n"
 "Language-Team: Swedish (https://app.transifex.com/python-doc/teams/5390/"
@@ -2171,7 +2171,7 @@ msgstr ""
 "`thread state` **bör inte** vara :term:`attached <attached thread state>`, "
 "annars uppstår deadlock. *tstate* kommer att vara attached vid returnering."
 
-#: ../../c-api/init.rst:1244 ../../c-api/init.rst:1618
+#: ../../c-api/init.rst:1244 ../../c-api/init.rst:1631
 msgid ""
 "Calling this function from a thread when the runtime is finalizing will hang "
 "the thread until the program exits, even if the thread was not created by "
@@ -2183,8 +2183,8 @@ msgstr ""
 "tråden inte skapades av Python.  Se :ref:`cautions-regarding-runtime-"
 "finalization` för mer information."
 
-#: ../../c-api/init.rst:1249 ../../c-api/init.rst:1320
-#: ../../c-api/init.rst:1628
+#: ../../c-api/init.rst:1249 ../../c-api/init.rst:1333
+#: ../../c-api/init.rst:1641
 msgid ""
 "Hangs the current thread, rather than terminating it, if called while the "
 "interpreter is finalizing."
@@ -2243,6 +2243,10 @@ msgstr ""
 "den kommer helt enkelt att returnera ``NULL`` vilket indikerar att det inte "
 "fanns någon tidigare thread state."
 
+#: ../../c-api/init.rst:1282
+msgid ":c:func:`PyEval_ReleaseThread`"
+msgstr ""
+
 #: ../../c-api/init.rst:1285
 msgid ""
 "Similar to :c:func:`PyGILState_Ensure`, this function will hang the thread "
@@ -2260,6 +2264,20 @@ msgstr ""
 "undertolkare:"
 
 #: ../../c-api/init.rst:1294
+msgid ""
+"The type of the value returned by :c:func:`PyGILState_Ensure` and passed to :"
+"c:func:`PyGILState_Release`."
+msgstr ""
+
+#: ../../c-api/init.rst:1299
+msgid "The GIL was already held when :c:func:`PyGILState_Ensure` was called."
+msgstr ""
+
+#: ../../c-api/init.rst:1303
+msgid "The GIL was not held when :c:func:`PyGILState_Ensure` was called."
+msgstr ""
+
+#: ../../c-api/init.rst:1307
 msgid ""
 "Ensure that the current thread is ready to call the Python C API regardless "
 "of the current state of Python, or of the :term:`attached thread state`. "
@@ -2281,7 +2299,7 @@ msgstr ""
 "exempel är normal användning av makrona :c:macro:`Py_BEGIN_ALLOW_THREADS` "
 "och :c:macro:`Py_END_ALLOW_THREADS` acceptabel."
 
-#: ../../c-api/init.rst:1304
+#: ../../c-api/init.rst:1317
 msgid ""
 "The return value is an opaque \"handle\" to the :term:`attached thread "
 "state` when :c:func:`PyGILState_Ensure` was called, and must be passed to :c:"
@@ -2297,7 +2315,7 @@ msgstr ""
 "delas - varje unikt anrop till :c:func:`PyGILState_Ensure` måste spara "
 "handtaget för sitt anrop till :c:func:`PyGILState_Release`."
 
-#: ../../c-api/init.rst:1311
+#: ../../c-api/init.rst:1324
 msgid ""
 "When the function returns, there will be an :term:`attached thread state` "
 "and the thread will be able to call arbitrary Python code.  Failure is a "
@@ -2307,7 +2325,7 @@ msgstr ""
 "state` och tråden kommer att kunna anropa godtycklig Python-kod.  "
 "Misslyckande är ett fatalt fel."
 
-#: ../../c-api/init.rst:1315
+#: ../../c-api/init.rst:1328
 msgid ""
 "Calling this function when the runtime is finalizing is unsafe. Doing so "
 "will either hang the thread until the program ends, or fully crash the "
@@ -2319,7 +2337,7 @@ msgstr ""
 "avslutas, eller i sällsynta fall krascha tolken helt och hållet. Se :ref:"
 "`cautions-regarding-runtime-finalization` för mer information."
 
-#: ../../c-api/init.rst:1326
+#: ../../c-api/init.rst:1339
 msgid ""
 "Release any resources previously acquired.  After this call, Python's state "
 "will be the same as it was prior to the corresponding :c:func:"
@@ -2331,7 +2349,7 @@ msgstr ""
 "`PyGILState_Ensure`\\-anrop (men i allmänhet kommer detta tillstånd att vara "
 "okänt för anroparen, därav användningen av GILState API)."
 
-#: ../../c-api/init.rst:1331
+#: ../../c-api/init.rst:1344
 msgid ""
 "Every call to :c:func:`PyGILState_Ensure` must be matched by a call to :c:"
 "func:`PyGILState_Release` on the same thread."
@@ -2339,7 +2357,7 @@ msgstr ""
 "Varje anrop till :c:func:`PyGILState_Ensure` måste motsvaras av ett anrop "
 "till :c:func:`PyGILState_Release` på samma tråd."
 
-#: ../../c-api/init.rst:1336
+#: ../../c-api/init.rst:1349
 msgid ""
 "Get the :term:`attached thread state` for this thread.  May return ``NULL`` "
 "if no GILState API has been used on the current thread.  Note that the main "
@@ -2352,19 +2370,18 @@ msgstr ""
 "anrop om automatiskt trådtillstånd har gjorts på huvudtråden.  Detta är "
 "huvudsakligen en hjälp/diagnostisk funktion."
 
-#: ../../c-api/init.rst:1342
+#: ../../c-api/init.rst:1355
 msgid ""
-"This function does not account for :term:`thread states <thread state>` "
-"created by something other than :c:func:`PyGILState_Ensure` (such as :c:func:"
-"`PyThreadState_New`). Prefer :c:func:`PyThreadState_Get` or :c:func:"
+"This function may return non-``NULL`` even when the :term:`thread state` is "
+"detached. Prefer :c:func:`PyThreadState_Get` or :c:func:"
 "`PyThreadState_GetUnchecked` for most cases."
 msgstr ""
-"Den här funktionen tar inte hänsyn till :term:`thread states <thread state>` "
-"som skapats av något annat än :c:func:`PyGILState_Ensure` (t.ex. :c:func:"
-"`PyThreadState_New`). Föredrar :c:func:`PyThreadState_Get` eller :c:func:"
-"`PyThreadState_GetUnchecked` för de flesta fall."
 
-#: ../../c-api/init.rst:1351
+#: ../../c-api/init.rst:1360
+msgid ":c:func:`PyThreadState_Get`"
+msgstr ""
+
+#: ../../c-api/init.rst:1364
 msgid ""
 "Return ``1`` if the current thread is holding the :term:`GIL` and ``0`` "
 "otherwise. This function can be called from any thread at any time. Only if "
@@ -2385,7 +2402,7 @@ msgstr ""
 "göra det möjligt för anroparen att utföra känsliga åtgärder eller på annat "
 "sätt bete sig annorlunda."
 
-#: ../../c-api/init.rst:1361
+#: ../../c-api/init.rst:1374
 msgid ""
 "If the current Python process has ever created a subinterpreter, this "
 "function will *always* return ``1``. Prefer :c:func:"
@@ -2395,7 +2412,7 @@ msgstr ""
 "denna funktion *alltid* att returnera ``1``. Föredrar :c:func:"
 "`PyThreadState_GetUnchecked` för de flesta fall."
 
-#: ../../c-api/init.rst:1368
+#: ../../c-api/init.rst:1381
 msgid ""
 "The following macros are normally used without a trailing semicolon; look "
 "for example usage in the Python source distribution."
@@ -2403,7 +2420,7 @@ msgstr ""
 "Följande makron används normalt utan efterföljande semikolon; se exempel på "
 "hur de används i Pythons källdistribution."
 
-#: ../../c-api/init.rst:1374
+#: ../../c-api/init.rst:1387
 msgid ""
 "This macro expands to ``{ PyThreadState *_save; _save = PyEval_SaveThread();"
 "``. Note that it contains an opening brace; it must be matched with a "
@@ -2415,7 +2432,7 @@ msgstr ""
 "det måste matchas med ett följande :c:macro:`Py_END_ALLOW_THREADS`\\-makro.  "
 "Se ovan för vidare diskussion om detta makro."
 
-#: ../../c-api/init.rst:1382
+#: ../../c-api/init.rst:1395
 msgid ""
 "This macro expands to ``PyEval_RestoreThread(_save); }``. Note that it "
 "contains a closing brace; it must be matched with an earlier :c:macro:"
@@ -2427,7 +2444,7 @@ msgstr ""
 "tidigare :c:macro:`Py_BEGIN_ALLOW_THREADS`\\-makro.  Se ovan för ytterligare "
 "diskussion om detta makro."
 
-#: ../../c-api/init.rst:1390
+#: ../../c-api/init.rst:1403
 msgid ""
 "This macro expands to ``PyEval_RestoreThread(_save);``: it is equivalent to :"
 "c:macro:`Py_END_ALLOW_THREADS` without the closing brace."
@@ -2436,7 +2453,7 @@ msgstr ""
 "likvärdigt med :c:macro:`Py_END_ALLOW_THREADS` utan den avslutande "
 "parentesen."
 
-#: ../../c-api/init.rst:1396
+#: ../../c-api/init.rst:1409
 msgid ""
 "This macro expands to ``_save = PyEval_SaveThread();``: it is equivalent to :"
 "c:macro:`Py_BEGIN_ALLOW_THREADS` without the opening brace and variable "
@@ -2446,16 +2463,16 @@ msgstr ""
 "c:macro:`Py_BEGIN_ALLOW_THREADS` utan inledande hängslen och "
 "variabeldeklaration."
 
-#: ../../c-api/init.rst:1402
+#: ../../c-api/init.rst:1415
 msgid "Low-level API"
 msgstr "API på låg nivå"
 
-#: ../../c-api/init.rst:1404
+#: ../../c-api/init.rst:1417
 msgid ""
 "All of the following functions must be called after :c:func:`Py_Initialize`."
 msgstr "Alla följande funktioner måste anropas efter :c:func:`Py_Initialize`."
 
-#: ../../c-api/init.rst:1406
+#: ../../c-api/init.rst:1419
 msgid ""
 ":c:func:`Py_Initialize()` now initializes the :term:`GIL` and sets an :term:"
 "`attached thread state`."
@@ -2463,7 +2480,7 @@ msgstr ""
 ":c:func:`Py_Initialize()` initierar nu :term:`GIL` och sätter en :term:"
 "`attached thread state`."
 
-#: ../../c-api/init.rst:1413
+#: ../../c-api/init.rst:1426
 msgid ""
 "Create a new interpreter state object.  An :term:`attached thread state` is "
 "not needed, but may optionally exist if it is necessary to serialize calls "
@@ -2473,7 +2490,7 @@ msgstr ""
 "behövs inte, men kan eventuellt existera om det är nödvändigt att "
 "serialisera anrop till denna funktion."
 
-#: ../../c-api/init.rst:1417
+#: ../../c-api/init.rst:1430
 msgid ""
 "Raises an :ref:`auditing event <auditing>` ``cpython."
 "PyInterpreterState_New`` with no arguments."
@@ -2481,7 +2498,7 @@ msgstr ""
 "Utlöser en :ref:`auditing event <auditing>` ``cpython."
 "PyInterpreterState_New`` utan argument."
 
-#: ../../c-api/init.rst:1422
+#: ../../c-api/init.rst:1435
 msgid ""
 "Reset all information in an interpreter state object.  There must be an :"
 "term:`attached thread state` for the interpreter."
@@ -2489,7 +2506,7 @@ msgstr ""
 "Återställer all information i ett tolkstatusobjekt.  Det måste finnas en :"
 "term:`attached thread state` för tolken."
 
-#: ../../c-api/init.rst:1425
+#: ../../c-api/init.rst:1438
 msgid ""
 "Raises an :ref:`auditing event <auditing>` ``cpython."
 "PyInterpreterState_Clear`` with no arguments."
@@ -2497,7 +2514,7 @@ msgstr ""
 "Utlöser en :ref:`auditing event <auditing>` ``cpython."
 "PyInterpreterState_Clear`` utan argument."
 
-#: ../../c-api/init.rst:1430
+#: ../../c-api/init.rst:1443
 msgid ""
 "Destroy an interpreter state object.  There **should not** be an :term:"
 "`attached thread state` for the target interpreter. The interpreter state "
@@ -2508,7 +2525,7 @@ msgstr ""
 "`attached thread state` för måltolken. Tolkens tillstånd måste ha "
 "återställts med ett tidigare anrop till :c:func:`PyInterpreterState_Clear`."
 
-#: ../../c-api/init.rst:1437
+#: ../../c-api/init.rst:1450
 msgid ""
 "Create a new thread state object belonging to the given interpreter object. "
 "An :term:`attached thread state` is not needed."
@@ -2516,7 +2533,7 @@ msgstr ""
 "Skapar ett nytt trådtillståndsobjekt som hör till det givna tolkobjektet. "
 "En :term:`attached thread state` behövs inte."
 
-#: ../../c-api/init.rst:1442
+#: ../../c-api/init.rst:1455
 msgid ""
 "Reset all information in a :term:`thread state` object.  *tstate* must be :"
 "term:`attached <attached thread state>`"
@@ -2524,19 +2541,17 @@ msgstr ""
 "Återställer all information i ett :term:`thread state`\\-objekt.  *tstate* "
 "måste vara :term:`attached <attached thread state>`"
 
-#: ../../c-api/init.rst:1445
+#: ../../c-api/init.rst:1458
 msgid ""
-"This function now calls the :c:member:`PyThreadState.on_delete` callback. "
+"This function now calls the :c:member:`!PyThreadState.on_delete` callback. "
 "Previously, that happened in :c:func:`PyThreadState_Delete`."
 msgstr ""
-"Denna funktion anropar nu :c:member:`PyThreadState.on_delete` callback. "
-"Tidigare skedde det i :c:func:`PyThreadState_Delete`."
 
-#: ../../c-api/init.rst:1449
-msgid "The :c:member:`PyThreadState.on_delete` callback was removed."
-msgstr "Återkallelsen :c:member:`PyThreadState.on_delete` togs bort."
+#: ../../c-api/init.rst:1462
+msgid "The :c:member:`!PyThreadState.on_delete` callback was removed."
+msgstr ""
 
-#: ../../c-api/init.rst:1455
+#: ../../c-api/init.rst:1468
 msgid ""
 "Destroy a :term:`thread state` object.  *tstate* should not be :term:"
 "`attached <attached thread state>` to any thread. *tstate* must have been "
@@ -2546,7 +2561,7 @@ msgstr ""
 "`attached <attached thread state>` till någon tråd. *tstate* måste ha "
 "återställts med ett tidigare anrop till :c:func:`PyThreadState_Clear`."
 
-#: ../../c-api/init.rst:1463
+#: ../../c-api/init.rst:1476
 msgid ""
 "Detach the :term:`attached thread state` (which must have been reset with a "
 "previous call to :c:func:`PyThreadState_Clear`) and then destroy it."
@@ -2554,7 +2569,7 @@ msgstr ""
 "Avlägsna :term:`attached thread state` (som måste ha återställts med ett "
 "tidigare anrop till :c:func:`PyThreadState_Clear`) och förstör det sedan."
 
-#: ../../c-api/init.rst:1466
+#: ../../c-api/init.rst:1479
 msgid ""
 "No :term:`thread state` will be :term:`attached <attached thread state>` "
 "upon returning."
@@ -2562,11 +2577,11 @@ msgstr ""
 "Ingen :term:`thread state` kommer att vara :term:`attached <attached thread "
 "state>` vid returnering."
 
-#: ../../c-api/init.rst:1471
+#: ../../c-api/init.rst:1484
 msgid "Get the current frame of the Python thread state *tstate*."
 msgstr "Hämta den aktuella bilden av Python-trådtillståndet *tstate*."
 
-#: ../../c-api/init.rst:1473
+#: ../../c-api/init.rst:1486
 msgid ""
 "Return a :term:`strong reference`. Return ``NULL`` if no frame is currently "
 "executing."
@@ -2574,12 +2589,12 @@ msgstr ""
 "Returnerar en :term:`strong reference`. Returnerar ``NULL`` om ingen ram "
 "körs för närvarande."
 
-#: ../../c-api/init.rst:1476
+#: ../../c-api/init.rst:1489
 msgid "See also :c:func:`PyEval_GetFrame`."
 msgstr "Se även :c:func:`PyEval_GetFrame`."
 
-#: ../../c-api/init.rst:1478 ../../c-api/init.rst:1487
-#: ../../c-api/init.rst:1496
+#: ../../c-api/init.rst:1491 ../../c-api/init.rst:1500
+#: ../../c-api/init.rst:1509
 msgid ""
 "*tstate* must not be ``NULL``, and must be :term:`attached <attached thread "
 "state>`."
@@ -2587,7 +2602,7 @@ msgstr ""
 "*tstate* får inte vara ``NULL``, och måste vara :term:`attached <attached "
 "thread state>`."
 
-#: ../../c-api/init.rst:1485
+#: ../../c-api/init.rst:1498
 msgid ""
 "Get the unique :term:`thread state` identifier of the Python thread state "
 "*tstate*."
@@ -2595,20 +2610,20 @@ msgstr ""
 "Hämta den unika :term:`thread state`\\-identifieraren för Python-"
 "trådtillståndet *tstate*."
 
-#: ../../c-api/init.rst:1494
+#: ../../c-api/init.rst:1507
 msgid "Get the interpreter of the Python thread state *tstate*."
 msgstr "Hämta tolken för Python-trådtillståndet *tstate*."
 
-#: ../../c-api/init.rst:1503
+#: ../../c-api/init.rst:1516
 msgid "Suspend tracing and profiling in the Python thread state *tstate*."
 msgstr "Avbryt spårning och profilering i Python-trådtillståndet *tstate*."
 
-#: ../../c-api/init.rst:1505
+#: ../../c-api/init.rst:1518
 msgid "Resume them using the :c:func:`PyThreadState_LeaveTracing` function."
 msgstr ""
 "Återuppta dem med hjälp av funktionen :c:func:`PyThreadState_LeaveTracing`."
 
-#: ../../c-api/init.rst:1512
+#: ../../c-api/init.rst:1525
 msgid ""
 "Resume tracing and profiling in the Python thread state *tstate* suspended "
 "by the :c:func:`PyThreadState_EnterTracing` function."
@@ -2616,18 +2631,18 @@ msgstr ""
 "Återuppta spårning och profilering i Python-trådtillståndet *tstate* som "
 "avbröts av funktionen :c:func:`PyThreadState_EnterTracing`."
 
-#: ../../c-api/init.rst:1515
+#: ../../c-api/init.rst:1528
 msgid ""
 "See also :c:func:`PyEval_SetTrace` and :c:func:`PyEval_SetProfile` functions."
 msgstr ""
 "Se även funktionerna :c:func:`PyEval_SetTrace` och :c:func:"
 "`PyEval_SetProfile`."
 
-#: ../../c-api/init.rst:1523
+#: ../../c-api/init.rst:1536
 msgid "Get the current interpreter."
 msgstr "Hämta den aktuella tolken."
 
-#: ../../c-api/init.rst:1525
+#: ../../c-api/init.rst:1538
 msgid ""
 "Issue a fatal error if there no :term:`attached thread state`. It cannot "
 "return NULL."
@@ -2635,7 +2650,7 @@ msgstr ""
 "Utfärdar ett allvarligt fel om det inte finns någon :term:`attached thread "
 "state`. Den kan inte returnera NULL."
 
-#: ../../c-api/init.rst:1533
+#: ../../c-api/init.rst:1546
 msgid ""
 "Return the interpreter's unique ID.  If there was any error in doing so then "
 "``-1`` is returned and an error is set."
@@ -2643,13 +2658,13 @@ msgstr ""
 "Returnerar tolkens unika ID.  Om något fel inträffade returneras ``\\-1`` "
 "och ett fel anges."
 
-#: ../../c-api/init.rst:1536 ../../c-api/init.rst:2132
-#: ../../c-api/init.rst:2139 ../../c-api/init.rst:2158
-#: ../../c-api/init.rst:2165
+#: ../../c-api/init.rst:1549 ../../c-api/init.rst:2145
+#: ../../c-api/init.rst:2152 ../../c-api/init.rst:2171
+#: ../../c-api/init.rst:2178
 msgid "The caller must have an :term:`attached thread state`."
 msgstr "Den som anropar måste ha en :term:`attached thread state`."
 
-#: ../../c-api/init.rst:1543
+#: ../../c-api/init.rst:1556
 msgid ""
 "Return a dictionary in which interpreter-specific data may be stored. If "
 "this function returns ``NULL`` then no exception has been raised and the "
@@ -2659,7 +2674,7 @@ msgstr ""
 "funktion returnerar ``NULL`` har inget undantag uppstått och den som anropar "
 "bör anta att ingen tolkspecifik dict finns tillgänglig."
 
-#: ../../c-api/init.rst:1547
+#: ../../c-api/init.rst:1560
 msgid ""
 "This is not a replacement for :c:func:`PyModule_GetState()`, which "
 "extensions should use to store interpreter-specific state information."
@@ -2667,17 +2682,17 @@ msgstr ""
 "Detta är inte en ersättning för :c:func:`PyModule_GetState()`, som tillägg "
 "bör använda för att lagra tolkspecifik tillståndsinformation."
 
-#: ../../c-api/init.rst:1550
+#: ../../c-api/init.rst:1563
 msgid ""
 "The returned dictionary is borrowed from the interpreter and is valid until "
 "interpreter shutdown."
 msgstr ""
 
-#: ../../c-api/init.rst:1558
+#: ../../c-api/init.rst:1571
 msgid "Type of a frame evaluation function."
 msgstr "Typ av utvärderingsfunktion för en ram."
 
-#: ../../c-api/init.rst:1560
+#: ../../c-api/init.rst:1573
 msgid ""
 "The *throwflag* parameter is used by the ``throw()`` method of generators: "
 "if non-zero, handle the current exception."
@@ -2685,11 +2700,11 @@ msgstr ""
 "Parametern *throwflag* används av generatorns metod ``throw()``: om den är "
 "icke-noll, hanteras det aktuella undantaget."
 
-#: ../../c-api/init.rst:1563
+#: ../../c-api/init.rst:1576
 msgid "The function now takes a *tstate* parameter."
 msgstr "Funktionen tar nu en *tstate* parameter."
 
-#: ../../c-api/init.rst:1566
+#: ../../c-api/init.rst:1579
 msgid ""
 "The *frame* parameter changed from ``PyFrameObject*`` to "
 "``_PyInterpreterFrame*``."
@@ -2697,19 +2712,19 @@ msgstr ""
 "Parametern *frame* ändrades från ``PyFrameObject*`` till "
 "``_PyInterpreterFrame*``."
 
-#: ../../c-api/init.rst:1571
+#: ../../c-api/init.rst:1584
 msgid "Get the frame evaluation function."
 msgstr "Hämta funktionen för utvärdering av ramen."
 
-#: ../../c-api/init.rst:1573 ../../c-api/init.rst:1581
+#: ../../c-api/init.rst:1586 ../../c-api/init.rst:1594
 msgid "See the :pep:`523` \"Adding a frame evaluation API to CPython\"."
 msgstr "Se :pep:`523` \"Lägga till ett API för ramutvärdering till CPython\"."
 
-#: ../../c-api/init.rst:1579
+#: ../../c-api/init.rst:1592
 msgid "Set the frame evaluation function."
 msgstr "Ställ in funktionen för utvärdering av ramen."
 
-#: ../../c-api/init.rst:1588
+#: ../../c-api/init.rst:1601
 msgid ""
 "Return a dictionary in which extensions can store thread-specific state "
 "information.  Each extension should use a unique key to use to store state "
@@ -2725,7 +2740,7 @@ msgstr ""
 "Om denna funktion returnerar ``NULL`` har inget undantag uppstått och den "
 "som anropar bör anta att inget trådtillstånd är kopplat."
 
-#: ../../c-api/init.rst:1598
+#: ../../c-api/init.rst:1611
 msgid ""
 "Asynchronously raise an exception in a thread. The *id* argument is the "
 "thread id of the target thread; *exc* is the exception object to be raised. "
@@ -2745,7 +2760,7 @@ msgstr ""
 "är ``NULL``, rensas det väntande undantaget (om det finns något) för tråden. "
 "Detta ger inte upphov till några undantag."
 
-#: ../../c-api/init.rst:1606
+#: ../../c-api/init.rst:1619
 msgid ""
 "The type of the *id* parameter changed from :c:expr:`long` to :c:expr:"
 "`unsigned long`."
@@ -2753,7 +2768,7 @@ msgstr ""
 "Typen av parametern *id* ändrades från :c:expr:`long` till :c:expr:`unsigned "
 "long`."
 
-#: ../../c-api/init.rst:1612
+#: ../../c-api/init.rst:1625
 msgid ""
 ":term:`Attach <attached thread state>` *tstate* to the current thread, which "
 "must not be ``NULL`` or already :term:`attached <attached thread state>`."
@@ -2762,13 +2777,13 @@ msgstr ""
 "som inte får vara ``NULL`` eller redan :term:`attached <attached thread "
 "state>`."
 
-#: ../../c-api/init.rst:1615
+#: ../../c-api/init.rst:1628
 msgid ""
 "The calling thread must not already have an :term:`attached thread state`."
 msgstr ""
 "Den anropande tråden får inte redan ha ett :term:`attached thread state`."
 
-#: ../../c-api/init.rst:1623
+#: ../../c-api/init.rst:1636
 msgid ""
 "Updated to be consistent with :c:func:`PyEval_RestoreThread`, :c:func:"
 "`Py_END_ALLOW_THREADS`, and :c:func:`PyGILState_Ensure`, and terminate the "
@@ -2778,7 +2793,7 @@ msgstr ""
 "`Py_END_ALLOW_THREADS`, och :c:func:`PyGILState_Ensure`, och avsluta den "
 "aktuella tråden om den anropas medan tolken håller på att slutföras."
 
-#: ../../c-api/init.rst:1632
+#: ../../c-api/init.rst:1645
 msgid ""
 ":c:func:`PyEval_RestoreThread` is a higher-level function which is always "
 "available (even when threads have not been initialized)."
@@ -2786,7 +2801,7 @@ msgstr ""
 ":c:func:`PyEval_RestoreThread` är en funktion på högre nivå som alltid är "
 "tillgänglig (även när trådar inte har initialiserats)."
 
-#: ../../c-api/init.rst:1638
+#: ../../c-api/init.rst:1651
 msgid ""
 "Detach the :term:`attached thread state`. The *tstate* argument, which must "
 "not be ``NULL``, is only used to check that it represents the :term:"
@@ -2797,7 +2812,7 @@ msgstr ""
 "`attached thread state` --- om det inte gör det, rapporteras ett allvarligt "
 "fel."
 
-#: ../../c-api/init.rst:1643
+#: ../../c-api/init.rst:1656
 msgid ""
 ":c:func:`PyEval_SaveThread` is a higher-level function which is always "
 "available (even when threads have not been initialized)."
@@ -2805,11 +2820,11 @@ msgstr ""
 ":c:func:`PyEval_SaveThread` är en funktion på högre nivå som alltid är "
 "tillgänglig (även när trådar inte har initialiserats)."
 
-#: ../../c-api/init.rst:1650
+#: ../../c-api/init.rst:1663
 msgid "Sub-interpreter support"
 msgstr "Stöd för undertolkning"
 
-#: ../../c-api/init.rst:1652
+#: ../../c-api/init.rst:1665
 msgid ""
 "While in most uses, you will only embed a single Python interpreter, there "
 "are cases where you need to create several independent interpreters in the "
@@ -2821,7 +2836,7 @@ msgstr ""
 "och kanske till och med i samma tråd. Undertolkare gör det möjligt för dig "
 "att göra det."
 
-#: ../../c-api/init.rst:1657
+#: ../../c-api/init.rst:1670
 msgid ""
 "The \"main\" interpreter is the first one created when the runtime "
 "initializes. It is usually the only Python interpreter in a process.  Unlike "
@@ -2839,7 +2854,7 @@ msgstr ""
 "Funktionen :c:func:`PyInterpreterState_Main` returnerar en pekare till dess "
 "tillstånd."
 
-#: ../../c-api/init.rst:1664
+#: ../../c-api/init.rst:1677
 msgid ""
 "You can switch between sub-interpreters using the :c:func:"
 "`PyThreadState_Swap` function. You can create and destroy them using the "
@@ -2849,7 +2864,7 @@ msgstr ""
 "`PyThreadState_Swap`. Du kan skapa och förstöra dem med hjälp av följande "
 "funktioner:"
 
-#: ../../c-api/init.rst:1670
+#: ../../c-api/init.rst:1683
 msgid ""
 "Structure containing most parameters to configure a sub-interpreter. Its "
 "values are used only in :c:func:`Py_NewInterpreterFromConfig` and never "
@@ -2859,11 +2874,11 @@ msgstr ""
 "tolk. Dess värden används endast i :c:func:`Py_NewInterpreterFromConfig` och "
 "ändras aldrig av körtiden."
 
-#: ../../c-api/init.rst:1676
+#: ../../c-api/init.rst:1689
 msgid "Structure fields:"
 msgstr "Strukturfält:"
 
-#: ../../c-api/init.rst:1680
+#: ../../c-api/init.rst:1693
 msgid ""
 "If this is ``0`` then the sub-interpreter will use its own \"object\" "
 "allocator state. Otherwise it will use (share) the main interpreter's."
@@ -2871,7 +2886,7 @@ msgstr ""
 "Om detta är ``0`` kommer undertolken att använda sitt eget \"objekt\"-"
 "allokeringstillstånd. Annars kommer den att använda (dela) huvudtolkens."
 
-#: ../../c-api/init.rst:1684
+#: ../../c-api/init.rst:1697
 msgid ""
 "If this is ``0`` then :c:member:`~PyInterpreterConfig."
 "check_multi_interp_extensions` must be ``1`` (non-zero). If this is ``1`` "
@@ -2883,7 +2898,7 @@ msgstr ""
 "får inte :c:member:`~PyInterpreterConfig.gil` vara :c:macro:"
 "`PyInterpreterConfig_OWN_GIL`."
 
-#: ../../c-api/init.rst:1692
+#: ../../c-api/init.rst:1705
 msgid ""
 "If this is ``0`` then the runtime will not support forking the process in "
 "any thread where the sub-interpreter is currently active. Otherwise fork is "
@@ -2893,14 +2908,14 @@ msgstr ""
 "någon tråd där undertolken för närvarande är aktiv. Annars är fork "
 "obegränsad."
 
-#: ../../c-api/init.rst:1696
+#: ../../c-api/init.rst:1709
 msgid ""
 "Note that the :mod:`subprocess` module still works when fork is disallowed."
 msgstr ""
 "Observera att modulen :mod:`subprocess` fortfarande fungerar när fork inte "
 "är tillåtet."
 
-#: ../../c-api/init.rst:1701
+#: ../../c-api/init.rst:1714
 msgid ""
 "If this is ``0`` then the runtime will not support replacing the current "
 "process via exec (e.g. :func:`os.execv`) in any thread where the sub-"
@@ -2910,14 +2925,14 @@ msgstr ""
 "processen via exec (t.ex. :func:`os.execv`) i någon tråd där undertolken för "
 "närvarande är aktiv. Annars är exec obegränsat."
 
-#: ../../c-api/init.rst:1706
+#: ../../c-api/init.rst:1719
 msgid ""
 "Note that the :mod:`subprocess` module still works when exec is disallowed."
 msgstr ""
 "Observera att modulen :mod:`subprocess` fortfarande fungerar när exec inte "
 "är tillåtet."
 
-#: ../../c-api/init.rst:1711
+#: ../../c-api/init.rst:1724
 msgid ""
 "If this is ``0`` then the sub-interpreter's :mod:`threading` module won't "
 "create threads. Otherwise threads are allowed."
@@ -2925,7 +2940,7 @@ msgstr ""
 "Om detta är ``0`` så kommer undertolkarens modul :mod:`threading` inte att "
 "skapa trådar. Annars är trådar tillåtna."
 
-#: ../../c-api/init.rst:1717
+#: ../../c-api/init.rst:1730
 msgid ""
 "If this is ``0`` then the sub-interpreter's :mod:`threading` module won't "
 "create daemon threads. Otherwise daemon threads are allowed (as long as :c:"
@@ -2935,7 +2950,7 @@ msgstr ""
 "skapa daemon-trådar. Annars är daemon-trådar tillåtna (så länge som :c:"
 "member:`~PyInterpreterConfig.allow_threads` är icke-noll)."
 
-#: ../../c-api/init.rst:1724
+#: ../../c-api/init.rst:1737
 msgid ""
 "If this is ``0`` then all extension modules may be imported, including "
 "legacy (single-phase init) modules, in any thread where the sub-interpreter "
@@ -2948,7 +2963,7 @@ msgstr ""
 "aktiv. Annars får endast tilläggsmoduler för flerfasig init (se :pep:`489`) "
 "importeras. (Se även :c:macro:`Py_mod_multiple_interpreters`.)"
 
-#: ../../c-api/init.rst:1731
+#: ../../c-api/init.rst:1744
 msgid ""
 "This must be ``1`` (non-zero) if :c:member:`~PyInterpreterConfig."
 "use_main_obmalloc` is ``0``."
@@ -2956,7 +2971,7 @@ msgstr ""
 "Detta måste vara ``1`` (icke-noll) om :c:member:`~PyInterpreterConfig."
 "use_main_obmalloc` är ``0``."
 
-#: ../../c-api/init.rst:1736
+#: ../../c-api/init.rst:1749
 msgid ""
 "This determines the operation of the GIL for the sub-interpreter. It may be "
 "one of the following:"
@@ -2964,19 +2979,19 @@ msgstr ""
 "Detta bestämmer hur GIL ska fungera för undertolken. Det kan vara något av "
 "följande:"
 
-#: ../../c-api/init.rst:1743
+#: ../../c-api/init.rst:1756
 msgid "Use the default selection (:c:macro:`PyInterpreterConfig_SHARED_GIL`)."
 msgstr "Använd standardvalet (:c:macro:`PyInterpreterConfig_SHARED_GIL`)."
 
-#: ../../c-api/init.rst:1747
+#: ../../c-api/init.rst:1760
 msgid "Use (share) the main interpreter's GIL."
 msgstr "Använd (dela) huvudtolkens GIL."
 
-#: ../../c-api/init.rst:1751
+#: ../../c-api/init.rst:1764
 msgid "Use the sub-interpreter's own GIL."
 msgstr "Använd undertolkarens egen GIL."
 
-#: ../../c-api/init.rst:1753
+#: ../../c-api/init.rst:1766
 msgid ""
 "If this is :c:macro:`PyInterpreterConfig_OWN_GIL` then :c:member:"
 "`PyInterpreterConfig.use_main_obmalloc` must be ``0``."
@@ -2984,7 +2999,7 @@ msgstr ""
 "Om detta är :c:macro:`PyInterpreterConfig_OWN_GIL` så måste :c:member:"
 "`PyInterpreterConfig.use_main_obmalloc` vara ``0``."
 
-#: ../../c-api/init.rst:1767
+#: ../../c-api/init.rst:1780
 msgid ""
 "Create a new sub-interpreter.  This is an (almost) totally separate "
 "environment for the execution of Python code.  In particular, the new "
@@ -3005,13 +3020,13 @@ msgstr ""
 "nya standard I/O-strömfilobjekt ``sys.stdin``, ``sys.stdout`` och ``sys."
 "stderr`` (dessa hänvisar dock till samma underliggande filbeskrivare)."
 
-#: ../../c-api/init.rst:1777
+#: ../../c-api/init.rst:1790
 msgid ""
 "The given *config* controls the options with which the interpreter is "
 "initialized."
 msgstr "Den angivna *config* styr de alternativ som tolken initieras med."
 
-#: ../../c-api/init.rst:1780
+#: ../../c-api/init.rst:1793
 msgid ""
 "Upon success, *tstate_p* will be set to the first :term:`thread state` "
 "created in the new sub-interpreter.  This thread state is :term:`attached "
@@ -3029,7 +3044,7 @@ msgstr ""
 "eftersom undantagstillståndet lagras i :term:`attached thread state`, som "
 "kanske inte existerar."
 
-#: ../../c-api/init.rst:1789
+#: ../../c-api/init.rst:1802
 msgid ""
 "Like all other Python/C API functions, an :term:`attached thread state` must "
 "be present before calling this function, but it might be detached upon "
@@ -3051,7 +3066,7 @@ msgstr ""
 "aktuella tråden och den föregående tolkens :term:`attached thread state` "
 "kommer att förbli detached."
 
-#: ../../c-api/init.rst:1800
+#: ../../c-api/init.rst:1813
 msgid ""
 "Sub-interpreters are most effective when isolated from each other, with "
 "certain functionality restricted::"
@@ -3059,7 +3074,7 @@ msgstr ""
 "Undertolkar är mest effektiva när de är isolerade från varandra, med vissa "
 "funktioner begränsade::"
 
-#: ../../c-api/init.rst:1803
+#: ../../c-api/init.rst:1816
 msgid ""
 "PyInterpreterConfig config = {\n"
 "    .use_main_obmalloc = 0,\n"
@@ -3091,7 +3106,7 @@ msgstr ""
 "    Py_ExitStatusException(status);\n"
 "}"
 
-#: ../../c-api/init.rst:1818
+#: ../../c-api/init.rst:1831
 msgid ""
 "Note that the config is used only briefly and does not get modified. During "
 "initialization the config's values are converted into various :c:type:"
@@ -3103,11 +3118,11 @@ msgstr ""
 "`PyInterpreterState`\\-värden.  En skrivskyddad kopia av config kan lagras "
 "internt på :c:type:`PyInterpreterState`."
 
-#: ../../c-api/init.rst:1827
+#: ../../c-api/init.rst:1840
 msgid "Extension modules are shared between (sub-)interpreters as follows:"
 msgstr "Tilläggsmoduler delas mellan (under)tolkarna enligt följande:"
 
-#: ../../c-api/init.rst:1829
+#: ../../c-api/init.rst:1842
 msgid ""
 "For modules using multi-phase initialization, e.g. :c:func:"
 "`PyModule_FromDefAndSpec`, a separate module object is created and "
@@ -3119,7 +3134,7 @@ msgstr ""
 "varje tolk. Endast statiska och globala variabler på C-nivå delas mellan "
 "dessa modulobjekt."
 
-#: ../../c-api/init.rst:1835
+#: ../../c-api/init.rst:1848
 msgid ""
 "For modules using single-phase initialization, e.g. :c:func:"
 "`PyModule_Create`, the first time a particular extension is imported, it is "
@@ -3138,7 +3153,7 @@ msgstr ""
 "inte. Objekten i modulens ordbok delas därmed mellan (under)tolkarna, vilket "
 "kan orsaka oönskat beteende (se `Bugs and caveats`_ nedan)."
 
-#: ../../c-api/init.rst:1846
+#: ../../c-api/init.rst:1859
 msgid ""
 "Note that this is different from what happens when an extension is imported "
 "after the interpreter has been completely re-initialized by calling :c:func:"
@@ -3154,7 +3169,7 @@ msgstr ""
 "flera faser innebär detta att endast statiska och globala variabler på C-"
 "nivå delas mellan dessa moduler."
 
-#: ../../c-api/init.rst:1866
+#: ../../c-api/init.rst:1879
 msgid ""
 "Create a new sub-interpreter.  This is essentially just a wrapper around :c:"
 "func:`Py_NewInterpreterFromConfig` with a config that preserves the existing "
@@ -3168,7 +3183,7 @@ msgstr ""
 "huvudtolkens GIL, tillåter fork/exec, tillåter daemon-trådar och tillåter "
 "enfasiga init-moduler."
 
-#: ../../c-api/init.rst:1878
+#: ../../c-api/init.rst:1891
 msgid ""
 "Destroy the (sub-)interpreter represented by the given :term:`thread state`. "
 "The given thread state must be :term:`attached <attached thread state>`. "
@@ -3181,7 +3196,7 @@ msgstr ""
 "term:`attached thread state`. Alla trådtillstånd som är associerade med "
 "denna tolk förstörs."
 
-#: ../../c-api/init.rst:1883
+#: ../../c-api/init.rst:1896
 msgid ""
 ":c:func:`Py_FinalizeEx` will destroy all sub-interpreters that haven't been "
 "explicitly destroyed at that point."
@@ -3189,11 +3204,11 @@ msgstr ""
 ":c:func:`Py_FinalizeEx` kommer att förstöra alla undertolkare som inte "
 "uttryckligen har förstörts vid den tidpunkten."
 
-#: ../../c-api/init.rst:1890
+#: ../../c-api/init.rst:1903
 msgid "A Per-Interpreter GIL"
 msgstr "A Per tolk GIL"
 
-#: ../../c-api/init.rst:1892
+#: ../../c-api/init.rst:1905
 msgid ""
 "Using :c:func:`Py_NewInterpreterFromConfig` you can create a sub-interpreter "
 "that is completely isolated from other interpreters, including having its "
@@ -3205,7 +3220,7 @@ msgid ""
 "just using threads. (See :pep:`554` and :pep:`684`.)"
 msgstr ""
 
-#: ../../c-api/init.rst:1902
+#: ../../c-api/init.rst:1915
 msgid ""
 "Using an isolated interpreter requires vigilance in preserving that "
 "isolation.  That especially means not sharing any objects or mutable state "
@@ -3229,7 +3244,7 @@ msgstr ""
 "term:`immortal`. Faktum är att detta har gjorts för de inbyggda "
 "singletonerna, små heltal och ett antal andra inbyggda objekt."
 
-#: ../../c-api/init.rst:1913
+#: ../../c-api/init.rst:1926
 msgid ""
 "If you preserve isolation then you will have access to proper multi-core "
 "computing without the complications that come with free-threading. Failure "
@@ -3241,7 +3256,7 @@ msgstr ""
 "bevarar isoleringen kommer du att utsättas för alla konsekvenser av free-"
 "threading, inklusive tävlingar och krascher som är svåra att felsöka."
 
-#: ../../c-api/init.rst:1918
+#: ../../c-api/init.rst:1931
 msgid ""
 "Aside from that, one of the main challenges of using multiple isolated "
 "interpreters is how to communicate between them safely (not break isolation) "
@@ -3257,11 +3272,11 @@ msgstr ""
 "till att minska ansträngningen att bevara isoleringen och exponera effektiva "
 "verktyg för att kommunicera (och dela) data mellan tolkar."
 
-#: ../../c-api/init.rst:1929
+#: ../../c-api/init.rst:1942
 msgid "Bugs and caveats"
 msgstr "Buggar och förbehåll"
 
-#: ../../c-api/init.rst:1931
+#: ../../c-api/init.rst:1944
 msgid ""
 "Because sub-interpreters (and the main interpreter) are part of the same "
 "process, the insulation between them isn't perfect --- for example, using "
@@ -3283,7 +3298,7 @@ msgstr ""
 "infoga objekt som skapats i en subtolk i ett namnrymd i en annan (sub-)tolk; "
 "detta bör undvikas om möjligt."
 
-#: ../../c-api/init.rst:1941
+#: ../../c-api/init.rst:1954
 msgid ""
 "Special care should be taken to avoid sharing user-defined functions, "
 "methods, instances or classes between sub-interpreters, since import "
@@ -3297,7 +3312,7 @@ msgstr ""
 "påverka fel (under)tolkares ordlista över inlästa moduler. Det är lika "
 "viktigt att undvika att dela objekt från vilka ovanstående kan nås."
 
-#: ../../c-api/init.rst:1947
+#: ../../c-api/init.rst:1960
 msgid ""
 "Also note that combining this functionality with ``PyGILState_*`` APIs is "
 "delicate, because these APIs assume a bijection between Python thread states "
@@ -3318,11 +3333,11 @@ msgstr ""
 "trådar som inte skapats av Python förmodligen att brytas när man använder "
 "undertolkare."
 
-#: ../../c-api/init.rst:1958
+#: ../../c-api/init.rst:1971
 msgid "Asynchronous Notifications"
 msgstr "Asynkrona notifieringar"
 
-#: ../../c-api/init.rst:1960
+#: ../../c-api/init.rst:1973
 msgid ""
 "A mechanism is provided to make asynchronous notifications to the main "
 "interpreter thread.  These notifications take the form of a function pointer "
@@ -3332,7 +3347,7 @@ msgstr ""
 "huvudtråd.  Dessa meddelanden har formen av en funktionspekare och ett void-"
 "pekarargument."
 
-#: ../../c-api/init.rst:1967
+#: ../../c-api/init.rst:1980
 msgid ""
 "Schedule a function to be called from the main interpreter thread.  On "
 "success, ``0`` is returned and *func* is queued for being called in the main "
@@ -3342,7 +3357,7 @@ msgstr ""
 "returneras ``0`` och *func* köas för att anropas i huvudtråden.  Vid "
 "misslyckande returneras ``\\-1`` utan att något undantag anges."
 
-#: ../../c-api/init.rst:1971
+#: ../../c-api/init.rst:1984
 msgid ""
 "When successfully queued, *func* will be *eventually* called from the main "
 "interpreter thread with the argument *arg*.  It will be called "
@@ -3354,11 +3369,11 @@ msgstr ""
 "förhållande till normalt körande Python-kod, men med båda dessa villkor "
 "uppfyllda:"
 
-#: ../../c-api/init.rst:1976
+#: ../../c-api/init.rst:1989
 msgid "on a :term:`bytecode` boundary;"
 msgstr "på en :term:`bytecode`\\-gräns;"
 
-#: ../../c-api/init.rst:1977
+#: ../../c-api/init.rst:1990
 msgid ""
 "with the main thread holding an :term:`attached thread state` (*func* can "
 "therefore use the full C API)."
@@ -3366,7 +3381,7 @@ msgstr ""
 "med huvudtråden som håller en :term:`attached thread state` (*func* kan "
 "därför använda hela C API)."
 
-#: ../../c-api/init.rst:1980
+#: ../../c-api/init.rst:1993
 msgid ""
 "*func* must return ``0`` on success, or ``-1`` on failure with an exception "
 "set.  *func* won't be interrupted to perform another asynchronous "
@@ -3379,7 +3394,7 @@ msgstr ""
 "för att byta tråd om :term:`thread state <attached thread state>` är "
 "fristående."
 
-#: ../../c-api/init.rst:1985
+#: ../../c-api/init.rst:1998
 msgid ""
 "This function doesn't need an :term:`attached thread state`. However, to "
 "call this function in a subinterpreter, the caller must have an :term:"
@@ -3391,7 +3406,7 @@ msgstr ""
 "`attached thread state`. Annars kan funktionen *func* schemaläggas så att "
 "den anropas från fel tolk."
 
-#: ../../c-api/init.rst:1990
+#: ../../c-api/init.rst:2003
 msgid ""
 "This is a low-level function, only useful for very special cases. There is "
 "no guarantee that *func* will be called as quick as possible.  If the main "
@@ -3407,7 +3422,7 @@ msgstr ""
 "är i allmänhet **inte** lämplig för anrop av Python-kod från godtyckliga C-"
 "trådar.  Använd istället :ref:`PyGILState API<gilstate>`."
 
-#: ../../c-api/init.rst:1999
+#: ../../c-api/init.rst:2012
 msgid ""
 "If this function is called in a subinterpreter, the function *func* is now "
 "scheduled to be called from the subinterpreter, rather than being called "
@@ -3419,16 +3434,16 @@ msgstr ""
 "huvudinterpretern. Varje undertolk har nu sin egen lista över schemalagda "
 "anrop."
 
-#: ../../c-api/init.rst:2005
+#: ../../c-api/init.rst:2018
 msgid ""
 "This function now always schedules *func* to be run in the main interpreter."
 msgstr ""
 
-#: ../../c-api/init.rst:2012
+#: ../../c-api/init.rst:2025
 msgid "Profiling and Tracing"
 msgstr "Profilering och spårning"
 
-#: ../../c-api/init.rst:2017
+#: ../../c-api/init.rst:2030
 msgid ""
 "The Python interpreter provides some low-level support for attaching "
 "profiling and execution tracing facilities.  These are used for profiling, "
@@ -3438,7 +3453,7 @@ msgstr ""
 "exekveringsspårningsfunktioner.  Dessa används för verktyg för profilering, "
 "felsökning och täckningsanalys."
 
-#: ../../c-api/init.rst:2021
+#: ../../c-api/init.rst:2034
 msgid ""
 "This C interface allows the profiling or tracing code to avoid the overhead "
 "of calling through Python-level callable objects, making a direct C function "
@@ -3455,7 +3470,7 @@ msgstr ""
 "spårningsfunktionen är desamma som rapporterades till spårningsfunktionerna "
 "på Python-nivå i tidigare versioner."
 
-#: ../../c-api/init.rst:2031
+#: ../../c-api/init.rst:2044
 msgid ""
 "The type of the trace function registered using :c:func:`PyEval_SetProfile` "
 "and :c:func:`PyEval_SetTrace`. The first parameter is the object passed to "
@@ -3475,68 +3490,68 @@ msgstr ""
 "c:data:`PyTrace_C_RETURN`, eller :c:data:`PyTrace_OPCODE`, och *arg* beror "
 "på värdet av *what*:"
 
-#: ../../c-api/init.rst:2040
+#: ../../c-api/init.rst:2053
 msgid "Value of *what*"
 msgstr "Värde av *vad*"
 
-#: ../../c-api/init.rst:2040
+#: ../../c-api/init.rst:2053
 msgid "Meaning of *arg*"
 msgstr "Betydelse av *arg*"
 
-#: ../../c-api/init.rst:2042
+#: ../../c-api/init.rst:2055
 msgid ":c:data:`PyTrace_CALL`"
 msgstr ":c:data:`PyTrace_CALL`"
 
-#: ../../c-api/init.rst:2042 ../../c-api/init.rst:2047
-#: ../../c-api/init.rst:2058
+#: ../../c-api/init.rst:2055 ../../c-api/init.rst:2060
+#: ../../c-api/init.rst:2071
 msgid "Always :c:data:`Py_None`."
 msgstr "Alltid :c:data:`Py_None`."
 
-#: ../../c-api/init.rst:2044
+#: ../../c-api/init.rst:2057
 msgid ":c:data:`PyTrace_EXCEPTION`"
 msgstr ":c:data:`PyTrace_EXCEPTION`"
 
-#: ../../c-api/init.rst:2044
+#: ../../c-api/init.rst:2057
 msgid "Exception information as returned by :func:`sys.exc_info`."
 msgstr "Information om undantag som returneras av :func:`sys.exc_info`."
 
-#: ../../c-api/init.rst:2047
+#: ../../c-api/init.rst:2060
 msgid ":c:data:`PyTrace_LINE`"
 msgstr ":c:data:`PyTrace_LINE`"
 
-#: ../../c-api/init.rst:2049
+#: ../../c-api/init.rst:2062
 msgid ":c:data:`PyTrace_RETURN`"
 msgstr ":c:data:`PyTrace_RETURN`"
 
-#: ../../c-api/init.rst:2049
+#: ../../c-api/init.rst:2062
 msgid ""
 "Value being returned to the caller, or ``NULL`` if caused by an exception."
 msgstr ""
 "Värde som returneras till den som anropar, eller ``NULL`` om det orsakas av "
 "ett undantag."
 
-#: ../../c-api/init.rst:2052
+#: ../../c-api/init.rst:2065
 msgid ":c:data:`PyTrace_C_CALL`"
 msgstr ":c:data:`PyTrace_C_CALL`"
 
-#: ../../c-api/init.rst:2052 ../../c-api/init.rst:2054
-#: ../../c-api/init.rst:2056
+#: ../../c-api/init.rst:2065 ../../c-api/init.rst:2067
+#: ../../c-api/init.rst:2069
 msgid "Function object being called."
 msgstr "Funktionsobjekt som anropas."
 
-#: ../../c-api/init.rst:2054
+#: ../../c-api/init.rst:2067
 msgid ":c:data:`PyTrace_C_EXCEPTION`"
 msgstr ":c:data:`PyTrace_C_EXCEPTION`"
 
-#: ../../c-api/init.rst:2056
+#: ../../c-api/init.rst:2069
 msgid ":c:data:`PyTrace_C_RETURN`"
 msgstr ":c:data:`PyTrace_C_RETURN`"
 
-#: ../../c-api/init.rst:2058
+#: ../../c-api/init.rst:2071
 msgid ":c:data:`PyTrace_OPCODE`"
 msgstr ":c:data:`PyTrace_OPCODE`"
 
-#: ../../c-api/init.rst:2063
+#: ../../c-api/init.rst:2076
 msgid ""
 "The value of the *what* parameter to a :c:type:`Py_tracefunc` function when "
 "a new call to a function or method is being reported, or a new entry into a "
@@ -3550,7 +3565,7 @@ msgstr ""
 "generatorfunktion inte rapporteras eftersom det inte sker någon "
 "kontrollöverföring till Python-bytekoden i motsvarande ram."
 
-#: ../../c-api/init.rst:2072
+#: ../../c-api/init.rst:2085
 msgid ""
 "The value of the *what* parameter to a :c:type:`Py_tracefunc` function when "
 "an exception has been raised.  The callback function is called with this "
@@ -3569,7 +3584,7 @@ msgstr ""
 "vid återkomst till varje ram när undantaget sprids.  Endast "
 "spårningsfunktioner tar emot dessa händelser; de behövs inte av profileraren."
 
-#: ../../c-api/init.rst:2083
+#: ../../c-api/init.rst:2096
 msgid ""
 "The value passed as the *what* parameter to a :c:type:`Py_tracefunc` "
 "function (but not a profiling function) when a line-number event is being "
@@ -3581,7 +3596,7 @@ msgstr ""
 "rapporteras. Den kan inaktiveras för en bildruta genom att sätta :attr:"
 "`~frame.f_trace_lines` till *0* för den bildrutan."
 
-#: ../../c-api/init.rst:2091
+#: ../../c-api/init.rst:2104
 msgid ""
 "The value for the *what* parameter to :c:type:`Py_tracefunc` functions when "
 "a call is about to return."
@@ -3589,7 +3604,7 @@ msgstr ""
 "Värdet för *what*-parametern till :c:type:`Py_tracefunc`\\-funktioner när "
 "ett anrop är på väg att returneras."
 
-#: ../../c-api/init.rst:2097
+#: ../../c-api/init.rst:2110
 msgid ""
 "The value for the *what* parameter to :c:type:`Py_tracefunc` functions when "
 "a C function is about to be called."
@@ -3597,7 +3612,7 @@ msgstr ""
 "Värdet för *what*-parametern till :c:type:`Py_tracefunc`\\-funktioner när en "
 "C-funktion ska anropas."
 
-#: ../../c-api/init.rst:2103
+#: ../../c-api/init.rst:2116
 msgid ""
 "The value for the *what* parameter to :c:type:`Py_tracefunc` functions when "
 "a C function has raised an exception."
@@ -3605,7 +3620,7 @@ msgstr ""
 "Värdet för *what*-parametern till :c:type:`Py_tracefunc`\\-funktioner när en "
 "C-funktion har orsakat ett undantag."
 
-#: ../../c-api/init.rst:2109
+#: ../../c-api/init.rst:2122
 msgid ""
 "The value for the *what* parameter to :c:type:`Py_tracefunc` functions when "
 "a C function has returned."
@@ -3613,7 +3628,7 @@ msgstr ""
 "Värdet för *what*-parametern till :c:type:`Py_tracefunc`\\-funktioner när en "
 "C-funktion har returnerats."
 
-#: ../../c-api/init.rst:2115
+#: ../../c-api/init.rst:2128
 msgid ""
 "The value for the *what* parameter to :c:type:`Py_tracefunc` functions (but "
 "not profiling functions) when a new opcode is about to be executed.  This "
@@ -3625,7 +3640,7 @@ msgstr ""
 "sänds inte ut som standard: den måste uttryckligen begäras genom att ställa "
 "in :attr:`~frame.f_trace_opcodes` till *1* på ramen."
 
-#: ../../c-api/init.rst:2123
+#: ../../c-api/init.rst:2136
 msgid ""
 "Set the profiler function to *func*.  The *obj* parameter is passed to the "
 "function as its first parameter, and may be any Python object, or ``NULL``.  "
@@ -3642,11 +3657,11 @@ msgstr ""
 "händelser utom :c:data:`PyTrace_LINE` :c:data:`PyTrace_OPCODE` och :c:data:"
 "`PyTrace_EXCEPTION`."
 
-#: ../../c-api/init.rst:2130
+#: ../../c-api/init.rst:2143
 msgid "See also the :func:`sys.setprofile` function."
 msgstr "Se även funktionen :func:`sys.setprofile`."
 
-#: ../../c-api/init.rst:2136
+#: ../../c-api/init.rst:2149
 msgid ""
 "Like :c:func:`PyEval_SetProfile` but sets the profile function in all "
 "running threads belonging to the current interpreter instead of the setting "
@@ -3656,7 +3671,7 @@ msgstr ""
 "pågående trådar som tillhör den aktuella tolken istället för att bara ställa "
 "in den i den aktuella tråden."
 
-#: ../../c-api/init.rst:2141
+#: ../../c-api/init.rst:2154
 msgid ""
 "As :c:func:`PyEval_SetProfile`, this function ignores any exceptions raised "
 "while setting the profile functions in all threads."
@@ -3664,7 +3679,7 @@ msgstr ""
 "Precis som :c:func:`PyEval_SetProfile` ignorerar denna funktion alla "
 "undantag som uppstår när profilfunktionerna ställs in i alla trådar."
 
-#: ../../c-api/init.rst:2149
+#: ../../c-api/init.rst:2162
 msgid ""
 "Set the tracing function to *func*.  This is similar to :c:func:"
 "`PyEval_SetProfile`, except the tracing function does receive line-number "
@@ -3682,11 +3697,11 @@ msgstr ""
 "`PyTrace_C_EXCEPTION` eller :c:data:`PyTrace_C_RETURN` som värde för "
 "parametern *what*."
 
-#: ../../c-api/init.rst:2156
+#: ../../c-api/init.rst:2169
 msgid "See also the :func:`sys.settrace` function."
 msgstr "Se även funktionen :func:`sys.settrace`."
 
-#: ../../c-api/init.rst:2162
+#: ../../c-api/init.rst:2175
 msgid ""
 "Like :c:func:`PyEval_SetTrace` but sets the tracing function in all running "
 "threads belonging to the current interpreter instead of the setting it only "
@@ -3696,7 +3711,7 @@ msgstr ""
 "pågående trådar som tillhör den aktuella tolken istället för att bara ställa "
 "in den i den aktuella tråden."
 
-#: ../../c-api/init.rst:2167
+#: ../../c-api/init.rst:2180
 msgid ""
 "As :c:func:`PyEval_SetTrace`, this function ignores any exceptions raised "
 "while setting the trace functions in all threads."
@@ -3704,11 +3719,11 @@ msgstr ""
 "Precis som :c:func:`PyEval_SetTrace` ignorerar denna funktion alla undantag "
 "som uppstår när spårningsfunktionerna ställs in i alla trådar."
 
-#: ../../c-api/init.rst:2173
+#: ../../c-api/init.rst:2186
 msgid "Reference tracing"
 msgstr "Referensspårning"
 
-#: ../../c-api/init.rst:2179
+#: ../../c-api/init.rst:2192
 msgid ""
 "The type of the trace function registered using :c:func:"
 "`PyRefTracer_SetTracer`. The first parameter is a Python object that has "
@@ -3724,7 +3739,7 @@ msgstr ""
 "`PyRefTracer_DESTROY`). Argumentet **data** är den opaka pekare som "
 "tillhandahölls när :c:func:`PyRefTracer_SetTracer` anropades."
 
-#: ../../c-api/init.rst:2189
+#: ../../c-api/init.rst:2202
 msgid ""
 "The value for the *event* parameter to :c:type:`PyRefTracer` functions when "
 "a Python object has been created."
@@ -3732,7 +3747,7 @@ msgstr ""
 "Värdet för parametern *event* till :c:type:`PyRefTracer`\\-funktioner när "
 "ett Python-objekt har skapats."
 
-#: ../../c-api/init.rst:2194
+#: ../../c-api/init.rst:2207
 msgid ""
 "The value for the *event* parameter to :c:type:`PyRefTracer` functions when "
 "a Python object has been destroyed."
@@ -3740,7 +3755,7 @@ msgstr ""
 "Värdet för parametern *event* till :c:type:`PyRefTracer`\\-funktioner när "
 "ett Python-objekt har förstörts."
 
-#: ../../c-api/init.rst:2199
+#: ../../c-api/init.rst:2212
 msgid ""
 "Register a reference tracer function. The function will be called when a new "
 "Python has been created or when an object is going to be destroyed. If "
@@ -3754,7 +3769,7 @@ msgstr ""
 "spårningsfunktionen anropas. Returnera ``0`` vid framgång. Ställ in ett "
 "undantag och returnera ``\\-1`` vid fel."
 
-#: ../../c-api/init.rst:2205
+#: ../../c-api/init.rst:2218
 msgid ""
 "Not that tracer functions **must not** create Python objects inside or "
 "otherwise the call will be re-entrant. The tracer also **must not** clear "
@@ -3766,13 +3781,13 @@ msgstr ""
 "tömma något befintligt undantag eller skapa ett undantag.  En :term:`thread "
 "state` kommer att vara aktiv varje gång tracerfunktionen anropas."
 
-#: ../../c-api/init.rst:2210 ../../c-api/init.rst:2221
+#: ../../c-api/init.rst:2223 ../../c-api/init.rst:2234
 msgid ""
 "There must be an :term:`attached thread state` when calling this function."
 msgstr ""
 "Det måste finnas en :term:`attached thread state` när denna funktion anropas."
 
-#: ../../c-api/init.rst:2216
+#: ../../c-api/init.rst:2229
 msgid ""
 "Get the registered reference tracer function and the value of the opaque "
 "data pointer that was registered when :c:func:`PyRefTracer_SetTracer` was "
@@ -3784,29 +3799,29 @@ msgstr ""
 "Om ingen spårningsfunktion registrerades returnerar denna funktion NULL och "
 "sätter pekaren **data** till NULL."
 
-#: ../../c-api/init.rst:2228
+#: ../../c-api/init.rst:2241
 msgid "Advanced Debugger Support"
 msgstr "Avancerat stöd för felsökare"
 
-#: ../../c-api/init.rst:2233
+#: ../../c-api/init.rst:2246
 msgid ""
 "These functions are only intended to be used by advanced debugging tools."
 msgstr ""
 "Dessa funktioner är endast avsedda att användas av avancerade "
 "felsökningsverktyg."
 
-#: ../../c-api/init.rst:2238
+#: ../../c-api/init.rst:2251
 msgid ""
 "Return the interpreter state object at the head of the list of all such "
 "objects."
 msgstr ""
 "Returnerar tolkens statusobjekt längst upp i listan över alla sådana objekt."
 
-#: ../../c-api/init.rst:2243
+#: ../../c-api/init.rst:2256
 msgid "Return the main interpreter state object."
 msgstr "Returnerar huvudtolkens statusobjekt."
 
-#: ../../c-api/init.rst:2248
+#: ../../c-api/init.rst:2261
 msgid ""
 "Return the next interpreter state object after *interp* from the list of all "
 "such objects."
@@ -3814,7 +3829,7 @@ msgstr ""
 "Returnerar nästa tolktillståndsobjekt efter *interp* från listan över alla "
 "sådana objekt."
 
-#: ../../c-api/init.rst:2254
+#: ../../c-api/init.rst:2267
 msgid ""
 "Return the pointer to the first :c:type:`PyThreadState` object in the list "
 "of threads associated with the interpreter *interp*."
@@ -3822,7 +3837,7 @@ msgstr ""
 "Returnerar pekaren till det första :c:type:`PyThreadState`\\-objektet i "
 "listan över trådar som är associerade med tolken *interp*."
 
-#: ../../c-api/init.rst:2260
+#: ../../c-api/init.rst:2273
 msgid ""
 "Return the next thread state object after *tstate* from the list of all such "
 "objects belonging to the same :c:type:`PyInterpreterState` object."
@@ -3830,11 +3845,11 @@ msgstr ""
 "Returnerar nästa trådtillståndsobjekt efter *tstate* från listan över alla "
 "sådana objekt som tillhör samma :c:type:`PyInterpreterState`\\-objekt."
 
-#: ../../c-api/init.rst:2267
+#: ../../c-api/init.rst:2280
 msgid "Thread Local Storage Support"
 msgstr "Tråd Stöd för lokal lagring"
 
-#: ../../c-api/init.rst:2271
+#: ../../c-api/init.rst:2284
 msgid ""
 "The Python interpreter provides low-level support for thread-local storage "
 "(TLS) which wraps the underlying native TLS implementation to support the "
@@ -3850,7 +3865,7 @@ msgstr ""
 "trådnyckel och funktioner för att associera ett :c:expr:`void*`\\-värde per "
 "tråd."
 
-#: ../../c-api/init.rst:2278
+#: ../../c-api/init.rst:2291
 msgid ""
 "A :term:`thread state` does *not* need to be :term:`attached <attached "
 "thread state>` when calling these functions; they suppl their own locking."
@@ -3858,7 +3873,7 @@ msgstr ""
 "En :term:`thread state` behöver *inte* vara :term:`attached <attached thread "
 "state>` när dessa funktioner anropas; de kompletterar sin egen låsning."
 
-#: ../../c-api/init.rst:2281
+#: ../../c-api/init.rst:2294
 msgid ""
 "Note that :file:`Python.h` does not include the declaration of the TLS APIs, "
 "you need to include :file:`pythread.h` to use thread-local storage."
@@ -3867,7 +3882,7 @@ msgstr ""
 "erna, du måste inkludera :file:`pythread.h` för att använda trådlokal "
 "lagring."
 
-#: ../../c-api/init.rst:2285
+#: ../../c-api/init.rst:2298
 msgid ""
 "None of these API functions handle memory management on behalf of the :c:"
 "expr:`void*` values.  You need to allocate and deallocate them yourself. If "
@@ -3879,11 +3894,11 @@ msgstr ""
 "`void*`\\-värdena råkar vara :c:expr:`PyObject*`, utför dessa funktioner "
 "inte heller refcount-operationer på dem."
 
-#: ../../c-api/init.rst:2293
+#: ../../c-api/init.rst:2306
 msgid "Thread Specific Storage (TSS) API"
 msgstr "API för trådspecifik lagring (TSS)"
 
-#: ../../c-api/init.rst:2295
+#: ../../c-api/init.rst:2308
 msgid ""
 "TSS API is introduced to supersede the use of the existing TLS API within "
 "the CPython interpreter.  This API uses a new type :c:type:`Py_tss_t` "
@@ -3893,11 +3908,11 @@ msgstr ""
 "inom CPython-tolken.  Detta API använder en ny typ :c:type:`Py_tss_t` "
 "istället för :c:expr:`int` för att representera trådnycklar."
 
-#: ../../c-api/init.rst:2301
+#: ../../c-api/init.rst:2314
 msgid "\"A New C-API for Thread-Local Storage in CPython\" (:pep:`539`)"
 msgstr "\"Ett nytt C-API för trådlokal lagring i CPython\" (:pep:`539`)"
 
-#: ../../c-api/init.rst:2306
+#: ../../c-api/init.rst:2319
 msgid ""
 "This data structure represents the state of a thread key, the definition of "
 "which may depend on the underlying TLS implementation, and it has an "
@@ -3909,7 +3924,7 @@ msgstr ""
 "ett internt fält som representerar nyckelns initialiseringstillstånd.  Det "
 "finns inga offentliga medlemmar i denna struktur."
 
-#: ../../c-api/init.rst:2311
+#: ../../c-api/init.rst:2324
 msgid ""
 "When :ref:`Py_LIMITED_API <stable>` is not defined, static allocation of "
 "this type by :c:macro:`Py_tss_NEEDS_INIT` is allowed."
@@ -3917,7 +3932,7 @@ msgstr ""
 "När :ref:`Py_LIMITED_API <stable>` inte är definierad, tillåts statisk "
 "allokering av denna typ genom :c:macro:`Py_tss_NEEDS_INIT`."
 
-#: ../../c-api/init.rst:2317
+#: ../../c-api/init.rst:2330
 msgid ""
 "This macro expands to the initializer for :c:type:`Py_tss_t` variables. Note "
 "that this macro won't be defined with :ref:`Py_LIMITED_API <stable>`."
@@ -3926,11 +3941,11 @@ msgstr ""
 "variabler. Observera att detta makro inte kommer att definieras med :ref:"
 "`Py_LIMITED_API <stable>`."
 
-#: ../../c-api/init.rst:2322
+#: ../../c-api/init.rst:2335
 msgid "Dynamic Allocation"
 msgstr "Dynamisk allokering"
 
-#: ../../c-api/init.rst:2324
+#: ../../c-api/init.rst:2337
 msgid ""
 "Dynamic allocation of the :c:type:`Py_tss_t`, required in extension modules "
 "built with :ref:`Py_LIMITED_API <stable>`, where static allocation of this "
@@ -3940,7 +3955,7 @@ msgstr ""
 "med :ref:`Py_LIMITED_API <stable>`, där statisk allokering av denna typ inte "
 "är möjlig på grund av att dess implementation är ogenomskinlig vid byggtiden."
 
-#: ../../c-api/init.rst:2331
+#: ../../c-api/init.rst:2344
 msgid ""
 "Return a value which is the same state as a value initialized with :c:macro:"
 "`Py_tss_NEEDS_INIT`, or ``NULL`` in the case of dynamic allocation failure."
@@ -3949,7 +3964,7 @@ msgstr ""
 "med :c:macro:`Py_tss_NEEDS_INIT`, eller ``NULL`` om dynamisk allokering "
 "misslyckats."
 
-#: ../../c-api/init.rst:2338
+#: ../../c-api/init.rst:2351
 msgid ""
 "Free the given *key* allocated by :c:func:`PyThread_tss_alloc`, after first "
 "calling :c:func:`PyThread_tss_delete` to ensure any associated thread locals "
@@ -3960,18 +3975,18 @@ msgstr ""
 "alla associerade trådlokaler har avallokerats. Detta är ett no-op om "
 "argumentet *key* är ``NULL``."
 
-#: ../../c-api/init.rst:2344
+#: ../../c-api/init.rst:2357
 msgid ""
 "A freed key becomes a dangling pointer. You should reset the key to ``NULL``."
 msgstr ""
 "En frigjord nyckel blir en hängande pekare. Du bör återställa nyckeln till "
 "``NULL``."
 
-#: ../../c-api/init.rst:2349
+#: ../../c-api/init.rst:2362
 msgid "Methods"
 msgstr "Metoder"
 
-#: ../../c-api/init.rst:2351
+#: ../../c-api/init.rst:2364
 msgid ""
 "The parameter *key* of these functions must not be ``NULL``.  Moreover, the "
 "behaviors of :c:func:`PyThread_tss_set` and :c:func:`PyThread_tss_get` are "
@@ -3983,7 +3998,7 @@ msgstr ""
 "odefinierade om den givna :c:type:`Py_tss_t` inte har initialiserats av :c:"
 "func:`PyThread_tss_create`."
 
-#: ../../c-api/init.rst:2359
+#: ../../c-api/init.rst:2372
 msgid ""
 "Return a non-zero value if the given :c:type:`Py_tss_t` has been initialized "
 "by :c:func:`PyThread_tss_create`."
@@ -3991,7 +4006,7 @@ msgstr ""
 "Returnerar ett värde som inte är noll om den angivna :c:type:`Py_tss_t` har "
 "initialiserats av :c:func:`PyThread_tss_create`."
 
-#: ../../c-api/init.rst:2365
+#: ../../c-api/init.rst:2378
 msgid ""
 "Return a zero value on successful initialization of a TSS key.  The behavior "
 "is undefined if the value pointed to by the *key* argument is not "
@@ -4005,7 +4020,7 @@ msgstr ""
 "upprepade gånger på samma nyckel - att anropa den på en redan initialiserad "
 "nyckel är en no-op och returnerar omedelbart framgång."
 
-#: ../../c-api/init.rst:2374
+#: ../../c-api/init.rst:2387
 msgid ""
 "Destroy a TSS key to forget the values associated with the key across all "
 "threads, and change the key's initialization state to uninitialized.  A "
@@ -4019,7 +4034,7 @@ msgstr ""
 "`PyThread_tss_create`. Den här funktionen kan anropas upprepade gånger på "
 "samma nyckel - att anropa den på en redan förstörd nyckel är inte möjligt."
 
-#: ../../c-api/init.rst:2383
+#: ../../c-api/init.rst:2396
 msgid ""
 "Return a zero value to indicate successfully associating a :c:expr:`void*` "
 "value with a TSS key in the current thread.  Each thread has a distinct "
@@ -4029,7 +4044,7 @@ msgstr ""
 "har associerats med en TSS-nyckel i den aktuella tråden.  Varje tråd har en "
 "distinkt mappning av nyckeln till ett :c:expr:`void*`\\-värde."
 
-#: ../../c-api/init.rst:2390
+#: ../../c-api/init.rst:2403
 msgid ""
 "Return the :c:expr:`void*` value associated with a TSS key in the current "
 "thread.  This returns ``NULL`` if no value is associated with the key in the "
@@ -4039,11 +4054,11 @@ msgstr ""
 "den aktuella tråden.  Returnerar ``NULL`` om inget värde är associerat med "
 "nyckeln i den aktuella tråden."
 
-#: ../../c-api/init.rst:2398
+#: ../../c-api/init.rst:2411
 msgid "Thread Local Storage (TLS) API"
 msgstr "API för lokal lagring av trådar (TLS)"
 
-#: ../../c-api/init.rst:2400
+#: ../../c-api/init.rst:2413
 msgid ""
 "This API is superseded by :ref:`Thread Specific Storage (TSS) API <thread-"
 "specific-storage-api>`."
@@ -4051,7 +4066,7 @@ msgstr ""
 "Detta API ersätts av :ref:`Thread Specific Storage (TSS) API <thread-"
 "specific-storage-api>`."
 
-#: ../../c-api/init.rst:2405
+#: ../../c-api/init.rst:2418
 msgid ""
 "This version of the API does not support platforms where the native TLS key "
 "is defined in a way that cannot be safely cast to ``int``.  On such "
@@ -4065,7 +4080,7 @@ msgstr ""
 "omedelbart med en felstatus, och de andra TLS-funktionerna kommer alla att "
 "vara no-ops på sådana plattformar."
 
-#: ../../c-api/init.rst:2410
+#: ../../c-api/init.rst:2423
 msgid ""
 "Due to the compatibility problem noted above, this version of the API should "
 "not be used in new code."
@@ -4073,15 +4088,15 @@ msgstr ""
 "På grund av det kompatibilitetsproblem som nämns ovan bör denna version av "
 "API:et inte användas i ny kod."
 
-#: ../../c-api/init.rst:2421
+#: ../../c-api/init.rst:2434
 msgid "Synchronization Primitives"
 msgstr "Synkroniseringsprimitiver"
 
-#: ../../c-api/init.rst:2423
+#: ../../c-api/init.rst:2436
 msgid "The C-API provides a basic mutual exclusion lock."
 msgstr "C-API tillhandahåller ett grundläggande lås med ömsesidig uteslutning."
 
-#: ../../c-api/init.rst:2427
+#: ../../c-api/init.rst:2440
 msgid ""
 "A mutual exclusion lock.  The :c:type:`!PyMutex` should be initialized to "
 "zero to represent the unlocked state.  For example::"
@@ -4089,11 +4104,11 @@ msgstr ""
 "Ett ömsesidigt uteslutningslås.  :c:type:`!PyMutex` bör initialiseras till "
 "noll för att representera det olåsta tillståndet.  Till exempel::"
 
-#: ../../c-api/init.rst:2430
+#: ../../c-api/init.rst:2443
 msgid "PyMutex mutex = {0};"
 msgstr "PyMutex mutex = {0};"
 
-#: ../../c-api/init.rst:2432
+#: ../../c-api/init.rst:2445
 msgid ""
 "Instances of :c:type:`!PyMutex` should not be copied or moved.  Both the "
 "contents and address of a :c:type:`!PyMutex` are meaningful, and it must "
@@ -4103,7 +4118,7 @@ msgstr ""
 "innehållet och adressen i en :c:type:`!PyMutex` är meningsfulla och den "
 "måste ligga kvar på en fast, skrivbar plats i minnet."
 
-#: ../../c-api/init.rst:2438
+#: ../../c-api/init.rst:2451
 msgid ""
 "A :c:type:`!PyMutex` currently occupies one byte, but the size should be "
 "considered unstable.  The size may change in future Python releases without "
@@ -4113,7 +4128,7 @@ msgstr ""
 "betraktas som instabil.  Storleken kan komma att ändras i framtida Python-"
 "utgåvor utan en utfasningsperiod."
 
-#: ../../c-api/init.rst:2446
+#: ../../c-api/init.rst:2459
 msgid ""
 "Lock mutex *m*.  If another thread has already locked it, the calling thread "
 "will block until the mutex is unlocked.  While blocked, the thread will "
@@ -4125,7 +4140,7 @@ msgstr ""
 "tråden tillfälligt att ta bort :term:`thread state <attached thread state>` "
 "om en sådan finns."
 
-#: ../../c-api/init.rst:2454
+#: ../../c-api/init.rst:2467
 msgid ""
 "Unlock mutex *m*. The mutex must be locked --- otherwise, the function will "
 "issue a fatal error."
@@ -4133,11 +4148,11 @@ msgstr ""
 "Lås upp mutex *m*. Mutex måste vara låst --- annars kommer funktionen att "
 "utfärda ett fatalt fel."
 
-#: ../../c-api/init.rst:2461
+#: ../../c-api/init.rst:2474
 msgid "Returns non-zero if the mutex *m* is currently locked, zero otherwise."
 msgstr "Returnerar icke-noll om mutex *m* för närvarande är låst, noll annars."
 
-#: ../../c-api/init.rst:2465
+#: ../../c-api/init.rst:2478
 msgid ""
 "This function is intended for use in assertions and debugging only and "
 "should not be used to make concurrency control decisions, as the lock state "
@@ -4148,11 +4163,11 @@ msgstr ""
 "samtidighetskontroll, eftersom låsets tillstånd kan ändras omedelbart efter "
 "kontrollen."
 
-#: ../../c-api/init.rst:2474
+#: ../../c-api/init.rst:2487
 msgid "Python Critical Section API"
 msgstr "Python API för kritiska avsnitt"
 
-#: ../../c-api/init.rst:2476
+#: ../../c-api/init.rst:2489
 msgid ""
 "The critical section API provides a deadlock avoidance layer on top of per-"
 "object locks for :term:`free-threaded <free threading>` CPython.  They are "
@@ -4164,7 +4179,7 @@ msgstr ""
 "CPython.  De är avsedda att ersätta beroendet av :term:`global interpreter "
 "lock`, och är no-ops i versioner av Python med global interpreter lock."
 
-#: ../../c-api/init.rst:2481
+#: ../../c-api/init.rst:2494
 msgid ""
 "Critical sections are intended to be used for custom types implemented in C-"
 "API extensions. They should generally not be used with built-in types like :"
@@ -4178,7 +4193,7 @@ msgstr ""
 "redan använder kritiska sektioner internt, med det noterbara undantaget :c:"
 "func:`PyDict_Next`, som kräver att kritiska sektioner förvärvas externt."
 
-#: ../../c-api/init.rst:2488
+#: ../../c-api/init.rst:2501
 msgid ""
 "Critical sections avoid deadlocks by implicitly suspending active critical "
 "sections, hence, they do not provide exclusive access such as provided by "
@@ -4196,7 +4211,7 @@ msgstr ""
 "utgåva objektlåset, så att andra trådar kan erhålla objektlåset för samma "
 "objekt."
 
-#: ../../c-api/init.rst:2496
+#: ../../c-api/init.rst:2509
 msgid ""
 "Variants that accept :c:type:`PyMutex` pointers rather than Python objects "
 "are also available. Use these variants to start a critical section in a "
@@ -4211,7 +4226,7 @@ msgstr ""
 "c:type:`PyObject` men som ändå behöver anropa C API:et på ett sätt som kan "
 "leda till dödlägen."
 
-#: ../../c-api/init.rst:2502
+#: ../../c-api/init.rst:2515
 msgid ""
 "The functions and structs used by the macros are exposed for cases where C "
 "macros are not available. They should only be used as in the given macro "
@@ -4223,7 +4238,7 @@ msgstr ""
 "makroexpansionerna. Observera att strukturernas storlek och innehåll kan "
 "komma att ändras i framtida Python-versioner."
 
-#: ../../c-api/init.rst:2509
+#: ../../c-api/init.rst:2522
 msgid ""
 "Operations that need to lock two objects at once must use :c:macro:"
 "`Py_BEGIN_CRITICAL_SECTION2`.  You *cannot* use nested critical sections to "
@@ -4237,11 +4252,11 @@ msgstr ""
 "avsnittet kan avbryta de yttre kritiska avsnitten.  Detta API "
 "tillhandahåller inte något sätt att låsa mer än två objekt samtidigt."
 
-#: ../../c-api/init.rst:2515
+#: ../../c-api/init.rst:2528
 msgid "Example usage::"
 msgstr "Exempel på användning::"
 
-#: ../../c-api/init.rst:2517
+#: ../../c-api/init.rst:2530
 msgid ""
 "static PyObject *\n"
 "set_field(MyObject *self, PyObject *value)\n"
@@ -4261,7 +4276,7 @@ msgstr ""
 "   Py_RETURN_NONE;\n"
 "}"
 
-#: ../../c-api/init.rst:2526
+#: ../../c-api/init.rst:2539
 msgid ""
 "In the above example, :c:macro:`Py_SETREF` calls :c:macro:`Py_DECREF`, which "
 "can call arbitrary code through an object's deallocation function.  The "
@@ -4277,7 +4292,7 @@ msgstr ""
 "sektionen om koden som utlöses av finalizer blockerar och anropar :c:func:"
 "`PyEval_SaveThread`."
 
-#: ../../c-api/init.rst:2534
+#: ../../c-api/init.rst:2547
 msgid ""
 "Acquires the per-object lock for the object *op* and begins a critical "
 "section."
@@ -4285,13 +4300,13 @@ msgstr ""
 "Förvärvar låset per objekt för objektet *op* och påbörjar ett kritiskt "
 "avsnitt."
 
-#: ../../c-api/init.rst:2537 ../../c-api/init.rst:2551
-#: ../../c-api/init.rst:2568 ../../c-api/init.rst:2583
-#: ../../c-api/init.rst:2597 ../../c-api/init.rst:2614
+#: ../../c-api/init.rst:2550 ../../c-api/init.rst:2564
+#: ../../c-api/init.rst:2581 ../../c-api/init.rst:2596
+#: ../../c-api/init.rst:2610 ../../c-api/init.rst:2627
 msgid "In the free-threaded build, this macro expands to::"
 msgstr "I den fritt trådade versionen expanderar detta makro till::"
 
-#: ../../c-api/init.rst:2539
+#: ../../c-api/init.rst:2552
 msgid ""
 "{\n"
 "    PyCriticalSection _py_cs;\n"
@@ -4301,15 +4316,15 @@ msgstr ""
 "    PyCriticalSection _py_cs;\n"
 "    PyCriticalSection_Begin(&_py_cs, (PyObject*)(op))"
 
-#: ../../c-api/init.rst:2543 ../../c-api/init.rst:2589
+#: ../../c-api/init.rst:2556 ../../c-api/init.rst:2602
 msgid "In the default build, this macro expands to ``{``."
 msgstr "I standardutförandet expanderar detta makro till ``{``."
 
-#: ../../c-api/init.rst:2549
+#: ../../c-api/init.rst:2562
 msgid "Locks the mutex *m* and begins a critical section."
 msgstr "Låser mutex *m* och påbörjar en kritisk sektion."
 
-#: ../../c-api/init.rst:2553
+#: ../../c-api/init.rst:2566
 msgid ""
 "{\n"
 "     PyCriticalSection _py_cs;\n"
@@ -4319,7 +4334,7 @@ msgstr ""
 "     PyCriticalSection _py_cs;\n"
 "     PyCriticalSection_BeginMutex(&_py_cs, m)"
 
-#: ../../c-api/init.rst:2557
+#: ../../c-api/init.rst:2570
 msgid ""
 "Note that unlike :c:macro:`Py_BEGIN_CRITICAL_SECTION`, there is no cast for "
 "the argument of the macro - it must be a :c:type:`PyMutex` pointer."
@@ -4328,15 +4343,15 @@ msgstr ""
 "det ingen cast för argumentet i makrot - det måste vara en :c:type:"
 "`PyMutex`\\-pekare."
 
-#: ../../c-api/init.rst:2560 ../../c-api/init.rst:2606
+#: ../../c-api/init.rst:2573 ../../c-api/init.rst:2619
 msgid "On the default build, this macro expands to ``{``."
 msgstr "I standardutförandet expanderar detta makro till ``{``."
 
-#: ../../c-api/init.rst:2566
+#: ../../c-api/init.rst:2579
 msgid "Ends the critical section and releases the per-object lock."
 msgstr "Avslutar det kritiska avsnittet och frigör låset per objekt."
 
-#: ../../c-api/init.rst:2570
+#: ../../c-api/init.rst:2583
 msgid ""
 "    PyCriticalSection_End(&_py_cs);\n"
 "}"
@@ -4344,11 +4359,11 @@ msgstr ""
 "    PyCriticalSection_End(&_py_cs);\n"
 "}"
 
-#: ../../c-api/init.rst:2573 ../../c-api/init.rst:2619
+#: ../../c-api/init.rst:2586 ../../c-api/init.rst:2632
 msgid "In the default build, this macro expands to ``}``."
 msgstr "I standardutförandet expanderar detta makro till ``}``."
 
-#: ../../c-api/init.rst:2579
+#: ../../c-api/init.rst:2592
 msgid ""
 "Acquires the per-objects locks for the objects *a* and *b* and begins a "
 "critical section.  The locks are acquired in a consistent order (lowest "
@@ -4358,7 +4373,7 @@ msgstr ""
 "sektion.  Låsen förvärvas i en konsekvent ordning (lägsta adress först) för "
 "att undvika låsningsdödlägen."
 
-#: ../../c-api/init.rst:2585
+#: ../../c-api/init.rst:2598
 msgid ""
 "{\n"
 "    PyCriticalSection2 _py_cs2;\n"
@@ -4368,11 +4383,11 @@ msgstr ""
 "    PyCriticalSection2 _py_cs2;\n"
 "    PyCriticalSection2_Begin(&_py_cs2, (PyObject*)(a), (PyObject*)(b))"
 
-#: ../../c-api/init.rst:2595
+#: ../../c-api/init.rst:2608
 msgid "Locks the mutexes *m1* and *m2* and begins a critical section."
 msgstr "Låser mutexarna *m1* och *m2* och påbörjar en kritisk sektion."
 
-#: ../../c-api/init.rst:2599
+#: ../../c-api/init.rst:2612
 msgid ""
 "{\n"
 "     PyCriticalSection2 _py_cs2;\n"
@@ -4382,7 +4397,7 @@ msgstr ""
 "     PyCriticalSection2 _py_cs2;\n"
 "     PyCriticalSection2_BeginMutex(&_py_cs2, m1, m2)"
 
-#: ../../c-api/init.rst:2603
+#: ../../c-api/init.rst:2616
 msgid ""
 "Note that unlike :c:macro:`Py_BEGIN_CRITICAL_SECTION2`, there is no cast for "
 "the arguments of the macro - they must be :c:type:`PyMutex` pointers."
@@ -4391,11 +4406,11 @@ msgstr ""
 "det ingen cast för argumenten i makrot - de måste vara :c:type:`PyMutex`\\-"
 "pekare."
 
-#: ../../c-api/init.rst:2612
+#: ../../c-api/init.rst:2625
 msgid "Ends the critical section and releases the per-object locks."
 msgstr "Avslutar det kritiska avsnittet och frigör låsen per objekt."
 
-#: ../../c-api/init.rst:2616
+#: ../../c-api/init.rst:2629
 msgid ""
 "    PyCriticalSection2_End(&_py_cs2);\n"
 "}"
@@ -4416,19 +4431,19 @@ msgid "path (in module sys)"
 msgstr "sökväg (i modul sys)"
 
 #: ../../c-api/init.rst:350 ../../c-api/init.rst:712 ../../c-api/init.rst:1228
-#: ../../c-api/init.rst:1759 ../../c-api/init.rst:1858
+#: ../../c-api/init.rst:1772 ../../c-api/init.rst:1871
 msgid "module"
 msgstr "modul"
 
-#: ../../c-api/init.rst:350 ../../c-api/init.rst:1759 ../../c-api/init.rst:1858
+#: ../../c-api/init.rst:350 ../../c-api/init.rst:1772 ../../c-api/init.rst:1871
 msgid "builtins"
 msgstr "inbyggda"
 
-#: ../../c-api/init.rst:350 ../../c-api/init.rst:1759 ../../c-api/init.rst:1858
+#: ../../c-api/init.rst:350 ../../c-api/init.rst:1772 ../../c-api/init.rst:1871
 msgid "__main__"
 msgstr "__main__"
 
-#: ../../c-api/init.rst:350 ../../c-api/init.rst:1759 ../../c-api/init.rst:1858
+#: ../../c-api/init.rst:350 ../../c-api/init.rst:1772 ../../c-api/init.rst:1871
 msgid "sys"
 msgstr "system"
 
@@ -4440,7 +4455,7 @@ msgstr "sök"
 msgid "path"
 msgstr "väg"
 
-#: ../../c-api/init.rst:350 ../../c-api/init.rst:1823 ../../c-api/init.rst:1876
+#: ../../c-api/init.rst:350 ../../c-api/init.rst:1836 ../../c-api/init.rst:1889
 msgid "Py_FinalizeEx (C function)"
 msgstr "Py_FinalizeEx (C-funktion)"
 
@@ -4536,22 +4551,22 @@ msgstr "PyEval_RestoreThread()"
 msgid "_thread"
 msgstr "_tråd"
 
-#: ../../c-api/init.rst:1759 ../../c-api/init.rst:1858
+#: ../../c-api/init.rst:1772 ../../c-api/init.rst:1871
 msgid "stdout (in module sys)"
 msgstr "stdout (i modul sys)"
 
-#: ../../c-api/init.rst:1759 ../../c-api/init.rst:1858
+#: ../../c-api/init.rst:1772 ../../c-api/init.rst:1871
 msgid "stderr (in module sys)"
 msgstr "stderr (i modul sys)"
 
-#: ../../c-api/init.rst:1759 ../../c-api/init.rst:1858
+#: ../../c-api/init.rst:1772 ../../c-api/init.rst:1871
 msgid "stdin (in module sys)"
 msgstr "stdin (i modul sys)"
 
-#: ../../c-api/init.rst:1823
+#: ../../c-api/init.rst:1836
 msgid "Py_Initialize (C function)"
 msgstr "Py_Initialize (C-funktion)"
 
-#: ../../c-api/init.rst:1853
+#: ../../c-api/init.rst:1866
 msgid "close (in module os)"
 msgstr "close (i modul os)"

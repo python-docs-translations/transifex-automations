@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-16 17:23+0000\n"
+"POT-Creation-Date: 2025-10-09 14:15+0000\n"
 "PO-Revision-Date: 2025-09-16 00:01+0000\n"
 "Last-Translator: python-doc bot, 2025\n"
 "Language-Team: Swedish (https://app.transifex.com/python-doc/teams/5390/"
@@ -267,7 +267,7 @@ msgstr "Utlöser :exc:`ShutDown` om kön har stängts av."
 msgid "Equivalent to ``put(item, block=False)``."
 msgstr "Motsvarar ``put(item, block=False)``."
 
-#: ../../library/queue.rst:156 ../../library/queue.rst:297
+#: ../../library/queue.rst:156 ../../library/queue.rst:313
 msgid ""
 "Remove and return an item from the queue.  If optional args *block* is true "
 "and *timeout* is ``None`` (the default), block if necessary until an item is "
@@ -306,7 +306,7 @@ msgstr ""
 "Utlöser :exc:`ShutDown` om kön har stängts av och är tom, eller om kön har "
 "stängts av omedelbart."
 
-#: ../../library/queue.rst:174 ../../library/queue.rst:307
+#: ../../library/queue.rst:174 ../../library/queue.rst:323
 msgid "Equivalent to ``get(False)``."
 msgstr "Motsvarar ``get(False)``."
 
@@ -341,25 +341,17 @@ msgstr ""
 
 #: ../../library/queue.rst:190
 msgid ""
-"``shutdown(immediate=True)`` calls :meth:`task_done` for each remaining item "
-"in the queue."
-msgstr ""
-"``shutdown(immediate=True)`` anropar :meth:`task_done` för varje återstående "
-"objekt i kön."
-
-#: ../../library/queue.rst:193
-msgid ""
 "Raises a :exc:`ValueError` if called more times than there were items placed "
 "in the queue."
 msgstr ""
 "Utlöser ett :exc:`ValueError` om den anropas fler gånger än det finns objekt "
 "i kön."
 
-#: ../../library/queue.rst:199
+#: ../../library/queue.rst:196
 msgid "Blocks until all items in the queue have been gotten and processed."
 msgstr "Blockerar tills alla objekt i kön har hämtats och bearbetats."
 
-#: ../../library/queue.rst:201
+#: ../../library/queue.rst:198
 msgid ""
 "The count of unfinished tasks goes up whenever an item is added to the "
 "queue. The count goes down whenever a consumer thread calls :meth:"
@@ -371,6 +363,10 @@ msgstr ""
 "Antalet sjunker när en konsumenttråd anropar :meth:`task_done` för att ange "
 "att objektet hämtades och att allt arbete med det är slutfört.  När antalet "
 "oavslutade uppgifter sjunker till noll avblockeras :meth:`join`."
+
+#: ../../library/queue.rst:205
+msgid "Waiting for task completion"
+msgstr ""
 
 #: ../../library/queue.rst:207
 msgid "Example of how to wait for enqueued tasks to be completed::"
@@ -430,54 +426,67 @@ msgstr "Avsluta köer"
 
 #: ../../library/queue.rst:236
 msgid ""
-":class:`Queue` objects can be made to prevent further interaction by "
-"shutting them down."
+"When no longer needed, :class:`Queue` objects can be wound down until empty "
+"or terminated immediately with a hard shutdown."
 msgstr ""
-":class:`Queue`\\-objekt kan göras så att ytterligare interaktion förhindras "
-"genom att de stängs av."
 
 #: ../../library/queue.rst:241
-msgid ""
-"Shut down the queue, making :meth:`~Queue.get` and :meth:`~Queue.put` raise :"
-"exc:`ShutDown`."
+msgid "Put a :class:`Queue` instance into a shutdown mode."
 msgstr ""
-"Stänger av kön, vilket gör att :meth:`~Queue.get` och :meth:`~Queue.put` ger "
-"upphov till :exc:`ShutDown`."
 
-#: ../../library/queue.rst:244
+#: ../../library/queue.rst:243
 msgid ""
-"By default, :meth:`~Queue.get` on a shut down queue will only raise once the "
-"queue is empty. Set *immediate* to true to make :meth:`~Queue.get` raise "
-"immediately instead."
+"The queue can no longer grow. Future calls to :meth:`~Queue.put` raise :exc:"
+"`ShutDown`. Currently blocked callers of :meth:`~Queue.put` will be "
+"unblocked and will raise :exc:`ShutDown` in the formerly blocked thread."
 msgstr ""
-"Som standard kommer :meth:`~Queue.get` på en avstängd kö inte att aktiveras "
-"förrän kön är tom. Sätt *immediate* till true för att få :meth:`~Queue.get` "
-"att starta omedelbart istället."
 
 #: ../../library/queue.rst:248
 msgid ""
-"All blocked callers of :meth:`~Queue.put` and :meth:`~Queue.get` will be "
-"unblocked. If *immediate* is true, a task will be marked as done for each "
-"remaining item in the queue, which may unblock callers of :meth:`~Queue."
-"join`."
+"If *immediate* is false (the default), the queue can be wound down normally "
+"with :meth:`~Queue.get` calls to extract tasks that have already been loaded."
 msgstr ""
-"Alla blockerade anropare av :meth:`~Queue.put` och :meth:`~Queue.get` kommer "
-"att avblockeras. Om *immediate* är true, kommer en uppgift att markeras som "
-"utförd för varje återstående objekt i kön, vilket kan avblockera anropare "
-"av :meth:`~Queue.join`."
 
-#: ../../library/queue.rst:257
+#: ../../library/queue.rst:252
+msgid ""
+"And if :meth:`~Queue.task_done` is called for each remaining task, a "
+"pending :meth:`~Queue.join` will be unblocked normally."
+msgstr ""
+
+#: ../../library/queue.rst:255
+msgid ""
+"Once the queue is empty, future calls to :meth:`~Queue.get` will raise :exc:"
+"`ShutDown`."
+msgstr ""
+
+#: ../../library/queue.rst:258
+msgid ""
+"If *immediate* is true, the queue is terminated immediately. The queue is "
+"drained to be completely empty.  All callers of :meth:`~Queue.join` are "
+"unblocked regardless of the number of unfinished tasks.  Blocked callers of :"
+"meth:`~Queue.get` are unblocked and will raise :exc:`ShutDown` because the "
+"queue is empty."
+msgstr ""
+
+#: ../../library/queue.rst:265
+msgid ""
+"Use caution when using :meth:`~Queue.join` with *immediate* set to true. "
+"This unblocks the join even when no work has been done on the tasks, "
+"violating the usual invariant for joining a queue."
+msgstr ""
+
+#: ../../library/queue.rst:273
 msgid "SimpleQueue Objects"
 msgstr "SimpleQueue-objekt"
 
-#: ../../library/queue.rst:259
+#: ../../library/queue.rst:275
 msgid ""
 ":class:`SimpleQueue` objects provide the public methods described below."
 msgstr ""
 ":class:`SimpleQueue`\\-objekt tillhandahåller de publika metoder som "
 "beskrivs nedan."
 
-#: ../../library/queue.rst:263
+#: ../../library/queue.rst:279
 msgid ""
 "Return the approximate size of the queue.  Note, qsize() > 0 doesn't "
 "guarantee that a subsequent get() will not block."
@@ -485,7 +494,7 @@ msgstr ""
 "Returnerar den ungefärliga storleken på kön.  Observera att qsize() > 0 inte "
 "garanterar att en efterföljande get() inte blockeras."
 
-#: ../../library/queue.rst:269
+#: ../../library/queue.rst:285
 msgid ""
 "Return ``True`` if the queue is empty, ``False`` otherwise.  If empty() "
 "returns ``False`` it doesn't guarantee that a subsequent call to get() will "
@@ -495,7 +504,7 @@ msgstr ""
 "``False`` garanterar det inte att ett efterföljande anrop till get() inte "
 "kommer att blockeras."
 
-#: ../../library/queue.rst:276
+#: ../../library/queue.rst:292
 msgid ""
 "Put *item* into the queue.  The method never blocks and always succeeds "
 "(except for potential low-level errors such as failure to allocate memory). "
@@ -507,7 +516,7 @@ msgstr ""
 "minne). De valfria argen *block* och *timeout* ignoreras och tillhandahålls "
 "endast för kompatibilitet med :meth:`Queue.put`."
 
-#: ../../library/queue.rst:282
+#: ../../library/queue.rst:298
 msgid ""
 "This method has a C implementation which is reentrant.  That is, a ``put()`` "
 "or ``get()`` call can be interrupted by another ``put()`` call in the same "
@@ -521,7 +530,7 @@ msgstr ""
 "tillståndet i kön korrumperas.  Detta gör den lämplig att använda i "
 "destruktorer som ``__del__`` metoder eller :mod:`weakref` callbacks."
 
-#: ../../library/queue.rst:291
+#: ../../library/queue.rst:307
 msgid ""
 "Equivalent to ``put(item, block=False)``, provided for compatibility with :"
 "meth:`Queue.put_nowait`."
@@ -529,11 +538,11 @@ msgstr ""
 "Motsvarar ``put(item, block=False)``, tillhandahålls för kompatibilitet med :"
 "meth:`Queue.put_nowait`."
 
-#: ../../library/queue.rst:312
+#: ../../library/queue.rst:328
 msgid "Class :class:`multiprocessing.Queue`"
 msgstr "Klassen :class:`multiprocessing.Queue`"
 
-#: ../../library/queue.rst:313
+#: ../../library/queue.rst:329
 msgid ""
 "A queue class for use in a multi-processing (rather than multi-threading) "
 "context."
@@ -541,7 +550,7 @@ msgstr ""
 "En köklass för användning i en multiprocessing-kontext (snarare än multi-"
 "threading)."
 
-#: ../../library/queue.rst:316
+#: ../../library/queue.rst:332
 msgid ""
 ":class:`collections.deque` is an alternative implementation of unbounded "
 "queues with fast atomic :meth:`~collections.deque.append` and :meth:"
