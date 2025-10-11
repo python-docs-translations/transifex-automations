@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-09 15:03+0000\n"
+"POT-Creation-Date: 2025-10-11 14:58+0000\n"
 "PO-Revision-Date: 2025-09-15 01:04+0000\n"
 "Last-Translator: eulalio barbero espinosa <eulalio@disroot.org>, 2025\n"
 "Language-Team: Spanish (Spain) (https://app.transifex.com/python-doc/"
@@ -533,6 +533,14 @@ msgid ""
 "default in absence of a *mp_context* parameter. This feature is incompatible "
 "with the \"fork\" start method."
 msgstr ""
+"*max_tasks_per_child* es un argumento opcional que especifica el número "
+"máximo de tareas que un único proceso puede ejecutar antes de salir y ser "
+"reemplazado por un nuevo proceso trabajador. Por defecto, "
+"*max_tasks_per_child* es ``None``, lo que significa que los procesos "
+"trabajadores vivirán tanto como el pool. Cuando se especifica un max, el "
+"método de inicio de multiprocesamiento \"spawn\" se utilizará por defecto en "
+"ausencia de un parámetro *mp_context*. Esta característica es incompatible "
+"con el método de inicio \"fork\"."
 
 #: ../../library/concurrent.futures.rst:281
 msgid ""
@@ -541,12 +549,18 @@ msgid ""
 "behaviour was undefined but operations on the executor or its futures would "
 "often freeze or deadlock."
 msgstr ""
+"Cuando uno de los procesos de trabajo termina abruptamente, ahora se genera "
+"un error :exc:`~concurrent.futures.process.BrokenProcessPool`. "
+"Anteriormente, el comportamiento era indefinido, pero las operaciones sobre "
+"el ejecutor o sus futuros a menudo se congelaban o bloqueaban."
 
 #: ../../library/concurrent.futures.rst:288
 msgid ""
 "The *mp_context* argument was added to allow users to control the "
 "start_method for worker processes created by the pool."
 msgstr ""
+"Se ha añadido el argumento *mp_context* para permitir a los usuarios "
+"controlar el método de inicio de los procesos de trabajo creados por el pool."
 
 #: ../../library/concurrent.futures.rst:295
 msgid ""
@@ -556,12 +570,19 @@ msgid ""
 "explicitly specify that by passing a ``mp_context=multiprocessing."
 "get_context(\"fork\")`` parameter."
 msgstr ""
+"El método de inicio por defecto :mod:`multiprocessing` (ver :ref:"
+"`multiprocessing-start-methods`) cambiará de *fork* en Python 3.14.  El "
+"código que requiera el uso de *fork* para su :class:`ProcessPoolExecutor` "
+"debe especificarlo explícitamente pasando un parámetro "
+"``mp_context=multiprocessing.get_context(\"fork\")``."
 
 #: ../../library/concurrent.futures.rst:302
 msgid ""
 "The *max_tasks_per_child* argument was added to allow users to control the "
 "lifetime of workers in the pool."
 msgstr ""
+"Se ha añadido el argumento *max_tasks_per_child* para permitir a los "
+"usuarios controlar el tiempo de vida de los trabajadores en el pool."
 
 #: ../../library/concurrent.futures.rst:306
 msgid ""
@@ -571,6 +592,12 @@ msgid ""
 "`DeprecationWarning`. Pass a *mp_context* configured to use a different "
 "start method. See the :func:`os.fork` documentation for further explanation."
 msgstr ""
+"En sistemas POSIX, si su aplicación tiene múltiples hilos y el contexto :mod:"
+"`multiprocessing` utiliza el método de inicio ``\"fork\"``: La función :func:"
+"`os.fork` llamada internamente para desovar trabajadores puede lanzar un :"
+"exc:`DeprecationWarning`. Pase un *mp_context* configurado para usar un "
+"método de inicio diferente. Consulte la documentación de :func:`os.fork` "
+"para más información."
 
 #: ../../library/concurrent.futures.rst:314
 msgid ""
@@ -580,7 +607,7 @@ msgstr ""
 
 #: ../../library/concurrent.futures.rst:321
 msgid "ProcessPoolExecutor Example"
-msgstr ""
+msgstr "Ejemplo de ProcessPoolExecutor"
 
 #: ../../library/concurrent.futures.rst:324
 msgid ""
@@ -617,16 +644,50 @@ msgid ""
 "if __name__ == '__main__':\n"
 "    main()"
 msgstr ""
+"import concurrent.futures\n"
+"import math\n"
+"\n"
+"PRIMES = [\n"
+"    112272535095293,\n"
+"    112582705942171,\n"
+"    112272535095293,\n"
+"    115280095190773,\n"
+"    115797848077099,\n"
+"    1099726899285419]\n"
+"\n"
+"def is_prime(n):\n"
+"    if n < 2:\n"
+"        return False\n"
+"    if n == 2:\n"
+"        return True\n"
+"    if n % 2 == 0:\n"
+"        return False\n"
+"\n"
+"    sqrt_n = int(math.floor(math.sqrt(n)))\n"
+"    for i in range(3, sqrt_n + 1, 2):\n"
+"        if n % i == 0:\n"
+"            return False\n"
+"    return True\n"
+"\n"
+"def main():\n"
+"    with concurrent.futures.ProcessPoolExecutor() as executor:\n"
+"        for number, prime in zip(PRIMES, executor.map(is_prime, PRIMES)):\n"
+"            print('%d is prime: %s' % (number, prime))\n"
+"\n"
+"if __name__ == '__main__':\n"
+"    main()"
 
 #: ../../library/concurrent.futures.rst:359
 msgid "Future Objects"
-msgstr ""
+msgstr "Objetos del futuro"
 
 #: ../../library/concurrent.futures.rst:361
 msgid ""
 "The :class:`Future` class encapsulates the asynchronous execution of a "
 "callable. :class:`Future` instances are created by :meth:`Executor.submit`."
 msgstr ""
+"La clase :class:`Future` encapsula la ejecución asíncrona de un callable. "
+"Las instancias de :class:`Future` son creadas por :meth:`Executor.submit`."
 
 #: ../../library/concurrent.futures.rst:366
 msgid ""
@@ -634,6 +695,9 @@ msgid ""
 "instances are created by :meth:`Executor.submit` and should not be created "
 "directly except for testing."
 msgstr ""
+"Encapsula la ejecución asíncrona de un callable. :class:`Future` instancias "
+"son creadas por :meth:`Executor.submit` y no deben ser creadas directamente "
+"excepto para pruebas."
 
 #: ../../library/concurrent.futures.rst:372
 msgid ""
@@ -642,21 +706,28 @@ msgid ""
 "``False``, otherwise the call will be cancelled and the method will return "
 "``True``."
 msgstr ""
+"Intento de cancelar la llamada.  Si la llamada se está ejecutando "
+"actualmente o ha terminado de ejecutarse y no puede cancelarse, el método "
+"devolverá ``False``, de lo contrario, la llamada se cancelará y el método "
+"devolverá ``True``."
 
 #: ../../library/concurrent.futures.rst:379
 msgid "Return ``True`` if the call was successfully cancelled."
-msgstr ""
+msgstr "Devuelve ``True`` si la llamada se ha cancelado correctamente."
 
 #: ../../library/concurrent.futures.rst:383
 msgid ""
 "Return ``True`` if the call is currently being executed and cannot be "
 "cancelled."
 msgstr ""
+"Devuelve ``True`` si la llamada se está ejecutando en ese momento y no se "
+"puede cancelar."
 
 #: ../../library/concurrent.futures.rst:388
 msgid ""
 "Return ``True`` if the call was successfully cancelled or finished running."
 msgstr ""
+"Devuelve ``True`` si la llamada se canceló con éxito o terminó de ejecutarse."
 
 #: ../../library/concurrent.futures.rst:393
 msgid ""
@@ -666,6 +737,11 @@ msgid ""
 "can be an int or float.  If *timeout* is not specified or ``None``, there is "
 "no limit to the wait time."
 msgstr ""
+"Devuelve el valor devuelto por la llamada. Si la llamada aún no se ha "
+"completado, este método esperará hasta *timeout* segundos.  Si la llamada no "
+"se ha completado en *timeout* segundos, se mostrará un mensaje :exc:"
+"`TimeoutError`. *timeout* puede ser un int o un float.  Si *timeout* no se "
+"especifica o ``None``, no hay límite para el tiempo de espera."
 
 #: ../../library/concurrent.futures.rst:400
 #: ../../library/concurrent.futures.rst:414
@@ -673,11 +749,14 @@ msgid ""
 "If the future is cancelled before completing then :exc:`.CancelledError` "
 "will be raised."
 msgstr ""
+"Si el futuro se cancela antes de completarse, se creará :exc:`."
+"CancelledError`."
 
 #: ../../library/concurrent.futures.rst:403
 msgid ""
 "If the call raised an exception, this method will raise the same exception."
 msgstr ""
+"Si la llamada lanzó una excepción, este método lanzará la misma excepción."
 
 #: ../../library/concurrent.futures.rst:407
 msgid ""
@@ -687,10 +766,15 @@ msgid ""
 "*timeout* can be an int or float.  If *timeout* is not specified or "
 "``None``, there is no limit to the wait time."
 msgstr ""
+"Devuelve la excepción lanzada por la llamada.  Si la llamada aún no se ha "
+"completado, este método esperará hasta *timeout* segundos.  Si la llamada no "
+"se ha completado en *timeout* segundos, entonces se lanzará un :exc:"
+"`TimeoutError`.  *timeout* puede ser un int o un float.  Si *timeout* no se "
+"especifica o ``None``, no hay límite para el tiempo de espera."
 
 #: ../../library/concurrent.futures.rst:417
 msgid "If the call completed without raising, ``None`` is returned."
-msgstr ""
+msgstr "Si la llamada finaliza sin elevarse, se devuelve ``None``."
 
 #: ../../library/concurrent.futures.rst:421
 msgid ""
@@ -698,6 +782,8 @@ msgid ""
 "future as its only argument, when the future is cancelled or finishes "
 "running."
 msgstr ""
+"Adjunta la llamada *fn* al futuro.  *fn* será llamada, con el futuro como "
+"único argumento, cuando el futuro se cancele o termine de ejecutarse."
 
 #: ../../library/concurrent.futures.rst:425
 msgid ""
@@ -707,18 +793,27 @@ msgid ""
 "ignored.  If the callable raises a :exc:`BaseException` subclass, the "
 "behavior is undefined."
 msgstr ""
+"Las llamadas añadidas se ejecutan en el orden en que fueron añadidas y "
+"siempre se ejecutan en un subproceso perteneciente al proceso que las "
+"añadió.  Si la llamada genera una subclase :exc:`Exception`, será registrada "
+"e ignorada.  Si la llamada genera una subclase :exc:`BaseException`, el "
+"comportamiento es indefinido."
 
 #: ../../library/concurrent.futures.rst:431
 msgid ""
 "If the future has already completed or been cancelled, *fn* will be called "
 "immediately."
 msgstr ""
+"Si el futuro ya se ha completado o cancelado, *fn* será llamado "
+"inmediatamente."
 
 #: ../../library/concurrent.futures.rst:434
 msgid ""
 "The following :class:`Future` methods are meant for use in unit tests and :"
 "class:`Executor` implementations."
 msgstr ""
+"Los siguientes métodos de :class:`Future` están pensados para su uso en "
+"pruebas unitarias e implementaciones de :class:`Executor`."
 
 #: ../../library/concurrent.futures.rst:439
 msgid ""
@@ -726,6 +821,9 @@ msgid ""
 "before executing the work associated with the :class:`Future` and by unit "
 "tests."
 msgstr ""
+"Este método sólo debe ser llamado por las implementaciones de :class:"
+"`Executor` antes de ejecutar el trabajo asociado a :class:`Future` y por las "
+"pruebas unitarias."
 
 #: ../../library/concurrent.futures.rst:443
 msgid ""
@@ -734,6 +832,10 @@ msgid ""
 "waiting on the :class:`Future` completing (i.e. through :func:`as_completed` "
 "or :func:`wait`) will be woken up."
 msgstr ""
+"Si el método devuelve ``False`` entonces el :class:`Future` fue cancelado, "
+"es decir, :meth:`Future.cancel` fue llamado y devolvió ``True``.  Cualquier "
+"hilo que esté esperando la finalización de :class:`Future` (es decir, a "
+"través de :func:`as_completed` o :func:`wait`) será despertado."
 
 #: ../../library/concurrent.futures.rst:448
 msgid ""
@@ -741,17 +843,23 @@ msgid ""
 "and has been put in the running state, i.e. calls to :meth:`Future.running` "
 "will return ``True``."
 msgstr ""
+"Si el método devuelve ``True`` entonces el :class:`Future` no se ha "
+"cancelado y se ha puesto en estado de ejecución, es decir, las llamadas a :"
+"meth:`Future.running` devolverán ``True``."
 
 #: ../../library/concurrent.futures.rst:452
 msgid ""
 "This method can only be called once and cannot be called after :meth:`Future."
 "set_result` or :meth:`Future.set_exception` have been called."
 msgstr ""
+"Este método sólo puede invocarse una vez y no puede invocarse después de "
+"haber invocado :meth:`Future.set_result` o :meth:`Future.set_exception`."
 
 #: ../../library/concurrent.futures.rst:458
 msgid ""
 "Sets the result of the work associated with the :class:`Future` to *result*."
 msgstr ""
+"Establece el resultado del trabajo asociado a :class:`Future` en *result*."
 
 #: ../../library/concurrent.futures.rst:461
 #: ../../library/concurrent.futures.rst:474
@@ -759,6 +867,8 @@ msgid ""
 "This method should only be used by :class:`Executor` implementations and "
 "unit tests."
 msgstr ""
+"Este método sólo debe ser utilizado por :class:`Executor` implementaciones y "
+"pruebas unitarias."
 
 #: ../../library/concurrent.futures.rst:464
 #: ../../library/concurrent.futures.rst:477
@@ -766,16 +876,20 @@ msgid ""
 "This method raises :exc:`concurrent.futures.InvalidStateError` if the :class:"
 "`Future` is already done."
 msgstr ""
+"Este método muestra :exc:`concurrent.futures.InvalidStateError` si :class:"
+"`Future` ya está hecho."
 
 #: ../../library/concurrent.futures.rst:471
 msgid ""
 "Sets the result of the work associated with the :class:`Future` to the :"
 "class:`Exception` *exception*."
 msgstr ""
+"Establece el resultado del trabajo asociado con la :class:`Future` a la :"
+"class:`Exception` *exception*."
 
 #: ../../library/concurrent.futures.rst:483
 msgid "Module Functions"
-msgstr ""
+msgstr "Funciones del módulo"
 
 #: ../../library/concurrent.futures.rst:487
 msgid ""
@@ -787,6 +901,14 @@ msgid ""
 "named ``not_done``, contains the futures that did not complete (pending or "
 "running futures)."
 msgstr ""
+"Espera a que se completen las instancias de :class:`Future` (posiblemente "
+"creadas por diferentes instancias de :class:`Executor` ) dadas por *fs*. Los "
+"futuros duplicados dados a *fs* se eliminan y se devolverán sólo una vez. "
+"Devuelve una 2-tupla de conjuntos con nombre.  El primer conjunto, llamado "
+"``done``, contiene los futuros que se completaron (futuros terminados o "
+"cancelados) antes de que se completara la espera.  El segundo conjunto, "
+"denominado ``not_done``, contiene los futuros que no se completaron (futuros "
+"pendientes o en ejecución)."
 
 #: ../../library/concurrent.futures.rst:495
 msgid ""
@@ -794,6 +916,10 @@ msgid ""
 "before returning.  *timeout* can be an int or float.  If *timeout* is not "
 "specified or ``None``, there is no limit to the wait time."
 msgstr ""
+"*timeout* se puede utilizar para controlar el número máximo de segundos que "
+"se debe esperar antes de volver.  *timeout* puede ser un int o un float.  Si "
+"*timeout* no se especifica o ``None``, no hay límite para el tiempo de "
+"espera."
 
 #: ../../library/concurrent.futures.rst:499
 msgid ""
@@ -841,24 +967,36 @@ msgid ""
 "original call to :func:`as_completed`.  *timeout* can be an int or float. If "
 "*timeout* is not specified or ``None``, there is no limit to the wait time."
 msgstr ""
+"Devuelve un iterador sobre las instancias de :class:`Future` (posiblemente "
+"creadas por diferentes instancias de :class:`Executor` ) dadas por *fs* que "
+"devuelve futuros a medida que se completan (futuros finalizados o "
+"cancelados). Cualquier futuro dado por *fs* que esté duplicado será devuelto "
+"una vez. Cualquier futuro que se haya completado antes de llamar a :func:"
+"`as_completed` se devolverá primero.  El iterador devuelto genera un :exc:"
+"`TimeoutError` si se llama a :meth:`~iterator.__next__` y el resultado no "
+"está disponible después de *timeout* segundos desde la llamada original a :"
+"func:`as_completed`.  *timeout* puede ser un int o un float. Si *timeout* no "
+"se especifica o ``None``, no hay límite para el tiempo de espera."
 
 #: ../../library/concurrent.futures.rst:534
 msgid ":pep:`3148` -- futures - execute computations asynchronously"
-msgstr ""
+msgstr ":pep:`3148` -- futures: ejecutan cálculos de forma asíncrona."
 
 #: ../../library/concurrent.futures.rst:535
 msgid ""
 "The proposal which described this feature for inclusion in the Python "
 "standard library."
 msgstr ""
+"La propuesta que describía esta característica para su inclusión en la "
+"biblioteca estándar de Python."
 
 #: ../../library/concurrent.futures.rst:540
 msgid "Exception classes"
-msgstr ""
+msgstr "Clases de excepción"
 
 #: ../../library/concurrent.futures.rst:546
 msgid "Raised when a future is cancelled."
-msgstr ""
+msgstr "Aparece cuando se cancela un futuro."
 
 #: ../../library/concurrent.futures.rst:550
 msgid ""
