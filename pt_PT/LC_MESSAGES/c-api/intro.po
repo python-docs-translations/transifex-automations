@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-22 14:43+0000\n"
+"POT-Creation-Date: 2025-10-15 14:16+0000\n"
 "PO-Revision-Date: 2025-09-16 00:00+0000\n"
 "Last-Translator: André Moreira <afrmscb@gmail.com>, 2025\n"
 "Language-Team: Portuguese (Portugal) (https://app.transifex.com/python-doc/"
@@ -1012,6 +1012,34 @@ msgid ""
 "    return total;\n"
 "}"
 msgstr ""
+"long\n"
+"sum_sequence(PyObject *sequence)\n"
+"{\n"
+"    Py_ssize_t i, n;\n"
+"    long total = 0, value;\n"
+"    PyObject *item;\n"
+"    n = PySequence_Length(sequence);\n"
+"    if (n < 0)\n"
+"        return -1; /* Não tem comprimento */\n"
+"    for (i = 0; i < n; i++) {\n"
+"        item = PySequence_GetItem(sequence, i);\n"
+"        if (item == NULL)\n"
+"            return -1; /* Não é uma sequência ou outra falha */\n"
+"        if (PyLong_Check(item)) {\n"
+"            value = PyLong_AsLong(item);\n"
+"            Py_DECREF(item);\n"
+"            if (value == -1 && PyErr_Occurred())\n"
+"                /* Número inteiro demasiado grande para caber num C longo, "
+"abortar */\n"
+"                return -1;\n"
+"            total += value;\n"
+"        }\n"
+"        else {\n"
+"            Py_DECREF(item); /* Descartar propriedade de referência */\n"
+"        }\n"
+"    }\n"
+"    return total;\n"
+"}"
 
 #: ../../c-api/intro.rst:549
 msgid "Types"
@@ -1448,7 +1476,7 @@ msgstr ""
 
 #: ../../c-api/intro.rst:791
 msgid "Debugging Builds"
-msgstr ""
+msgstr "Depuração de compilações"
 
 #: ../../c-api/intro.rst:793
 msgid ""
@@ -1456,6 +1484,10 @@ msgid ""
 "interpreter and extension modules.  These checks tend to add a large amount "
 "of overhead to the runtime so they are not enabled by default."
 msgstr ""
+"O Python pode ser compilado com várias macros para permitir verificações "
+"adicionais do interpretador e dos módulos de extensão. Essas verificações "
+"tendem a adicionar uma grande sobrecarga ao tempo de execução, por isso não "
+"estão ativadas por predefinição."
 
 #: ../../c-api/intro.rst:797
 msgid ""
@@ -1466,6 +1498,12 @@ msgid ""
 "most frequently used builds will be described in the remainder of this "
 "section."
 msgstr ""
+"Uma lista completa dos vários tipos de compilações de depuração está no "
+"ficheiro :file:`Misc/SpecialBuilds.txt` na distribuição do código-fonte do "
+"Python. Estão disponíveis compilações que suportam o rastreamento de "
+"contagens de referência, a depuração do alocador de memória ou a criação de "
+"perfis de baixo nível do loop principal do interpretador. Apenas as "
+"compilações mais utilizadas serão descritas no restante desta secção."
 
 #: ../../c-api/intro.rst:805
 msgid ""
@@ -1477,12 +1515,21 @@ msgid ""
 "macro:`!Py_DEBUG` is enabled in the Unix build, compiler optimization is "
 "disabled."
 msgstr ""
+"Compilar o interpretador com a macro :c:macro:`!Py_DEBUG` definida produz o "
+"que geralmente se entende por :ref:`uma compilação de depuração do Python "
+"<debug-build>`. A macro :c:macro:`!Py_DEBUG` é ativada na compilação Unix "
+"adicionando :option:`--with-pydebug` ao comando :file:`./configure`. Isso "
+"também está implícito na presença da macro :c:macro:`!_DEBUG`, que não é "
+"específica do Python. Quando :c:macro:`!Py_DEBUG` é ativada na compilação "
+"Unix, a otimização do compilador é desativada."
 
 #: ../../c-api/intro.rst:813
 msgid ""
 "In addition to the reference count debugging described below, extra checks "
 "are performed, see :ref:`Python Debug Build <debug-build>`."
 msgstr ""
+"Além da depuração da contagem de referências descrita abaixo, são realizadas "
+"verificações adicionais, consulte :ref:`Python Debug Build <debug-build>`."
 
 #: ../../c-api/intro.rst:816
 msgid ""
@@ -1493,54 +1540,65 @@ msgid ""
 "well.  Upon exit, all existing references are printed.  (In interactive mode "
 "this happens after every statement run by the interpreter.)"
 msgstr ""
+"Definir :c:macro:`Py_TRACE_REFS` ativa o rastreamento de referências "
+"(consulte a opção :option:`configure --with-trace-refs option <--with-trace-"
+"refs>`). Quando definido, uma lista circular duplamente ligada de objetos "
+"ativos é mantida adicionando dois campos extras a cada :c:type:`PyObject`. "
+"As alocações totais também são rastreadas. Ao sair, todas as referências "
+"existentes são impressas. (No modo interativo, isso acontece após cada "
+"instrução executada pelo interpretador.)"
 
 #: ../../c-api/intro.rst:823
 msgid ""
 "Please refer to :file:`Misc/SpecialBuilds.txt` in the Python source "
 "distribution for more detailed information."
 msgstr ""
+"Consulte o ficheiro :file:`Misc/SpecialBuilds.txt` na distribuição do código-"
+"fonte do Python para obter informações mais detalhadas."
 
 #: ../../c-api/intro.rst:830
 msgid "Recommended third party tools"
-msgstr ""
+msgstr "Ferramentas de terceiros recomendadas"
 
 #: ../../c-api/intro.rst:832
 msgid ""
 "The following third party tools offer both simpler and more sophisticated "
 "approaches to creating C, C++ and Rust extensions for Python:"
 msgstr ""
+"As seguintes ferramentas de terceiros oferecem abordagens mais simples e "
+"sofisticadas para criar extensões C, C++ e Rust para Python:"
 
 #: ../../c-api/intro.rst:835
 msgid "`Cython <https://cython.org/>`_"
-msgstr ""
+msgstr "`Cython <https://cython.org/>`_"
 
 #: ../../c-api/intro.rst:836
 msgid "`cffi <https://cffi.readthedocs.io>`_"
-msgstr ""
+msgstr "`cffi <https://cffi.readthedocs.io>`_"
 
 #: ../../c-api/intro.rst:837
 msgid "`HPy <https://hpyproject.org/>`_"
-msgstr ""
+msgstr "`HPy <https://hpyproject.org/>`_"
 
 #: ../../c-api/intro.rst:838
 msgid "`nanobind <https://github.com/wjakob/nanobind>`_ (C++)"
-msgstr ""
+msgstr "`nanobind <https://github.com/wjakob/nanobind>`_ (C++)"
 
 #: ../../c-api/intro.rst:839
 msgid "`Numba <https://numba.pydata.org/>`_"
-msgstr ""
+msgstr "`Numba <https://numba.pydata.org/>`_"
 
 #: ../../c-api/intro.rst:840
 msgid "`pybind11 <https://pybind11.readthedocs.io/>`_ (C++)"
-msgstr ""
+msgstr "`pybind11 <https://pybind11.readthedocs.io/>`_ (C++)"
 
 #: ../../c-api/intro.rst:841
 msgid "`PyO3 <https://pyo3.rs/>`_ (Rust)"
-msgstr ""
+msgstr "`PyO3 <https://pyo3.rs/>`_ (Rust)"
 
 #: ../../c-api/intro.rst:842
 msgid "`SWIG <https://www.swig.org>`_"
-msgstr ""
+msgstr "`SWIG <https://www.swig.org>`_"
 
 #: ../../c-api/intro.rst:844
 msgid ""
@@ -1552,6 +1610,14 @@ msgid ""
 "support compiling for other implementations of Python from a single set of "
 "sources."
 msgstr ""
+"O uso de ferramentas como essas pode ajudar a evitar a escrita de código "
+"fortemente vinculado a uma versão específica do CPython, evitar erros de "
+"contagem de referências e focar mais no seu próprio código do que no uso da "
+"API do CPython. Em geral, novas versões do Python podem ser suportadas "
+"atualizando a ferramenta, e o seu código frequentemente usará APIs mais "
+"recentes e eficientes automaticamente. Algumas ferramentas também suportam a "
+"compilação para outras implementações do Python a partir de um único "
+"conjunto de fontes."
 
 #: ../../c-api/intro.rst:851
 msgid ""
@@ -1560,12 +1626,18 @@ msgid ""
 "the project is still maintained and supported, as the list above may become "
 "outdated."
 msgstr ""
+"Esses projetos não são suportados pelas mesmas pessoas que mantêm o Python, "
+"e as questões devem ser levantadas diretamente com os projetos. Lembre-se de "
+"verificar se o projeto ainda é mantido e suportado, pois a lista acima pode "
+"ficar desatualizada."
 
 #: ../../c-api/intro.rst:858
 msgid ""
 "`Python Packaging User Guide: Binary Extensions <https://packaging.python."
 "org/guides/packaging-binary-extensions/>`_"
 msgstr ""
+"`Guia do utilizador de empacotamento Python: Extensões binárias <https://"
+"packaging.python.org/guides/packaging-binary-extensions/>`_"
 
 #: ../../c-api/intro.rst:859
 msgid ""
@@ -1573,6 +1645,10 @@ msgid ""
 "simplify the creation of binary extensions, but also discusses the various "
 "reasons why creating an extension module may be desirable in the first place."
 msgstr ""
+"O Guia do Utilizador de Empacotamento Python não só aborda várias "
+"ferramentas disponíveis que simplificam a criação de extensões binárias, "
+"como também discute as várias razões pelas quais pode ser desejável criar um "
+"módulo de extensão."
 
 #: ../../c-api/intro.rst:276
 msgid "object"
@@ -1584,67 +1660,67 @@ msgstr "tipo"
 
 #: ../../c-api/intro.rst:315
 msgid "Py_INCREF (C function)"
-msgstr ""
+msgstr "Py_INCREF (função C)"
 
 #: ../../c-api/intro.rst:315
 msgid "Py_DECREF (C function)"
-msgstr ""
+msgstr "Py_DECREF (função C)"
 
 #: ../../c-api/intro.rst:391
 msgid "PyList_SetItem (C function)"
-msgstr ""
+msgstr "PyList_SetItem (função C)"
 
 #: ../../c-api/intro.rst:391
 msgid "PyTuple_SetItem (C function)"
-msgstr ""
+msgstr "PyTuple_SetItem (função C)"
 
 #: ../../c-api/intro.rst:462
 msgid "set_all()"
-msgstr ""
+msgstr "set_all()"
 
 #: ../../c-api/intro.rst:481
 msgid "PyList_GetItem (C function)"
-msgstr ""
+msgstr "PyList_GetItem (função C)"
 
 #: ../../c-api/intro.rst:481
 msgid "PySequence_GetItem (C function)"
-msgstr ""
+msgstr "PySequence_GetItem (função C)"
 
 #: ../../c-api/intro.rst:511
 msgid "sum_list()"
-msgstr ""
+msgstr "sum_list()"
 
 #: ../../c-api/intro.rst:543 ../../c-api/intro.rst:635
 msgid "sum_sequence()"
-msgstr ""
+msgstr "sum_sequence()"
 
 #: ../../c-api/intro.rst:578
 msgid "PyErr_Occurred (C function)"
-msgstr ""
+msgstr "PyErr_Occurred (função C)"
 
 #: ../../c-api/intro.rst:591
 msgid "PyErr_SetString (C function)"
-msgstr ""
+msgstr "PyErr_SetString (função C)"
 
 #: ../../c-api/intro.rst:591 ../../c-api/intro.rst:699
 msgid "PyErr_Clear (C function)"
-msgstr ""
+msgstr "PyErr_Clear (função C)"
 
 #: ../../c-api/intro.rst:615
 msgid "exc_info (in module sys)"
-msgstr ""
+msgstr "exc_info (no módulo sys)"
 
 #: ../../c-api/intro.rst:650 ../../c-api/intro.rst:697
 msgid "incr_item()"
-msgstr ""
+msgstr "incr_item()"
 
 #: ../../c-api/intro.rst:699
 msgid "PyErr_ExceptionMatches (C function)"
-msgstr ""
+msgstr "PyErr_ExceptionMatches (função C)"
 
 #: ../../c-api/intro.rst:699
 msgid "Py_XDECREF (C function)"
-msgstr ""
+msgstr "Py_XDECREF (função C)"
 
 #: ../../c-api/intro.rst:725
 msgid "Py_Initialize (C function)"
@@ -1680,20 +1756,20 @@ msgstr "path (no módulo sys)"
 
 #: ../../c-api/intro.rst:760
 msgid "Py_GetPath (C function)"
-msgstr ""
+msgstr "Py_GetPath (função C)"
 
 #: ../../c-api/intro.rst:760
 msgid "Py_GetPrefix (C function)"
-msgstr ""
+msgstr "Py_GetPrefix (função C)"
 
 #: ../../c-api/intro.rst:760
 msgid "Py_GetExecPrefix (C function)"
-msgstr ""
+msgstr "Py_GetExecPrefix (função C)"
 
 #: ../../c-api/intro.rst:760
 msgid "Py_GetProgramFullPath (C function)"
-msgstr ""
+msgstr "Py_GetProgramFullPath (função C)"
 
 #: ../../c-api/intro.rst:775
 msgid "Py_IsInitialized (C function)"
-msgstr ""
+msgstr "Py_IsInitialized (função C)"
