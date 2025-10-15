@@ -11,6 +11,8 @@ transifex-automations
 .. image:: https://readthedocs.org/projects/python-docs-transifex-automation/badge/?version=latest&style=flat
    :target: https://app.readthedocs.org/projects/python-docs-transifex-automation/
 
+.. image:: https://img.shields.io/github/repo-size/python-docs-translations/transifex-automations
+   :alt: GitHub repo size
 
 
 Scripts and procedures for maintaining Python_ documentation translation_ infrastructure under python-doc_ organization in Transifex_.
