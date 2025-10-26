@@ -2,13 +2,13 @@
 Subtitle translations of Python: The Documentary
 ================================================
 
-Find here the translated subtitles for the video `Python: The Documentary | An origin story`_.
+Find here the translated subtitles for the video
+**Python: The Documentary | An origin story**.
 
-The source subtitle file is named ``subtitle.rst``, translations are named ``subtitle-<lang>.rst``
-(replacing ``<lang>`` with the actual language).
+Translations happen in Transifex: https://explore.transifex.com/python-doc/the-documentary-subtitle/
 
-Command to pull source file: ``tx pull -s -f``
+The video is available at https://www.youtube.com/watch?v=GfH4QL4VqJ0
 
-Command to pull translation files: ``tx pull -a -f``
-
-.. _`Python: The Documentary | An origin story`: https://www.youtube.com/watch?v=GfH4QL4VqJ0
+The source subtitle file is named ``subtitle.rst``,
+translations are named ``subtitle-<lang>.rst``
+(replacing ``<lang>`` with the actual language code).
