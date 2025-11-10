@@ -19,10 +19,10 @@ def get_stable_from_versions(data: dict) -> list:
     return [k for k, v in data.items() if v["status"] in ["bugfix", "security"]]
 
 
-def get_from_devguide() -> list:
+def get_from_peps() -> list:
     """
     Returns a list of bug-fix and security-fix releases from
-    a JSON file in devguide, which is used to generate info
+    the PEPs JSON file, which is used to generate info
     on version.rst for https://devguide.python.org/versions/.
 
     Returns:
@@ -31,8 +31,7 @@ def get_from_devguide() -> list:
     Raises:
         JSONDecodeError: If an error occurs when parsing the data as JSON.
     """
-    raw_root_url = "https://raw.githubusercontent.com/python/devguide/main"
-    url = f"{raw_root_url}/include/release-cycle.json"
+    url = "https://peps.python.org/api/release-cycle.json"
 
     r = requests.get(url, allow_redirects=True)
     if r.status_code != 200:
@@ -88,9 +87,9 @@ def get_latest_version() -> str:
 def update_versions_file(versions_file: str):
     """
     Writes Python versions in *versions_file* using info gathered by
-    the get_from_devguide() and get_latest_version() functions.
+    the get_from_peps() and get_latest_version() functions.
     """
-    versions = get_from_devguide()
+    versions = get_from_peps()
     latest = get_latest_version()
     if latest:
         versions.insert(0, latest)
