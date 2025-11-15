@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-09 15:45+0000\n"
+"POT-Creation-Date: 2025-11-13 15:53+0000\n"
 "PO-Revision-Date: 2025-07-18 19:57+0000\n"
 "Last-Translator: Rainer Terroso, 2025\n"
 "Language-Team: Portuguese (Brazil) (https://app.transifex.com/python-doc/"
@@ -237,6 +237,10 @@ msgid ""
 "    double ob_fval;\n"
 "} PyFloatObject;"
 msgstr ""
+"typedef struct {\n"
+"PyObject_HEAD\n"
+"double ob_fval;\n"
+"} PyFloatObject"
 
 #: ../../extending/newtypes_tutorial.rst:88
 msgid "The second bit is the definition of the type object. ::"
@@ -254,6 +258,15 @@ msgid ""
 "    .tp_new = PyType_GenericNew,\n"
 "};"
 msgstr ""
+"static PyTypeObject CustomType = {\n"
+".ob_base = PyVarObject_HEAD_INIT(NULL, 0)\n"
+".tp_name = \"custom.Custom\",\n"
+".tp_doc = PyDoc_STR(\"Custom objects\"),\n"
+".tp_basicsize = sizeof(CustomObject),\n"
+".tp_itemsize = 0,\n"
+".tp_flags = Py_TPFLAGS_DEFAULT,\n"
+".tp_new = PyType_GenericNew,\n"
+"};"
 
 #: ../../extending/newtypes_tutorial.rst:101
 msgid ""
@@ -261,6 +274,10 @@ msgid ""
 "listing all the :c:type:`PyTypeObject` fields that you don't care about and "
 "also to avoid caring about the fields' declaration order."
 msgstr ""
+"Recomendamos usar inicializadores nomeados no estilo C99, como mostrado "
+"acima, para evitar listar todos os campos de :c:type:`PyTypeObject` com os "
+"quais você não precisa se preocupar e também para não depender da ordem em "
+"que esses campos são declarados."
 
 #: ../../extending/newtypes_tutorial.rst:105
 msgid ""
@@ -269,6 +286,10 @@ msgid ""
 "fields will be filled with zeros by the C compiler, and it's common practice "
 "to not specify them explicitly unless you need them."
 msgstr ""
+"A definição real de :c:type:`PyTypeObject` no :file:`object.h` possui muito "
+"mais ref:`fields <type-structs> do que a definição acima. Os campos "
+"restantes serão preenchidos com zeros pelo compilador C, e é prática comum "
+"não especificá-los explicitamente, a menos que sejam necessários."
 
 #: ../../extending/newtypes_tutorial.rst:110
 msgid "We're going to pick it apart, one field at a time::"
@@ -276,23 +297,27 @@ msgstr "Vamos separá-lo, um campo de cada vez ::"
 
 #: ../../extending/newtypes_tutorial.rst:112
 msgid ".ob_base = PyVarObject_HEAD_INIT(NULL, 0)"
-msgstr ""
+msgstr ".ob_base = PyVarObject_HEAD_INIT(NULL, 0)"
 
 #: ../../extending/newtypes_tutorial.rst:114
 msgid ""
 "This line is mandatory boilerplate to initialize the ``ob_base`` field "
 "mentioned above. ::"
 msgstr ""
+"Essa linha é um boilerplate obrigatório para inicializar o campo ``ob_base`` "
+"mencionado acima. ::"
 
 #: ../../extending/newtypes_tutorial.rst:117
 msgid ".tp_name = \"custom.Custom\","
-msgstr ""
+msgstr ".tp_name = \"custom.Custom\","
 
 #: ../../extending/newtypes_tutorial.rst:119
 msgid ""
 "The name of our type.  This will appear in the default textual "
 "representation of our objects and in some error messages, for example:"
 msgstr ""
+"O nome do nosso tipo.  Ele aparecerá na representação textual padrão do "
+"nosso objeto e em algumas mensagens erro, por exemplo:"
 
 #: ../../extending/newtypes_tutorial.rst:122
 msgid ""
@@ -301,6 +326,10 @@ msgid ""
 "  File \"<stdin>\", line 1, in <module>\n"
 "TypeError: can only concatenate str (not \"custom.Custom\") to str"
 msgstr ""
+">>> \"\" + custom.Custom()\n"
+"traceback (última chamada mais recente):\n"
+"  Arquivo \"<stdin>\", linha 1, em <módulo>\n"
+"TypeError: só é possível concatenar str (não \"custom.Custom\") para str"
 
 #: ../../extending/newtypes_tutorial.rst:129
 msgid ""
@@ -310,12 +339,19 @@ msgid ""
 "`!custom.Custom`. Using the real dotted import path is important to make "
 "your type compatible with the :mod:`pydoc` and :mod:`pickle` modules. ::"
 msgstr ""
+"Observe que o nome é um nome pontilhado que inclui o nome módulo e o nome do "
+"tipo dentro do módulo. O módulo, neste caso, é :mod:`!custom` e o tipo é :"
+"class:`!Custom`, portanto, definimos o nome do tipo como :class:`!custom."
+"Custom`. O uso do pontilhado real caminho de importação é importante para "
+"tornar seu tipo compatível com o :mod:`pydoc` e os módulos :mod:`pickle`. ::"
 
 #: ../../extending/newtypes_tutorial.rst:135
 msgid ""
 ".tp_basicsize = sizeof(CustomObject),\n"
 ".tp_itemsize = 0,"
 msgstr ""
+".tp_basicsize = sizeof(CustomObject),\n"
+".tp_itemsize = 0,"
 
 #: ../../extending/newtypes_tutorial.rst:138
 msgid ""
@@ -323,6 +359,10 @@ msgid ""
 "class:`!Custom` instances.  :c:member:`~PyTypeObject.tp_itemsize` is only "
 "used for variable-sized objects and should otherwise be zero."
 msgstr ""
+"Isso serve para que o Python saiba quanta memória deve ser alocada ao criar "
+"novas instâncias do :class:`!Custom`. O :c:member:`~PyTypeObject."
+"tp_itemsize` é usado somente para objeto de tamanho variável e, caso "
+"contrário, deve ser zero."
 
 #: ../../extending/newtypes_tutorial.rst:144
 msgid ""
