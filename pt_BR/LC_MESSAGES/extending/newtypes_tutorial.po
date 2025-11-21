@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-17 17:31+0000\n"
+"POT-Creation-Date: 2025-11-19 18:20+0000\n"
 "PO-Revision-Date: 2025-09-22 15:57+0000\n"
 "Last-Translator: Rainer Terroso, 2025\n"
 "Language-Team: Portuguese (Brazil) (https://app.transifex.com/python-doc/"
@@ -408,10 +408,13 @@ msgid ""
 "We want to make sure that the first and last names are initialized to empty "
 "strings, so we provide a ``tp_new`` implementation::"
 msgstr ""
+"Queremos nos certificar de que o primeiro e o último nome sejam "
+"inicializados com strings vazias, portanto, fornecemos uma implementação:: "
+"``tp_new``  "
 
 #: ../../extending/newtypes_tutorial.rst:316
 msgid "and install it in the :c:member:`~PyTypeObject.tp_new` member::"
-msgstr ""
+msgstr "e instale-o no membro:: :c:member:`~PyTypeObject.tp_new`"
 
 #: ../../extending/newtypes_tutorial.rst:320
 msgid ""
@@ -433,24 +436,37 @@ msgid ""
 "often ignore the arguments, leaving the argument handling to initializer (a."
 "k.a. ``tp_init`` in C or ``__init__`` in Python) methods."
 msgstr ""
+"O ``tp_new`` recebe o tipo que está sendo instanciado (não necessariamente "
+"``CustomType``, caso uma subclasse esteja sendo instanciada) e quaisquer "
+"argumentos passados quando o tipo foi chamado, e deve devolver a instância "
+"criada. Manipuladores ``tp_new`` sempre aceitam argumentos posicionais e "
+"argumentos nomeados, mas frequentemente os ignoram, deixando o tratamento "
+"dos argumentos para os métodos inicializadores (ou seja, ``tp_init`` em C ou "
+"``__init__`` em Python)."
 
 #: ../../extending/newtypes_tutorial.rst:336
 msgid ""
 "``tp_new`` shouldn't call ``tp_init`` explicitly, as the interpreter will do "
 "it itself."
 msgstr ""
+"``tp_new`` não deve chamar ``tp_init`` explicitamente, pois o interpretador "
+"fará isso por conta própria."
 
 #: ../../extending/newtypes_tutorial.rst:339
 msgid ""
 "The ``tp_new`` implementation calls the :c:member:`~PyTypeObject.tp_alloc` "
 "slot to allocate memory::"
 msgstr ""
+"A implementação de ``tp_new`` chama o slot :c:member:`~PyTypeObject."
+"tp_alloc` para alocar memória::"
 
 #: ../../extending/newtypes_tutorial.rst:344
 msgid ""
 "Since memory allocation may fail, we must check the :c:member:`~PyTypeObject."
 "tp_alloc` result against ``NULL`` before proceeding."
 msgstr ""
+"Como a alocação de memória pode falhar, precisamos verificar se o resultado "
+"de :c:member:`~PyTypeObject.tp_alloc` é ``NULL`` antes de prosseguir."
 
 #: ../../extending/newtypes_tutorial.rst:348
 msgid ""
@@ -459,6 +475,10 @@ msgid ""
 "class, which is :class:`object` by default.  Most types use the default "
 "allocation strategy."
 msgstr ""
+"Nós não preenchemos o campo :c:member:`~PyTypeObject.tp_alloc` por conta "
+"própria. Em vez disso, :c:func:`PyType_Ready` o preenche herdando-o da nossa "
+"classe base, que por padrão é :class:`object`. A maioria dos tipos usa a "
+"estratégia de alocação padrão."
 
 #: ../../extending/newtypes_tutorial.rst:354
 msgid ""
@@ -478,10 +498,12 @@ msgid ""
 "We also define an initialization function which accepts arguments to provide "
 "initial values for our instance::"
 msgstr ""
+"Também definimos uma função de inicialização que aceita argumentos para "
+"fornecer valores iniciais para nosso instância::"
 
 #: ../../extending/newtypes_tutorial.rst:393
 msgid "by filling the :c:member:`~PyTypeObject.tp_init` slot. ::"
-msgstr ""
+msgstr "preenchendo o campo :c:member:`~PyTypeObject.tp_init`::"
 
 #: ../../extending/newtypes_tutorial.rst:397
 msgid ""
@@ -539,17 +561,23 @@ msgid ""
 "tp_dealloc` handler on a type which doesn't support cyclic garbage "
 "collection [#]_."
 msgstr ""
+"quando estamos decrementando uma contagem de referências em um manipulador :"
+"c:member:`~PyTypeObject.tp_dealloc` de um tipo que não oferece suporte à "
+"coleta de lixo cíclica [#]_."
 
 #: ../../extending/newtypes_tutorial.rst:435
 msgid ""
 "We want to expose our instance variables as attributes. There are a number "
 "of ways to do that. The simplest way is to define member definitions::"
 msgstr ""
+"Queremos expor nossas variáveis de instância como atributos. Há várias "
+"maneiras de fazer isso. A forma mais simples é declarar definições de "
+"membros::"
 
 #: ../../extending/newtypes_tutorial.rst:448
 msgid ""
 "and put the definitions in the :c:member:`~PyTypeObject.tp_members` slot::"
-msgstr ""
+msgstr "e colocar as definições no slot :c:member:`~PyTypeObject.tp_members`::"
 
 #: ../../extending/newtypes_tutorial.rst:452
 msgid ""
@@ -557,6 +585,9 @@ msgid ""
 "documentation string.  See the :ref:`Generic-Attribute-Management` section "
 "below for details."
 msgstr ""
+"Cada definição de membro possui um nome, um tipo, um deslocamento, "
+"sinalizadores de acesso e uma string de documentação. Consulte a seção :ref:"
+"`Generic-Attribute-Management` abaixo para mais detalhes."
 
 #: ../../extending/newtypes_tutorial.rst:456
 msgid ""
@@ -568,6 +599,14 @@ msgid ""
 "``NULL`` values, the members can be set to ``NULL`` if the attributes are "
 "deleted."
 msgstr ""
+"Uma desvantagem dessa abordagem é que ela não fornece uma forma de "
+"restringir os tipos de objetos que podem ser atribuídos aos atributos em "
+"Python. Esperamos que os nomes first e last sejam strings, mas qualquer "
+"objeto Python pode ser atribuído. Além disso, os atributos podem ser "
+"excluídos, fazendo com que os ponteiros em C sejam definidos como ``NULL``. "
+"Mesmo que possamos garantir que os membros sejam inicializados com valores "
+"não ``NULL``, eles ainda podem acabar sendo definidos como ``NULL`` caso os "
+"atributos sejam apagados."
 
 #: ../../extending/newtypes_tutorial.rst:463
 msgid ""
@@ -610,7 +649,7 @@ msgstr ""
 
 #: ../../extending/newtypes_tutorial.rst:511
 msgid "and assign it to the :c:member:`~PyTypeObject.tp_methods` slot::"
-msgstr ""
+msgstr "e atribuí-lo para o slot:: :c:member:`~PyTypeObject.tp_methods`"
 
 #: ../../extending/newtypes_tutorial.rst:515
 msgid ""
@@ -671,7 +710,7 @@ msgstr ""
 
 #: ../../extending/newtypes_tutorial.rst:592
 msgid "We create an array of :c:type:`PyGetSetDef` structures::"
-msgstr ""
+msgstr "Nós criar um vetor de estruturas:: :c:type:`PyGetSetDef` "
 
 #: ../../extending/newtypes_tutorial.rst:602
 msgid "and register it in the :c:member:`~PyTypeObject.tp_getset` slot::"
@@ -683,6 +722,9 @@ msgid ""
 "mentioned above.  In this case, we aren't using a closure, so we just pass "
 "``NULL``."
 msgstr ""
+"A última entrada em uma estrutura :c:type:`PyGetSetDef` é o “closure” "
+"mencionado acima. Neste caso, não estamos usando um closure, então "
+"simplesmente passamos ``NULL``."
 
 #: ../../extending/newtypes_tutorial.rst:609
 msgid "We also remove the member definitions for these attributes::"
@@ -693,6 +735,8 @@ msgid ""
 "We also need to update the :c:member:`~PyTypeObject.tp_init` handler to only "
 "allow strings [#]_ to be passed::"
 msgstr ""
+"Também precisamos atualizar o manipulador :c:member:`~PyTypeObject."
+"tp_init`para permitir apenas strings [#]_ como valores passados::"
 
 #: ../../extending/newtypes_tutorial.rst:646
 msgid ""
@@ -703,6 +747,13 @@ msgid ""
 "these calls is in the ``tp_dealloc`` implementation, where there is the "
 "possibility that the initialization of these members failed in ``tp_new``."
 msgstr ""
+"Com essas alterações, podemos garantir que os membros ``first`` e ``last`` "
+"nunca sejam ``NULL``, de modo que podemos remover quase todas as "
+"verificações de valores ``NULL``. Isso significa que a maioria das chamadas "
+"para:c:func:`Py_XDECREF`pode ser substituída por chamadas para :c:func:"
+"`Py_DECREF`. O único lugar em que não podemos substituir essas chamadas é na "
+"implementação de ``tp_dealloc``, onde existe a possibilidade de que a "
+"inicialização desses membros tenha falhado em ``tp_new``."
 
 #: ../../extending/newtypes_tutorial.rst:653
 msgid ""
@@ -710,6 +761,9 @@ msgid ""
 "initialization function, as we did before, and we add an extra definition to "
 "the :file:`setup.py` file."
 msgstr ""
+"Também renomeamos a função de inicialização do módulo e o nome do módulo "
+"dentro da função de inicialização, como fizemos anteriormente, e adicionamos "
+"uma definição extra ao arquivo :file:`setup.py`."
 
 #: ../../extending/newtypes_tutorial.rst:659
 msgid "Supporting cyclic garbage collection"
@@ -721,6 +775,10 @@ msgid ""
 "can identify unneeded objects even when their reference counts are not zero. "
 "This can happen when objects are involved in cycles.  For example, consider:"
 msgstr ""
+"O Python possui um coletor de lixo <garbage collection> que pode identificar "
+"objetos que não são mais necessários mesmo quando suas contagens de "
+"referência não são zero. Isso pode acontecer quando os objetos participam de "
+"ciclos. Por exemplo, considere:"
 
 #: ../../extending/newtypes_tutorial.rst:671
 msgid ""
@@ -729,6 +787,10 @@ msgid ""
 "zero. Fortunately, Python's cyclic garbage collector will eventually figure "
 "out that the list is garbage and free it."
 msgstr ""
+"Neste exemplo, criamos uma lista que contém a si mesma. Quando a excluímos, "
+"ela ainda tem um referência dela mesma. Sua contagem de referências não cai "
+"para zero. Felizmente, o coletor de lixo cíclico do Python acabará "
+"descobrindo que a lista é lixo e a liberará."
 
 #: ../../extending/newtypes_tutorial.rst:676
 msgid ""
@@ -752,6 +814,8 @@ msgid ""
 "First, the traversal method lets the cyclic GC know about subobjects that "
 "could participate in cycles::"
 msgstr ""
+"Primeiro, o método de travessia informa ao coletor de lixo cíclico quais "
+"subobjetos podem participar de ciclos::"
 
 #: ../../extending/newtypes_tutorial.rst:717
 msgid ""
@@ -768,18 +832,26 @@ msgid ""
 "functions.  With :c:func:`Py_VISIT`, we can minimize the amount of "
 "boilerplate in ``Custom_traverse``::"
 msgstr ""
+"O Python fornece o macro :c:func:`Py_VISIT`, que automatiza as chamadas às "
+"funções visit. Com :c:func:Py_VISIT, podemos minimizar a quantidade de "
+"boilerplate em Custom_traverse::"
 
 #: ../../extending/newtypes_tutorial.rst:736
 msgid ""
 "The :c:member:`~PyTypeObject.tp_traverse` implementation must name its "
 "arguments exactly *visit* and *arg* in order to use :c:func:`Py_VISIT`."
 msgstr ""
+"A implementação de :c:member:`~PyTypeObject.tp_traverse` deve nomear seus "
+"argumentos exatamente como *visit* e *arg* para que seja possível usar :c:"
+"func:`Py_VISIT`."
 
 #: ../../extending/newtypes_tutorial.rst:739
 msgid ""
 "Second, we need to provide a method for clearing any subobjects that can "
 "participate in cycles::"
 msgstr ""
+"Segundo, precisamos fornecer um método para limpar quaisquer subobjetos que "
+"possam participar de ciclos::"
 
 #: ../../extending/newtypes_tutorial.rst:750
 msgid ""
@@ -790,10 +862,16 @@ msgid ""
 "attribute's destructor would call back into code that reads the attribute "
 "again (*especially* if there is a reference cycle)."
 msgstr ""
+"Observe o uso do macro :c:func:`Py_CLEAR`. Ele é a forma recomendada e "
+"segura de limpar atributos de dados de tipos arbitrários enquanto decrementa "
+"suas contagens de referências. Se você chamasse :c:func:`Py_XDECREF` no "
+"atributo antes de defini-lo como ``NULL``, haveria a possibilidade de que o "
+"destrutor do atributo chamasse novamente algum código que lesse o atributo "
+"(especialmente se houver um ciclo de referência)."
 
 #: ../../extending/newtypes_tutorial.rst:758
 msgid "You could emulate :c:func:`Py_CLEAR` by writing::"
-msgstr ""
+msgstr "Você poderia emular :c:func:`Py_CLEAR` ao escrever::"
 
 #: ../../extending/newtypes_tutorial.rst:765
 msgid ""
@@ -801,6 +879,9 @@ msgid ""
 "`Py_CLEAR` when deleting an attribute.  Don't try to micro-optimize at the "
 "expense of robustness!"
 msgstr ""
+"Apesar disso, é muito mais fácil e menos propenso a erros, usar sempre :c:"
+"func:`Py_CLEAR` ao excluir um atributo. Não tente micro‐otimizar às custas "
+"da robustez!"
 
 #: ../../extending/newtypes_tutorial.rst:769
 msgid ""
@@ -811,6 +892,12 @@ msgid ""
 "members. Here is our reimplemented deallocator using :c:func:"
 "`PyObject_GC_UnTrack` and ``Custom_clear``::"
 msgstr ""
+"O desalocador ``Custom_dealloc`` pode executar código arbitrário ao limpar "
+"atributos. Isso significa que o GC pode ser acionado dentro da função. Como "
+"o GC assume que a contagem de referências não é zero, precisamos remover o "
+"objeto do rastreamento do GC chamando :c:func:`PyObject_GC_UnTrack`antes de "
+"limpar os membros. A seguir está nossa versão reimplementada do desalocador "
+"usando :c:func:`PyObject_GC_UnTrack` e ``Custom_clear``::"
 
 #: ../../extending/newtypes_tutorial.rst:784
 msgid ""
@@ -824,6 +911,10 @@ msgid ""
 "them for cyclic garbage collection.  Most extensions will use the versions "
 "automatically provided."
 msgstr ""
+"Isso é praticamente tudo. Se tivéssemos escrito manipuladores personalizados "
+"para :c:member:`~PyTypeObject.tp_alloc` ou :c:member:`~PyTypeObject."
+"tp_free`, precisaríamos adaptá-los para a coleta de lixo cíclica. A maior "
+"parte das extensões usará as versões fornecidas automaticamente."
 
 #: ../../extending/newtypes_tutorial.rst:794
 msgid "Subclassing other types"
@@ -836,6 +927,11 @@ msgid ""
 "can easily use the :c:type:`PyTypeObject` it needs. It can be difficult to "
 "share these :c:type:`PyTypeObject` structures between extension modules."
 msgstr ""
+"É possível criar novos tipos de extensão derivados de tipos já existentes. É "
+"mais fácil herdar dos tipos embutidos, já que uma extensão pode usar "
+"diretamente o :c:type:`PyTypeObject` de que precisa. Pode ser difícil "
+"compartilhar essas estruturas :c:type:`PyTypeObject` entre módulos de "
+"extensão distintos."
 
 #: ../../extending/newtypes_tutorial.rst:801
 msgid ""
@@ -858,6 +954,9 @@ msgid ""
 "object structure must be the first value.  The base type will already "
 "include the :c:func:`PyObject_HEAD` at the beginning of its structure."
 msgstr ""
+"A diferença principal para objetos de tipos derivados é que a estrutura de "
+"objeto do tipo base deve ser o primeiro campo. O tipo base já inclui o :c:"
+"func:`PyObject_HEAD` no início de sua própria estrutura."
 
 #: ../../extending/newtypes_tutorial.rst:833
 msgid ""
@@ -880,6 +979,12 @@ msgid ""
 "memory for the object with its :c:member:`~PyTypeObject.tp_alloc`, but let "
 "the base class handle it by calling its own :c:member:`~PyTypeObject.tp_new`."
 msgstr ""
+"Esse padrão é importante ao escrever um tipo que possui membros "
+"personalizados em :c:member:`~PyTypeObject.tp_new` e :c:member:"
+"`~PyTypeObject.tp_dealloc`. O manipulador :c:member:`~PyTypeObject."
+"tp_new`não deve realmente criar a memória do objeto usando o seu próprio :c:"
+"member:`~PyTypeObject.tp_alloc`; em vez disso, deve permitir que a classe "
+"base faça isso, chamando o seu próprio :c:member:`~PyTypeObject.tp_new`."
 
 #: ../../extending/newtypes_tutorial.rst:854
 msgid ""
@@ -898,6 +1003,11 @@ msgid ""
 "tp_alloc` slot with :c:func:`PyType_GenericNew` -- the allocation function "
 "from the base type will be inherited."
 msgstr ""
+"Antes de chamar :c:func:`PyType_Ready`, a estrutura do tipo deve ter o slot :"
+"c:member:`~PyTypeObject.tp_base` preenchido. Ao derivarmos um tipo "
+"existente, não é necessário preencher o slot :c:member:`~PyTypeObject."
+"tp_alloc` com :c:func:`PyType_GenericNew` — a função de alocação do tipo "
+"base será herdada."
 
 #: ../../extending/newtypes_tutorial.rst:888
 msgid ""
@@ -922,6 +1032,8 @@ msgid ""
 "We relied on this in the :c:member:`~PyTypeObject.tp_dealloc` handler in "
 "this example, because our type doesn't support garbage collection."
 msgstr ""
+"Confiamos nisso no manipulador:c:member:`~PyTypeObject.tp_dealloc` neste "
+"exemplo, porque o nosso tipo não oferece suporte à coleta de lixo."
 
 #: ../../extending/newtypes_tutorial.rst:900
 msgid ""
