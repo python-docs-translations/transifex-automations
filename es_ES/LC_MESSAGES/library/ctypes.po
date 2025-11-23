@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-21 14:14+0000\n"
+"POT-Creation-Date: 2025-11-23 14:12+0000\n"
 "PO-Revision-Date: 2025-09-16 00:01+0000\n"
 "Last-Translator: eulalio barbero espinosa <eulalio@disroot.org>, 2025\n"
 "Language-Team: Spanish (Spain) (https://app.transifex.com/python-doc/"
@@ -1036,26 +1036,36 @@ msgid ""
 "convention for variadic functions is different than that for regular "
 "functions."
 msgstr ""
+"En muchas plataformas, llamar a funciones variádicas a través de ctypes es "
+"exactamente lo mismo que llamar a funciones con un número fijo de "
+"parámetros. En algunas plataformas, y en particular en ARM64 para "
+"plataformas Apple, la convención de llamada a funciones variádicas es "
+"diferente a la de las funciones normales."
 
 #: ../../library/ctypes.rst:418
 msgid ""
 "On those platforms it is required to specify the :attr:`~_CFuncPtr.argtypes` "
 "attribute for the regular, non-variadic, function arguments:"
 msgstr ""
+"En estas plataformas es necesario especificar el atributo :attr:`~_CFuncPtr."
+"argtypes` para los argumentos de función normales, no variados:"
 
 #: ../../library/ctypes.rst:421
 msgid "libc.printf.argtypes = [ctypes.c_char_p]"
-msgstr ""
+msgstr "libc.printf.argtypes = [ctypes.c_char_p]"
 
 #: ../../library/ctypes.rst:425
 msgid ""
 "Because specifying the attribute does not inhibit portability it is advised "
 "to always specify :attr:`~_CFuncPtr.argtypes` for all variadic functions."
 msgstr ""
+"Dado que la especificación del atributo no inhibe la portabilidad, se "
+"aconseja especificar siempre :attr:`~_CFuncPtr.argtypes` para todas las "
+"funciones variádicas."
 
 #: ../../library/ctypes.rst:432
 msgid "Calling functions with your own custom data types"
-msgstr ""
+msgstr "Llamada a funciones con tipos de datos personalizados"
 
 #: ../../library/ctypes.rst:434
 msgid ""
@@ -1065,6 +1075,12 @@ msgid ""
 "The attribute must be an integer, string, bytes, a :mod:`ctypes` instance, "
 "or an object with an :attr:`!_as_parameter_` attribute::"
 msgstr ""
+"También puede personalizar la conversión de argumentos :mod:`ctypes` para "
+"permitir que instancias de sus propias clases se utilicen como argumentos de "
+"función. :mod:`ctypes` busca un atributo :attr:`!_as_parameter_` y lo "
+"utiliza como argumento de función. El atributo debe ser un entero, una "
+"cadena, bytes, una instancia de :mod:`ctypes` o un objeto con un atributo :"
+"attr:`!_as_parameter_`::"
 
 #: ../../library/ctypes.rst:440
 msgid ""
@@ -1078,6 +1094,15 @@ msgid ""
 "19\n"
 ">>>"
 msgstr ""
+">>> class Bottles:\n"
+"...     def __init__(self, number):\n"
+"...         self._as_parameter_ = number\n"
+"...\n"
+">>> bottles = Bottles(42)\n"
+">>> printf(b\"%d bottles of beer\\n\", bottles)\n"
+"42 bottles of beer\n"
+"19\n"
+">>>"
 
 #: ../../library/ctypes.rst:450
 msgid ""
@@ -1085,16 +1110,22 @@ msgid ""
 "_as_parameter_` instance variable, you could define a :class:`property` "
 "which makes the attribute available on request."
 msgstr ""
+"Si no desea almacenar los datos de la instancia en la variable de instancia :"
+"attr:`!_as_parameter_`, puede definir una :class:`property` que haga que el "
+"atributo esté disponible cuando se solicite."
 
 #: ../../library/ctypes.rst:458
 msgid "Specifying the required argument types (function prototypes)"
 msgstr ""
+"Especificación de los tipos de argumentos necesarios (prototipos de función)"
 
 #: ../../library/ctypes.rst:460
 msgid ""
 "It is possible to specify the required argument types of functions exported "
 "from DLLs by setting the :attr:`~_CFuncPtr.argtypes` attribute."
 msgstr ""
+"Es posible especificar los tipos de argumentos requeridos de las funciones "
+"exportadas de las DLL estableciendo el atributo :attr:`~_CFuncPtr.argtypes`."
 
 #: ../../library/ctypes.rst:463
 msgid ""
@@ -1104,6 +1135,11 @@ msgid ""
 "string, on the other hand this is quite handy to experiment with this "
 "feature)::"
 msgstr ""
+":attr:`~_CFuncPtr.argtypes` debe ser una secuencia de tipos de datos C (la "
+"función :func:`!printf` probablemente no es un buen ejemplo aquí, porque "
+"toma un número variable y diferentes tipos de parámetros dependiendo de la "
+"cadena de formato, por otro lado esto es bastante práctico para experimentar "
+"con esta característica)::"
 
 #: ../../library/ctypes.rst:468
 msgid ""
@@ -1113,6 +1149,11 @@ msgid ""
 "37\n"
 ">>>"
 msgstr ""
+">>> printf.argtypes = [c_char_p, c_char_p, c_int, c_double]\n"
+">>> printf(b\"String '%s', Int %d, Double %f\\n\", b\"Hi\", 10, 2.2)\n"
+"String 'Hi', Int 10, Double 2.200000\n"
+"37\n"
+">>>"
 
 #: ../../library/ctypes.rst:474
 msgid ""
@@ -1120,6 +1161,9 @@ msgid ""
 "prototype for a C function), and tries to convert the arguments to valid "
 "types::"
 msgstr ""
+"Especificar un formato protege contra tipos de argumentos incompatibles "
+"(igual que un prototipo para una función C), e intenta convertir los "
+"argumentos a tipos válidos::"
 
 #: ../../library/ctypes.rst:477
 msgid ""
@@ -1147,10 +1191,20 @@ msgid ""
 "bytes, a :mod:`ctypes` instance, or an object with an :attr:`!"
 "_as_parameter_` attribute."
 msgstr ""
+"Si has definido tus propias clases que pasas a las llamadas a función, "
+"tienes que implementar un método de clase :meth:`~_CData.from_param` para "
+"poder usarlas en la secuencia :attr:`~_CFuncPtr.argtypes`. El método de "
+"clase :meth:`~_CData.from_param` recibe el objeto Python pasado a la llamada "
+"a función, debería hacer una comprobación de tipo o lo que sea necesario "
+"para asegurarse de que este objeto es aceptable, y luego devolver el objeto "
+"mismo, su atributo :attr:`!_as_parameter_`, o lo que quieras pasar como "
+"argumento de la función C en este caso. De nuevo, el resultado debería ser "
+"un entero, una cadena, bytes, una instancia de :mod:`ctypes`, o un objeto "
+"con un atributo :attr:`!_as_parameter_`."
 
 #: ../../library/ctypes.rst:500
 msgid "Return types"
-msgstr ""
+msgstr "Tipos de devolución"
 
 #: ../../library/ctypes.rst:510
 msgid ""
@@ -1158,6 +1212,9 @@ msgid ""
 "return types can be specified by setting the :attr:`~_CFuncPtr.restype` "
 "attribute of the function object."
 msgstr ""
+"Por defecto, se supone que las funciones devuelven el tipo C :c:expr:`int`.  "
+"Se pueden especificar otros tipos de retorno estableciendo el atributo :attr:"
+"`~_CFuncPtr.restype` del objeto de función."
 
 #: ../../library/ctypes.rst:514
 msgid ""
@@ -1165,14 +1222,19 @@ msgid ""
 "type:`time_t` might be of a different type than the default return type :c:"
 "expr:`int`, you should specify the :attr:`!restype` attribute::"
 msgstr ""
+"El prototipo en C de :c:func:`time` es ``time_t time(time_t *)``. Dado que :"
+"c:type:`time_t` puede ser de un tipo diferente al tipo de retorno por "
+"defecto :c:expr:`int`, debe especificar el atributo :attr:`!restype`::"
 
 #: ../../library/ctypes.rst:518
 msgid ">>> libc.time.restype = c_time_t"
-msgstr ""
+msgstr ">>> libc.time.restype = c_time_t"
 
 #: ../../library/ctypes.rst:520
 msgid "The argument types can be specified using :attr:`~_CFuncPtr.argtypes`::"
 msgstr ""
+"Los tipos de argumento pueden especificarse utilizando :attr:`~_CFuncPtr."
+"argtypes`::"
 
 #: ../../library/ctypes.rst:522
 msgid ">>> libc.time.argtypes = (POINTER(c_time_t),)"
