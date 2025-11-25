@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-23 14:12+0000\n"
+"POT-Creation-Date: 2025-11-25 14:15+0000\n"
 "PO-Revision-Date: 2025-09-16 00:01+0000\n"
 "Last-Translator: eulalio barbero espinosa <eulalio@disroot.org>, 2025\n"
 "Language-Team: Spanish (Spain) (https://app.transifex.com/python-doc/"
@@ -1026,7 +1026,7 @@ msgstr ""
 
 #: ../../library/ctypes.rst:411
 msgid "Calling variadic functions"
-msgstr ""
+msgstr "Llamada a funciones variádicas"
 
 #: ../../library/ctypes.rst:413
 msgid ""
@@ -1238,25 +1238,31 @@ msgstr ""
 
 #: ../../library/ctypes.rst:522
 msgid ">>> libc.time.argtypes = (POINTER(c_time_t),)"
-msgstr ""
+msgstr ">>> libc.time.argtypes = (POINTER(c_time_t),)"
 
 #: ../../library/ctypes.rst:524
 msgid ""
 "To call the function with a ``NULL`` pointer as first argument, use "
 "``None``::"
 msgstr ""
+"Para llamar a la función con un puntero ``NULL`` como primer argumento, usar "
+"``None``::"
 
 #: ../../library/ctypes.rst:526
 msgid ""
 ">>> print(libc.time(None))\n"
 "1150640792"
 msgstr ""
+">>> print(libc.time(None))\n"
+"1150640792"
 
 #: ../../library/ctypes.rst:529
 msgid ""
 "Here is a more advanced example, it uses the :func:`!strchr` function, which "
 "expects a string pointer and a char, and returns a pointer to a string::"
 msgstr ""
+"He aquí un ejemplo más avanzado, utiliza la función :func:`!strchr`, que "
+"espera un puntero a cadena y un char, y devuelve un puntero a una cadena::"
 
 #: ../../library/ctypes.rst:532
 msgid ""
@@ -1270,6 +1276,16 @@ msgid ""
 "None\n"
 ">>>"
 msgstr ""
+">>> strchr = libc.strchr\n"
+">>> strchr(b \"abcdef\", ord(\"d\"))\n"
+"8059983\n"
+">>> strchr.restype = c_char_p # c_char_p es un puntero a una cadena de "
+"caracteres\n"
+">>> strchr(b \"abcdef\", ord(\"d\"))\n"
+"b'def'\n"
+">>> print(strchr(b \"abcdef\", ord(\"x\")))\n"
+"Ninguno\n"
+">>>"
 
 #: ../../library/ctypes.rst:542
 msgid ""
@@ -1277,6 +1293,9 @@ msgid ""
 "the :attr:`~_CFuncPtr.argtypes` attribute, and the second argument will be "
 "converted from a single character Python bytes object into a C char:"
 msgstr ""
+"Si desea evitar las llamadas :func:`ord(\"x\") <ord>` anteriores, puede "
+"establecer el atributo :attr:`~_CFuncPtr.argtypes`, y el segundo argumento "
+"se convertirá de un objeto Python bytes de un solo carácter a un C char:"
 
 #: ../../library/ctypes.rst:546
 msgid ""
@@ -1294,6 +1313,19 @@ msgid ""
 "b'def'\n"
 ">>>"
 msgstr ""
+">>> strchr.restype = c_char_p\n"
+">>> strchr.argtypes = [c_char_p, c_char]\n"
+">>> strchr(b\"abcdef\", b\"d\")\n"
+"b'def'\n"
+">>> strchr(b\"abcdef\", b\"def\")\n"
+"Traceback (most recent call last):\n"
+"ctypes.ArgumentError: argument 2: TypeError: one character bytes, bytearray "
+"or integer expected\n"
+">>> print(strchr(b\"abcdef\", b\"x\"))\n"
+"None\n"
+">>> strchr(b\"abcdef\", b\"d\")\n"
+"b'def'\n"
+">>>"
 
 #: ../../library/ctypes.rst:561
 msgid ""
@@ -1304,6 +1336,12 @@ msgid ""
 "result of your function call. This is useful to check for error return "
 "values and automatically raise an exception::"
 msgstr ""
+"También puedes utilizar un objeto callable de Python (una función o una "
+"clase, por ejemplo) como atributo :attr:`~_CFuncPtr.restype`, si la función "
+"ajena devuelve un entero.  El callable será llamado con el *integer* que "
+"devuelve la función C, y el resultado de esta llamada será usado como el "
+"resultado de tu llamada a la función. Esto es útil para comprobar los "
+"valores de retorno de error y automáticamente lanzar una excepción::"
 
 #: ../../library/ctypes.rst:567
 msgid ""
@@ -1324,6 +1362,22 @@ msgid ""
 "OSError: [Errno 126] The specified module could not be found.\n"
 ">>>"
 msgstr ""
+">>> GetModuleHandle = windll.kernel32.GetModuleHandleA\n"
+">>> def ValidHandle(value):\n"
+"...     if value == 0:\n"
+"...         raise WinError()\n"
+"...     return value\n"
+"...\n"
+">>>\n"
+">>> GetModuleHandle.restype = ValidHandle\n"
+">>> GetModuleHandle(None)\n"
+"486539264\n"
+">>> GetModuleHandle(\"something silly\")\n"
+"Traceback (most recent call last):\n"
+"  File \"<stdin>\", line 1, in <module>\n"
+"  File \"<stdin>\", line 3, in ValidHandle\n"
+"OSError: [Errno 126] The specified module could not be found.\n"
+">>>"
 
 #: ../../library/ctypes.rst:584
 msgid ""
@@ -1332,6 +1386,11 @@ msgid ""
 "exception. ``WinError`` takes an optional error code parameter, if no one is "
 "used, it calls :func:`GetLastError` to retrieve it."
 msgstr ""
+"``WinError`` es una función que llamará a la api de Windows "
+"``FormatMessage()`` para obtener la representación en cadena de un código de "
+"error, y *devuelve* una excepción. ``WinError`` toma un parámetro opcional "
+"de código de error, si no se usa ninguno, llama a :func:`GetLastError` para "
+"recuperarlo."
 
 #: ../../library/ctypes.rst:589
 msgid ""
@@ -1339,10 +1398,13 @@ msgid ""
 "through the :attr:`~_CFuncPtr.errcheck` attribute; see the reference manual "
 "for details."
 msgstr ""
+"Tener en cuenta que existe un mecanismo de comprobación de errores mucho más "
+"potente a través del atributo :attr:`~_CFuncPtr.errcheck`; consultar el "
+"manual de referencia para obtener más información."
 
 #: ../../library/ctypes.rst:597
 msgid "Passing pointers (or: passing parameters by reference)"
-msgstr ""
+msgstr "Pasar punteros (o: pasar parámetros por referencia)"
 
 #: ../../library/ctypes.rst:599
 msgid ""
@@ -1351,6 +1413,10 @@ msgid ""
 "large to be passed by value. This is also known as *passing parameters by "
 "reference*."
 msgstr ""
+"A veces una función api de C espera un *pointer* a un tipo de datos como "
+"parámetro, probablemente para escribir en la ubicación correspondiente, o si "
+"los datos son demasiado grandes para ser pasados por valor. Esto también se "
+"conoce como *passing parameters by reference*."
 
 #: ../../library/ctypes.rst:603
 msgid ""
@@ -1360,6 +1426,11 @@ msgid ""
 "constructs a real pointer object, so it is faster to use :func:`byref` if "
 "you don't need the pointer object in Python itself::"
 msgstr ""
+":mod:`ctypes` exporta la función :func:`byref` que se utiliza para pasar "
+"parámetros por referencia.  Se puede conseguir el mismo efecto con la "
+"función :func:`pointer`, aunque :func:`pointer` hace mucho más trabajo ya "
+"que construye un objeto puntero real, por lo que es más rápido utilizar :"
+"func:`byref` si no se necesita el objeto puntero en el propio Python::"
 
 #: ../../library/ctypes.rst:609
 msgid ""
@@ -1375,10 +1446,21 @@ msgid ""
 "1 3.1400001049 b'Hello'\n"
 ">>>"
 msgstr ""
+">>> i = c_int()\n"
+">>> f = c_float()\n"
+">>> s = create_string_buffer(b'\\000' * 32)\n"
+">>> print(i.value, f.value, repr(s.value))\n"
+"0 0.0 b''\n"
+">>> libc.sscanf(b\"1 3.14 Hello\", b\"%d %f %s\",\n"
+"...             byref(i), byref(f), s)\n"
+"3\n"
+">>> print(i.value, f.value, repr(s.value))\n"
+"1 3.1400001049 b'Hello'\n"
+">>>"
 
 #: ../../library/ctypes.rst:625
 msgid "Structures and unions"
-msgstr ""
+msgstr "Estructuras y uniones"
 
 #: ../../library/ctypes.rst:627
 msgid ""
@@ -1388,12 +1470,20 @@ msgid ""
 "_fields_` must be a list of *2-tuples*, containing a *field name* and a "
 "*field type*."
 msgstr ""
+"Las estructuras y uniones deben derivar de las clases base :class:"
+"`Structure` y :class:`Union` que se definen en el módulo :mod:`ctypes`. Cada "
+"subclase debe definir un atributo :attr:`~Structure._fields_`. :attr:`!"
+"_fields_` debe ser una lista de *2-tuplas*, que contenga un *nombre de "
+"campo* y un *tipo de campo*."
 
 #: ../../library/ctypes.rst:632
 msgid ""
 "The field type must be a :mod:`ctypes` type like :class:`c_int`, or any "
 "other derived :mod:`ctypes` type: structure, union, array, pointer."
 msgstr ""
+"El tipo de campo debe ser un tipo :mod:`ctypes` como :class:`c_int`, o "
+"cualquier otro tipo derivado :mod:`ctypes`: estructura, unión, matriz, "
+"puntero."
 
 #: ../../library/ctypes.rst:635
 msgid ""
@@ -1401,6 +1491,9 @@ msgid ""
 "named *x* and *y*, and also shows how to initialize a structure in the "
 "constructor::"
 msgstr ""
+"Aquí hay un ejemplo simple de una estructura POINT, que contiene dos enteros "
+"llamados *x* e *y*, y también muestra cómo inicializar una estructura en el "
+"constructor::"
 
 #: ../../library/ctypes.rst:638
 msgid ""
@@ -1421,18 +1514,39 @@ msgid ""
 "TypeError: too many initializers\n"
 ">>>"
 msgstr ""
+">>> from ctypes import *\n"
+">>> class POINT(Structure):\n"
+"...     _fields_ = [(\"x\", c_int),\n"
+"...                 (\"y\", c_int)]\n"
+"...\n"
+">>> point = POINT(10, 20)\n"
+">>> print(point.x, point.y)\n"
+"10 20\n"
+">>> point = POINT(y=5)\n"
+">>> print(point.x, point.y)\n"
+"0 5\n"
+">>> POINT(1, 2, 3)\n"
+"Traceback (most recent call last):\n"
+"  File \"<stdin>\", line 1, in <module>\n"
+"TypeError: too many initializers\n"
+">>>"
 
 #: ../../library/ctypes.rst:655
 msgid ""
 "You can, however, build much more complicated structures.  A structure can "
 "itself contain other structures by using a structure as a field type."
 msgstr ""
+"Sin embargo, se pueden construir estructuras mucho más complicadas.  Una "
+"estructura puede contener a su vez otras estructuras utilizando una "
+"estructura como tipo de campo."
 
 #: ../../library/ctypes.rst:658
 msgid ""
 "Here is a RECT structure which contains two POINTs named *upperleft* and "
 "*lowerright*::"
 msgstr ""
+"Esta es una estructura RECT que contiene dos PUNTOS llamados "
+"*arribaizquierda* y *abajoderecha*::"
 
 #: ../../library/ctypes.rst:661
 msgid ""
@@ -1447,18 +1561,32 @@ msgid ""
 "0 0\n"
 ">>>"
 msgstr ""
+">>> class RECT(Structure):\n"
+"...     _fields_ = [(\"upperleft\", POINT),\n"
+"...                 (\"lowerright\", POINT)]\n"
+"...\n"
+">>> rc = RECT(point)\n"
+">>> print(rc.upperleft.x, rc.upperleft.y)\n"
+"0 5\n"
+">>> print(rc.lowerright.x, rc.lowerright.y)\n"
+"0 0\n"
+">>>"
 
 #: ../../library/ctypes.rst:672
 msgid ""
 "Nested structures can also be initialized in the constructor in several "
 "ways::"
 msgstr ""
+"Las estructuras anidadas también se pueden inicializar en el constructor de "
+"varias maneras::"
 
 #: ../../library/ctypes.rst:674
 msgid ""
 ">>> r = RECT(POINT(1, 2), POINT(3, 4))\n"
 ">>> r = RECT((1, 2), (3, 4))"
 msgstr ""
+">>> r = RECT(POINT(1, 2), POINT(3, 4))\n"
+">>> r = RECT((1, 2), (3, 4))"
 
 #: ../../library/ctypes.rst:677
 msgid ""
@@ -1483,6 +1611,11 @@ msgid ""
 "guaranteed by the library to work in the general case.  Unions and "
 "structures with bit-fields should always be passed to functions by pointer."
 msgstr ""
+":mod:`ctypes` no permite pasar uniones o estructuras con campos de bits a "
+"funciones por valor.  Aunque esto puede funcionar en x86 de 32 bits, la "
+"biblioteca no garantiza que funcione en el caso general.  Las uniones y "
+"estructuras con campos de bits deben pasarse siempre a las funciones por "
+"puntero."
 
 #: ../../library/ctypes.rst:698
 msgid "Structure/union layout, alignment and byte order"
@@ -1512,10 +1645,15 @@ msgid ""
 "`BigEndianUnion`, and :class:`LittleEndianUnion` base classes.  These "
 "classes cannot contain pointer fields."
 msgstr ""
+":mod:`ctypes` utiliza el orden de bytes nativo para Estructuras y Uniones.  "
+"Para construir estructuras con un orden de bytes no nativo, puede utilizar "
+"una de las clases base :class:`BigEndianStructure`, :class:"
+"`LittleEndianStructure`, :class:`BigEndianUnion`, y :class:"
+"`LittleEndianUnion`.  Estas clases no pueden contener campos de puntero."
 
 #: ../../library/ctypes.rst:720
 msgid "Bit fields in structures and unions"
-msgstr ""
+msgstr "Campos de bits en estructuras y uniones"
 
 #: ../../library/ctypes.rst:722
 msgid ""
@@ -1523,6 +1661,9 @@ msgid ""
 "fields are only possible for integer fields, the bit width is specified as "
 "the third item in the :attr:`~Structure._fields_` tuples::"
 msgstr ""
+"Es posible crear estructuras y uniones que contengan campos de bits. Los "
+"campos de bits sólo son posibles para campos enteros, la anchura del bit se "
+"especifica como tercer elemento en las tuplas :attr:`~Structure._fields_`::"
 
 #: ../../library/ctypes.rst:726
 msgid ""
@@ -1547,29 +1688,35 @@ msgstr ""
 
 #: ../../library/ctypes.rst:746
 msgid "Arrays"
-msgstr ""
+msgstr "Matrices"
 
 #: ../../library/ctypes.rst:748
 msgid ""
 "Arrays are sequences, containing a fixed number of instances of the same "
 "type."
 msgstr ""
+"Las matrices son secuencias que contienen un número fijo de instancias del "
+"mismo tipo."
 
 #: ../../library/ctypes.rst:750
 msgid ""
 "The recommended way to create array types is by multiplying a data type with "
 "a positive integer::"
 msgstr ""
+"La forma recomendada de crear tipos de array es multiplicando un tipo de "
+"dato por un entero positivo::"
 
 #: ../../library/ctypes.rst:753
 msgid "TenPointsArrayType = POINT * 10"
-msgstr ""
+msgstr "TenPointsArrayType = POINT * 10"
 
 #: ../../library/ctypes.rst:755
 msgid ""
 "Here is an example of a somewhat artificial data type, a structure "
 "containing 4 POINTs among other stuff::"
 msgstr ""
+"He aquí un ejemplo de un tipo de datos un tanto artificial, una estructura "
+"que contiene 4 PUNTOS entre otras cosas::"
 
 #: ../../library/ctypes.rst:758
 msgid ""
@@ -1586,10 +1733,22 @@ msgid ""
 "4\n"
 ">>>"
 msgstr ""
+">>> from ctypes import *\n"
+">>> class POINT(Structure):\n"
+"...     _fields_ = (\"x\", c_int), (\"y\", c_int)\n"
+"...\n"
+">>> class MyStruct(Structure):\n"
+"...     _fields_ = [(\"a\", c_int),\n"
+"...                 (\"b\", c_float),\n"
+"...                 (\"point_array\", POINT * 4)]\n"
+">>>\n"
+">>> print(len(MyStruct().point_array))\n"
+"4\n"
+">>>"
 
 #: ../../library/ctypes.rst:771
 msgid "Instances are created in the usual way, by calling the class::"
-msgstr ""
+msgstr "Las instancias se crean de la forma habitual, llamando a la clase::"
 
 #: ../../library/ctypes.rst:773
 msgid ""
@@ -1597,16 +1756,21 @@ msgid ""
 "for pt in arr:\n"
 "    print(pt.x, pt.y)"
 msgstr ""
+"arr = TenPointsArrayType()\n"
+"for pt in arr:\n"
+"    print(pt.x, pt.y)"
 
 #: ../../library/ctypes.rst:777
 msgid ""
 "The above code print a series of ``0 0`` lines, because the array contents "
 "is initialized to zeros."
 msgstr ""
+"El código anterior imprime una serie de líneas ``0 0``, porque el contenido "
+"del array está inicializado a ceros."
 
 #: ../../library/ctypes.rst:780
 msgid "Initializers of the correct type can also be specified::"
-msgstr ""
+msgstr "También se pueden especificar inicializadores del tipo correcto::"
 
 #: ../../library/ctypes.rst:782
 msgid ""
@@ -1620,16 +1784,27 @@ msgid ""
 "1 2 3 4 5 6 7 8 9 10\n"
 ">>>"
 msgstr ""
+">>> from ctypes import *\n"
+">>> TenIntegers = c_int * 10\n"
+">>> ii = DiezIntegrantes(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)\n"
+">>> print(ii)\n"
+"<c_long_Array_10 object at 0x...>\n"
+">>> for i in ii: print(i, end=\" \")\n"
+"...\n"
+"1 2 3 4 5 6 7 8 9 10\n"
+">>>"
 
 #: ../../library/ctypes.rst:796
 msgid "Pointers"
-msgstr ""
+msgstr "Punteros"
 
 #: ../../library/ctypes.rst:798
 msgid ""
 "Pointer instances are created by calling the :func:`pointer` function on a :"
 "mod:`ctypes` type::"
 msgstr ""
+"Las instancias de puntero se crean llamando a la función :func:`pointer` en "
+"un tipo :mod:`ctypes`::"
 
 #: ../../library/ctypes.rst:801
 msgid ""
@@ -1638,12 +1813,18 @@ msgid ""
 ">>> pi = pointer(i)\n"
 ">>>"
 msgstr ""
+">>> from ctypes import *\n"
+">>> i = c_int(42)\n"
+">>> pi = pointer(i)\n"
+">>>"
 
 #: ../../library/ctypes.rst:806
 msgid ""
 "Pointer instances have a :attr:`~_Pointer.contents` attribute which returns "
 "the object to which the pointer points, the ``i`` object above::"
 msgstr ""
+"Las instancias de puntero tienen un atributo :attr:`~_Pointer.contents` que "
+"devuelve el objeto al que apunta el puntero, el objeto ``i`` anterior::"
 
 #: ../../library/ctypes.rst:809
 msgid ""
@@ -1651,12 +1832,17 @@ msgid ""
 "c_long(42)\n"
 ">>>"
 msgstr ""
+">>> pi.contents\n"
+"c_long(42)\n"
+">>>"
 
 #: ../../library/ctypes.rst:813
 msgid ""
 "Note that :mod:`ctypes` does not have OOR (original object return), it "
 "constructs a new, equivalent object each time you retrieve an attribute::"
 msgstr ""
+"Tener en cuenta que :mod:`ctypes` no tiene OOR (retorno de objeto original), "
+"construye un nuevo objeto equivalente cada vez que recupera un atributo::"
 
 #: ../../library/ctypes.rst:816
 msgid ""
@@ -1666,6 +1852,11 @@ msgid ""
 "False\n"
 ">>>"
 msgstr ""
+">>> pi.contents is i\n"
+"False\n"
+">>> pi.contents is pi.contents\n"
+"False\n"
+">>>"
 
 #: ../../library/ctypes.rst:822
 msgid ""
@@ -1673,6 +1864,9 @@ msgid ""
 "attribute would cause the pointer to point to the memory location where this "
 "is stored::"
 msgstr ""
+"La asignación de otra instancia de :class:`c_int` al atributo de contenido "
+"del puntero haría que éste apuntara a la ubicación de memoria donde se "
+"almacena::"
 
 #: ../../library/ctypes.rst:825
 msgid ""
@@ -1682,10 +1876,15 @@ msgid ""
 "c_long(99)\n"
 ">>>"
 msgstr ""
+">>> i = c_int(99)\n"
+">>> pi.contents = i\n"
+">>> pi.contents\n"
+"c_long(99)\n"
+">>>"
 
 #: ../../library/ctypes.rst:834
 msgid "Pointer instances can also be indexed with integers::"
-msgstr ""
+msgstr "Las instancias de puntero también pueden indexarse con enteros::"
 
 #: ../../library/ctypes.rst:836
 msgid ""
@@ -1693,10 +1892,13 @@ msgid ""
 "99\n"
 ">>>"
 msgstr ""
+">>> pi[0]\n"
+"99\n"
+">>>"
 
 #: ../../library/ctypes.rst:840
 msgid "Assigning to an integer index changes the pointed to value::"
-msgstr ""
+msgstr "La asignación a un índice entero cambia el valor apuntado a::"
 
 #: ../../library/ctypes.rst:842
 msgid ""
@@ -1707,6 +1909,12 @@ msgid ""
 "c_long(22)\n"
 ">>>"
 msgstr ""
+">>> print(i)\n"
+"c_long(99)\n"
+">>> pi[0] = 22\n"
+">>> print(i)\n"
+"c_long(22)\n"
+">>>"
 
 #: ../../library/ctypes.rst:849
 msgid ""
@@ -1716,6 +1924,11 @@ msgid ""
 "a C function, and you *know* that the pointer actually points to an array "
 "instead of a single item."
 msgstr ""
+"También es posible utilizar índices distintos de 0, pero debes saber lo que "
+"haces, igual que en C: Puedes acceder o cambiar posiciones de memoria "
+"arbitrarias. Generalmente sólo se utiliza esta característica si se recibe "
+"un puntero de una función C, y se *sabe* que el puntero apunta realmente a "
+"un array en lugar de a un único elemento."
 
 #: ../../library/ctypes.rst:855
 msgid ""
