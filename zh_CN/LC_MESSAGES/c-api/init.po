@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-25 14:15+0000\n"
+"POT-Creation-Date: 2025-11-27 14:15+0000\n"
 "PO-Revision-Date: 2025-09-16 00:00+0000\n"
 "Last-Translator: Freesand Leo <yuqinju@163.com>, 2025\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/python-doc/"
@@ -2434,12 +2434,12 @@ msgstr ""
 msgid ""
 "Set the stack protection start address and stack protection size of a Python "
 "thread state."
-msgstr ""
+msgstr "设置一个 Python 线程状态的栈保护起始地址和栈保护大小。"
 
 #: ../../c-api/init.rst:1539
 msgid ""
 "On success, return ``0``. On failure, set an exception and return ``-1``."
-msgstr ""
+msgstr "成功时，返回 ``0``。 失败时，设置一个异常并返回 ``-1``。"
 
 #: ../../c-api/init.rst:1542
 msgid ""
@@ -2453,6 +2453,12 @@ msgid ""
 "func:`~PyUnstable_ThreadState_SetStackProtection` to inform CPython of the "
 "change."
 msgstr ""
+"CPython 通过在注意到机器的执行栈即将溢出时引发 :py:exc:`RecursionError` 实现"
+"针对 C 代码的 :ref:`递归控制 <recursion>`。 请查看 :c:func:"
+"`Py_EnterRecursiveCall` 函数的示例。 为此，需要知道当前线程栈的位置，这通常是"
+"从操作系统获取的。 例如当使用 Boost 库的 ``boost::context`` 之类的上下文切换"
+"技术使栈发生改变时，你必须调用 :c:func:"
+"`~PyUnstable_ThreadState_SetStackProtection` 将变化通知给 CPython。"
 
 #: ../../c-api/init.rst:1551
 msgid ""
@@ -2460,12 +2466,17 @@ msgid ""
 "after changing the stack. Do not call any other Python C API between the "
 "call and the stack change."
 msgstr ""
+"在修改栈之前或之后调用 :c:func:"
+"`~PyUnstable_ThreadState_SetStackProtection`。 不要在调用和栈修改之间调用任何"
+"其他 Python C API。"
 
 #: ../../c-api/init.rst:1556
 msgid ""
 "See :c:func:`PyUnstable_ThreadState_ResetStackProtection` for undoing this "
 "operation."
 msgstr ""
+"请参阅 :c:func:`PyUnstable_ThreadState_ResetStackProtection` 了解如何撤销此操"
+"作。"
 
 #: ../../c-api/init.rst:1562 ../../c-api/init.rst:1582
 msgid ""
@@ -2477,17 +2488,24 @@ msgid ""
 "packaging.python.org/en/latest/specifications/core-metadata/#requires-"
 "python>`_."
 msgstr ""
+"此函数是在缺陷修正发布版中添加的，使用它的扩展将不兼容 Python 3.14.0。 大多"
+"数 Python 打包工具都无法自动处理此不兼容性，并将需要显式的配置。 当使用 PyPA "
+"标准（编译版和源代码发布版）时，请在 `核心元数据 <https://packaging.python."
+"org/en/latest/specifications/core-metadata/#requires-python>`_ 中设置 "
+"``Requires-Python: != 3.14.0.*``。"
 
 #: ../../c-api/init.rst:1573
 msgid ""
 "Reset the stack protection start address and stack protection size of a "
 "Python thread state to the operating system defaults."
 msgstr ""
+"将一个 Python 线程程序的栈保护起始地址和栈保护大小重置为操作系统的默认值。"
 
 #: ../../c-api/init.rst:1576
 msgid ""
 "See :c:func:`PyUnstable_ThreadState_SetStackProtection` for an explanation."
 msgstr ""
+"请参阅 :c:func:`PyUnstable_ThreadState_SetStackProtection` 查看相关说明。"
 
 #: ../../c-api/init.rst:1593
 msgid "Get the current interpreter."
@@ -4139,6 +4157,257 @@ msgid ""
 msgstr ""
 "    PyCriticalSection2_End(&_py_cs2);\n"
 "}"
+
+#: ../../c-api/init.rst:2714
+msgid "Legacy Locking APIs"
+msgstr ""
+
+#: ../../c-api/init.rst:2716
+msgid ""
+"These APIs are obsolete since Python 3.13 with the introduction of :c:type:"
+"`PyMutex`."
+msgstr ""
+
+#: ../../c-api/init.rst:2719
+msgid "These APIs are now a simple wrapper around ``PyMutex``."
+msgstr ""
+
+#: ../../c-api/init.rst:2725
+msgid "A pointer to a mutual exclusion lock."
+msgstr ""
+
+#: ../../c-api/init.rst:2730
+msgid "The result of acquiring a lock with a timeout."
+msgstr ""
+
+#: ../../c-api/init.rst:2736
+msgid "Failed to acquire the lock."
+msgstr ""
+
+#: ../../c-api/init.rst:2740
+msgid "The lock was successfully acquired."
+msgstr ""
+
+#: ../../c-api/init.rst:2744
+msgid "The lock was interrupted by a signal."
+msgstr ""
+
+#: ../../c-api/init.rst:2749
+msgid "Allocate a new lock."
+msgstr ""
+
+#: ../../c-api/init.rst:2751
+msgid ""
+"On success, this function returns a lock; on failure, this function returns "
+"``0`` without an exception set."
+msgstr ""
+
+#: ../../c-api/init.rst:2754 ../../c-api/init.rst:2766
+#: ../../c-api/init.rst:2786 ../../c-api/init.rst:2804
+#: ../../c-api/init.rst:2812 ../../c-api/init.rst:2835
+#: ../../c-api/init.rst:2919 ../../c-api/init.rst:2927
+msgid "The caller does not need to hold an :term:`attached thread state`."
+msgstr ""
+
+#: ../../c-api/init.rst:2756
+msgid ""
+"This function now always uses :c:type:`PyMutex`. In prior versions, this "
+"would use a lock provided by the operating system."
+msgstr ""
+
+#: ../../c-api/init.rst:2763
+msgid ""
+"Destroy *lock*. The lock should not be held by any thread when calling this."
+msgstr ""
+
+#: ../../c-api/init.rst:2771
+msgid "Acquire *lock* with a timeout."
+msgstr ""
+
+#: ../../c-api/init.rst:2773
+msgid ""
+"This will wait for *microseconds* microseconds to acquire the lock. If the "
+"timeout expires, this function returns :c:enumerator:`PY_LOCK_FAILURE`. If "
+"*microseconds* is ``-1``, this will wait indefinitely until the lock has "
+"been released."
+msgstr ""
+
+#: ../../c-api/init.rst:2778
+msgid ""
+"If *intr_flag* is ``1``, acquiring the lock may be interrupted by a signal, "
+"in which case this function returns :c:enumerator:`PY_LOCK_INTR`. Upon "
+"interruption, it's generally expected that the caller makes a call to :c:"
+"func:`Py_MakePendingCalls` to propagate an exception to Python code."
+msgstr ""
+
+#: ../../c-api/init.rst:2783
+msgid ""
+"If the lock is successfully acquired, this function returns :c:enumerator:"
+"`PY_LOCK_ACQUIRED`."
+msgstr ""
+
+#: ../../c-api/init.rst:2791
+msgid "Acquire *lock*."
+msgstr ""
+
+#: ../../c-api/init.rst:2793
+msgid ""
+"If *waitflag* is ``1`` and another thread currently holds the lock, this "
+"function will wait until the lock can be acquired and will always return "
+"``1``."
+msgstr ""
+
+#: ../../c-api/init.rst:2797
+msgid ""
+"If *waitflag* is ``0`` and another thread holds the lock, this function will "
+"not wait and instead return ``0``. If the lock is not held by any other "
+"thread, then this function will acquire it and return ``1``."
+msgstr ""
+
+#: ../../c-api/init.rst:2801
+msgid ""
+"Unlike :c:func:`PyThread_acquire_lock_timed`, acquiring the lock cannot be "
+"interrupted by a signal."
+msgstr ""
+
+#: ../../c-api/init.rst:2809
+msgid ""
+"Release *lock*. If *lock* is not held, then this function issues a fatal "
+"error."
+msgstr ""
+
+#: ../../c-api/init.rst:2816
+msgid "Operating System Thread APIs"
+msgstr ""
+
+#: ../../c-api/init.rst:2820
+msgid "Sentinel value for an invalid thread ID."
+msgstr ""
+
+#: ../../c-api/init.rst:2822
+msgid "This is currently equivalent to ``(unsigned long)-1``."
+msgstr ""
+
+#: ../../c-api/init.rst:2827
+msgid ""
+"Start function *func* in a new thread with argument *arg*. The resulting "
+"thread is not intended to be joined."
+msgstr ""
+
+#: ../../c-api/init.rst:2830
+msgid "*func* must not be ``NULL``, but *arg* may be ``NULL``."
+msgstr ""
+
+#: ../../c-api/init.rst:2832
+msgid ""
+"On success, this function returns the identifier of the new thread; on "
+"failure, this returns :c:macro:`PYTHREAD_INVALID_THREAD_ID`."
+msgstr ""
+
+#: ../../c-api/init.rst:2840
+msgid "Return the identifier of the current thread, which will never be zero."
+msgstr ""
+
+#: ../../c-api/init.rst:2842 ../../c-api/init.rst:2874
+msgid ""
+"This function cannot fail, and the caller does not need to hold an :term:"
+"`attached thread state`."
+msgstr ""
+
+#: ../../c-api/init.rst:2846
+msgid ":py:func:`threading.get_ident`"
+msgstr ""
+
+#: ../../c-api/init.rst:2851
+msgid ""
+"Get general information about the current thread in the form of a :ref:"
+"`struct sequence <struct-sequence-objects>` object. This information is "
+"accessible as :py:attr:`sys.thread_info` in Python."
+msgstr ""
+
+#: ../../c-api/init.rst:2855
+msgid ""
+"On success, this returns a new :term:`strong reference` to the thread "
+"information; on failure, this returns ``NULL`` with an exception set."
+msgstr ""
+
+#: ../../c-api/init.rst:2858
+msgid "The caller must hold an :term:`attached thread state`."
+msgstr ""
+
+#: ../../c-api/init.rst:2863
+msgid "This macro is defined when the system supports native thread IDs."
+msgstr ""
+
+#: ../../c-api/init.rst:2868
+msgid ""
+"Get the native identifier of the current thread as it was assigned by the "
+"operating system's kernel, which will never be less than zero."
+msgstr ""
+
+#: ../../c-api/init.rst:2871
+msgid ""
+"This function is only available when :c:macro:`PY_HAVE_THREAD_NATIVE_ID` is "
+"defined."
+msgstr ""
+
+#: ../../c-api/init.rst:2878
+msgid ":py:func:`threading.get_native_id`"
+msgstr ""
+
+#: ../../c-api/init.rst:2883
+msgid ""
+"Terminate the current thread. This function is generally considered unsafe "
+"and should be avoided. It is kept solely for backwards compatibility."
+msgstr ""
+
+#: ../../c-api/init.rst:2886
+msgid ""
+"This function is only safe to call if all functions in the full call stack "
+"are written to safely allow it."
+msgstr ""
+
+#: ../../c-api/init.rst:2891
+msgid ""
+"If the current system uses POSIX threads (also known as \"pthreads\"), this "
+"calls :manpage:`pthread_exit(3)`, which attempts to unwind the stack and "
+"call C++ destructors on some libc implementations. However, if a "
+"``noexcept`` function is reached, it may terminate the process. Other "
+"systems, such as macOS, do unwinding."
+msgstr ""
+
+#: ../../c-api/init.rst:2897
+msgid ""
+"On Windows, this function calls ``_endthreadex()``, which kills the thread "
+"without calling C++ destructors."
+msgstr ""
+
+#: ../../c-api/init.rst:2900
+msgid "In any case, there is a risk of corruption on the thread's stack."
+msgstr ""
+
+#: ../../c-api/init.rst:2907
+msgid ""
+"Initialize ``PyThread*`` APIs. Python executes this function automatically, "
+"so there's little need to call it from an extension module."
+msgstr ""
+
+#: ../../c-api/init.rst:2913
+msgid "Set the stack size of the current thread to *size* bytes."
+msgstr ""
+
+#: ../../c-api/init.rst:2915
+msgid ""
+"This function returns ``0`` on success, ``-1`` if *size* is invalid, or "
+"``-2`` if the system does not support changing the stack size. This function "
+"does not set exceptions."
+msgstr ""
+
+#: ../../c-api/init.rst:2924
+msgid ""
+"Return the stack size of the current thread in bytes, or ``0`` if the "
+"system's default stack size is in use."
+msgstr ""
 
 #: ../../c-api/init.rst:350
 msgid "PyEval_InitThreads()"
