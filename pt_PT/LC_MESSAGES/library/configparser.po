@@ -5,16 +5,16 @@
 #
 # Translators:
 # python-doc bot, 2025
-# André Moreira <afrmscb@gmail.com>, 2025
+# NyaPuma <afrmscb@gmail.com>, 2025
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-05 16:08+0000\n"
+"POT-Creation-Date: 2025-11-27 15:44+0000\n"
 "PO-Revision-Date: 2025-07-18 19:57+0000\n"
-"Last-Translator: André Moreira <afrmscb@gmail.com>, 2025\n"
+"Last-Translator: NyaPuma <afrmscb@gmail.com>, 2025\n"
 "Language-Team: Portuguese (Portugal) (https://app.transifex.com/python-doc/"
 "teams/5390/pt_PT/)\n"
 "MIME-Version: 1.0\n"
@@ -26,11 +26,11 @@ msgstr ""
 
 #: ../../library/configparser.rst:2
 msgid ":mod:`!configparser` --- Configuration file parser"
-msgstr ""
+msgstr ":mod:`!configparser` --- Analisador de ficheiros de configuração"
 
 #: ../../library/configparser.rst:14
 msgid "**Source code:** :source:`Lib/configparser.py`"
-msgstr ""
+msgstr "**Código-fonte:** :source:`Lib/configparser.py`"
 
 #: ../../library/configparser.rst:24
 msgid ""
@@ -39,50 +39,66 @@ msgid ""
 "found in Microsoft Windows INI files.  You can use this to write Python "
 "programs which can be customized by end users easily."
 msgstr ""
+"Este módulo fornece a classe :class:`ConfigParser`, que implementa uma "
+"linguagem básica de configuração que fornece uma estrutura semelhante à "
+"encontrada nos ficheiros INI do Microsoft Windows. Pode usar isto para "
+"escrever programas Python que podem ser facilmente personalizados pelos "
+"utilizadores finais."
 
 #: ../../library/configparser.rst:31
 msgid ""
 "This library does *not* interpret or write the value-type prefixes used in "
 "the Windows Registry extended version of INI syntax."
 msgstr ""
+"Esta biblioteca *não* interpreta nem escreve os prefixos de tipo de valor "
+"usados na versão estendida da sintaxe INI do Registo do Windows."
 
 #: ../../library/configparser.rst:36
 msgid "Module :mod:`tomllib`"
-msgstr ""
+msgstr "Módulo :mod:`tomllib`"
 
 #: ../../library/configparser.rst:37
 msgid ""
 "TOML is a well-specified format for application configuration files. It is "
 "specifically designed to be an improved version of INI."
 msgstr ""
+"TOML é um formato bem especificado para ficheiros de configuração de "
+"aplicações. Foi especificamente concebido para ser uma versão melhorada do "
+"INI."
 
 #: ../../library/configparser.rst:40
 msgid "Module :mod:`shlex`"
-msgstr ""
+msgstr "Módulo :mod:`shlex`"
 
 #: ../../library/configparser.rst:41
 msgid ""
 "Support for creating Unix shell-like mini-languages which can also be used "
 "for application configuration files."
 msgstr ""
+"Suporte para criar mini-linguagens semelhantes a shell Unix, que também "
+"podem ser usadas para ficheiros de configuração de aplicações."
 
 #: ../../library/configparser.rst:44
 msgid "Module :mod:`json`"
-msgstr ""
+msgstr "Módulo :mod:`json`"
 
 #: ../../library/configparser.rst:45
 msgid ""
 "The ``json`` module implements a subset of JavaScript syntax which is "
 "sometimes used for configuration, but does not support comments."
 msgstr ""
+"O módulo ``json`` implementa um subconjunto da sintaxe JavaScript que é, por "
+"vezes, usado para configuração, mas não suporta comentários."
 
 #: ../../library/configparser.rst:61
 msgid "Quick Start"
-msgstr ""
+msgstr "Início Rápido"
 
 #: ../../library/configparser.rst:63
 msgid "Let's take a very basic configuration file that looks like this:"
 msgstr ""
+"Vamos considerar um ficheiro de configuração muito básico que se parece com "
+"isto:"
 
 #: ../../library/configparser.rst:65
 msgid ""
@@ -99,6 +115,18 @@ msgid ""
 "Port = 50022\n"
 "ForwardX11 = no"
 msgstr ""
+"[DEFAULT]\n"
+"ServerAliveInterval = 45\n"
+"Compression = yes\n"
+"CompressionLevel = 9\n"
+"ForwardX11 = yes\n"
+"\n"
+"[forge.example]\n"
+"User = hg\n"
+"\n"
+"[topsecret.server.example]\n"
+"Port = 50022\n"
+"ForwardX11 = no"
 
 #: ../../library/configparser.rst:80
 msgid ""
@@ -108,6 +136,11 @@ msgid ""
 "classes can read and write such files.  Let's start by creating the above "
 "configuration file programmatically."
 msgstr ""
+"A estrutura dos ficheiros INI é descrita `na secção seguinte <#supported-ini-"
+"file-structure>`_. Basicamente, o ficheiro consiste em secções, cada uma das "
+"quais contém chaves com valores. As classes :mod:`configparser` podem ler e "
+"escrever tais ficheiros. Vamos começar por criar o ficheiro de configuração "
+"acima programaticamente."
 
 #: ../../library/configparser.rst:86
 msgid ""
@@ -127,6 +160,21 @@ msgid ""
 "...   config.write(configfile)\n"
 "..."
 msgstr ""
+">>> import configparser\n"
+">>> config = configparser.ConfigParser()\n"
+">>> config['DEFAULT'] = {'ServerAliveInterval': '45',\n"
+"...                      'Compression': 'yes',\n"
+"...                      'CompressionLevel': '9'}\n"
+">>> config['forge.example'] = {}\n"
+">>> config['forge.example']['User'] = 'hg'\n"
+">>> config['topsecret.server.example'] = {}\n"
+">>> topsecret = config['topsecret.server.example']\n"
+">>> topsecret['Port'] = '50022'     # modifica o analisador\n"
+">>> topsecret['ForwardX11'] = 'no'  # o mesmo aqui\n"
+">>> config['DEFAULT']['ForwardX11'] = 'yes'\n"
+">>> with open('example.ini', 'w') as configfile:\n"
+"...   config.write(configfile)\n"
+"..."
 
 #: ../../library/configparser.rst:104
 msgid ""
@@ -134,12 +182,18 @@ msgid ""
 "are differences, `outlined later <#mapping-protocol-access>`_, but the "
 "behavior is very close to what you would expect from a dictionary."
 msgstr ""
+"Como pode ver, podemos tratar um analisador de configuração muito como um "
+"dicionário. Existem diferenças, `descritas mais tarde <#mapping-protocol-"
+"access>`_, mas o comportamento é muito próximo do que esperaria de um "
+"dicionário."
 
 #: ../../library/configparser.rst:108
 msgid ""
 "Now that we have created and saved a configuration file, let's read it back "
 "and explore the data it holds."
 msgstr ""
+"Ahora que criámos e guardámos um ficheiro de configuração, vamos lê-lo de "
+"volta e explorar os dados que contém."
 
 #: ../../library/configparser.rst:111
 msgid ""
@@ -173,6 +227,35 @@ msgid ""
 ">>> config['forge.example']['ForwardX11']\n"
 "'yes'"
 msgstr ""
+">>> config = configparser.ConfigParser()\n"
+">>> config.sections()\n"
+"[]\n"
+">>> config.read('example.ini')\n"
+"['example.ini']\n"
+">>> config.sections()\n"
+"['forge.example', 'topsecret.server.example']\n"
+">>> 'forge.example' in config\n"
+"True\n"
+">>> 'python.org' in config\n"
+"False\n"
+">>> config['forge.example']['User']\n"
+"'hg'\n"
+">>> config['DEFAULT']['Compression']\n"
+"'yes'\n"
+">>> topsecret = config['topsecret.server.example']\n"
+">>> topsecret['ForwardX11']\n"
+"'no'\n"
+">>> topsecret['Port']\n"
+"'50022'\n"
+">>> for key in config['forge.example']:\n"
+"...     print(key)\n"
+"user\n"
+"compressionlevel\n"
+"serveraliveinterval\n"
+"compression\n"
+"forwardx11\n"
+">>> config['forge.example']['ForwardX11']\n"
+"'yes'"
 
 #: ../../library/configparser.rst:143
 msgid ""
@@ -181,6 +264,10 @@ msgid ""
 "other sections [1]_.  Note also that keys in sections are case-insensitive "
 "and stored in lowercase [1]_."
 msgstr ""
+"Como podemos ver acima, a API é bastante simples. A única parte mágica "
+"envolve a secção ``DEFAULT``, que fornece valores predefinidos para todas as "
+"outras secções [1]_. Note também que as chaves nas secções não são sensíveis "
+"a maiúsculas e minúsculas e são armazenadas em minúsculas [1]_."
 
 #: ../../library/configparser.rst:148 ../../library/configparser.rst:967
 msgid ""
@@ -191,12 +278,20 @@ msgid ""
 "an ``override.ini`` file, which will override any conflicting keys from the "
 "``example.ini`` file."
 msgstr ""
+"É possível ler várias configurações num único :class:`ConfigParser`, onde a "
+"configuração mais recentemente adicionada tem a maior prioridade. Quaisquer "
+"chaves conflitantes são obtidas da configuração mais recente, enquanto as "
+"chaves previamente existentes são mantidas. O exemplo abaixo lê um ficheiro "
+"``override.ini``, que substituirá quaisquer chaves conflitantes do ficheiro "
+"``example.ini``."
 
 #: ../../library/configparser.rst:155 ../../library/configparser.rst:974
 msgid ""
 "[DEFAULT]\n"
 "ServerAliveInterval = -1"
 msgstr ""
+"[DEFAULT]\n"
+"ServerAliveInterval = -1"
 
 #: ../../library/configparser.rst:160 ../../library/configparser.rst:979
 msgid ""
@@ -211,16 +306,28 @@ msgid ""
 ">>> print(config_override.get('DEFAULT', 'ServerAliveInterval'))\n"
 "-1"
 msgstr ""
+">>> config_override = configparser.ConfigParser()\n"
+">>> config_override['DEFAULT'] = {'ServerAliveInterval': '-1'}\n"
+">>> with open('override.ini', 'w') as configfile:\n"
+"...     config_override.write(configfile)\n"
+"...\n"
+">>> config_override = configparser.ConfigParser()\n"
+">>> config_override.read(['example.ini', 'override.ini'])\n"
+"['example.ini', 'override.ini']\n"
+">>> print(config_override.get('DEFAULT', 'ServerAliveInterval'))\n"
+"-1"
 
 #: ../../library/configparser.rst:174
 msgid ""
 "This behaviour is equivalent to a :meth:`ConfigParser.read` call with "
 "several files passed to the *filenames* parameter."
 msgstr ""
+"Este comportamento é equivalente a uma chamada :meth:`ConfigParser.read` com "
+"vários ficheiros passados ao parâmetro *filenames*."
 
 #: ../../library/configparser.rst:179
 msgid "Supported Datatypes"
-msgstr ""
+msgstr "Tipos de Dados Suportados"
 
 #: ../../library/configparser.rst:181
 msgid ""
@@ -228,6 +335,10 @@ msgid ""
 "always storing them internally as strings.  This means that if you need "
 "other datatypes, you should convert on your own:"
 msgstr ""
+"Os analisadores de configuração não adivinham os tipos de dados dos valores "
+"nos ficheiros de configuração, armazenando-os sempre internamente como "
+"strings. Isto significa que, se precisar de outros tipos de dados, deve "
+"convertê-los por si próprio:"
 
 #: ../../library/configparser.rst:185
 msgid ""
@@ -236,6 +347,10 @@ msgid ""
 ">>> float(topsecret['CompressionLevel'])\n"
 "9.0"
 msgstr ""
+">>> int(topsecret['Port'])\n"
+"50022\n"
+">>> float(topsecret['CompressionLevel'])\n"
+"9.0"
 
 #: ../../library/configparser.rst:192
 msgid ""
@@ -247,6 +362,14 @@ msgid ""
 "and recognizes Boolean values from ``'yes'``/``'no'``, ``'on'``/``'off'``, "
 "``'true'``/``'false'`` and ``'1'``/``'0'`` [1]_.  For example:"
 msgstr ""
+"Como esta tarefa é tão comum, os analisadores de configuração fornecem uma "
+"série de métodos de obtenção úteis para lidar com inteiros, floats e "
+"booleanos. O último é o mais interessante porque simplesmente passar o valor "
+"para ``bool()`` não seria útil, uma vez que ``bool('False')`` ainda é "
+"``True``. É por isso que os analisadores de configuração também fornecem :"
+"meth:`~ConfigParser.getboolean`. Este método não é sensível a maiúsculas e "
+"minúsculas e reconhece valores booleanos de ``'yes'``/``'no'``, ``'on'``/"
+"``'off'``, ``'true'``/``'false'`` e ``'1'``/``'0'`` [1]_. Por exemplo:"
 
 #: ../../library/configparser.rst:200
 msgid ""
@@ -257,6 +380,12 @@ msgid ""
 ">>> config.getboolean('forge.example', 'Compression')\n"
 "True"
 msgstr ""
+">>> topsecret.getboolean('ForwardX11')\n"
+"False\n"
+">>> config['forge.example'].getboolean('ForwardX11')\n"
+"True\n"
+">>> config.getboolean('forge.example', 'Compression')\n"
+"True"
 
 #: ../../library/configparser.rst:209
 msgid ""
@@ -265,16 +394,22 @@ msgid ""
 "methods.  You can register your own converters and customize the provided "
 "ones. [1]_"
 msgstr ""
+"Além de :meth:`~ConfigParser.getboolean`, os analisadores de configuração "
+"também fornecem métodos equivalentes :meth:`~ConfigParser.getint` e :meth:"
+"`~ConfigParser.getfloat`. Pode registar os seus próprios conversores e "
+"personalizar os fornecidos. [1]_"
 
 #: ../../library/configparser.rst:215
 msgid "Fallback Values"
-msgstr ""
+msgstr "Valores de Recurso"
 
 #: ../../library/configparser.rst:217
 msgid ""
 "As with a dictionary, you can use a section's :meth:`~ConfigParser.get` "
 "method to provide fallback values:"
 msgstr ""
+"Como com um dicionário, pode usar o método :meth:`~ConfigParser.get` de uma "
+"secção para fornecer valores de recurso:"
 
 #: ../../library/configparser.rst:220
 msgid ""
@@ -286,6 +421,13 @@ msgid ""
 ">>> topsecret.get('Cipher', '3des-cbc')\n"
 "'3des-cbc'"
 msgstr ""
+">>> topsecret.get('Port')\n"
+"'50022'\n"
+">>> topsecret.get('CompressionLevel')\n"
+"'9'\n"
+">>> topsecret.get('Cipher')\n"
+">>> topsecret.get('Cipher', '3des-cbc')\n"
+"'3des-cbc'"
 
 #: ../../library/configparser.rst:230
 msgid ""
@@ -295,12 +437,19 @@ msgid ""
 "``'topsecret.server.example'``, we will always get the default, even if we "
 "specify a fallback:"
 msgstr ""
+"Note que os valores predefinidos têm precedência sobre os valores de "
+"recurso. Por exemplo, no nosso exemplo, a chave ``'CompressionLevel'`` foi "
+"especificada apenas na secção ``'DEFAULT'``. Se tentarmos obtê-la da secção "
+"``'topsecret.server.example'``, sempre obteremos o valor predefinido, mesmo "
+"que especifiquemos um valor de recurso:"
 
 #: ../../library/configparser.rst:236
 msgid ""
 ">>> topsecret.get('CompressionLevel', '3')\n"
 "'9'"
 msgstr ""
+">>> topsecret.get('CompressionLevel', '3')\n"
+"'9'"
 
 #: ../../library/configparser.rst:241
 msgid ""
@@ -309,6 +458,11 @@ msgid ""
 "backwards compatibility.  When using this method, a fallback value can be "
 "provided via the ``fallback`` keyword-only argument:"
 msgstr ""
+"Mais uma coisa a ter em conta é que o método :meth:`~ConfigParser.get` ao "
+"nível do analisador fornece uma interface personalizada e mais complexa, "
+"mantida para compatibilidade retroativa. Ao usar este método, um valor de "
+"recurso pode ser fornecido através do argumento ``fallback`` apenas por "
+"palavra-chave:"
 
 #: ../../library/configparser.rst:246
 msgid ""
@@ -316,6 +470,9 @@ msgid ""
 "...            fallback='No such things as monsters')\n"
 "'No such things as monsters'"
 msgstr ""
+">>> config.get('forge.example', 'monster',\n"
+"...            fallback='Não existem coisas como monstros')\n"
+"'Não existem coisas como monstros'"
 
 #: ../../library/configparser.rst:252
 msgid ""
@@ -323,6 +480,9 @@ msgid ""
 "getint`, :meth:`~ConfigParser.getfloat` and :meth:`~ConfigParser.getboolean` "
 "methods, for example:"
 msgstr ""
+"O mesmo argumento ``fallback`` pode ser usado com os métodos :meth:"
+"`~ConfigParser.getint`, :meth:`~ConfigParser.getfloat` e :meth:"
+"`~ConfigParser.getboolean`, por exemplo:"
 
 #: ../../library/configparser.rst:256
 msgid ""
@@ -334,10 +494,17 @@ msgid ""
 ">>> topsecret.getboolean('BatchMode', fallback=True)\n"
 "False"
 msgstr ""
+">>> 'BatchMode' in topsecret\n"
+"False\n"
+">>> topsecret.getboolean('BatchMode', fallback=True)\n"
+"True\n"
+">>> config['DEFAULT']['BatchMode'] = 'no'\n"
+">>> topsecret.getboolean('BatchMode', fallback=True)\n"
+"False"
 
 #: ../../library/configparser.rst:268
 msgid "Supported INI File Structure"
-msgstr ""
+msgstr "Estrutura de Ficheiro INI Suportada"
 
 #: ../../library/configparser.rst:270
 msgid ""
@@ -351,12 +518,25 @@ msgid ""
 "of the value.  Depending on the parser's mode, blank lines may be treated as "
 "parts of multiline values or ignored."
 msgstr ""
+"Um ficheiro de configuração consiste em secções, cada uma liderada por um "
+"cabeçalho ``[section]``, seguido de entradas chave/valor separadas por uma "
+"string específica (``=`` ou ``:`` por predefinição [1]_). Por predefinição, "
+"os nomes das secções são sensíveis a maiúsculas e minúsculas, mas as chaves "
+"não são [1]_. Os espaços em branco no início e no fim são removidos das "
+"chaves e valores. Os valores podem ser omitidos se o analisador estiver "
+"configurado para permitir [1]_, caso em que o delimitador chave/valor também "
+"pode ser omitido. Os valores também podem abranger várias linhas, desde que "
+"estejam indentados mais profundamente do que a primeira linha do valor. "
+"Dependendo do modo do analisador, linhas em branco podem ser tratadas como "
+"partes de valores multilinhas ou ignoradas."
 
 #: ../../library/configparser.rst:280
 msgid ""
 "By default, a valid section name can be any string that does not contain '\\"
 "\\n'. To change this, see :attr:`ConfigParser.SECTCRE`."
 msgstr ""
+"Por predefinição, um nome de secção válido pode ser qualquer string que não "
+"contenha '\\\\n'. Para alterar isto, consulte :attr:`ConfigParser.SECTCRE`."
 
 #: ../../library/configparser.rst:283
 msgid ""
@@ -364,6 +544,9 @@ msgid ""
 "(``#`` and ``;`` by default [1]_).  Comments may appear on their own on an "
 "otherwise empty line, possibly indented. [1]_"
 msgstr ""
+"Os ficheiros de configuração podem incluir comentários, prefixados por "
+"caracteres específicos (``#`` e ``;`` por predefinição [1]_). Os comentários "
+"podem aparecer sozinhos numa linha, possivelmente indentados. [1]_"
 
 #: ../../library/configparser.rst:287 ../../library/configparser.rst:350
 msgid "For example:"
@@ -413,10 +596,52 @@ msgid ""
 "            of a value\n"
 "        # Did I mention we can indent comments, too?"
 msgstr ""
+"[Valores Simples]\n"
+"chave=valor\n"
+"espaços em chaves=permitidos\n"
+"espaços em valores=também permitidos\n"
+"espaços em redor do delimitador = óbvio\n"
+"também pode usar : para delimitar chaves de valores\n"
+"\n"
+"[Todos os Valores São Strings]\n"
+"valores como este: 1000000\n"
+"ou este: 3.14159265359\n"
+"são tratados como números? : não\n"
+"inteiros, floats e booleanos são mantidos como: strings\n"
+"pode usar a API para obter valores convertidos diretamente: true\n"
+"\n"
+"[Valores Multilinha]\n"
+"refrão: Sou um lenhador, e estou bem\n"
+"    Durmo toda a noite e trabalho todo o dia\n"
+"\n"
+"[Sem Valores]\n"
+"chave_sem_valor\n"
+"valor de string vazio aqui =\n"
+"\n"
+"[Pode Usar Comentários]\n"
+"# como este\n"
+"; ou este\n"
+"\n"
+"# Por predefinição apenas numa linha vazia.\n"
+"# Comentários em linha podem ser prejudiciais porque impedem os "
+"utilizadores\n"
+"# de usar os caracteres delimitadores como partes de valores.\n"
+"# Dito isto, isto pode ser personalizado.\n"
+"\n"
+"    [As Secções Podem Ser Indentadas]\n"
+"        os_valores_também_podem_ser = True\n"
+"        isso_significa_algo_especial = False\n"
+"        propósito = formatação para legibilidade\n"
+"        valores_multilinha = são\n"
+"            tratados muito bem desde que\n"
+"            estejam indentados\n"
+"            mais profundamente do que a primeira linha\n"
+"            de um valor\n"
+"        # Já mencionei que também podemos indentar comentários?"
 
 #: ../../library/configparser.rst:335
 msgid "Interpolation of values"
-msgstr ""
+msgstr "Interpolation de Valores"
 
 #: ../../library/configparser.rst:337
 msgid ""
@@ -424,6 +649,9 @@ msgid ""
 "interpolation.  This means values can be preprocessed before returning them "
 "from ``get()`` calls."
 msgstr ""
+"Além da funcionalidade principal, :class:`ConfigParser` suporta "
+"interpolação. Isto significa que os valores podem ser pré-processados antes "
+"de serem retornados de chamadas ``get()``."
 
 #: ../../library/configparser.rst:345
 msgid ""
@@ -432,6 +660,10 @@ msgid ""
 "or values in the special default section [1]_.  Additional default values "
 "can be provided on initialization."
 msgstr ""
+"A implementação predefinida usada por :class:`ConfigParser`. Permite que os "
+"valores contenham strings de formato que se referem a outros valores na "
+"mesma secção, ou valores na secção especial predefinida [1]_. Valores "
+"predefinidos adicionais podem ser fornecidos na inicialização."
 
 #: ../../library/configparser.rst:352
 msgid ""
@@ -445,6 +677,15 @@ msgid ""
 "escaped):\n"
 "gain: 80%%"
 msgstr ""
+"[Paths]\n"
+"home_dir: /Users\n"
+"my_dir: %(home_dir)s/lumberjack\n"
+"my_pictures: %(my_dir)s/Pictures\n"
+"\n"
+"[Escape]\n"
+"# use %% para escapar o sinal % (% é o único caráter que precisa de ser "
+"escapado):\n"
+"gain: 80%%"
 
 #: ../../library/configparser.rst:363
 msgid ""
@@ -455,6 +696,12 @@ msgid ""
 "keys used in the chain of references do not have to be specified in any "
 "specific order in the configuration file."
 msgstr ""
+"No exemplo acima, :class:`ConfigParser` com *interpolação* definida para "
+"``BasicInterpolation()`` resolveria ``%(home_dir)s`` para o valor de "
+"``home_dir`` (``/Users`` neste caso). ``%(my_dir)s``, na prática, resolveria "
+"para ``/Users/lumberjack``. Todas as interpolações são feitas sob demanda, "
+"por isso as chaves usadas na cadeia de referências não precisam de ser "
+"especificadas em nenhuma ordem específica no ficheiro de configuração."
 
 #: ../../library/configparser.rst:370
 msgid ""
@@ -462,6 +709,9 @@ msgid ""
 "``%(my_dir)s/Pictures`` as the value of ``my_pictures`` and ``%(home_dir)s/"
 "lumberjack`` as the value of ``my_dir``."
 msgstr ""
+"Com ``interpolation`` definido como ``None``, o analisador simplesmente "
+"retornaria ``%(my_dir)s/Pictures`` como o valor de ``my_pictures`` e "
+"``%(home_dir)s/lumberjack`` como o valor de ``my_dir``."
 
 #: ../../library/configparser.rst:378
 msgid ""
@@ -472,12 +722,20 @@ msgid ""
 "`` part is omitted, interpolation defaults to the current section (and "
 "possibly the default values from the special section)."
 msgstr ""
+"Um manipulador alternativo para interpolação que implementa uma sintaxe mais "
+"avançada, usada, por exemplo, em ``zc.buildout``. A interpolação estendida "
+"usa ``${section:option}`` para denotar um valor de uma secção externa. A "
+"interpolação pode abranger vários níveis. Por conveniência, se a parte "
+"``section:`` for omitida, a interpolação predefine para a secção atual (e "
+"possivelmente os valores predefinidos da secção especial)."
 
 #: ../../library/configparser.rst:385
 msgid ""
 "For example, the configuration specified above with basic interpolation, "
 "would look like this with extended interpolation:"
 msgstr ""
+"Por exemplo, a configuração especificada acima com interpolação básica "
+"ficaria assim com interpolação estendida:"
 
 #: ../../library/configparser.rst:388
 msgid ""
@@ -494,7 +752,7 @@ msgstr ""
 
 #: ../../library/configparser.rst:399
 msgid "Values from other sections can be fetched as well:"
-msgstr ""
+msgstr "Valores de outras secções também podem ser obtidos:"
 
 #: ../../library/configparser.rst:401
 msgid ""
@@ -518,7 +776,7 @@ msgstr ""
 
 #: ../../library/configparser.rst:421
 msgid "Mapping Protocol Access"
-msgstr ""
+msgstr "Acesso ao Protocolo de Mapeamento"
 
 #: ../../library/configparser.rst:425
 msgid ""
@@ -527,6 +785,10 @@ msgid ""
 "`configparser`, the mapping interface implementation is using the "
 "``parser['section']['option']`` notation."
 msgstr ""
+"O acesso ao protocolo de mapeamento é um nome genérico para a funcionalidade "
+"que permite usar objetos personalizados como se fossem dicionários. No caso "
+"de :mod:`configparser`, a implementação da interface de mapeamento usa a "
+"notação ``parser['section']['option']``."
 
 #: ../../library/configparser.rst:430
 msgid ""
@@ -536,6 +798,11 @@ msgid ""
 "values are changed on a section proxy, they are actually mutated in the "
 "original parser."
 msgstr ""
+"``parser['section']``, em particular, retorna um proxy para os dados da "
+"secção no analisador. Isto significa que os valores não são copiados, mas "
+"são obtidos do analisador original sob demanda. O que é ainda mais "
+"importante é que, quando os valores são alterados num proxy de secção, eles "
+"são realmente modificados no analisador original."
 
 #: ../../library/configparser.rst:436
 msgid ""
@@ -544,6 +811,10 @@ msgid ""
 "`~collections.abc.MutableMapping` ABC. However, there are a few differences "
 "that should be taken into account:"
 msgstr ""
+"Os objetos :mod:`configparser` comportam-se o mais próximo possível de "
+"dicionários reais. A interface de mapeamento é completa e aderente à :class:"
+"`~collections.abc.MutableMapping` ABC. No entanto, existem algumas "
+"diferenças que devem ser tidas em conta:"
 
 #: ../../library/configparser.rst:441
 msgid ""
@@ -553,12 +824,20 @@ msgid ""
 "default.  At the same time, for a section that holds the key ``'a'``, both "
 "expressions return ``True``::"
 msgstr ""
+"Por predefinição, todas as chaves nas secções são acessíveis de forma não "
+"sensível a maiúsculas e minúsculas [1]_. Por exemplo, ``for option in "
+"parser[\"section\"]`` produz apenas nomes de chaves de opção transformados "
+"por ``optionxform``. Isto significa chaves em minúsculas por predefinição. "
+"Ao mesmo tempo, para uma secção que contém a chave ``'a'``, ambas as "
+"expressões retornam ``True``::"
 
 #: ../../library/configparser.rst:446
 msgid ""
 "\"a\" in parser[\"section\"]\n"
 "\"A\" in parser[\"section\"]"
 msgstr ""
+"\"a\" in parser[\"section\"]\n"
+"\"A\" in parser[\"section\"]"
 
 #: ../../library/configparser.rst:449
 msgid ""
@@ -569,22 +848,28 @@ msgid ""
 "deleting causes the default value to be visible again.  Trying to delete a "
 "default value causes a :exc:`KeyError`."
 msgstr ""
+"Todas as secções incluem também valores ``DEFAULTSECT``, o que significa que "
+"``.clear()`` numa secção pode não deixar a secção visivelmente vazia. Isto "
+"porque os valores predefinidos não podem ser eliminados da secção (porque, "
+"tecnicamente, não estão lá). Se forem substituídos na secção, a eliminação "
+"faz com que o valor predefinido volte a estar visível. Tentar eliminar um "
+"valor predefinido causa um :exc:`KeyError`."
 
 #: ../../library/configparser.rst:456
 msgid "``DEFAULTSECT`` cannot be removed from the parser:"
-msgstr ""
+msgstr "``DEFAULTSECT`` não pode ser removido do analisador:"
 
 #: ../../library/configparser.rst:458
 msgid "trying to delete it raises :exc:`ValueError`,"
-msgstr ""
+msgstr "tentar eliminá-lo levanta :exc:`ValueError`,"
 
 #: ../../library/configparser.rst:460
 msgid "``parser.clear()`` leaves it intact,"
-msgstr ""
+msgstr "``parser.clear()`` deixa-o intacto,"
 
 #: ../../library/configparser.rst:462
 msgid "``parser.popitem()`` never returns it."
-msgstr ""
+msgstr "``parser.popitem()`` nunca o retorna."
 
 #: ../../library/configparser.rst:464
 msgid ""
@@ -592,6 +877,10 @@ msgid ""
 "fallback value.  Note however that the section-level ``get()`` methods are "
 "compatible both with the mapping protocol and the classic configparser API."
 msgstr ""
+"``parser.get(section, option, **kwargs)`` - o segundo argumento **não** é um "
+"valor de recurso. Note, no entanto, que os métodos ``get()`` ao nível da "
+"secção são compatíveis tanto com o protocolo de mapeamento como com a API "
+"clássica do configparser."
 
 #: ../../library/configparser.rst:468
 msgid ""
@@ -602,6 +891,12 @@ msgid ""
 "*value* pairs for a specified ``section``, with all interpolations expanded "
 "(unless ``raw=True`` is provided)."
 msgstr ""
+"``parser.items()`` é compatível com o protocolo de mapeamento (retorna uma "
+"lista de pares *section_name*, *section_proxy*, incluindo DEFAULTSECT). No "
+"entanto, este método também pode ser invocado com argumentos: ``parser."
+"items(section, raw, vars)``. A última chamada retorna uma lista de pares "
+"*option*, *value* para uma ``section`` especificada, com todas as "
+"interpolações expandidas (a menos que ``raw=True`` seja fornecido)."
 
 #: ../../library/configparser.rst:475
 msgid ""
@@ -609,10 +904,13 @@ msgid ""
 "that subclasses overriding the original interface still should have mappings "
 "working as expected."
 msgstr ""
+"O protocolo de mapeamento é implementado sobre a API legada existente, de "
+"modo que subclasses que substituem a interface original ainda devem ter "
+"mapeamentos a funcionar como esperado."
 
 #: ../../library/configparser.rst:481
 msgid "Customizing Parser Behaviour"
-msgstr ""
+msgstr "Personalizar o Comportamento do Analisador"
 
 #: ../../library/configparser.rst:483
 msgid ""
@@ -622,16 +920,23 @@ msgid ""
 "dictated by historical background and it's very likely that you will want to "
 "customize some of the features."
 msgstr ""
+"Existem quase tantos variantes do formato INI quanto aplicações que o usam. :"
+"mod:`configparser` faz um grande esforço para fornecer suporte para o maior "
+"conjunto sensato de estilos INI disponíveis. A funcionalidade predefinida é "
+"principalmente ditada pelo histórico e é muito provável que queira "
+"personalizar algumas das funcionalidades."
 
 #: ../../library/configparser.rst:489
 msgid ""
 "The most common way to change the way a specific config parser works is to "
 "use the :meth:`!__init__` options:"
 msgstr ""
+"A forma mais comum de alterar a forma como um analisador de configuração "
+"específico funciona é usar as opções :meth:`!__init__`:"
 
 #: ../../library/configparser.rst:492
 msgid "*defaults*, default value: ``None``"
-msgstr ""
+msgstr "*defaults*, valor predefinido: ``None``"
 
 #: ../../library/configparser.rst:494
 msgid ""
@@ -640,16 +945,22 @@ msgid ""
 "concise configuration files that don't specify values which are the same as "
 "the documented default."
 msgstr ""
+"Esta opção aceita um dicionário de pares chave-valor que serão inicialmente "
+"colocados na secção ``DEFAULT``. Isto torna-se uma forma elegante de "
+"suportar ficheiros de configuração concisos que não especificam valores que "
+"são iguais ao predefinido documentado."
 
 #: ../../library/configparser.rst:499
 msgid ""
 "Hint: if you want to specify default values for a specific section, use :"
 "meth:`~ConfigParser.read_dict` before you read the actual file."
 msgstr ""
+"Dica: se quiser especificar valores predefinidos para uma secção específica, "
+"use :meth:`~ConfigParser.read_dict` antes de ler o ficheiro real."
 
 #: ../../library/configparser.rst:502
 msgid "*dict_type*, default value: :class:`dict`"
-msgstr ""
+msgstr "*dict_type*, valor predefinido: :class:`dict`"
 
 #: ../../library/configparser.rst:504
 msgid ""
@@ -658,12 +969,18 @@ msgid ""
 "every section is stored in the order they were added to the parser.  Same "
 "goes for options within sections."
 msgstr ""
+"Esta opção tem um grande impacto em como o protocolo de mapeamento se "
+"comportará e como os ficheiros de configuração escritos parecerão. Com o "
+"dicionário padrão, cada secção é armazenada na ordem em que foram "
+"adicionadas ao analisador. O mesmo acontece com as opções dentro das secções."
 
 #: ../../library/configparser.rst:509
 msgid ""
 "An alternative dictionary type can be used for example to sort sections and "
 "options on write-back."
 msgstr ""
+"Um tipo de dicionário alternativo pode ser usado, por exemplo, para ordenar "
+"secções e opções na escrita de volta."
 
 #: ../../library/configparser.rst:512
 msgid ""
@@ -671,6 +988,9 @@ msgid ""
 "operation.  When you use a regular dictionary in those operations, the order "
 "of the keys will be ordered.  For example:"
 msgstr ""
+"Note que: existem formas de adicionar um conjunto de pares chave-valor numa "
+"única operação. Quando usa um dicionário regular nessas operações, a ordem "
+"das chaves será ordenada. Por exemplo:"
 
 #: ../../library/configparser.rst:516
 msgid ""
@@ -690,10 +1010,25 @@ msgid ""
 ">>> [option for option in parser['section3']]\n"
 "['foo', 'bar', 'baz']"
 msgstr ""
+">>> parser = configparser.ConfigParser()\n"
+">>> parser.read_dict({'section1': {'key1': 'value1',\n"
+"...                                'key2': 'value2',\n"
+"...                                'key3': 'value3'},\n"
+"...                   'section2': {'keyA': 'valueA',\n"
+"...                                'keyB': 'valueB',\n"
+"...                                'keyC': 'valueC'},\n"
+"...                   'section3': {'foo': 'x',\n"
+"...                                'bar': 'y',\n"
+"...                                'baz': 'z'}\n"
+"... })\n"
+">>> parser.sections()\n"
+"['section1', 'section2', 'section3']\n"
+">>> [option for option in parser['section3']]\n"
+"['foo', 'bar', 'baz']"
 
 #: ../../library/configparser.rst:534
 msgid "*allow_no_value*, default value: ``False``"
-msgstr ""
+msgstr "*allow_no_value*, valor predefinido: ``False``"
 
 #: ../../library/configparser.rst:536
 msgid ""
@@ -702,6 +1037,10 @@ msgid ""
 "*allow_no_value* parameter to the constructor can be used to indicate that "
 "such values should be accepted:"
 msgstr ""
+"Alguns ficheiros de configuração incluem definições sem valores, mas que, de "
+"outra forma, estão em conformidade com a sintaxe suportada por :mod:"
+"`configparser`. O parâmetro *allow_no_value* para o construtor pode ser "
+"usado para indicar que tais valores devem ser aceites:"
 
 #: ../../library/configparser.rst:541
 msgid ""
@@ -733,10 +1072,37 @@ msgid ""
 "  ...\n"
 "KeyError: 'does-not-exist'"
 msgstr ""
+">>> import configparser\n"
+"\n"
+">>> sample_config = \"\"\"\n"
+"... [mysqld]\n"
+"...   user = mysql\n"
+"...   pid-file = /var/run/mysqld/mysqld.pid\n"
+"...   skip-external-locking\n"
+"...   old_passwords = 1\n"
+"...   skip-bdb\n"
+"...   # não precisamos de ACID hoje\n"
+"...   skip-innodb\n"
+"... \"\"\"\n"
+">>> config = configparser.ConfigParser(allow_no_value=True)\n"
+">>> config.read_string(sample_config)\n"
+"\n"
+">>> # Definições com valores são tratadas como antes:\n"
+">>> config[\"mysqld\"][\"user\"]\n"
+"'mysql'\n"
+"\n"
+">>> # Definições sem valores fornecem None:\n"
+">>> config[\"mysqld\"][\"skip-bdb\"]\n"
+"\n"
+">>> # Definições que não estão especificadas ainda levantam um erro:\n"
+">>> config[\"mysqld\"][\"does-not-exist\"]\n"
+"Traceback (most recent call last):\n"
+"  ...\n"
+"KeyError: 'does-not-exist'"
 
 #: ../../library/configparser.rst:571
 msgid "*delimiters*, default value: ``('=', ':')``"
-msgstr ""
+msgstr "*delimiters*, valor predefinido: ``('=', ':')``"
 
 #: ../../library/configparser.rst:573
 msgid ""
@@ -744,20 +1110,26 @@ msgid ""
 "The first occurrence of a delimiting substring on a line is considered a "
 "delimiter.  This means values (but not keys) can contain the delimiters."
 msgstr ""
+"Os delimitadores são substrings que delimitam chaves de valores dentro de "
+"uma secção. A primeira ocorrência de uma substring delimitadora numa linha é "
+"considerada um delimitador. Isto significa que os valores (mas não as "
+"chaves) podem conter os delimitadores."
 
 #: ../../library/configparser.rst:577
 msgid ""
 "See also the *space_around_delimiters* argument to :meth:`ConfigParser."
 "write`."
 msgstr ""
+"Veja também o argumento *space_around_delimiters* para :meth:`ConfigParser."
+"write`."
 
 #: ../../library/configparser.rst:580
 msgid "*comment_prefixes*, default value: ``('#', ';')``"
-msgstr ""
+msgstr "*comment_prefixes*, valor predefinido: ``('#', ';')``"
 
 #: ../../library/configparser.rst:582
 msgid "*inline_comment_prefixes*, default value: ``None``"
-msgstr ""
+msgstr "*inline_comment_prefixes*, valor predefinido: ``None``"
 
 #: ../../library/configparser.rst:584
 msgid ""
@@ -768,12 +1140,21 @@ msgid ""
 "well).  By default inline comments are disabled and ``'#'`` and ``';'`` are "
 "used as prefixes for whole line comments."
 msgstr ""
+"Os prefixos de comentário são strings que indicam o início de um comentário "
+"válido dentro de um ficheiro de configuração. *comment_prefixes* são usados "
+"apenas em linhas vazias (opcionalmente indentadas), enquanto "
+"*inline_comment_prefixes* podem ser usados após cada valor válido (por "
+"exemplo, nomes de secções, opções e linhas vazias também). Por predefinição, "
+"os comentários em linha estão desativados e ``'#'`` e ``';'`` são usados "
+"como prefixos para comentários de linha inteira."
 
 #: ../../library/configparser.rst:591
 msgid ""
 "In previous versions of :mod:`configparser` behaviour matched "
 "``comment_prefixes=('#',';')`` and ``inline_comment_prefixes=(';',)``."
 msgstr ""
+"Em versões anteriores de :mod:`configparser`, o comportamento correspondia a "
+"``comment_prefixes=('#',';')`` e ``inline_comment_prefixes=(';',)``."
 
 #: ../../library/configparser.rst:595
 msgid ""
@@ -784,6 +1165,13 @@ msgid ""
 "storing comment prefix characters at the beginning of a line in multiline "
 "values is to interpolate the prefix, for example::"
 msgstr ""
+"Note que os analisadores de configuração não suportam o escape de prefixos "
+"de comentário, por isso usar *inline_comment_prefixes* pode impedir os "
+"utilizadores de especificar valores de opção com caracteres usados como "
+"prefixos de comentário. Em caso de dúvida, evite definir "
+"*inline_comment_prefixes*. Em qualquer circunstância, a única forma de "
+"armazenar caracteres de prefixo de comentário no início de uma linha em "
+"valores multilinhas é interpolá-los, por exemplo::"
 
 #: ../../library/configparser.rst:602
 msgid ""
@@ -829,7 +1217,7 @@ msgstr ""
 
 #: ../../library/configparser.rst:641
 msgid "*strict*, default value: ``True``"
-msgstr ""
+msgstr "*strict*, valor predefinido: ``True``"
 
 #: ../../library/configparser.rst:643
 msgid ""
@@ -838,16 +1226,23 @@ msgid ""
 "read_file`, :meth:`~ConfigParser.read_string` or :meth:`~ConfigParser."
 "read_dict`).  It is recommended to use strict parsers in new applications."
 msgstr ""
+"Quando definido como ``True``, o analisador não permitirá quaisquer "
+"duplicados de secções ou opções ao ler de uma única fonte (usando :meth:"
+"`~ConfigParser.read_file`, :meth:`~ConfigParser.read_string` ou :meth:"
+"`~ConfigParser.read_dict`). É recomendado usar analisadores estritos em "
+"novas aplicações."
 
 #: ../../library/configparser.rst:648
 msgid ""
 "In previous versions of :mod:`configparser` behaviour matched "
 "``strict=False``."
 msgstr ""
+"Em versões anteriores de :mod:`configparser`, o comportamento correspondia a "
+"``strict=False``."
 
 #: ../../library/configparser.rst:652
 msgid "*empty_lines_in_values*, default value: ``True``"
-msgstr ""
+msgstr "*empty_lines_in_values*, valor predefinido: ``True``"
 
 #: ../../library/configparser.rst:654
 msgid ""
@@ -858,6 +1253,13 @@ msgid ""
 "when configuration files get big and complex, it is easy for the user to "
 "lose track of the file structure.  Take for instance:"
 msgstr ""
+"Nos analisadores de configuração, os valores podem abranger várias linhas, "
+"desde que estejam indentados mais do que a chave que os contém. Por "
+"predefinição, os analisadores também permitem que linhas vazias façam parte "
+"dos valores. Ao mesmo tempo, as chaves podem ser indentadas arbitrariamente "
+"para melhorar a legibilidade. Em consequência, quando os ficheiros de "
+"configuração se tornam grandes e complexos, é fácil para o utilizador perder "
+"a noção da estrutura do ficheiro. Tome como exemplo:"
 
 #: ../../library/configparser.rst:661
 msgid ""
@@ -867,6 +1269,11 @@ msgid ""
 "\n"
 " this = is still a part of the multiline value of 'key'"
 msgstr ""
+"[Section]\n"
+"key = multiline\n"
+"  valor com uma armadilha\n"
+"\n"
+" this = ainda faz parte do valor multilinhas de 'key'"
 
 #: ../../library/configparser.rst:669
 msgid ""
@@ -876,12 +1283,19 @@ msgid ""
 "This will make empty lines split keys every time.  In the example above, it "
 "would produce two keys, ``key`` and ``this``."
 msgstr ""
+"Isto pode ser especialmente problemático para o utilizador ver se estiver a "
+"usar uma fonte proporcional para editar o ficheiro. É por isso que, quando a "
+"sua aplicação não precisa de valores com linhas vazias, deve considerar não "
+"os permitir. Isto fará com que as linhas vazias separem as chaves todas as "
+"vezes. No exemplo acima, produziria duas chaves, ``key`` e ``this``."
 
 #: ../../library/configparser.rst:675
 msgid ""
 "*default_section*, default value: ``configparser.DEFAULTSECT`` (that is: "
 "``\"DEFAULT\"``)"
 msgstr ""
+"*default_section*, valor predefinido: ``configparser.DEFAULTSECT`` (ou seja: "
+"``\"DEFAULT\"``)"
 
 #: ../../library/configparser.rst:678
 msgid ""
@@ -896,10 +1310,22 @@ msgid ""
 "default_section`` attribute and may be modified at runtime (i.e. to convert "
 "files from one format to another)."
 msgstr ""
+"A convenção de permitir uma secção especial de valores predefinidos para "
+"outras secções ou para fins de interpolação é um conceito poderoso desta "
+"biblioteca, permitindo que os utilizadores criem configurações declarativas "
+"complexas. Esta secção é normalmente chamada ``\"DEFAULT\"``, mas isto pode "
+"ser personalizado para apontar para qualquer outro nome de secção válido. "
+"Alguns valores típicos incluem: ``\"general\"`` ou ``\"common\"``. O nome "
+"fornecido é usado para reconhecer secções predefinidas ao ler de qualquer "
+"fonte e é usado ao escrever a configuração de volta para um ficheiro. O seu "
+"valor atual pode ser recuperado usando o atributo ``parser_instance."
+"default_section`` e pode ser modificado em tempo de execução (por exemplo, "
+"para converter ficheiros de um formato para outro)."
 
 #: ../../library/configparser.rst:689
 msgid "*interpolation*, default value: ``configparser.BasicInterpolation``"
 msgstr ""
+"*interpolation*, valor predefinido: ``configparser.BasicInterpolation``"
 
 #: ../../library/configparser.rst:691
 msgid ""
@@ -910,10 +1336,17 @@ msgid ""
 "`dedicated documentation section <#interpolation-of-values>`_. :class:"
 "`RawConfigParser` has a default value of ``None``."
 msgstr ""
+"O comportamento de interpolação pode ser personalizado fornecendo um "
+"manipulador personalizado através do argumento *interpolation*. ``None`` "
+"pode ser usado para desligar completamente a interpolação, "
+"``ExtendedInterpolation()`` fornece uma variante mais avançada inspirada em "
+"``zc.buildout``. Mais sobre o assunto na `secção de documentação dedicada "
+"<#interpolation-of-values>`_. :class:`RawConfigParser` tem um valor "
+"predefinido de ``None``."
 
 #: ../../library/configparser.rst:698
 msgid "*converters*, default value: not set"
-msgstr ""
+msgstr "*converters*, valor predefinido: não definido"
 
 #: ../../library/configparser.rst:700
 msgid ""
@@ -928,6 +1361,17 @@ msgid ""
 "``parser_instance.getdecimal('section', 'key', fallback=0)`` and "
 "``parser_instance['section'].getdecimal('key', 0)``."
 msgstr ""
+"Os analisadores de configuração fornecem métodos de obtenção de valores de "
+"opção que realizam conversão de tipo. Por predefinição, :meth:`~ConfigParser."
+"getint`, :meth:`~ConfigParser.getfloat` e :meth:`~ConfigParser.getboolean` "
+"são implementados. Se outros métodos de obtenção forem desejáveis, os "
+"utilizadores podem defini-los numa subclasse ou passar um dicionário onde "
+"cada chave é um nome do conversor e cada valor é um objeto invocável que "
+"implementa a conversão. Por exemplo, passar ``{'decimal': decimal.Decimal}`` "
+"adicionaria :meth:`!getdecimal` tanto no objeto analisador como em todos os "
+"proxies de secção. Em outras palavras, será possível escrever tanto "
+"``parser_instance.getdecimal('section', 'key', fallback=0)`` como "
+"``parser_instance['section'].getdecimal('key', 0)``."
 
 #: ../../library/configparser.rst:711
 msgid ""
@@ -936,6 +1380,11 @@ msgid ""
 "method starts with ``get``, it will be available on all section proxies, in "
 "the dict-compatible form (see the ``getdecimal()`` example above)."
 msgstr ""
+"Se o conversor precisar de aceder ao estado do analisador, pode ser "
+"implementado como um método numa subclasse do analisador de configuração. Se "
+"o nome deste método começar com ``get``, estará disponível em todos os "
+"proxies de secção, na forma compatível com dicionário (consulte o exemplo "
+"``getdecimal()`` acima)."
 
 #: ../../library/configparser.rst:716
 msgid ""
@@ -943,6 +1392,10 @@ msgid ""
 "these parser attributes.  The defaults are defined on the classes, so they "
 "may be overridden by subclasses or by attribute assignment."
 msgstr ""
+"Uma personalização mais avançada pode ser alcançada substituindo os valores "
+"predefinidos destes atributos do analisador. Os valores predefinidos são "
+"definidos nas classes, por isso podem ser substituídos por subclasses ou por "
+"atribuição de atributos."
 
 #: ../../library/configparser.rst:722
 msgid ""
@@ -1003,6 +1456,26 @@ msgid ""
 ">>> list(custom['Section2'].keys())\n"
 "['AnotherKey']"
 msgstr ""
+">>> config = \"\"\"\n"
+"... [Section1]\n"
+"... Key = Value\n"
+"...\n"
+"... [Section2]\n"
+"... AnotherKey = Value\n"
+"... \"\"\"\n"
+">>> typical = configparser.ConfigParser()\n"
+">>> typical.read_string(config)\n"
+">>> list(typical['Section1'].keys())\n"
+"['key']\n"
+">>> list(typical['Section2'].keys())\n"
+"['anotherkey']\n"
+">>> custom = configparser.RawConfigParser()\n"
+">>> custom.optionxform = lambda option: option\n"
+">>> custom.read_string(config)\n"
+">>> list(custom['Section1'].keys())\n"
+"['Key']\n"
+">>> list(custom['Section2'].keys())\n"
+"['AnotherKey']"
 
 #: ../../library/configparser.rst:776
 msgid ""
@@ -1010,6 +1483,9 @@ msgid ""
 "should be an idempotent function: if the name is already in canonical form, "
 "it should be returned unchanged."
 msgstr ""
+"A função optionxform transforma os nomes das opções para uma forma canónica. "
+"Isto deve ser uma função idempotente: se o nome já estiver na forma "
+"canónica, deve ser retornado inalterado."
 
 #: ../../library/configparser.rst:783
 msgid ""
@@ -1040,6 +1516,23 @@ msgid ""
 ">>> custom.sections()\n"
 "['Section 1', 'Section 2']"
 msgstr ""
+">>> import re\n"
+">>> config = \"\"\"\n"
+"... [Section 1]\n"
+"... option = value\n"
+"...\n"
+"... [  Section 2  ]\n"
+"... another = val\n"
+"... \"\"\"\n"
+">>> typical = configparser.ConfigParser()\n"
+">>> typical.read_string(config)\n"
+">>> typical.sections()\n"
+"['Section 1', '  Section 2  ']\n"
+">>> custom = configparser.ConfigParser()\n"
+">>> custom.SECTCRE = re.compile(r\"\\[ *(?P<header>[^]]+?) *\\]\")\n"
+">>> custom.read_string(config)\n"
+">>> custom.sections()\n"
+"['Section 1', 'Section 2']"
 
 #: ../../library/configparser.rst:811
 msgid ""
@@ -1050,7 +1543,7 @@ msgstr ""
 
 #: ../../library/configparser.rst:817
 msgid "Legacy API Examples"
-msgstr ""
+msgstr "Exemplos de API Legada"
 
 #: ../../library/configparser.rst:819
 msgid ""
@@ -1063,7 +1556,7 @@ msgstr ""
 
 #: ../../library/configparser.rst:825
 msgid "An example of writing to a configuration file::"
-msgstr ""
+msgstr "Um exemplo de escrita num ficheiro de configuração::"
 
 #: ../../library/configparser.rst:827
 msgid ""
@@ -1091,7 +1584,7 @@ msgstr ""
 
 #: ../../library/configparser.rst:848
 msgid "An example of reading the configuration file again::"
-msgstr ""
+msgstr "Um exemplo de leitura do ficheiro de configuração novamente::"
 
 #: ../../library/configparser.rst:850
 msgid ""
@@ -1111,10 +1604,25 @@ msgid ""
 "if config.getboolean('Section1', 'a_bool'):\n"
 "    print(config.get('Section1', 'foo'))"
 msgstr ""
+"import configparser\n"
+"\n"
+"config = configparser.RawConfigParser()\n"
+"config.read('example.cfg')\n"
+"\n"
+"# getfloat() levanta uma exceção se o valor não for um float\n"
+"# getint() e getboolean() também o fazem para os seus respetivos tipos\n"
+"a_float = config.getfloat('Section1', 'a_float')\n"
+"an_int = config.getint('Section1', 'an_int')\n"
+"print(a_float + an_int)\n"
+"\n"
+"# Note que a próxima saída não interpola '%(bar)s' ou '%(baz)s'.\n"
+"# Isto é porque estamos a usar um RawConfigParser().\n"
+"if config.getboolean('Section1', 'a_bool'):\n"
+"    print(config.get('Section1', 'foo'))"
 
 #: ../../library/configparser.rst:866
 msgid "To get interpolation, use :class:`ConfigParser`::"
-msgstr ""
+msgstr "Para obter interpolação, use :class:`ConfigParser`::"
 
 #: ../../library/configparser.rst:868
 msgid ""
@@ -1150,12 +1658,47 @@ msgid ""
 "print(cfg.get('Section1', 'monster', fallback=None))\n"
 "      # -> None"
 msgstr ""
+"import configparser\n"
+"\n"
+"cfg = configparser.ConfigParser()\n"
+"cfg.read('example.cfg')\n"
+"\n"
+"# Defina o argumento opcional *raw* de get() como True se desejar desativar\n"
+"# a interpolação numa única operação get.\n"
+"print(cfg.get('Section1', 'foo', raw=False))  # -> \"Python is fun!\"\n"
+"print(cfg.get('Section1', 'foo', raw=True))   # -> \"%(bar)s is %(baz)s!\"\n"
+"\n"
+"# O argumento opcional *vars* é um dicionário com membros que terão "
+"precedência na interpolação.\n"
+"print(cfg.get('Section1', 'foo', vars={'bar': 'Documentation',\n"
+"                                       'baz': 'evil'}))\n"
+"\n"
+"# O argumento opcional *fallback* pode ser usado para fornecer um valor de "
+"recurso\n"
+"print(cfg.get('Section1', 'foo'))\n"
+"      # -> \"Python is fun!\"\n"
+"\n"
+"print(cfg.get('Section1', 'foo', fallback='Monty is not.'))\n"
+"      # -> \"Python is fun!\"\n"
+"\n"
+"print(cfg.get('Section1', 'monster', fallback='No such things as "
+"monsters.'))\n"
+"      # -> \"No such things as monsters.\"\n"
+"\n"
+"# Um simples print(cfg.get('Section1', 'monster')) levantaria NoOptionError\n"
+"# mas também podemos usar:\n"
+"\n"
+"print(cfg.get('Section1', 'monster', fallback=None))\n"
+"      # -> None"
 
 #: ../../library/configparser.rst:899
 msgid ""
 "Default values are available in both types of ConfigParsers.  They are used "
 "in interpolation if an option used is not defined elsewhere. ::"
 msgstr ""
+"Os valores predefinidos estão disponíveis em ambos os tipos de "
+"ConfigParsers. São usados na interpolação se uma opção usada não estiver "
+"definida noutro lugar. ::"
 
 #: ../../library/configparser.rst:902
 msgid ""
@@ -1170,10 +1713,21 @@ msgid ""
 "config.remove_option('Section1', 'baz')\n"
 "print(config.get('Section1', 'foo'))     # -> \"Life is hard!\""
 msgstr ""
+"import configparser\n"
+"\n"
+"# Nova instância com 'bar' e 'baz' predefinidos para 'Life' e 'hard', "
+"respetivamente\n"
+"config = configparser.ConfigParser({'bar': 'Life', 'baz': 'hard'})\n"
+"config.read('example.cfg')\n"
+"\n"
+"print(config.get('Section1', 'foo'))     # -> \"Python is fun!\"\n"
+"config.remove_option('Section1', 'bar')\n"
+"config.remove_option('Section1', 'baz')\n"
+"print(config.get('Section1', 'foo'))     # -> \"Life is hard!\""
 
 #: ../../library/configparser.rst:917
 msgid "ConfigParser Objects"
-msgstr ""
+msgstr "Objetos ConfigParser"
 
 #: ../../library/configparser.rst:921
 msgid ""
@@ -1182,6 +1736,11 @@ msgid ""
 "will be used to create the dictionary objects for the list of sections, for "
 "the options within a section, and for the default values."
 msgstr ""
+"O principal analisador de configuração. Quando *defaults* é fornecido, é "
+"inicializado no dicionário de valores predefinidos intrínsecos. Quando "
+"*dict_type* é fornecido, será usado para criar os objetos de dicionário para "
+"a lista de secções, para as opções dentro de uma secção e para os valores "
+"predefinidos."
 
 #: ../../library/configparser.rst:926
 msgid ""
@@ -1191,6 +1750,12 @@ msgid ""
 "can be indented.  When *inline_comment_prefixes* is given, it will be used "
 "as the set of substrings that prefix comments in non-empty lines."
 msgstr ""
+"Quando *delimiters* é fornecido, é usado como o conjunto de substrings que "
+"dividem as chaves dos valores. Quando *comment_prefixes* é fornecido, será "
+"usado como o conjunto de substrings que prefixam comentários em linhas "
+"vazias. Os comentários podem ser indentados. Quando "
+"*inline_comment_prefixes* é fornecido, será usado como o conjunto de "
+"substrings que prefixam comentários em linhas não vazias."
 
 #: ../../library/configparser.rst:932
 msgid ""
@@ -1204,6 +1769,15 @@ msgid ""
 "are accepted; the value held for these is ``None`` and they are serialized "
 "without the trailing delimiter."
 msgstr ""
+"Quando *strict* é ``True`` (o predefinido), o analisador não permitirá "
+"quaisquer duplicados de secções ou opções ao ler de uma única fonte "
+"(ficheiro, string ou dicionário), levantando :exc:`DuplicateSectionError` "
+"ou :exc:`DuplicateOptionError`. Quando *empty_lines_in_values* é ``False`` "
+"(predefinido: ``True``), cada linha vazia marca o fim de uma opção. Caso "
+"contrário, as linhas vazias internas de uma opção multilinha são mantidas "
+"como parte do valor. Quando *allow_no_value* é ``True`` (predefinido: "
+"``False``), as opções sem valores são aceites; o valor mantido para estas é "
+"``None`` e são serializadas sem o delimitador final."
 
 #: ../../library/configparser.rst:942
 msgid ""
@@ -1214,6 +1788,13 @@ msgid ""
 "evaluate an already parsed config file, but will be used when writing parsed "
 "settings to a new config file."
 msgstr ""
+"Quando *default_section* é fornecido, especifica o nome para a secção "
+"especial que contém valores predefinidos para outras secções e fins de "
+"interpolação (normalmente chamada ``\"DEFAULT\"``). Este valor pode ser "
+"recuperado e alterado em tempo de execução usando o atributo de instância "
+"``default_section``. Isto não reavaliará um ficheiro de configuração já "
+"analisado, mas será usado ao escrever as definições analisadas num novo "
+"ficheiro de configuração."
 
 #: ../../library/configparser.rst:949
 msgid ""
@@ -1232,6 +1813,11 @@ msgid ""
 "converts option names to lower case), the values ``foo %(bar)s`` and ``foo "
 "%(BAR)s`` are equivalent."
 msgstr ""
+"Todos os nomes de opções usados na interpolação serão passados pelo método :"
+"meth:`optionxform`, tal como qualquer outra referência de nome de opção. Por "
+"exemplo, usando a implementação predefinida de :meth:`optionxform` (que "
+"converte nomes de opções para minúsculas), os valores ``foo %(bar)s`` e "
+"``foo %(BAR)s`` são equivalentes."
 
 #: ../../library/configparser.rst:961
 msgid ""
@@ -1241,20 +1827,28 @@ msgid ""
 "converter gets its own corresponding :meth:`!get*` method on the parser "
 "object and section proxies."
 msgstr ""
+"Quando *converters* é fornecido, deve ser um dicionário onde cada chave "
+"representa o nome de um conversor de tipo e cada valor é um objeto invocável "
+"que implementa a conversão de string para o tipo de dados desejado. Cada "
+"conversor obtém o seu próprio método :meth:`!get*` correspondente no objeto "
+"analisador e nos proxies de secção."
 
 #: ../../library/configparser.rst:992
 msgid "The default *dict_type* is :class:`collections.OrderedDict`."
-msgstr ""
+msgstr "O tipo *dict_type* predefinido é :class:`collections.OrderedDict`."
 
 #: ../../library/configparser.rst:995
 msgid ""
 "*allow_no_value*, *delimiters*, *comment_prefixes*, *strict*, "
 "*empty_lines_in_values*, *default_section* and *interpolation* were added."
 msgstr ""
+"*allow_no_value*, *delimiters*, *comment_prefixes*, *strict*, "
+"*empty_lines_in_values*, *default_section* e *interpolation* foram "
+"adicionados."
 
 #: ../../library/configparser.rst:1000
 msgid "The *converters* argument was added."
-msgstr ""
+msgstr "O argumento *converters* foi adicionado."
 
 #: ../../library/configparser.rst:1003
 msgid ""
@@ -1262,22 +1856,30 @@ msgid ""
 "behavior across the parser: non-string keys and values are implicitly "
 "converted to strings."
 msgstr ""
+"O argumento *defaults* é lido com :meth:`read_dict`, fornecendo "
+"comportamento consistente em todo o analisador: chaves e valores não-string "
+"são implicitamente convertidos para strings."
 
 #: ../../library/configparser.rst:1008 ../../library/configparser.rst:1271
 msgid ""
 "The default *dict_type* is :class:`dict`, since it now preserves insertion "
 "order."
 msgstr ""
+"O tipo *dict_type* predefinido é :class:`dict`, uma vez que agora preserva a "
+"ordem de inserção."
 
 #: ../../library/configparser.rst:1014
 msgid "Return a dictionary containing the instance-wide defaults."
 msgstr ""
+"Retorna um dicionário contendo os valores predefinidos em toda a instância."
 
 #: ../../library/configparser.rst:1019
 msgid ""
 "Return a list of the sections available; the *default section* is not "
 "included in the list."
 msgstr ""
+"Retorna uma lista das secções disponíveis; a *secção predefinida* não está "
+"incluída na lista."
 
 #: ../../library/configparser.rst:1025
 msgid ""
@@ -1286,20 +1888,27 @@ msgid ""
 "*default section* name is passed, :exc:`ValueError` is raised.  The name of "
 "the section must be a string; if not, :exc:`TypeError` is raised."
 msgstr ""
+"Adiciona uma secção com o nome *section* à instância. Se uma secção com o "
+"nome dado já existir, é levantada uma :exc:`DuplicateSectionError`. Se o "
+"nome da *secção predefinida* for passado, é levantada uma :exc:`ValueError`. "
+"O nome da secção deve ser uma string; se não for, é levantada uma :exc:"
+"`TypeError`."
 
 #: ../../library/configparser.rst:1030
 msgid "Non-string section names raise :exc:`TypeError`."
-msgstr ""
+msgstr "Nomes de secção não-string levantam :exc:`TypeError`."
 
 #: ../../library/configparser.rst:1036
 msgid ""
 "Indicates whether the named *section* is present in the configuration. The "
 "*default section* is not acknowledged."
 msgstr ""
+"Indica se a *secção* nomeada está presente na configuração. A *secção "
+"predefinida* não é reconhecida."
 
 #: ../../library/configparser.rst:1042
 msgid "Return a list of options available in the specified *section*."
-msgstr ""
+msgstr "Retorna uma lista de opções disponíveis na *secção* especificada."
 
 #: ../../library/configparser.rst:1047
 msgid ""
@@ -1307,12 +1916,17 @@ msgid ""
 "const:`True`; otherwise return :const:`False`.  If the specified *section* "
 "is :const:`None` or an empty string, DEFAULT is assumed."
 msgstr ""
+"Se a *secção* dada existir e contiver a *opção* dada, retorna :const:`True`; "
+"caso contrário, retorna :const:`False`. Se a *secção* especificada for :"
+"const:`None` ou uma string vazia, assume-se DEFAULT."
 
 #: ../../library/configparser.rst:1054
 msgid ""
 "Attempt to read and parse an iterable of filenames, returning a list of "
 "filenames which were successfully parsed."
 msgstr ""
+"Tenta ler e analisar um iterável de nomes de ficheiros, retornando uma lista "
+"de nomes de ficheiros que foram analisados com sucesso."
 
 #: ../../library/configparser.rst:1057
 msgid ""
@@ -1324,6 +1938,13 @@ msgid ""
 "wide directory), and all existing configuration files in the iterable will "
 "be read."
 msgstr ""
+"Se *filenames* for uma string, um objeto :class:`bytes` ou um objeto :term:"
+"`path-like`, é tratado como um único nome de ficheiro. Se um ficheiro "
+"nomeado em *filenames* não puder ser aberto, esse ficheiro será ignorado. "
+"Isto é concebido para que possa especificar um iterável de locais potenciais "
+"de ficheiros de configuração (por exemplo, o diretório atual, o diretório "
+"inicial do utilizador e algum diretório do sistema), e todos os ficheiros de "
+"configuração existentes no iterável serão lidos."
 
 #: ../../library/configparser.rst:1066
 msgid ""
@@ -1332,6 +1953,11 @@ msgid ""
 "be loaded from a file should load the required file or files using :meth:"
 "`read_file` before calling :meth:`read` for any optional files::"
 msgstr ""
+"Se nenhum dos ficheiros nomeados existir, a instância :class:`ConfigParser` "
+"conterá um conjunto de dados vazio. Uma aplicação que requer valores "
+"iniciais a serem carregados de um ficheiro deve carregar o ficheiro ou "
+"ficheiros necessários usando :meth:`read_file` antes de chamar :meth:`read` "
+"para quaisquer ficheiros opcionais::"
 
 #: ../../library/configparser.rst:1072
 msgid ""
@@ -1342,26 +1968,36 @@ msgid ""
 "config.read(['site.cfg', os.path.expanduser('~/.myapp.cfg')],\n"
 "            encoding='cp1250')"
 msgstr ""
+"import configparser, os\n"
+"\n"
+"config = configparser.ConfigParser()\n"
+"config.read_file(open('defaults.cfg'))\n"
+"config.read(['site.cfg', os.path.expanduser('~/.myapp.cfg')],\n"
+"            encoding='cp1250')"
 
 #: ../../library/configparser.rst:1079
 msgid ""
 "Added the *encoding* parameter. Previously, all files were read using the "
 "default encoding for :func:`open`."
 msgstr ""
+"Adicionado o parâmetro *encoding*. Anteriormente, todos os ficheiros eram "
+"lidos usando a codificação predefinida para :func:`open`."
 
 #: ../../library/configparser.rst:1083
 msgid "The *filenames* parameter accepts a :term:`path-like object`."
-msgstr ""
+msgstr "O parâmetro *filenames* aceita um objeto :term:`path-like`."
 
 #: ../../library/configparser.rst:1086
 msgid "The *filenames* parameter accepts a :class:`bytes` object."
-msgstr ""
+msgstr "O parâmetro *filenames* aceita um objeto :class:`bytes`."
 
 #: ../../library/configparser.rst:1092
 msgid ""
 "Read and parse configuration data from *f* which must be an iterable "
 "yielding Unicode strings (for example files opened in text mode)."
 msgstr ""
+"Lê e analisa dados de configuração de *f*, que deve ser um iterável que "
+"produz strings Unicode (por exemplo, ficheiros abertos em modo de texto)."
 
 #: ../../library/configparser.rst:1095
 msgid ""
@@ -1369,14 +2005,17 @@ msgid ""
 "not given and *f* has a :attr:`!name` attribute, that is used for *source*; "
 "the default is ``'<???>'``."
 msgstr ""
+"O argumento opcional *source* especifica o nome do ficheiro a ser lido. Se "
+"não for fornecido e *f* tiver um atributo :attr:`!name`, esse é usado para "
+"*source*; o predefinido é ``'<???>'``."
 
 #: ../../library/configparser.rst:1099
 msgid "Replaces :meth:`!readfp`."
-msgstr ""
+msgstr "Substitui :meth:`!readfp`."
 
 #: ../../library/configparser.rst:1104
 msgid "Parse configuration data from a string."
-msgstr ""
+msgstr "Analisa dados de configuração a partir de uma string."
 
 #: ../../library/configparser.rst:1106
 msgid ""
@@ -1384,6 +2023,9 @@ msgid ""
 "passed.  If not given, ``'<string>'`` is used.  This should commonly be a "
 "filesystem path or a URL."
 msgstr ""
+"O argumento opcional *source* especifica um nome específico do contexto da "
+"string passada. Se não for fornecido, ``'<string>'`` é usado. Isto deve ser "
+"comumente um caminho do sistema de ficheiros ou um URL."
 
 #: ../../library/configparser.rst:1115
 msgid ""
@@ -1393,16 +2035,24 @@ msgid ""
 "preserves order, sections and their keys will be added in order. Values are "
 "automatically converted to strings."
 msgstr ""
+"Carrega a configuração de qualquer objeto que forneça um método ``items()`` "
+"semelhante a um dicionário. As chaves são nomes de secções, os valores são "
+"dicionários com chaves e valores que devem estar presentes na secção. Se o "
+"tipo de dicionário usado preservar a ordem, as secções e as suas chaves "
+"serão adicionadas por ordem. Os valores são automaticamente convertidos para "
+"strings."
 
 #: ../../library/configparser.rst:1121
 msgid ""
 "Optional argument *source* specifies a context-specific name of the "
 "dictionary passed.  If not given, ``<dict>`` is used."
 msgstr ""
+"O argumento opcional *source* especifica um nome específico do contexto do "
+"dicionário passado. Se não for fornecido, ``<dict>`` é usado."
 
 #: ../../library/configparser.rst:1124
 msgid "This method can be used to copy state between parsers."
-msgstr ""
+msgstr "Este método pode ser usado para copiar o estado entre analisadores."
 
 #: ../../library/configparser.rst:1131
 msgid ""
@@ -1412,6 +2062,11 @@ msgid ""
 "*fallback* is provided, it is used as a fallback value.  ``None`` can be "
 "provided as a *fallback* value."
 msgstr ""
+"Obtém um valor de *opção* para a *secção* nomeada. Se *vars* for fornecido, "
+"deve ser um dicionário. A *opção* é procurada em *vars* (se fornecido), "
+"*secção* e em *DEFAULTSECT* por essa ordem. Se a chave não for encontrada e "
+"*fallback* for fornecido, é usado como um valor de recurso. ``None`` pode "
+"ser fornecido como um valor de *fallback*."
 
 #: ../../library/configparser.rst:1137
 msgid ""
@@ -1419,6 +2074,9 @@ msgid ""
 "*raw* argument is true.  Values for interpolation keys are looked up in the "
 "same manner as the option."
 msgstr ""
+"Todas as interpolações ``'%'`` são expandidas nos valores de retorno, a "
+"menos que o argumento *raw* seja verdadeiro. Os valores para as chaves de "
+"interpolação são procurados da mesma forma que a opção."
 
 #: ../../library/configparser.rst:1141
 msgid ""
@@ -1426,6 +2084,9 @@ msgid ""
 "from trying to use the third argument as the *fallback* fallback (especially "
 "when using the mapping protocol)."
 msgstr ""
+"Os argumentos *raw*, *vars* e *fallback* são apenas por palavra-chave para "
+"proteger os utilizadores de tentarem usar o terceiro argumento como o "
+"*fallback* de recurso (especialmente ao usar o protocolo de mapeamento)."
 
 #: ../../library/configparser.rst:1149
 msgid ""
@@ -1433,6 +2094,9 @@ msgid ""
 "to an integer.  See :meth:`get` for explanation of *raw*, *vars* and "
 "*fallback*."
 msgstr ""
+"Um método de conveniência que converte a *opção* na *secção* especificada "
+"para um inteiro. Consulte :meth:`get` para a explicação de *raw*, *vars* e "
+"*fallback*."
 
 #: ../../library/configparser.rst:1156
 msgid ""
@@ -1440,6 +2104,9 @@ msgid ""
 "to a floating-point number.  See :meth:`get` for explanation of *raw*, "
 "*vars* and *fallback*."
 msgstr ""
+"Um método de conveniência que converte a *opção* na *secção* especificada "
+"para um número de ponto flutuante. Consulte :meth:`get` para a explicação de "
+"*raw*, *vars* e *fallback*."
 
 #: ../../library/configparser.rst:1163
 msgid ""
@@ -1452,12 +2119,22 @@ msgid ""
 "`ValueError`.  See :meth:`get` for explanation of *raw*, *vars* and "
 "*fallback*."
 msgstr ""
+"Um método de conveniência que converte a *opção* na *secção* especificada "
+"para um valor booleano. Note que os valores aceites para a opção são "
+"``'1'``, ``'yes'``, ``'true'`` e ``'on'``, que fazem com que este método "
+"retorne ``True``, e ``'0'``, ``'no'``, ``'false'`` e ``'off'``, que fazem "
+"com que retorne ``False``. Estes valores de string são verificados de forma "
+"não sensível a maiúsculas e minúsculas. Qualquer outro valor fará com que "
+"levante :exc:`ValueError`. Consulte :meth:`get` para a explicação de *raw*, "
+"*vars* e *fallback*."
 
 #: ../../library/configparser.rst:1176
 msgid ""
 "When *section* is not given, return a list of *section_name*, "
 "*section_proxy* pairs, including DEFAULTSECT."
 msgstr ""
+"Quando *section* não é fornecido, retorna uma lista de pares *section_name*, "
+"*section_proxy*, incluindo DEFAULTSECT."
 
 #: ../../library/configparser.rst:1179
 msgid ""
@@ -1465,6 +2142,9 @@ msgid ""
 "given *section*.  Optional arguments have the same meaning as for the :meth:"
 "`get` method."
 msgstr ""
+"Caso contrário, retorna uma lista de pares *name*, *value* para as opções na "
+"*secção* dada. Os argumentos opcionais têm o mesmo significado que para o "
+"método :meth:`get`."
 
 #: ../../library/configparser.rst:1183
 msgid ""
@@ -1472,6 +2152,9 @@ msgid ""
 "behaviour mixed actual parser options with variables provided for "
 "interpolation."
 msgstr ""
+"Itens presentes em *vars* já não aparecem no resultado. O comportamento "
+"anterior misturava opções reais do analisador com variáveis fornecidas para "
+"interpolação."
 
 #: ../../library/configparser.rst:1191
 msgid ""
@@ -1479,6 +2162,9 @@ msgid ""
 "otherwise raise :exc:`NoSectionError`.  *option* and *value* must be "
 "strings; if not, :exc:`TypeError` is raised."
 msgstr ""
+"Se a secção dada existir, define a opção dada para o valor especificado; "
+"caso contrário, levanta :exc:`NoSectionError`. *option* e *value* devem ser "
+"strings; se não forem, é levantada uma :exc:`TypeError`."
 
 #: ../../library/configparser.rst:1198
 msgid ""
@@ -1488,6 +2174,11 @@ msgid ""
 "*space_around_delimiters* is true, delimiters between keys and values are "
 "surrounded by spaces."
 msgstr ""
+"Escreve uma representação da configuração no objeto :term:`file` "
+"especificado, que deve ser aberto em modo de texto (aceitando strings). Esta "
+"representação pode ser analisada por uma chamada futura :meth:`read`. Se "
+"*space_around_delimiters* for verdadeiro, os delimitadores entre chaves e "
+"valores são rodeados por espaços."
 
 #: ../../library/configparser.rst:1206
 msgid ""
@@ -1495,6 +2186,9 @@ msgid ""
 "the configuration back. What is considered a comment, depends on the given "
 "values for *comment_prefix* and *inline_comment_prefix*."
 msgstr ""
+"Os comentários no ficheiro de configuração original não são preservados ao "
+"escrever a configuração de volta. O que é considerado um comentário depende "
+"dos valores dados para *comment_prefix* e *inline_comment_prefix*."
 
 #: ../../library/configparser.rst:1214
 msgid ""
@@ -1502,12 +2196,17 @@ msgid ""
 "does not exist, raise :exc:`NoSectionError`.  If the option existed to be "
 "removed, return :const:`True`; otherwise return :const:`False`."
 msgstr ""
+"Remove a *opção* especificada da *secção* especificada. Se a secção não "
+"existir, levanta :exc:`NoSectionError`. Se a opção existir para ser "
+"removida, retorna :const:`True`; caso contrário, retorna :const:`False`."
 
 #: ../../library/configparser.rst:1222
 msgid ""
 "Remove the specified *section* from the configuration.  If the section in "
 "fact existed, return ``True``.  Otherwise return ``False``."
 msgstr ""
+"Remove a *secção* especificada da configuração. Se a secção de facto "
+"existir, retorna ``True``. Caso contrário, retorna ``False``."
 
 #: ../../library/configparser.rst:1228
 msgid ""
@@ -1517,6 +2216,12 @@ msgid ""
 "*option*; subclasses may override this or client code can set an attribute "
 "of this name on instances to affect this behavior."
 msgstr ""
+"Transforma o nome da opção *option*, conforme encontrado num ficheiro de "
+"entrada ou conforme passado pelo código do cliente, para a forma que deve "
+"ser usada nas estruturas internas. A implementação predefinida retorna uma "
+"versão em minúsculas de *option*; subclasses podem substituir isto ou o "
+"código do cliente pode definir um atributo com este nome nas instâncias para "
+"afetar este comportamento."
 
 #: ../../library/configparser.rst:1234
 msgid ""
@@ -1525,18 +2230,26 @@ msgid ""
 "string.  Setting it to ``str``, for example, would make option names case "
 "sensitive::"
 msgstr ""
+"Não precisa de criar uma subclasse do analisador para usar este método, "
+"também pode defini-lo numa instância, para uma função que recebe um "
+"argumento string e retorna uma string. Defini-lo para ``str``, por exemplo, "
+"tornaria os nomes das opções sensíveis a maiúsculas e minúsculas::"
 
 #: ../../library/configparser.rst:1239
 msgid ""
 "cfgparser = ConfigParser()\n"
 "cfgparser.optionxform = str"
 msgstr ""
+"cfgparser = ConfigParser()\n"
+"cfgparser.optionxform = str"
 
 #: ../../library/configparser.rst:1242
 msgid ""
 "Note that when reading configuration files, whitespace around the option "
 "names is stripped before :meth:`optionxform` is called."
 msgstr ""
+"Note que, ao ler ficheiros de configuração, os espaços em branco em redor "
+"dos nomes das opções são removidos antes de :meth:`optionxform` ser chamado."
 
 #: ../../library/configparser.rst:1248
 msgid ""
@@ -1544,10 +2257,13 @@ msgid ""
 "ConfigParser.get` when the *raw* parameter is false.  This is relevant only "
 "when the default *interpolation* is used."
 msgstr ""
+"A profundidade máxima para interpolação recursiva para :meth:`~configparser."
+"ConfigParser.get` quando o parâmetro *raw* é falso. Isto é relevante apenas "
+"quando a *interpolação* predefinida é usada."
 
 #: ../../library/configparser.rst:1256
 msgid "RawConfigParser Objects"
-msgstr ""
+msgstr "Objetos RawConfigParser"
 
 #: ../../library/configparser.rst:1266
 msgid ""
@@ -1563,6 +2279,9 @@ msgid ""
 "values to be stored internally.  If you don't want interpolation, you can "
 "use ``ConfigParser(interpolation=None)``."
 msgstr ""
+"Considere usar :class:`ConfigParser` em vez disso, que verifica os tipos dos "
+"valores a serem armazenados internamente. Se não quiser interpolação, pode "
+"usar ``ConfigParser(interpolation=None)``."
 
 #: ../../library/configparser.rst:1283
 msgid ""
@@ -1576,6 +2295,9 @@ msgid ""
 "Type of *section* is not checked which lets users create non-string named "
 "sections.  This behaviour is unsupported and may cause internal errors."
 msgstr ""
+"O tipo de *section* não é verificado, o que permite aos utilizadores criar "
+"secções com nomes não-string. Este comportamento não é suportado e pode "
+"causar erros internos."
 
 #: ../../library/configparser.rst:1293
 msgid ""
@@ -1586,6 +2308,12 @@ msgid ""
 "(including interpolation and output to files) can only be achieved using "
 "string values."
 msgstr ""
+"Se a secção dada existir, define a opção dada para o valor especificado; "
+"caso contrário, levanta :exc:`NoSectionError`. Embora seja possível usar :"
+"class:`RawConfigParser` (ou :class:`ConfigParser` com parâmetros *raw* "
+"definidos como verdadeiros) para armazenamento *interno* de valores não-"
+"string, a funcionalidade completa (incluindo interpolação e saída para "
+"ficheiros) só pode ser alcançada usando valores string."
 
 #: ../../library/configparser.rst:1300
 msgid ""
@@ -1594,6 +2322,10 @@ msgid ""
 "file or get it in non-raw mode.  **Use the mapping protocol API** which does "
 "not allow such assignments to take place."
 msgstr ""
+"Este método permite que os utilizadores atribuam valores não-string a chaves "
+"internamente. Este comportamento não é suportado e causará erros ao tentar "
+"escrever num ficheiro ou obtê-lo em modo não-raw. **Use a API do protocolo "
+"de mapeamento**, que não permite que tais atribuições ocorram."
 
 #: ../../library/configparser.rst:1307
 msgid "Exceptions"
@@ -1601,11 +2333,11 @@ msgstr "Exceções"
 
 #: ../../library/configparser.rst:1311
 msgid "Base class for all other :mod:`configparser` exceptions."
-msgstr ""
+msgstr "Classe base para todas as outras exceções :mod:`configparser`."
 
 #: ../../library/configparser.rst:1316
 msgid "Exception raised when a specified section is not found."
-msgstr ""
+msgstr "Exceção levantada quando uma secção especificada não é encontrada."
 
 #: ../../library/configparser.rst:1321
 msgid ""
@@ -1613,12 +2345,18 @@ msgid ""
 "name of a section that is already present or in strict parsers when a "
 "section if found more than once in a single input file, string or dictionary."
 msgstr ""
+"Exceção levantada se :meth:`~ConfigParser.add_section` for chamado com o "
+"nome de uma secção que já está presente ou em analisadores estritos quando "
+"uma secção é encontrada mais do que uma vez num único ficheiro de entrada, "
+"string ou dicionário."
 
 #: ../../library/configparser.rst:1325
 msgid ""
 "Added the optional *source* and *lineno* attributes and parameters to :meth:"
 "`!__init__`."
 msgstr ""
+"Adicionados os atributos e parâmetros opcionais *source* e *lineno* a :meth:"
+"`!__init__`."
 
 #: ../../library/configparser.rst:1332
 msgid ""
@@ -1627,18 +2365,28 @@ msgid ""
 "and case sensitivity-related errors, e.g. a dictionary may have two keys "
 "representing the same case-insensitive configuration key."
 msgstr ""
+"Exceção levantada por analisadores estritos se uma única opção aparecer duas "
+"vezes durante a leitura de um único ficheiro, string ou dicionário. Isto "
+"deteta erros ortográficos e erros relacionados com a sensibilidade a "
+"maiúsculas e minúsculas, por exemplo, um dicionário pode ter duas chaves que "
+"representam a mesma chave de configuração não sensível a maiúsculas e "
+"minúsculas."
 
 #: ../../library/configparser.rst:1340
 msgid ""
 "Exception raised when a specified option is not found in the specified "
 "section."
 msgstr ""
+"Exceção levantada quando uma opção especificada não é encontrada na secção "
+"especificada."
 
 #: ../../library/configparser.rst:1346
 msgid ""
 "Base class for exceptions raised when problems occur performing string "
 "interpolation."
 msgstr ""
+"Classe base para exceções levantadas quando ocorrem problemas ao realizar "
+"interpolação de strings."
 
 #: ../../library/configparser.rst:1352
 msgid ""
@@ -1646,34 +2394,46 @@ msgid ""
 "number of iterations exceeds :const:`MAX_INTERPOLATION_DEPTH`.  Subclass of :"
 "exc:`InterpolationError`."
 msgstr ""
+"Exceção levantada quando a interpolação de strings não pode ser concluída "
+"porque o número de iterações excede :const:`MAX_INTERPOLATION_DEPTH`. "
+"Subclasse de :exc:`InterpolationError`."
 
 #: ../../library/configparser.rst:1359
 msgid ""
 "Exception raised when an option referenced from a value does not exist. "
 "Subclass of :exc:`InterpolationError`."
 msgstr ""
+"Exceção levantada quando uma opção referenciada a partir de um valor não "
+"existe. Subclasse de :exc:`InterpolationError`."
 
 #: ../../library/configparser.rst:1365
 msgid ""
 "Exception raised when the source text into which substitutions are made does "
 "not conform to the required syntax.  Subclass of :exc:`InterpolationError`."
 msgstr ""
+"Exceção levantada quando o texto de origem no qual as substituições são "
+"feitas não está em conformidade com a sintaxe necessária. Subclasse de :exc:"
+"`InterpolationError`."
 
 #: ../../library/configparser.rst:1371
 msgid ""
 "Exception raised when attempting to parse a file which has no section "
 "headers."
 msgstr ""
+"Exceção levantada ao tentar analisar um ficheiro que não tem cabeçalhos de "
+"secção."
 
 #: ../../library/configparser.rst:1377
 msgid "Exception raised when errors occur attempting to parse a file."
-msgstr ""
+msgstr "Exceção levantada quando ocorrem erros ao tentar analisar um ficheiro."
 
 #: ../../library/configparser.rst:1379
 msgid ""
 "The ``filename`` attribute and :meth:`!__init__` constructor argument were "
 "removed.  They have been available using the name ``source`` since 3.2."
 msgstr ""
+"O atributo ``filename`` e o argumento do construtor :meth:`!__init__` foram "
+"removidos. Estão disponíveis usando o nome ``source`` desde a versão 3.2."
 
 #: ../../library/configparser.rst:1384
 msgid "Footnotes"
@@ -1688,7 +2448,7 @@ msgstr ""
 
 #: ../../library/configparser.rst:16
 msgid ".ini"
-msgstr ""
+msgstr ".ini"
 
 #: ../../library/configparser.rst:16
 msgid "file"
@@ -1696,11 +2456,11 @@ msgstr "ficheiro"
 
 #: ../../library/configparser.rst:16
 msgid "configuration"
-msgstr ""
+msgstr "configuração"
 
 #: ../../library/configparser.rst:16
 msgid "ini file"
-msgstr ""
+msgstr "ficheiro ini"
 
 #: ../../library/configparser.rst:16
 msgid "Windows ini file"
@@ -1716,4 +2476,4 @@ msgstr ""
 
 #: ../../library/configparser.rst:374
 msgid "$ (dollar)"
-msgstr ""
+msgstr "$ (dólar)"
