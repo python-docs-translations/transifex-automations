@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-27 15:44+0000\n"
+"POT-Creation-Date: 2025-11-29 15:44+0000\n"
 "PO-Revision-Date: 2025-07-18 19:58+0000\n"
 "Last-Translator: NyaPuma <afrmscb@gmail.com>, 2025\n"
 "Language-Team: Portuguese (Portugal) (https://app.transifex.com/python-doc/"
@@ -26,11 +26,11 @@ msgstr ""
 
 #: ../../library/urllib.parse.rst:2
 msgid ":mod:`!urllib.parse` --- Parse URLs into components"
-msgstr ""
+msgstr ":mod:`!urllib.parse` --- Analisar URLs em componentes"
 
 #: ../../library/urllib.parse.rst:7
 msgid "**Source code:** :source:`Lib/urllib/parse.py`"
-msgstr ""
+msgstr "**Código-fonte:** :source:`Lib/urllib/parse.py`"
 
 #: ../../library/urllib.parse.rst:18
 msgid ""
@@ -39,6 +39,11 @@ msgid ""
 "etc.), to combine the components back into a URL string, and to convert a "
 "\"relative URL\" to an absolute URL given a \"base URL.\""
 msgstr ""
+"Este módulo define uma interface padrão para dividir strings de Localizador "
+"Uniforme de Recursos (URL) em componentes (esquema de endereçamento, "
+"localização de rede, caminho, etc.), para combinar os componentes de volta "
+"numa string de URL, e para converter uma \"URL relativa\" numa URL absoluta "
+"dada uma \"URL base\"."
 
 #: ../../library/urllib.parse.rst:23
 msgid ""
@@ -56,6 +61,9 @@ msgid ""
 "categories: URL parsing and URL quoting. These are covered in detail in the "
 "following sections."
 msgstr ""
+"O módulo :mod:`urllib.parse` define funções que se enquadram em duas grandes "
+"categorias: análise de URL e codificação de URL. Estas são abordadas em "
+"detalhe nas secções seguintes."
 
 #: ../../library/urllib.parse.rst:34
 msgid ""
@@ -64,16 +72,23 @@ msgid ""
 "by :rfc:`3986`, which introduced the term ``authority`` as its replacement. "
 "The use of ``netloc`` is continued for backward compatibility."
 msgstr ""
+"As funções deste módulo usam o termo obsoleto ``netloc`` (ou ``net_loc``), "
+"que foi introduzido no :rfc:`1808`. No entanto, este termo foi tornado "
+"obsoleto pelo :rfc:`3986`, que introduziu o termo ``authority`` como "
+"substituto. O uso de ``netloc`` é continuado por razões de compatibilidade "
+"retroativa."
 
 #: ../../library/urllib.parse.rst:40
 msgid "URL Parsing"
-msgstr ""
+msgstr "Análise de URL"
 
 #: ../../library/urllib.parse.rst:42
 msgid ""
 "The URL parsing functions focus on splitting a URL string into its "
 "components, or on combining URL components into a URL string."
 msgstr ""
+"As funções de análise de URL concentram-se em dividir uma string de URL nos "
+"seus componentes, ou em combinar componentes de URL numa string de URL."
 
 #: ../../library/urllib.parse.rst:47
 msgid ""
@@ -85,6 +100,14 @@ msgid ""
 "delimiters as shown above are not part of the result, except for a leading "
 "slash in the *path* component, which is retained if present.  For example:"
 msgstr ""
+"Analisa uma URL em seis componentes, devolvendo um :term:`tuplo nomeado` de "
+"6 itens. Isto corresponde à estrutura geral de uma URL: ``scheme://netloc/"
+"path;parameters?query#fragment``. Cada item do tuplo é uma string, "
+"possivelmente vazia. Os componentes não são divididos em partes menores (por "
+"exemplo, a localização de rede é uma única string), e as sequências de "
+"escape % não são expandidas. Os delimitadores, como mostrado acima, não "
+"fazem parte do resultado, exceto uma barra inicial no componente *path*, que "
+"é retida se presente. Por exemplo:"
 
 #: ../../library/urllib.parse.rst:56
 msgid ""
@@ -110,6 +133,27 @@ msgid ""
 ">>> o._replace(fragment=\"\").geturl()\n"
 "'http://docs.python.org:80/3/library/urllib.parse.html?highlight=params'"
 msgstr ""
+">>> from urllib.parse import urlparse\n"
+">>> urlparse(\"scheme://netloc/path;parameters?query#fragment\")\n"
+"ParseResult(scheme='scheme', netloc='netloc', path='/path;parameters', "
+"params='',\n"
+"            query='query', fragment='fragment')\n"
+">>> o = urlparse(\"http://docs.python.org:80/3/library/urllib.parse.html?\"\n"
+"...              \"highlight=params#url-parsing\")\n"
+">>> o\n"
+"ParseResult(scheme='http', netloc='docs.python.org:80',\n"
+"            path='/3/library/urllib.parse.html', params='',\n"
+"            query='highlight=params', fragment='url-parsing')\n"
+">>> o.scheme\n"
+"'http'\n"
+">>> o.netloc\n"
+"'docs.python.org:80'\n"
+">>> o.hostname\n"
+"'docs.python.org'\n"
+">>> o.port\n"
+"80\n"
+">>> o._replace(fragment=\"\").geturl()\n"
+"'http://docs.python.org:80/3/library/urllib.parse.html?highlight=params'"
 
 #: ../../library/urllib.parse.rst:80
 msgid ""
@@ -117,6 +161,10 @@ msgid ""
 "netloc only if it is properly introduced by '//'.  Otherwise the input is "
 "presumed to be a relative URL and thus to start with a path component."
 msgstr ""
+"Seguindo as especificações de sintaxe no :rfc:`1808`, urlparse reconhece um "
+"netloc apenas se for devidamente introduzido por '//'. Caso contrário, a "
+"entrada é presumida como sendo uma URL relativa e, portanto, começa com um "
+"componente de caminho."
 
 #: ../../library/urllib.parse.rst:85
 msgid ""
@@ -132,6 +180,17 @@ msgid ""
 "ParseResult(scheme='', netloc='', path='help/Python.html', params='',\n"
 "            query='', fragment='')"
 msgstr ""
+">>> from urllib.parse import urlparse\n"
+">>> urlparse('//www.cwi.nl:80/%7Eguido/Python.html')\n"
+"ParseResult(scheme='', netloc='www.cwi.nl:80', path='/%7Eguido/Python."
+"html',\n"
+"            params='', query='', fragment='')\n"
+">>> urlparse('www.cwi.nl/%7Eguido/Python.html')\n"
+"ParseResult(scheme='', netloc='', path='www.cwi.nl/%7Eguido/Python.html',\n"
+"            params='', query='', fragment='')\n"
+">>> urlparse('help/Python.html')\n"
+"ParseResult(scheme='', netloc='', path='help/Python.html', params='',\n"
+"            query='', fragment='')"
 
 #: ../../library/urllib.parse.rst:99
 msgid ""
@@ -140,6 +199,10 @@ msgid ""
 "as *urlstring*, except that the default value ``''`` is always allowed, and "
 "is automatically converted to ``b''`` if appropriate."
 msgstr ""
+"O argumento *scheme* fornece o esquema de endereçamento predefinido, a ser "
+"usado apenas se a URL não especificar um. Deve ser do mesmo tipo (texto ou "
+"bytes) que *urlstring*, exceto que o valor predefinido ``''`` é sempre "
+"permitido e é automaticamente convertido para ``b''`` se apropriado."
 
 #: ../../library/urllib.parse.rst:104
 msgid ""
@@ -148,12 +211,18 @@ msgid ""
 "query component, and :attr:`fragment` is set to the empty string in the "
 "return value."
 msgstr ""
+"Se o argumento *allow_fragments* for falso, os identificadores de fragmentos "
+"não são reconhecidos. Em vez disso, são analisados como parte do caminho, "
+"parâmetros ou componente de consulta, e :attr:`fragment` é definido como a "
+"string vazia no valor de retorno."
 
 #: ../../library/urllib.parse.rst:109
 msgid ""
 "The return value is a :term:`named tuple`, which means that its items can be "
 "accessed by index or as named attributes, which are:"
 msgstr ""
+"O valor de retorno é um :term:`tuplo nomeado`, o que significa que os seus "
+"itens podem ser acedidos por índice ou como atributos nomeados, que são:"
 
 #: ../../library/urllib.parse.rst:113 ../../library/urllib.parse.rst:302
 #: ../../library/urllib.parse.rst:424
@@ -173,11 +242,11 @@ msgstr "Valor"
 #: ../../library/urllib.parse.rst:113 ../../library/urllib.parse.rst:302
 #: ../../library/urllib.parse.rst:424
 msgid "Value if not present"
-msgstr ""
+msgstr "Valor se não presente"
 
 #: ../../library/urllib.parse.rst:115 ../../library/urllib.parse.rst:304
 msgid ":attr:`scheme`"
-msgstr ""
+msgstr ":attr:`scheme`"
 
 #: ../../library/urllib.parse.rst:115 ../../library/urllib.parse.rst:304
 #: ../../library/urllib.parse.rst:426
@@ -186,15 +255,15 @@ msgstr "0"
 
 #: ../../library/urllib.parse.rst:115 ../../library/urllib.parse.rst:304
 msgid "URL scheme specifier"
-msgstr ""
+msgstr "Especificador de esquema de URL"
 
 #: ../../library/urllib.parse.rst:115 ../../library/urllib.parse.rst:304
 msgid "*scheme* parameter"
-msgstr ""
+msgstr "parâmetro *scheme*"
 
 #: ../../library/urllib.parse.rst:117 ../../library/urllib.parse.rst:306
 msgid ":attr:`netloc`"
-msgstr ""
+msgstr ":attr:`netloc`"
 
 #: ../../library/urllib.parse.rst:117 ../../library/urllib.parse.rst:306
 #: ../../library/urllib.parse.rst:428
@@ -203,7 +272,7 @@ msgstr "1"
 
 #: ../../library/urllib.parse.rst:117 ../../library/urllib.parse.rst:306
 msgid "Network location part"
-msgstr ""
+msgstr "Parte de localização de rede"
 
 #: ../../library/urllib.parse.rst:117 ../../library/urllib.parse.rst:119
 #: ../../library/urllib.parse.rst:121 ../../library/urllib.parse.rst:124
@@ -212,11 +281,11 @@ msgstr ""
 #: ../../library/urllib.parse.rst:312 ../../library/urllib.parse.rst:426
 #: ../../library/urllib.parse.rst:428
 msgid "empty string"
-msgstr ""
+msgstr "string vazia"
 
 #: ../../library/urllib.parse.rst:119 ../../library/urllib.parse.rst:308
 msgid ":attr:`path`"
-msgstr ""
+msgstr ":attr:`path`"
 
 #: ../../library/urllib.parse.rst:119 ../../library/urllib.parse.rst:308
 msgid "2"
@@ -224,11 +293,11 @@ msgstr "2"
 
 #: ../../library/urllib.parse.rst:119 ../../library/urllib.parse.rst:308
 msgid "Hierarchical path"
-msgstr ""
+msgstr "Caminho hierárquico"
 
 #: ../../library/urllib.parse.rst:121
 msgid ":attr:`params`"
-msgstr ""
+msgstr ":attr:`params`"
 
 #: ../../library/urllib.parse.rst:121 ../../library/urllib.parse.rst:310
 msgid "3"
@@ -236,11 +305,11 @@ msgstr "3"
 
 #: ../../library/urllib.parse.rst:121
 msgid "Parameters for last path element"
-msgstr ""
+msgstr "Parâmetros para o último elemento do caminho"
 
 #: ../../library/urllib.parse.rst:124 ../../library/urllib.parse.rst:310
 msgid ":attr:`query`"
-msgstr ""
+msgstr ":attr:`query`"
 
 #: ../../library/urllib.parse.rst:124 ../../library/urllib.parse.rst:312
 msgid "4"
@@ -248,12 +317,12 @@ msgstr "4"
 
 #: ../../library/urllib.parse.rst:124 ../../library/urllib.parse.rst:310
 msgid "Query component"
-msgstr ""
+msgstr "Componente de consulta"
 
 #: ../../library/urllib.parse.rst:126 ../../library/urllib.parse.rst:312
 #: ../../library/urllib.parse.rst:428
 msgid ":attr:`fragment`"
-msgstr ""
+msgstr ":attr:`fragment`"
 
 #: ../../library/urllib.parse.rst:126
 msgid "5"
@@ -262,46 +331,46 @@ msgstr "5"
 #: ../../library/urllib.parse.rst:126 ../../library/urllib.parse.rst:312
 #: ../../library/urllib.parse.rst:428
 msgid "Fragment identifier"
-msgstr ""
+msgstr "Identificador de fragmento"
 
 #: ../../library/urllib.parse.rst:128 ../../library/urllib.parse.rst:314
 msgid ":attr:`username`"
-msgstr ""
+msgstr ":attr:`username`"
 
 #: ../../library/urllib.parse.rst:128 ../../library/urllib.parse.rst:314
 msgid "User name"
-msgstr ""
+msgstr "Nome de utilizador"
 
 #: ../../library/urllib.parse.rst:128 ../../library/urllib.parse.rst:130
 #: ../../library/urllib.parse.rst:132 ../../library/urllib.parse.rst:134
 #: ../../library/urllib.parse.rst:314 ../../library/urllib.parse.rst:316
 #: ../../library/urllib.parse.rst:318 ../../library/urllib.parse.rst:320
 msgid ":const:`None`"
-msgstr ""
+msgstr ":const:`None`"
 
 #: ../../library/urllib.parse.rst:130 ../../library/urllib.parse.rst:316
 msgid ":attr:`password`"
-msgstr ""
+msgstr ":attr:`password`"
 
 #: ../../library/urllib.parse.rst:130 ../../library/urllib.parse.rst:316
 msgid "Password"
-msgstr ""
+msgstr "Palavra-passe"
 
 #: ../../library/urllib.parse.rst:132 ../../library/urllib.parse.rst:318
 msgid ":attr:`hostname`"
-msgstr ""
+msgstr ":attr:`hostname`"
 
 #: ../../library/urllib.parse.rst:132 ../../library/urllib.parse.rst:318
 msgid "Host name (lower case)"
-msgstr ""
+msgstr "Nome do anfitrião (minúsculas)"
 
 #: ../../library/urllib.parse.rst:134 ../../library/urllib.parse.rst:320
 msgid ":attr:`port`"
-msgstr ""
+msgstr ":attr:`port`"
 
 #: ../../library/urllib.parse.rst:134 ../../library/urllib.parse.rst:320
 msgid "Port number as integer, if present"
-msgstr ""
+msgstr "Número da porta como inteiro, se presente"
 
 #: ../../library/urllib.parse.rst:138 ../../library/urllib.parse.rst:324
 msgid ""
@@ -309,12 +378,17 @@ msgid ""
 "invalid port is specified in the URL.  See section :ref:`urlparse-result-"
 "object` for more information on the result object."
 msgstr ""
+"A leitura do atributo :attr:`port` levantará uma exceção :exc:`ValueError` "
+"se uma porta inválida for especificada na URL. Consulte a secção :ref:"
+"`urlparse-result-object` para mais informações sobre o objeto de resultado."
 
 #: ../../library/urllib.parse.rst:142 ../../library/urllib.parse.rst:328
 msgid ""
 "Unmatched square brackets in the :attr:`netloc` attribute will raise a :exc:"
 "`ValueError`."
 msgstr ""
+"Parênteses retos não correspondidos no atributo :attr:`netloc` levantarão "
+"uma exceção :exc:`ValueError`."
 
 #: ../../library/urllib.parse.rst:145 ../../library/urllib.parse.rst:331
 msgid ""
@@ -323,6 +397,10 @@ msgid ""
 "``#``, ``@``, or ``:`` will raise a :exc:`ValueError`. If the URL is "
 "decomposed before parsing, no error will be raised."
 msgstr ""
+"Caracteres no atributo :attr:`netloc` que se decompõem sob normalização NFKC "
+"(como usado pela codificação IDNA) em qualquer um de ``/``, ``?``, ``#``, "
+"``@``, ou ``:`` levantarão uma exceção :exc:`ValueError`. Se a URL for "
+"decomposta antes da análise, nenhum erro será levantado."
 
 #: ../../library/urllib.parse.rst:150
 msgid ""
@@ -331,6 +409,10 @@ msgid ""
 "meth:`_replace`. The :meth:`_replace` method will return a new ParseResult "
 "object replacing specified fields with new values."
 msgstr ""
+"Como é o caso de todos os tuplos nomeados, a subclasse tem alguns métodos e "
+"atributos adicionais que são particularmente úteis. Um desses métodos é :"
+"meth:`_replace`. O método :meth:`_replace` devolverá um novo objeto "
+"ParseResult substituindo os campos especificados por novos valores."
 
 #: ../../library/urllib.parse.rst:155
 msgid ""
@@ -345,16 +427,28 @@ msgid ""
 "html',\n"
 "            params='', query='', fragment='')"
 msgstr ""
+">>> from urllib.parse import urlparse\n"
+">>> u = urlparse('//www.cwi.nl:80/%7Eguido/Python.html')\n"
+">>> u\n"
+"ParseResult(scheme='', netloc='www.cwi.nl:80', path='/%7Eguido/Python."
+"html',\n"
+"            params='', query='', fragment='')\n"
+">>> u._replace(scheme='http')\n"
+"ParseResult(scheme='http', netloc='www.cwi.nl:80', path='/%7Eguido/Python."
+"html',\n"
+"            params='', query='', fragment='')"
 
 #: ../../library/urllib.parse.rst:169
 msgid ""
 ":func:`urlparse` does not perform validation.  See :ref:`URL parsing "
 "security <url-parsing-security>` for details."
 msgstr ""
+":func:`urlparse` não realiza validação. Consulte :ref:`segurança de análise "
+"de URL <url-parsing-security>` para mais detalhes."
 
 #: ../../library/urllib.parse.rst:172
 msgid "Added IPv6 URL parsing capabilities."
-msgstr ""
+msgstr "Adicionadas capacidades de análise de URL IPv6."
 
 #: ../../library/urllib.parse.rst:175
 msgid ""
@@ -362,18 +456,25 @@ msgid ""
 "false), in accordance with :rfc:`3986`.  Previously, an allowlist of schemes "
 "that support fragments existed."
 msgstr ""
+"O fragmento é agora analisado para todos os esquemas de URL (a menos que "
+"*allow_fragments* seja falso), de acordo com o :rfc:`3986`. Anteriormente, "
+"existia uma lista de permissões de esquemas que suportavam fragmentos."
 
 #: ../../library/urllib.parse.rst:180 ../../library/urllib.parse.rst:345
 msgid ""
 "Out-of-range port numbers now raise :exc:`ValueError`, instead of returning :"
 "const:`None`."
 msgstr ""
+"Números de porta fora do intervalo agora levantam :exc:`ValueError`, em vez "
+"de devolverem :const:`None`."
 
 #: ../../library/urllib.parse.rst:184 ../../library/urllib.parse.rst:349
 msgid ""
 "Characters that affect netloc parsing under NFKC normalization will now "
 "raise :exc:`ValueError`."
 msgstr ""
+"Caracteres que afetam a análise de netloc sob normalização NFKC agora "
+"levantarão :exc:`ValueError`."
 
 #: ../../library/urllib.parse.rst:191
 msgid ""
@@ -382,6 +483,10 @@ msgid ""
 "The dictionary keys are the unique query variable names and the values are "
 "lists of values for each name."
 msgstr ""
+"Analisa uma string de consulta dada como argumento de string (dados do tipo :"
+"mimetype:`application/x-www-form-urlencoded`). Os dados são devolvidos como "
+"um dicionário. As chaves do dicionário são os nomes únicos das variáveis de "
+"consulta e os valores são listas de valores para cada nome."
 
 #: ../../library/urllib.parse.rst:196 ../../library/urllib.parse.rst:241
 msgid ""
@@ -391,6 +496,12 @@ msgid ""
 "default false value indicates that blank values are to be ignored and "
 "treated as if they were not included."
 msgstr ""
+"O argumento opcional *keep_blank_values* é uma flag que indica se os valores "
+"em branco em consultas codificadas em percentagem devem ser tratados como "
+"strings em branco. Um valor verdadeiro indica que os espaços em branco devem "
+"ser retidos como strings em branco. O valor falso predefinido indica que os "
+"valores em branco devem ser ignorados e tratados como se não tivessem sido "
+"incluídos."
 
 #: ../../library/urllib.parse.rst:202 ../../library/urllib.parse.rst:247
 msgid ""
@@ -398,6 +509,10 @@ msgid ""
 "parsing errors.  If false (the default), errors are silently ignored.  If "
 "true, errors raise a :exc:`ValueError` exception."
 msgstr ""
+"O argumento opcional *strict_parsing* é uma flag que indica o que fazer com "
+"erros de análise. Se falso (o predefinido), os erros são ignorados "
+"silenciosamente. Se verdadeiro, os erros levantam uma exceção :exc:"
+"`ValueError`."
 
 #: ../../library/urllib.parse.rst:206 ../../library/urllib.parse.rst:251
 msgid ""
@@ -405,6 +520,9 @@ msgid ""
 "percent-encoded sequences into Unicode characters, as accepted by the :meth:"
 "`bytes.decode` method."
 msgstr ""
+"Os parâmetros opcionais *encoding* e *errors* especificam como descodificar "
+"sequências codificadas em percentagem em caracteres Unicode, como aceite "
+"pelo método :meth:`bytes.decode`."
 
 #: ../../library/urllib.parse.rst:210 ../../library/urllib.parse.rst:255
 msgid ""
@@ -412,26 +530,34 @@ msgid ""
 "read. If set, then throws a :exc:`ValueError` if there are more than "
 "*max_num_fields* fields read."
 msgstr ""
+"O argumento opcional *max_num_fields* é o número máximo de campos a ler. Se "
+"definido, então lança uma exceção :exc:`ValueError` se houver mais do que "
+"*max_num_fields* campos lidos."
 
 #: ../../library/urllib.parse.rst:214 ../../library/urllib.parse.rst:259
 msgid ""
 "The optional argument *separator* is the symbol to use for separating the "
 "query arguments. It defaults to ``&``."
 msgstr ""
+"O argumento opcional *separator* é o símbolo a usar para separar os "
+"argumentos da consulta. Por predefinição é ``&``."
 
 #: ../../library/urllib.parse.rst:217
 msgid ""
 "Use the :func:`urllib.parse.urlencode` function (with the ``doseq`` "
 "parameter set to ``True``) to convert such dictionaries into query strings."
 msgstr ""
+"Use a função :func:`urllib.parse.urlencode` (com o parâmetro ``doseq`` "
+"definido como ``True``) para converter tais dicionários em strings de "
+"consulta."
 
 #: ../../library/urllib.parse.rst:222 ../../library/urllib.parse.rst:265
 msgid "Add *encoding* and *errors* parameters."
-msgstr ""
+msgstr "Adicionados os parâmetros *encoding* e *errors*."
 
 #: ../../library/urllib.parse.rst:225 ../../library/urllib.parse.rst:268
 msgid "Added *max_num_fields* parameter."
-msgstr ""
+msgstr "Adicionado o parâmetro *max_num_fields*."
 
 #: ../../library/urllib.parse.rst:228 ../../library/urllib.parse.rst:271
 msgid ""
@@ -440,6 +566,10 @@ msgid ""
 "parameter separator. This has been changed to allow only a single separator "
 "key, with ``&`` as the default separator."
 msgstr ""
+"Adicionado o parâmetro *separator* com o valor predefinido ``&``. Versões do "
+"Python anteriores ao Python 3.10 permitiam o uso de ``;`` e ``&`` como "
+"separador de parâmetros de consulta. Isto foi alterado para permitir apenas "
+"uma única chave de separador, com ``&`` como separador predefinido."
 
 #: ../../library/urllib.parse.rst:237
 msgid ""
@@ -447,12 +577,17 @@ msgid ""
 "`application/x-www-form-urlencoded`).  Data are returned as a list of name, "
 "value pairs."
 msgstr ""
+"Analisa uma string de consulta dada como argumento de string (dados do tipo :"
+"mimetype:`application/x-www-form-urlencoded`). Os dados são devolvidos como "
+"uma lista de pares nome, valor."
 
 #: ../../library/urllib.parse.rst:262
 msgid ""
 "Use the :func:`urllib.parse.urlencode` function to convert such lists of "
 "pairs into query strings."
 msgstr ""
+"Use a função :func:`urllib.parse.urlencode` para converter tais listas de "
+"pares em strings de consulta."
 
 #: ../../library/urllib.parse.rst:280
 msgid ""
@@ -462,6 +597,11 @@ msgid ""
 "unnecessary delimiters (for example, a ``?`` with an empty query; the RFC "
 "states that these are equivalent)."
 msgstr ""
+"Constrói uma URL a partir de um tuplo como devolvido por ``urlparse()``. O "
+"argumento *parts* pode ser qualquer iterável de seis itens. Isto pode "
+"resultar numa URL ligeiramente diferente, mas equivalente, se a URL que foi "
+"originalmente analisada tinha delimitadores desnecessários (por exemplo, um "
+"``?`` com uma consulta vazia; o RFC afirma que estas são equivalentes)."
 
 #: ../../library/urllib.parse.rst:289
 msgid ""
@@ -472,17 +612,27 @@ msgid ""
 "is needed to separate the path segments and parameters.  This function "
 "returns a 5-item :term:`named tuple`::"
 msgstr ""
+"Isto é semelhante a :func:`urlparse`, mas não divide os parâmetros da URL. "
+"Isto deve geralmente ser usado em vez de :func:`urlparse` se a sintaxe de "
+"URL mais recente que permite parâmetros a serem aplicados a cada segmento da "
+"porção *path* da URL (ver :rfc:`2396`) for desejada. Uma função separada é "
+"necessária para separar os segmentos de caminho e parâmetros. Esta função "
+"devolve um :term:`tuplo nomeado` de 5 itens::"
 
 #: ../../library/urllib.parse.rst:296
 msgid ""
 "(addressing scheme, network location, path, query, fragment identifier)."
 msgstr ""
+"(esquema de endereçamento, localização de rede, caminho, consulta, "
+"identificador de fragmento)."
 
 #: ../../library/urllib.parse.rst:298 ../../library/urllib.parse.rst:420
 msgid ""
 "The return value is a :term:`named tuple`, its items can be accessed by "
 "index or as named attributes:"
 msgstr ""
+"O valor de retorno é um :term:`tuplo nomeado`, os seus itens podem ser "
+"acedidos por índice ou como atributos nomeados:"
 
 #: ../../library/urllib.parse.rst:336
 msgid ""
@@ -490,21 +640,28 @@ msgid ""
 "control and space characters are stripped from the URL. ``\\n``, ``\\r`` and "
 "tab ``\\t`` characters are removed from the URL at any position."
 msgstr ""
+"Seguindo algumas das `WHATWG spec`_  que atualizam o RFC 3986, os caracteres "
+"de controlo C0 e de espaço iniciais são removidos da URL. Os caracteres "
+"``\\n``, ``\\r`` e tabulação ``\\t`` são removidos da URL em qualquer "
+"posição."
 
 #: ../../library/urllib.parse.rst:342
 msgid ""
 ":func:`urlsplit` does not perform validation.  See :ref:`URL parsing "
 "security <url-parsing-security>` for details."
 msgstr ""
+":func:`urlsplit` não realiza validação. Consulte :ref:`segurança de análise "
+"de URL <url-parsing-security>` para mais detalhes."
 
 #: ../../library/urllib.parse.rst:353
 msgid "ASCII newline and tab characters are stripped from the URL."
-msgstr ""
+msgstr "Caracteres de nova linha e tabulação ASCII são removidos da URL."
 
 #: ../../library/urllib.parse.rst:356
 msgid ""
 "Leading WHATWG C0 control and space characters are stripped from the URL."
 msgstr ""
+"Caracteres de controlo C0 e de espaço iniciais WHATWG são removidos da URL."
 
 #: ../../library/urllib.parse.rst:363
 msgid ""
@@ -514,6 +671,12 @@ msgid ""
 "the URL that was parsed originally had unnecessary delimiters (for example, "
 "a ? with an empty query; the RFC states that these are equivalent)."
 msgstr ""
+"Combina os elementos de um tuplo como devolvido por :func:`urlsplit` numa "
+"URL completa como uma string. O argumento *parts* pode ser qualquer iterável "
+"de cinco itens. Isto pode resultar numa URL ligeiramente diferente, mas "
+"equivalente, se a URL que foi originalmente analisada tinha delimitadores "
+"desnecessários (por exemplo, um ? com uma consulta vazia; o RFC afirma que "
+"estas são equivalentes)."
 
 #: ../../library/urllib.parse.rst:372
 msgid ""
@@ -522,12 +685,19 @@ msgid ""
 "in particular the addressing scheme, the network location and (part of) the "
 "path, to provide missing components in the relative URL.  For example:"
 msgstr ""
+"Constrói uma URL completa (\"absoluta\") combinando uma \"URL "
+"base\" (*base*) com outra URL (*url*). Informalmente, isto usa componentes "
+"da URL base, em particular o esquema de endereçamento, a localização de rede "
+"e (parte) do caminho, para fornecer componentes em falta na URL relativa. "
+"Por exemplo:"
 
 #: ../../library/urllib.parse.rst:381
 msgid ""
 "The *allow_fragments* argument has the same meaning and default as for :func:"
 "`urlparse`."
 msgstr ""
+"O argumento *allow_fragments* tem o mesmo significado e valor predefinido "
+"que em :func:`urlparse`."
 
 #: ../../library/urllib.parse.rst:386
 msgid ""
@@ -535,6 +705,9 @@ msgid ""
 "``), the *url*'s hostname and/or scheme will be present in the result.  For "
 "example:"
 msgstr ""
+"Se *url* for uma URL absoluta (ou seja, começa com ``//`` ou ``scheme://``), "
+"o nome de anfitrião e/ou esquema de *url* estarão presentes no resultado. "
+"Por exemplo:"
 
 #: ../../library/urllib.parse.rst:389
 msgid ""
@@ -542,12 +715,18 @@ msgid ""
 "...         '//www.python.org/%7Eguido')\n"
 "'http://www.python.org/%7Eguido'"
 msgstr ""
+">>> urljoin('http://www.cwi.nl/%7Eguido/Python.html',\n"
+"...         '//www.python.org/%7Eguido')\n"
+"'http://www.python.org/%7Eguido'"
 
 #: ../../library/urllib.parse.rst:395
 msgid ""
 "If you do not want that behavior, preprocess the *url* with :func:`urlsplit` "
 "and :func:`urlunsplit`, removing possible *scheme* and *netloc* parts."
 msgstr ""
+"Se não pretender esse comportamento, pré-processe a *url* com :func:"
+"`urlsplit` e :func:`urlunsplit`, removendo possíveis partes *scheme* e "
+"*netloc*."
 
 #: ../../library/urllib.parse.rst:400
 msgid ""
@@ -557,10 +736,17 @@ msgid ""
 "username)``, if ``username`` can contain an absolute URL, the result of "
 "``urljoin`` will be the absolute URL."
 msgstr ""
+"Como uma URL absoluta pode ser passada como o parâmetro ``url``, é "
+"geralmente **não seguro** usar ``urljoin`` com uma ``url`` controlada por um "
+"atacante. Por exemplo, em ``urljoin(\"https://website.com/users/\", "
+"username)``, se ``username`` puder conter uma URL absoluta, o resultado de "
+"``urljoin`` será a URL absoluta."
 
 #: ../../library/urllib.parse.rst:410
 msgid "Behavior updated to match the semantics defined in :rfc:`3986`."
 msgstr ""
+"Comportamento atualizado para corresponder à semântica definida em :rfc:"
+"`3986`."
 
 #: ../../library/urllib.parse.rst:415
 msgid ""
@@ -569,24 +755,30 @@ msgid ""
 "string.  If there is no fragment identifier in *url*, return *url* "
 "unmodified and an empty string."
 msgstr ""
+"Se *url* contiver um identificador de fragmento, devolve uma versão "
+"modificada de *url* sem identificador de fragmento, e o identificador de "
+"fragmento como uma string separada. Se não houver identificador de fragmento "
+"em *url*, devolve *url* inalterada e uma string vazia."
 
 #: ../../library/urllib.parse.rst:426
 msgid ":attr:`url`"
-msgstr ""
+msgstr ":attr:`url`"
 
 #: ../../library/urllib.parse.rst:426
 msgid "URL with no fragment"
-msgstr ""
+msgstr "URL sem fragmento"
 
 #: ../../library/urllib.parse.rst:431
 msgid ""
 "See section :ref:`urlparse-result-object` for more information on the result "
 "object."
 msgstr ""
+"Consulte a secção :ref:`urlparse-result-object` para mais informações sobre "
+"o objeto de resultado."
 
 #: ../../library/urllib.parse.rst:434
 msgid "Result is a structured object rather than a simple 2-tuple."
-msgstr ""
+msgstr "O resultado é um objeto estruturado em vez de um simples 2-tuplo."
 
 #: ../../library/urllib.parse.rst:439
 msgid ""
@@ -595,10 +787,14 @@ msgid ""
 "or ``scheme://host/path``). If *url* is not a wrapped URL, it is returned "
 "without changes."
 msgstr ""
+"Extrai a URL de uma URL encapsulada (ou seja, uma string formatada como "
+"``<URL:scheme://host/path>``, ``<scheme://host/path>``, ``URL:scheme://host/"
+"path`` ou ``scheme://host/path``). Se *url* não for uma URL encapsulada, é "
+"devolvida sem alterações."
 
 #: ../../library/urllib.parse.rst:447
 msgid "URL parsing security"
-msgstr ""
+msgstr "Segurança de análise de URL"
 
 #: ../../library/urllib.parse.rst:449
 msgid ""
@@ -608,6 +804,11 @@ msgid ""
 "considered URLs elsewhere.  Their purpose is for practical functionality "
 "rather than purity."
 msgstr ""
+"As APIs :func:`urlsplit` e :func:`urlparse` não realizam **validação** de "
+"entradas. Podem não levantar erros em entradas que outras aplicações "
+"consideram inválidas. Também podem ter sucesso em algumas entradas que podem "
+"não ser consideradas URLs noutros contextos. O seu propósito é a "
+"funcionalidade prática em vez de pureza."
 
 #: ../../library/urllib.parse.rst:455
 msgid ""
@@ -615,6 +816,9 @@ msgid ""
 "some component parts as empty strings. Or components may contain more than "
 "perhaps they should."
 msgstr ""
+"Em vez de levantar uma exceção em entradas incomuns, podem em vez disso "
+"devolver algumas partes de componentes como strings vazias. Ou componentes "
+"podem conter mais do que talvez devessem."
 
 #: ../../library/urllib.parse.rst:459
 msgid ""
@@ -624,6 +828,11 @@ msgid ""
 "make sense?  Is that a sensible ``path``?  Is there anything strange about "
 "that ``hostname``?  etc."
 msgstr ""
+"Recomendamos que os utilizadores destas APIs, onde os valores podem ser "
+"usados em qualquer lugar com implicações de segurança, codifiquem de forma "
+"defensiva. Façam alguma verificação no vosso código antes de confiar numa "
+"parte de componente devolvida. Esse ``scheme`` faz sentido? Esse ``path`` é "
+"sensato? Há algo estranho nesse ``hostname``? etc."
 
 #: ../../library/urllib.parse.rst:465
 msgid ""
@@ -636,10 +845,19 @@ msgid ""
 "behaviors predate both standards leading us to be very cautious about making "
 "API behavior changes."
 msgstr ""
+"O que constitui uma URL não está universalmente bem definido. Diferentes "
+"aplicações têm necessidades e restrições desejadas diferentes. Por exemplo, "
+"a `WHATWG spec`_  em vigor descreve o que os clientes web voltados para o "
+"utilizador, como um navegador web, requerem. Enquanto o :rfc:`3986` é mais "
+"geral. Estas funções incorporam alguns aspetos de ambos, mas não podem ser "
+"consideradas conformes com nenhum. As APIs e o código de utilizador "
+"existente com expectativas em comportamentos específicos precedem ambos os "
+"padrões, levando-nos a ser muito cautelosos em relação a alterações de "
+"comportamento da API."
 
 #: ../../library/urllib.parse.rst:476
 msgid "Parsing ASCII Encoded Bytes"
-msgstr ""
+msgstr "Análise de Bytes Codificados em ASCII"
 
 #: ../../library/urllib.parse.rst:478
 msgid ""
@@ -649,6 +867,11 @@ msgid ""
 "parsing functions in this module all operate on :class:`bytes` and :class:"
 "`bytearray` objects in addition to :class:`str` objects."
 msgstr ""
+"As funções de análise de URL foram originalmente concebidas para operar "
+"apenas em strings de caracteres. Na prática, é útil poder manipular URLs "
+"devidamente citadas e codificadas como sequências de bytes ASCII. Assim, as "
+"funções de análise de URL neste módulo operam em objetos :class:`bytes` e :"
+"class:`bytearray`, além de objetos :class:`str`."
 
 #: ../../library/urllib.parse.rst:484
 msgid ""
@@ -656,6 +879,9 @@ msgid ""
 "`str` data. If :class:`bytes` or :class:`bytearray` data is passed in, the "
 "result will contain only :class:`bytes` data."
 msgstr ""
+"Se dados :class:`str` forem passados, o resultado também conterá apenas "
+"dados :class:`str`. Se dados :class:`bytes` ou :class:`bytearray` forem "
+"passados, o resultado conterá apenas dados :class:`bytes`."
 
 #: ../../library/urllib.parse.rst:488
 msgid ""
@@ -664,6 +890,10 @@ msgid ""
 "being raised, while attempting to pass in non-ASCII byte values will "
 "trigger :exc:`UnicodeDecodeError`."
 msgstr ""
+"Tentar misturar dados :class:`str` com :class:`bytes` ou :class:`bytearray` "
+"numa única chamada de função resultará numa exceção :exc:`TypeError`, "
+"enquanto tentar passar valores de byte não-ASCII desencadeará uma exceção :"
+"exc:`UnicodeDecodeError`."
 
 #: ../../library/urllib.parse.rst:493
 msgid ""
@@ -677,6 +907,15 @@ msgid ""
 "contains either :class:`bytes` data (for :meth:`encode` methods) or :class:"
 "`str` data (for :meth:`decode` methods)."
 msgstr ""
+"Para apoiar a conversão mais fácil de objetos de resultado entre :class:"
+"`str` e :class:`bytes`, todos os valores de retorno das funções de análise "
+"de URL fornecem um método :meth:`encode` (quando o resultado contém dados :"
+"class:`str`) ou um método :meth:`decode` (quando o resultado contém dados :"
+"class:`bytes`). As assinaturas destes métodos correspondem às dos métodos :"
+"class:`str` e :class:`bytes` correspondentes (exceto que a codificação "
+"predefinida é ``'ascii'`` em vez de ``'utf-8'``). Cada um produz um valor de "
+"um tipo correspondente que contém dados :class:`bytes` (para métodos :meth:"
+"`encode`) ou dados :class:`str` (para métodos :meth:`decode`)."
 
 #: ../../library/urllib.parse.rst:504
 msgid ""
@@ -684,6 +923,10 @@ msgid ""
 "may contain non-ASCII data will need to do their own decoding from bytes to "
 "characters before invoking the URL parsing methods."
 msgstr ""
+"Aplicações que precisam de operar em URLs potencialmente citadas de forma "
+"incorreta que podem conter dados não-ASCII precisarão de fazer a sua própria "
+"descodificação de bytes para caracteres antes de invocar os métodos de "
+"análise de URL."
 
 #: ../../library/urllib.parse.rst:508
 msgid ""
@@ -692,14 +935,20 @@ msgid ""
 "consuming byte sequences as detailed in the documentation of the individual "
 "URL quoting functions."
 msgstr ""
+"O comportamento descrito nesta secção aplica-se apenas às funções de análise "
+"de URL. As funções de codificação de URL usam as suas próprias regras ao "
+"produzir ou consumir sequências de bytes, como detalhado na documentação das "
+"funções individuais de codificação de URL."
 
 #: ../../library/urllib.parse.rst:513
 msgid "URL parsing functions now accept ASCII encoded byte sequences"
 msgstr ""
+"As funções de análise de URL agora aceitam sequências de bytes codificadas "
+"em ASCII"
 
 #: ../../library/urllib.parse.rst:520
 msgid "Structured Parse Results"
-msgstr ""
+msgstr "Resultados de Análise Estruturados"
 
 #: ../../library/urllib.parse.rst:522
 msgid ""
@@ -709,6 +958,11 @@ msgid ""
 "functions, the encoding and decoding support described in the previous "
 "section, as well as an additional method:"
 msgstr ""
+"Os objetos de resultado das funções :func:`urlparse`, :func:`urlsplit` e :"
+"func:`urldefrag` são subclasses do tipo :class:`tuple`. Estas subclasses "
+"adicionam os atributos listados na documentação para essas funções, o "
+"suporte de codificação e descodificação descrito na secção anterior, bem "
+"como um método adicional:"
 
 #: ../../library/urllib.parse.rst:530
 msgid ""
@@ -717,6 +971,10 @@ msgid ""
 "case and empty components may be dropped. Specifically, empty parameters, "
 "queries, and fragment identifiers will be removed."
 msgstr ""
+"Devolve a versão recombinada da URL original como uma string. Isto pode "
+"diferir da URL original no sentido em que o esquema pode ser normalizado "
+"para minúsculas e componentes vazios podem ser removidos. Especificamente, "
+"parâmetros vazios, consultas e identificadores de fragmentos serão removidos."
 
 #: ../../library/urllib.parse.rst:535
 msgid ""
@@ -724,64 +982,92 @@ msgid ""
 "removed. For :func:`urlsplit` and :func:`urlparse` results, all noted "
 "changes will be made to the URL returned by this method."
 msgstr ""
+"Para resultados de :func:`urldefrag`, apenas identificadores de fragmentos "
+"vazios serão removidos. Para resultados de :func:`urlsplit` e :func:"
+"`urlparse`, todas as alterações mencionadas serão feitas na URL devolvida "
+"por este método."
 
 #: ../../library/urllib.parse.rst:539
 msgid ""
 "The result of this method remains unchanged if passed back through the "
 "original parsing function:"
 msgstr ""
+"O resultado deste método permanece inalterado se passado novamente através "
+"da função de análise original:"
 
 #: ../../library/urllib.parse.rst:552
 msgid ""
 "The following classes provide the implementations of the structured parse "
 "results when operating on :class:`str` objects:"
 msgstr ""
+"As classes seguintes fornecem as implementações dos resultados de análise "
+"estruturados ao operar em objetos :class:`str`:"
 
 #: ../../library/urllib.parse.rst:557
 msgid ""
 "Concrete class for :func:`urldefrag` results containing :class:`str` data. "
 "The :meth:`encode` method returns a :class:`DefragResultBytes` instance."
 msgstr ""
+"Classe concreta para resultados de :func:`urldefrag` contendo dados :class:"
+"`str`. O método :meth:`encode` devolve uma instância de :class:"
+"`DefragResultBytes`."
 
 #: ../../library/urllib.parse.rst:565
 msgid ""
 "Concrete class for :func:`urlparse` results containing :class:`str` data. "
 "The :meth:`encode` method returns a :class:`ParseResultBytes` instance."
 msgstr ""
+"Classe concreta para resultados de :func:`urlparse` contendo dados :class:"
+"`str`. O método :meth:`encode` devolve uma instância de :class:"
+"`ParseResultBytes`."
 
 #: ../../library/urllib.parse.rst:571
 msgid ""
 "Concrete class for :func:`urlsplit` results containing :class:`str` data. "
 "The :meth:`encode` method returns a :class:`SplitResultBytes` instance."
 msgstr ""
+"Classe concreta para resultados de :func:`urlsplit` contendo dados :class:"
+"`str`. O método :meth:`encode` devolve uma instância de :class:"
+"`SplitResultBytes`."
 
 #: ../../library/urllib.parse.rst:576
 msgid ""
 "The following classes provide the implementations of the parse results when "
 "operating on :class:`bytes` or :class:`bytearray` objects:"
 msgstr ""
+"As classes seguintes fornecem as implementações dos resultados de análise ao "
+"operar em objetos :class:`bytes` ou :class:`bytearray`:"
 
 #: ../../library/urllib.parse.rst:581
 msgid ""
 "Concrete class for :func:`urldefrag` results containing :class:`bytes` data. "
 "The :meth:`decode` method returns a :class:`DefragResult` instance."
 msgstr ""
+"Classe concreta para resultados de :func:`urldefrag` contendo dados :class:"
+"`bytes`. O método :meth:`decode` devolve uma instância de :class:"
+"`DefragResult`."
 
 #: ../../library/urllib.parse.rst:589
 msgid ""
 "Concrete class for :func:`urlparse` results containing :class:`bytes` data. "
 "The :meth:`decode` method returns a :class:`ParseResult` instance."
 msgstr ""
+"Classe concreta para resultados de :func:`urlparse` contendo dados :class:"
+"`bytes`. O método :meth:`decode` devolve uma instância de :class:"
+"`ParseResult`."
 
 #: ../../library/urllib.parse.rst:597
 msgid ""
 "Concrete class for :func:`urlsplit` results containing :class:`bytes` data. "
 "The :meth:`decode` method returns a :class:`SplitResult` instance."
 msgstr ""
+"Classe concreta para resultados de :func:`urlsplit` contendo dados :class:"
+"`bytes`. O método :meth:`decode` devolve uma instância de :class:"
+"`SplitResult`."
 
 #: ../../library/urllib.parse.rst:605
 msgid "URL Quoting"
-msgstr ""
+msgstr "Codificação de URL"
 
 #: ../../library/urllib.parse.rst:607
 msgid ""
@@ -791,6 +1077,12 @@ msgid ""
 "recreate the original data from the contents of a URL component if that task "
 "isn't already covered by the URL parsing functions above."
 msgstr ""
+"As funções de codificação de URL concentram-se em tomar dados de programas e "
+"torná-los seguros para uso como componentes de URL, codificando caracteres "
+"especiais e texto não-ASCII de forma apropriada. Também suportam reverter "
+"estas operações para recrear os dados originais a partir do conteúdo de um "
+"componente de URL, se essa tarefa não estiver já coberta pelas funções de "
+"análise de URL acima."
 
 #: ../../library/urllib.parse.rst:615
 msgid ""
@@ -800,17 +1092,24 @@ msgid ""
 "optional *safe* parameter specifies additional ASCII characters that should "
 "not be quoted --- its default value is ``'/'``."
 msgstr ""
+"Substitui caracteres especiais em *string* usando a escape :samp:`%{xx}`. "
+"Letras, dígitos e os caracteres ``'_.-~'`` nunca são codificados. Por "
+"predefinição, esta função destina-se a codificar a secção de caminho de uma "
+"URL. O parâmetro opcional *safe* especifica caracteres ASCII adicionais que "
+"não devem ser codificados — o seu valor predefinido é ``'/'``."
 
 #: ../../library/urllib.parse.rst:621 ../../library/urllib.parse.rst:667
 #: ../../library/urllib.parse.rst:696
 msgid "*string* may be either a :class:`str` or a :class:`bytes` object."
-msgstr ""
+msgstr "*string* pode ser um objeto :class:`str` ou :class:`bytes`."
 
 #: ../../library/urllib.parse.rst:623
 msgid ""
 "Moved from :rfc:`2396` to :rfc:`3986` for quoting URL strings. \"~\" is now "
 "included in the set of unreserved characters."
 msgstr ""
+"Mudado de :rfc:`2396` para :rfc:`3986` para codificação de strings de URL. "
+"\"~\" está agora incluído no conjunto de caracteres não reservados."
 
 #: ../../library/urllib.parse.rst:627
 msgid ""
@@ -821,16 +1120,25 @@ msgid ""
 "*errors* must not be supplied if *string* is a :class:`bytes`, or a :class:"
 "`TypeError` is raised."
 msgstr ""
+"Os parâmetros opcionais *encoding* e *errors* especificam como lidar com "
+"caracteres não-ASCII, como aceite pelo método :meth:`str.encode`. *encoding* "
+"é predefinido para ``'utf-8'``. *errors* é predefinido para ``'strict'``, o "
+"que significa que caracteres não suportados levantam um :class:"
+"`UnicodeEncodeError`. *encoding* e *errors* não devem ser fornecidos se "
+"*string* for um :class:`bytes`, ou uma exceção :class:`TypeError` será "
+"levantada."
 
 #: ../../library/urllib.parse.rst:635
 msgid ""
 "Note that ``quote(string, safe, encoding, errors)`` is equivalent to "
 "``quote_from_bytes(string.encode(encoding, errors), safe)``."
 msgstr ""
+"Note que ``quote(string, safe, encoding, errors)`` é equivalente a "
+"``quote_from_bytes(string.encode(encoding, errors), safe)``."
 
 #: ../../library/urllib.parse.rst:638
 msgid "Example: ``quote('/El Niño/')`` yields ``'/El%20Ni%C3%B1o/'``."
-msgstr ""
+msgstr "Exemplo: ``quote('/El Niño/')`` produz ``'/El%20Ni%C3%B1o/'``."
 
 #: ../../library/urllib.parse.rst:643
 msgid ""
@@ -839,20 +1147,27 @@ msgid ""
 "Plus signs in the original string are escaped unless they are included in "
 "*safe*.  It also does not have *safe* default to ``'/'``."
 msgstr ""
+"Semelhante a :func:`quote`, mas também substitui espaços por sinais de mais, "
+"como exigido para codificar valores de formulários HTML ao construir uma "
+"string de consulta para ir numa URL. Sinais de mais na string original são "
+"escapados a menos que estejam incluídos em *safe*. Também não tem *safe* "
+"predefinido para ``'/'``."
 
 #: ../../library/urllib.parse.rst:648
 msgid "Example: ``quote_plus('/El Niño/')`` yields ``'%2FEl+Ni%C3%B1o%2F'``."
-msgstr ""
+msgstr "Exemplo: ``quote_plus('/El Niño/')`` produz ``'%2FEl+Ni%C3%B1o%2F'``."
 
 #: ../../library/urllib.parse.rst:653
 msgid ""
 "Like :func:`quote`, but accepts a :class:`bytes` object rather than a :class:"
 "`str`, and does not perform string-to-bytes encoding."
 msgstr ""
+"Semelhante a :func:`quote`, mas aceita um objeto :class:`bytes` em vez de "
+"um :class:`str`, e não realiza codificação de string para bytes."
 
 #: ../../library/urllib.parse.rst:656
 msgid "Example: ``quote_from_bytes(b'a&\\xef')`` yields ``'a%26%EF'``."
-msgstr ""
+msgstr "Exemplo: ``quote_from_bytes(b'a&\\xef')`` produz ``'a%26%EF'``."
 
 #: ../../library/urllib.parse.rst:662
 msgid ""
@@ -861,51 +1176,65 @@ msgid ""
 "encoded sequences into Unicode characters, as accepted by the :meth:`bytes."
 "decode` method."
 msgstr ""
+"Substitui escapes :samp:`%{xx}` pelo seu equivalente de carácter único. Os "
+"parâmetros opcionais *encoding* e *errors* especificam como descodificar "
+"sequências codificadas em percentagem em caracteres Unicode, como aceite "
+"pelo método :meth:`bytes.decode`."
 
 #: ../../library/urllib.parse.rst:669
 msgid ""
 "*encoding* defaults to ``'utf-8'``. *errors* defaults to ``'replace'``, "
 "meaning invalid sequences are replaced by a placeholder character."
 msgstr ""
+"*encoding* é predefinido para ``'utf-8'``. *errors* é predefinido para "
+"``'replace'``, o que significa que sequências inválidas são substituídas por "
+"um carácter de espaço reservado."
 
 #: ../../library/urllib.parse.rst:673
 msgid "Example: ``unquote('/El%20Ni%C3%B1o/')`` yields ``'/El Niño/'``."
-msgstr ""
+msgstr "Exemplo: ``unquote('/El%20Ni%C3%B1o/')`` produz ``'/El Niño/'``."
 
 #: ../../library/urllib.parse.rst:675
 msgid ""
 "*string* parameter supports bytes and str objects (previously only str)."
 msgstr ""
+"O parâmetro *string* suporta objetos bytes e str (anteriormente apenas str)."
 
 #: ../../library/urllib.parse.rst:683
 msgid ""
 "Like :func:`unquote`, but also replace plus signs with spaces, as required "
 "for unquoting HTML form values."
 msgstr ""
+"Semelhante a :func:`unquote`, mas também substitui sinais de mais por "
+"espaços, como exigido para descodificar valores de formulários HTML."
 
 #: ../../library/urllib.parse.rst:686
 msgid "*string* must be a :class:`str`."
-msgstr ""
+msgstr "*string* deve ser um :class:`str`."
 
 #: ../../library/urllib.parse.rst:688
 msgid "Example: ``unquote_plus('/El+Ni%C3%B1o/')`` yields ``'/El Niño/'``."
-msgstr ""
+msgstr "Exemplo: ``unquote_plus('/El+Ni%C3%B1o/')`` produz ``'/El Niño/'``."
 
 #: ../../library/urllib.parse.rst:693
 msgid ""
 "Replace :samp:`%{xx}` escapes with their single-octet equivalent, and return "
 "a :class:`bytes` object."
 msgstr ""
+"Substitui escapes :samp:`%{xx}` pelo seu equivalente de octeto único, e "
+"devolve um objeto :class:`bytes`."
 
 #: ../../library/urllib.parse.rst:698
 msgid ""
 "If it is a :class:`str`, unescaped non-ASCII characters in *string* are "
 "encoded into UTF-8 bytes."
 msgstr ""
+"Se for um :class:`str`, os caracteres não-ASCII não escapados em *string* "
+"são codificados em bytes UTF-8."
 
 #: ../../library/urllib.parse.rst:701
 msgid "Example: ``unquote_to_bytes('a%26%EF')`` yields ``b'a&\\xef'``."
-msgstr ""
+msgstr "Exemplo: ``unquote_to_bytes('a%26%EF')`` produz ``b'a&\\xef'``."
 
 #: ../../library/urllib.parse.rst:707
 msgid ""
@@ -915,6 +1244,12 @@ msgid ""
 "operation with the :func:`~urllib.request.urlopen` function, then it should "
 "be encoded to bytes, otherwise it would result in a :exc:`TypeError`."
 msgstr ""
+"Converte um objeto de mapeamento ou uma sequência de tuplos de dois "
+"elementos, que podem conter objetos :class:`str` ou :class:`bytes`, numa "
+"string de texto ASCII codificada em percentagem. Se a string resultante for "
+"usada como *data* para uma operação POST com a função :func:`~urllib.request."
+"urlopen`, então deve ser codificada para bytes, caso contrário resultaria "
+"num :exc:`TypeError`."
 
 #: ../../library/urllib.parse.rst:714
 msgid ""
@@ -928,6 +1263,16 @@ msgid ""
 "and not encode '/' characters.  For maximum control of what is quoted, use "
 "``quote`` and specify a value for *safe*."
 msgstr ""
+"A string resultante é uma série de pares ``key=value`` separados por "
+"caracteres ``'&'``, onde tanto *key* como *value* são codificados usando a "
+"função *quote_via*. Por predefinição, :func:`quote_plus` é usado para "
+"codificar os valores, o que significa que os espaços são codificados como um "
+"carácter ``'+'`` e os caracteres '/' são codificados como ``%2F``, o que "
+"segue o padrão para pedidos GET (``application/x-www-form-urlencoded``). Uma "
+"função alternativa que pode ser passada como *quote_via* é :func:`quote`, "
+"que codificará espaços como ``%20`` e não codificará caracteres '/'. Para um "
+"controlo máximo do que é codificado, use ``quote`` e especifique um valor "
+"para *safe*."
 
 #: ../../library/urllib.parse.rst:724
 msgid ""
@@ -939,6 +1284,13 @@ msgid ""
 "for the key.  The order of parameters in the encoded string will match the "
 "order of parameter tuples in the sequence."
 msgstr ""
+"Quando uma sequência de tuplos de dois elementos é usada como argumento "
+"*query*, o primeiro elemento de cada tuplo é uma chave e o segundo é um "
+"valor. O elemento de valor em si pode ser uma sequência e, nesse caso, se o "
+"parâmetro opcional *doseq* avaliar para ``True``, pares ``key=value`` "
+"individuais separados por ``'&'`` são gerados para cada elemento da "
+"sequência de valores para a chave. A ordem dos parâmetros na string "
+"codificada corresponderá à ordem dos tuplos de parâmetros na sequência."
 
 #: ../../library/urllib.parse.rst:732
 msgid ""
@@ -946,12 +1298,18 @@ msgid ""
 "*quote_via* (the *encoding* and *errors* parameters are only passed when a "
 "query element is a :class:`str`)."
 msgstr ""
+"Os parâmetros *safe*, *encoding* e *errors* são passados para *quote_via* "
+"(os parâmetros *encoding* e *errors* são passados apenas quando um elemento "
+"de consulta é um :class:`str`)."
 
 #: ../../library/urllib.parse.rst:736
 msgid ""
 "To reverse this encoding process, :func:`parse_qs` and :func:`parse_qsl` are "
 "provided in this module to parse query strings into Python data structures."
 msgstr ""
+"Para reverter este processo de codificação, :func:`parse_qs` e :func:"
+"`parse_qsl` são fornecidas neste módulo para analisar strings de consulta em "
+"estruturas de dados Python."
 
 #: ../../library/urllib.parse.rst:739
 msgid ""
@@ -959,28 +1317,33 @@ msgid ""
 "`urllib.parse.urlencode` method can be used for generating the query string "
 "of a URL or data for a POST request."
 msgstr ""
+"Consulte :ref:`exemplos urllib <urllib-examples>` para descobrir como o "
+"método :func:`urllib.parse.urlencode` pode ser usado para gerar a string de "
+"consulta de uma URL ou dados para um pedido POST."
 
 #: ../../library/urllib.parse.rst:743
 msgid "*query* supports bytes and string objects."
-msgstr ""
+msgstr "*query* suporta objetos bytes e string."
 
 #: ../../library/urllib.parse.rst:746
 msgid "Added the *quote_via* parameter."
-msgstr ""
+msgstr "Adicionado o parâmetro *quote_via*."
 
 #: ../../library/urllib.parse.rst:752
 msgid "`WHATWG`_ -  URL Living standard"
-msgstr ""
+msgstr "`WHATWG`_ - Padrão URL em evolução"
 
 #: ../../library/urllib.parse.rst:753
 msgid ""
 "Working Group for the URL Standard that defines URLs, domains, IP addresses, "
 "the application/x-www-form-urlencoded format, and their API."
 msgstr ""
+"Grupo de Trabalho para o Padrão de URL que define URLs, domínios, endereços "
+"IP, o formato application/x-www-form-urlencoded e a sua API."
 
 #: ../../library/urllib.parse.rst:756
 msgid ":rfc:`3986` - Uniform Resource Identifiers"
-msgstr ""
+msgstr ":rfc:`3986` - Identificadores Uniformes de Recursos"
 
 #: ../../library/urllib.parse.rst:757
 msgid ""
@@ -989,36 +1352,44 @@ msgid ""
 "mostly for backward compatibility purposes and for certain de-facto parsing "
 "requirements as commonly observed in major browsers."
 msgstr ""
+"Este é o padrão atual (STD66). Quaisquer alterações ao módulo urllib.parse "
+"devem estar em conformidade com este. Certos desvios podem ser observados, "
+"que são maioritariamente para fins de compatibilidade retroativa e para "
+"certos requisitos de análise de facto, como comumente observado nos "
+"principais navegadores."
 
 #: ../../library/urllib.parse.rst:762
 msgid ":rfc:`2732` - Format for Literal IPv6 Addresses in URL's."
-msgstr ""
+msgstr ":rfc:`2732` - Formato para Endereços IPv6 Literais em URLs."
 
 #: ../../library/urllib.parse.rst:763
 msgid "This specifies the parsing requirements of IPv6 URLs."
-msgstr ""
+msgstr "Isto especifica os requisitos de análise de URLs IPv6."
 
 #: ../../library/urllib.parse.rst:765
 msgid ":rfc:`2396` - Uniform Resource Identifiers (URI): Generic Syntax"
 msgstr ""
+":rfc:`2396` - Identificadores Uniformes de Recursos (URI): Sintaxe Genérica"
 
 #: ../../library/urllib.parse.rst:766
 msgid ""
 "Document describing the generic syntactic requirements for both Uniform "
 "Resource Names (URNs) and Uniform Resource Locators (URLs)."
 msgstr ""
+"Documento que descreve os requisitos sintáticos genéricos para Nomes "
+"Uniformes de Recursos (URNs) e Localizadores Uniformes de Recursos (URLs)."
 
 #: ../../library/urllib.parse.rst:769
 msgid ":rfc:`2368` - The mailto URL scheme."
-msgstr ""
+msgstr ":rfc:`2368` - O esquema de URL mailto."
 
 #: ../../library/urllib.parse.rst:770
 msgid "Parsing requirements for mailto URL schemes."
-msgstr ""
+msgstr "Requisitos de análise para esquemas de URL mailto."
 
 #: ../../library/urllib.parse.rst:772
 msgid ":rfc:`1808` - Relative Uniform Resource Locators"
-msgstr ""
+msgstr ":rfc:`1808` - Localizadores Uniformes de Recursos Relativos"
 
 #: ../../library/urllib.parse.rst:773
 msgid ""
@@ -1026,30 +1397,33 @@ msgid ""
 "relative URL, including a fair number of \"Abnormal Examples\" which govern "
 "the treatment of border cases."
 msgstr ""
+"Este Pedido de Comentários inclui as regras para unir uma URL absoluta e uma "
+"relativa, incluindo um número considerável de \"Exemplos Anormais\" que "
+"regem o tratamento de casos limite."
 
 #: ../../library/urllib.parse.rst:777
 msgid ":rfc:`1738` - Uniform Resource Locators (URL)"
-msgstr ""
+msgstr ":rfc:`1738` - Localizadores Uniformes de Recursos (URL)"
 
 #: ../../library/urllib.parse.rst:778
 msgid "This specifies the formal syntax and semantics of absolute URLs."
-msgstr ""
+msgstr "Isto especifica a sintaxe formal e semântica de URLs absolutas."
 
 #: ../../library/urllib.parse.rst:9
 msgid "WWW"
-msgstr ""
+msgstr "WWW"
 
 #: ../../library/urllib.parse.rst:9
 msgid "World Wide Web"
-msgstr ""
+msgstr "World Wide Web"
 
 #: ../../library/urllib.parse.rst:9
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: ../../library/urllib.parse.rst:9
 msgid "parsing"
-msgstr ""
+msgstr "análise"
 
 #: ../../library/urllib.parse.rst:9
 msgid "relative"
