@@ -53,13 +53,8 @@ jobs:
       with:
         python-version: '3.12'
         cache: 'pip'
-        cache-dependency-path: |
-          requirements.txt
-
-    - name: Install dependencies
-      run: |
-        python3 -m pip install --upgrade pip
-        python3 -m pip install -r requirements.txt
+        cache-dependency-path: requirements.txt
+        pip-install: -r requirements.txt
 
     - name: Set version variables
       id: version
@@ -128,6 +123,7 @@ jobs:
           cache-dependency-path: |
             requirements.txt
             cpython/Doc/requirements.txt
+          pip-install: -r requirements.txt -r cpython/Doc/requirements.txt
 
       - name: Install Transifex CLI
         working-directory: /usr/local/bin
@@ -137,8 +133,6 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update -y && sudo apt install gettext -y
-          pip3 install --upgrade pip
-          pip3 install -r requirements.txt -r cpython/Doc/requirements.txt
 
       - name: Change Transifex project name if Python version != python-newest
         if: ${{ matrix.cpython_version != needs.trigger.outputs.current }}
