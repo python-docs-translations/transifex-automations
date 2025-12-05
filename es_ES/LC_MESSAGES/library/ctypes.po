@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-01 15:07+0000\n"
+"POT-Creation-Date: 2025-12-05 15:13+0000\n"
 "PO-Revision-Date: 2025-09-15 01:04+0000\n"
 "Last-Translator: eulalio barbero espinosa <eulalio@disroot.org>, 2025\n"
 "Language-Team: Spanish (Spain) (https://app.transifex.com/python-doc/"
@@ -2774,6 +2774,11 @@ msgid ""
 "the contents of ``temp1``. So, the last assignment ``rc.b = temp1``, doesn't "
 "have the expected effect."
 msgstr ""
+"Nótese que ``temp0`` y ``temp1`` son objetos que todavía utilizan el buffer "
+"interno del objeto ``rc`` anterior. Así que ejecutar ``rc.a = temp0`` copia "
+"el contenido del buffer de ``temp0`` en el buffer de ``rc``.  Esto, a su "
+"vez, cambia el contenido de ``temp1``. Así, la última asignación ``rc.b = "
+"temp1``, no tiene el efecto esperado."
 
 #: ../../library/ctypes.rst:1229
 msgid ""
@@ -2781,12 +2786,17 @@ msgid ""
 "doesn't *copy* the sub-object, instead it retrieves a wrapper object "
 "accessing the root-object's underlying buffer."
 msgstr ""
+"Tenga en cuenta que la recuperación de subobjetos de Structure, Unions y "
+"Arrays no *copia* el subobjeto, sino que recupera un objeto envoltorio que "
+"accede al búfer subyacente del objeto raíz."
 
 #: ../../library/ctypes.rst:1233
 msgid ""
 "Another example that may behave differently from what one would expect is "
 "this::"
 msgstr ""
+"Otro ejemplo que puede comportarse de forma diferente a lo que cabría "
+"esperar es el siguiente::"
 
 #: ../../library/ctypes.rst:1235
 msgid ""
@@ -2798,12 +2808,21 @@ msgid ""
 "False\n"
 ">>>"
 msgstr ""
+">>> s = c_char_p()\n"
+">>> s.value = b\"abc def ghi\"\n"
+">>> s.value\n"
+"b'abc def ghi'\n"
+">>> s.value is s.value\n"
+"False\n"
+">>>"
 
 #: ../../library/ctypes.rst:1245
 msgid ""
 "Objects instantiated from :class:`c_char_p` can only have their value set to "
 "bytes or integers."
 msgstr ""
+"Los objetos instanciados a partir de :class:`c_char_p` sólo pueden tener "
+"como valor bytes o enteros."
 
 #: ../../library/ctypes.rst:1248
 msgid ""
@@ -2813,15 +2832,22 @@ msgid ""
 "object itself, instead the ``contents`` of the object is stored.  Accessing "
 "the contents again constructs a new Python object each time!"
 msgstr ""
+"¿Por qué imprime ``False``? Las instancias de ctypes son objetos que "
+"contienen un bloque de memoria más algunos :term:`descriptor`\\s que acceden "
+"al contenido de la memoria. El almacenamiento de un objeto Python en el "
+"bloque de memoria no almacena el objeto en sí, en su lugar se almacena el "
+"``contents`` del objeto.  Si se vuelve a acceder al contenido, se construye "
+"un nuevo objeto Python cada vez."
 
 #: ../../library/ctypes.rst:1258
 msgid "Variable-sized data types"
-msgstr ""
+msgstr "Tipos de datos de tamaño variable"
 
 #: ../../library/ctypes.rst:1260
 msgid ""
 ":mod:`ctypes` provides some support for variable-sized arrays and structures."
 msgstr ""
+":mod:`ctypes` ofrece soporte para matrices y estructuras de tamaño variable."
 
 #: ../../library/ctypes.rst:1262
 msgid ""
@@ -2831,6 +2857,12 @@ msgid ""
 "cannot be made smaller than the natural memory block specified by the "
 "objects type, a :exc:`ValueError` is raised if this is tried::"
 msgstr ""
+"La función :func:`resize` puede utilizarse para redimensionar el búfer de "
+"memoria de un objeto ctypes existente.  La función toma el objeto como "
+"primer argumento, y el tamaño solicitado en bytes como segundo argumento.  "
+"El bloque de memoria no puede hacerse más pequeño que el bloque de memoria "
+"natural especificado por el tipo de objeto, un :exc:`ValueError` se plantea "
+"si esto se intenta::"
 
 #: ../../library/ctypes.rst:1268
 msgid ""
@@ -2848,6 +2880,19 @@ msgid ""
 "8\n"
 ">>>"
 msgstr ""
+">>> short_array = (c_short * 4)()\n"
+">>> print(sizeof(short_array))\n"
+"8\n"
+">>> resize(short_array, 4)\n"
+"Traceback (most recent call last):\n"
+"    ...\n"
+"ValueError: minimum size is 8\n"
+">>> resize(short_array, 32)\n"
+">>> sizeof(short_array)\n"
+"32\n"
+">>> sizeof(type(short_array))\n"
+"8\n"
+">>>"
 
 #: ../../library/ctypes.rst:1282
 msgid ""
@@ -2855,6 +2900,9 @@ msgid ""
 "contained in this array?  Since the type still only knows about 4 elements, "
 "we get errors accessing other elements::"
 msgstr ""
+"Esto está muy bien, pero ¿cómo se puede acceder a los elementos adicionales "
+"contenidos en esta matriz?  Dado que el tipo todavía sólo conoce 4 "
+"elementos, obtenemos errores al acceder a otros elementos::"
 
 #: ../../library/ctypes.rst:1286
 msgid ""
@@ -2866,6 +2914,13 @@ msgid ""
 "IndexError: invalid index\n"
 ">>>"
 msgstr ""
+">>> short_array[:]\n"
+"[0, 0, 0, 0]\n"
+">>> short_array[7]\n"
+"Traceback (most recent call last):\n"
+"    ...\n"
+"IndexError: invalid index\n"
+">>>"
 
 #: ../../library/ctypes.rst:1294
 msgid ""
@@ -2873,20 +2928,25 @@ msgid ""
 "the dynamic nature of Python, and (re-)define the data type after the "
 "required size is already known, on a case by case basis."
 msgstr ""
+"Otra forma de utilizar tipos de datos de tamaño variable con :mod:`ctypes` "
+"es utilizar la naturaleza dinámica de Python, y (re)definir el tipo de datos "
+"después de conocer el tamaño requerido, caso por caso."
 
 #: ../../library/ctypes.rst:1302
 msgid "ctypes reference"
-msgstr ""
+msgstr "referencia ctypes"
 
 #: ../../library/ctypes.rst:1308
 msgid "Finding shared libraries"
-msgstr ""
+msgstr "Encontrar bibliotecas compartidas"
 
 #: ../../library/ctypes.rst:1310
 msgid ""
 "When programming in a compiled language, shared libraries are accessed when "
 "compiling/linking a program, and when the program is run."
 msgstr ""
+"Cuando se programa en un lenguaje compilado, se accede a las bibliotecas "
+"compartidas al compilar/vincular un programa y al ejecutarlo."
 
 #: ../../library/ctypes.rst:1313
 msgid ""
@@ -2896,12 +2956,20 @@ msgid ""
 "be loaded), while the ctypes library loaders act like when a program is run, "
 "and call the runtime loader directly."
 msgstr ""
+"El propósito de la función :func:`~ctypes.util.find_library` es localizar "
+"una biblioteca de forma similar a lo que hace el compilador o el cargador en "
+"tiempo de ejecución (en plataformas con varias versiones de una biblioteca "
+"compartida debe cargarse la más reciente), mientras que los cargadores de "
+"bibliotecas ctypes actúan como cuando se ejecuta un programa, y llaman "
+"directamente al cargador en tiempo de ejecución."
 
 #: ../../library/ctypes.rst:1319
 msgid ""
 "The :mod:`!ctypes.util` module provides a function which can help to "
 "determine the library to load."
 msgstr ""
+"El módulo :mod:`!ctypes.util` proporciona una función que puede ayudar a "
+"determinar la biblioteca a cargar."
 
 #: ../../library/ctypes.rst:1327
 msgid ""
@@ -2910,10 +2978,15 @@ msgid ""
 "number (this is the form used for the posix linker option :option:`!-l`).  "
 "If no library can be found, returns ``None``."
 msgstr ""
+"Intenta encontrar una biblioteca y devuelve una ruta.  *nombre* es el nombre "
+"de la biblioteca sin ningún prefijo como *lib*, sufijo como ``.so``, ``."
+"dylib`` o número de versión (esta es la forma utilizada para la opción del "
+"enlazador posix :option:`!-l`).  Si no se encuentra ninguna biblioteca, "
+"devuelve ``None``."
 
 #: ../../library/ctypes.rst:1332 ../../library/ctypes.rst:2038
 msgid "The exact functionality is system dependent."
-msgstr ""
+msgstr "La funcionalidad exacta depende del sistema."
 
 #: ../../library/ctypes.rst:1334
 msgid ""
@@ -2921,6 +2994,9 @@ msgid ""
 "(``/sbin/ldconfig``, ``gcc``, ``objdump`` and ``ld``) to find the library "
 "file. It returns the filename of the library file."
 msgstr ""
+"En Linux, :func:`~ctypes.util.find_library` intenta ejecutar programas "
+"externos (``/sbin/ldconfig``, ``gcc``, ``objdump`` y ``ld``) para encontrar "
+"el archivo de biblioteca. Devuelve el nombre del archivo de la biblioteca."
 
 #: ../../library/ctypes.rst:1338
 msgid ""
@@ -2928,10 +3004,12 @@ msgid ""
 "when searching for libraries, if a library cannot be found by any other "
 "means."
 msgstr ""
+"En Linux, el valor de la variable de entorno se usa al buscar bibliotecas, "
+"si no se puede encontrar una biblioteca por ningún otro medio."
 
 #: ../../library/ctypes.rst:1342
 msgid "Here are some examples::"
-msgstr ""
+msgstr "He aquí algunos ejemplos::"
 
 #: ../../library/ctypes.rst:1344
 msgid ""
@@ -2944,6 +3022,14 @@ msgid ""
 "'libbz2.so.1.0'\n"
 ">>>"
 msgstr ""
+">>> from ctypes.util import find_library\n"
+">>> find_library(\"m\")\n"
+"'libm.so.6'\n"
+">>> find_library(\"c\")\n"
+"'libc.so.6'\n"
+">>> find_library(\"bz2\")\n"
+"'libbz2.so.1.0'\n"
+">>>"
 
 #: ../../library/ctypes.rst:1353
 msgid ""
@@ -2965,6 +3051,16 @@ msgid ""
 "'/System/Library/Frameworks/AGL.framework/AGL'\n"
 ">>>"
 msgstr ""
+">>> from ctypes.util import find_library\n"
+">>> find_library(\"c\")\n"
+"'/usr/lib/libc.dylib'\n"
+">>> find_library(\"m\")\n"
+"'/usr/lib/libm.dylib'\n"
+">>> find_library(\"bz2\")\n"
+"'/usr/lib/libbz2.dylib'\n"
+">>> find_library(\"AGL\")\n"
+"'/System/Library/Frameworks/AGL.framework/AGL'\n"
+">>>"
 
 #: ../../library/ctypes.rst:1368
 msgid ""
@@ -2973,6 +3069,10 @@ msgid ""
 "naming scheme a call like ``find_library(\"c\")`` will fail and return "
 "``None``."
 msgstr ""
+"En Windows, :func:`~ctypes.util.find_library` busca a lo largo de la ruta de "
+"búsqueda del sistema y devuelve la ruta completa, pero como no existe un "
+"esquema de nombres predefinido, una llamada como ``find_library(\"c\")`` "
+"fallará y devolverá ``None``."
 
 #: ../../library/ctypes.rst:1372
 msgid ""
@@ -2981,16 +3081,23 @@ msgid ""
 "into the wrapper module instead of using :func:`~ctypes.util.find_library` "
 "to locate the library at runtime."
 msgstr ""
+"Si se envuelve una biblioteca compartida con :mod:`ctypes`, *puede* ser "
+"mejor determinar el nombre de la biblioteca compartida en tiempo de "
+"desarrollo, y hardcode que en el módulo de envoltura en lugar de utilizar :"
+"func:`~ctypes.util.find_library` para localizar la biblioteca en tiempo de "
+"ejecución."
 
 #: ../../library/ctypes.rst:1380
 msgid "Loading shared libraries"
-msgstr ""
+msgstr "Carga de bibliotecas compartidas"
 
 #: ../../library/ctypes.rst:1382
 msgid ""
 "There are several ways to load shared libraries into the Python process.  "
 "One way is to instantiate one of the following classes:"
 msgstr ""
+"Hay varias formas de cargar bibliotecas compartidas en el proceso Python.  "
+"Una forma es instanciar una de las siguientes clases:"
 
 #: ../../library/ctypes.rst:1388
 msgid ""
@@ -2998,6 +3105,9 @@ msgid ""
 "these libraries use the standard C calling convention, and are assumed to "
 "return :c:expr:`int`."
 msgstr ""
+"Las instancias de esta clase representan bibliotecas compartidas cargadas. "
+"Las funciones de estas bibliotecas utilizan la convención de llamadas "
+"estándar de C y se supone que devuelven :c:expr:`int`."
 
 #: ../../library/ctypes.rst:1392
 msgid ""
@@ -3010,17 +3120,29 @@ msgid ""
 "which DLL is not found, you need to find the list of dependent DLLs and "
 "determine which one is not found using Windows debugging and tracing tools."
 msgstr ""
+"En Windows, la creación de una instancia de :class:`CDLL` puede fallar "
+"incluso si el nombre de la DLL existe. Cuando no se encuentra una DLL "
+"dependiente de la DLL cargada, se produce un error :exc:`OSError` con el "
+"mensaje *\"[WinError 126] The specified module could not be found\".* Este "
+"mensaje de error no contiene el nombre de la DLL que falta porque la API de "
+"Windows no devuelve esta información, lo que hace que este error sea difícil "
+"de diagnosticar. Para resolver este error y determinar qué DLL no se "
+"encuentra, es necesario encontrar la lista de DLL dependientes y determinar "
+"cuál no se encuentra utilizando las herramientas de depuración y rastreo de "
+"Windows."
 
 #: ../../library/ctypes.rst:1404 ../../library/ctypes.rst:1429
 #: ../../library/ctypes.rst:1442 ../../library/ctypes.rst:1460
 msgid "The *name* parameter can now be a :term:`path-like object`."
-msgstr ""
+msgstr "El parámetro *nombre* ahora puede ser un  :term:`path-like object`."
 
 #: ../../library/ctypes.rst:1408
 msgid ""
 "`Microsoft DUMPBIN tool <https://docs.microsoft.com/cpp/build/reference/"
 "dependents>`_ -- A tool to find DLL dependents."
 msgstr ""
+"`Microsoft DUMPBIN tool <https://docs.microsoft.com/cpp/build/reference/"
+"dependents>`_ -- Una herramienta para encontrar dependientes DLL."
 
 #: ../../library/ctypes.rst:1414
 msgid ""
@@ -3031,6 +3153,13 @@ msgid ""
 "succeeded, together with additional error code.  If the return value signals "
 "a failure, an :class:`OSError` is automatically raised."
 msgstr ""
+"Las instancias de esta clase representan bibliotecas compartidas cargadas; "
+"las funciones de estas bibliotecas utilizan la convención de llamadas "
+"``stdcall`` y se supone que devuelven el código :class:`HRESULT` específico "
+"de Windows. Los valores :class:`HRESULT` contienen información que "
+"especifica si la llamada a la función ha fallado o ha tenido éxito, junto "
+"con un código de error adicional.  Si el valor de retorno indica un fallo, "
+"se genera automáticamente un :class:`OSError`."
 
 #: ../../library/ctypes.rst:1421 ../../library/ctypes.rst:1438
 #: ../../library/ctypes.rst:1582 ../../library/ctypes.rst:1590
@@ -3046,7 +3175,7 @@ msgstr "Disponibilidad"
 msgid ""
 ":exc:`WindowsError` used to be raised, which is now an alias of :exc:"
 "`OSError`."
-msgstr ""
+msgstr ":exc:`WindowsError` que ahora es un alias de :exc:`OSError`."
 
 #: ../../library/ctypes.rst:1434
 msgid ""
@@ -3054,12 +3183,18 @@ msgid ""
 "these libraries use the ``stdcall`` calling convention, and are assumed to "
 "return :c:expr:`int` by default."
 msgstr ""
+"Las instancias de esta clase representan bibliotecas compartidas cargadas, "
+"las funciones de estas bibliotecas utilizan la convención de llamadas "
+"``stdcall``, y se supone que devuelven :c:expr:`int` por defecto."
 
 #: ../../library/ctypes.rst:1445
 msgid ""
 "The Python :term:`global interpreter lock` is released before calling any "
 "function exported by these libraries, and reacquired afterwards."
 msgstr ""
+"El  :term:`global interpreter lock` de Python se libera antes de llamar a "
+"cualquier función exportada por estas bibliotecas, y se vuelve a adquirir "
+"después."
 
 #: ../../library/ctypes.rst:1451
 msgid ""
@@ -3068,10 +3203,16 @@ msgid ""
 "function execution the Python error flag is checked. If the error flag is "
 "set, a Python exception is raised."
 msgstr ""
+"Las instancias de esta clase se comportan como instancias de :class:`CDLL`, "
+"excepto que el GIL de Python *no* se libera durante la llamada a la función, "
+"y después de la ejecución de la función se comprueba la bandera de error de "
+"Python. Si la bandera de error está activada, se lanza una excepción Python."
 
 #: ../../library/ctypes.rst:1456
 msgid "Thus, this is only useful to call Python C api functions directly."
 msgstr ""
+"Por lo tanto, esto sólo es útil para llamar directamente a funciones api de "
+"Python C."
 
 #: ../../library/ctypes.rst:1462
 msgid ""
@@ -3090,6 +3231,10 @@ msgid ""
 "ignored.  On posix systems, RTLD_NOW is always added, and is not "
 "configurable."
 msgstr ""
+"El parámetro *mode* puede utilizarse para especificar cómo se carga la "
+"biblioteca.  Para más detalles, consulte la página de manual :manpage:"
+"`dlopen(3)`.  En Windows, *mode* se ignora.  En sistemas posix, RTLD_NOW se "
+"añade siempre, y no es configurable."
 
 #: ../../library/ctypes.rst:1474
 msgid ""
@@ -3107,6 +3252,9 @@ msgid ""
 "private copy, and the function :func:`ctypes.set_errno` changes the ctypes "
 "private copy to a new value and returns the former value."
 msgstr ""
+"La función :func:`ctypes.get_errno` devuelve el valor de la copia privada "
+"ctypes, y la función :func:`ctypes.set_errno` cambia la copia privada ctypes "
+"a un nuevo valor y devuelve el valor anterior."
 
 #: ../../library/ctypes.rst:1485
 msgid ""
@@ -3116,6 +3264,12 @@ msgid ""
 "and :func:`ctypes.set_last_error` are used to request and change the ctypes "
 "private copy of the windows error code."
 msgstr ""
+"El parámetro *use_last_error*, cuando se establece en true, habilita el "
+"mismo mecanismo para el código de error de Windows que es gestionado por las "
+"funciones de la API de Windows :func:`GetLastError` y :func:`!"
+"SetLastError`; :func:`ctypes.get_last_error` y :func:`ctypes.set_last_error` "
+"se utilizan para solicitar y cambiar la copia privada ctypes del código de "
+"error de windows."
 
 #: ../../library/ctypes.rst:1491
 msgid ""
@@ -3126,28 +3280,41 @@ msgid ""
 "such as DLL hijacking. Passing the full path to the DLL is the safest way to "
 "ensure the correct library and dependencies are loaded."
 msgstr ""
+"El parámetro *winmode* se utiliza en Windows para especificar cómo se carga "
+"la biblioteca (ya que *mode* se ignora). Toma cualquier valor que sea válido "
+"para el parámetro Win32 API ``LoadLibraryEx`` flags. Cuando se omite, el "
+"valor por defecto es utilizar las banderas que resultan en la carga de DLL "
+"más segura, lo que evita problemas como el secuestro de DLL. Pasar la ruta "
+"completa a la DLL es la forma más segura de garantizar que se cargan la "
+"biblioteca y las dependencias correctas."
 
 #: ../../library/ctypes.rst:1498
 msgid "Added *winmode* parameter."
-msgstr ""
+msgstr "Se ha añadido el parámetro *winmode*."
 
 #: ../../library/ctypes.rst:1505
 msgid ""
 "Flag to use as *mode* parameter.  On platforms where this flag is not "
 "available, it is defined as the integer zero."
 msgstr ""
+"Bandera a utilizar como parámetro *mode*.  En plataformas donde esta bandera "
+"no está disponible, se define como el entero cero."
 
 #: ../../library/ctypes.rst:1512
 msgid ""
 "Flag to use as *mode* parameter.  On platforms where this is not available, "
 "it is the same as *RTLD_GLOBAL*."
 msgstr ""
+"Bandera a utilizar como parámetro *mode*.  En plataformas en las que no está "
+"disponible, es el mismo que *RTLD_GLOBAL*."
 
 #: ../../library/ctypes.rst:1519
 msgid ""
 "The default mode which is used to load shared libraries.  On OSX 10.3, this "
 "is *RTLD_GLOBAL*, otherwise it is the same as *RTLD_LOCAL*."
 msgstr ""
+"El modo por defecto que se utiliza para cargar las bibliotecas compartidas.  "
+"En OSX 10.3, es *RTLD_GLOBAL*, de lo contrario es el mismo que *RTLD_LOCAL*."
 
 #: ../../library/ctypes.rst:1522
 msgid ""
@@ -3157,6 +3324,12 @@ msgid ""
 "therefore accessing it repeatedly returns the same object each time.  On the "
 "other hand, accessing it through an index returns a new object each time::"
 msgstr ""
+"Las instancias de estas clases no tienen métodos públicos.  Se puede acceder "
+"a las funciones exportadas por la biblioteca compartida como atributos o por "
+"índice.  Tenga en cuenta que el acceso a la función a través de un atributo "
+"almacena en caché el resultado y, por lo tanto, acceder a ella repetidamente "
+"devuelve el mismo objeto cada vez.  Por otro lado, acceder a ella a través "
+"de un índice devuelve un nuevo objeto cada vez::"
 
 #: ../../library/ctypes.rst:1528
 msgid ""
@@ -3167,20 +3340,28 @@ msgid ""
 ">>> libc['time'] == libc['time']\n"
 "False"
 msgstr ""
+">>> from ctypes import CDLL\n"
+">>> libc = CDLL(\"libc.so.6\")  # On Linux\n"
+">>> libc.time == libc.time\n"
+"True\n"
+">>> libc['time'] == libc['time']\n"
+"False"
 
 #: ../../library/ctypes.rst:1535
 msgid ""
 "The following public attributes are available, their name starts with an "
 "underscore to not clash with exported function names:"
 msgstr ""
+"Los siguientes atributos públicos están disponibles, su nombre comienza con "
+"un guión bajo para no chocar con los nombres de las funciones exportadas:"
 
 #: ../../library/ctypes.rst:1541
 msgid "The system handle used to access the library."
-msgstr ""
+msgstr "Manejador del sistema utilizado para acceder a la biblioteca."
 
 #: ../../library/ctypes.rst:1546
 msgid "The name of the library passed in the constructor."
-msgstr ""
+msgstr "El nombre de la biblioteca pasada en el constructor."
 
 #: ../../library/ctypes.rst:1548
 msgid ""
@@ -3189,12 +3370,18 @@ msgid ""
 "calling the :meth:`~LibraryLoader.LoadLibrary` method, or by retrieving the "
 "library as attribute of the loader instance."
 msgstr ""
+"Las bibliotecas compartidas también pueden cargarse utilizando uno de los "
+"objetos prefabricados, que son instancias de la clase :class:"
+"`LibraryLoader`, bien llamando al método :meth:`~LibraryLoader.LoadLibrary`, "
+"bien recuperando la biblioteca como atributo de la instancia del cargador."
 
 #: ../../library/ctypes.rst:1556
 msgid ""
 "Class which loads shared libraries.  *dlltype* should be one of the :class:"
 "`CDLL`, :class:`PyDLL`, :class:`WinDLL`, or :class:`OleDLL` types."
 msgstr ""
+"Clase que carga bibliotecas compartidas.  *dlltype* debe ser uno de los "
+"tipos :class:`CDLL`, :class:`PyDLL`, :class:`WinDLL`, o :class:`OleDLL`."
 
 #: ../../library/ctypes.rst:1559
 msgid ""
@@ -3203,12 +3390,18 @@ msgid ""
 "result is cached, so repeated attribute accesses return the same library "
 "each time."
 msgstr ""
+":meth:`!__getattr__` tiene un comportamiento especial: Permite cargar una "
+"biblioteca compartida accediendo a ella como atributo de una instancia del "
+"cargador de bibliotecas.  El resultado se almacena en caché, por lo que los "
+"accesos repetidos al atributo devuelven la misma biblioteca cada vez."
 
 #: ../../library/ctypes.rst:1565
 msgid ""
 "Load a shared library into the process and return it.  This method always "
 "returns a new instance of the library."
 msgstr ""
+"Carga una biblioteca compartida en el proceso y la devuelve.  Este método "
+"siempre devuelve una nueva instancia de la biblioteca."
 
 #: ../../library/ctypes.rst:1569
 msgid "These prefabricated library loaders are available:"
