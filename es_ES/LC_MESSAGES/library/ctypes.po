@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-07 14:58+0000\n"
+"POT-Creation-Date: 2025-12-09 15:04+0000\n"
 "PO-Revision-Date: 2025-09-15 01:04+0000\n"
 "Last-Translator: eulalio barbero espinosa <eulalio@disroot.org>, 2025\n"
 "Language-Team: Spanish (Spain) (https://app.transifex.com/python-doc/"
@@ -3796,30 +3796,41 @@ msgid ""
 "COM interface as first argument, in addition to those parameters that are "
 "specified in the :attr:`!argtypes` tuple."
 msgstr ""
+"Los métodos COM utilizan una convención de llamada especial: Requieren un "
+"puntero a la interfaz COM como primer argumento, además de los parámetros "
+"especificados en la tupla :attr:`!argtypes`."
 
 #: ../../library/ctypes.rst:1815
 msgid ""
 "The optional *paramflags* parameter creates foreign function wrappers with "
 "much more functionality than the features described above."
 msgstr ""
+"El parámetro opcional *paramflags* crea envoltorios de funciones ajenas con "
+"mucha más funcionalidad que las características descritas anteriormente."
 
 #: ../../library/ctypes.rst:1818
 msgid ""
 "*paramflags* must be a tuple of the same length as :attr:`~_CFuncPtr."
 "argtypes`."
 msgstr ""
+"*paramflags* debe ser una tupla de la misma longitud que :attr:`~_CFuncPtr."
+"argtypes`."
 
 #: ../../library/ctypes.rst:1820
 msgid ""
 "Each item in this tuple contains further information about a parameter, it "
 "must be a tuple containing one, two, or three items."
 msgstr ""
+"Cada elemento de esta tupla contiene información adicional sobre un "
+"parámetro, debe ser una tupla que contenga uno, dos o tres elementos."
 
 #: ../../library/ctypes.rst:1823
 msgid ""
 "The first item is an integer containing a combination of direction flags for "
 "the parameter:"
 msgstr ""
+"El primer elemento es un número entero que contiene una combinación de "
+"indicadores de dirección para el parámetro:"
 
 #: ../../library/ctypes.rst:1826
 msgid "1"
@@ -3827,7 +3838,7 @@ msgstr "1"
 
 #: ../../library/ctypes.rst:1827
 msgid "Specifies an input parameter to the function."
-msgstr ""
+msgstr "Especifica un parámetro de entrada a la función."
 
 #: ../../library/ctypes.rst:1829
 msgid "2"
@@ -3835,7 +3846,7 @@ msgstr "2"
 
 #: ../../library/ctypes.rst:1830
 msgid "Output parameter.  The foreign function fills in a value."
-msgstr ""
+msgstr "Parámetro de salida.  La función externa rellena un valor."
 
 #: ../../library/ctypes.rst:1832
 msgid "4"
@@ -3843,17 +3854,19 @@ msgstr "4"
 
 #: ../../library/ctypes.rst:1833
 msgid "Input parameter which defaults to the integer zero."
-msgstr ""
+msgstr "Parámetro de entrada que por defecto es el entero cero."
 
 #: ../../library/ctypes.rst:1835
 msgid ""
 "The optional second item is the parameter name as string.  If this is "
 "specified, the foreign function can be called with named parameters."
 msgstr ""
+"El segundo elemento opcional es el nombre del parámetro como cadena.  Si se "
+"especifica, se puede llamar a la función externa con parámetros con nombre."
 
 #: ../../library/ctypes.rst:1838
 msgid "The optional third item is the default value for this parameter."
-msgstr ""
+msgstr "El tercer elemento opcional es el valor por defecto de este parámetro."
 
 #: ../../library/ctypes.rst:1841
 msgid ""
@@ -3861,6 +3874,9 @@ msgid ""
 "function so that it supports default parameters and named arguments. The C "
 "declaration from the windows header file is this::"
 msgstr ""
+"El siguiente ejemplo muestra cómo envolver la función ``MessageBoxW`` de "
+"Windows para que admita parámetros por defecto y argumentos con nombre. La "
+"declaración C del archivo de cabecera de Windows es la siguiente::"
 
 #: ../../library/ctypes.rst:1845
 msgid ""
@@ -3871,10 +3887,16 @@ msgid ""
 "    LPCWSTR lpCaption,\n"
 "    UINT uType);"
 msgstr ""
+"WINUSERAPI int WINAPI\n"
+"MessageBoxW(\n"
+"    HWND hWnd,\n"
+"    LPCWSTR lpText,\n"
+"    LPCWSTR lpCaption,\n"
+"    UINT uType);"
 
 #: ../../library/ctypes.rst:1852 ../../library/ctypes.rst:1875
 msgid "Here is the wrapping with :mod:`ctypes`::"
-msgstr ""
+msgstr "Aquí está el envoltorio con :mod:`ctypes`::"
 
 #: ../../library/ctypes.rst:1854
 msgid ""
@@ -3885,10 +3907,17 @@ msgid ""
 "\"Hello from ctypes\"), (1, \"flags\", 0)\n"
 ">>> MessageBox = prototype((\"MessageBoxW\", windll.user32), paramflags)"
 msgstr ""
+">>> from ctypes import c_int, WINFUNCTYPE, windll\n"
+">>> from ctypes.wintypes import HWND, LPCWSTR, UINT\n"
+">>> prototype = WINFUNCTYPE(c_int, HWND, LPCWSTR, LPCWSTR, UINT)\n"
+">>> paramflags = (1, \"hwnd\", 0), (1, \"text\", \"Hi\"), (1, \"caption\", "
+"\"Hello from ctypes\"), (1, \"flags\", 0)\n"
+">>> MessageBox = prototype((\"MessageBoxW\", windll.user32), paramflags)"
 
 #: ../../library/ctypes.rst:1860
 msgid "The ``MessageBox`` foreign function can now be called in these ways::"
 msgstr ""
+"La función ajena ``MessageBox`` se puede llamar ahora de estas maneras::"
 
 #: ../../library/ctypes.rst:1862
 msgid ""
@@ -3896,6 +3925,9 @@ msgid ""
 ">>> MessageBox(text=\"Spam, spam, spam\")\n"
 ">>> MessageBox(flags=2, text=\"foo bar\")"
 msgstr ""
+">>> MessageBox()\n"
+">>> MessageBox(text=\"Spam, spam, spam\")\n"
+">>> MessageBox(flags=2, text=\"foo bar\")"
 
 #: ../../library/ctypes.rst:1866
 msgid ""
@@ -3904,6 +3936,10 @@ msgid ""
 "copying them into ``RECT`` structure that the caller has to supply.  Here is "
 "the C declaration::"
 msgstr ""
+"Un segundo ejemplo muestra los parámetros de salida.  La función win32 "
+"``GetWindowRect`` recupera las dimensiones de una ventana especificada "
+"copiándolas en la estructura ``RECT`` que el llamante debe suministrar.  "
+"Esta es la declaración en C::"
 
 #: ../../library/ctypes.rst:1870
 msgid ""
@@ -3912,6 +3948,10 @@ msgid ""
 "     HWND hWnd,\n"
 "     LPRECT lpRect);"
 msgstr ""
+"WINUSERAPI BOOL WINAPI\n"
+"GetWindowRect(\n"
+"     HWND hWnd,\n"
+"     LPRECT lpRect);"
 
 #: ../../library/ctypes.rst:1877
 msgid ""
@@ -3923,6 +3963,13 @@ msgid ""
 "paramflags)\n"
 ">>>"
 msgstr ""
+">>> from ctypes import POINTER, WINFUNCTYPE, windll, WinError\n"
+">>> from ctypes.wintypes import BOOL, HWND, RECT\n"
+">>> prototype = WINFUNCTYPE(BOOL, HWND, POINTER(RECT))\n"
+">>> paramflags = (1, \"hwnd\"), (2, \"lprect\")\n"
+">>> GetWindowRect = prototype((\"GetWindowRect\", windll.user32), "
+"paramflags)\n"
+">>>"
 
 #: ../../library/ctypes.rst:1884
 msgid ""
@@ -3931,6 +3978,10 @@ msgid ""
 "parameter values when there are more than one, so the GetWindowRect function "
 "now returns a RECT instance, when called."
 msgstr ""
+"Las funciones con parámetros de salida devolverán automáticamente el valor "
+"del parámetro de salida si hay uno solo, o una tupla que contiene los "
+"valores de los parámetros de salida cuando hay más de uno, por lo que la "
+"función GetWindowRect devuelve ahora una instancia RECT, cuando se llama."
 
 #: ../../library/ctypes.rst:1889
 msgid ""
@@ -3940,6 +3991,12 @@ msgid ""
 "failure, so this function could do the error checking, and raises an "
 "exception when the api call failed::"
 msgstr ""
+"Los parámetros de salida pueden combinarse con el protocolo :attr:"
+"`~_CFuncPtr.errcheck` para realizar el procesamiento de la salida y la "
+"comprobación de errores.  La función win32 ``GetWindowRect`` api devuelve un "
+"``BOOL`` para señalar el éxito o el fracaso, por lo que esta función podría "
+"hacer la comprobación de errores, y lanza una excepción cuando la llamada "
+"api falló::"
 
 #: ../../library/ctypes.rst:1894
 msgid ""
@@ -3951,6 +4008,13 @@ msgid ""
 ">>> GetWindowRect.errcheck = errcheck\n"
 ">>>"
 msgstr ""
+">>> def errcheck(result, func, args):\n"
+"...     if not result:\n"
+"...         raise WinError()\n"
+"...     return args\n"
+"...\n"
+">>> GetWindowRect.errcheck = errcheck\n"
+">>>"
 
 #: ../../library/ctypes.rst:1902
 msgid ""
@@ -3960,6 +4024,12 @@ msgid ""
 "instead of a ``RECT`` instance, you can retrieve the fields in the function "
 "and return them instead, the normal processing will no longer take place::"
 msgstr ""
+"Si la función :attr:`~_CFuncPtr.errcheck` devuelve la tupla de argumentos "
+"que recibe sin cambios, :mod:`ctypes` continúa el procesamiento normal que "
+"realiza sobre los parámetros de salida.  Si desea devolver una tupla de "
+"coordenadas de ventana en lugar de una instancia de ``RECT``, puede "
+"recuperar los campos en la función y devolverlos en su lugar, el "
+"procesamiento normal ya no tendrá lugar::"
 
 #: ../../library/ctypes.rst:1908
 msgid ""
@@ -3972,28 +4042,42 @@ msgid ""
 ">>> GetWindowRect.errcheck = errcheck\n"
 ">>>"
 msgstr ""
+">>> def errcheck(result, func, args):\n"
+"...     if not result:\n"
+"...         raise WinError()\n"
+"...     rc = args[1]\n"
+"...     return rc.left, rc.top, rc.bottom, rc.right\n"
+"...\n"
+">>> GetWindowRect.errcheck = errcheck\n"
+">>>"
 
 #: ../../library/ctypes.rst:1921
 msgid "Utility functions"
-msgstr ""
+msgstr "Funciones de utilidad"
 
 #: ../../library/ctypes.rst:1925
 msgid ""
 "Returns the address of the memory buffer as integer.  *obj* must be an "
 "instance of a ctypes type."
 msgstr ""
+"Devuelve la dirección del búfer de memoria como entero.  *obj* debe ser una "
+"instancia de un tipo ctypes."
 
 #: ../../library/ctypes.rst:1928
 msgid ""
 "Raises an :ref:`auditing event <auditing>` ``ctypes.addressof`` with "
 "argument ``obj``."
 msgstr ""
+"Lanza un :ref:`auditing event <auditing>` ``ctypes.addressof`` con el "
+"argumento ``obj``."
 
 #: ../../library/ctypes.rst:1933
 msgid ""
 "Returns the alignment requirements of a ctypes type. *obj_or_type* must be a "
 "ctypes type or instance."
 msgstr ""
+"Devuelve los requisitos de alineación de un tipo ctypes. *obj_or_type* debe "
+"ser un tipo o instancia ctypes."
 
 #: ../../library/ctypes.rst:1939
 msgid ""
