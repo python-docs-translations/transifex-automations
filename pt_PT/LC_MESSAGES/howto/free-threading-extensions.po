@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 14:13+0000\n"
+"POT-Creation-Date: 2025-12-11 14:18+0000\n"
 "PO-Revision-Date: 2025-09-16 00:00+0000\n"
 "Last-Translator: NyaPuma <afrmscb@gmail.com>, 2025\n"
 "Language-Team: Portuguese (Portugal) (https://app.transifex.com/python-doc/"
@@ -25,7 +25,7 @@ msgstr ""
 
 #: ../../howto/free-threading-extensions.rst:7
 msgid "C API Extension Support for Free Threading"
-msgstr ""
+msgstr "Suporte de Extensão da API C para Multithreading Livre"
 
 #: ../../howto/free-threading-extensions.rst:9
 msgid ""
@@ -34,10 +34,14 @@ msgid ""
 "term:`free threading`.  This document describes how to adapt C API "
 "extensions to support free threading."
 msgstr ""
+"A partir da versão 3.13, o CPython suporta a execução com o :term:`global "
+"interpreter lock` (GIL) desativado, numa configuração chamada :term:"
+"`multithreading livre`. Este documento descreve como adaptar extensões da "
+"API C para suportar multithreading livre."
 
 #: ../../howto/free-threading-extensions.rst:16
 msgid "Identifying the Free-Threaded Build in C"
-msgstr ""
+msgstr "Identificar a Compilação com Multithreading Livre em C"
 
 #: ../../howto/free-threading-extensions.rst:18
 msgid ""
@@ -46,6 +50,10 @@ msgid ""
 "defined. You can use it to enable code that only runs under the free-"
 "threaded build::"
 msgstr ""
+"A API C do CPython expõe a macro ``Py_GIL_DISABLED``: na compilação com "
+"multithreading livre, está definida como ``1``, enquanto na compilação "
+"normal não está definida. Pode utilizá-la para ativar código que só deve ser "
+"executado na compilação com multithreading livre::"
 
 #: ../../howto/free-threading-extensions.rst:22
 msgid ""
@@ -53,6 +61,9 @@ msgid ""
 "/* code that only runs in the free-threaded build */\n"
 "#endif"
 msgstr ""
+"#ifdef Py_GIL_DISABLED\n"
+"/* código que só é executado na compilação com multithreading livre */\n"
+"#endif"
 
 #: ../../howto/free-threading-extensions.rst:28
 msgid ""
@@ -61,10 +72,14 @@ msgid ""
 "can be used to determine whether the current running interpreter had the "
 "macro defined."
 msgstr ""
+"No Windows, esta macro não é definida automaticamente, mas deve ser "
+"especificada ao compilador durante a compilação. A função :func:`sysconfig."
+"get_config_var` pode ser utilizada para determinar se o interpretador em "
+"execução teve a macro definida."
 
 #: ../../howto/free-threading-extensions.rst:35
 msgid "Module Initialization"
-msgstr ""
+msgstr "Inicialização de Módulos"
 
 #: ../../howto/free-threading-extensions.rst:37
 msgid ""
@@ -72,6 +87,9 @@ msgid ""
 "the GIL disabled; otherwise importing the extension will raise a warning and "
 "enable the GIL at runtime."
 msgstr ""
+"Os módulos de extensão precisam de indicar explicitamente que suportam a "
+"execução com o GIL desativado; caso contrário, a importação da extensão "
+"gerará um aviso e ativará o GIL em tempo de execução."
 
 #: ../../howto/free-threading-extensions.rst:41
 msgid ""
@@ -79,10 +97,13 @@ msgid ""
 "with the GIL disabled depending on whether the extension uses multi-phase or "
 "single-phase initialization."
 msgstr ""
+"Existem duas formas de indicar que um módulo de extensão suporta a execução "
+"com o GIL desativado, dependendo se a extensão utiliza inicialização em "
+"várias fases ou numa única fase."
 
 #: ../../howto/free-threading-extensions.rst:46
 msgid "Multi-Phase Initialization"
-msgstr ""
+msgstr "Inicialização em Várias Fases"
 
 #: ../../howto/free-threading-extensions.rst:48
 msgid ""
@@ -91,6 +112,10 @@ msgid ""
 "definition.  If your extension supports older versions of CPython, you "
 "should guard the slot with a :c:data:`PY_VERSION_HEX` check."
 msgstr ""
+"Extensões que utilizam inicialização em várias fases (ou seja, :c:func:"
+"`PyModuleDef_Init`) devem adicionar um slot :c:data:`Py_mod_gil` na "
+"definição do módulo. Se a sua extensão suportar versões mais antigas do "
+"CPython, deve proteger o slot com uma verificação :c:data:`PY_VERSION_HEX`."
 
 #: ../../howto/free-threading-extensions.rst:55
 msgid ""
@@ -108,10 +133,23 @@ msgid ""
 "    ...\n"
 "};"
 msgstr ""
+"static struct PyModuleDef_Slot module_slots[] = {\n"
+"    ...\n"
+"#if PY_VERSION_HEX >= 0x030D0000\n"
+"    {Py_mod_gil, Py_MOD_GIL_NOT_USED},\n"
+"#endif\n"
+"    {0, NULL}\n"
+"};\n"
+"\n"
+"static struct PyModuleDef moduledef = {\n"
+"    PyModuleDef_HEAD_INIT,\n"
+"    .m_slots = module_slots,\n"
+"    ...\n"
+"};\n"
 
 #: ../../howto/free-threading-extensions.rst:71
 msgid "Single-Phase Initialization"
-msgstr ""
+msgstr "Inicialização em Fase Única"
 
 #: ../../howto/free-threading-extensions.rst:73
 msgid ""
@@ -121,6 +159,12 @@ msgid ""
 "only defined in the free-threaded build, so you should guard the call with "
 "``#ifdef Py_GIL_DISABLED`` to avoid compilation errors in the regular build."
 msgstr ""
+"Extensões que utilizam inicialização em fase única (ou seja, :c:func:"
+"`PyModule_Create`) devem chamar :c:func:`PyUnstable_Module_SetGIL` para "
+"indicar que suportam a execução com o GIL desativado. A função só está "
+"definida na compilação com multithreading livre, pelo que deve proteger a "
+"chamada com ``#ifdef Py_GIL_DISABLED`` para evitar erros de compilação na "
+"compilação normal."
 
 #: ../../howto/free-threading-extensions.rst:81
 msgid ""
@@ -142,20 +186,41 @@ msgid ""
 "    return m;\n"
 "}"
 msgstr ""
+"static struct PyModuleDef moduledef = {\n"
+"    PyModuleDef_HEAD_INIT,\n"
+"    ...\n"
+"};\n"
+"\n"
+"PyMODINIT_FUNC\n"
+"PyInit_mymodule(void)\n"
+"{\n"
+"    PyObject *m = PyModule_Create(&moduledef);\n"
+"    if (m == NULL) {\n"
+"        return NULL;\n"
+"    }\n"
+"#ifdef Py_GIL_DISABLED\n"
+"    PyUnstable_Module_SetGIL(m, Py_MOD_GIL_NOT_USED);\n"
+"#endif\n"
+"    return m;\n"
+"}"
 
 #: ../../howto/free-threading-extensions.rst:101
 msgid "General API Guidelines"
-msgstr ""
+msgstr "Diretrizes Gerais da API"
 
 #: ../../howto/free-threading-extensions.rst:103
 msgid "Most of the C API is thread-safe, but there are some exceptions."
 msgstr ""
+"A maioria da API C é segura para threads, mas existem algumas exceções."
 
 #: ../../howto/free-threading-extensions.rst:105
 msgid ""
 "**Struct Fields**: Accessing fields in Python C API objects or structs "
 "directly is not thread-safe if the field may be concurrently modified."
 msgstr ""
+"**Campos de Estruturas**: Aceder diretamente a campos em objetos ou "
+"estruturas da API C do Python não é seguro para threads se o campo puder ser "
+"modificado concorrentemente."
 
 #: ../../howto/free-threading-extensions.rst:107
 msgid ""
@@ -165,6 +230,11 @@ msgid ""
 "error checking or locking. These macros are not thread-safe if the container "
 "object may be modified concurrently."
 msgstr ""
+"**Macros**: Macros de acesso como :c:macro:`PyList_GET_ITEM`, :c:macro:"
+"`PyList_SET_ITEM`, e macros como :c:macro:`PySequence_Fast_GET_SIZE` que "
+"utilizam o objeto retornado por :c:func:`PySequence_Fast` não realizam "
+"qualquer verificação de erros ou bloqueio. Estas macros não são seguras para "
+"threads se o objeto contentor puder ser modificado concorrentemente."
 
 #: ../../howto/free-threading-extensions.rst:113
 msgid ""
@@ -173,10 +243,15 @@ msgid ""
 "object is modified concurrently.  See the section on :ref:`borrowed "
 "references <borrowed-references>` for more information."
 msgstr ""
+"**Referências Emprestadas**: Funções da API C que retornam :term:"
+"`referências emprestadas <borrowed reference>` podem não ser seguras para "
+"threads se o objeto contentor for modificado concorrentemente. Consulte a "
+"secção sobre :ref:`referências emprestadas <borrowed-references>` para mais "
+"informações."
 
 #: ../../howto/free-threading-extensions.rst:120
 msgid "Container Thread Safety"
-msgstr ""
+msgstr "Segurança de Threads em Contentores"
 
 #: ../../howto/free-threading-extensions.rst:122
 msgid ""
@@ -185,10 +260,14 @@ msgid ""
 "For example, the :c:func:`PyList_Append` will lock the list before appending "
 "an item."
 msgstr ""
+"Contentores como :c:struct:`PyListObject`, :c:struct:`PyDictObject` e :c:"
+"struct:`PySetObject` realizam bloqueio interno na compilação com "
+"multithreading livre. Por exemplo, a função :c:func:`PyList_Append` bloqueia "
+"a lista antes de adicionar um item."
 
 #: ../../howto/free-threading-extensions.rst:130
 msgid "``PyDict_Next``"
-msgstr ""
+msgstr "``PyDict_Next``"
 
 #: ../../howto/free-threading-extensions.rst:132
 msgid ""
@@ -197,6 +276,10 @@ msgid ""
 "the dictionary while iterating over it if the dictionary may be concurrently "
 "modified::"
 msgstr ""
+"Uma exceção notável é :c:func:`PyDict_Next`, que não bloqueia o dicionário. "
+"Deve utilizar :c:macro:`Py_BEGIN_CRITICAL_SECTION` para proteger o "
+"dicionário enquanto itera sobre ele, se o dicionário puder ser modificado "
+"concorrentemente::"
 
 #: ../../howto/free-threading-extensions.rst:137
 msgid ""
@@ -208,10 +291,17 @@ msgid ""
 "}\n"
 "Py_END_CRITICAL_SECTION();"
 msgstr ""
+"Py_BEGIN_CRITICAL_SECTION(dict);\n"
+"PyObject *key, *value;\n"
+"Py_ssize_t pos = 0;\n"
+"while (PyDict_Next(dict, &pos, &key, &value)) {\n"
+"    ...\n"
+"}\n"
+"Py_END_CRITICAL_SECTION();"
 
 #: ../../howto/free-threading-extensions.rst:147
 msgid "Borrowed References"
-msgstr ""
+msgstr "Referências Emprestadas"
 
 #: ../../howto/free-threading-extensions.rst:151
 msgid ""
@@ -220,99 +310,105 @@ msgid ""
 "modified concurrently.  For example, it's not safe to use :c:func:"
 "`PyList_GetItem` if the list may be modified concurrently."
 msgstr ""
+"Algumas funções da API C retornam :term:`referências emprestadas <borrowed "
+"reference>`. Estas APIs não são seguras para threads se o objeto contentor "
+"for modificado concorrentemente. Por exemplo, não é seguro utilizar :c:func:"
+"`PyList_GetItem` se a lista puder ser modificada concorrentemente."
 
 #: ../../howto/free-threading-extensions.rst:156
 msgid ""
 "The following table lists some borrowed reference APIs and their "
 "replacements that return :term:`strong references <strong reference>`."
 msgstr ""
+"A tabela seguinte lista algumas APIs de referências emprestadas e as suas "
+"substituições que retornam :term:`referências fortes <strong reference>`."
 
 #: ../../howto/free-threading-extensions.rst:160
 msgid "Borrowed reference API"
-msgstr ""
+msgstr "API de Referência Emprestada"
 
 #: ../../howto/free-threading-extensions.rst:160
 msgid "Strong reference API"
-msgstr ""
+msgstr "API de Referência Forte"
 
 #: ../../howto/free-threading-extensions.rst:162
 msgid ":c:func:`PyList_GetItem`"
-msgstr ""
+msgstr ":c:func:`PyList_GetItem`"
 
 #: ../../howto/free-threading-extensions.rst:162
 #: ../../howto/free-threading-extensions.rst:164
 msgid ":c:func:`PyList_GetItemRef`"
-msgstr ""
+msgstr ":c:func:`PyList_GetItemRef`"
 
 #: ../../howto/free-threading-extensions.rst:164
 msgid ":c:func:`PyList_GET_ITEM`"
-msgstr ""
+msgstr ":c:func:`PyList_GET_ITEM`"
 
 #: ../../howto/free-threading-extensions.rst:166
 msgid ":c:func:`PyDict_GetItem`"
-msgstr ""
+msgstr ":c:func:`PyDict_GetItem`"
 
 #: ../../howto/free-threading-extensions.rst:166
 #: ../../howto/free-threading-extensions.rst:168
 msgid ":c:func:`PyDict_GetItemRef`"
-msgstr ""
+msgstr ":c:func:`PyDict_GetItemRef`"
 
 #: ../../howto/free-threading-extensions.rst:168
 msgid ":c:func:`PyDict_GetItemWithError`"
-msgstr ""
+msgstr ":c:func:`PyDict_GetItemWithError`"
 
 #: ../../howto/free-threading-extensions.rst:170
 msgid ":c:func:`PyDict_GetItemString`"
-msgstr ""
+msgstr ":c:func:`PyDict_GetItemString`"
 
 #: ../../howto/free-threading-extensions.rst:170
 msgid ":c:func:`PyDict_GetItemStringRef`"
-msgstr ""
+msgstr ":c:func:`PyDict_GetItemStringRef`"
 
 #: ../../howto/free-threading-extensions.rst:172
 msgid ":c:func:`PyDict_SetDefault`"
-msgstr ""
+msgstr ":c:func:`PyDict_SetDefault`"
 
 #: ../../howto/free-threading-extensions.rst:172
 msgid ":c:func:`PyDict_SetDefaultRef`"
-msgstr ""
+msgstr ":c:func:`PyDict_SetDefaultRef`"
 
 #: ../../howto/free-threading-extensions.rst:174
 msgid ":c:func:`PyDict_Next`"
-msgstr ""
+msgstr ":c:func:`PyDict_Next`"
 
 #: ../../howto/free-threading-extensions.rst:174
 msgid "none (see :ref:`PyDict_Next`)"
-msgstr ""
+msgstr "nenhuma (consulte :ref:`PyDict_Next`)"
 
 #: ../../howto/free-threading-extensions.rst:176
 msgid ":c:func:`PyWeakref_GetObject`"
-msgstr ""
+msgstr ":c:func:`PyWeakref_GetObject`"
 
 #: ../../howto/free-threading-extensions.rst:176
 #: ../../howto/free-threading-extensions.rst:178
 msgid ":c:func:`PyWeakref_GetRef`"
-msgstr ""
+msgstr ":c:func:`PyWeakref_GetRef`"
 
 #: ../../howto/free-threading-extensions.rst:178
 msgid ":c:func:`PyWeakref_GET_OBJECT`"
-msgstr ""
+msgstr ":c:func:`PyWeakref_GET_OBJECT`"
 
 #: ../../howto/free-threading-extensions.rst:180
 msgid ":c:func:`PyImport_AddModule`"
-msgstr ""
+msgstr ":c:func:`PyImport_AddModule`"
 
 #: ../../howto/free-threading-extensions.rst:180
 msgid ":c:func:`PyImport_AddModuleRef`"
-msgstr ""
+msgstr ":c:func:`PyImport_AddModuleRef`"
 
 #: ../../howto/free-threading-extensions.rst:182
 msgid ":c:func:`PyCell_GET`"
-msgstr ""
+msgstr ":c:func:`PyCell_GET`"
 
 #: ../../howto/free-threading-extensions.rst:182
 msgid ":c:func:`PyCell_Get`"
-msgstr ""
+msgstr ":c:func:`PyCell_Get`"
 
 #: ../../howto/free-threading-extensions.rst:185
 msgid ""
@@ -324,6 +420,14 @@ msgid ""
 "(not accessible by other threads), so using borrowed references in that "
 "context is safe."
 msgstr ""
+"Nem todas as APIs que retornam referências emprestadas são problemáticas. "
+"Por exemplo, :c:func:`PyTuple_GetItem` é seguro porque os tuplos são "
+"imutáveis. Da mesma forma, nem todos os usos das APIs acima são "
+"problemáticos. Por exemplo, :c:func:`PyDict_GetItem` é frequentemente "
+"utilizado para analisar dicionários de argumentos nomeados em chamadas de "
+"funções; esses dicionários de argumentos nomeados são efetivamente privados "
+"(não acessíveis por outras threads), pelo que o uso de referências "
+"emprestadas nesse contexto é seguro."
 
 #: ../../howto/free-threading-extensions.rst:193
 msgid ""
@@ -331,10 +435,14 @@ msgid ""
 "`pythoncapi-compat <https://github.com/python/pythoncapi-compat>`_ package "
 "to provide implementations of these functions for older Python versions."
 msgstr ""
+"Algumas destas funções foram adicionadas no Python 3.13. Pode utilizar o "
+"pacote `pythoncapi-compat <https://github.com/python/pythoncapi-compat>`_ "
+"para fornecer implementações destas funções para versões mais antigas do "
+"Python."
 
 #: ../../howto/free-threading-extensions.rst:201
 msgid "Memory Allocation APIs"
-msgstr ""
+msgstr "APIs de Alocação de Memória"
 
 #: ../../howto/free-threading-extensions.rst:203
 msgid ""
@@ -345,6 +453,13 @@ msgid ""
 "allocated using that domain.  This differs from the prior Python versions, "
 "where this was only a best practice and not a hard requirement."
 msgstr ""
+"A API C de gestão de memória do Python fornece funções em três domínios de "
+"alocação diferentes :ref:`<allocator-domains>`: \"raw\", \"mem\" e "
+"\"object\". Para segurança de threads, a compilação com multithreading livre "
+"exige que apenas objetos Python sejam alocados utilizando o domínio de "
+"objetos, e que todos os objetos Python sejam alocados utilizando esse "
+"domínio. Isto difere das versões anteriores do Python, onde isto era apenas "
+"uma boa prática e não um requisito obrigatório."
 
 #: ../../howto/free-threading-extensions.rst:212
 msgid ""
@@ -352,28 +467,33 @@ msgid ""
 "that the allocated memory is used for Python objects. Use :c:func:"
 "`PyMem_Malloc` to allocate buffers instead of :c:func:`PyObject_Malloc`."
 msgstr ""
+"Procure usos de :c:func:`PyObject_Malloc` na sua extensão e verifique se a "
+"memória alocada é utilizada para objetos Python. Utilize :c:func:"
+"`PyMem_Malloc` para alocar buffers em vez de :c:func:`PyObject_Malloc`."
 
 #: ../../howto/free-threading-extensions.rst:219
 msgid "Thread State and GIL APIs"
-msgstr ""
+msgstr "APIs de Estado de Thread e GIL"
 
 #: ../../howto/free-threading-extensions.rst:221
 msgid ""
 "Python provides a set of functions and macros to manage thread state and the "
 "GIL, such as:"
 msgstr ""
+"O Python fornece um conjunto de funções e macros para gerir o estado de "
+"threads e o GIL, tais como:"
 
 #: ../../howto/free-threading-extensions.rst:224
 msgid ":c:func:`PyGILState_Ensure` and :c:func:`PyGILState_Release`"
-msgstr ""
+msgstr ":c:func:`PyGILState_Ensure` e :c:func:`PyGILState_Release`"
 
 #: ../../howto/free-threading-extensions.rst:225
 msgid ":c:func:`PyEval_SaveThread` and :c:func:`PyEval_RestoreThread`"
-msgstr ""
+msgstr ":c:func:`PyEval_SaveThread` e :c:func:`PyEval_RestoreThread`"
 
 #: ../../howto/free-threading-extensions.rst:226
 msgid ":c:macro:`Py_BEGIN_ALLOW_THREADS` and :c:macro:`Py_END_ALLOW_THREADS`"
-msgstr ""
+msgstr ":c:macro:`Py_BEGIN_ALLOW_THREADS` e :c:macro:`Py_END_ALLOW_THREADS`"
 
 #: ../../howto/free-threading-extensions.rst:228
 msgid ""
@@ -383,6 +503,11 @@ msgid ""
 "before calling into the Python API to ensure that the thread has a valid "
 "Python thread state."
 msgstr ""
+"Estas funções ainda devem ser utilizadas na compilação com multithreading "
+"livre para gerir o estado de threads, mesmo quando o :term:`GIL` está "
+"desativado. Por exemplo, se criar uma thread fora do Python, deve chamar :c:"
+"func:`PyGILState_Ensure` antes de chamar a API do Python para garantir que a "
+"thread tem um estado de thread Python válido."
 
 #: ../../howto/free-threading-extensions.rst:234
 msgid ""
@@ -391,10 +516,14 @@ msgid ""
 "acquisitions, to allow other threads to run the :term:`cyclic garbage "
 "collector <garbage collection>`."
 msgstr ""
+"Deve continuar a chamar :c:func:`PyEval_SaveThread` ou :c:macro:"
+"`Py_BEGIN_ALLOW_THREADS` em operações bloqueantes, como I/O ou aquisição de "
+"bloqueios, para permitir que outras threads executem o :term:`recolhedor de "
+"lixo cíclico <garbage collection>`."
 
 #: ../../howto/free-threading-extensions.rst:241
 msgid "Protecting Internal Extension State"
-msgstr ""
+msgstr "Proteção do Estado Interno da Extensão"
 
 #: ../../howto/free-threading-extensions.rst:243
 msgid ""
@@ -402,6 +531,9 @@ msgid ""
 "GIL.  You may need to add locking to protect this state.  The approach will "
 "depend on your extension, but some common patterns include:"
 msgstr ""
+"A sua extensão pode ter um estado interno que era anteriormente protegido "
+"pelo GIL. Pode ser necessário adicionar bloqueios para proteger este estado. "
+"A abordagem dependerá da sua extensão, mas alguns padrões comuns incluem:"
 
 #: ../../howto/free-threading-extensions.rst:247
 msgid ""
@@ -409,6 +541,10 @@ msgid ""
 "using a lock to protect the cache or disabling it in the free-threaded build "
 "if the cache is not critical for performance."
 msgstr ""
+"**Caches**: as caches globais são uma fonte comum de estado partilhado. "
+"Considere utilizar um bloqueio para proteger a cache ou desativá-la na "
+"compilação com multithreading livre se a cache não for crítica para o "
+"desempenho."
 
 #: ../../howto/free-threading-extensions.rst:250
 msgid ""
@@ -417,10 +553,14 @@ msgid ""
 "``_Thread_local`` for `thread-local storage <https://en.cppreference.com/w/c/"
 "language/storage_duration>`_."
 msgstr ""
+"**Estado Global**: o estado global pode precisar de ser protegido por um "
+"bloqueio ou movido para armazenamento local de thread. O C11 e C++11 "
+"fornecem ``thread_local`` ou ``_Thread_local`` para `armazenamento local de "
+"thread <https://en.cppreference.com/w/c/language/storage_duration>`_."
 
 #: ../../howto/free-threading-extensions.rst:257
 msgid "Critical Sections"
-msgstr ""
+msgstr "Secções Críticas"
 
 #: ../../howto/free-threading-extensions.rst:261
 msgid ""
@@ -430,10 +570,16 @@ msgid ""
 "implementation directly, understanding their behavior is crucial when using "
 "certain C API functions or managing shared state in the free-threaded build."
 msgstr ""
+"Na compilação com multithreading livre, o CPython fornece um mecanismo "
+"chamado \"secções críticas\" para proteger dados que, de outra forma, seriam "
+"protegidos pelo GIL. Embora os autores de extensões possam não interagir "
+"diretamente com a implementação interna das secções críticas, compreender o "
+"seu comportamento é crucial ao utilizar certas funções da API C ou gerir "
+"estado partilhado na compilação com multithreading livre."
 
 #: ../../howto/free-threading-extensions.rst:268
 msgid "What Are Critical Sections?"
-msgstr ""
+msgstr "O que são Secções Críticas?"
 
 #: ../../howto/free-threading-extensions.rst:270
 msgid ""
@@ -444,26 +590,36 @@ msgid ""
 "func:`PyDict_SetItem`, or explicitly using macros), it attempts to acquire "
 "the underlying mutex."
 msgstr ""
+"Conceptualmente, as secções críticas atuam como uma camada de prevenção de "
+"deadlocks construída sobre mutexes simples. Cada thread mantém uma pilha de "
+"secções críticas ativas. Quando uma thread precisa de adquirir um bloqueio "
+"associado a uma secção crítica (por exemplo, implicitamente ao chamar uma "
+"função da API C segura para threads como :c:func:`PyDict_SetItem`, ou "
+"explicitamente utilizando macros), tenta adquirir o mutex subjacente."
 
 #: ../../howto/free-threading-extensions.rst:278
 msgid "Using Critical Sections"
-msgstr ""
+msgstr "Utilização de Secções Críticas"
 
 #: ../../howto/free-threading-extensions.rst:280
 msgid "The primary APIs for using critical sections are:"
-msgstr ""
+msgstr "As principais APIs para utilizar secções críticas são:"
 
 #: ../../howto/free-threading-extensions.rst:282
 msgid ""
 ":c:macro:`Py_BEGIN_CRITICAL_SECTION` and :c:macro:`Py_END_CRITICAL_SECTION` "
 "- For locking a single object"
 msgstr ""
+":c:macro:`Py_BEGIN_CRITICAL_SECTION` e :c:macro:`Py_END_CRITICAL_SECTION` - "
+"Para bloquear um único objeto"
 
 #: ../../howto/free-threading-extensions.rst:285
 msgid ""
 ":c:macro:`Py_BEGIN_CRITICAL_SECTION2` and :c:macro:"
 "`Py_END_CRITICAL_SECTION2` - For locking two objects simultaneously"
 msgstr ""
+":c:macro:`Py_BEGIN_CRITICAL_SECTION2` e :c:macro:`Py_END_CRITICAL_SECTION2` "
+"- Para bloquear dois objetos simultaneamente"
 
 #: ../../howto/free-threading-extensions.rst:288
 msgid ""
@@ -472,6 +628,11 @@ msgid ""
 "non-free-threaded builds, so they can be safely added to code that needs to "
 "support both build types."
 msgstr ""
+"Estas macros devem ser utilizadas em pares correspondentes e devem aparecer "
+"no mesmo âmbito C, uma vez que estabelecem um novo âmbito local. Estas "
+"macros não têm efeito em compilações sem multithreading livre, pelo que "
+"podem ser adicionadas com segurança a código que precisa de suportar ambos "
+"os tipos de compilação."
 
 #: ../../howto/free-threading-extensions.rst:293
 msgid ""
@@ -480,6 +641,10 @@ msgid ""
 "has an internal count field, you could use a critical section while reading "
 "or writing that field::"
 msgstr ""
+"Uma utilização comum de uma secção crítica seria bloquear um objeto enquanto "
+"acede a um atributo interno do mesmo. Por exemplo, se um tipo de extensão "
+"tiver um campo interno de contagem, poderia utilizar uma secção crítica ao "
+"ler ou escrever nesse campo::"
 
 #: ../../howto/free-threading-extensions.rst:298
 msgid ""
@@ -495,10 +660,22 @@ msgid ""
 "obj->count = new_count;\n"
 "Py_END_CRITICAL_SECTION();"
 msgstr ""
+"// ler a contagem, retorna uma nova referência para o valor interno da "
+"contagem\n"
+"PyObject *result;\n"
+"Py_BEGIN_CRITICAL_SECTION(obj);\n"
+"result = Py_NewRef(obj->count);\n"
+"Py_END_CRITICAL_SECTION();\n"
+"return result;\n"
+"\n"
+"// escrever a contagem, consome a referência de new_count\n"
+"Py_BEGIN_CRITICAL_SECTION(obj);\n"
+"obj->count = new_count;\n"
+"Py_END_CRITICAL_SECTION();"
 
 #: ../../howto/free-threading-extensions.rst:312
 msgid "How Critical Sections Work"
-msgstr ""
+msgstr "Como Funcionam as Secções Críticas"
 
 #: ../../howto/free-threading-extensions.rst:314
 msgid ""
@@ -508,16 +685,24 @@ msgid ""
 "O), the critical section is temporarily suspended—all locks are released—and "
 "then resumed when the blocking operation completes."
 msgstr ""
+"Ao contrário dos bloqueios tradicionais, as secções críticas não garantem "
+"acesso exclusivo durante toda a sua duração. Se uma thread bloquear enquanto "
+"mantém uma secção crítica (por exemplo, ao adquirir outro bloqueio ou "
+"realizar I/O), a secção crítica é temporariamente suspensa — todos os "
+"bloqueios são libertados — e depois retomada quando a operação bloqueante é "
+"concluída."
 
 #: ../../howto/free-threading-extensions.rst:320
 msgid ""
 "This behavior is similar to what happens with the GIL when a thread makes a "
 "blocking call. The key differences are:"
 msgstr ""
+"Este comportamento é semelhante ao que acontece com o GIL quando uma thread "
+"realiza uma chamada bloqueante. As principais diferenças são:"
 
 #: ../../howto/free-threading-extensions.rst:323
 msgid "Critical sections operate on a per-object basis rather than globally"
-msgstr ""
+msgstr "As secções críticas operam por objeto em vez de globalmente"
 
 #: ../../howto/free-threading-extensions.rst:325
 msgid ""
@@ -525,20 +710,25 @@ msgid ""
 "\"begin\" and \"end\" macros enforce this since they must be paired and "
 "within the same scope)"
 msgstr ""
+"As secções críticas seguem uma disciplina de pilha dentro de cada thread (as "
+"macros \"begin\" e \"end\" impõem isto, uma vez que devem ser emparelhadas e "
+"dentro do mesmo âmbito)"
 
 #: ../../howto/free-threading-extensions.rst:328
 msgid ""
 "Critical sections automatically release and reacquire locks around potential "
 "blocking operations"
 msgstr ""
+"As secções críticas libertam e readquirem automaticamente bloqueios em torno "
+"de operações potencialmente bloqueantes"
 
 #: ../../howto/free-threading-extensions.rst:332
 msgid "Deadlock Avoidance"
-msgstr ""
+msgstr "Prevenção de Deadlocks"
 
 #: ../../howto/free-threading-extensions.rst:334
 msgid "Critical sections help avoid deadlocks in two ways:"
-msgstr ""
+msgstr "As secções críticas ajudam a evitar deadlocks de duas formas:"
 
 #: ../../howto/free-threading-extensions.rst:336
 msgid ""
@@ -546,12 +736,17 @@ msgid ""
 "it first suspends all of its active critical sections, temporarily releasing "
 "their locks"
 msgstr ""
+"Se uma thread tentar adquirir um bloqueio que já é mantido por outra thread, "
+"primeiro suspende todas as suas secções críticas ativas, libertando "
+"temporariamente os seus bloqueios"
 
 #: ../../howto/free-threading-extensions.rst:340
 msgid ""
 "When the blocking operation completes, only the top-most critical section is "
 "reacquired first"
 msgstr ""
+"Quando a operação bloqueante é concluída, apenas a secção crítica mais "
+"recente é readquirida primeiro"
 
 #: ../../howto/free-threading-extensions.rst:343
 msgid ""
@@ -560,6 +755,10 @@ msgid ""
 "Instead, use :c:macro:`Py_BEGIN_CRITICAL_SECTION2` to lock two objects "
 "simultaneously."
 msgstr ""
+"Isto significa que não pode confiar em secções críticas aninhadas para "
+"bloquear vários objetos de uma vez, uma vez que a secção crítica interna "
+"pode suspender as externas. Em vez disso, utilize :c:macro:"
+"`Py_BEGIN_CRITICAL_SECTION2` para bloquear dois objetos simultaneamente."
 
 #: ../../howto/free-threading-extensions.rst:347
 msgid ""
@@ -571,10 +770,18 @@ msgid ""
 "released.  If :c:type:`PyMutex` is used without a critical section, it will "
 "not be released and therefore does not get the same deadlock avoidance."
 msgstr ""
+"Note que os bloqueios descritos acima são apenas bloqueios baseados em :c:"
+"type:`PyMutex`. A implementação das secções críticas não conhece nem afeta "
+"outros mecanismos de bloqueio que possam estar em uso, como mutexes POSIX. "
+"Note também que, embora o bloqueio em qualquer :c:type:`PyMutex` provoque a "
+"suspensão das secções críticas, apenas os mutexes que fazem parte das "
+"secções críticas são libertados. Se :c:type:`PyMutex` for utilizado sem uma "
+"secção crítica, não será libertado e, portanto, não beneficia da mesma "
+"prevenção de deadlocks."
 
 #: ../../howto/free-threading-extensions.rst:356
 msgid "Important Considerations"
-msgstr ""
+msgstr "Considerações Importantes"
 
 #: ../../howto/free-threading-extensions.rst:358
 msgid ""
@@ -582,6 +789,10 @@ msgid ""
 "threads to modify the protected data. Be careful about making assumptions "
 "about the state of the data after operations that might block."
 msgstr ""
+"As secções críticas podem libertar temporariamente os seus bloqueios, "
+"permitindo que outras threads modifiquem os dados protegidos. Tenha cuidado "
+"ao fazer suposições sobre o estado dos dados após operações que possam "
+"bloquear."
 
 #: ../../howto/free-threading-extensions.rst:362
 msgid ""
@@ -592,6 +803,13 @@ msgid ""
 "I/O), all locks held by the thread via critical sections will be released. "
 "This is similar to how the GIL can be released during blocking calls."
 msgstr ""
+"Uma vez que os bloqueios podem ser libertados temporariamente (suspensos), a "
+"entrada numa secção crítica não garante acesso exclusivo ao recurso "
+"protegido durante toda a duração da secção. Se o código dentro de uma secção "
+"crítica chamar outra função que bloqueie (por exemplo, adquire outro "
+"bloqueio, realiza I/O bloqueante), todos os bloqueios mantidos pela thread "
+"através de secções críticas serão libertados. Isto é semelhante à forma como "
+"o GIL pode ser libertado durante chamadas bloqueantes."
 
 #: ../../howto/free-threading-extensions.rst:369
 msgid ""
@@ -599,12 +817,18 @@ msgid ""
 "critical section are guaranteed to be held at any given time. Locks for "
 "outer, nested critical sections might have been suspended."
 msgstr ""
+"Apenas o(s) bloqueio(s) associado(s) à secção crítica mais recentemente "
+"iniciada (a mais recente) é(são) garantidamente mantido(s) em qualquer "
+"momento. Os bloqueios de secções críticas externas e aninhadas podem ter "
+"sido suspensos."
 
 #: ../../howto/free-threading-extensions.rst:373
 msgid ""
 "You can lock at most two objects simultaneously with these APIs. If you need "
 "to lock more objects, you'll need to restructure your code."
 msgstr ""
+"Pode bloquear no máximo dois objetos simultaneamente com estas APIs. Se "
+"precisar de bloquear mais objetos, terá de reestruturar o seu código."
 
 #: ../../howto/free-threading-extensions.rst:376
 msgid ""
@@ -612,6 +836,9 @@ msgid ""
 "object twice, they are less efficient than purpose-built reentrant locks for "
 "this use case."
 msgstr ""
+"Embora as secções críticas não provoquem deadlocks se tentar bloquear o "
+"mesmo objeto duas vezes, são menos eficientes do que bloqueios reentrantes "
+"específicos para este caso de uso."
 
 #: ../../howto/free-threading-extensions.rst:380
 msgid ""
@@ -619,6 +846,9 @@ msgid ""
 "doesn't affect correctness (the implementation handles deadlock avoidance), "
 "but it's good practice to always lock objects in a consistent order."
 msgstr ""
+"Ao utilizar :c:macro:`Py_BEGIN_CRITICAL_SECTION2`, a ordem dos objetos não "
+"afeta a correção (a implementação trata da prevenção de deadlocks), mas é "
+"uma boa prática bloquear sempre os objetos por uma ordem consistente."
 
 #: ../../howto/free-threading-extensions.rst:384
 msgid ""
@@ -628,22 +858,32 @@ msgid ""
 "protecting purely internal extension state, standard mutexes or other "
 "synchronization primitives might be more appropriate."
 msgstr ""
+"Lembre-se de que as macros de secções críticas são principalmente para "
+"proteger o acesso a *objetos Python* que possam estar envolvidos em "
+"operações internas do CPython suscetíveis aos cenários de deadlock descritos "
+"acima. Para proteger o estado interno puramente de extensões, mutexes padrão "
+"ou outras primitivas de sincronização podem ser mais apropriadas."
 
 #: ../../howto/free-threading-extensions.rst:392
 msgid "Building Extensions for the Free-Threaded Build"
-msgstr ""
+msgstr "Compilação de Extensões para a Compilação com Multithreading Livre"
 
 #: ../../howto/free-threading-extensions.rst:394
 msgid ""
 "C API extensions need to be built specifically for the free-threaded build. "
 "The wheels, shared libraries, and binaries are indicated by a ``t`` suffix."
 msgstr ""
+"As extensões da API C precisam de ser compiladas especificamente para a "
+"compilação com multithreading livre. As rodas (wheels), bibliotecas "
+"partilhadas e binários são indicados pelo sufixo ``t``."
 
 #: ../../howto/free-threading-extensions.rst:397
 msgid ""
 "`pypa/manylinux <https://github.com/pypa/manylinux>`_ supports the free-"
 "threaded build, with the ``t`` suffix, such as ``python3.13t``."
 msgstr ""
+"O `pypa/manylinux <https://github.com/pypa/manylinux>`_ suporta a compilação "
+"com multithreading livre, com o sufixo ``t``, como ``python3.13t``."
 
 #: ../../howto/free-threading-extensions.rst:399
 msgid ""
@@ -653,10 +893,15 @@ msgid ""
 "`CIBW_ENABLE to cpython-freethreading <https://cibuildwheel.pypa.io/en/"
 "stable/options/#enable>`_."
 msgstr ""
+"O `pypa/cibuildwheel <https://github.com/pypa/cibuildwheel>`_ suporta a "
+"compilação com multithreading livre no Python 3.13 e 3.14. No Python 3.14, "
+"as rodas (wheels) com multithreading livre serão compiladas por defeito. No "
+"Python 3.13, terá de definir `CIBW_ENABLE para cpython-freethreading "
+"<https://cibuildwheel.pypa.io/en/stable/options/#enable>`_."
 
 #: ../../howto/free-threading-extensions.rst:405
 msgid "Limited C API and Stable ABI"
-msgstr ""
+msgstr "API C Limitada e ABI Estável"
 
 #: ../../howto/free-threading-extensions.rst:407
 msgid ""
@@ -667,6 +912,13 @@ msgid ""
 "sysconfig.get_config_var(\"Py_GIL_DISABLED\")`` to opt out of the limited "
 "API when building with the free-threaded build."
 msgstr ""
+"A compilação com multithreading livre não suporta atualmente a :ref:`API C "
+"Limitada <limited-c-api>` nem a ABI estável. Se utilizar o `setuptools "
+"<https://setuptools.pypa.io/en/latest/setuptools.html>`_ para compilar a sua "
+"extensão e atualmente definir ``py_limited_api=True``, pode utilizar "
+"``py_limited_api=not sysconfig.get_config_var(\"Py_GIL_DISABLED\")`` para "
+"optar por não utilizar a API limitada ao compilar com a compilação de "
+"multithreading livre."
 
 #: ../../howto/free-threading-extensions.rst:415
 msgid ""
@@ -674,6 +926,10 @@ msgid ""
 "build.  If you currently use the stable ABI, you can continue to build a "
 "single wheel for multiple non-free-threaded Python versions."
 msgstr ""
+"Terá de compilar rodas (wheels) separadas especificamente para a compilação "
+"com multithreading livre. Se atualmente utilizar a ABI estável, pode "
+"continuar a compilar uma única roda para várias versões do Python sem "
+"multithreading livre."
 
 #: ../../howto/free-threading-extensions.rst:421
 msgid "Windows"
@@ -684,6 +940,9 @@ msgid ""
 "Due to a limitation of the official Windows installer, you will need to "
 "manually define ``Py_GIL_DISABLED=1`` when building extensions from source."
 msgstr ""
+"Devido a uma limitação do instalador oficial do Windows, terá de definir "
+"manualmente ``Py_GIL_DISABLED=1`` ao compilar extensões a partir do código "
+"fonte."
 
 #: ../../howto/free-threading-extensions.rst:428
 msgid ""
