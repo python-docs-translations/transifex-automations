@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-21 14:13+0000\n"
+"POT-Creation-Date: 2025-12-29 14:16+0000\n"
 "PO-Revision-Date: 2025-09-16 00:01+0000\n"
 "Last-Translator: eulalio barbero espinosa <eulalio@disroot.org>, 2025\n"
 "Language-Team: Spanish (Spain) (https://app.transifex.com/python-doc/"
@@ -5295,6 +5295,8 @@ msgid ""
 "                 ...\n"
 "                ]"
 msgstr ""
+"class List(Structure):    passList._fields_ = [(\"pnext\", "
+"POINTER(List)),                 ...                ]"
 
 #: ../../library/ctypes.rst:2780
 msgid ""
@@ -5436,6 +5438,9 @@ msgid ""
 "attr:`_anonymous_` must be already defined when :attr:`_fields_` is "
 "assigned, otherwise it will have no effect."
 msgstr ""
+"Una secuencia opcional que enumera los nombres de los campos sin nombre "
+"(anónimos). :attr:`_anonymous_` debe estar ya definida cuando se asigne :"
+"attr:`_fields_`, de lo contrario no tendrá ningún efecto."
 
 #: ../../library/ctypes.rst:2875
 msgid ""
@@ -5444,10 +5449,14 @@ msgid ""
 "accessing the nested fields directly, without the need to create the "
 "structure or union field."
 msgstr ""
+"Los campos enumerados en esta variable deben ser campos de tipo estructura o "
+"unión. :mod:`ctypes` creará descriptores en el tipo estructura que permitan "
+"acceder directamente a los campos anidados, sin necesidad de crear el campo "
+"estructura o unión."
 
 #: ../../library/ctypes.rst:2880
 msgid "Here is an example type (Windows)::"
-msgstr ""
+msgstr "He aquí un ejemplo de tipo (Windows)::"
 
 #: ../../library/ctypes.rst:2882
 msgid ""
@@ -5461,6 +5470,11 @@ msgid ""
 "    _fields_ = [(\"u\", _U),\n"
 "                (\"vt\", VARTYPE)]"
 msgstr ""
+"class _U(Union):    _fields_ = [(\"lptdesc\", "
+"POINTER(TYPEDESC)),                (\"lpadesc\", "
+"POINTER(ARRAYDESC)),                (\"hreftype\", HREFTYPE)]class "
+"TYPEDESC(Structure):    _anonymous_ = (\"u\",)    _fields_ = [(\"u\", "
+"_U),                (\"vt\", VARTYPE)]"
 
 #: ../../library/ctypes.rst:2893
 msgid ""
@@ -5471,6 +5485,12 @@ msgid ""
 "equivalent, but the former is faster since it does not need to create a "
 "temporary union instance::"
 msgstr ""
+"La estructura ``TYPEDESC`` describe un tipo de datos COM, el campo ``vt`` "
+"especifica cuál de los campos de la unión es válido.  Dado que el campo "
+"``u`` se define como campo anónimo, ahora es posible acceder a los miembros "
+"directamente desde la instancia TYPEDESC. ``td.lptdesc`` y ``td.u.lptdesc`` "
+"son equivalentes, pero el primero es más rápido ya que no necesita crear una "
+"instancia de unión temporal::"
 
 #: ../../library/ctypes.rst:2900
 msgid ""
@@ -5479,6 +5499,8 @@ msgid ""
 "td.lptdesc = POINTER(some_type)\n"
 "td.u.lptdesc = POINTER(some_type)"
 msgstr ""
+"td = TYPEDESC()td.vt = VT_PTRtd.lptdesc = POINTER(some_type)td.u.lptdesc = "
+"POINTER(some_type)"
 
 #: ../../library/ctypes.rst:2905
 msgid ""
@@ -5487,6 +5509,10 @@ msgid ""
 "`_fields_` variable, the fields specified in this are appended to the fields "
 "of the base class."
 msgstr ""
+"Es posible definir subclases de estructuras, éstas heredan los campos de la "
+"clase base.  Si la definición de la subclase tiene una variable :attr:"
+"`_fields_` separada, los campos especificados en ella se añaden a los campos "
+"de la clase base."
 
 #: ../../library/ctypes.rst:2910
 msgid ""
@@ -5497,6 +5523,13 @@ msgid ""
 "initialize :attr:`_fields_` with the same name, or create new attributes for "
 "names not present in :attr:`_fields_`."
 msgstr ""
+"Los constructores de estructuras y uniones aceptan tanto argumentos "
+"posicionales como de palabra clave.  Los argumentos posicionales se utilizan "
+"para inicializar los campos miembro en el mismo orden en que aparecen en :"
+"attr:`_fields_`.  Los argumentos de palabra clave en el constructor se "
+"interpretan como asignaciones de atributos, por lo que inicializarán :attr:"
+"`_fields_` con el mismo nombre, o crearán nuevos atributos para nombres no "
+"presentes en :attr:`_fields_`."
 
 #: ../../library/ctypes.rst:2920
 msgid ""
@@ -5614,11 +5647,11 @@ msgstr ""
 
 #: ../../library/ctypes.rst:3013
 msgid "Arrays and pointers"
-msgstr ""
+msgstr "Matrices y punteros"
 
 #: ../../library/ctypes.rst:3017
 msgid "Abstract base class for arrays."
-msgstr ""
+msgstr "Clase base abstracta para matrices."
 
 #: ../../library/ctypes.rst:3019
 msgid ""
@@ -5629,6 +5662,13 @@ msgid ""
 "and slice accesses; for slice reads, the resulting object is *not* itself "
 "an :class:`Array`."
 msgstr ""
+"La forma recomendada de crear tipos de array concretos es multiplicando "
+"cualquier tipo de datos :mod:`ctypes` por un entero no negativo.  "
+"Alternativamente, puede subclasificar este tipo y definir variables de "
+"clase :attr:`_length_` y :attr:`_type_`. Los elementos de una matriz pueden "
+"leerse y escribirse utilizando los accesos estándar por subíndice y por "
+"segmento; en el caso de las lecturas por segmento, el objeto resultante *no* "
+"es en sí mismo un :class:`Array`."
 
 #: ../../library/ctypes.rst:3029
 msgid ""
@@ -5636,16 +5676,21 @@ msgid ""
 "range subscripts result in an :exc:`IndexError`. Will be returned by :func:"
 "`len`."
 msgstr ""
+"Un número entero positivo que especifica el número de elementos de la "
+"matriz. Los subíndices fuera de rango resultan en un :exc:`IndexError`. Será "
+"devuelto por :func:`len`."
 
 #: ../../library/ctypes.rst:3036
 msgid "Specifies the type of each element in the array."
-msgstr ""
+msgstr "Especifica el tipo de cada elemento de la matriz."
 
 #: ../../library/ctypes.rst:3039
 msgid ""
 "Array subclass constructors accept positional arguments, used to initialize "
 "the elements in order."
 msgstr ""
+"Los constructores de subclases de matrices aceptan argumentos posicionales, "
+"utilizados para inicializar los elementos en orden."
 
 #: ../../library/ctypes.rst:3044
 msgid ""
@@ -5661,13 +5706,15 @@ msgstr ""
 
 #: ../../library/ctypes.rst:3054
 msgid "Private, abstract base class for pointers."
-msgstr ""
+msgstr "Clase base abstracta y privada para punteros."
 
 #: ../../library/ctypes.rst:3056
 msgid ""
 "Concrete pointer types are created by calling :func:`POINTER` with the type "
 "that will be pointed to; this is done automatically by :func:`pointer`."
 msgstr ""
+"Los tipos de puntero concretos se crean llamando a :func:`POINTER` con el "
+"tipo al que se apuntará; esto lo hace automáticamente :func:`pointer`."
 
 #: ../../library/ctypes.rst:3060
 msgid ""
@@ -5677,6 +5724,12 @@ msgid ""
 "the memory *before* the pointer (as in C), and out-of-range subscripts will "
 "probably crash with an access violation (if you're lucky)."
 msgstr ""
+"Si un puntero apunta a una matriz, sus elementos pueden leerse y escribirse "
+"utilizando los accesos estándar por subíndice y por corte.  Los objetos "
+"puntero no tienen tamaño, por lo que :func:`len` lanzará :exc:`TypeError`.  "
+"Los subíndices negativos leerán de la memoria *antes* del puntero (como en "
+"C), y los subíndices fuera de rango probablemente se bloquearán con una "
+"violación de acceso (si tienes suerte)."
 
 #: ../../library/ctypes.rst:3070
 msgid "Specifies the type pointed to."
