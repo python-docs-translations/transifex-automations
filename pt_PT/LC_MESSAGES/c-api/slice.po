@@ -120,6 +120,9 @@ msgid ""
 "should be replaced by a combination of :c:func:`PySlice_Unpack` and :c:func:"
 "`PySlice_AdjustIndices` where ::"
 msgstr ""
+"Esta função não é considerada segura para sequências redimensionáveis. A sua "
+"invocação deve ser substituída por uma combinação de :c:func:"
+"`PySlice_Unpack` e :c:func:`PySlice_AdjustIndices`, onde ::"
 
 #: ../../c-api/slice.rst:64
 msgid ""
@@ -128,10 +131,14 @@ msgid ""
 "    // return error\n"
 "}"
 msgstr ""
+"if (PySlice_GetIndicesEx(slice, length, &start, &stop, &step, &slicelength) "
+"< 0) {\n"
+"    // return error\n"
+"}"
 
 #: ../../c-api/slice.rst:68
 msgid "is replaced by ::"
-msgstr ""
+msgstr "é substituído por ::"
 
 #: ../../c-api/slice.rst:70
 msgid ""
@@ -140,6 +147,10 @@ msgid ""
 "}\n"
 "slicelength = PySlice_AdjustIndices(length, &start, &stop, step);"
 msgstr ""
+"if (PySlice_Unpack(slice, &start, &stop, &step) < 0) {\n"
+"    // return error\n"
+"}\n"
+"slicelength = PySlice_AdjustIndices(length, &start, &stop, step);"
 
 #: ../../c-api/slice.rst:79
 msgid ""
@@ -149,6 +160,11 @@ msgid ""
 "PySlice_Unpack` and :c:func:`!PySlice_AdjustIndices`. Arguments *start*, "
 "*stop* and *step* are evaluated more than once."
 msgstr ""
+"Se ``Py_LIMITED_API`` não estiver definido ou estiver definido com um valor "
+"entre ``0x03050400`` e ``0x03060000`` (não incluído) ou ``0x03060100`` ou "
+"superior :c:func:`!PySlice_GetIndicesEx` é implementado como uma macro "
+"utilizando :c:func:`!PySlice_Unpack` e :c:func:`!PySlice_AdjustIndices`. Os "
+"argumentos *start*, *stop* e *step* são avaliados mais de uma vez."
 
 #: ../../c-api/slice.rst:86
 msgid ""
@@ -156,6 +172,9 @@ msgid ""
 "between ``0x03060000`` and ``0x03060100`` (not including) :c:func:`!"
 "PySlice_GetIndicesEx` is a deprecated function."
 msgstr ""
+"Se ``Py_LIMITED_API`` estiver definido com um valor inferior a "
+"``0x03050400`` ou entre ``0x03060000`` e ``0x03060100`` (não incluído) :c:"
+"func:`!PySlice_GetIndicesEx` é uma função obsoleta."
 
 #: ../../c-api/slice.rst:94
 msgid ""
@@ -165,6 +184,12 @@ msgid ""
 "``PY_SSIZE_T_MIN`` to ``PY_SSIZE_T_MIN``, and silently boost the step values "
 "less than ``-PY_SSIZE_T_MAX`` to ``-PY_SSIZE_T_MAX``."
 msgstr ""
+"Extraia os membros de dados start, stop e step de um objeto slice como "
+"inteiros C. Reduza silenciosamente os valores maiores que ``PY_SSIZE_T_MAX`` "
+"para ``PY_SSIZE_T_MAX``, aumente silenciosamente os valores start e stop "
+"menores que ``PY_SSIZE_T_MIN`` para ``PY_SSIZE_T_MIN``, e aumente "
+"silenciosamente os valores de passo menores que ``-PY_SSIZE_T_MAX`` para ``-"
+"PY_SSIZE_T_MAX``."
 
 #: ../../c-api/slice.rst:100
 msgid "Return ``-1`` with an exception set on error, ``0`` on success."
@@ -178,29 +203,37 @@ msgid ""
 "Out of bounds indices are clipped in a manner consistent with the handling "
 "of normal slices."
 msgstr ""
+"Ajusta os índices de início/fim da fatia assumindo uma sequência com o "
+"comprimento especificado. Os índices fora dos limites são cortados de "
+"maneira consistente com o tratamento das fatias normais."
 
 #: ../../c-api/slice.rst:111
 msgid ""
 "Return the length of the slice.  Always successful.  Doesn't call Python "
 "code."
 msgstr ""
+"Retorna o comprimento da fatia. Sempre bem-sucedido. Não chama código Python."
 
 #: ../../c-api/slice.rst:118
 msgid "Ellipsis Object"
-msgstr ""
+msgstr "Objeto de reticências"
 
 #: ../../c-api/slice.rst:123
 msgid ""
 "The type of Python :const:`Ellipsis` object.  Same as :class:`types."
 "EllipsisType` in the Python layer."
 msgstr ""
+"O tipo de objeto Python :const:`Ellipsis`. Igual a :class:`types."
+"EllipsisType` na camada Python."
 
 #: ../../c-api/slice.rst:129
 msgid ""
 "The Python ``Ellipsis`` object.  This object has no methods.  Like :c:data:"
 "`Py_None`, it is an :term:`immortal` singleton object."
 msgstr ""
+"O objeto Python ``Ellipsis``. Este objeto não possui métodos. Assim como :c:"
+"data:`Py_None`, é um objeto singleton :term:`imortal`."
 
 #: ../../c-api/slice.rst:132
 msgid ":c:data:`Py_Ellipsis` is immortal."
-msgstr ""
+msgstr ":c:data:`Py_Ellipsis` é imortal."
