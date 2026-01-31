@@ -4,16 +4,16 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 # Translators:
-# André Moreira <afrmscb@gmail.com>, 2025
+# André Moreira <afrmscb@gmail.com>, 2026
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-09 16:52+0000\n"
+"POT-Creation-Date: 2026-01-31 16:33+0000\n"
 "PO-Revision-Date: 2025-09-22 16:49+0000\n"
-"Last-Translator: André Moreira <afrmscb@gmail.com>, 2025\n"
+"Last-Translator: André Moreira <afrmscb@gmail.com>, 2026\n"
 "Language-Team: Portuguese (Portugal) (https://app.transifex.com/python-doc/"
 "teams/5390/pt_PT/)\n"
 "MIME-Version: 1.0\n"
@@ -864,7 +864,7 @@ msgstr ""
 
 #: ../../extending/newtypes_tutorial.rst:659
 msgid "Supporting cyclic garbage collection"
-msgstr ""
+msgstr "Suporte à recolha cíclica de lixo"
 
 #: ../../extending/newtypes_tutorial.rst:661
 msgid ""
@@ -872,6 +872,10 @@ msgid ""
 "can identify unneeded objects even when their reference counts are not zero. "
 "This can happen when objects are involved in cycles.  For example, consider:"
 msgstr ""
+"Python tem um :term:`coletor de lixo cíclico (GC) <garbage collection>` que "
+"pode identificar objetos desnecessários mesmo quando as suas contagens de "
+"referência não são zero. Isso pode acontecer quando os objetos estão "
+"envolvidos em ciclos. Por exemplo, considere:"
 
 #: ../../extending/newtypes_tutorial.rst:671
 msgid ""
@@ -880,6 +884,10 @@ msgid ""
 "zero. Fortunately, Python's cyclic garbage collector will eventually figure "
 "out that the list is garbage and free it."
 msgstr ""
+"Neste exemplo, criamos uma lista que contém a si mesma. Quando a excluímos, "
+"ela ainda tem uma referência de si mesma. A sua contagem de referências não "
+"cai para zero. Felizmente, o coletor de lixo cíclico do Python acabará por "
+"perceber que a lista é lixo e irá libertá-la."
 
 #: ../../extending/newtypes_tutorial.rst:676
 msgid ""
@@ -889,6 +897,12 @@ msgid ""
 "class:`!Custom`, and subclasses may add arbitrary attributes.  For any of "
 "those two reasons, :class:`!Custom` objects can participate in cycles:"
 msgstr ""
+"Na segunda versão do exemplo :class:`!Custom`, permitimos que qualquer tipo "
+"de objeto fosse armazenado nos atributos :attr:`!first` ou :attr:`!last` "
+"[#]_. Além disso, na segunda e terceira versões, permitimos a subclasse :"
+"class:`!Custom`, e as subclasses podem adicionar atributos arbitrários. Por "
+"qualquer uma dessas duas razões, os objetos :class:`!Custom` podem "
+"participar em ciclos:"
 
 #: ../../extending/newtypes_tutorial.rst:690
 msgid ""
@@ -897,12 +911,18 @@ msgid ""
 "type needs to fill two additional slots and to enable a flag that enables "
 "these slots:"
 msgstr ""
+"Para permitir que uma instância :class:`!Custom` participante de um ciclo de "
+"referência seja detectada e recolhida corretamente pelo GC cíclico, o nosso "
+"tipo :class:`!Custom` precisa preencher dois slots adicionais e ativar uma "
+"flag que habilita esses slots:"
 
 #: ../../extending/newtypes_tutorial.rst:697
 msgid ""
 "First, the traversal method lets the cyclic GC know about subobjects that "
 "could participate in cycles::"
 msgstr ""
+"Primeiro, o método traversal permite que o GC cíclico reconheça os "
+"subobjetos que poderiam participar dos ciclos:"
 
 #: ../../extending/newtypes_tutorial.rst:717
 msgid ""
@@ -912,6 +932,11 @@ msgid ""
 "*arg* passed to the traversal method.  It returns an integer value that must "
 "be returned if it is non-zero."
 msgstr ""
+"Para cada subobjeto que pode participar em ciclos, precisamos chamar a "
+"função :c:func:`!visit`, que é passada para o método traversal. A função :c:"
+"func:`!visit` recebe como argumentos o subobjeto e o argumento extra *arg* "
+"passado para o método traversal. Ela retorna um valor inteiro que deve ser "
+"retornado se for diferente de zero."
 
 #: ../../extending/newtypes_tutorial.rst:723
 msgid ""
@@ -919,18 +944,25 @@ msgid ""
 "functions.  With :c:func:`Py_VISIT`, we can minimize the amount of "
 "boilerplate in ``Custom_traverse``::"
 msgstr ""
+"Python fornece uma macro :c:func:`Py_VISIT` que automatiza a chamada de "
+"funções de visita. Com :c:func:`Py_VISIT`, podemos minimizar a quantidade de "
+"código repetitivo em ``Custom_traverse``::"
 
 #: ../../extending/newtypes_tutorial.rst:736
 msgid ""
 "The :c:member:`~PyTypeObject.tp_traverse` implementation must name its "
 "arguments exactly *visit* and *arg* in order to use :c:func:`Py_VISIT`."
 msgstr ""
+"A implementação :c:member:`~PyTypeObject.tp_traverse` deve nomear os seus "
+"argumentos exatamente *visit* e *arg* para poder usar :c:func:`Py_VISIT`."
 
 #: ../../extending/newtypes_tutorial.rst:739
 msgid ""
 "Second, we need to provide a method for clearing any subobjects that can "
 "participate in cycles::"
 msgstr ""
+"Em segundo lugar, precisamos fornecer um método para limpar quaisquer "
+"subobjetos que possam participar em ciclos::"
 
 #: ../../extending/newtypes_tutorial.rst:750
 msgid ""
@@ -941,10 +973,16 @@ msgid ""
 "attribute's destructor would call back into code that reads the attribute "
 "again (*especially* if there is a reference cycle)."
 msgstr ""
+"Observe o uso da macro :c:func:`Py_CLEAR`. Essa é a maneira recomendada e "
+"segura de limpar atributos de dados de tipos arbitrários enquanto diminui as "
+"suas contagens de referência. Se você chamasse :c:func:`Py_XDECREF` no "
+"atributo antes de defini-lo como ``NULL``, existe a possibilidade de que o "
+"destruidor do atributo chamasse de volta o código que lê o atributo "
+"novamente (*especialmente* se houver um ciclo de referência)."
 
 #: ../../extending/newtypes_tutorial.rst:758
 msgid "You could emulate :c:func:`Py_CLEAR` by writing::"
-msgstr ""
+msgstr "Pode emular :c:func:`Py_CLEAR` se escrever::"
 
 #: ../../extending/newtypes_tutorial.rst:765
 msgid ""
@@ -952,6 +990,9 @@ msgid ""
 "`Py_CLEAR` when deleting an attribute.  Don't try to micro-optimize at the "
 "expense of robustness!"
 msgstr ""
+"No entanto, é muito mais fácil e menos propenso a erros usar sempre :c:func:"
+"`Py_CLEAR` ao excluir um atributo. Não tente fazer micro-otimizações em "
+"detrimento da robustez!"
 
 #: ../../extending/newtypes_tutorial.rst:769
 msgid ""
@@ -962,11 +1003,19 @@ msgid ""
 "members. Here is our reimplemented deallocator using :c:func:"
 "`PyObject_GC_UnTrack` and ``Custom_clear``::"
 msgstr ""
+"O desalocador ``Custom_dealloc`` pode chamar código arbitrário ao limpar "
+"atributos. Isso significa que o GC circular pode ser acionado dentro da "
+"função. Como o GC assume que a contagem de referências não é zero, "
+"precisamos desmarcar o objeto do GC chamando :c:func:`PyObject_GC_UnTrack` "
+"antes de limpar os membros. Aqui está o nosso desalocador reimplementado "
+"usando :c:func:`PyObject_GC_UnTrack` e ``Custom_clear``::"
 
 #: ../../extending/newtypes_tutorial.rst:784
 msgid ""
 "Finally, we add the :c:macro:`Py_TPFLAGS_HAVE_GC` flag to the class flags::"
 msgstr ""
+"Por fim, adicionamos a flag :c:macro:`Py_TPFLAGS_HAVE_GC` às flags da "
+"classe::"
 
 #: ../../extending/newtypes_tutorial.rst:788
 msgid ""
@@ -975,10 +1024,14 @@ msgid ""
 "them for cyclic garbage collection.  Most extensions will use the versions "
 "automatically provided."
 msgstr ""
+"É basicamente isso. Se tivéssemos escrito manipuladores personalizados :c:"
+"member:`~PyTypeObject.tp_alloc` ou :c:member:`~PyTypeObject.tp_free`, "
+"precisaríamos modificá-los para a recolha cíclica de lixo. A maioria das "
+"extensões usará as versões fornecidas automaticamente."
 
 #: ../../extending/newtypes_tutorial.rst:794
 msgid "Subclassing other types"
-msgstr ""
+msgstr "Subclassificação de outros tipos"
 
 #: ../../extending/newtypes_tutorial.rst:796
 msgid ""
@@ -987,6 +1040,10 @@ msgid ""
 "can easily use the :c:type:`PyTypeObject` it needs. It can be difficult to "
 "share these :c:type:`PyTypeObject` structures between extension modules."
 msgstr ""
+"É possível criar novos tipos de extensão derivados de tipos existentes. É "
+"mais fácil herdar dos tipos integrados, uma vez que uma extensão pode "
+"facilmente usar o :c:type:`PyTypeObject` de que necessita. Pode ser difícil "
+"partilhar estas estruturas :c:type:`PyTypeObject` entre módulos de extensão."
 
 #: ../../extending/newtypes_tutorial.rst:801
 msgid ""
@@ -995,6 +1052,10 @@ msgid ""
 "with regular lists, but will have an additional :meth:`!increment` method "
 "that increases an internal counter:"
 msgstr ""
+"Neste exemplo, iremos criar um tipo :class:`!SubList` que herda do tipo :"
+"class:`list` integrado. O novo tipo será totalmente compatível com listas "
+"regulares, mas terá um método :meth:`!increment` adicional que aumenta um "
+"contador interno:"
 
 #: ../../extending/newtypes_tutorial.rst:821
 msgid ""
@@ -1002,6 +1063,9 @@ msgid ""
 "examples in previous sections. We will break down the main differences "
 "between them. ::"
 msgstr ""
+"Como pode ver, o código-fonte é muito semelhante aos exemplos :class:`!"
+"Custom` das secções anteriores. Vamos analisar as principais diferenças "
+"entre eles. ::"
 
 #: ../../extending/newtypes_tutorial.rst:829
 msgid ""
@@ -1009,6 +1073,9 @@ msgid ""
 "object structure must be the first value.  The base type will already "
 "include the :c:func:`PyObject_HEAD` at the beginning of its structure."
 msgstr ""
+"A principal diferença para objetos de tipo derivado é que a estrutura do "
+"objeto do tipo base deve ser o primeiro valor. O tipo base já incluirá o :c:"
+"func:`PyObject_HEAD` no início da sua estrutura."
 
 #: ../../extending/newtypes_tutorial.rst:833
 msgid ""
@@ -1016,12 +1083,16 @@ msgid ""
 "pointer can be safely cast to both ``PyListObject *`` and ``SubListObject "
 "*``::"
 msgstr ""
+"Quando um objeto Python é uma instância :class:`!SubList`, o seu ponteiro "
+"``PyObject *`` pode ser convertido com segurança para ``PyListObject *`` e "
+"``SubListObject *``::"
 
 #: ../../extending/newtypes_tutorial.rst:845
 msgid ""
 "We see above how to call through to the :meth:`~object.__init__` method of "
 "the base type."
 msgstr ""
+"Vemos acima como chamar o método :meth:`~object.__init__` do tipo base."
 
 #: ../../extending/newtypes_tutorial.rst:848
 msgid ""
@@ -1031,6 +1102,12 @@ msgid ""
 "memory for the object with its :c:member:`~PyTypeObject.tp_alloc`, but let "
 "the base class handle it by calling its own :c:member:`~PyTypeObject.tp_new`."
 msgstr ""
+"Este padrão é importante ao escrever um tipo com membros personalizados :c:"
+"member:`~PyTypeObject.tp_new` e :c:member:`~PyTypeObject.tp_dealloc`. O "
+"manipulador :c:member:`~PyTypeObject.tp_new` não deve realmente criar a "
+"memória para o objeto com o seu :c:member:`~PyTypeObject.tp_alloc`, mas "
+"deixar que a classe base lide com isso chamando o seu próprio :c:member:"
+"`~PyTypeObject.tp_new`."
 
 #: ../../extending/newtypes_tutorial.rst:854
 msgid ""
@@ -1049,12 +1126,19 @@ msgid ""
 "tp_alloc` slot with :c:func:`PyType_GenericNew` -- the allocation function "
 "from the base type will be inherited."
 msgstr ""
+"Antes de chamar :c:func:`PyType_Ready`, a estrutura do tipo deve ter o slot :"
+"c:member:`~PyTypeObject.tp_base` preenchido. Quando estamos a derivar um "
+"tipo existente, não é necessário preencher o slot :c:member:`~PyTypeObject."
+"tp_alloc` com :c:func:`PyType_GenericNew` -- a função de alocação do tipo "
+"base será herdada."
 
 #: ../../extending/newtypes_tutorial.rst:888
 msgid ""
 "After that, calling :c:func:`PyType_Ready` and adding the type object to the "
 "module is the same as with the basic :class:`!Custom` examples."
 msgstr ""
+"Depois disso, chamar :c:func:`PyType_Ready` e adicionar o objeto de tipo ao "
+"módulo é igual aos exemplos básicos :class:`!Custom`."
 
 #: ../../extending/newtypes_tutorial.rst:893
 msgid "Footnotes"
@@ -1065,12 +1149,16 @@ msgid ""
 "This is true when we know that the object is a basic type, like a string or "
 "a float."
 msgstr ""
+"Isso é verdade quando sabemos que o objeto é um tipo básico, como uma string "
+"ou um float."
 
 #: ../../extending/newtypes_tutorial.rst:897
 msgid ""
 "We relied on this in the :c:member:`~PyTypeObject.tp_dealloc` handler in "
 "this example, because our type doesn't support garbage collection."
 msgstr ""
+"Neste exemplo, confiamos nisso no manipulador :c:member:`~PyTypeObject."
+"tp_dealloc`, porque o nosso tipo não suporta recolha de lixo."
 
 #: ../../extending/newtypes_tutorial.rst:900
 msgid ""
@@ -1081,6 +1169,12 @@ msgid ""
 "deallocating an instance of a string subclass won't call back into our "
 "objects."
 msgstr ""
+"Agora sabemos que o primeiro e o último membros são strings, então talvez "
+"possamos ser menos cuidadosos ao diminuir as suas contagens de referência. "
+"No entanto, aceitamos instâncias de subclasses de string. Embora a "
+"desalocação de strings normais não chame de volta os nossos objetos, não "
+"podemos garantir que a desalocação de uma instância de uma subclasse de "
+"string não chame de volta nossos objetos."
 
 #: ../../extending/newtypes_tutorial.rst:906
 msgid ""
@@ -1088,3 +1182,6 @@ msgid ""
 "could pass arbitrary :class:`str` subclasses and therefore still create "
 "reference cycles."
 msgstr ""
+"Além disso, mesmo com os nossos atributos restritos a instâncias de strings, "
+"o utilizador poderia passar subclasses :class:`str` arbitrárias e, portanto, "
+"ainda criar ciclos de referência."
