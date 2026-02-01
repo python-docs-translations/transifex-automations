@@ -5,16 +5,16 @@
 #
 # Translators:
 # python-doc bot, 2025
-# Freesand Leo <yuqinju@163.com>, 2025
+# Freesand Leo <yuqinju@163.com>, 2026
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-11 14:58+0000\n"
+"POT-Creation-Date: 2026-01-31 15:04+0000\n"
 "PO-Revision-Date: 2025-09-15 01:03+0000\n"
-"Last-Translator: Freesand Leo <yuqinju@163.com>, 2025\n"
+"Last-Translator: Freesand Leo <yuqinju@163.com>, 2026\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/python-doc/"
 "teams/5390/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -783,6 +783,16 @@ msgid ""
 "handlers, object finalizers, or any code that may be run while flushing the "
 "stdout and stderr files."
 msgstr ""
+"**程序缺陷与注意事项：** 模块和模块内对象的销毁顺序是随机的；这可能导致析构"
+"器 (:meth:`~object.__del__` 方法) 在它们要依赖其他对象（甚至函数）或模块时执"
+"行失败。 由 Python 动态加载的扩展模块不会被卸载。 由 Python 解释器分配的少量"
+"内存可能不会被释放（如果你发现内存泄漏，请提交报告）。 关联到对象间循环引用的"
+"内存不会被释放。 某些由扩展模块分配的内存可能不会被释放。 某些扩展在它们的初"
+"始化例程被多次调用时可能无法正常工作；如果应用程序多次调用 :c:func:"
+"`Py_Initialize` 和 :c:func:`Py_FinalizeEx` 就可能出现这种情况。 :c:func:"
+"`Py_FinalizeEx` 不可被自身递归调用。 因此，它不能被任何可能作为解释器关闭流程"
+"的一部分的代码所调用，如 :py:mod:`atexit` 处理器对象终结器或任何会在刷新 "
+"stdout 和 stderr 文件时运行的代码。"
 
 #: ../../c-api/init.rst:456
 msgid ""
@@ -1723,6 +1733,12 @@ msgid ""
 "finalization attempts to acquire a lock owned by the blocked thread, or "
 "otherwise waits on the blocked thread."
 msgstr ""
+"如果除最终化线程之外的任何线程试图在最终化期间获取 GIL，无论是显式地通过 :c:"
+"func:`PyGILState_Ensure`, :c:macro:`Py_END_ALLOW_THREADS`, :c:func:"
+"`PyEval_AcquireThread` 或 :c:func:`!PyEval_AcquireLock`，还是当解释器让出 "
+"GIL 后隐式地尝试重新获取，该线程都将进入 **永久阻塞状态** 并保持该状态直到程"
+"序退出。 在多数情况下这都不会有什么损害，但如果在最终化的后期试图获取由被阻塞"
+"线程持有的锁，或以其他方式等待被阻塞线程响应则可能导致死锁。"
 
 #: ../../c-api/init.rst:1104
 msgid ""
@@ -1734,6 +1750,11 @@ msgid ""
 "situation. Changing that would require new stable C APIs and rewriting the "
 "majority of C code in the CPython ecosystem to use those with error handling."
 msgstr ""
+"太过粗暴？是的。 但这能防止随机崩溃和/或当这些线程在 CPython 3.13.7 及更早版"
+"本中被强制退出时意外跳过调用栈上游的 C++ 最终化过程。 CPython 运行时的 GIL 获"
+"取 C API 从来没有在 GIL 获取过程中考虑任何错误报告或处理机制以允许优雅地退出"
+"这种情况。 改变此机制需要新的稳定 C API 并重写 CPython 生态系统中的大部分 C "
+"代码来为它们增加错误处理。"
 
 #: ../../c-api/init.rst:1114
 msgid "High-level API"
@@ -2956,6 +2977,8 @@ msgid ""
 "function does nothing and returns ``0``. The caller must hold the :term:"
 "`GIL`."
 msgstr ""
+"如果此函数不是在主解释器的主线程中被调用的，它将不做任何事并返回 ``0``。 调用"
+"方必须持有 :term:`GIL`。"
 
 #: ../../c-api/init.rst:1982
 msgid "This function only runs pending calls in the main interpreter."
@@ -3826,7 +3849,7 @@ msgstr "成功时，此函数将返回一个锁；失败时，此函数将返回
 #: ../../c-api/init.rst:2648 ../../c-api/init.rst:2671
 #: ../../c-api/init.rst:2753 ../../c-api/init.rst:2761
 msgid "The caller does not need to hold the :term:`GIL`."
-msgstr ""
+msgstr "调用方不需要持有 :term:`GIL`。"
 
 #: ../../c-api/init.rst:2592
 msgid ""
@@ -3945,7 +3968,7 @@ msgstr "返回当前线程的标识号，它一定不为零。"
 msgid ""
 "This function cannot fail, and the caller does not need to hold the :term:"
 "`GIL`."
-msgstr ""
+msgstr "此函数执行一定不会失败，并且调用方不需要持有 :term:`GIL`。"
 
 #: ../../c-api/init.rst:2682
 msgid ":py:func:`threading.get_ident`"
