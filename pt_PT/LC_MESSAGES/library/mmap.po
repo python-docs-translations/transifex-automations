@@ -4,16 +4,16 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 # Translators:
-# André Moreira <afrmscb@gmail.com>, 2025
+# André Moreira <afrmscb@gmail.com>, 2026
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-13 17:24+0000\n"
+"POT-Creation-Date: 2026-02-03 17:39+0000\n"
 "PO-Revision-Date: 2025-09-22 15:58+0000\n"
-"Last-Translator: André Moreira <afrmscb@gmail.com>, 2025\n"
+"Last-Translator: André Moreira <afrmscb@gmail.com>, 2026\n"
 "Language-Team: Portuguese (Portugal) (https://app.transifex.com/python-doc/"
 "teams/5390/pt_PT/)\n"
 "MIME-Version: 1.0\n"
@@ -38,6 +38,15 @@ msgid ""
 "data starting at the current file position, and :meth:`seek` through the "
 "file to different positions."
 msgstr ""
+"Os objetos de ficheiro mapeados em memória comportam-se tanto como :class:"
+"`bytearray` como como :term:`objetos de ficheiro <file object>`. Pode "
+"utilizar objetos mmap na maioria dos locais onde são esperados :class:"
+"`bytearray`; por exemplo, pode utilizar o módulo :mod:`re` para pesquisar "
+"num ficheiro mapeado em memória. Também pode alterar um único byte fazendo "
+"``obj[index] = 97``, ou alterar uma subsequência atribuindo a uma fatia "
+"(*slice*): ``obj[i1:i2] = b'...'``. Também pode ler e escrever dados a "
+"partir da posição atual do ficheiro e usar :meth:`seek` através do ficheiro "
+"para diferentes posições."
 
 #: ../../library/mmap.rst:17
 msgid ""
@@ -57,6 +66,10 @@ msgid ""
 "that local modifications to the buffers are actually available to the "
 "mapping."
 msgstr ""
+"Se pretender criar um mapeamento de memória para um ficheiro gravável com "
+"buffer, deve aplicar :func:`~io.IOBase.flush` ao ficheiro primeiro. Isto é "
+"necessário para garantir que as modificações locais nos buffers estão "
+"realmente disponíveis para o mapeamento."
 
 #: ../../library/mmap.rst:31
 msgid ""
@@ -73,6 +86,20 @@ msgid ""
 "Assignment to an :const:`ACCESS_COPY` memory map affects memory but does not "
 "update the underlying file."
 msgstr ""
+"Tanto para a versão Unix como para a Windows do construtor, o parâmetro "
+"*access* pode ser especificado como um parâmetro opcional de palavra-chave. "
+"*access* aceita um de quatro valores: :const:`ACCESS_READ`, :const:"
+"`ACCESS_WRITE` ou :const:`ACCESS_COPY` para especificar memória de leitura "
+"exclusiva, escrita direta (*write-through*) ou cópia-na-escrita (*copy-on-"
+"write*), respetivamente, ou :const:`ACCESS_DEFAULT` para delegar em *prot*. "
+"*access* pode ser utilizado tanto em Unix como em Windows. Se *access* não "
+"for especificado, o mmap do Windows devolve um mapeamento de escrita direta. "
+"Os valores iniciais da memória para todos os três tipos de acesso são "
+"retirados do ficheiro especificado. A atribuição a um mapeamento de memória :"
+"const:`ACCESS_READ` lança uma exceção :exc:`TypeError`. A atribuição a um "
+"mapeamento de memória :const:`ACCESS_WRITE` afeta tanto a memória como o "
+"ficheiro subjacente. A atribuição a um mapeamento de memória :const:"
+"`ACCESS_COPY` afeta a memória, mas não atualiza o ficheiro subjacente."
 
 #: ../../library/mmap.rst:44
 msgid "Added :const:`ACCESS_DEFAULT` constant."
@@ -83,6 +110,8 @@ msgid ""
 "To map anonymous memory, -1 should be passed as the fileno along with the "
 "length."
 msgstr ""
+"Para mapear memória anónima, deve ser passado -1 como fileno juntamente com "
+"o comprimento."
 
 #: ../../library/mmap.rst:51
 msgid ""
@@ -126,6 +155,10 @@ msgid ""
 "maximum length of the map will be the current size of the file when :class:"
 "`~mmap.mmap` is called."
 msgstr ""
+"**(Versão Unix)** Mapeia *length* bytes do ficheiro especificado pelo "
+"descritor de ficheiro *fileno* e devolve um objeto mmap. Se *length* for "
+"``0``, o comprimento máximo do mapeamento será o tamanho atual do ficheiro "
+"quando :class:`~mmap.mmap` for chamado."
 
 #: ../../library/mmap.rst:80
 msgid ""
@@ -192,12 +225,15 @@ msgstr ""
 #: ../../library/mmap.rst:163
 msgid "Memory-mapped file objects support the following methods:"
 msgstr ""
+"Os objetos de ficheiro mapeados em memória suportam os seguintes métodos:"
 
 #: ../../library/mmap.rst:167
 msgid ""
 "Closes the mmap. Subsequent calls to other methods of the object will result "
 "in a ValueError exception being raised. This will not close the open file."
 msgstr ""
+"Fecha o mmap. Chamadas subsequentes a outros métodos do objeto resultarão no "
+"lançamento de uma exceção ValueError. Isto não fechará o ficheiro aberto."
 
 #: ../../library/mmap.rst:174
 msgid "``True`` if the file is closed."
@@ -225,6 +261,13 @@ msgid ""
 "extent of the mapping is flushed.  *offset* must be a multiple of the :const:"
 "`PAGESIZE` or :const:`ALLOCATIONGRANULARITY`."
 msgstr ""
+"Sincroniza (*flushes*) as alterações feitas na cópia em memória de um "
+"ficheiro de volta para o disco. Sem o uso desta chamada, não há garantia de "
+"que as alterações sejam gravadas antes de o objeto ser destruído. Se "
+"*offset* e *size* forem especificados, apenas as alterações no intervalo de "
+"bytes indicado serão sincronizadas para o disco; caso contrário, toda a "
+"extensão do mapeamento é sincronizada. *offset* deve ser um múltiplo de :"
+"const:`PAGESIZE` ou :const:`ALLOCATIONGRANULARITY`."
 
 #: ../../library/mmap.rst:199
 msgid ""
@@ -306,12 +349,18 @@ msgid ""
 "``os.SEEK_CUR`` or ``1`` (seek relative to the current position) and ``os."
 "SEEK_END`` or ``2`` (seek relative to the file's end)."
 msgstr ""
+"Define a posição atual do ficheiro. O argumento *whence* é opcional e o seu "
+"padrão é ``os.SEEK_SET`` ou ``0`` (posicionamento absoluto no ficheiro); "
+"outros valores são ``os.SEEK_CUR`` ou ``1`` (procura relativa à posição "
+"atual) e ``os.SEEK_END`` ou ``2`` (procura relativa ao fim do ficheiro)."
 
 #: ../../library/mmap.rst:281
 msgid ""
 "Return the length of the file, which can be larger than the size of the "
 "memory-mapped area."
 msgstr ""
+"Devolve o comprimento do ficheiro, que pode ser maior do que o tamanho da "
+"área mapeada em memória."
 
 #: ../../library/mmap.rst:287
 msgid "Returns the current position of the file pointer."
