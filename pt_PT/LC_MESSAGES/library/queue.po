@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-03 15:30+0000\n"
+"POT-Creation-Date: 2026-02-05 15:30+0000\n"
 "PO-Revision-Date: 2025-09-15 01:04+0000\n"
 "Last-Translator: André Moreira <afrmscb@gmail.com>, 2026\n"
 "Language-Team: Portuguese (Portugal) (https://app.transifex.com/python-doc/"
@@ -29,7 +29,7 @@ msgstr ":mod:`!queue` --- Uma classe de fila sincronizada"
 
 #: ../../library/queue.rst:7
 msgid "**Source code:** :source:`Lib/queue.py`"
-msgstr ""
+msgstr "**Código-fonte:** :source:`Lib/queue.py`"
 
 #: ../../library/queue.rst:11
 msgid ""
@@ -38,6 +38,10 @@ msgid ""
 "exchanged safely between multiple threads.  The :class:`Queue` class in this "
 "module implements all the required locking semantics."
 msgstr ""
+"O módulo :mod:`queue` implementa filas multi-produtor e multi-consumidor. É "
+"especialmente útil em programação com threads quando a informação deve ser "
+"trocada de forma segura entre múltiplas threads. A classe :class:`Queue` "
+"neste módulo implementa toda a semântica de bloqueio necessária."
 
 #: ../../library/queue.rst:16
 msgid ""
@@ -49,6 +53,13 @@ msgid ""
 "kept sorted (using the :mod:`heapq` module) and the lowest valued entry is "
 "retrieved first."
 msgstr ""
+"O módulo implementa três tipos de fila, que diferem apenas na ordem em que "
+"as entradas são recuperadas. Numa fila :abbr:`FIFO (first-in, first-out)`, "
+"as primeiras tarefas adicionadas são as primeiras a ser recuperadas. Numa "
+"fila :abbr:`LIFO (last-in, first-out)`, a entrada adicionada mais "
+"recentemente é a primeira a ser recuperada (funcionando como uma pilha). Com "
+"uma fila de prioridade, as entradas são mantidas ordenadas (usando o módulo :"
+"mod:`heapq`) e a entrada de menor valor é recuperada primeiro."
 
 #: ../../library/queue.rst:24
 msgid ""
@@ -56,6 +67,9 @@ msgid ""
 "competing threads; however, they are not designed to handle reentrancy "
 "within a thread."
 msgstr ""
+"Internamente, esses três tipos de filas utilizam trincos (*locks*) para "
+"bloquear temporariamente threads concorrentes; no entanto, não foram "
+"concebidas para lidar com reentrância dentro de uma thread."
 
 #: ../../library/queue.rst:28
 msgid ""
@@ -63,10 +77,13 @@ msgid ""
 "out)` queue type, :class:`SimpleQueue`, whose specific implementation "
 "provides additional guarantees in exchange for the smaller functionality."
 msgstr ""
+"Além disso, o módulo implementa um tipo de fila :abbr:`FIFO (first-in, first-"
+"out)` \"simples\", :class:`SimpleQueue`, cuja implementação específica "
+"oferece garantias adicionais em troca de funcionalidades mais reduzidas."
 
 #: ../../library/queue.rst:33
 msgid "The :mod:`queue` module defines the following classes and exceptions:"
-msgstr ""
+msgstr "O módulo :mod:`queue` define as seguintes classes e exceções:"
 
 #: ../../library/queue.rst:37
 msgid ""
@@ -76,6 +93,11 @@ msgid ""
 "until queue items are consumed.  If *maxsize* is less than or equal to zero, "
 "the queue size is infinite."
 msgstr ""
+"Construtor para uma fila :abbr:`FIFO (first-in, first-out)`. *maxsize* é um "
+"inteiro que define o limite superior do número de itens que podem ser "
+"colocados na fila. A inserção será bloqueada assim que este tamanho for "
+"atingido, até que os itens da fila sejam consumidos. Se *maxsize* for menor "
+"ou igual a zero, o tamanho da fila é infinito."
 
 #: ../../library/queue.rst:45
 msgid ""
@@ -85,6 +107,11 @@ msgid ""
 "until queue items are consumed.  If *maxsize* is less than or equal to zero, "
 "the queue size is infinite."
 msgstr ""
+"Construtor para uma fila :abbr:`LIFO (last-in, first-out)`. *maxsize* é um "
+"inteiro que define o limite superior do número de itens que podem ser "
+"colocados na fila. A inserção será bloqueada assim que este tamanho for "
+"atingido, até que os itens da fila sejam consumidos. Se *maxsize* for menor "
+"ou igual a zero, o tamanho da fila é infinito."
 
 #: ../../library/queue.rst:54
 msgid ""
@@ -94,6 +121,11 @@ msgid ""
 "consumed.  If *maxsize* is less than or equal to zero, the queue size is "
 "infinite."
 msgstr ""
+"Construtor para uma fila de prioridade. *maxsize* é um inteiro que define o "
+"limite superior do número de itens que podem ser colocados na fila. A "
+"inserção será bloqueada assim que este tamanho for atingido, até que os "
+"itens da fila sejam consumidos. Se *maxsize* for menor ou igual a zero, o "
+"tamanho da fila é infinito."
 
 #: ../../library/queue.rst:59
 msgid ""
@@ -101,12 +133,18 @@ msgid ""
 "the one that would be returned by ``min(entries)``).  A typical pattern for "
 "entries is a tuple in the form: ``(priority_number, data)``."
 msgstr ""
+"As entradas com o valor mais baixo são recuperadas primeiro (a entrada de "
+"menor valor é a que seria devolvida por ``min(entries)``). Um padrão típico "
+"para as entradas é um tuplo no formato: ``(priority_number, data)``."
 
 #: ../../library/queue.rst:63
 msgid ""
 "If the *data* elements are not comparable, the data can be wrapped in a "
 "class that ignores the data item and only compares the priority number::"
 msgstr ""
+"Se os elementos *data* não forem comparáveis, os dados podem ser envolvidos "
+"numa classe que ignore o item de dados e compare apenas o número de "
+"prioridade::"
 
 #: ../../library/queue.rst:66
 msgid ""
@@ -118,40 +156,57 @@ msgid ""
 "    priority: int\n"
 "    item: Any=field(compare=False)"
 msgstr ""
+"from dataclasses import dataclass, field\n"
+"from typing import Any\n"
+"\n"
+"@dataclass(order=True)\n"
+"class PrioritizedItem:\n"
+"    priority: int\n"
+"    item: Any=field(compare=False)"
 
 #: ../../library/queue.rst:76
 msgid ""
 "Constructor for an unbounded :abbr:`FIFO (first-in, first-out)` queue. "
 "Simple queues lack advanced functionality such as task tracking."
 msgstr ""
+"Construtor para uma fila :abbr:`FIFO (first-in, first-out)` ilimitada. Filas "
+"simples carecem de funcionalidades avançadas, como o rastreamento de tarefas."
 
 #: ../../library/queue.rst:84
 msgid ""
 "Exception raised when non-blocking :meth:`~Queue.get` (or :meth:`~Queue."
 "get_nowait`) is called on a :class:`Queue` object which is empty."
 msgstr ""
+"Exceção lançada quando um :meth:`~Queue.get` não bloqueante (ou :meth:"
+"`~Queue.get_nowait`) é chamado num objeto :class:`Queue` que está vazio."
 
 #: ../../library/queue.rst:91
 msgid ""
 "Exception raised when non-blocking :meth:`~Queue.put` (or :meth:`~Queue."
 "put_nowait`) is called on a :class:`Queue` object which is full."
 msgstr ""
+"Exceção lançada quando um :meth:`~Queue.put` não bloqueante (ou :meth:"
+"`~Queue.put_nowait`) é chamado num objeto :class:`Queue` que está cheio."
 
 #: ../../library/queue.rst:98
 msgid ""
 "Exception raised when :meth:`~Queue.put` or :meth:`~Queue.get` is called on "
 "a :class:`Queue` object which has been shut down."
 msgstr ""
+"Exceção lançada quando :meth:`~Queue.put` ou :meth:`~Queue.get` é chamado "
+"num objeto :class:`Queue` que foi encerrado (*shut down*)."
 
 #: ../../library/queue.rst:107
 msgid "Queue Objects"
-msgstr ""
+msgstr "Objetos Queue"
 
 #: ../../library/queue.rst:109
 msgid ""
 "Queue objects (:class:`Queue`, :class:`LifoQueue`, or :class:"
 "`PriorityQueue`) provide the public methods described below."
 msgstr ""
+"Objetos de fila (:class:`Queue`, :class:`LifoQueue` ou :class:"
+"`PriorityQueue`) fornecem os métodos públicos descritos abaixo."
 
 #: ../../library/queue.rst:115
 msgid ""
@@ -159,6 +214,9 @@ msgid ""
 "guarantee that a subsequent get() will not block, nor will qsize() < maxsize "
 "guarantee that put() will not block."
 msgstr ""
+"Retorna o tamanho aproximado da fila. Note que qsize() > 0 não garante que "
+"um get() subsequente não bloqueie, nem qsize() < maxsize garante que o put() "
+"não bloqueie."
 
 #: ../../library/queue.rst:122
 msgid ""
@@ -167,6 +225,10 @@ msgid ""
 "not block.  Similarly, if empty() returns ``False`` it doesn't guarantee "
 "that a subsequent call to get() will not block."
 msgstr ""
+"Retorna ``True`` se a fila estiver vazia, ``False`` caso contrário. Se "
+"empty() retornar ``True``, não garante que uma chamada subsequente a put() "
+"não bloqueie. Da mesma forma, se empty() retornar ``False``, não garante que "
+"uma chamada subsequente a get() não bloqueie."
 
 #: ../../library/queue.rst:130
 msgid ""
@@ -175,6 +237,10 @@ msgid ""
 "not block.  Similarly, if full() returns ``False`` it doesn't guarantee that "
 "a subsequent call to put() will not block."
 msgstr ""
+"Retorna ``True`` se a fila estiver cheia, ``False`` caso contrário. Se "
+"full() retornar ``True``, não garante que uma chamada subsequente a get() "
+"não bloqueie. Da mesma forma, se full() retornar ``False``, não garante que "
+"uma chamada subsequente a put() não bloqueie."
 
 #: ../../library/queue.rst:138
 msgid ""
@@ -186,14 +252,22 @@ msgid ""
 "a free slot is immediately available, else raise the :exc:`Full` exception "
 "(*timeout* is ignored in that case)."
 msgstr ""
+"Coloca um *item* na fila. Se os argumentos opcionais *block* forem "
+"verdadeiros e *timeout* for ``None`` (o valor predefinido), bloqueia se "
+"necessário até que haja um lugar livre disponível. Se *timeout* for um "
+"número positivo, bloqueia no máximo *timeout* segundos e lança a exceção :"
+"exc:`Full` se nenhum lugar livre estiver disponível nesse tempo. Caso "
+"contrário (*block* é falso), coloca um item na fila se houver um lugar livre "
+"imediatamente disponível, caso contrário lança a exceção :exc:`Full` (o "
+"*timeout* é ignorado nesse caso)."
 
 #: ../../library/queue.rst:146
 msgid "Raises :exc:`ShutDown` if the queue has been shut down."
-msgstr ""
+msgstr "Lança :exc:`ShutDown` se a fila tiver sido encerrada."
 
 #: ../../library/queue.rst:151
 msgid "Equivalent to ``put(item, block=False)``."
-msgstr ""
+msgstr "Equivalente a ``put(item, block=False)``."
 
 #: ../../library/queue.rst:156 ../../library/queue.rst:314
 msgid ""
@@ -205,6 +279,14 @@ msgid ""
 "immediately available, else raise the :exc:`Empty` exception (*timeout* is "
 "ignored in that case)."
 msgstr ""
+"Remove e retorna um item da fila. Se os argumentos opcionais *block* forem "
+"verdadeiros e *timeout* for ``None`` (o valor predefinido), bloqueia se "
+"necessário até que um item esteja disponível. Se *timeout* for um número "
+"positivo, bloqueia no máximo *timeout* segundos e lança a exceção :exc:"
+"`Empty` se nenhum item estiver disponível nesse tempo. Caso contrário "
+"(*block* é falso), retorna um item se um estiver imediatamente disponível, "
+"caso contrário lança a exceção :exc:`Empty` (o *timeout* é ignorado nesse "
+"caso)."
 
 #: ../../library/queue.rst:163
 msgid ""
@@ -214,12 +296,19 @@ msgid ""
 "can occur, and in particular a SIGINT will not trigger a :exc:"
 "`KeyboardInterrupt`."
 msgstr ""
+"Antes da versão 3.0 em sistemas POSIX, e para todas as versões em Windows, "
+"se *block* for verdadeiro e *timeout* for ``None``, esta operação entra numa "
+"espera ininterruptível num trinco subjacente. Isto significa que nenhuma "
+"exceção pode ocorrer e, em particular, um SIGINT não desencadeará um :exc:"
+"`KeyboardInterrupt`."
 
 #: ../../library/queue.rst:168
 msgid ""
 "Raises :exc:`ShutDown` if the queue has been shut down and is empty, or if "
 "the queue has been shut down immediately."
 msgstr ""
+"Lança :exc:`ShutDown` se a fila tiver sido encerrada e estiver vazia, ou se "
+"a fila tiver sido encerrada imediatamente."
 
 #: ../../library/queue.rst:174 ../../library/queue.rst:324
 msgid "Equivalent to ``get(False)``."
@@ -230,6 +319,8 @@ msgid ""
 "Two methods are offered to support tracking whether enqueued tasks have been "
 "fully processed by daemon consumer threads."
 msgstr ""
+"São oferecidos dois métodos para suportar o rastreamento de se as tarefas "
+"enfileiradas foram totalmente processadas por threads consumidoras daemon."
 
 #: ../../library/queue.rst:182
 msgid ""
@@ -237,6 +328,10 @@ msgid ""
 "threads.  For each :meth:`get` used to fetch a task, a subsequent call to :"
 "meth:`task_done` tells the queue that the processing on the task is complete."
 msgstr ""
+"Indica que uma tarefa anteriormente enfileirada está concluída. Usado por "
+"threads consumidoras de fila. Para cada :meth:`get` usado para obter uma "
+"tarefa, uma chamada subsequente a :meth:`task_done` informa a fila de que o "
+"processamento da tarefa está concluído."
 
 #: ../../library/queue.rst:186
 msgid ""
@@ -244,6 +339,9 @@ msgid ""
 "been processed (meaning that a :meth:`task_done` call was received for every "
 "item that had been :meth:`put` into the queue)."
 msgstr ""
+"Se um :meth:`join` estiver bloqueado, ele retomará quando todos os itens "
+"tiverem sido processados (significando que uma chamada :meth:`task_done` foi "
+"recebida para cada item que foi colocado (:meth:`put`) na fila)."
 
 #: ../../library/queue.rst:190
 msgid ""
@@ -266,14 +364,19 @@ msgid ""
 "complete.  When the count of unfinished tasks drops to zero, :meth:`join` "
 "unblocks."
 msgstr ""
+"A contagem de tarefas inacabadas aumenta sempre que um item é adicionado à "
+"fila. A contagem diminui sempre que uma thread consumidora chama :meth:"
+"`task_done` para indicar que o item foi recuperado e todo o trabalho nele "
+"está concluído. Quando a contagem de tarefas inacabadas desce para zero, o :"
+"meth:`join` desbloqueia."
 
 #: ../../library/queue.rst:205
 msgid "Waiting for task completion"
-msgstr ""
+msgstr "Esperar pela conclusão da tarefa"
 
 #: ../../library/queue.rst:207
 msgid "Example of how to wait for enqueued tasks to be completed::"
-msgstr ""
+msgstr "Exemplo de como esperar que as tarefas enfileiradas sejam concluídas::"
 
 #: ../../library/queue.rst:209
 msgid ""
@@ -300,20 +403,45 @@ msgid ""
 "q.join()\n"
 "print('All work completed')"
 msgstr ""
+"import threading\n"
+"import queue\n"
+"\n"
+"q = queue.Queue()\n"
+"\n"
+"def worker():\n"
+"    while True:\n"
+"        item = q.get()\n"
+"        print(f'Trabalhando em {item}')\n"
+"        print(f'Terminado {item}')\n"
+"        q.task_done()\n"
+"\n"
+"# Ligar a thread trabalhadora.\n"
+"threading.Thread(target=worker, daemon=True).start()\n"
+"\n"
+"# Enviar trinta pedidos de tarefa para o trabalhador.\n"
+"for item in range(30):\n"
+"    q.put(item)\n"
+"\n"
+"# Bloquear até que todas as tarefas estejam concluídas.\n"
+"q.join()\n"
+"print('Todo o trabalho concluído')"
 
 #: ../../library/queue.rst:234
 msgid "Terminating queues"
-msgstr ""
+msgstr "Encerrar filas"
 
 #: ../../library/queue.rst:236
 msgid ""
 "When no longer needed, :class:`Queue` objects can be wound down until empty "
 "or terminated immediately with a hard shutdown."
 msgstr ""
+"Quando já não forem necessários, os objetos :class:`Queue` podem ser "
+"esvaziados gradualmente até ficarem vazios ou terminados imediatamente com "
+"um encerramento forçado (*hard shutdown*)."
 
 #: ../../library/queue.rst:241
 msgid "Put a :class:`Queue` instance into a shutdown mode."
-msgstr ""
+msgstr "Coloca uma instância :class:`Queue` num modo de encerramento."
 
 #: ../../library/queue.rst:243
 msgid ""
@@ -321,24 +449,35 @@ msgid ""
 "`ShutDown`. Currently blocked callers of :meth:`~Queue.put` will be "
 "unblocked and will raise :exc:`ShutDown` in the formerly blocked thread."
 msgstr ""
+"A fila já não pode crescer. Chamadas futuras a :meth:`~Queue.put` lançarão :"
+"exc:`ShutDown`. Os chamadores de :meth:`~Queue.put` atualmente bloqueados "
+"serão desbloqueados e lançarão :exc:`ShutDown` na thread anteriormente "
+"bloqueada."
 
 #: ../../library/queue.rst:248
 msgid ""
 "If *immediate* is false (the default), the queue can be wound down normally "
 "with :meth:`~Queue.get` calls to extract tasks that have already been loaded."
 msgstr ""
+"Se *immediate* for falso (o predefinido), a fila pode ser encerrada "
+"normalmente com chamadas :meth:`~Queue.get` para extrair tarefas que já "
+"tinham sido carregadas."
 
 #: ../../library/queue.rst:252
 msgid ""
 "And if :meth:`~Queue.task_done` is called for each remaining task, a "
 "pending :meth:`~Queue.join` will be unblocked normally."
 msgstr ""
+"E se :meth:`~Queue.task_done` for chamado para cada tarefa restante, um :"
+"meth:`~Queue.join` pendente será desbloqueado normalmente."
 
 #: ../../library/queue.rst:255
 msgid ""
 "Once the queue is empty, future calls to :meth:`~Queue.get` will raise :exc:"
 "`ShutDown`."
 msgstr ""
+"Assim que a fila estiver vazia, futuras chamadas a :meth:`~Queue.get` "
+"lançarão :exc:`ShutDown`."
 
 #: ../../library/queue.rst:258
 msgid ""
@@ -348,6 +487,12 @@ msgid ""
 "meth:`~Queue.join` are unblocked.  Also, blocked callers of :meth:`~Queue."
 "get` are unblocked and will raise :exc:`ShutDown` because the queue is empty."
 msgstr ""
+"Se *immediate* for verdadeiro, a fila é terminada imediatamente. A fila é "
+"esvaziada para ficar completamente vazia e a contagem de tarefas inacabadas "
+"é reduzida pelo número de tarefas esvaziadas. Se as tarefas inacabadas forem "
+"zero, os chamadores de :meth:`~Queue.join` são desbloqueados. Além disso, os "
+"chamadores bloqueados de :meth:`~Queue.get` são desbloqueados e lançarão :"
+"exc:`ShutDown` porque a fila está vazia."
 
 #: ../../library/queue.rst:266
 msgid ""
@@ -355,21 +500,27 @@ msgid ""
 "This unblocks the join even when no work has been done on the tasks, "
 "violating the usual invariant for joining a queue."
 msgstr ""
+"Tenha cautela ao utilizar :meth:`~Queue.join` com *immediate* definido como "
+"verdadeiro. Isto desbloqueia o join mesmo quando nenhum trabalho foi feito "
+"nas tarefas, violando o invariante habitual para junção de uma fila."
 
 #: ../../library/queue.rst:274
 msgid "SimpleQueue Objects"
-msgstr ""
+msgstr "Objetos SimpleQueue"
 
 #: ../../library/queue.rst:276
 msgid ""
 ":class:`SimpleQueue` objects provide the public methods described below."
 msgstr ""
+"Objetos :class:`SimpleQueue` fornecem os métodos públicos descritos abaixo."
 
 #: ../../library/queue.rst:280
 msgid ""
 "Return the approximate size of the queue.  Note, qsize() > 0 doesn't "
 "guarantee that a subsequent get() will not block."
 msgstr ""
+"Retorna o tamanho aproximado da fila. Note que qsize() > 0 não garante que "
+"um get() subsequente não bloqueie."
 
 #: ../../library/queue.rst:286
 msgid ""
@@ -377,6 +528,9 @@ msgid ""
 "returns ``False`` it doesn't guarantee that a subsequent call to get() will "
 "not block."
 msgstr ""
+"Retorna ``True`` se a fila estiver vazia, ``False`` caso contrário. Se "
+"empty() retornar ``False``, não garante que uma chamada subsequente a get() "
+"não bloqueie."
 
 #: ../../library/queue.rst:293
 msgid ""
@@ -385,6 +539,10 @@ msgid ""
 "The optional args *block* and *timeout* are ignored and only provided for "
 "compatibility with :meth:`Queue.put`."
 msgstr ""
+"Coloca o *item* na fila. O método nunca bloqueia e sucede sempre (exceto por "
+"potenciais erros de baixo nível, como falha ao alocar memória). Os "
+"argumentos opcionais *block* e *timeout* são ignorados e fornecidos apenas "
+"para compatibilidade com :meth:`Queue.put`."
 
 #: ../../library/queue.rst:299
 msgid ""
@@ -394,22 +552,31 @@ msgid ""
 "This makes it appropriate for use in destructors such as ``__del__`` methods "
 "or :mod:`weakref` callbacks."
 msgstr ""
+"Este método possui uma implementação em C que é reentrante. Ou seja, uma "
+"chamada ``put()`` ou ``get()`` pode ser interrompida por outra chamada "
+"``put()`` na mesma thread sem causar bloqueios ou corromper o estado interno "
+"da fila. Isto torna-o apropriado para uso em destrutores, como os métodos "
+"``__del__`` ou em chamadas de retorno (*callbacks*) de :mod:`weakref`."
 
 #: ../../library/queue.rst:308
 msgid ""
 "Equivalent to ``put(item, block=False)``, provided for compatibility with :"
 "meth:`Queue.put_nowait`."
 msgstr ""
+"Equivalente a ``put(item, block=False)``, fornecido para compatibilidade "
+"com :meth:`Queue.put_nowait`."
 
 #: ../../library/queue.rst:329
 msgid "Class :class:`multiprocessing.Queue`"
-msgstr ""
+msgstr "Classe :class:`multiprocessing.Queue`"
 
 #: ../../library/queue.rst:330
 msgid ""
 "A queue class for use in a multi-processing (rather than multi-threading) "
 "context."
 msgstr ""
+"Uma classe de fila para uso num contexto de multi-processamento (em vez de "
+"multi-threading)."
 
 #: ../../library/queue.rst:333
 msgid ""
@@ -418,3 +585,7 @@ msgid ""
 "`~collections.deque.popleft` operations that do not require locking and also "
 "support indexing."
 msgstr ""
+":class:`collections.deque` é uma implementação alternativa de filas "
+"ilimitadas com operações :meth:`~collections.deque.append` e :meth:"
+"`~collections.deque.popleft` atómicas e rápidas, que não requerem trincos e "
+"também suportam indexação."
