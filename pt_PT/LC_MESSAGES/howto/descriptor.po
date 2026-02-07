@@ -5,16 +5,16 @@
 #
 # Translators:
 # python-doc bot, 2025
-# André Moreira <afrmscb@gmail.com>, 2025
+# André Moreira <afrmscb@gmail.com>, 2026
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-05 15:07+0000\n"
+"POT-Creation-Date: 2026-02-07 15:03+0000\n"
 "PO-Revision-Date: 2025-09-15 01:03+0000\n"
-"Last-Translator: André Moreira <afrmscb@gmail.com>, 2025\n"
+"Last-Translator: André Moreira <afrmscb@gmail.com>, 2026\n"
 "Language-Team: Portuguese (Portugal) (https://app.transifex.com/python-doc/"
 "teams/5390/pt_PT/)\n"
 "MIME-Version: 1.0\n"
@@ -1905,6 +1905,31 @@ msgid ""
 "        \"Emulate method_descr_get() in Objects/classobject.c\"\n"
 "        return self"
 msgstr ""
+"class MethodType:\n"
+"    \"Emulate PyMethod_Type in Objects/classobject.c\"\n"
+"\n"
+"    def __init__(self, func, obj):\n"
+"        self.__func__ = func\n"
+"        self.__self__ = obj\n"
+"\n"
+"    def __call__(self, *args, **kwargs):\n"
+"        func = self.__func__\n"
+"        obj = self.__self__\n"
+"        return func(obj, *args, **kwargs)\n"
+"\n"
+"    def __getattribute__(self, name):\n"
+"        \"Emulate method_getset() in Objects/classobject.c\"\n"
+"        if name == '__doc__':\n"
+"            return self.__func__.__doc__\n"
+"        return object.__getattribute__(self, name)\n"
+"\n"
+"    def __getattr__(self, name):\n"
+"        \"Emulate method_getattro() in Objects/classobject.c\"\n"
+"        return getattr(self.__func__, name)\n"
+"\n"
+"    def __get__(self, obj, objtype=None):\n"
+"        \"Emulate method_descr_get() in Objects/classobject.c\"\n"
+"        return self"
 
 #: ../../howto/descriptor.rst:1189
 msgid ""
