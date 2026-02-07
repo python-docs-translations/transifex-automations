@@ -5,16 +5,16 @@
 #
 # Translators:
 # python-doc bot, 2025
-# Dmitry Luschan, 2025
+# Dmitry Luschan, 2026
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-05 14:39+0000\n"
+"POT-Creation-Date: 2026-02-07 14:20+0000\n"
 "PO-Revision-Date: 2025-09-16 00:02+0000\n"
-"Last-Translator: Dmitry Luschan, 2025\n"
+"Last-Translator: Dmitry Luschan, 2026\n"
 "Language-Team: Russian (https://app.transifex.com/python-doc/teams/5390/"
 "ru/)\n"
 "MIME-Version: 1.0\n"
@@ -96,6 +96,8 @@ msgid ""
 "(See section :ref:`primaries` for the syntax definitions for *attributeref* "
 "and *subscription*.)"
 msgstr ""
+"(См. раздел :ref:`primaries` для описания синтаксиса *обращения к атрибуту* "
+"и *индексирования*)."
 
 #: ../../reference/simple_stmts.rst:99
 msgid ""
@@ -118,6 +120,13 @@ msgid ""
 "unacceptable.  The rules observed by various types and the exceptions raised "
 "are given with the definition of the object types (see section :ref:`types`)."
 msgstr ""
+"Присваивание определяется рекурсивно в зависимости от формы цели (или "
+"целевого списка). Когда цель является частью изменяемого объекта (обращение "
+"к атрибуту или по индексу), сам этот объект должен в конечном итоге "
+"выполнить присваивание и принять решение о его допустимости, в противном "
+"случае может быть выброшено исключение. Правила, соблюдаемые различными "
+"типами, и возникающие исключения приведены вместе с определением типов "
+"объектов (см. раздел :ref:`types`)."
 
 #: ../../reference/simple_stmts.rst:121
 msgid ""
@@ -269,6 +278,10 @@ msgid ""
 "meth:`~object.__setitem__` method is called with two arguments: the "
 "subscript and the assigned object."
 msgstr ""
+"Если в качестве цели используется операция индексирования, сначала "
+"вычисляется первичное выражение в этом обращении, затем — выражение индекса. "
+"После этого вызывается метод :meth:`~object.__setitem__` первичного объекта "
+"с двумя аргументами: значением индекса и присваиваемым объектом."
 
 #: ../../reference/simple_stmts.rst:196
 msgid ""
@@ -276,6 +289,9 @@ msgid ""
 "objects (such as lists) and mapping objects (such as dictionaries), and "
 "behaves as follows."
 msgstr ""
+"Как правило, метод :meth:`~object.__setitem__` определён у изменяемых "
+"последовательностей (таких как списки) и отображений (таких как словари) и "
+"ведёт себя следующим образом."
 
 #: ../../reference/simple_stmts.rst:204
 msgid ""
@@ -326,6 +342,18 @@ msgid ""
 "be different from the length of the assigned sequence, thus changing the "
 "length of the target sequence, if the target sequence allows it."
 msgstr ""
+"Если целью присваивания является срез, первичное выражение должно "
+"вычисляться в изменяемую последовательность (например, список). "
+"Присваиваемый объект должен быть :term:`итерируемым`. Нижняя и верхняя "
+"границы среза должны быть целыми числами; если они равны ``None`` (или "
+"отсутствуют), по умолчанию используются ноль и длина последовательности. "
+"Если какая-либо из границ отрицательна, к ней прибавляется длина "
+"последовательности. Полученные границы затем ограничиваются диапазоном от "
+"нуля до длины последовательности включительно. Наконец, последовательности "
+"поручается заменить указанный срез элементами присваиваемой "
+"последовательности. Длина среза может отличаться от длины присваиваемой "
+"последовательности, что приводит к изменению длины целевой "
+"последовательности, если она это позволяет."
 
 #: ../../reference/simple_stmts.rst:235
 msgid ""
@@ -692,6 +720,10 @@ msgid ""
 "assignment of an empty slice of the right type (but even this is determined "
 "by the sliced object)."
 msgstr ""
+"Удаление атрибутов и элементов по индексу передаётся соответствующему "
+"первичному объекту. Удаление среза в общем случае эквивалентно присваиванию "
+"пустого среза соответствующего типа (однако даже это определяется объектом, "
+"к которому применяется срез)."
 
 #: ../../reference/simple_stmts.rst:473
 msgid ""
@@ -1287,27 +1319,18 @@ msgstr ""
 msgid ""
 "The *public names* defined by a module are determined by checking the "
 "module's namespace for a variable named ``__all__``; if defined, it must be "
-"a sequence of strings which are names defined or imported by that module.  "
-"The names given in ``__all__`` are all considered public and are required to "
-"exist.  If ``__all__`` is not defined, the set of public names includes all "
-"names found in the module's namespace which do not begin with an underscore "
-"character (``'_'``).  ``__all__`` should contain the entire public API. It "
-"is intended to avoid accidentally exporting items that are not part of the "
-"API (such as library modules which were imported and used within the module)."
+"a sequence of strings which are names defined or imported by that module. "
+"Names containing non-ASCII characters must be in the `normalization form`_ "
+"NFKC; see :ref:`lexical-names-nonascii` for details.  The names given in "
+"``__all__`` are all considered public and are required to exist.  If "
+"``__all__`` is not defined, the set of public names includes all names found "
+"in the module's namespace which do not begin with an underscore character "
+"(``'_'``).  ``__all__`` should contain the entire public API. It is intended "
+"to avoid accidentally exporting items that are not part of the API (such as "
+"library modules which were imported and used within the module)."
 msgstr ""
-"*Общедоступные имена* модуля определяются следующим образом: проверяется "
-"наличие переменной с именем ``__all__`` в пространстве имён модуля. Если она "
-"определена, это должна быть последовательность строк, каждая из которых — "
-"имя, определённое или импортированное модулем. Все имена, указанные в "
-"``__all__``, считаются общедоступными и обязаны существовать. Если "
-"``__all__`` не определено, в качестве публичных рассматриваются все имена в "
-"пространстве имён модуля, которые не начинаются с символа подчёркивания "
-"(``'_'``). Переменная ``__all__`` должна включать весь публичный API модуля. "
-"Она предназначена для предотвращения случайного экспорта элементов, не "
-"являющихся частью его API (например, библиотечных модулей, импортированных и "
-"использованных внутри модуля)."
 
-#: ../../reference/simple_stmts.rst:842
+#: ../../reference/simple_stmts.rst:844
 msgid ""
 "The wild card form of import --- ``from module import *`` --- is only "
 "allowed at the module level.  Attempting to use it in class or function "
@@ -1317,7 +1340,7 @@ msgstr ""
 "только на уровне модуля. Попытка использовать её внутри определения класса "
 "или функции приводит к возбуждению исключения :exc:`SyntaxError`."
 
-#: ../../reference/simple_stmts.rst:849
+#: ../../reference/simple_stmts.rst:851
 msgid ""
 "When specifying what module to import you do not have to specify the "
 "absolute name of the module. When a module or package is contained within "
@@ -1346,7 +1369,7 @@ msgstr ""
 "``pkg.subpkg1`` будет импортирован ``pkg.subpkg2.mod``. Спецификация "
 "относительных импортов приведена в разделе :ref:`relativeimports`."
 
-#: ../../reference/simple_stmts.rst:863
+#: ../../reference/simple_stmts.rst:865
 msgid ""
 ":func:`importlib.import_module` is provided to support applications that "
 "determine dynamically the modules to be loaded."
@@ -1354,7 +1377,7 @@ msgstr ""
 "Функция :func:`importlib.import_module` предназначена для поддержки "
 "приложений, которые динамически определяют загружаемые модули."
 
-#: ../../reference/simple_stmts.rst:866
+#: ../../reference/simple_stmts.rst:868
 msgid ""
 "Raises an :ref:`auditing event <auditing>` ``import`` with arguments "
 "``module``, ``filename``, ``sys.path``, ``sys.meta_path``, ``sys."
@@ -1364,11 +1387,11 @@ msgstr ""
 "``module``, ``filename``, ``sys.path``, ``sys.meta_path`` и ``sys."
 "path_hooks``."
 
-#: ../../reference/simple_stmts.rst:871
+#: ../../reference/simple_stmts.rst:875
 msgid "Future statements"
 msgstr "Инструкции будущих возможностей"
 
-#: ../../reference/simple_stmts.rst:877
+#: ../../reference/simple_stmts.rst:881
 msgid ""
 "A :dfn:`future statement` is a directive to the compiler that a particular "
 "module should be compiled using syntax or semantics that will be available "
@@ -1379,7 +1402,7 @@ msgstr ""
 "синтаксиса или семантики, которые станут стандартными в одном из будущих "
 "выпусков Python."
 
-#: ../../reference/simple_stmts.rst:881
+#: ../../reference/simple_stmts.rst:885
 msgid ""
 "The future statement is intended to ease migration to future versions of "
 "Python that introduce incompatible changes to the language.  It allows use "
@@ -1391,7 +1414,7 @@ msgstr ""
 "использовать новые возможности на уровне отдельных модулей ещё до того, как "
 "они станут стандартными в будущих выпусках Python."
 
-#: ../../reference/simple_stmts.rst:893
+#: ../../reference/simple_stmts.rst:897
 msgid ""
 "A future statement must appear near the top of the module.  The only lines "
 "that can appear before a future statement are:"
@@ -1399,23 +1422,23 @@ msgstr ""
 "Инструкции будущих возможностей должны находиться в начале модуля. Перед "
 "ними могут встречаться только следующие строки:"
 
-#: ../../reference/simple_stmts.rst:896
+#: ../../reference/simple_stmts.rst:900
 msgid "the module docstring (if any),"
 msgstr "строка документации модуля (если она есть),"
 
-#: ../../reference/simple_stmts.rst:897
+#: ../../reference/simple_stmts.rst:901
 msgid "comments,"
 msgstr "комментарии,"
 
-#: ../../reference/simple_stmts.rst:898
+#: ../../reference/simple_stmts.rst:902
 msgid "blank lines, and"
 msgstr "пустые строки и"
 
-#: ../../reference/simple_stmts.rst:899
+#: ../../reference/simple_stmts.rst:903
 msgid "other future statements."
 msgstr "другие инструкции будущих возможностей."
 
-#: ../../reference/simple_stmts.rst:901
+#: ../../reference/simple_stmts.rst:905
 msgid ""
 "The only feature that requires using the future statement is ``annotations`` "
 "(see :pep:`563`)."
@@ -1423,7 +1446,7 @@ msgstr ""
 "Единственная функциональность, требующая использования инструкции будущих "
 "возможностей — это ``annotations`` (см. :pep:`563`)."
 
-#: ../../reference/simple_stmts.rst:904
+#: ../../reference/simple_stmts.rst:908
 msgid ""
 "All historical features enabled by the future statement are still recognized "
 "by Python 3.  The list includes ``absolute_import``, ``division``, "
@@ -1440,7 +1463,7 @@ msgstr ""
 "поскольку вся эта функциональность уже включена, и сохраняются только для "
 "обратной совместимости."
 
-#: ../../reference/simple_stmts.rst:911
+#: ../../reference/simple_stmts.rst:915
 msgid ""
 "A future statement is recognized and treated specially at compile time: "
 "Changes to the semantics of core constructs are often implemented by "
@@ -1456,7 +1479,7 @@ msgstr ""
 "зарезервированное слово), и тогда компилятору требуется по-другому "
 "анализировать модуль. Такие решения нельзя откладывать до времени выполнения."
 
-#: ../../reference/simple_stmts.rst:918
+#: ../../reference/simple_stmts.rst:922
 msgid ""
 "For any given release, the compiler knows which feature names have been "
 "defined, and raises a compile-time error if a future statement contains a "
@@ -1466,7 +1489,7 @@ msgstr ""
 "возможностей определены, и выдаёт ошибку на этапе компиляции, если "
 "инструкция будущих возможностей содержит неизвестное ему имя."
 
-#: ../../reference/simple_stmts.rst:922
+#: ../../reference/simple_stmts.rst:926
 msgid ""
 "The direct runtime semantics are the same as for any import statement: there "
 "is a standard module :mod:`__future__`, described later, and it will be "
@@ -1477,7 +1500,7 @@ msgstr ""
 "описанный далее, и он импортируется обычным образом в момент выполнения "
 "инструкции будущих возможностей."
 
-#: ../../reference/simple_stmts.rst:926
+#: ../../reference/simple_stmts.rst:930
 msgid ""
 "The interesting runtime semantics depend on the specific feature enabled by "
 "the future statement."
@@ -1485,15 +1508,15 @@ msgstr ""
 "Более существенные аспекты семантики времени выполнения зависят от "
 "конкретной функциональности, включаемой инструкцией будущих возможностей."
 
-#: ../../reference/simple_stmts.rst:929
+#: ../../reference/simple_stmts.rst:933
 msgid "Note that there is nothing special about the statement::"
 msgstr "Обратите внимание, что в этой инструкции нет ничего особенного::"
 
-#: ../../reference/simple_stmts.rst:931
+#: ../../reference/simple_stmts.rst:935
 msgid "import __future__ [as name]"
 msgstr "import __future__ [as name]"
 
-#: ../../reference/simple_stmts.rst:933
+#: ../../reference/simple_stmts.rst:937
 msgid ""
 "That is not a future statement; it's an ordinary import statement with no "
 "special semantics or syntax restrictions."
@@ -1501,7 +1524,7 @@ msgstr ""
 "Это не инструкция будущих возможностей, а обычная инструкция импорта, не "
 "имеющая ни специальной семантики, ни синтаксических ограничений."
 
-#: ../../reference/simple_stmts.rst:936
+#: ../../reference/simple_stmts.rst:940
 msgid ""
 "Code compiled by calls to the built-in functions :func:`exec` and :func:"
 "`compile` that occur in a module :mod:`!M` containing a future statement "
@@ -1516,7 +1539,7 @@ msgstr ""
 "помощью дополнительных аргументов функции :func:`compile` — подробности см. "
 "в её документации."
 
-#: ../../reference/simple_stmts.rst:942
+#: ../../reference/simple_stmts.rst:946
 msgid ""
 "A future statement typed at an interactive interpreter prompt will take "
 "effect for the rest of the interpreter session.  If an interpreter is "
@@ -1530,19 +1553,19 @@ msgstr ""
 "скрипт содержит инструкцию будущих возможностей, то она будет действовать и "
 "в интерактивном сеансе, который начинается после выполнения скрипта."
 
-#: ../../reference/simple_stmts.rst:950
+#: ../../reference/simple_stmts.rst:954
 msgid ":pep:`236` - Back to the __future__"
 msgstr ":pep:`236` — Назад в __будущее__"
 
-#: ../../reference/simple_stmts.rst:951
+#: ../../reference/simple_stmts.rst:955
 msgid "The original proposal for the __future__ mechanism."
 msgstr "Первоначальное предложение механизма __future__."
 
-#: ../../reference/simple_stmts.rst:957
+#: ../../reference/simple_stmts.rst:961
 msgid "The :keyword:`!global` statement"
 msgstr "Инструкция :keyword:`!global`"
 
-#: ../../reference/simple_stmts.rst:967
+#: ../../reference/simple_stmts.rst:971
 msgid ""
 "The :keyword:`global` statement causes the listed identifiers to be "
 "interpreted as globals. It would be impossible to assign to a global "
@@ -1554,7 +1577,7 @@ msgstr ""
 "присвоение глобальной переменной было бы невозможно, хотя свободные "
 "переменные могут ссылаться на глобальные без объявления их как глобальных."
 
-#: ../../reference/simple_stmts.rst:972
+#: ../../reference/simple_stmts.rst:976
 msgid ""
 "The :keyword:`!global` statement applies to the entire current scope "
 "(module, function body or class definition). A :exc:`SyntaxError` is raised "
@@ -1566,7 +1589,7 @@ msgstr ""
 "или ей присваивается значение до её объявления как глобальной в этой "
 "области, выбрасывается исключение :exc:`SyntaxError`."
 
-#: ../../reference/simple_stmts.rst:977
+#: ../../reference/simple_stmts.rst:981
 msgid ""
 "At the module level, all variables are global, so a :keyword:`!global` "
 "statement has no effect. However, variables must still not be used or "
@@ -1579,7 +1602,7 @@ msgstr ""
 "объявления через :keyword:`!global`. Это ограничение смягчено в "
 "интерактивной консоли (:term:`REPL`)."
 
-#: ../../reference/simple_stmts.rst:988
+#: ../../reference/simple_stmts.rst:992
 msgid ""
 "**Programmer's note:** :keyword:`global` is a directive to the parser.  It "
 "applies only to code parsed at the same time as the :keyword:`!global` "
@@ -1599,11 +1622,11 @@ msgstr ""
 "global` из кода, содержащего вызов функции. То же самое относится к "
 "функциям :func:`eval` и :func:`compile`."
 
-#: ../../reference/simple_stmts.rst:1000
+#: ../../reference/simple_stmts.rst:1004
 msgid "The :keyword:`!nonlocal` statement"
 msgstr "Инструкция :keyword:`!nonlocal`"
 
-#: ../../reference/simple_stmts.rst:1008
+#: ../../reference/simple_stmts.rst:1012
 msgid ""
 "When the definition of a function or class is nested (enclosed) within the "
 "definitions of other functions, its nonlocal scopes are the local scopes of "
@@ -1624,7 +1647,7 @@ msgstr ""
 "нелокальной области или таких областей нет, выбрасывается исключение :exc:"
 "`SyntaxError`."
 
-#: ../../reference/simple_stmts.rst:1017
+#: ../../reference/simple_stmts.rst:1021
 msgid ""
 "The :keyword:`nonlocal` statement applies to the entire scope of a function "
 "or class body. A :exc:`SyntaxError` is raised if a variable is used or "
@@ -1635,15 +1658,15 @@ msgstr ""
 "значение до её объявления как нелокальной, выбрасывается исключение :exc:"
 "`SyntaxError`."
 
-#: ../../reference/simple_stmts.rst:1023
+#: ../../reference/simple_stmts.rst:1027
 msgid ":pep:`3104` - Access to Names in Outer Scopes"
 msgstr ":pep:`3104` — Доступ к именам во внешних областях видимости"
 
-#: ../../reference/simple_stmts.rst:1024
+#: ../../reference/simple_stmts.rst:1028
 msgid "The specification for the :keyword:`nonlocal` statement."
 msgstr "Спецификация инструкции :keyword:`nonlocal`."
 
-#: ../../reference/simple_stmts.rst:1026
+#: ../../reference/simple_stmts.rst:1030
 msgid ""
 "**Programmer's note:** :keyword:`nonlocal` is a directive to the parser and "
 "applies only to code parsed along with it.  See the note for the :keyword:"
@@ -1654,11 +1677,11 @@ msgstr ""
 "анализируется вместе с этой инструкцией. См. примечание к инструкции :"
 "keyword:`global`."
 
-#: ../../reference/simple_stmts.rst:1034
+#: ../../reference/simple_stmts.rst:1038
 msgid "The :keyword:`!type` statement"
 msgstr "Инструкция :keyword:`!type`"
 
-#: ../../reference/simple_stmts.rst:1041
+#: ../../reference/simple_stmts.rst:1045
 msgid ""
 "The :keyword:`!type` statement declares a type alias, which is an instance "
 "of :class:`typing.TypeAliasType`."
@@ -1666,19 +1689,19 @@ msgstr ""
 "Инструкция :keyword:`!type` объявляет псевдоним типа, который является "
 "экземпляром :class:`typing.TypeAliasType`."
 
-#: ../../reference/simple_stmts.rst:1044
+#: ../../reference/simple_stmts.rst:1048
 msgid "For example, the following statement creates a type alias::"
 msgstr "Например, следующая инструкция создаёт псевдоним типа::"
 
-#: ../../reference/simple_stmts.rst:1046
+#: ../../reference/simple_stmts.rst:1050
 msgid "type Point = tuple[float, float]"
 msgstr "type Point = tuple[float, float]"
 
-#: ../../reference/simple_stmts.rst:1048
+#: ../../reference/simple_stmts.rst:1052
 msgid "This code is roughly equivalent to::"
 msgstr "Этот код примерно эквивалентен следующему::"
 
-#: ../../reference/simple_stmts.rst:1050
+#: ../../reference/simple_stmts.rst:1054
 msgid ""
 "annotation-def VALUE_OF_Point():\n"
 "    return tuple[float, float]\n"
@@ -1688,7 +1711,7 @@ msgstr ""
 "    return tuple[float, float]\n"
 "Point = typing.TypeAliasType(\"Point\", VALUE_OF_Point())"
 
-#: ../../reference/simple_stmts.rst:1054
+#: ../../reference/simple_stmts.rst:1058
 msgid ""
 "``annotation-def`` indicates an :ref:`annotation scope <annotation-scopes>`, "
 "which behaves mostly like a function, but with several small differences."
@@ -1697,7 +1720,7 @@ msgstr ""
 "scopes>`, которая ведёт себя в основном как функция, но имеет несколько "
 "небольших отличий."
 
-#: ../../reference/simple_stmts.rst:1057
+#: ../../reference/simple_stmts.rst:1061
 msgid ""
 "The value of the type alias is evaluated in the annotation scope. It is not "
 "evaluated when the type alias is created, but only when the value is "
@@ -1711,7 +1734,7 @@ msgstr ""
 "evaluation`). Это позволяет псевдониму типа ссылаться на имена, которые ещё "
 "не определены."
 
-#: ../../reference/simple_stmts.rst:1063
+#: ../../reference/simple_stmts.rst:1067
 msgid ""
 "Type aliases may be made generic by adding a :ref:`type parameter list <type-"
 "params>` after the name. See :ref:`generic-type-aliases` for more."
@@ -1720,15 +1743,15 @@ msgstr ""
 "`список параметров типа <type-params>`. Подробнее см. :ref:`generic-type-"
 "aliases`."
 
-#: ../../reference/simple_stmts.rst:1066
+#: ../../reference/simple_stmts.rst:1070
 msgid ":keyword:`!type` is a :ref:`soft keyword <soft-keywords>`."
 msgstr ":keyword:`!type` — это :ref:`мягкое ключевое слово <soft-keywords>`."
 
-#: ../../reference/simple_stmts.rst:1072
+#: ../../reference/simple_stmts.rst:1076
 msgid ":pep:`695` - Type Parameter Syntax"
 msgstr ":pep:`695` — Синтаксис параметров типа"
 
-#: ../../reference/simple_stmts.rst:1073
+#: ../../reference/simple_stmts.rst:1077
 msgid ""
 "Introduced the :keyword:`!type` statement and syntax for generic classes and "
 "functions."
@@ -1747,9 +1770,9 @@ msgstr "простой"
 #: ../../reference/simple_stmts.rst:457 ../../reference/simple_stmts.rst:483
 #: ../../reference/simple_stmts.rst:520 ../../reference/simple_stmts.rst:556
 #: ../../reference/simple_stmts.rst:681 ../../reference/simple_stmts.rst:715
-#: ../../reference/simple_stmts.rst:740 ../../reference/simple_stmts.rst:873
-#: ../../reference/simple_stmts.rst:959 ../../reference/simple_stmts.rst:1002
-#: ../../reference/simple_stmts.rst:1036
+#: ../../reference/simple_stmts.rst:740 ../../reference/simple_stmts.rst:877
+#: ../../reference/simple_stmts.rst:963 ../../reference/simple_stmts.rst:1006
+#: ../../reference/simple_stmts.rst:1040
 msgid "statement"
 msgstr "инструкция"
 
@@ -1763,7 +1786,7 @@ msgstr "выражение"
 msgid "list"
 msgstr "список"
 
-#: ../../reference/simple_stmts.rst:56 ../../reference/simple_stmts.rst:983
+#: ../../reference/simple_stmts.rst:56 ../../reference/simple_stmts.rst:987
 msgid "built-in function"
 msgstr "встроенная функция"
 
@@ -1829,13 +1852,13 @@ msgid "assignment"
 msgstr "присваивание"
 
 #: ../../reference/simple_stmts.rst:75 ../../reference/simple_stmts.rst:740
-#: ../../reference/simple_stmts.rst:795 ../../reference/simple_stmts.rst:959
+#: ../../reference/simple_stmts.rst:795 ../../reference/simple_stmts.rst:963
 msgid "binding"
 msgstr "связывание"
 
 #: ../../reference/simple_stmts.rst:75 ../../reference/simple_stmts.rst:457
 #: ../../reference/simple_stmts.rst:740 ../../reference/simple_stmts.rst:795
-#: ../../reference/simple_stmts.rst:959
+#: ../../reference/simple_stmts.rst:963
 msgid "name"
 msgstr "имя"
 
@@ -1858,8 +1881,8 @@ msgid "target"
 msgstr "цель"
 
 #: ../../reference/simple_stmts.rst:115 ../../reference/simple_stmts.rst:379
-#: ../../reference/simple_stmts.rst:740 ../../reference/simple_stmts.rst:959
-#: ../../reference/simple_stmts.rst:1002
+#: ../../reference/simple_stmts.rst:740 ../../reference/simple_stmts.rst:963
+#: ../../reference/simple_stmts.rst:1006
 msgid ", (comma)"
 msgstr ", (запятая)"
 
@@ -2033,7 +2056,7 @@ msgstr "del"
 msgid "deletion"
 msgstr "удаление"
 
-#: ../../reference/simple_stmts.rst:457 ../../reference/simple_stmts.rst:959
+#: ../../reference/simple_stmts.rst:457 ../../reference/simple_stmts.rst:963
 msgid "global"
 msgstr "global"
 
@@ -2140,7 +2163,7 @@ msgstr "управление циклом"
 msgid "continue"
 msgstr "continue"
 
-#: ../../reference/simple_stmts.rst:740 ../../reference/simple_stmts.rst:846
+#: ../../reference/simple_stmts.rst:740 ../../reference/simple_stmts.rst:848
 msgid "import"
 msgstr "import"
 
@@ -2173,42 +2196,42 @@ msgstr "инструкция импорта"
 msgid "__all__ (optional module attribute)"
 msgstr "__all__ (необязательный атрибут модуля)"
 
-#: ../../reference/simple_stmts.rst:846
+#: ../../reference/simple_stmts.rst:848
 msgid "relative"
 msgstr "относительный"
 
-#: ../../reference/simple_stmts.rst:873
+#: ../../reference/simple_stmts.rst:877
 msgid "future"
 msgstr "future"
 
-#: ../../reference/simple_stmts.rst:873
+#: ../../reference/simple_stmts.rst:877
 msgid "__future__"
 msgstr "__future__"
 
-#: ../../reference/simple_stmts.rst:873
+#: ../../reference/simple_stmts.rst:877
 msgid "future statement"
 msgstr "инструкция будущих возможностей"
 
-#: ../../reference/simple_stmts.rst:959 ../../reference/simple_stmts.rst:1002
+#: ../../reference/simple_stmts.rst:963 ../../reference/simple_stmts.rst:1006
 msgid "identifier list"
 msgstr "список идентификаторов"
 
-#: ../../reference/simple_stmts.rst:983
+#: ../../reference/simple_stmts.rst:987
 msgid "exec"
 msgstr "exec"
 
-#: ../../reference/simple_stmts.rst:983
+#: ../../reference/simple_stmts.rst:987
 msgid "eval"
 msgstr "eval"
 
-#: ../../reference/simple_stmts.rst:983
+#: ../../reference/simple_stmts.rst:987
 msgid "compile"
 msgstr "compile"
 
-#: ../../reference/simple_stmts.rst:1002
+#: ../../reference/simple_stmts.rst:1006
 msgid "nonlocal"
 msgstr "nonlocal"
 
-#: ../../reference/simple_stmts.rst:1036
+#: ../../reference/simple_stmts.rst:1040
 msgid "type"
 msgstr "тип"

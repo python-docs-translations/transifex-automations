@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-01 14:20+0000\n"
+"POT-Creation-Date: 2026-02-05 14:39+0000\n"
 "PO-Revision-Date: 2025-09-16 00:00+0000\n"
 "Last-Translator: André Moreira <afrmscb@gmail.com>, 2026\n"
 "Language-Team: Portuguese (Portugal) (https://app.transifex.com/python-doc/"
@@ -399,6 +399,11 @@ msgid ""
 "link *into* your .exe file (!)  You do **not** have to create a DLL file, "
 "and this also simplifies linking."
 msgstr ""
+"Se utilizar o SWIG, é fácil criar um «módulo de extensão» Python que "
+"disponibilizará os dados e métodos da aplicação para o Python. O SWIG "
+"tratará de praticamente todos os detalhes complicados por si. O resultado é "
+"um código C que liga *ao* seu ficheiro .exe (!). Não precisa de criar um "
+"ficheiro DLL, o que também simplifica a ligação."
 
 #: ../../faq/windows.rst:197
 msgid ""
@@ -408,6 +413,11 @@ msgid ""
 "classes, as you should, the init function will be called initleoc().  This "
 "initializes a mostly hidden helper class used by the shadow class."
 msgstr ""
+"O SWIG criará uma função init (uma função C) cujo nome depende do nome do "
+"módulo de extensão. Por exemplo, se o nome do módulo for leo, a função init "
+"será chamada initleo(). Se você usar classes sombra SWIG, como deveria, a "
+"função init será chamada initleoc(). Isso inicializa uma classe auxiliar "
+"quase totalmente oculta usada pela classe sombra."
 
 #: ../../faq/windows.rst:203
 msgid ""
@@ -415,12 +425,17 @@ msgid ""
 "calling the initialization function is equivalent to importing the module "
 "into Python! (This is the second key undocumented fact.)"
 msgstr ""
+"A razão pela qual pode ligar o código C na etapa 2 ao seu ficheiro .exe é "
+"que chamar a função de inicialização é equivalente a importar o módulo para "
+"o Python! (Este é o segundo facto importante não documentado.)"
 
 #: ../../faq/windows.rst:207
 msgid ""
 "In short, you can use the following code to initialize the Python "
 "interpreter with your extension module."
 msgstr ""
+"Em resumo, pode usar o seguinte código para inicializar o interpretador "
+"Python com o seu módulo de extensão."
 
 #: ../../faq/windows.rst:210
 msgid ""
@@ -430,12 +445,20 @@ msgid ""
 "initmyAppc();  // Initialize (import) the helper class.\n"
 "PyRun_SimpleString(\"import myApp\");  // Import the shadow class."
 msgstr ""
+"#include <Python.h>\n"
+"...\n"
+"Py_Initialize();  // Initialize Python.\n"
+"initmyAppc();  // Initialize (import) the helper class.\n"
+"PyRun_SimpleString(\"import myApp\");  // Import the shadow class."
 
 #: ../../faq/windows.rst:218
 msgid ""
 "There are two problems with Python's C API which will become apparent if you "
 "use a compiler other than MSVC, the compiler used to build pythonNN.dll."
 msgstr ""
+"Existem dois problemas com a API C do Python que se tornam evidentes se "
+"utilizar um compilador diferente do MSVC, o compilador utilizado para "
+"compilar o pythonNN.dll."
 
 #: ../../faq/windows.rst:221
 msgid ""
@@ -444,12 +467,18 @@ msgid ""
 "compiler's notion of a ``struct FILE`` will be different.  From an "
 "implementation standpoint these are very low level functions."
 msgstr ""
+"Problema 1: As chamadas funções de «nível muito alto» que recebem argumentos "
+"``FILE *`` não funcionarão num ambiente com vários compiladores, porque a "
+"noção de ``struct FILE`` de cada compilador será diferente. Do ponto de "
+"vista da implementação, estas são funções de nível muito baixo."
 
 #: ../../faq/windows.rst:226
 msgid ""
 "Problem 2: SWIG generates the following code when generating wrappers to "
 "void functions:"
 msgstr ""
+"Problema 2: O SWIG gera o seguinte código ao gerar wrappers para funções "
+"void:"
 
 #: ../../faq/windows.rst:229
 msgid ""
@@ -457,6 +486,9 @@ msgid ""
 "_resultobj = Py_None;\n"
 "return _resultobj;"
 msgstr ""
+"Py_INCREF(Py_None);\n"
+"_resultobj = Py_None;\n"
+"return _resultobj;"
 
 #: ../../faq/windows.rst:235
 msgid ""
@@ -464,10 +496,14 @@ msgid ""
 "structure called _Py_NoneStruct inside pythonNN.dll.  Again, this code will "
 "fail in a mult-compiler environment.  Replace such code by:"
 msgstr ""
+"Infelizmente, Py_None é uma macro que se expande para uma referência a uma "
+"estrutura de dados complexa chamada _Py_NoneStruct dentro do pythonNN.dll. "
+"Mais uma vez, este código irá falhar num ambiente com vários compiladores. "
+"Substitua esse código por:"
 
 #: ../../faq/windows.rst:239
 msgid "return Py_BuildValue(\"\");"
-msgstr ""
+msgstr "return Py_BuildValue(\"\");"
 
 #: ../../faq/windows.rst:243
 msgid ""
@@ -475,6 +511,9 @@ msgid ""
 "automatically, though I have not been able to get this to work (I'm a "
 "complete SWIG newbie)."
 msgstr ""
+"Pode ser possível usar o comando ``%typemap`` do SWIG para fazer a alteração "
+"automaticamente, embora eu não tenha conseguido fazer isso funcionar (sou um "
+"novato completo no SWIG)."
 
 #: ../../faq/windows.rst:247
 msgid ""
@@ -487,10 +526,19 @@ msgid ""
 "is a Python object (defined in your extension module) that contains read() "
 "and write() methods."
 msgstr ""
+"Usar um script shell Python para abrir uma janela do interpretador Python a "
+"partir da sua aplicação Windows não é uma boa ideia; a janela resultante "
+"será independente do sistema de janelas da sua aplicação. Em vez disso, você "
+"(ou a classe wxPythonWindow) deve criar uma janela de interpretador "
+"\"nativa\". É fácil conectar essa janela ao interpretador Python. Você pode "
+"redirecionar o I/O do Python para qualquer objeto que suporte leitura e "
+"escrita, então tudo o que você precisa é um objeto Python (definido no seu "
+"módulo de extensão) que contenha os métodos read() e write()."
 
 #: ../../faq/windows.rst:256
 msgid "How do I keep editors from inserting tabs into my Python source?"
 msgstr ""
+"Como posso impedir que os editores insiram tabulações no meu código Python?"
 
 #: ../../faq/windows.rst:258
 msgid ""
@@ -498,6 +546,9 @@ msgid ""
 "recommends 4 spaces for distributed Python code; this is also the Emacs "
 "python-mode default."
 msgstr ""
+"A FAQ não recomenda o uso de tabulações, e o guia de estilo Python, :pep:"
+"`8`, recomenda 4 espaços para código Python distribuído; este também é o "
+"padrão do modo python do Emacs."
 
 #: ../../faq/windows.rst:262
 msgid ""
@@ -507,6 +558,11 @@ msgid ""
 "set \"Tab size\" and \"Indent size\" to 4, and select the \"Insert spaces\" "
 "radio button."
 msgstr ""
+"Em qualquer editor, misturar tabulações e espaços é uma má ideia. O MSVC não "
+"é diferente nesse aspecto e é facilmente configurado para usar espaços: Vá "
+"em :menuselection:`Ferramentas --> Opções --> Tabulações` e, para o tipo de "
+"ficheiro \"Padrão\", defina \"Tamanho da tabulação\" e \"Tamanho do recuo\" "
+"como 4 e selecione o botão de opção \"Inserir espaços\"."
 
 #: ../../faq/windows.rst:267
 msgid ""
@@ -514,10 +570,14 @@ msgid ""
 "spaces are causing problems in leading whitespace. You may also run the :mod:"
 "`tabnanny` module to check a directory tree in batch mode."
 msgstr ""
+"O Python gera :exc:`IndentationError` ou :exc:`TabError` se a mistura de "
+"tabulações e espaços estiver a causar problemas no espaço em branco inicial. "
+"Também pode executar o módulo :mod:`tabnanny` para verificar uma árvore de "
+"diretórios em modo batch."
 
 #: ../../faq/windows.rst:274
 msgid "How do I check for a keypress without blocking?"
-msgstr ""
+msgstr "Como posso verificar se uma tecla foi pressionada sem bloquear?"
 
 #: ../../faq/windows.rst:276
 msgid ""
@@ -531,7 +591,7 @@ msgstr ""
 
 #: ../../faq/windows.rst:281
 msgid "How do I solve the missing api-ms-win-crt-runtime-l1-1-0.dll error?"
-msgstr ""
+msgstr "Como resolver o erro api-ms-win-crt-runtime-l1-1-0.dll ausente?"
 
 #: ../../faq/windows.rst:283
 msgid ""
@@ -541,3 +601,9 @@ msgid ""
 "issue, visit the `Microsoft support page <https://support.microsoft.com/en-"
 "us/help/3118401/>`_ for guidance on manually installing the C Runtime update."
 msgstr ""
+"Isso pode ocorrer no Python 3.5 e versões posteriores ao usar o Windows 8.1 "
+"ou versões anteriores sem todas as atualizações instaladas. Primeiro, "
+"certifique-se de que o seu sistema operativo é compatível e está atualizado. "
+"Se isso não resolver o problema, aceda à `página de suporte da Microsoft "
+"<https://support.microsoft.com/en-us/help/3118401/>`_ para obter orientações "
+"sobre como instalar manualmente a atualização do C Runtime."
