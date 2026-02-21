@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-25 14:15+0000\n"
+"POT-Creation-Date: 2026-02-21 14:20+0000\n"
 "PO-Revision-Date: 2025-09-16 00:00+0000\n"
 "Last-Translator: python-doc bot, 2025\n"
 "Language-Team: Swedish (https://app.transifex.com/python-doc/teams/5390/"
@@ -1005,60 +1005,79 @@ msgid "Signal Handling"
 msgstr "Signalhantering"
 
 #: ../../c-api/exceptions.rst:676
-msgid "This function interacts with Python's signal handling."
-msgstr "Denna funktion interagerar med Pythons signalhantering."
-
-#: ../../c-api/exceptions.rst:678
 msgid ""
-"If the function is called from the main thread and under the main Python "
-"interpreter, it checks whether a signal has been sent to the processes and "
-"if so, invokes the corresponding signal handler.  If the :mod:`signal` "
-"module is supported, this can invoke a signal handler written in Python."
+"Handle external interruptions, such as signals or activating a debugger, "
+"whose processing has been delayed until it is safe to run Python code and/or "
+"raise exceptions."
 msgstr ""
-"Om funktionen anropas från huvudtråden och under Pythons huvudtolk, "
-"kontrollerar den om en signal har skickats till processerna och anropar i så "
-"fall motsvarande signalhanterare.  Om modulen :mod:`signal` stöds kan den "
-"anropa en signalhanterare som är skriven i Python."
 
-#: ../../c-api/exceptions.rst:683
+#: ../../c-api/exceptions.rst:680
 msgid ""
-"The function attempts to handle all pending signals, and then returns ``0``. "
-"However, if a Python signal handler raises an exception, the error indicator "
-"is set and the function returns ``-1`` immediately (such that other pending "
-"signals may not have been handled yet: they will be on the next :c:func:"
-"`PyErr_CheckSignals()` invocation)."
+"For example, pressing :kbd:`Ctrl-C` causes a terminal to send the :py:data:"
+"`signal.SIGINT` signal. This function executes the corresponding Python "
+"signal handler, which, by default, raises the :exc:`KeyboardInterrupt` "
+"exception."
 msgstr ""
-"Funktionen försöker hantera alla väntande signaler och returnerar sedan "
-"``0``. Men om en Python-signalhanterare ger upphov till ett undantag, sätts "
-"felindikatorn och funktionen returnerar ``-1`` omedelbart (så att andra "
-"väntande signaler kanske inte har hanterats ännu: de kommer att hanteras vid "
-"nästa :c:func:`PyErr_CheckSignals()`-inkallning)."
 
-#: ../../c-api/exceptions.rst:689
+#: ../../c-api/exceptions.rst:685
 msgid ""
-"If the function is called from a non-main thread, or under a non-main Python "
-"interpreter, it does nothing and returns ``0``."
+":c:func:`!PyErr_CheckSignals` should be called by long-running C code "
+"frequently enough so that the response appears immediate to humans."
 msgstr ""
-"Om funktionen anropas från en tråd som inte är huvudtråd, eller under en "
-"Python-tolk som inte är huvudtråd, gör den ingenting och returnerar ``0``."
 
-#: ../../c-api/exceptions.rst:692
-msgid ""
-"This function can be called by long-running C code that wants to be "
-"interruptible by user requests (such as by pressing Ctrl-C)."
+#: ../../c-api/exceptions.rst:688
+msgid "Handlers invoked by this function currently include:"
 msgstr ""
-"Den här funktionen kan anropas av C-kod som körs under lång tid och som vill "
-"kunna avbrytas av användaren (t.ex. genom att trycka på Ctrl-C)."
 
-#: ../../c-api/exceptions.rst:696
+#: ../../c-api/exceptions.rst:690
 msgid ""
-"The default Python signal handler for :c:macro:`!SIGINT` raises the :exc:"
-"`KeyboardInterrupt` exception."
+"Signal handlers, including Python functions registered using the :mod:"
+"`signal` module."
 msgstr ""
-"Pythons standardsignalhanterare för :c:macro:`!SIGINT` ger upphov till "
-"undantaget :exc:`KeyboardInterrupt`."
+
+#: ../../c-api/exceptions.rst:693
+msgid ""
+"Signal handlers are only run in the main thread of the main interpreter."
+msgstr ""
+
+#: ../../c-api/exceptions.rst:695
+msgid ""
+"(This is where the function got the name: originally, signals were the only "
+"way to interrupt the interpreter.)"
+msgstr ""
+
+#: ../../c-api/exceptions.rst:698
+msgid "Running the garbage collector, if necessary."
+msgstr ""
+
+#: ../../c-api/exceptions.rst:700
+msgid "Executing a pending :ref:`remote debugger <remote-debugging>` script."
+msgstr ""
+
+#: ../../c-api/exceptions.rst:702
+msgid ""
+"If any handler raises an exception, immediately return ``-1`` with that "
+"exception set. Any remaining interruptions are left to be processed on the "
+"next :c:func:`PyErr_CheckSignals()` invocation, if appropriate."
+msgstr ""
 
 #: ../../c-api/exceptions.rst:707
+msgid ""
+"If all handlers finish successfully, or there are no handlers to run, return "
+"``0``."
+msgstr ""
+
+#: ../../c-api/exceptions.rst:710
+msgid "This function may now invoke the garbage collector."
+msgstr ""
+
+#: ../../c-api/exceptions.rst:713
+msgid ""
+"This function may now execute a remote debugger script, if remote debugging "
+"is enabled."
+msgstr ""
+
+#: ../../c-api/exceptions.rst:725
 msgid ""
 "Simulate the effect of a :c:macro:`!SIGINT` signal arriving. This is "
 "equivalent to ``PyErr_SetInterruptEx(SIGINT)``."
@@ -1066,7 +1085,7 @@ msgstr ""
 "Simulerar effekten av att en :c:macro:`!SIGINT`-signal anländer. Detta är "
 "likvärdigt med ``PyErr_SetInterruptEx(SIGINT)``."
 
-#: ../../c-api/exceptions.rst:711 ../../c-api/exceptions.rst:738
+#: ../../c-api/exceptions.rst:729 ../../c-api/exceptions.rst:756
 msgid ""
 "This function is async-signal-safe.  It can be called without an :term:"
 "`attached thread state` and from a C signal handler."
@@ -1074,7 +1093,7 @@ msgstr ""
 "Denna funktion är async-signal-säker.  Den kan anropas utan en :term:"
 "`attached thread state` och från en C-signalhanterare."
 
-#: ../../c-api/exceptions.rst:721
+#: ../../c-api/exceptions.rst:739
 msgid ""
 "Simulate the effect of a signal arriving. The next time :c:func:"
 "`PyErr_CheckSignals` is called,  the Python signal handler for the given "
@@ -1084,7 +1103,7 @@ msgstr ""
 "`PyErr_CheckSignals` anropas, kommer Python-signalhanteraren för det angivna "
 "signalnumret att anropas."
 
-#: ../../c-api/exceptions.rst:725
+#: ../../c-api/exceptions.rst:743
 msgid ""
 "This function can be called by C code that sets up its own signal handling "
 "and wants Python signal handlers to be invoked as expected when an "
@@ -1096,7 +1115,7 @@ msgstr ""
 "avbrott begärs (t.ex. när användaren trycker på Ctrl-C för att avbryta en "
 "operation)."
 
-#: ../../c-api/exceptions.rst:730
+#: ../../c-api/exceptions.rst:748
 msgid ""
 "If the given signal isn't handled by Python (it was set to :py:const:`signal."
 "SIG_DFL` or :py:const:`signal.SIG_IGN`), it will be ignored."
@@ -1104,7 +1123,7 @@ msgstr ""
 "Om den angivna signalen inte hanteras av Python (den var inställd på :py:"
 "const:`signal.SIG_DFL` eller :py:const:`signal.SIG_IGN`), ignoreras den."
 
-#: ../../c-api/exceptions.rst:733
+#: ../../c-api/exceptions.rst:751
 msgid ""
 "If *signum* is outside of the allowed range of signal numbers, ``-1`` is "
 "returned.  Otherwise, ``0`` is returned.  The error indicator is never "
@@ -1114,7 +1133,7 @@ msgstr ""
 "returneras ``-1``.  I annat fall returneras ``0``.  Felindikatorn ändras "
 "aldrig av denna funktion."
 
-#: ../../c-api/exceptions.rst:746
+#: ../../c-api/exceptions.rst:764
 msgid ""
 "This utility function specifies a file descriptor to which the signal number "
 "is written as a single byte whenever a signal is received. *fd* must be non-"
@@ -1124,7 +1143,7 @@ msgstr ""
 "signalnumret skrivs som en enda byte när en signal tas emot. *fd* måste vara "
 "icke-blockerande. Den returnerar den föregående sådana fildescriptorn."
 
-#: ../../c-api/exceptions.rst:750
+#: ../../c-api/exceptions.rst:768
 msgid ""
 "The value ``-1`` disables the feature; this is the initial state. This is "
 "equivalent to :func:`signal.set_wakeup_fd` in Python, but without any error "
@@ -1136,15 +1155,15 @@ msgstr ""
 "någon felkontroll.  *fd* bör vara en giltig filbeskrivare.  Funktionen bör "
 "endast anropas från huvudtråden."
 
-#: ../../c-api/exceptions.rst:755
+#: ../../c-api/exceptions.rst:773
 msgid "On Windows, the function now also supports socket handles."
 msgstr "I Windows stöder funktionen nu även socket-handtag."
 
-#: ../../c-api/exceptions.rst:760
+#: ../../c-api/exceptions.rst:778
 msgid "Exception Classes"
 msgstr "Undantagsklasser"
 
-#: ../../c-api/exceptions.rst:764
+#: ../../c-api/exceptions.rst:782
 msgid ""
 "This utility function creates and returns a new exception class. The *name* "
 "argument must be the name of the new exception, a C string of the form "
@@ -1158,7 +1177,7 @@ msgstr ""
 "``NULL``. Detta skapar ett klassobjekt som härrör från :exc:`Exception` "
 "(tillgängligt i C som :c:data:`PyExc_Exception`)."
 
-#: ../../c-api/exceptions.rst:770
+#: ../../c-api/exceptions.rst:788
 msgid ""
 "The :attr:`~type.__module__` attribute of the new class is set to the first "
 "part (up to the last dot) of the *name* argument, and the class name is set "
@@ -1174,7 +1193,7 @@ msgstr ""
 "antingen vara bara en klass eller en tupel av klasser. Argumentet *dict* kan "
 "användas för att ange en ordbok över klassens variabler och metoder."
 
-#: ../../c-api/exceptions.rst:779
+#: ../../c-api/exceptions.rst:797
 msgid ""
 "Same as :c:func:`PyErr_NewException`, except that the new exception class "
 "can easily be given a docstring: If *doc* is non-``NULL``, it will be used "
@@ -1184,7 +1203,7 @@ msgstr ""
 "enkelt kan ges en docstring: Om *doc* är icke-``NULL``, kommer den att "
 "användas som dokumentsträng för undantagsklassen."
 
-#: ../../c-api/exceptions.rst:788
+#: ../../c-api/exceptions.rst:806
 msgid ""
 "Return non-zero if *ob* is an exception class, zero otherwise. This function "
 "always succeeds."
@@ -1192,25 +1211,25 @@ msgstr ""
 "Returnerar icke-noll om *ob* är en undantagsklass, noll annars. Denna "
 "funktion lyckas alltid."
 
-#: ../../c-api/exceptions.rst:793
+#: ../../c-api/exceptions.rst:811
 msgid "Return :c:member:`~PyTypeObject.tp_name` of the exception class *ob*."
 msgstr "Returnerar :c:member:`~PyTypeObject.tp_name` i undantagsklassen *ob*."
 
-#: ../../c-api/exceptions.rst:797
+#: ../../c-api/exceptions.rst:815
 msgid "Exception Objects"
 msgstr "Objekt för undantag"
 
-#: ../../c-api/exceptions.rst:801
+#: ../../c-api/exceptions.rst:819
 msgid ""
 "Return true if *op* is an instance of :class:`BaseException`, false "
 "otherwise. This function always succeeds."
 msgstr ""
 
-#: ../../c-api/exceptions.rst:807
+#: ../../c-api/exceptions.rst:825
 msgid "Equivalent to :c:func:`Py_TYPE(op) <Py_TYPE>`."
 msgstr ""
 
-#: ../../c-api/exceptions.rst:812
+#: ../../c-api/exceptions.rst:830
 msgid ""
 "Return the traceback associated with the exception as a new reference, as "
 "accessible from Python through the :attr:`~BaseException.__traceback__` "
@@ -1221,7 +1240,7 @@ msgstr ""
 "__traceback__`. Om det inte finns någon traceback associerad, returneras "
 "``NULL``."
 
-#: ../../c-api/exceptions.rst:820
+#: ../../c-api/exceptions.rst:838
 msgid ""
 "Set the traceback associated with the exception to *tb*.  Use ``Py_None`` to "
 "clear it."
@@ -1229,7 +1248,7 @@ msgstr ""
 "Ställ in den traceback som är kopplad till undantaget till *tb*.  Använd "
 "``Py_None`` för att rensa det."
 
-#: ../../c-api/exceptions.rst:826
+#: ../../c-api/exceptions.rst:844
 msgid ""
 "Return the context (another exception instance during whose handling *ex* "
 "was raised) associated with the exception as a new reference, as accessible "
@@ -1241,7 +1260,7 @@ msgstr ""
 "tillgänglig från Python genom attributet :attr:`~BaseException.__context__`. "
 "Om det inte finns någon kontext associerad, returneras ``NULL``."
 
-#: ../../c-api/exceptions.rst:834
+#: ../../c-api/exceptions.rst:852
 msgid ""
 "Set the context associated with the exception to *ctx*.  Use ``NULL`` to "
 "clear it.  There is no type check to make sure that *ctx* is an exception "
@@ -1251,7 +1270,7 @@ msgstr ""
 "``NULL`` för att rensa den.  Det finns ingen typkontroll för att se till att "
 "*ctx* är en undantagsinstans. Detta stjäl en referens till *ctx*."
 
-#: ../../c-api/exceptions.rst:841
+#: ../../c-api/exceptions.rst:859
 msgid ""
 "Return the cause (either an exception instance, or ``None``, set by "
 "``raise ... from ...``) associated with the exception as a new reference, as "
@@ -1262,7 +1281,7 @@ msgstr ""
 "``raise ... from ...``) associerad med undantaget som en ny referens, som "
 "tillgänglig från Python genom attributet :attr:`~BaseException.__cause__`."
 
-#: ../../c-api/exceptions.rst:849
+#: ../../c-api/exceptions.rst:867
 msgid ""
 "Set the cause associated with the exception to *cause*.  Use ``NULL`` to "
 "clear it.  There is no type check to make sure that *cause* is either an "
@@ -1272,7 +1291,7 @@ msgstr ""
 "den.  Det finns ingen typkontroll för att se till att *cause* antingen är en "
 "undantagsinstans eller ``None``.  Detta stjäl en referens till *cause*."
 
-#: ../../c-api/exceptions.rst:853
+#: ../../c-api/exceptions.rst:871
 msgid ""
 "The :attr:`~BaseException.__suppress_context__` attribute is implicitly set "
 "to ``True`` by this function."
@@ -1280,15 +1299,15 @@ msgstr ""
 "Attributet :attr:`~BaseException.__suppress_context__` sätts implicit till "
 "``True`` av denna funktion."
 
-#: ../../c-api/exceptions.rst:859
+#: ../../c-api/exceptions.rst:877
 msgid "Return :attr:`~BaseException.args` of exception *ex*."
 msgstr "Returnera :attr:`~BaseException.args` för undantag *ex*."
 
-#: ../../c-api/exceptions.rst:864
+#: ../../c-api/exceptions.rst:882
 msgid "Set :attr:`~BaseException.args` of exception *ex* to *args*."
 msgstr "Ställ in :attr:`~BaseException.args` för undantag *ex* till *args*."
 
-#: ../../c-api/exceptions.rst:868
+#: ../../c-api/exceptions.rst:886
 msgid ""
 "Implement part of the interpreter's implementation of :keyword:`!except*`. "
 "*orig* is the original exception that was caught, and *excs* is the list of "
@@ -1308,11 +1327,11 @@ msgstr ""
 "`ExceptionGroup` som behöver återupplivas i slutet, eller ``None`` om det "
 "inte finns något att återuppliva."
 
-#: ../../c-api/exceptions.rst:882
+#: ../../c-api/exceptions.rst:900
 msgid "Unicode Exception Objects"
 msgstr "Objekt för Unicode-undantag"
 
-#: ../../c-api/exceptions.rst:884
+#: ../../c-api/exceptions.rst:902
 msgid ""
 "The following functions are used to create and modify Unicode exceptions "
 "from C."
@@ -1320,7 +1339,7 @@ msgstr ""
 "Följande funktioner används för att skapa och modifiera Unicode-undantag "
 "från C."
 
-#: ../../c-api/exceptions.rst:888
+#: ../../c-api/exceptions.rst:906
 msgid ""
 "Create a :class:`UnicodeDecodeError` object with the attributes *encoding*, "
 "*object*, *length*, *start*, *end* and *reason*. *encoding* and *reason* are "
@@ -1330,15 +1349,15 @@ msgstr ""
 "*object*, *length*, *start*, *end* och *reason*. *encoding* och *reason* är "
 "UTF-8-kodade strängar."
 
-#: ../../c-api/exceptions.rst:895
+#: ../../c-api/exceptions.rst:913
 msgid "Return the *encoding* attribute of the given exception object."
 msgstr "Returnerar *encoding*-attributet för det angivna undantagsobjektet."
 
-#: ../../c-api/exceptions.rst:901
+#: ../../c-api/exceptions.rst:919
 msgid "Return the *object* attribute of the given exception object."
 msgstr "Returnerar *object*-attributet för det angivna undantagsobjektet."
 
-#: ../../c-api/exceptions.rst:907
+#: ../../c-api/exceptions.rst:925
 msgid ""
 "Get the *start* attribute of the given exception object and place it into "
 "*\\*start*.  *start* must not be ``NULL``.  Return ``0`` on success, ``-1`` "
@@ -1348,7 +1367,7 @@ msgstr ""
 "*\\*start*.  *start* får inte vara ``NULL``.  Returnerar ``0`` vid framgång, "
 "``-1`` vid misslyckande."
 
-#: ../../c-api/exceptions.rst:911
+#: ../../c-api/exceptions.rst:929
 msgid ""
 "If the :attr:`UnicodeError.object` is an empty sequence, the resulting "
 "*start* is ``0``. Otherwise, it is clipped to ``[0, len(object) - 1]``."
@@ -1356,11 +1375,11 @@ msgstr ""
 "Om :attr:`UnicodeError.object` är en tom sekvens, är den resulterande "
 "*starten* ``0``. Annars klipps den till ``[0, len(object) - 1]``."
 
-#: ../../c-api/exceptions.rst:914
+#: ../../c-api/exceptions.rst:932
 msgid ":attr:`UnicodeError.start`"
 msgstr ":attr:`UnicodeError.start`"
 
-#: ../../c-api/exceptions.rst:920
+#: ../../c-api/exceptions.rst:938
 msgid ""
 "Set the *start* attribute of the given exception object to *start*. Return "
 "``0`` on success, ``-1`` on failure."
@@ -1368,7 +1387,7 @@ msgstr ""
 "Sätter attributet *start* för det angivna undantagsobjektet till *start*. "
 "Returnerar ``0`` vid framgång, ``-1`` vid misslyckande."
 
-#: ../../c-api/exceptions.rst:925
+#: ../../c-api/exceptions.rst:943
 msgid ""
 "While passing a negative *start* does not raise an exception, the "
 "corresponding getters will not consider it as a relative offset."
@@ -1376,7 +1395,7 @@ msgstr ""
 "Även om det inte leder till något undantag att skicka en negativ *start*, "
 "kommer motsvarande getters inte att betrakta den som en relativ offset."
 
-#: ../../c-api/exceptions.rst:933
+#: ../../c-api/exceptions.rst:951
 msgid ""
 "Get the *end* attribute of the given exception object and place it into "
 "*\\*end*.  *end* must not be ``NULL``.  Return ``0`` on success, ``-1`` on "
@@ -1386,7 +1405,7 @@ msgstr ""
 "*\\*end*.  *end* får inte vara ``NULL``.  Returnerar ``0`` vid framgång, "
 "``-1`` vid misslyckande."
 
-#: ../../c-api/exceptions.rst:937
+#: ../../c-api/exceptions.rst:955
 msgid ""
 "If the :attr:`UnicodeError.object` is an empty sequence, the resulting *end* "
 "is ``0``. Otherwise, it is clipped to ``[1, len(object)]``."
@@ -1394,7 +1413,7 @@ msgstr ""
 "Om :attr:`UnicodeError.object` är en tom sekvens, blir det resulterande "
 "*slutet* ``0``. Annars klipps den till ``[1, len(object)]``."
 
-#: ../../c-api/exceptions.rst:944
+#: ../../c-api/exceptions.rst:962
 msgid ""
 "Set the *end* attribute of the given exception object to *end*.  Return "
 "``0`` on success, ``-1`` on failure."
@@ -1402,15 +1421,15 @@ msgstr ""
 "Sätter attributet *end* för det angivna undantagsobjektet till *end*.  "
 "Returnerar ``0`` vid framgång, ``-1`` vid misslyckande."
 
-#: ../../c-api/exceptions.rst:947
+#: ../../c-api/exceptions.rst:965
 msgid ":attr:`UnicodeError.end`"
 msgstr ":attr:`UnicodeError.end`"
 
-#: ../../c-api/exceptions.rst:953
+#: ../../c-api/exceptions.rst:971
 msgid "Return the *reason* attribute of the given exception object."
 msgstr "Returnerar attributet *reason* för det angivna undantagsobjektet."
 
-#: ../../c-api/exceptions.rst:959
+#: ../../c-api/exceptions.rst:977
 msgid ""
 "Set the *reason* attribute of the given exception object to *reason*.  "
 "Return ``0`` on success, ``-1`` on failure."
@@ -1418,11 +1437,11 @@ msgstr ""
 "Sätter attributet *reason* för det angivna undantagsobjektet till *reason*.  "
 "Returnerar ``0`` vid framgång, ``-1`` vid misslyckande."
 
-#: ../../c-api/exceptions.rst:966
+#: ../../c-api/exceptions.rst:984
 msgid "Recursion Control"
 msgstr "Kontroll av rekursion"
 
-#: ../../c-api/exceptions.rst:968
+#: ../../c-api/exceptions.rst:986
 msgid ""
 "These two functions provide a way to perform safe recursive calls at the C "
 "level, both in the core and in extension modules.  They are needed if the "
@@ -1437,12 +1456,12 @@ msgstr ""
 "automatiskt). De behövs inte heller för *tp_call*-implementeringar eftersom :"
 "ref:`call protocol <call>` tar hand om rekursionshanteringen."
 
-#: ../../c-api/exceptions.rst:977
+#: ../../c-api/exceptions.rst:995
 msgid "Marks a point where a recursive C-level call is about to be performed."
 msgstr ""
 "Markerar en punkt där ett rekursivt anrop på C-nivå är på väg att utföras."
 
-#: ../../c-api/exceptions.rst:979
+#: ../../c-api/exceptions.rst:997
 msgid ""
 "The function then checks if the stack limit is reached.  If this is the "
 "case, a :exc:`RecursionError` is set and a nonzero value is returned. "
@@ -1452,7 +1471,7 @@ msgstr ""
 "anges ett :exc:`RecursionError` och ett värde som inte är noll returneras. "
 "Annars returneras noll."
 
-#: ../../c-api/exceptions.rst:983
+#: ../../c-api/exceptions.rst:1001
 msgid ""
 "*where* should be a UTF-8 encoded string such as ``\" in instance check\"`` "
 "to be concatenated to the :exc:`RecursionError` message caused by the "
@@ -1462,18 +1481,18 @@ msgstr ""
 "konkateneras till meddelandet :exc:`RecursionError` som orsakas av gränsen "
 "för rekursionsdjup."
 
-#: ../../c-api/exceptions.rst:988
+#: ../../c-api/exceptions.rst:1006
 msgid "The :c:func:`PyUnstable_ThreadState_SetStackProtection` function."
 msgstr ""
 
-#: ../../c-api/exceptions.rst:990 ../../c-api/exceptions.rst:998
+#: ../../c-api/exceptions.rst:1008 ../../c-api/exceptions.rst:1016
 msgid ""
 "This function is now also available in the :ref:`limited API <limited-c-"
 "api>`."
 msgstr ""
 "Denna funktion är nu också tillgänglig i :ref:``limited API <limited-c-api>`."
 
-#: ../../c-api/exceptions.rst:995
+#: ../../c-api/exceptions.rst:1013
 msgid ""
 "Ends a :c:func:`Py_EnterRecursiveCall`.  Must be called once for each "
 "*successful* invocation of :c:func:`Py_EnterRecursiveCall`."
@@ -1481,7 +1500,7 @@ msgstr ""
 "Avslutar en :c:func:`Py_EnterRecursiveCall`.  Måste anropas en gång för "
 "varje *lyckad* anrop av :c:func:`Py_EnterRecursiveCall`."
 
-#: ../../c-api/exceptions.rst:1001
+#: ../../c-api/exceptions.rst:1019
 msgid ""
 "Properly implementing :c:member:`~PyTypeObject.tp_repr` for container types "
 "requires special recursion handling.  In addition to protecting the stack, :"
@@ -1496,7 +1515,7 @@ msgstr ""
 "funktionalitet.  I praktiken är dessa C-motsvarigheten till :func:`reprlib."
 "recursive_repr`."
 
-#: ../../c-api/exceptions.rst:1009
+#: ../../c-api/exceptions.rst:1027
 msgid ""
 "Called at the beginning of the :c:member:`~PyTypeObject.tp_repr` "
 "implementation to detect cycles."
@@ -1504,7 +1523,7 @@ msgstr ""
 "Anropas i början av :c:member:`~PyTypeObject.tp_repr`-implementeringen för "
 "att upptäcka cykler."
 
-#: ../../c-api/exceptions.rst:1012
+#: ../../c-api/exceptions.rst:1030
 msgid ""
 "If the object has already been processed, the function returns a positive "
 "integer.  In that case the :c:member:`~PyTypeObject.tp_repr` implementation "
@@ -1517,7 +1536,7 @@ msgstr ""
 "`dict`-objekt returnerar ``{...}`` och :class:`list`-objekt returnerar "
 "``[...]``."
 
-#: ../../c-api/exceptions.rst:1018
+#: ../../c-api/exceptions.rst:1036
 msgid ""
 "The function will return a negative integer if the recursion limit is "
 "reached.  In that case the :c:member:`~PyTypeObject.tp_repr` implementation "
@@ -1527,7 +1546,7 @@ msgstr ""
 "så fall bör implementeringen :c:member:`~PyTypeObject.tp_repr` typiskt "
 "returnera ``NULL``."
 
-#: ../../c-api/exceptions.rst:1022
+#: ../../c-api/exceptions.rst:1040
 msgid ""
 "Otherwise, the function returns zero and the :c:member:`~PyTypeObject."
 "tp_repr` implementation can continue normally."
@@ -1535,7 +1554,7 @@ msgstr ""
 "I annat fall returnerar funktionen noll och :c:member:`~PyTypeObject."
 "tp_repr`-implementeringen kan fortsätta normalt."
 
-#: ../../c-api/exceptions.rst:1027
+#: ../../c-api/exceptions.rst:1045
 msgid ""
 "Ends a :c:func:`Py_ReprEnter`.  Must be called once for each invocation of :"
 "c:func:`Py_ReprEnter` that returns zero."
@@ -1543,36 +1562,36 @@ msgstr ""
 "Avslutar en :c:func:`Py_ReprEnter`.  Måste anropas en gång för varje anrop "
 "av :c:func:`Py_ReprEnter` som returnerar noll."
 
-#: ../../c-api/exceptions.rst:1032
+#: ../../c-api/exceptions.rst:1050
 msgid ""
 "Get the recursion limit for the current interpreter. It can be set with :c:"
 "func:`Py_SetRecursionLimit`. The recursion limit prevents the Python "
 "interpreter stack from growing infinitely."
 msgstr ""
 
-#: ../../c-api/exceptions.rst:1036 ../../c-api/exceptions.rst:1046
+#: ../../c-api/exceptions.rst:1054 ../../c-api/exceptions.rst:1064
 msgid ""
 "This function cannot fail, and the caller must hold an :term:`attached "
 "thread state`."
 msgstr ""
 
-#: ../../c-api/exceptions.rst:1040
+#: ../../c-api/exceptions.rst:1058
 msgid ":py:func:`sys.getrecursionlimit`"
 msgstr ""
 
-#: ../../c-api/exceptions.rst:1044
+#: ../../c-api/exceptions.rst:1062
 msgid "Set the recursion limit for the current interpreter."
 msgstr ""
 
-#: ../../c-api/exceptions.rst:1050
+#: ../../c-api/exceptions.rst:1068
 msgid ":py:func:`sys.setrecursionlimit`"
 msgstr ""
 
-#: ../../c-api/exceptions.rst:1055
+#: ../../c-api/exceptions.rst:1073
 msgid "Exception and warning types"
 msgstr "Typer av undantag och varningar"
 
-#: ../../c-api/exceptions.rst:1057
+#: ../../c-api/exceptions.rst:1075
 msgid ""
 "All standard Python exceptions and warning categories are available as "
 "global variables whose names are ``PyExc_`` followed by the Python exception "
@@ -1582,246 +1601,246 @@ msgstr ""
 "globala variabler vars namn är ``PyExc_`` följt av Pythons undantagsnamn. "
 "Dessa har typen :c:expr:`PyObject*`; de är alla klassobjekt."
 
-#: ../../c-api/exceptions.rst:1061
+#: ../../c-api/exceptions.rst:1079
 msgid "For completeness, here are all the variables:"
 msgstr "För fullständighetens skull, här är alla variabler:"
 
-#: ../../c-api/exceptions.rst:1064
+#: ../../c-api/exceptions.rst:1082
 msgid "Exception types"
 msgstr "Typer av undantag"
 
-#: ../../c-api/exceptions.rst:1071 ../../c-api/exceptions.rst:1217
-#: ../../c-api/exceptions.rst:1247
+#: ../../c-api/exceptions.rst:1089 ../../c-api/exceptions.rst:1235
+#: ../../c-api/exceptions.rst:1265
 msgid "C name"
 msgstr "C-namn"
 
-#: ../../c-api/exceptions.rst:1072 ../../c-api/exceptions.rst:1218
-#: ../../c-api/exceptions.rst:1248
+#: ../../c-api/exceptions.rst:1090 ../../c-api/exceptions.rst:1236
+#: ../../c-api/exceptions.rst:1266
 msgid "Python name"
 msgstr "Python-namn"
 
-#: ../../c-api/exceptions.rst:1074
+#: ../../c-api/exceptions.rst:1092
 msgid ":exc:`BaseException`"
 msgstr ":exc:`BaseException`"
 
-#: ../../c-api/exceptions.rst:1076
+#: ../../c-api/exceptions.rst:1094
 msgid ":exc:`BaseExceptionGroup`"
 msgstr ":exc:`BaseExceptionGroup`"
 
-#: ../../c-api/exceptions.rst:1078
+#: ../../c-api/exceptions.rst:1096
 msgid ":exc:`Exception`"
 msgstr ":exc:`Untantagande`"
 
-#: ../../c-api/exceptions.rst:1080
+#: ../../c-api/exceptions.rst:1098
 msgid ":exc:`ArithmeticError`"
 msgstr ":exc:`Aritmetiskt fel`"
 
-#: ../../c-api/exceptions.rst:1082
+#: ../../c-api/exceptions.rst:1100
 msgid ":exc:`AssertionError`"
 msgstr ":exc:`AssertionError`"
 
-#: ../../c-api/exceptions.rst:1084
+#: ../../c-api/exceptions.rst:1102
 msgid ":exc:`AttributeError`"
 msgstr ":exc:`AttributeError`"
 
-#: ../../c-api/exceptions.rst:1086
+#: ../../c-api/exceptions.rst:1104
 msgid ":exc:`BlockingIOError`"
 msgstr ":exc:`BlockingIOError`"
 
-#: ../../c-api/exceptions.rst:1088
+#: ../../c-api/exceptions.rst:1106
 msgid ":exc:`BrokenPipeError`"
 msgstr ":exc:`BrokenPipeError`"
 
-#: ../../c-api/exceptions.rst:1090
+#: ../../c-api/exceptions.rst:1108
 msgid ":exc:`BufferError`"
 msgstr ":exc:`BufferError`"
 
-#: ../../c-api/exceptions.rst:1092
+#: ../../c-api/exceptions.rst:1110
 msgid ":exc:`ChildProcessError`"
 msgstr ":exc:`ChildProcessError`"
 
-#: ../../c-api/exceptions.rst:1094
+#: ../../c-api/exceptions.rst:1112
 msgid ":exc:`ConnectionAbortedError`"
 msgstr ":exc:`Fel vid avbruten anslutning`"
 
-#: ../../c-api/exceptions.rst:1096
+#: ../../c-api/exceptions.rst:1114
 msgid ":exc:`ConnectionError`"
 msgstr ":exc:`AnslutningFel`"
 
-#: ../../c-api/exceptions.rst:1098
+#: ../../c-api/exceptions.rst:1116
 msgid ":exc:`ConnectionRefusedError`"
 msgstr ":exc:`AnslutningRefusedError`"
 
-#: ../../c-api/exceptions.rst:1100
+#: ../../c-api/exceptions.rst:1118
 msgid ":exc:`ConnectionResetError`"
 msgstr ":exc:`Fel vid återställning av anslutning`"
 
-#: ../../c-api/exceptions.rst:1102
+#: ../../c-api/exceptions.rst:1120
 msgid ":exc:`EOFError`"
 msgstr ":exc:`EOFError`"
 
-#: ../../c-api/exceptions.rst:1104
+#: ../../c-api/exceptions.rst:1122
 msgid ":exc:`FileExistsError`"
 msgstr ":exc:`FileExistsError`"
 
-#: ../../c-api/exceptions.rst:1106
+#: ../../c-api/exceptions.rst:1124
 msgid ":exc:`FileNotFoundError`"
 msgstr ":exc:`FileNotFoundError`"
 
-#: ../../c-api/exceptions.rst:1108
+#: ../../c-api/exceptions.rst:1126
 msgid ":exc:`FloatingPointError`"
 msgstr ":exc:`FloatingPointError`"
 
-#: ../../c-api/exceptions.rst:1110
+#: ../../c-api/exceptions.rst:1128
 msgid ":exc:`GeneratorExit`"
 msgstr ":exc:`GeneratorExit`"
 
-#: ../../c-api/exceptions.rst:1112
+#: ../../c-api/exceptions.rst:1130
 msgid ":exc:`ImportError`"
 msgstr ":exc:`ImportError`"
 
-#: ../../c-api/exceptions.rst:1114
+#: ../../c-api/exceptions.rst:1132
 msgid ":exc:`IndentationError`"
 msgstr ":exc:`IndentationError`"
 
-#: ../../c-api/exceptions.rst:1116
+#: ../../c-api/exceptions.rst:1134
 msgid ":exc:`IndexError`"
 msgstr ":exc:`IndexError`"
 
-#: ../../c-api/exceptions.rst:1118
+#: ../../c-api/exceptions.rst:1136
 msgid ":exc:`InterruptedError`"
 msgstr ":exc:`AvbrutetFel`"
 
-#: ../../c-api/exceptions.rst:1120
+#: ../../c-api/exceptions.rst:1138
 msgid ":exc:`IsADirectoryError`"
 msgstr ":exc:`IsADirectoryError`"
 
-#: ../../c-api/exceptions.rst:1122
+#: ../../c-api/exceptions.rst:1140
 msgid ":exc:`KeyError`"
 msgstr ":exc:`KeyError`"
 
-#: ../../c-api/exceptions.rst:1124
+#: ../../c-api/exceptions.rst:1142
 msgid ":exc:`KeyboardInterrupt`"
 msgstr ":exc:`KeyboardInterrupt`"
 
-#: ../../c-api/exceptions.rst:1126
+#: ../../c-api/exceptions.rst:1144
 msgid ":exc:`LookupError`"
 msgstr ":exc:`LookupError`"
 
-#: ../../c-api/exceptions.rst:1128
+#: ../../c-api/exceptions.rst:1146
 msgid ":exc:`MemoryError`"
 msgstr ":exc:`MemoryError`"
 
-#: ../../c-api/exceptions.rst:1130
+#: ../../c-api/exceptions.rst:1148
 msgid ":exc:`ModuleNotFoundError`"
 msgstr ":exc:`ModuleNotFoundError`"
 
-#: ../../c-api/exceptions.rst:1132
+#: ../../c-api/exceptions.rst:1150
 msgid ":exc:`NameError`"
 msgstr ":exc:`NamnFel`"
 
-#: ../../c-api/exceptions.rst:1134
+#: ../../c-api/exceptions.rst:1152
 msgid ":exc:`NotADirectoryError`"
 msgstr ":exc:`NotADirectoryError`"
 
-#: ../../c-api/exceptions.rst:1136
+#: ../../c-api/exceptions.rst:1154
 msgid ":exc:`NotImplementedError`"
 msgstr ":exc:`NotImplementedError`"
 
-#: ../../c-api/exceptions.rst:1138 ../../c-api/exceptions.rst:1221
-#: ../../c-api/exceptions.rst:1224 ../../c-api/exceptions.rst:1227
+#: ../../c-api/exceptions.rst:1156 ../../c-api/exceptions.rst:1239
+#: ../../c-api/exceptions.rst:1242 ../../c-api/exceptions.rst:1245
 msgid ":exc:`OSError`"
 msgstr ":exc:`OSError`"
 
-#: ../../c-api/exceptions.rst:1140
+#: ../../c-api/exceptions.rst:1158
 msgid ":exc:`OverflowError`"
 msgstr ":exc:`OverflowError`"
 
-#: ../../c-api/exceptions.rst:1142
+#: ../../c-api/exceptions.rst:1160
 msgid ":exc:`PermissionError`"
 msgstr ":exc:`PermissionError`"
 
-#: ../../c-api/exceptions.rst:1144
+#: ../../c-api/exceptions.rst:1162
 msgid ":exc:`ProcessLookupError`"
 msgstr ":exc:`ProcessLookupError`"
 
-#: ../../c-api/exceptions.rst:1146
+#: ../../c-api/exceptions.rst:1164
 msgid ":exc:`PythonFinalizationError`"
 msgstr ":exc:`PythonFinalizationError`"
 
-#: ../../c-api/exceptions.rst:1148
+#: ../../c-api/exceptions.rst:1166
 msgid ":exc:`RecursionError`"
 msgstr ":exc:`RecursionError`"
 
-#: ../../c-api/exceptions.rst:1150
+#: ../../c-api/exceptions.rst:1168
 msgid ":exc:`ReferenceError`"
 msgstr ":exc:`ReferenceError`"
 
-#: ../../c-api/exceptions.rst:1152
+#: ../../c-api/exceptions.rst:1170
 msgid ":exc:`RuntimeError`"
 msgstr ":exc:`RuntimeError`"
 
-#: ../../c-api/exceptions.rst:1154
+#: ../../c-api/exceptions.rst:1172
 msgid ":exc:`StopAsyncIteration`"
 msgstr ":exc:`StopAsyncIteration`"
 
-#: ../../c-api/exceptions.rst:1156
+#: ../../c-api/exceptions.rst:1174
 msgid ":exc:`StopIteration`"
 msgstr ":exc:`StopIteration`"
 
-#: ../../c-api/exceptions.rst:1158
+#: ../../c-api/exceptions.rst:1176
 msgid ":exc:`SyntaxError`"
 msgstr ":exc:`SyntaxError`"
 
-#: ../../c-api/exceptions.rst:1160
+#: ../../c-api/exceptions.rst:1178
 msgid ":exc:`SystemError`"
 msgstr ":exc:`Systemfel`"
 
-#: ../../c-api/exceptions.rst:1162
+#: ../../c-api/exceptions.rst:1180
 msgid ":exc:`SystemExit`"
 msgstr ":exc:`SystemExit`"
 
-#: ../../c-api/exceptions.rst:1164
+#: ../../c-api/exceptions.rst:1182
 msgid ":exc:`TabError`"
 msgstr ":exc:`TabError`"
 
-#: ../../c-api/exceptions.rst:1166
+#: ../../c-api/exceptions.rst:1184
 msgid ":exc:`TimeoutError`"
 msgstr ":exc:`TimeoutError`"
 
-#: ../../c-api/exceptions.rst:1168
+#: ../../c-api/exceptions.rst:1186
 msgid ":exc:`TypeError`"
 msgstr ":exc:`TypeError`"
 
-#: ../../c-api/exceptions.rst:1170
+#: ../../c-api/exceptions.rst:1188
 msgid ":exc:`UnboundLocalError`"
 msgstr ":exc:`UnboundLocalError`"
 
-#: ../../c-api/exceptions.rst:1172
+#: ../../c-api/exceptions.rst:1190
 msgid ":exc:`UnicodeDecodeError`"
 msgstr ":exc:`UnicodeDecodeError`"
 
-#: ../../c-api/exceptions.rst:1174
+#: ../../c-api/exceptions.rst:1192
 msgid ":exc:`UnicodeEncodeError`"
 msgstr ":exc:`UnicodeEncodeError`"
 
-#: ../../c-api/exceptions.rst:1176
+#: ../../c-api/exceptions.rst:1194
 msgid ":exc:`UnicodeError`"
 msgstr ":exc:`UnicodeError`"
 
-#: ../../c-api/exceptions.rst:1178
+#: ../../c-api/exceptions.rst:1196
 msgid ":exc:`UnicodeTranslateError`"
 msgstr ":exc:`UnicodeTranslateError`"
 
-#: ../../c-api/exceptions.rst:1180
+#: ../../c-api/exceptions.rst:1198
 msgid ":exc:`ValueError`"
 msgstr ":exc:`ValueError`"
 
-#: ../../c-api/exceptions.rst:1182
+#: ../../c-api/exceptions.rst:1200
 msgid ":exc:`ZeroDivisionError`"
 msgstr ":exc:`ZeroDivisionError`"
 
-#: ../../c-api/exceptions.rst:1184
+#: ../../c-api/exceptions.rst:1202
 msgid ""
 ":c:data:`PyExc_BlockingIOError`, :c:data:`PyExc_BrokenPipeError`, :c:data:"
 "`PyExc_ChildProcessError`, :c:data:`PyExc_ConnectionError`, :c:data:"
@@ -1841,43 +1860,43 @@ msgstr ""
 "`PyExc_PermissionError`, :c:data:`PyExc_ProcessLookupError` och :c:data:"
 "`PyExc_TimeoutError` infördes enligt :pep:`3151`."
 
-#: ../../c-api/exceptions.rst:1194
+#: ../../c-api/exceptions.rst:1212
 msgid ":c:data:`PyExc_StopAsyncIteration` and :c:data:`PyExc_RecursionError`."
 msgstr ":c:data:`PyExc_StopAsyncIteration` och :c:data:`PyExc_RecursionError`."
 
-#: ../../c-api/exceptions.rst:1197
+#: ../../c-api/exceptions.rst:1215
 msgid ":c:data:`PyExc_ModuleNotFoundError`."
 msgstr ":c:data:`PyExc_ModuleNotFoundError`."
 
-#: ../../c-api/exceptions.rst:1200
+#: ../../c-api/exceptions.rst:1218
 msgid ":c:data:`PyExc_BaseExceptionGroup`."
 msgstr ":c:data:`PyExc_BaseExceptionGroup`."
 
-#: ../../c-api/exceptions.rst:1205
+#: ../../c-api/exceptions.rst:1223
 msgid "OSError aliases"
 msgstr "OSError-aliaser"
 
-#: ../../c-api/exceptions.rst:1207
+#: ../../c-api/exceptions.rst:1225
 msgid "The following are a compatibility aliases to :c:data:`PyExc_OSError`."
 msgstr "Följande är kompatibla alias till :c:data:`PyExc_OSError`."
 
-#: ../../c-api/exceptions.rst:1209
+#: ../../c-api/exceptions.rst:1227
 msgid "These aliases used to be separate exception types."
 msgstr "Dessa alias brukade tidigare vara separata undantagstyper."
 
-#: ../../c-api/exceptions.rst:1219
+#: ../../c-api/exceptions.rst:1237
 msgid "Notes"
 msgstr "Anteckningar"
 
-#: ../../c-api/exceptions.rst:1228
+#: ../../c-api/exceptions.rst:1246
 msgid "[win]_"
 msgstr "[win]_"
 
-#: ../../c-api/exceptions.rst:1230
+#: ../../c-api/exceptions.rst:1248
 msgid "Notes:"
 msgstr "Anteckningar:"
 
-#: ../../c-api/exceptions.rst:1233
+#: ../../c-api/exceptions.rst:1251
 msgid ""
 ":c:var:`!PyExc_WindowsError` is only defined on Windows; protect code that "
 "uses this by testing that the preprocessor macro ``MS_WINDOWS`` is defined."
@@ -1886,99 +1905,99 @@ msgstr ""
 "använder detta genom att testa att preprocessormakrot ``MS_WINDOWS`` är "
 "definierat."
 
-#: ../../c-api/exceptions.rst:1240
+#: ../../c-api/exceptions.rst:1258
 msgid "Warning types"
 msgstr "Typer av varningar"
 
-#: ../../c-api/exceptions.rst:1250
+#: ../../c-api/exceptions.rst:1268
 msgid ":exc:`Warning`"
 msgstr ":exc:`Varning`"
 
-#: ../../c-api/exceptions.rst:1252
+#: ../../c-api/exceptions.rst:1270
 msgid ":exc:`BytesWarning`"
 msgstr ":exc:`BytesWarning`"
 
-#: ../../c-api/exceptions.rst:1254
+#: ../../c-api/exceptions.rst:1272
 msgid ":exc:`DeprecationWarning`"
 msgstr ":exc:`DeprecationWarning`"
 
-#: ../../c-api/exceptions.rst:1256
+#: ../../c-api/exceptions.rst:1274
 msgid ":exc:`EncodingWarning`"
 msgstr ":exc:`EncodingWarning`"
 
-#: ../../c-api/exceptions.rst:1258
+#: ../../c-api/exceptions.rst:1276
 msgid ":exc:`FutureWarning`"
 msgstr ":exc:`FutureWarning`"
 
-#: ../../c-api/exceptions.rst:1260
+#: ../../c-api/exceptions.rst:1278
 msgid ":exc:`ImportWarning`"
 msgstr ":exc:`ImportWarning`"
 
-#: ../../c-api/exceptions.rst:1262
+#: ../../c-api/exceptions.rst:1280
 msgid ":exc:`PendingDeprecationWarning`"
 msgstr ":exc:`PendingDeprecationWarning`"
 
-#: ../../c-api/exceptions.rst:1264
+#: ../../c-api/exceptions.rst:1282
 msgid ":exc:`ResourceWarning`"
 msgstr ":exc:`ResourceWarning`"
 
-#: ../../c-api/exceptions.rst:1266
+#: ../../c-api/exceptions.rst:1284
 msgid ":exc:`RuntimeWarning`"
 msgstr ":exc:`RuntimeWarning`"
 
-#: ../../c-api/exceptions.rst:1268
+#: ../../c-api/exceptions.rst:1286
 msgid ":exc:`SyntaxWarning`"
 msgstr ":exc:`SyntaxWarning`"
 
-#: ../../c-api/exceptions.rst:1270
+#: ../../c-api/exceptions.rst:1288
 msgid ":exc:`UnicodeWarning`"
 msgstr ":exc:`UnicodeWarning`"
 
-#: ../../c-api/exceptions.rst:1272
+#: ../../c-api/exceptions.rst:1290
 msgid ":exc:`UserWarning`"
 msgstr ":exc:`UserWarning`"
 
-#: ../../c-api/exceptions.rst:1274
+#: ../../c-api/exceptions.rst:1292
 msgid ":c:data:`PyExc_ResourceWarning`."
 msgstr ":c:data:`PyExc_ResourceWarning`."
 
-#: ../../c-api/exceptions.rst:1277
+#: ../../c-api/exceptions.rst:1295
 msgid ":c:data:`PyExc_EncodingWarning`."
 msgstr ":c:data:`PyExc_EncodingWarning`."
 
-#: ../../c-api/exceptions.rst:1282
+#: ../../c-api/exceptions.rst:1300
 msgid "Tracebacks"
 msgstr ""
 
-#: ../../c-api/exceptions.rst:1286
+#: ../../c-api/exceptions.rst:1304
 msgid ""
 "Type object for traceback objects. This is available as :class:`types."
 "TracebackType` in the Python layer."
 msgstr ""
 
-#: ../../c-api/exceptions.rst:1292
+#: ../../c-api/exceptions.rst:1310
 msgid ""
 "Return true if *op* is a traceback object, false otherwise. This function "
 "does not account for subtypes."
 msgstr ""
 
-#: ../../c-api/exceptions.rst:1298
+#: ../../c-api/exceptions.rst:1316
 msgid ""
 "Replace the :attr:`~BaseException.__traceback__` attribute on the current "
 "exception with a new traceback prepending *f* to the existing chain."
 msgstr ""
 
-#: ../../c-api/exceptions.rst:1301
+#: ../../c-api/exceptions.rst:1319
 msgid "Calling this function without an exception set is undefined behavior."
 msgstr ""
 
-#: ../../c-api/exceptions.rst:1303 ../../c-api/exceptions.rst:1311
+#: ../../c-api/exceptions.rst:1321 ../../c-api/exceptions.rst:1329
 msgid ""
 "This function returns ``0`` on success, and returns ``-1`` with an exception "
 "set on failure."
 msgstr ""
 
-#: ../../c-api/exceptions.rst:1309
+#: ../../c-api/exceptions.rst:1327
 msgid "Write the traceback *tb* into the file *f*."
 msgstr ""
 
@@ -1986,21 +2005,21 @@ msgstr ""
 msgid "strerror (C function)"
 msgstr "strerror (C-funktion)"
 
-#: ../../c-api/exceptions.rst:671 ../../c-api/exceptions.rst:702
-#: ../../c-api/exceptions.rst:717
+#: ../../c-api/exceptions.rst:671 ../../c-api/exceptions.rst:720
+#: ../../c-api/exceptions.rst:735
 msgid "module"
 msgstr "modul"
 
-#: ../../c-api/exceptions.rst:671 ../../c-api/exceptions.rst:702
-#: ../../c-api/exceptions.rst:717
+#: ../../c-api/exceptions.rst:671 ../../c-api/exceptions.rst:720
+#: ../../c-api/exceptions.rst:735
 msgid "signal"
 msgstr "signal"
 
-#: ../../c-api/exceptions.rst:671 ../../c-api/exceptions.rst:702
+#: ../../c-api/exceptions.rst:671 ../../c-api/exceptions.rst:720
 msgid "SIGINT (C macro)"
 msgstr "SIGINT (C-makro)"
 
-#: ../../c-api/exceptions.rst:671 ../../c-api/exceptions.rst:702
-#: ../../c-api/exceptions.rst:717
+#: ../../c-api/exceptions.rst:671 ../../c-api/exceptions.rst:720
+#: ../../c-api/exceptions.rst:735
 msgid "KeyboardInterrupt (built-in exception)"
 msgstr "KeyboardInterrupt (inbyggt undantag)"
