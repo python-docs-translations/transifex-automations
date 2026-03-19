@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-17 14:51+0000\n"
+"POT-Creation-Date: 2026-03-19 14:42+0000\n"
 "PO-Revision-Date: 2026-02-27 14:38+0000\n"
 "Last-Translator: Freesand Leo <yuqinju@163.com>, 2026\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/python-doc/"
@@ -70,6 +70,8 @@ msgid ""
 "state in an unsynchronized way and must only be called from a single thread "
 "throughout the program's lifetime."
 msgstr ""
+"即便使用外部同步化也无法确保并发使用安全性的函数或操作。 不兼容的代码通常会以"
+"非同步方式访问全局状态并且在整个程序生命周期中只能从一个线程调用。"
 
 #: ../../library/threadsafety.rst:35
 msgid ""
@@ -77,10 +79,12 @@ msgid ""
 "or environment variables, where concurrent calls from any threads, even with "
 "external locking, can conflict with the runtime or other libraries."
 msgstr ""
+"例如：会修改进程级状态如信号处理器或环境变量的函数，当从任意线程调用时，即便"
+"使用了外部锁机制，也可能与运行时或其他库发生冲突。"
 
 #: ../../library/threadsafety.rst:42
 msgid "Compatible"
-msgstr ""
+msgstr "兼容的"
 
 #: ../../library/threadsafety.rst:44
 msgid ""
@@ -90,6 +94,9 @@ msgid ""
 "such synchronization, concurrent calls may produce :term:`race conditions "
 "<race condition>` or :term:`data races <data race>`."
 msgstr ""
+"*只要* 调用方提供了适当的外部同步化，例如通过在每次调用期间持有 :term:`lock` "
+"锁，即可安全地从多个线程调用的函数或操作。 没有这样的同步化，并发调用可能会产"
+"生 :term:`竞争条件 <race condition>` 或 :term:`数据竞争 <data race>`。"
 
 #: ../../library/threadsafety.rst:50
 msgid ""
@@ -97,10 +104,12 @@ msgid ""
 "state is not protected by a lock. Callers must ensure that no two threads "
 "access the same object at the same time."
 msgstr ""
+"例如：针对一个内部状态没有锁保护的对象执行读取或写入的函数。 调用方必须确保不"
+"会有两个线程同时访问同一个对象。"
 
 #: ../../library/threadsafety.rst:57
 msgid "Safe on distinct objects"
-msgstr ""
+msgstr "在单独对象上安全"
 
 #: ../../library/threadsafety.rst:59
 msgid ""
@@ -110,6 +119,9 @@ msgid ""
 "not pass the same object (or objects that share underlying state) as "
 "arguments."
 msgstr ""
+"只要每个线程是在 **不同** 对象上操作，即可安全地从多个线程调用的函数或操作。 "
+"两个线程可以同时调用该函数，但它们不能传入同一个对象（或共享底层状态的不同对"
+"象）作为参数。"
 
 #: ../../library/threadsafety.rst:65
 msgid ""
@@ -118,10 +130,13 @@ msgid ""
 "safely, but concurrent calls on the *same* instance require external "
 "synchronization."
 msgstr ""
+"例如：使用非原子化写入来修改一个结构体的字段的函数。 两个线程可以分别在它们各"
+"自的结构体实例上安全地调用该函数，但在 *相同* 实例上并发调用则需要外部同步"
+"化。"
 
 #: ../../library/threadsafety.rst:73
 msgid "Safe on shared objects"
-msgstr ""
+msgstr "在共享对象上安全"
 
 #: ../../library/threadsafety.rst:75
 msgid ""
@@ -752,21 +767,23 @@ msgstr ""
 msgid ""
 "The following operations return new objects and hold the per-object lock for "
 "the duration:"
-msgstr ""
+msgstr "下列操作会返回新的对象并在执行期间拥有每对象锁："
 
 #: ../../library/threadsafety.rst:507
 msgid ""
 "ba.copy()     # returns a shallow copy\n"
 "ba * n        # repeat into new bytearray"
 msgstr ""
+"ba.copy()     # 返回一个浅拷贝\n"
+"ba * n        # 对新的 bytearray 执行重复"
 
 #: ../../library/threadsafety.rst:513
 msgid "The membership test holds the lock for its duration:"
-msgstr ""
+msgstr "成员检测会在执行期间持有锁："
 
 #: ../../library/threadsafety.rst:515
 msgid "x in ba       # bytearray.__contains__"
-msgstr ""
+msgstr "x in ba       # bytearray.__contains__"
 
 #: ../../library/threadsafety.rst:520
 msgid ""
@@ -774,6 +791,9 @@ msgid ""
 "`~bytearray.replace`, :meth:`~bytearray.split`, :meth:`~bytearray.decode`, "
 "etc.) hold the per-object lock for their duration."
 msgstr ""
+"所有其他 bytearray 方法 (如 :meth:`~bytearray.find`, :meth:`~bytearray."
+"replace`, :meth:`~bytearray.split`, :meth:`~bytearray.decode` 等) 会在其执行"
+"期间持有每对象锁。"
 
 #: ../../library/threadsafety.rst:528
 msgid ""
@@ -785,12 +805,19 @@ msgid ""
 "for byte in ba:\n"
 "    process(byte)  # another thread may modify ba"
 msgstr ""
+"# 非原子化的：检查-执行\n"
+"if x in ba:\n"
+"    ba.remove(x)\n"
+"\n"
+"# 非线程安全的：在修改期间迭代\n"
+"for byte in ba:\n"
+"    process(byte)  # 另一个线程可能会修改 ba"
 
 #: ../../library/threadsafety.rst:539
 msgid ""
 "To safely iterate over a bytearray that may be modified by another thread, "
 "iterate over a copy:"
-msgstr ""
+msgstr "要安全地迭代可能会被另一个线程修改的 bytearray，可以迭代其拷贝："
 
 #: ../../library/threadsafety.rst:542
 msgid ""
@@ -798,9 +825,85 @@ msgid ""
 "for byte in ba.copy():\n"
 "    process(byte)"
 msgstr ""
+"# 创建一个拷贝以安全地迭代\n"
+"for byte in ba.copy():\n"
+"    process(byte)"
 
 #: ../../library/threadsafety.rst:549
 msgid ""
 "Consider external synchronization when sharing :class:`bytearray` instances "
 "across threads.  See :ref:`freethreading-python-howto` for more information."
+msgstr ""
+"在跨线程共享 :class:`bytearray` 实例时可考虑进行外部同步化。 详情参见 :ref:"
+"`freethreading-python-howto`。"
+
+#: ../../library/threadsafety.rst:556
+msgid "Thread safety for memoryview objects"
+msgstr ""
+
+#: ../../library/threadsafety.rst:558
+msgid ""
+":class:`memoryview` objects provide access to the internal data of an "
+"underlying object without copying. Thread safety depends on both the "
+"memoryview itself and the underlying buffer exporter."
+msgstr ""
+
+#: ../../library/threadsafety.rst:562
+msgid ""
+"The memoryview implementation uses atomic operations to track its own "
+"exports in the :term:`free-threaded build`. Creating and releasing a "
+"memoryview are thread-safe. Attribute access (e.g., :attr:`~memoryview."
+"shape`, :attr:`~memoryview.format`) reads fields that are immutable for the "
+"lifetime of the memoryview, so concurrent reads are safe as long as the "
+"memoryview has not been released."
+msgstr ""
+
+#: ../../library/threadsafety.rst:569
+msgid ""
+"However, the actual data accessed through the memoryview is owned by the "
+"underlying object. Concurrent access to this data is only safe if the "
+"underlying object supports it:"
+msgstr ""
+
+#: ../../library/threadsafety.rst:573
+msgid ""
+"For immutable objects like :class:`bytes`, concurrent reads through multiple "
+"memoryviews are safe."
+msgstr ""
+
+#: ../../library/threadsafety.rst:576
+msgid ""
+"For mutable objects like :class:`bytearray`, reading and writing the same "
+"memory region from multiple threads without external synchronization is not "
+"safe and may result in data corruption. Note that even read-only memoryviews "
+"of mutable objects do not prevent data races if the underlying object is "
+"modified from another thread."
+msgstr ""
+
+#: ../../library/threadsafety.rst:583
+msgid ""
+"# NOT safe: concurrent writes to the same buffer\n"
+"data = bytearray(1000)\n"
+"view = memoryview(data)\n"
+"# Thread 1: view[0:500] = b'x' * 500\n"
+"# Thread 2: view[0:500] = b'y' * 500"
+msgstr ""
+
+#: ../../library/threadsafety.rst:592
+msgid ""
+"# Safe: use a lock for concurrent access\n"
+"import threading\n"
+"lock = threading.Lock()\n"
+"data = bytearray(1000)\n"
+"view = memoryview(data)\n"
+"\n"
+"with lock:\n"
+"    view[0:500] = b'x' * 500"
+msgstr ""
+
+#: ../../library/threadsafety.rst:604
+msgid ""
+"Resizing or reallocating the underlying object (such as calling :meth:"
+"`bytearray.resize`) while a memoryview is exported raises :exc:"
+"`BufferError`. This is enforced regardless of threading."
 msgstr ""

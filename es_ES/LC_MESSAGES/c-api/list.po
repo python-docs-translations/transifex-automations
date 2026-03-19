@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-25 14:15+0000\n"
+"POT-Creation-Date: 2026-03-19 14:42+0000\n"
 "PO-Revision-Date: 2025-09-16 00:00+0000\n"
 "Last-Translator: python-doc bot, 2025\n"
 "Language-Team: Spanish (Spain) (https://app.transifex.com/python-doc/"
@@ -99,11 +99,18 @@ msgid ""
 "instead of a :term:`strong reference`."
 msgstr ""
 
-#: ../../c-api/list.rst:80
+#: ../../c-api/list.rst:79 ../../c-api/list.rst:91
+msgid ""
+"In the :term:`free-threaded build`, the returned :term:`borrowed reference` "
+"may become invalid if another thread modifies the list concurrently. Prefer :"
+"c:func:`PyList_GetItemRef`, which returns a :term:`strong reference`."
+msgstr ""
+
+#: ../../c-api/list.rst:87
 msgid "Similar to :c:func:`PyList_GetItem`, but without error checking."
 msgstr "Similar a :c:func:`PyList_GetItem`, pero sin comprobación de errores."
 
-#: ../../c-api/list.rst:85
+#: ../../c-api/list.rst:99
 msgid ""
 "Set the item at index *index* in list to *item*.  Return ``0`` on success. "
 "If *index* is out of bounds, return ``-1`` and set an :exc:`IndexError` "
@@ -113,7 +120,7 @@ msgstr ""
 "``0`` en caso de éxito. Si *index* está fuera de los límites, devuelve "
 "``-1`` y establece una excepción :exc:`IndexError`."
 
-#: ../../c-api/list.rst:91
+#: ../../c-api/list.rst:105
 msgid ""
 "This function \"steals\" a reference to *item* and discards a reference to "
 "an item already in the list at the affected position."
@@ -121,7 +128,7 @@ msgstr ""
 "Esta función \"roba\" una referencia a *item* y descarta una referencia a un "
 "elemento ya existente en la lista en la posición afectada."
 
-#: ../../c-api/list.rst:97
+#: ../../c-api/list.rst:111
 msgid ""
 "Macro form of :c:func:`PyList_SetItem` without error checking. This is "
 "normally only used to fill in new lists where there is no previous content."
@@ -130,13 +137,13 @@ msgstr ""
 "Normalmente sólo se utiliza para rellenar listas nuevas en las que no hay "
 "contenido previo."
 
-#: ../../c-api/list.rst:100
+#: ../../c-api/list.rst:114
 msgid ""
 "Bounds checking is performed as an assertion if Python is built in :ref:"
 "`debug mode <debug-build>` or :option:`with assertions <--with-assertions>`."
 msgstr ""
 
-#: ../../c-api/list.rst:106
+#: ../../c-api/list.rst:120
 msgid ""
 "This macro \"steals\" a reference to *item*, and, unlike :c:func:"
 "`PyList_SetItem`, does *not* discard a reference to any item that is being "
@@ -147,7 +154,15 @@ msgstr ""
 "siendo reemplazado; cualquier referencia en *list* en la posición *i* será "
 "filtrada."
 
-#: ../../c-api/list.rst:114
+#: ../../c-api/list.rst:127
+msgid ""
+"In the :term:`free-threaded build`, this macro has no internal "
+"synchronization. It is normally only used to fill in new lists where no "
+"other thread has a reference to the list. If the list may be shared, use :c:"
+"func:`PyList_SetItem` instead, which uses a :term:`per-object lock`."
+msgstr ""
+
+#: ../../c-api/list.rst:136
 msgid ""
 "Insert the item *item* into list *list* in front of index *index*.  Return "
 "``0`` if successful; return ``-1`` and set an exception if unsuccessful. "
@@ -157,7 +172,7 @@ msgstr ""
 "Devuelve ``0`` si tiene éxito; devuelve ``-1`` y lanza una excepción si no "
 "tiene éxito. Análogo a ``list.insert(index, item)``."
 
-#: ../../c-api/list.rst:121
+#: ../../c-api/list.rst:143
 msgid ""
 "Append the object *item* at the end of list *list*. Return ``0`` if "
 "successful; return ``-1`` and set an exception if unsuccessful.  Analogous "
@@ -167,7 +182,7 @@ msgstr ""
 "éxito; devuelve ``-1`` y lanza una excepción si no tiene éxito.  Análogo a "
 "``list.append(item)``."
 
-#: ../../c-api/list.rst:128
+#: ../../c-api/list.rst:150
 msgid ""
 "Return a list of the objects in *list* containing the objects *between* "
 "*low* and *high*.  Return ``NULL`` and set an exception if unsuccessful.  "
@@ -179,7 +194,7 @@ msgstr ""
 "tiene éxito.  Análogo a ``list[low:high]``. No se admite la indexación desde "
 "el final de la lista."
 
-#: ../../c-api/list.rst:135
+#: ../../c-api/list.rst:157
 msgid ""
 "Set the slice of *list* between *low* and *high* to the contents of "
 "*itemlist*.  Analogous to ``list[low:high] = itemlist``. The *itemlist* may "
@@ -193,33 +208,49 @@ msgstr ""
 "Devuelve ``0`` en caso de éxito, ``-1`` en caso de fallo.  No se admite la "
 "indexación desde el final de la lista."
 
-#: ../../c-api/list.rst:144
+#: ../../c-api/list.rst:165
+msgid ""
+"In the :term:`free-threaded build`, when *itemlist* is a :class:`list`, both "
+"*list* and *itemlist* are locked for the duration of the operation. For "
+"other iterables (or ``NULL``), only *list* is locked."
+msgstr ""
+
+#: ../../c-api/list.rst:172
 msgid ""
 "Extend *list* with the contents of *iterable*.  This is the same as "
 "``PyList_SetSlice(list, PY_SSIZE_T_MAX, PY_SSIZE_T_MAX, iterable)`` and "
 "analogous to ``list.extend(iterable)`` or ``list += iterable``."
 msgstr ""
 
-#: ../../c-api/list.rst:148
+#: ../../c-api/list.rst:176
 msgid ""
 "Raise an exception and return ``-1`` if *list* is not a :class:`list` "
 "object. Return 0 on success."
 msgstr ""
 
-#: ../../c-api/list.rst:156
+#: ../../c-api/list.rst:183
+msgid ""
+"In the :term:`free-threaded build`, when *iterable* is a :class:`list`, :"
+"class:`set`, :class:`dict`, or dict view, both *list* and *iterable* (or its "
+"underlying dict) are locked for the duration of the operation. For other "
+"iterables, only *list* is locked; *iterable* may be concurrently modified by "
+"another thread."
+msgstr ""
+
+#: ../../c-api/list.rst:192
 msgid ""
 "Remove all items from *list*.  This is the same as ``PyList_SetSlice(list, "
 "0, PY_SSIZE_T_MAX, NULL)`` and analogous to ``list.clear()`` or ``del "
 "list[:]``."
 msgstr ""
 
-#: ../../c-api/list.rst:160
+#: ../../c-api/list.rst:196
 msgid ""
 "Raise an exception and return ``-1`` if *list* is not a :class:`list` "
 "object.  Return 0 on success."
 msgstr ""
 
-#: ../../c-api/list.rst:168
+#: ../../c-api/list.rst:204
 msgid ""
 "Sort the items of *list* in place.  Return ``0`` on success, ``-1`` on "
 "failure.  This is equivalent to ``list.sort()``."
@@ -227,7 +258,15 @@ msgstr ""
 "Ordena los elementos de *list* en su lugar.  Devuelve ``0`` en caso de "
 "éxito, ``-1`` en caso de fallo.  Esto es equivalente a ``list.sort()``."
 
-#: ../../c-api/list.rst:174
+#: ../../c-api/list.rst:209
+msgid ""
+"In the :term:`free-threaded build`, element comparison via :meth:`~object."
+"__lt__` can execute arbitrary Python code, during which the :term:`per-"
+"object lock` may be temporarily released. For built-in types (:class:`str`, :"
+"class:`int`, :class:`float`), the lock is not released during comparison."
+msgstr ""
+
+#: ../../c-api/list.rst:218
 msgid ""
 "Reverse the items of *list* in place.  Return ``0`` on success, ``-1`` on "
 "failure.  This is the equivalent of ``list.reverse()``."
@@ -235,7 +274,7 @@ msgstr ""
 "Invierte los elementos de *list* en su lugar.  Devuelve ``0`` en caso de "
 "éxito, en caso de fallo ``-1`` .  Equivale a ``list.reverse()``."
 
-#: ../../c-api/list.rst:182
+#: ../../c-api/list.rst:226
 msgid ""
 "Return a new tuple object containing the contents of *list*; equivalent to "
 "``tuple(list)``."
@@ -251,7 +290,7 @@ msgstr "objeto"
 msgid "list"
 msgstr "lista"
 
-#: ../../c-api/list.rst:51 ../../c-api/list.rst:180
+#: ../../c-api/list.rst:51 ../../c-api/list.rst:224
 msgid "built-in function"
 msgstr "función incorporada"
 
@@ -259,6 +298,6 @@ msgstr "función incorporada"
 msgid "len"
 msgstr "len"
 
-#: ../../c-api/list.rst:180
+#: ../../c-api/list.rst:224
 msgid "tuple"
 msgstr "tupla"
