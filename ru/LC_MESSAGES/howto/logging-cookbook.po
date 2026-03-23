@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-05 14:39+0000\n"
+"POT-Creation-Date: 2026-03-23 14:50+0000\n"
 "PO-Revision-Date: 2025-09-16 00:00+0000\n"
 "Last-Translator: Vladimir, 2025\n"
 "Language-Team: Russian (https://app.transifex.com/python-doc/teams/5390/"
@@ -3316,12 +3316,12 @@ msgstr ""
 "        executor.submit(worker_process, queue, worker_configurer)"
 
 #: ../../howto/logging-cookbook.rst:1553
-msgid "Deploying Web applications using Gunicorn and uWSGI"
-msgstr "Развертывание веб-приложений с использованием Gunicorn и uWSGI."
+msgid "Deploying web applications using Gunicorn and uWSGI"
+msgstr ""
 
 #: ../../howto/logging-cookbook.rst:1555
 msgid ""
-"When deploying Web applications using `Gunicorn <https://gunicorn.org/>`_ or "
+"When deploying web applications using `Gunicorn <https://gunicorn.org/>`_ or "
 "`uWSGI <https://uwsgi-docs.readthedocs.io/en/latest/>`_ (or similar), "
 "multiple worker processes are created to handle client requests. In such "
 "environments, avoid creating file-based handlers directly in your web "
@@ -3330,15 +3330,6 @@ msgid ""
 "process management tool such as Supervisor - see `Running a logging socket "
 "listener in production`_ for more details."
 msgstr ""
-"При развертывании веб-приложений с использованием `Gunicorn <https://"
-"gunicorn.org/>`_ или `uWSGI <https://uwsgi-docs.readthedocs.io/en/latest/>`_ "
-"(или аналогичного) несколько рабочих процессов создаются для обработки "
-"запросов клиентов. В таких средах избегайте создания обработчиков на основе "
-"файлов непосредственно в веб-приложении. Вместо этого используйте :class:"
-"`SocketHandler` для входа из веб-приложения в прослушиватель в отдельном "
-"процессе. Это можно настроить с помощью инструмента управления процессами, "
-"такого как Supervisor. Дополнительные сведения см. в разделе «Запуск "
-"прослушивателя сокетов журналирования в рабочей среде»."
 
 #: ../../howto/logging-cookbook.rst:1565
 msgid "Using file rotation"
@@ -7590,7 +7581,6 @@ msgstr ""
 
 #: ../../howto/logging-cookbook.rst:3620
 msgid ""
-"import datetime\n"
 "import logging\n"
 "import random\n"
 "import sys\n"
@@ -7838,276 +7828,22 @@ msgid ""
 "if __name__=='__main__':\n"
 "    main()"
 msgstr ""
-"import datetime\n"
-"import logging\n"
-"import random\n"
-"import sys\n"
-"import time\n"
-"\n"
-"# Deal with minor differences between different Qt packages\n"
-"try:\n"
-"    from PySide6 import QtCore, QtGui, QtWidgets\n"
-"    Signal = QtCore.Signal\n"
-"    Slot = QtCore.Slot\n"
-"except ImportError:\n"
-"    try:\n"
-"        from PyQt6 import QtCore, QtGui, QtWidgets\n"
-"        Signal = QtCore.pyqtSignal\n"
-"        Slot = QtCore.pyqtSlot\n"
-"    except ImportError:\n"
-"        try:\n"
-"            from PySide2 import QtCore, QtGui, QtWidgets\n"
-"            Signal = QtCore.Signal\n"
-"            Slot = QtCore.Slot\n"
-"        except ImportError:\n"
-"            from PyQt5 import QtCore, QtGui, QtWidgets\n"
-"            Signal = QtCore.pyqtSignal\n"
-"            Slot = QtCore.pyqtSlot\n"
-"\n"
-"logger = logging.getLogger(__name__)\n"
-"\n"
-"\n"
-"#\n"
-"# Signals need to be contained in a QObject or subclass in order to be "
-"correctly\n"
-"# initialized.\n"
-"#\n"
-"class Signaller(QtCore.QObject):\n"
-"    signal = Signal(str, logging.LogRecord)\n"
-"\n"
-"#\n"
-"# Output to a Qt GUI is only supposed to happen on the main thread. So, "
-"this\n"
-"# handler is designed to take a slot function which is set up to run in the "
-"main\n"
-"# thread. In this example, the function takes a string argument which is a\n"
-"# formatted log message, and the log record which generated it. The "
-"formatted\n"
-"# string is just a convenience - you could format a string for output any "
-"way\n"
-"# you like in the slot function itself.\n"
-"#\n"
-"# You specify the slot function to do whatever GUI updates you want. The "
-"handler\n"
-"# doesn't know or care about specific UI elements.\n"
-"#\n"
-"class QtHandler(logging.Handler):\n"
-"    def __init__(self, slotfunc, *args, **kwargs):\n"
-"        super().__init__(*args, **kwargs)\n"
-"        self.signaller = Signaller()\n"
-"        self.signaller.signal.connect(slotfunc)\n"
-"\n"
-"    def emit(self, record):\n"
-"        s = self.format(record)\n"
-"        self.signaller.signal.emit(s, record)\n"
-"\n"
-"#\n"
-"# This example uses QThreads, which means that the threads at the Python "
-"level\n"
-"# are named something like \"Dummy-1\". The function below gets the Qt name "
-"of the\n"
-"# current thread.\n"
-"#\n"
-"def ctname():\n"
-"    return QtCore.QThread.currentThread().objectName()\n"
-"\n"
-"\n"
-"#\n"
-"# Used to generate random levels for logging.\n"
-"#\n"
-"LEVELS = (logging.DEBUG, logging.INFO, logging.WARNING, logging.ERROR,\n"
-"          logging.CRITICAL)\n"
-"\n"
-"#\n"
-"# This worker class represents work that is done in a thread separate to "
-"the\n"
-"# main thread. The way the thread is kicked off to do work is via a button "
-"press\n"
-"# that connects to a slot in the worker.\n"
-"#\n"
-"# Because the default threadName value in the LogRecord isn't much use, we "
-"add\n"
-"# a qThreadName which contains the QThread name as computed above, and pass "
-"that\n"
-"# value in an \"extra\" dictionary which is used to update the LogRecord "
-"with the\n"
-"# QThread name.\n"
-"#\n"
-"# This example worker just outputs messages sequentially, interspersed with\n"
-"# random delays of the order of a few seconds.\n"
-"#\n"
-"class Worker(QtCore.QObject):\n"
-"    @Slot()\n"
-"    def start(self):\n"
-"        extra = {'qThreadName': ctname() }\n"
-"        logger.debug('Started work', extra=extra)\n"
-"        i = 1\n"
-"        # Let the thread run until interrupted. This allows reasonably "
-"clean\n"
-"        # thread termination.\n"
-"        while not QtCore.QThread.currentThread().isInterruptionRequested():\n"
-"            delay = 0.5 + random.random() * 2\n"
-"            time.sleep(delay)\n"
-"            try:\n"
-"                if random.random() < 0.1:\n"
-"                    raise ValueError('Exception raised: %d' % i)\n"
-"                else:\n"
-"                    level = random.choice(LEVELS)\n"
-"                    logger.log(level, 'Message after delay of %3.1f: %d', "
-"delay, i, extra=extra)\n"
-"            except ValueError as e:\n"
-"                logger.exception('Failed: %s', e, extra=extra)\n"
-"            i += 1\n"
-"\n"
-"#\n"
-"# Implement a simple UI for this cookbook example. This contains:\n"
-"#\n"
-"# * A read-only text edit window which holds formatted log messages\n"
-"# * A button to start work and log stuff in a separate thread\n"
-"# * A button to log something from the main thread\n"
-"# * A button to clear the log window\n"
-"#\n"
-"class Window(QtWidgets.QWidget):\n"
-"\n"
-"    COLORS = {\n"
-"        logging.DEBUG: 'black',\n"
-"        logging.INFO: 'blue',\n"
-"        logging.WARNING: 'orange',\n"
-"        logging.ERROR: 'red',\n"
-"        logging.CRITICAL: 'purple',\n"
-"    }\n"
-"\n"
-"    def __init__(self, app):\n"
-"        super().__init__()\n"
-"        self.app = app\n"
-"        self.textedit = te = QtWidgets.QPlainTextEdit(self)\n"
-"        # Set whatever the default monospace font is for the platform\n"
-"        f = QtGui.QFont('nosuchfont')\n"
-"        if hasattr(f, 'Monospace'):\n"
-"            f.setStyleHint(f.Monospace)\n"
-"        else:\n"
-"            f.setStyleHint(f.StyleHint.Monospace)  # for Qt6\n"
-"        te.setFont(f)\n"
-"        te.setReadOnly(True)\n"
-"        PB = QtWidgets.QPushButton\n"
-"        self.work_button = PB('Start background work', self)\n"
-"        self.log_button = PB('Log a message at a random level', self)\n"
-"        self.clear_button = PB('Clear log window', self)\n"
-"        self.handler = h = QtHandler(self.update_status)\n"
-"        # Remember to use qThreadName rather than threadName in the format "
-"string.\n"
-"        fs = '%(asctime)s %(qThreadName)-12s %(levelname)-8s %(message)s'\n"
-"        formatter = logging.Formatter(fs)\n"
-"        h.setFormatter(formatter)\n"
-"        logger.addHandler(h)\n"
-"        # Set up to terminate the QThread when we exit\n"
-"        app.aboutToQuit.connect(self.force_quit)\n"
-"\n"
-"        # Lay out all the widgets\n"
-"        layout = QtWidgets.QVBoxLayout(self)\n"
-"        layout.addWidget(te)\n"
-"        layout.addWidget(self.work_button)\n"
-"        layout.addWidget(self.log_button)\n"
-"        layout.addWidget(self.clear_button)\n"
-"        self.setFixedSize(900, 400)\n"
-"\n"
-"        # Connect the non-worker slots and signals\n"
-"        self.log_button.clicked.connect(self.manual_update)\n"
-"        self.clear_button.clicked.connect(self.clear_display)\n"
-"\n"
-"        # Start a new worker thread and connect the slots for the worker\n"
-"        self.start_thread()\n"
-"        self.work_button.clicked.connect(self.worker.start)\n"
-"        # Once started, the button should be disabled\n"
-"        self.work_button.clicked.connect(lambda : self.work_button."
-"setEnabled(False))\n"
-"\n"
-"    def start_thread(self):\n"
-"        self.worker = Worker()\n"
-"        self.worker_thread = QtCore.QThread()\n"
-"        self.worker.setObjectName('Worker')\n"
-"        self.worker_thread.setObjectName('WorkerThread')  # for qThreadName\n"
-"        self.worker.moveToThread(self.worker_thread)\n"
-"        # This will start an event loop in the worker thread\n"
-"        self.worker_thread.start()\n"
-"\n"
-"    def kill_thread(self):\n"
-"        # Just tell the worker to stop, then tell it to quit and wait for "
-"that\n"
-"        # to happen\n"
-"        self.worker_thread.requestInterruption()\n"
-"        if self.worker_thread.isRunning():\n"
-"            self.worker_thread.quit()\n"
-"            self.worker_thread.wait()\n"
-"        else:\n"
-"            print('worker has already exited.')\n"
-"\n"
-"    def force_quit(self):\n"
-"        # For use when the window is closed\n"
-"        if self.worker_thread.isRunning():\n"
-"            self.kill_thread()\n"
-"\n"
-"    # The functions below update the UI and run in the main thread because\n"
-"    # that's where the slots are set up\n"
-"\n"
-"    @Slot(str, logging.LogRecord)\n"
-"    def update_status(self, status, record):\n"
-"        color = self.COLORS.get(record.levelno, 'black')\n"
-"        s = '<pre><font color=\"%s\">%s</font></pre>' % (color, status)\n"
-"        self.textedit.appendHtml(s)\n"
-"\n"
-"    @Slot()\n"
-"    def manual_update(self):\n"
-"        # This function uses the formatted message passed in, but also uses\n"
-"        # information from the record to format the message in an "
-"appropriate\n"
-"        # color according to its severity (level).\n"
-"        level = random.choice(LEVELS)\n"
-"        extra = {'qThreadName': ctname() }\n"
-"        logger.log(level, 'Manually logged!', extra=extra)\n"
-"\n"
-"    @Slot()\n"
-"    def clear_display(self):\n"
-"        self.textedit.clear()\n"
-"\n"
-"\n"
-"def main():\n"
-"    QtCore.QThread.currentThread().setObjectName('MainThread')\n"
-"    logging.getLogger().setLevel(logging.DEBUG)\n"
-"    app = QtWidgets.QApplication(sys.argv)\n"
-"    example = Window(app)\n"
-"    example.show()\n"
-"    if hasattr(app, 'exec'):\n"
-"        rc = app.exec()\n"
-"    else:\n"
-"        rc = app.exec_()\n"
-"    sys.exit(rc)\n"
-"\n"
-"if __name__=='__main__':\n"
-"    main()"
 
-#: ../../howto/logging-cookbook.rst:3852
+#: ../../howto/logging-cookbook.rst:3851
 msgid "Logging to syslog with RFC5424 support"
 msgstr "Запись в системный журнал с поддержкой RFC5424."
 
-#: ../../howto/logging-cookbook.rst:3854
+#: ../../howto/logging-cookbook.rst:3853
 msgid ""
 "Although :rfc:`5424` dates from 2009, most syslog servers are configured by "
 "default to use the older :rfc:`3164`, which hails from 2001. When "
 "``logging`` was added to Python in 2003, it supported the earlier (and only "
-"existing) protocol at the time. Since RFC5424 came out, as there has not "
+"existing) protocol at the time. Since RFC 5424 came out, as there has not "
 "been widespread deployment of it in syslog servers, the :class:`~logging."
 "handlers.SysLogHandler` functionality has not been updated."
 msgstr ""
-"Хотя :rfc:`5424` датируется 2009 годом, большинство серверов системного "
-"журнала по умолчанию настроены на использование более старого :rfc:`3164`, "
-"который родом из 2001 года. Когда в 2003 году в Python было добавлено :rfc:"
-"`3164`, оно поддерживало более ранний (и единственный существовавший на тот "
-"момент) протокол. С момента выхода RFC5424, поскольку он не получил широкого "
-"распространения на серверах системного журнала, функциональность :class:"
-"`~logging.handlers.SysLogHandler` не обновлялась."
 
-#: ../../howto/logging-cookbook.rst:3861
+#: ../../howto/logging-cookbook.rst:3860
 msgid ""
 "RFC 5424 contains some useful features such as support for structured data, "
 "and if you need to be able to log to a syslog server with support for it, "
@@ -8118,9 +7854,9 @@ msgstr ""
 "системного журнала с его поддержкой, вы можете сделать это с помощью "
 "обработчика подкласса, который выглядит примерно так:"
 
-#: ../../howto/logging-cookbook.rst:3865
+#: ../../howto/logging-cookbook.rst:3864
 msgid ""
-"import datetime\n"
+"import datetime as dt\n"
 "import logging.handlers\n"
 "import re\n"
 "import socket\n"
@@ -8138,8 +7874,7 @@ msgid ""
 "\n"
 "    def format(self, record):\n"
 "        version = 1\n"
-"        asctime = datetime.datetime.fromtimestamp(record.created)."
-"isoformat()\n"
+"        asctime = dt.datetime.fromtimestamp(record.created).isoformat()\n"
 "        m = self.tz_offset.match(time.strftime('%z'))\n"
 "        has_offset = False\n"
 "        if m and time.timezone:\n"
@@ -8187,74 +7922,8 @@ msgid ""
 "        return f'{version} {asctime} {hostname} {appname} {procid} {msgid} "
 "{sdata} {msg}'"
 msgstr ""
-"import datetime\n"
-"import logging.handlers\n"
-"import re\n"
-"import socket\n"
-"import time\n"
-"\n"
-"class SysLogHandler5424(logging.handlers.SysLogHandler):\n"
-"\n"
-"    tz_offset = re.compile(r'([+-]\\d{2})(\\d{2})$')\n"
-"    escaped = re.compile(r'([\\]\"\\\\])')\n"
-"\n"
-"    def __init__(self, *args, **kwargs):\n"
-"        self.msgid = kwargs.pop('msgid', None)\n"
-"        self.appname = kwargs.pop('appname', None)\n"
-"        super().__init__(*args, **kwargs)\n"
-"\n"
-"    def format(self, record):\n"
-"        version = 1\n"
-"        asctime = datetime.datetime.fromtimestamp(record.created)."
-"isoformat()\n"
-"        m = self.tz_offset.match(time.strftime('%z'))\n"
-"        has_offset = False\n"
-"        if m and time.timezone:\n"
-"            hrs, mins = m.groups()\n"
-"            if int(hrs) or int(mins):\n"
-"                has_offset = True\n"
-"        if not has_offset:\n"
-"            asctime += 'Z'\n"
-"        else:\n"
-"            asctime += f'{hrs}:{mins}'\n"
-"        try:\n"
-"            hostname = socket.gethostname()\n"
-"        except Exception:\n"
-"            hostname = '-'\n"
-"        appname = self.appname or '-'\n"
-"        procid = record.process\n"
-"        msgid = '-'\n"
-"        msg = super().format(record)\n"
-"        sdata = '-'\n"
-"        if hasattr(record, 'structured_data'):\n"
-"            sd = record.structured_data\n"
-"            # This should be a dict where the keys are SD-ID and the value "
-"is a\n"
-"            # dict mapping PARAM-NAME to PARAM-VALUE (refer to the RFC for "
-"what these\n"
-"            # mean)\n"
-"            # There's no error checking here - it's purely for illustration, "
-"and you\n"
-"            # can adapt this code for use in production environments\n"
-"            parts = []\n"
-"\n"
-"            def replacer(m):\n"
-"                g = m.groups()\n"
-"                return '\\\\' + g[0]\n"
-"\n"
-"            for sdid, dv in sd.items():\n"
-"                part = f'[{sdid}'\n"
-"                for k, v in dv.items():\n"
-"                    s = str(v)\n"
-"                    s = self.escaped.sub(replacer, s)\n"
-"                    part += f' {k}=\"{s}\"'\n"
-"                part += ']'\n"
-"                parts.append(part)\n"
-"            sdata = ''.join(parts)\n"
-"        return f'{version} {asctime} {hostname} {appname} {procid} {msgid} "
-"{sdata} {msg}'"
 
-#: ../../howto/logging-cookbook.rst:3927
+#: ../../howto/logging-cookbook.rst:3926
 msgid ""
 "You'll need to be familiar with RFC 5424 to fully understand the above code, "
 "and it may be that you have slightly different needs (e.g. for how you pass "
@@ -8269,7 +7938,7 @@ msgstr ""
 "выше обработчика вы передаете структурированные данные, используя что-то "
 "вроде этого::"
 
-#: ../../howto/logging-cookbook.rst:3932
+#: ../../howto/logging-cookbook.rst:3931
 msgid ""
 "sd = {\n"
 "    'foo@12345': {'bar': 'baz', 'baz': 'bozz', 'fizz': r'buzz'},\n"
@@ -8287,11 +7956,11 @@ msgstr ""
 "i = 1\n"
 "logger.debug('Message %d', i, extra=extra)"
 
-#: ../../howto/logging-cookbook.rst:3941
+#: ../../howto/logging-cookbook.rst:3940
 msgid "How to treat a logger like an output stream"
 msgstr "Как относиться к регистратору как к выходному потоку"
 
-#: ../../howto/logging-cookbook.rst:3943
+#: ../../howto/logging-cookbook.rst:3942
 msgid ""
 "Sometimes, you need to interface to a third-party API which expects a file-"
 "like object to write to, but you want to direct the API's output to a "
@@ -8303,7 +7972,7 @@ msgstr ""
 "регистратор. Вы можете сделать это, используя класс, который обертывает "
 "регистратор файловым API. Вот короткий скрипт, иллюстрирующий такой класс:"
 
-#: ../../howto/logging-cookbook.rst:3948
+#: ../../howto/logging-cookbook.rst:3947
 msgid ""
 "import logging\n"
 "\n"
@@ -8375,17 +8044,17 @@ msgstr ""
 "if __name__ == \"__main__\":\n"
 "    main()"
 
-#: ../../howto/logging-cookbook.rst:3983
+#: ../../howto/logging-cookbook.rst:3982
 msgid "When this script is run, it prints"
 msgstr "Когда этот скрипт запускается, он печатает"
 
-#: ../../howto/logging-cookbook.rst:3985
+#: ../../howto/logging-cookbook.rst:3984
 msgid ""
 "INFO:demo:An INFO message\n"
 "DEBUG:demo:A DEBUG message"
 msgstr "INFO:demo:Информационное сообщение DEBUG:demo:Сообщение DEBUG"
 
-#: ../../howto/logging-cookbook.rst:3990
+#: ../../howto/logging-cookbook.rst:3989
 msgid ""
 "You could also use ``LoggerWriter`` to redirect ``sys.stdout`` and ``sys."
 "stderr`` by doing something like this:"
@@ -8393,7 +8062,7 @@ msgstr ""
 "Вы также можете использовать LoggerWriter для перенаправления sys.stdout и "
 "sys.stderr, выполнив что-то вроде этого:"
 
-#: ../../howto/logging-cookbook.rst:3993
+#: ../../howto/logging-cookbook.rst:3992
 msgid ""
 "import sys\n"
 "\n"
@@ -8405,7 +8074,7 @@ msgstr ""
 "sys.stdout = LoggerWriter(logger, logging.INFO)\n"
 "sys.stderr = LoggerWriter(logger, logging.WARNING)"
 
-#: ../../howto/logging-cookbook.rst:4000
+#: ../../howto/logging-cookbook.rst:3999
 msgid ""
 "You should do this *after* configuring logging for your needs. In the above "
 "example, the :func:`~logging.basicConfig` call does this (using the ``sys."
@@ -8417,7 +8086,7 @@ msgstr ""
 "(используя значение ``sys.stderr`` *до* того, как оно будет перезаписано "
 "экземпляром ``LoggerWriter``). Тогда вы получите такой результат:"
 
-#: ../../howto/logging-cookbook.rst:4005
+#: ../../howto/logging-cookbook.rst:4004
 msgid ""
 ">>> print('Foo')\n"
 "INFO:demo:Foo\n"
@@ -8431,7 +8100,7 @@ msgstr ""
 "WARNING:demo:Bar\n"
 ">>>"
 
-#: ../../howto/logging-cookbook.rst:4013
+#: ../../howto/logging-cookbook.rst:4012
 msgid ""
 "Of course, the examples above show output according to the format used by :"
 "func:`~logging.basicConfig`, but you can use a different formatter when you "
@@ -8441,7 +8110,7 @@ msgstr ""
 "форматом, используемым :func:`~logging.basicConfig`, но при настройке "
 "ведения журнала вы можете использовать другой форматтер."
 
-#: ../../howto/logging-cookbook.rst:4017
+#: ../../howto/logging-cookbook.rst:4016
 msgid ""
 "Note that with the above scheme, you are somewhat at the mercy of buffering "
 "and the sequence of write calls which you are intercepting. For example, "
@@ -8452,7 +8121,7 @@ msgstr ""
 "перехватываете. Например, с определением ``LoggerWriter`` выше, если у вас "
 "есть фрагмент"
 
-#: ../../howto/logging-cookbook.rst:4021
+#: ../../howto/logging-cookbook.rst:4020
 msgid ""
 "sys.stderr = LoggerWriter(logger, logging.WARNING)\n"
 "1 / 0"
@@ -8460,11 +8129,11 @@ msgstr ""
 "sys.stderr = LoggerWriter(logger, logging.WARNING)\n"
 "1 / 0"
 
-#: ../../howto/logging-cookbook.rst:4026
+#: ../../howto/logging-cookbook.rst:4025
 msgid "then running the script results in"
 msgstr "затем запуск скрипта приводит к"
 
-#: ../../howto/logging-cookbook.rst:4028
+#: ../../howto/logging-cookbook.rst:4027
 msgid ""
 "WARNING:demo:Traceback (most recent call last):\n"
 "\n"
@@ -8498,7 +8167,7 @@ msgstr ""
 "WARNING:demo::\n"
 "WARNING:demo:division by zero"
 
-#: ../../howto/logging-cookbook.rst:4044
+#: ../../howto/logging-cookbook.rst:4043
 msgid ""
 "As you can see, this output isn't ideal. That's because the underlying code "
 "which writes to ``sys.stderr`` makes multiple writes, each of which results "
@@ -8514,7 +8183,7 @@ msgstr ""
 "буферизовать данные и выводить строки журнала только при появлении новых "
 "строк. Давайте воспользуемся немного лучшей реализацией LoggerWriter:"
 
-#: ../../howto/logging-cookbook.rst:4050
+#: ../../howto/logging-cookbook.rst:4049
 msgid ""
 "class BufferingLoggerWriter(LoggerWriter):\n"
 "    def __init__(self, logger, level):\n"
@@ -8550,7 +8219,7 @@ msgstr ""
 "            for part in parts:\n"
 "                self.logger.log(self.level, part)"
 
-#: ../../howto/logging-cookbook.rst:4069
+#: ../../howto/logging-cookbook.rst:4068
 msgid ""
 "This just buffers up stuff until a newline is seen, and then logs complete "
 "lines. With this approach, you get better output:"
@@ -8559,7 +8228,7 @@ msgstr ""
 "затем записывает полные строки. При таком подходе вы получите лучший "
 "результат:"
 
-#: ../../howto/logging-cookbook.rst:4072
+#: ../../howto/logging-cookbook.rst:4071
 msgid ""
 "WARNING:demo:Traceback (most recent call last):\n"
 "WARNING:demo:  File \"/home/runner/cookbook-loggerwriter/main.py\", line 55, "
@@ -8579,11 +8248,11 @@ msgstr ""
 "WARNING:demo:    1/0\n"
 "WARNING:demo:ZeroDivisionError: division by zero"
 
-#: ../../howto/logging-cookbook.rst:4082
+#: ../../howto/logging-cookbook.rst:4081
 msgid "How to uniformly handle newlines in logging output"
 msgstr ""
 
-#: ../../howto/logging-cookbook.rst:4084
+#: ../../howto/logging-cookbook.rst:4083
 msgid ""
 "Usually, messages that are logged (say to console or file) consist of a "
 "single line of text. However, sometimes there is a need to handle messages "
@@ -8594,7 +8263,7 @@ msgid ""
 "handler mixin, as in the following snippet:"
 msgstr ""
 
-#: ../../howto/logging-cookbook.rst:4092
+#: ../../howto/logging-cookbook.rst:4091
 msgid ""
 "# Assume this is in a module mymixins.py\n"
 "import copy\n"
@@ -8613,11 +8282,11 @@ msgid ""
 "                super().emit(rec)"
 msgstr ""
 
-#: ../../howto/logging-cookbook.rst:4110
+#: ../../howto/logging-cookbook.rst:4109
 msgid "You can use the mixin as in the following script:"
 msgstr ""
 
-#: ../../howto/logging-cookbook.rst:4112
+#: ../../howto/logging-cookbook.rst:4111
 msgid ""
 "import logging\n"
 "\n"
@@ -8639,11 +8308,11 @@ msgid ""
 "again')"
 msgstr ""
 
-#: ../../howto/logging-cookbook.rst:4131
+#: ../../howto/logging-cookbook.rst:4130
 msgid "The script, when run, prints something like:"
 msgstr ""
 
-#: ../../howto/logging-cookbook.rst:4133
+#: ../../howto/logging-cookbook.rst:4132
 msgid ""
 "2025-07-02 13:54:47,234 DEBUG     Single line\n"
 "2025-07-02 13:54:47,234 DEBUG     Multiple lines:\n"
@@ -8654,14 +8323,14 @@ msgid ""
 "2025-07-02 13:54:47,234 DEBUG     can't get fooled again"
 msgstr ""
 
-#: ../../howto/logging-cookbook.rst:4143
+#: ../../howto/logging-cookbook.rst:4142
 msgid ""
 "If, on the other hand, you are concerned about `log injection <https://owasp."
 "org/www-community/attacks/Log_Injection>`_, you can use a formatter which "
 "escapes newlines, as per the following example:"
 msgstr ""
 
-#: ../../howto/logging-cookbook.rst:4147
+#: ../../howto/logging-cookbook.rst:4146
 msgid ""
 "import logging\n"
 "\n"
@@ -8684,13 +8353,13 @@ msgid ""
 "again')"
 msgstr ""
 
-#: ../../howto/logging-cookbook.rst:4167
+#: ../../howto/logging-cookbook.rst:4166
 msgid ""
 "You can, of course, use whatever escaping scheme makes the most sense for "
 "you. The script, when run, should produce output like this:"
 msgstr ""
 
-#: ../../howto/logging-cookbook.rst:4170
+#: ../../howto/logging-cookbook.rst:4169
 msgid ""
 "2025-07-09 06:47:33,783 DEBUG     Single line\n"
 "2025-07-09 06:47:33,783 DEBUG     Multiple lines:\\nfool me once ...\n"
@@ -8699,17 +8368,17 @@ msgid ""
 "fooled again"
 msgstr ""
 
-#: ../../howto/logging-cookbook.rst:4177
+#: ../../howto/logging-cookbook.rst:4176
 msgid ""
 "Escaping behaviour can't be the stdlib default , as it would break backwards "
 "compatibility."
 msgstr ""
 
-#: ../../howto/logging-cookbook.rst:4183
+#: ../../howto/logging-cookbook.rst:4182
 msgid "Patterns to avoid"
 msgstr "Шаблоны, которых следует избегать"
 
-#: ../../howto/logging-cookbook.rst:4185
+#: ../../howto/logging-cookbook.rst:4184
 msgid ""
 "Although the preceding sections have described ways of doing things you "
 "might need to do or deal with, it is worth mentioning some usage patterns "
@@ -8722,11 +8391,11 @@ msgstr ""
 "поэтому следует избегать в большинстве случаев. Следующие разделы "
 "расположены в произвольном порядке."
 
-#: ../../howto/logging-cookbook.rst:4191
+#: ../../howto/logging-cookbook.rst:4190
 msgid "Opening the same log file multiple times"
 msgstr "Открытие одного и того же файла журнала несколько раз"
 
-#: ../../howto/logging-cookbook.rst:4193
+#: ../../howto/logging-cookbook.rst:4192
 msgid ""
 "On Windows, you will generally not be able to open the same file multiple "
 "times as this will lead to a \"file is in use by another process\" error. "
@@ -8738,7 +8407,7 @@ msgstr ""
 "Однако на платформах POSIX вы не получите никаких ошибок, если откроете один "
 "и тот же файл несколько раз. Это может быть сделано случайно, например:"
 
-#: ../../howto/logging-cookbook.rst:4198
+#: ../../howto/logging-cookbook.rst:4197
 msgid ""
 "Adding a file handler more than once which references the same file (e.g. by "
 "a copy/paste/forget-to-change error)."
@@ -8746,7 +8415,7 @@ msgstr ""
 "Добавление обработчика файла более одного раза, который ссылается на один и "
 "тот же файл (например, из-за ошибки копирования/вставки/забытия изменения)."
 
-#: ../../howto/logging-cookbook.rst:4201
+#: ../../howto/logging-cookbook.rst:4200
 msgid ""
 "Opening two files that look different, as they have different names, but are "
 "the same because one is a symbolic link to the other."
@@ -8754,7 +8423,7 @@ msgstr ""
 "Открытие двух файлов, которые выглядят по-разному, поскольку имеют разные "
 "имена, но одинаковы, поскольку один является символической ссылкой на другой."
 
-#: ../../howto/logging-cookbook.rst:4204
+#: ../../howto/logging-cookbook.rst:4203
 msgid ""
 "Forking a process, following which both parent and child have a reference to "
 "the same file. This might be through use of the :mod:`multiprocessing` "
@@ -8764,7 +8433,7 @@ msgstr ""
 "имеют ссылку на один и тот же файл. Это может быть сделано, например, с "
 "помощью модуля :mod:`multiprocessing`."
 
-#: ../../howto/logging-cookbook.rst:4208
+#: ../../howto/logging-cookbook.rst:4207
 msgid ""
 "Opening a file multiple times might *appear* to work most of the time, but "
 "can lead to a number of problems in practice:"
@@ -8772,7 +8441,7 @@ msgstr ""
 "Открытие файла несколько раз может *казаться* эффективным в большинстве "
 "случаев, но на практике может привести к ряду проблем:"
 
-#: ../../howto/logging-cookbook.rst:4211
+#: ../../howto/logging-cookbook.rst:4210
 msgid ""
 "Logging output can be garbled because multiple threads or processes try to "
 "write to the same file. Although logging guards against concurrent use of "
@@ -8787,7 +8456,7 @@ msgstr ""
 "одновременная запись выполняется двумя разными потоками с использованием "
 "двух разных экземпляров обработчика, которые указывают на один и тот же файл."
 
-#: ../../howto/logging-cookbook.rst:4217
+#: ../../howto/logging-cookbook.rst:4216
 msgid ""
 "An attempt to delete a file (e.g. during file rotation) silently fails, "
 "because there is another reference pointing to it. This can lead to "
@@ -8803,7 +8472,7 @@ msgstr ""
 "на месте и неожиданно увеличивается в размере, несмотря на предположительное "
 "вращение на основе размера."
 
-#: ../../howto/logging-cookbook.rst:4224
+#: ../../howto/logging-cookbook.rst:4223
 msgid ""
 "Use the techniques outlined in :ref:`multiple-processes` to circumvent such "
 "issues."
@@ -8811,13 +8480,13 @@ msgstr ""
 "Используйте методы, описанные в :ref:`multiple-processes`, чтобы обойти "
 "такие проблемы."
 
-#: ../../howto/logging-cookbook.rst:4228
+#: ../../howto/logging-cookbook.rst:4227
 msgid "Using loggers as attributes in a class or passing them as parameters"
 msgstr ""
 "Использование регистраторов в качестве атрибутов класса или передача их в "
 "качестве параметров."
 
-#: ../../howto/logging-cookbook.rst:4230
+#: ../../howto/logging-cookbook.rst:4229
 msgid ""
 "While there might be unusual cases where you'll need to do this, in general "
 "there is no point because loggers are singletons. Code can always access a "
@@ -8837,7 +8506,7 @@ msgstr ""
 "где единицей декомпозиции программного обеспечения является модуль (а не "
 "класс)."
 
-#: ../../howto/logging-cookbook.rst:4239
+#: ../../howto/logging-cookbook.rst:4238
 msgid ""
 "Adding handlers other than :class:`~logging.NullHandler` to a logger in a "
 "library"
@@ -8845,7 +8514,7 @@ msgstr ""
 "Добавление обработчиков, отличных от :class:`~logging.NullHandler`, в "
 "регистратор в библиотеке."
 
-#: ../../howto/logging-cookbook.rst:4241
+#: ../../howto/logging-cookbook.rst:4240
 msgid ""
 "Configuring logging by adding handlers, formatters and filters is the "
 "responsibility of the application developer, not the library developer. If "
@@ -8858,11 +8527,11 @@ msgstr ""
 "вы не добавляете обработчики ни в один из ваших регистраторов, кроме "
 "экземпляра :class:`~logging.NullHandler`."
 
-#: ../../howto/logging-cookbook.rst:4247
+#: ../../howto/logging-cookbook.rst:4246
 msgid "Creating a lot of loggers"
 msgstr "Создание большого количества логгеров"
 
-#: ../../howto/logging-cookbook.rst:4249
+#: ../../howto/logging-cookbook.rst:4248
 msgid ""
 "Loggers are singletons that are never freed during a script execution, and "
 "so creating lots of loggers will use up memory which can't then be freed. "
@@ -8881,38 +8550,38 @@ msgstr ""
 "ваши журналы и ограничьте создаваемые регистраторы теми, которые описывают "
 "области вашего приложения (обычно модули , но иногда немного более детально)."
 
-#: ../../howto/logging-cookbook.rst:4260
+#: ../../howto/logging-cookbook.rst:4259
 msgid "Other resources"
 msgstr "Другие ресурсы"
 
-#: ../../howto/logging-cookbook.rst:4264
+#: ../../howto/logging-cookbook.rst:4263
 msgid "Module :mod:`logging`"
 msgstr "Модуль :mod:`logging`"
 
-#: ../../howto/logging-cookbook.rst:4265
+#: ../../howto/logging-cookbook.rst:4264
 msgid "API reference for the logging module."
 msgstr "Ссылка на API для модуля ведения журнала."
 
-#: ../../howto/logging-cookbook.rst:4267
+#: ../../howto/logging-cookbook.rst:4266
 msgid "Module :mod:`logging.config`"
 msgstr "Модуль :mod:`logging.config`"
 
-#: ../../howto/logging-cookbook.rst:4268
+#: ../../howto/logging-cookbook.rst:4267
 msgid "Configuration API for the logging module."
 msgstr "API конфигурации для модуля журналирования."
 
-#: ../../howto/logging-cookbook.rst:4270
+#: ../../howto/logging-cookbook.rst:4269
 msgid "Module :mod:`logging.handlers`"
 msgstr "Модуль :mod:`logging.handlers`"
 
-#: ../../howto/logging-cookbook.rst:4271
+#: ../../howto/logging-cookbook.rst:4270
 msgid "Useful handlers included with the logging module."
 msgstr "Полезные обработчики, включенные в модуль журналирования."
 
-#: ../../howto/logging-cookbook.rst:4273
+#: ../../howto/logging-cookbook.rst:4272
 msgid ":ref:`Basic Tutorial <logging-basic-tutorial>`"
 msgstr ":ref:`Basic Tutorial <logging-basic-tutorial>`"
 
-#: ../../howto/logging-cookbook.rst:4275
+#: ../../howto/logging-cookbook.rst:4274
 msgid ":ref:`Advanced Tutorial <logging-advanced-tutorial>`"
 msgstr ":ref:`Advanced Tutorial <logging-advanced-tutorial>`"
