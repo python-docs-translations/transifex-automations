@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-21 15:50+0000\n"
+"POT-Creation-Date: 2026-03-25 16:54+0000\n"
 "PO-Revision-Date: 2025-07-18 19:58+0000\n"
 "Last-Translator: eulalio barbero espinosa <eulalio@disroot.org>, 2026\n"
 "Language-Team: Spanish (Spain) (https://app.transifex.com/python-doc/"
@@ -2412,6 +2412,10 @@ msgid ""
 "its :meth:`utcoffset` and :meth:`dst` methods must not return ``None``. If "
 "*self* is naive, it is presumed to represent time in the system time zone."
 msgstr ""
+"Si se proporciona, *tz* debe ser una instancia de una subclase de :class:"
+"`tzinfo`, y sus métodos :meth:`utcoffset` y :meth:`dst` no deben devolver "
+"``None``. Si *self* es ingenuo, se supone que representa la hora en la zona "
+"horaria del sistema."
 
 #: ../../library/datetime.rst:1296
 msgid ""
@@ -2420,6 +2424,11 @@ msgid ""
 "converted datetime instance will be set to an instance of :class:`timezone` "
 "with the zone name and offset obtained from the OS."
 msgstr ""
+"Si se llama sin argumentos (o con ``tz=None``) se asume la zona horaria "
+"local del sistema para la zona horaria de destino. El atributo ``.tzinfo`` "
+"de la instancia datetime convertida se establecerá en una instancia de :"
+"class:`timezone` con el nombre de la zona y el desplazamiento obtenidos del "
+"SO."
 
 #: ../../library/datetime.rst:1301
 msgid ""
@@ -2429,6 +2438,12 @@ msgid ""
 "``astz = dt.astimezone(tz)``, ``astz - astz.utcoffset()`` will have the same "
 "date and time data as ``dt - dt.utcoffset()``."
 msgstr ""
+"Si ``self.tzinfo`` es *tz*, ``self.astimezone(tz)`` es igual a *self*: no se "
+"realiza ningún ajuste de los datos de fecha u hora. De lo contrario, el "
+"resultado es la hora local en la zona horaria *tz*, que representa la misma "
+"hora UTC que *self*: después de ``astz = dt.astimezone(tz)``, ``astz - astz."
+"utcoffset()`` tendrá los mismos datos de fecha y hora que ``dt - dt."
+"utcoffset()``."
 
 #: ../../library/datetime.rst:1307
 msgid ""
@@ -2438,6 +2453,11 @@ msgid ""
 "object from an aware datetime *dt* without conversion of date and time data, "
 "use ``dt.replace(tzinfo=None)``."
 msgstr ""
+"Si sólo desea adjuntar un objeto :class:`timezone` *tz* a una fecha y hora "
+"*dt* sin ajustar los datos de fecha y hora, utilice ``dt."
+"replace(tzinfo=tz)``. Si sólo desea eliminar el objeto :class:`!timezone` de "
+"una fecha y hora *dt* sin convertir los datos de fecha y hora, utilice ``dt."
+"replace(tzinfo=None)``."
 
 #: ../../library/datetime.rst:1312
 msgid ""
@@ -2445,6 +2465,10 @@ msgid ""
 "class:`tzinfo` subclass to affect the result returned by :meth:`astimezone`. "
 "Ignoring error cases, :meth:`astimezone` acts like::"
 msgstr ""
+"Tenga en cuenta que el método por defecto :meth:`tzinfo.fromutc` puede ser "
+"sobrescrito en una subclase de :class:`tzinfo` para afectar al resultado "
+"devuelto por :meth:`astimezone`. Ignorando los casos de error, :meth:"
+"`astimezone` actúa como::"
 
 #: ../../library/datetime.rst:1316
 msgid ""
@@ -2456,16 +2480,25 @@ msgid ""
 "    # Convert from UTC to tz's local time.\n"
 "    return tz.fromutc(utc)"
 msgstr ""
+"def astimezone(self, tz):\n"
+"    if self.tzinfo is tz:\n"
+"        return self\n"
+"    # Convierte self a UTC y adjunta el nuevo objeto de zona horaria.\n"
+"    utc = (self - self.utcoffset()).replace(tzinfo=tz)\n"
+"    # Convierte de UTC a la hora local de tz.\n"
+"    return tz.fromutc(utc)"
 
 #: ../../library/datetime.rst:1324
 msgid "*tz* now can be omitted."
-msgstr ""
+msgstr "*tz* ahora se puede omitir."
 
 #: ../../library/datetime.rst:1327
 msgid ""
 "The :meth:`astimezone` method can now be called on naive instances that are "
 "presumed to represent system local time."
 msgstr ""
+"Ahora se puede llamar al método :meth:`astimezone` en instancias ingenuas "
+"que se supone que representan la hora local del sistema."
 
 #: ../../library/datetime.rst:1334
 msgid ""
@@ -2473,12 +2506,16 @@ msgid ""
 "utcoffset(self)``, and raises an exception if the latter doesn't return "
 "``None`` or a :class:`timedelta` object with magnitude less than one day."
 msgstr ""
+"Si :attr:`.tzinfo` es ``None``, devuelve ``None``, en caso contrario "
+"devuelve ``self.tzinfo.utcoffset(self)``, y lanza una excepción si este "
+"último no devuelve ``None`` o un objeto :class:`timedelta` con magnitud "
+"inferior a un día."
 
 #: ../../library/datetime.rst:1338 ../../library/datetime.rst:1930
 #: ../../library/datetime.rst:2037 ../../library/datetime.rst:2282
 #: ../../library/datetime.rst:2294 ../../library/datetime.rst:2623
 msgid "The UTC offset is not restricted to a whole number of minutes."
-msgstr ""
+msgstr "El desfase UTC no está limitado a un número entero de minutos."
 
 #: ../../library/datetime.rst:1344
 msgid ""
@@ -2486,11 +2523,15 @@ msgid ""
 "dst(self)``, and raises an exception if the latter doesn't return ``None`` "
 "or a :class:`timedelta` object with magnitude less than one day."
 msgstr ""
+"Si :attr:`.tzinfo` es ``None``, devuelve ``None``, en caso contrario "
+"devuelve ``self.tzinfo.dst(self)``, y lanza una excepción si este último no "
+"devuelve ``None`` o un objeto :class:`timedelta` con magnitud inferior a un "
+"día."
 
 #: ../../library/datetime.rst:1348 ../../library/datetime.rst:1940
 #: ../../library/datetime.rst:2091
 msgid "The DST offset is not restricted to a whole number of minutes."
-msgstr ""
+msgstr "El desfase horario no se limita a un número entero de minutos."
 
 #: ../../library/datetime.rst:1354
 msgid ""
@@ -2498,6 +2539,9 @@ msgid ""
 "tzname(self)``, raises an exception if the latter doesn't return ``None`` or "
 "a string object,"
 msgstr ""
+"Si :attr:`.tzinfo` es ``None``, devuelve ``None``, en caso contrario "
+"devuelve ``self.tzinfo.tzname(self)``, lanza una excepción si este último no "
+"devuelve ``None`` o un objeto string,"
 
 #: ../../library/datetime.rst:1365
 msgid ""
@@ -2505,6 +2549,9 @@ msgid ""
 "                  d.hour, d.minute, d.second,\n"
 "                  d.weekday(), yday, dst))"
 msgstr ""
+"time.struct_time((d.year, d.month, d.day,\n"
+"                  d.hour, d.minute, d.second,\n"
+"                  d.weekday(), yday, dst))"
 
 #: ../../library/datetime.rst:1369
 msgid ""
@@ -2516,6 +2563,13 @@ msgid ""
 "non-zero value, :attr:`!tm_isdst` is set to 1; else :attr:`!tm_isdst` is set "
 "to 0."
 msgstr ""
+"donde ``yday = d.toordinal() - date(d.year, 1, 1).toordinal() + 1`` es el "
+"número de día dentro del año en curso, empezando por 1 para el 1 de enero. "
+"La bandera :attr:`~time.struct_time.tm_isdst` del resultado se establece de "
+"acuerdo con el método :meth:`dst`: :attr:`.tzinfo` es ``None`` o :meth:`dst` "
+"devuelve ``None``, :attr:`!tm_isdst` se establece en ``-1``; si :meth:`dst` "
+"devuelve un valor distinto de cero, :attr:`!tm_isdst` se establece en 1; si "
+"no, :attr:`!tm_isdst` se establece en 0."
 
 #: ../../library/datetime.rst:1380
 msgid ""
@@ -2524,6 +2578,10 @@ msgid ""
 "regardless of what ``d.dst()`` returns. DST is never in effect for a UTC "
 "time."
 msgstr ""
+"Si la instancia :class:`.datetime` ``d`` es ingenua, ocurre lo mismo que con "
+"``d.timetuple()`` excepto que :attr:`~.time.struct_time.tm_isdst` se fuerza "
+"a 0 independientemente de lo que devuelva ``d.dst()``. DST nunca está en "
+"efecto para una hora UTC."
 
 #: ../../library/datetime.rst:1384
 msgid ""
@@ -2533,6 +2591,11 @@ msgid ""
 "`OverflowError` may be raised if ``d.year`` was ``MINYEAR`` or ``MAXYEAR`` "
 "and UTC adjustment spills over a year boundary."
 msgstr ""
+"Si ``d`` es consciente, ``d`` se normaliza a la hora UTC, restando ``d."
+"utcoffset()``, y se devuelve un :class:`time.struct_time` para la hora "
+"normalizada. :attr:`!tm_isdst` se fuerza a 0. Tenga en cuenta que puede "
+"surgir un :exc:`OverflowError` si ``d.year`` era ``MINYEAR`` o ``MAXYEAR`` y "
+"el ajuste UTC se extiende por encima del límite de un año."
 
 #: ../../library/datetime.rst:1393
 msgid ""
@@ -2543,12 +2606,21 @@ msgid ""
 "replace(tzinfo=timezone.utc)`` to make it aware, at which point you can use :"
 "meth:`.datetime.timetuple`."
 msgstr ""
+"Debido a que los objetos naive ``datetime`` son tratados por muchos métodos "
+"``datetime`` como horas locales, es preferible utilizar datetimes "
+"conscientes para representar tiempos en UTC; como resultado, el uso de :meth:"
+"`datetime.utctimetuple` puede dar resultados engañosos. Si tiene un "
+"``datetime`` ingenuo que representa UTC, utilice ``datetime."
+"replace(tzinfo=timezone.utc)`` para hacerlo consciente, momento en el que "
+"podrá utilizar :meth:`.datetime.timetuple`."
 
 #: ../../library/datetime.rst:1402
 msgid ""
 "Return the proleptic Gregorian ordinal of the date. The same as ``self."
 "date().toordinal()``."
 msgstr ""
+"Devuelve el ordinal gregoriano proléptico de la fecha. Igual que ``self."
+"date().toordinal()``."
 
 #: ../../library/datetime.rst:1407
 msgid ""
@@ -2556,6 +2628,9 @@ msgid ""
 "return value is a :class:`float` similar to that returned by :func:`time."
 "time`."
 msgstr ""
+"Devuelve la marca de tiempo POSIX correspondiente a la instancia :class:`."
+"datetime`. El valor devuelto es un :class:`float` similar al devuelto por :"
+"func:`time.time`."
 
 #: ../../library/datetime.rst:1411
 msgid ""
