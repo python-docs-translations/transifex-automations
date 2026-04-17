@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-13 15:10+0000\n"
+"POT-Creation-Date: 2026-04-17 14:50+0000\n"
 "PO-Revision-Date: 2026-02-27 14:38+0000\n"
 "Last-Translator: Freesand Leo <yuqinju@163.com>, 2026\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/python-doc/"
@@ -444,12 +444,16 @@ msgid ""
 "`int`, and :class:`float`, that implement :meth:`~object.__eq__` in C, the "
 "underlying lock is not released during comparisons and this is not a concern."
 msgstr ""
+"这些操作可能会使用 :meth:`~object.__eq__` 对键进行比较，这可以执行任意 "
+"Python 代码。 在这种比较期间，字典可能会被其他线程修改。 对于内置类型如 :"
+"class:`str`, :class:`int` 和 :class:`float`，它们是用 C 来实现 :meth:"
+"`~object.__eq__` 的，下层的锁在比较期间不会被释放所以这不是问题。"
 
 #: ../../library/threadsafety.rst:249
 msgid ""
 "The following operations return new objects and hold the :term:`per-object "
 "lock` for the duration of the operation:"
-msgstr ""
+msgstr "下列操作会返回新的对象并在操作期间持有 :term:`per-object lock`:"
 
 #: ../../library/threadsafety.rst:252
 msgid ""
@@ -459,12 +463,18 @@ msgid ""
 "d.values()    # returns a new dict_values view object\n"
 "d.items()     # returns a new dict_items view object"
 msgstr ""
+"d.copy()      # 返回一个字典的浅拷贝\n"
+"d | other     # 将两个字典合并为一个新字典\n"
+"d.keys()      # 返回一个新的 dict_keys 视图对象\n"
+"d.values()    # 返回一个新的 dict_values 视图对象\n"
+"d.items()     # 返回一个新的 dict_items 视图对象"
 
 #: ../../library/threadsafety.rst:261
 msgid ""
 "The :meth:`~dict.clear` method holds the lock for its duration. Other "
 "threads cannot observe elements being removed."
 msgstr ""
+":meth:`~dict.clear` 方法会在其执行期间持有锁。 其他线程无法观察到元素被移除。"
 
 #: ../../library/threadsafety.rst:264
 msgid ""
@@ -474,6 +484,9 @@ msgid ""
 "iteration). For equality comparison, this applies to :class:`dict` and its "
 "subclasses:"
 msgstr ""
+"下列操作会同时锁定两个字典。 对于 :meth:`~dict.update` 和 ``|=``，这仅在另一"
+"个操作数是使用标准字典迭代器（不能是重写了迭代操作的子类）的 :class:`dict` 时"
+"才适用。 对于相等性比较，这适用于 :class:`dict` 及其子类："
 
 #: ../../library/threadsafety.rst:270
 msgid ""
@@ -481,12 +494,17 @@ msgid ""
 "d |= other_dict       # both locked when other_dict is a dict\n"
 "d == other_dict       # both locked for dict and subclasses"
 msgstr ""
+"d.update(other_dict)  # 当 other_dict 为字典时双方都会被锁定\n"
+"d |= other_dict       # 当 other_dict 为字典时双方都会被锁定\n"
+"d == other_dict       # 对于字典及其子类双方都会被锁定"
 
 #: ../../library/threadsafety.rst:277
 msgid ""
 "All comparison operations also compare values using :meth:`~object.__eq__`, "
 "so for non-built-in types the lock may be released during comparison."
 msgstr ""
+"所有比较操作也都会使用 :meth:`~object.__eq__` 来比较值，因此对于非内置类型来"
+"说锁可能会在比较期间被释放。"
 
 #: ../../library/threadsafety.rst:280
 msgid ""
@@ -494,6 +512,8 @@ msgid ""
 "the iterable is exactly a :class:`dict`, :class:`set`, or :class:`frozenset` "
 "(not subclasses):"
 msgstr ""
+"当可迭代对象为 :class:`dict`, :class:`set` 或 :class:`frozenset` (不能为其子"
+"类) 时 :meth:`~dict.fromkeys` 会同时锁定新字典和可迭代对象："
 
 #: ../../library/threadsafety.rst:284
 msgid ""
@@ -501,12 +521,17 @@ msgid ""
 "dict.fromkeys(a_set)       # locks both\n"
 "dict.fromkeys(a_frozenset) # locks both"
 msgstr ""
+"dict.fromkeys(a_dict)      # 双方均锁定\n"
+"dict.fromkeys(a_set)       # 双方均锁定\n"
+"dict.fromkeys(a_frozenset) # 双方均锁定"
 
 #: ../../library/threadsafety.rst:291
 msgid ""
 "When updating from a non-dict iterable, only the target dictionary is "
 "locked. The iterable may be concurrently modified by another thread:"
 msgstr ""
+"当使用非字典可迭代对象进行更新时，只有目标字典会被锁定。 可迭代对象可能会被其"
+"他线程并发地修改："
 
 #: ../../library/threadsafety.rst:294
 msgid ""
