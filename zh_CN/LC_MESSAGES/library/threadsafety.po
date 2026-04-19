@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-17 14:50+0000\n"
+"POT-Creation-Date: 2026-04-19 14:37+0000\n"
 "PO-Revision-Date: 2026-02-27 14:38+0000\n"
 "Last-Translator: Freesand Leo <yuqinju@163.com>, 2026\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/python-doc/"
@@ -540,13 +540,17 @@ msgid ""
 "dict.fromkeys(iterable)   # iterable is not a dict/set/frozenset: only "
 "result locked"
 msgstr ""
+"d.update(iterable)        # iterable 不是字典：仅 d 被锁定\n"
+"d |= iterable             # iterable 不是字典：仅 d 被锁定\n"
+"dict.fromkeys(iterable)   # iterable 不是字典 dict/set/frozenset：仅结果被锁"
+"定"
 
 #: ../../library/threadsafety.rst:301 ../../library/threadsafety.rst:434
 #: ../../library/threadsafety.rst:525
 msgid ""
 "Operations that involve multiple accesses, as well as iteration, are never "
 "atomic:"
-msgstr ""
+msgstr "涉及多线程访问，以及迭代的操作肯定是非原子化的："
 
 #: ../../library/threadsafety.rst:304
 msgid ""
@@ -561,12 +565,22 @@ msgid ""
 "for key, value in d.items():\n"
 "    process(key)  # another thread may modify d"
 msgstr ""
+"# 非原子化：读取-修改-写入\n"
+"d[key] = d[key] + 1\n"
+"\n"
+"# 非原子化：先检查再执行（TOCTOU）\n"
+"if key in d:\n"
+"    del d[key]\n"
+"\n"
+"# 非线程安全：在修改时迭代\n"
+"for key, value in d.items():\n"
+"    process(key)  # another thread may modify d"
 
 #: ../../library/threadsafety.rst:318
 msgid ""
 "To avoid time-of-check to time-of-use (TOCTOU) issues, use atomic operations "
 "or handle exceptions:"
-msgstr ""
+msgstr "要避免检查时和使用时脱节（TOCTOU）问题，应使用原子化操作或处理异常："
 
 #: ../../library/threadsafety.rst:321
 msgid ""
@@ -579,12 +593,20 @@ msgid ""
 "except KeyError:\n"
 "    pass"
 msgstr ""
+"# 使用带默认值的而不是先检查再删除\n"
+"d.pop(key, None)\n"
+"\n"
+"# 或者处理异常\n"
+"try:\n"
+"    del d[key]\n"
+"except KeyError:\n"
+"    pass"
 
 #: ../../library/threadsafety.rst:333
 msgid ""
 "To safely iterate over a dictionary that may be modified by another thread, "
 "iterate over a copy:"
-msgstr ""
+msgstr "要安全地迭代可能会被另一个线程修改的字典，可以迭代其拷贝："
 
 #: ../../library/threadsafety.rst:336
 msgid ""
@@ -592,21 +614,24 @@ msgid ""
 "for key, value in d.copy().items():\n"
 "    process(key)"
 msgstr ""
+"# 拷贝以安全地迭代\n"
+"for key, value in d.copy().items():\n"
+"    process(key)"
 
 #: ../../library/threadsafety.rst:343
 msgid ""
 "Consider external synchronization when sharing :class:`dict` instances "
 "across threads."
-msgstr ""
+msgstr "在线程间共享 :class:`dict` 实例时可考虑进行外部同步。"
 
 #: ../../library/threadsafety.rst:350
 msgid "Thread safety for set objects"
-msgstr ""
+msgstr "集合对象的线程安全性"
 
 #: ../../library/threadsafety.rst:352 ../../library/threadsafety.rst:457
 msgid ""
 "The :func:`len` function is lock-free and :term:`atomic <atomic operation>`."
-msgstr ""
+msgstr ":func:`len` 函数是免加锁且 :term:`原子化 <atomic operation>` 的。"
 
 #: ../../library/threadsafety.rst:354
 msgid ""
