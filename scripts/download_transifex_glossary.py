@@ -120,8 +120,6 @@ def write_file(content: str, output: str):
     except OSError as e:
         fail(f"Failed to write output file '{output}': {e}")
 
-    logger.info("Output file written successfully.")
-
 
 def main():
     token = get_env("TX_TOKEN", required=True)
@@ -141,8 +139,9 @@ def main():
 
     csv_content = download_glossary_content(token, download_id, timeout, interval)
 
-    logger.info(f"Writing content to {output}")
+    logger.info(f"Writing content to '{output}'")
     write_file(csv_content, output)
+    logger.info("Output file written successfully.")
 
 
 if __name__ == "__main__":
