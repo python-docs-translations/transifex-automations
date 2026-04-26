@@ -3,14 +3,21 @@
 import os
 import sys
 import time
+import logging
 import requests
 
+level = os.getenv("LOG_LEVEL", "INFO").upper()
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+)
+logger = logging.getLogger(__name__)
 
 API_BASE = "https://rest.api.transifex.com"
 
 
 def fail(msg: str):
-    print(f"ERROR: {msg}", file=sys.stderr)
+    logger.error(msg)
     sys.exit(1)
 
 
@@ -113,7 +120,7 @@ def write_file(content: str, output: str):
     except OSError as e:
         fail(f"Failed to write output file '{output}': {e}")
 
-    print("Output file written successfully.")
+    logger.info("Output file written successfully.")
 
 
 def main():
@@ -124,17 +131,17 @@ def main():
     timeout = get_int_env("EXPORT_TIMEOUT", 300)
     interval = get_int_env("EXPORT_INTERVAL", 10)
 
-    print(f"Using timeout={timeout}s interval={interval}s")
+    logger.info(f"Using timeout={timeout}s interval={interval}s")
 
-    print("Requesting export...")
+    logger.info("Requesting export...")
     download_id = request_export(token, glossary_id)
 
-    print(f"Download ID: {download_id}")
-    print("Waiting for content to be available...")
+    logger.info(f"Download ID: {download_id}")
+    logger.info("Waiting for content to be available...")
 
     csv_content = download_glossary_content(token, download_id, timeout, interval)
 
-    print(f"Writing content to {output}")
+    logger.info(f"Writing content to {output}")
     write_file(csv_content, output)
 
 
