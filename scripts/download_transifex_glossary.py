@@ -124,7 +124,7 @@ def write_file(content: str, output: str):
 def main():
     token = get_env("TX_TOKEN", required=True)
     glossary_id = get_env("GLOSSARY_ID", required=True)
-    output = get_env("OUTPUT_FILE", "glossary.csv")
+    output = get_env("OUTPUT", "glossary.csv")
 
     timeout = get_int_env("EXPORT_TIMEOUT", 300)
     interval = get_int_env("EXPORT_INTERVAL", 10)
