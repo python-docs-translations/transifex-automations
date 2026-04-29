@@ -32,7 +32,7 @@ create_payload = {
     }
 }
 create_response = requests.post(
-    create_url, data=json.dumps(create_payload), headers=create_headers
+    create_url, data=json.dumps(create_payload), headers=create_headers, timeout=30
 )
 create_response.raise_for_status()
 download_id = create_response.json()["data"]["id"]
@@ -45,7 +45,7 @@ status_headers = {
 }
 while True:
     status_response = requests.get(
-        status_url, headers=status_headers, allow_redirects=False
+        status_url, headers=status_headers, allow_redirects=False, timeout=30
     )
     status_response.raise_for_status()
     if status_response.status_code == requests.codes.SEE_OTHER:
