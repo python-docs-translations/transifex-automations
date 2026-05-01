@@ -5,16 +5,16 @@
 #
 # Translators:
 # python-doc bot, 2025
-# André Moreira <afrmscb@gmail.com>, 2025
+# André Moreira <afrmscb@gmail.com>, 2026
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-19 15:10+0000\n"
+"POT-Creation-Date: 2026-05-01 15:37+0000\n"
 "PO-Revision-Date: 2025-09-15 01:05+0000\n"
-"Last-Translator: André Moreira <afrmscb@gmail.com>, 2025\n"
+"Last-Translator: André Moreira <afrmscb@gmail.com>, 2026\n"
 "Language-Team: Portuguese (Portugal) (https://app.transifex.com/python-doc/"
 "teams/5390/pt_PT/)\n"
 "MIME-Version: 1.0\n"
@@ -763,11 +763,399 @@ msgstr ""
 "Veja também a descrição da instrução :keyword:`try` na secção :ref:`try` e "
 "da instrução :keyword:`raise` na secção :ref:`raise`."
 
-#: ../../reference/executionmodel.rst:395
+#: ../../reference/executionmodel.rst:397
+msgid "Runtime Components"
+msgstr "Componentes de tempo de execução"
+
+#: ../../reference/executionmodel.rst:400
+msgid "General Computing Model"
+msgstr "Modelo de computação geral"
+
+#: ../../reference/executionmodel.rst:402
+msgid ""
+"Python's execution model does not operate in a vacuum.  It runs on a host "
+"machine and through that host's runtime environment, including its operating "
+"system (OS), if there is one.  When a program runs, the conceptual layers of "
+"how it runs on the host look something like this:"
+msgstr ""
+"O modelo de execução do Python não opera no vazio. Ele é executado numa "
+"máquina hospedeira e através do ambiente de execução dessa máquina, "
+"incluindo o seu sistema operativo (SO), se houver um. Quando um programa é "
+"executado, as camadas conceptuais de como ele é executado na máquina "
+"hospedeira parecem algo como isto:"
+
+#: ../../reference/executionmodel.rst:0
+msgid "**host machine**"
+msgstr "**máquina hospedeira**"
+
+#: ../../reference/executionmodel.rst:0
+msgid "**process** (global resources)"
+msgstr "**processo** (recursos globais)"
+
+#: ../../reference/executionmodel.rst:0
+msgid "**thread** (runs machine code)"
+msgstr "**thread** (executa código de máquina)"
+
+#: ../../reference/executionmodel.rst:412
+msgid ""
+"Each process represents a program running on the host.  Think of each "
+"process itself as the data part of its program.  Think of the process' "
+"threads as the execution part of the program.  This distinction will be "
+"important to understand the conceptual Python runtime."
+msgstr ""
+"Cada processo representa um programa em execução na máquina hospedeira. "
+"Pense em cada processo como a parte de dados do seu programa. Pense nas "
+"*threads* do processo como a parte de execução do programa. Esta distinção "
+"será importante para entender o tempo de execução conceitual do Python."
+
+#: ../../reference/executionmodel.rst:417
+msgid ""
+"The process, as the data part, is the execution context in which the program "
+"runs.  It mostly consists of the set of resources assigned to the program by "
+"the host, including memory, signals, file handles, sockets, and environment "
+"variables."
+msgstr ""
+"O processo, como parte de dados, é o contexto de execução no qual o programa "
+"é executado. Consiste principalmente no conjunto de recursos atribuídos ao "
+"programa pela máquina hospedeira, incluindo memória, sinais, *handles* de "
+"ficheiros, *sockets* e variáveis de ambiente."
+
+#: ../../reference/executionmodel.rst:422
+msgid ""
+"Processes are isolated and independent from one another.  (The same is true "
+"for hosts.)  The host manages the process' access to its assigned resources, "
+"in addition to coordinating between processes."
+msgstr ""
+"Os processos são isolados e independentes uns dos outros. (O mesmo é verdade "
+"para as máquinas hospedeiras.) A máquina hospedeira gere o acesso do "
+"processo aos seus recursos atribuídos, além de coordenar entre processos."
+
+#: ../../reference/executionmodel.rst:426
+msgid ""
+"Each thread represents the actual execution of the program's machine code, "
+"running relative to the resources assigned to the program's process.  It's "
+"strictly up to the host how and when that execution takes place."
+msgstr ""
+"Cada *thread* representa a execução real do código de máquina do programa, "
+"executando em relação aos recursos atribuídos ao processo do programa. Cabe "
+"estritamente à máquina hospedeira como e quando essa execução ocorre."
+
+#: ../../reference/executionmodel.rst:431
+msgid ""
+"From the point of view of Python, a program always starts with exactly one "
+"thread.  However, the program may grow to run in multiple simultaneous "
+"threads.  Not all hosts support multiple threads per process, but most do.  "
+"Unlike processes, threads in a process are not isolated and independent from "
+"one another.  Specifically, all threads in a process share all of the "
+"process' resources."
+msgstr ""
+"Do ponto de vista do Python, um programa sempre começa com exatamente uma "
+"*thread*. No entanto, o programa pode crescer para ser executado em várias "
+"*threads* simultâneas. Nem todas as máquinas hospedeiras suportam várias "
+"*threads* por processo, mas a maioria suporta. Ao contrário dos processos, "
+"as *threads* num processo não são isoladas nem independentes umas das "
+"outras. Especificamente, todas as *threads* num processo partilham todos os "
+"recursos do processo."
+
+#: ../../reference/executionmodel.rst:438
+msgid ""
+"The fundamental point of threads is that each one does *run* independently, "
+"at the same time as the others.  That may be only conceptually at the same "
+"time (\"concurrently\") or physically (\"in parallel\").  Either way, the "
+"threads effectively run at a non-synchronized rate."
+msgstr ""
+"O ponto fundamental das *threads* é que cada uma *executa* "
+"independentemente, ao mesmo tempo que as outras. Isso pode ser apenas "
+"conceitualmente ao mesmo tempo (\"concorrentemente\") ou fisicamente (\"em "
+"paralelo\"). De qualquer forma, as *threads* executam efetivamente a uma "
+"taxa não sincronizada."
+
+#: ../../reference/executionmodel.rst:446
+msgid ""
+"That non-synchronized rate means none of the process' memory is guaranteed "
+"to stay consistent for the code running in any given thread.  Thus multi-"
+"threaded programs must take care to coordinate access to intentionally "
+"shared resources.  Likewise, they must take care to be absolutely diligent "
+"about not accessing any *other* resources in multiple threads; otherwise two "
+"threads running at the same time might accidentally interfere with each "
+"other's use of some shared data.  All this is true for both Python programs "
+"and the Python runtime."
+msgstr ""
+"Essa taxa não sincronizada significa que nenhuma da memória do processo é "
+"garantida como consistente para o código em execução em qualquer *thread* "
+"dada. Assim, programas com várias *threads* devem tomar cuidado para "
+"coordenar o acesso a recursos compartilhados intencionalmente. Da mesma "
+"forma, devem tomar cuidado para serem absolutamente diligentes em não "
+"acessar quaisquer *outros* recursos em várias *threads*; caso contrário, "
+"duas *threads* executando ao mesmo tempo podem interferir acidentalmente no "
+"uso uma da outra de alguns dados compartilhados. Tudo isto é verdadeiro "
+"tanto para programas Python quanto para o tempo de execução do Python."
+
+#: ../../reference/executionmodel.rst:456
+msgid ""
+"The cost of this broad, unstructured requirement is the tradeoff for the "
+"kind of raw concurrency that threads provide.  The alternative to the "
+"required discipline generally means dealing with non-deterministic bugs and "
+"data corruption."
+msgstr ""
+"O custo deste requisito amplo e não estruturado é a compensação pelo tipo de "
+"concorrência bruta que as *threads* fornecem. A alternativa à disciplina "
+"necessária geralmente significa lidar com erros não determinísticos e "
+"corrupção de dados."
+
+#: ../../reference/executionmodel.rst:462
+msgid "Python Runtime Model"
+msgstr "Modelo de tempo de execução do Python"
+
+#: ../../reference/executionmodel.rst:464
+msgid ""
+"The same conceptual layers apply to each Python program, with some extra "
+"data layers specific to Python:"
+msgstr ""
+"As mesmas camadas conceptuais aplicam-se a cada programa Python, com algumas "
+"camadas de dados adicionais específicas do Python:"
+
+#: ../../reference/executionmodel.rst:0
+msgid "Python global runtime (*state*)"
+msgstr "Tempo de execução global do Python (*estado*)"
+
+#: ../../reference/executionmodel.rst:0
+msgid "Python interpreter (*state*)"
+msgstr "Interpretador do Python (*estado*)"
+
+#: ../../reference/executionmodel.rst:0
+msgid "**thread** (runs Python bytecode and \"C-API\")"
+msgstr "**thread** (executa *bytecode* Python e \"C-API\")"
+
+#: ../../reference/executionmodel.rst:0
+msgid "Python thread *state*"
+msgstr "Estado da *thread* Python"
+
+#: ../../reference/executionmodel.rst:474
+msgid ""
+"At the conceptual level: when a Python program starts, it looks exactly like "
+"that diagram, with one of each.  The runtime may grow to include multiple "
+"interpreters, and each interpreter may grow to include multiple thread "
+"states."
+msgstr ""
+"Ao nível conceitual: quando um programa Python começa, parece exatamente com "
+"esse diagrama, com um de cada. O tempo de execução pode crescer para incluir "
+"vários interpretadores, e cada interpretador pode crescer para incluir "
+"vários estados de *thread*."
+
+#: ../../reference/executionmodel.rst:481
+msgid ""
+"A Python implementation won't necessarily implement the runtime layers "
+"distinctly or even concretely.  The only exception is places where distinct "
+"layers are directly specified or exposed to users, like through the :mod:"
+"`threading` module."
+msgstr ""
+"Uma implementação do Python não implementará necessariamente as camadas de "
+"tempo de execução de forma distinta ou mesmo concreta. A única exceção são "
+"os locais onde camadas distintas são especificadas diretamente ou expostas "
+"aos utilizadores, como através do módulo :mod:`threading`."
+
+#: ../../reference/executionmodel.rst:488
+msgid ""
+"The initial interpreter is typically called the \"main\" interpreter. Some "
+"Python implementations, like CPython, assign special roles to the main "
+"interpreter."
+msgstr ""
+"O interpretador inicial é tipicamente chamado de interpretador "
+"\"principal\". Algumas implementações do Python, como o CPython, atribuem "
+"papéis especiais ao interpretador principal."
+
+#: ../../reference/executionmodel.rst:492
+msgid ""
+"Likewise, the host thread where the runtime was initialized is known as the "
+"\"main\" thread.  It may be different from the process' initial thread, "
+"though they are often the same.  In some cases \"main thread\" may be even "
+"more specific and refer to the initial thread state. A Python runtime might "
+"assign specific responsibilities to the main thread, such as handling "
+"signals."
+msgstr ""
+"Da mesma forma, a *thread* hospedeira onde o tempo de execução foi "
+"inicializado é conhecida como a *thread* \"principal\". Pode ser diferente "
+"da *thread* inicial do processo, embora muitas vezes sejam a mesma. Em "
+"alguns casos, \"*thread* principal\" pode ser ainda mais específica e "
+"referir-se ao estado inicial da *thread*. Um tempo de execução do Python "
+"pode atribuir responsabilidades específicas à *thread* principal, como o "
+"tratamento de sinais."
+
+#: ../../reference/executionmodel.rst:499
+msgid ""
+"As a whole, the Python runtime consists of the global runtime state, "
+"interpreters, and thread states.  The runtime ensures all that state stays "
+"consistent over its lifetime, particularly when used with multiple host "
+"threads."
+msgstr ""
+"No seu conjunto, o tempo de execução do Python consiste no estado global do "
+"tempo de execução, interpretadores e estados de *thread*. O tempo de "
+"execução garante que todo esse estado permanece consistente ao longo do seu "
+"tempo de vida, especialmente quando usado com várias *threads* hospedeiras."
+
+#: ../../reference/executionmodel.rst:504
+msgid ""
+"The global runtime, at the conceptual level, is just a set of interpreters.  "
+"While those interpreters are otherwise isolated and independent from one "
+"another, they may share some data or other resources.  The runtime is "
+"responsible for managing these global resources safely.  The actual nature "
+"and management of these resources is implementation-specific.  Ultimately, "
+"the external utility of the global runtime is limited to managing "
+"interpreters."
+msgstr ""
+"O tempo de execução global, ao nível conceitual, é apenas um conjunto de "
+"interpretadores. Embora esses interpretadores sejam, de outra forma, "
+"isolados e independentes uns dos outros, podem partilhar alguns dados ou "
+"outros recursos. O tempo de execução é responsável por gerir esses recursos "
+"globais de forma segura. A natureza e gestão reais desses recursos são "
+"específicas da implementação. Em última análise, a utilidade externa do "
+"tempo de execução global é limitada à gestão de interpretadores."
+
+#: ../../reference/executionmodel.rst:512
+msgid ""
+"In contrast, an \"interpreter\" is conceptually what we would normally think "
+"of as the (full-featured) \"Python runtime\".  When machine code executing "
+"in a host thread interacts with the Python runtime, it calls into Python in "
+"the context of a specific interpreter."
+msgstr ""
+"Em contraste, um \"interpretador\" é conceitualmente o que normalmente "
+"pensaríamos como o tempo de execução \"Python\" (com todas as "
+"funcionalidades). Quando o código de máquina em execução numa *thread* "
+"hospedeira interage com o tempo de execução do Python, chama o Python no "
+"contexto de um interpretador específico."
+
+#: ../../reference/executionmodel.rst:519
+msgid ""
+"The term \"interpreter\" here is not the same as the \"bytecode "
+"interpreter\", which is what regularly runs in threads, executing compiled "
+"Python code."
+msgstr ""
+"O termo \"interpretador\" aqui não é o mesmo que o \"interpretador de "
+"*bytecode*\", que é o que normalmente é executado em *threads*, executando "
+"código Python compilado."
+
+#: ../../reference/executionmodel.rst:523
+msgid ""
+"In an ideal world, \"Python runtime\" would refer to what we currently call "
+"\"interpreter\".  However, it's been called \"interpreter\" at least since "
+"introduced in 1997 (`CPython:a027efa5b`_)."
+msgstr ""
+"Num mundo ideal, \"tempo de execução do Python\" referir-se-ia ao que "
+"atualmente chamamos de \"interpretador\". No entanto, tem sido chamado de "
+"\"interpretador\" pelo menos desde que foi introduzido em 1997 (`CPython:"
+"a027efa5b`_)."
+
+#: ../../reference/executionmodel.rst:529
+msgid ""
+"Each interpreter completely encapsulates all of the non-process-global, non-"
+"thread-specific state needed for the Python runtime to work. Notably, the "
+"interpreter's state persists between uses.  It includes fundamental data "
+"like :data:`sys.modules`.  The runtime ensures multiple threads using the "
+"same interpreter will safely share it between them."
+msgstr ""
+"Cada interpretador encapsula completamente todo o estado não global do "
+"processo e não específico da *thread* necessário para o funcionamento do "
+"tempo de execução do Python. Notavelmente, o estado do interpretador "
+"persiste entre usos. Inclui dados fundamentais como :data:`sys.modules`. O "
+"tempo de execução garante que várias *threads* que usam o mesmo "
+"interpretador o partilharão de forma segura."
+
+#: ../../reference/executionmodel.rst:536
+msgid ""
+"A Python implementation may support using multiple interpreters at the same "
+"time in the same process.  They are independent and isolated from one "
+"another.  For example, each interpreter has its own :data:`sys.modules`."
+msgstr ""
+"Uma implementação do Python pode suportar o uso de vários interpretadores ao "
+"mesmo tempo no mesmo processo. Eles são independentes e isolados uns dos "
+"outros. Por exemplo, cada interpretador tem o seu próprio :data:`sys."
+"modules`."
+
+#: ../../reference/executionmodel.rst:541
+msgid ""
+"For thread-specific runtime state, each interpreter has a set of thread "
+"states, which it manages, in the same way the global runtime contains a set "
+"of interpreters.  It can have thread states for as many host threads as it "
+"needs.  It may even have multiple thread states for the same host thread, "
+"though that isn't as common."
+msgstr ""
+"Para o estado de tempo de execução específico da *thread*, cada "
+"interpretador tem um conjunto de estados de *thread*, que gere, da mesma "
+"forma que o tempo de execução global contém um conjunto de interpretadores. "
+"Pode ter estados de *thread* para quantas *threads* hospedeiras forem "
+"necessárias. Pode até ter vários estados de *thread* para a mesma *thread* "
+"hospedeira, embora isso não seja tão comum."
+
+#: ../../reference/executionmodel.rst:547
+msgid ""
+"Each thread state, conceptually, has all the thread-specific runtime data an "
+"interpreter needs to operate in one host thread.  The thread state includes "
+"the current raised exception and the thread's Python call stack.  It may "
+"include other thread-specific resources."
+msgstr ""
+"Cada estado de *thread*, conceitualmente, tem todos os dados de tempo de "
+"execução específicos da *thread* de que um interpretador necessita para "
+"operar numa *thread* hospedeira. O estado da *thread* inclui a exceção "
+"atualmente levantada e a pilha de chamadas Python da *thread*. Pode incluir "
+"outros recursos específicos da *thread*."
+
+#: ../../reference/executionmodel.rst:554
+msgid ""
+"The term \"Python thread\" can sometimes refer to a thread state, but "
+"normally it means a thread created using the :mod:`threading` module."
+msgstr ""
+"O termo \"*thread* Python\" pode, por vezes, referir-se a um estado de "
+"*thread*, mas normalmente significa uma *thread* criada usando o módulo :mod:"
+"`threading`."
+
+#: ../../reference/executionmodel.rst:557
+msgid ""
+"Each thread state, over its lifetime, is always tied to exactly one "
+"interpreter and exactly one host thread.  It will only ever be used in that "
+"thread and with that interpreter."
+msgstr ""
+"Cada estado de *thread*, ao longo da sua vida útil, está sempre ligado a "
+"exatamente um interpretador e exatamente uma *thread* hospedeira. Só será "
+"usado nessa *thread* e com esse interpretador."
+
+#: ../../reference/executionmodel.rst:561
+msgid ""
+"Multiple thread states may be tied to the same host thread, whether for "
+"different interpreters or even the same interpreter.  However, for any given "
+"host thread, only one of the thread states tied to it can be used by the "
+"thread at a time."
+msgstr ""
+"Vários estados de *thread* podem estar ligados à mesma *thread* hospedeira, "
+"quer para diferentes interpretadores ou até para o mesmo interpretador. No "
+"entanto, para qualquer *thread* hospedeira, apenas um dos estados de "
+"*thread* ligados a ela pode ser usado pela *thread* de cada vez."
+
+#: ../../reference/executionmodel.rst:566
+msgid ""
+"Thread states are isolated and independent from one another and don't share "
+"any data, except for possibly sharing an interpreter and objects or other "
+"resources belonging to that interpreter."
+msgstr ""
+"Os estados de *thread* são isolados e independentes uns dos outros e não "
+"partilham quaisquer dados, exceto possivelmente partilhando um interpretador "
+"e objetos ou outros recursos pertencentes a esse interpretador."
+
+#: ../../reference/executionmodel.rst:570
+msgid ""
+"Once a program is running, new Python threads can be created using the :mod:"
+"`threading` module (on platforms and Python implementations that support "
+"threads).  Additional processes can be created using the :mod:`os`, :mod:"
+"`subprocess`, and :mod:`multiprocessing` modules. Coroutines (async) can be "
+"run using :mod:`asyncio` in each interpreter, typically only in a single "
+"thread (often the main thread)."
+msgstr ""
+
+#: ../../reference/executionmodel.rst:580
 msgid "Footnotes"
 msgstr "Notas de rodapé"
 
-#: ../../reference/executionmodel.rst:396
+#: ../../reference/executionmodel.rst:581
 msgid ""
 "This limitation occurs because the code that is executed by these operations "
 "is not available at the time the module is compiled."
