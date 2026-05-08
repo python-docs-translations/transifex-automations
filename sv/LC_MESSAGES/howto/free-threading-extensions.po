@@ -11,15 +11,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-23 15:47+0000\n"
+"POT-Creation-Date: 2026-05-08 12:11-0300\n"
 "PO-Revision-Date: 2025-09-16 00:00+0000\n"
 "Last-Translator: python-doc bot, 2025\n"
 "Language-Team: Swedish (https://app.transifex.com/python-doc/teams/5390/"
 "sv/)\n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sv\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../howto/free-threading-extensions.rst:7
@@ -28,15 +28,15 @@ msgstr "Stöd för fri trådning i C API-tillägg"
 
 #: ../../howto/free-threading-extensions.rst:9
 msgid ""
-"Starting with the 3.13 release, CPython has support for running with the :"
-"term:`global interpreter lock` (GIL) disabled in a configuration called :"
-"term:`free threading`.  This document describes how to adapt C API "
+"Starting with the 3.13 release, CPython has support for running with "
+"the :term:`global interpreter lock` (GIL) disabled in a configuration "
+"called :term:`free threading`.  This document describes how to adapt C API "
 "extensions to support free threading."
 msgstr ""
 "Från och med version 3.13 har CPython stöd för att köra med :term:`global "
-"interpreter lock` (GIL) inaktiverat i en konfiguration som kallas :term:"
-"`free threading`.  Detta dokument beskriver hur man anpassar C API-tillägg "
-"för att stödja fri trådning."
+"interpreter lock` (GIL) inaktiverat i en konfiguration som "
+"kallas :term:`free threading`.  Detta dokument beskriver hur man anpassar C "
+"API-tillägg för att stödja fri trådning."
 
 #: ../../howto/free-threading-extensions.rst:16
 msgid "Identifying the Free-Threaded Build in C"
@@ -72,9 +72,9 @@ msgid ""
 "macro defined."
 msgstr ""
 "I Windows definieras inte detta makro automatiskt, utan måste anges till "
-"kompilatorn när den bygger programmet. Funktionen :func:`sysconfig."
-"get_config_var` kan användas för att avgöra om den tolk som körs för "
-"tillfället har definierat makrot."
+"kompilatorn när den bygger programmet. "
+"Funktionen :func:`sysconfig.get_config_var` kan användas för att avgöra om "
+"den tolk som körs för tillfället har definierat makrot."
 
 #: ../../howto/free-threading-extensions.rst:35
 msgid "Module Initialization"
@@ -105,18 +105,23 @@ msgid "Multi-Phase Initialization"
 msgstr "Initialisering av flera faser"
 
 #: ../../howto/free-threading-extensions.rst:48
+#, fuzzy
 msgid ""
-"Extensions that use multi-phase initialization (i.e., :c:func:"
-"`PyModuleDef_Init`) should add a :c:data:`Py_mod_gil` slot in the module "
-"definition.  If your extension supports older versions of CPython, you "
-"should guard the slot with a :c:data:`PY_VERSION_HEX` check."
+"Extensions that use :ref:`multi-phase initialization <multi-phase-"
+"initialization>` (functions "
+"like :c:func:`PyModuleDef_Init`, :c:func:`PyModExport_* "
+"<PyModExport_modulename>` export hook, :c:func:`PyModule_FromSlotsAndSpec`) "
+"should add a :c:data:`Py_mod_gil` slot in the module definition. If your "
+"extension supports older versions of CPython, you should guard the slot with "
+"a :c:data:`PY_VERSION_HEX` check."
 msgstr ""
 "Tillägg som använder flerfasinitialisering (dvs. :c:func:`PyModuleDef_Init`) "
 "bör lägga till en :c:data:`Py_mod_gil` slot i moduldefinitionen.  Om ditt "
-"tillägg stöder äldre versioner av CPython bör du bevaka platsen med en :c:"
-"data:`PY_VERSION_HEX`-kontroll."
+"tillägg stöder äldre versioner av CPython bör du bevaka platsen med "
+"en :c:data:`PY_VERSION_HEX`-kontroll."
 
-#: ../../howto/free-threading-extensions.rst:55
+#: ../../howto/free-threading-extensions.rst:58
+#, fuzzy
 msgid ""
 "static struct PyModuleDef_Slot module_slots[] = {\n"
 "    ...\n"
@@ -124,12 +129,6 @@ msgid ""
 "    {Py_mod_gil, Py_MOD_GIL_NOT_USED},\n"
 "#endif\n"
 "    {0, NULL}\n"
-"};\n"
-"\n"
-"static struct PyModuleDef moduledef = {\n"
-"    PyModuleDef_HEAD_INIT,\n"
-"    .m_slots = module_slots,\n"
-"    ...\n"
 "};"
 msgstr ""
 "static struct PyModuleDef_Slot module_slots[] = {\n"
@@ -146,17 +145,19 @@ msgstr ""
 "    ...\n"
 "};"
 
-#: ../../howto/free-threading-extensions.rst:71
+#: ../../howto/free-threading-extensions.rst:68
 msgid "Single-Phase Initialization"
 msgstr "Initialisering med en fas"
 
-#: ../../howto/free-threading-extensions.rst:73
+#: ../../howto/free-threading-extensions.rst:70
+#, fuzzy
 msgid ""
-"Extensions that use single-phase initialization (i.e., :c:func:"
-"`PyModule_Create`) should call :c:func:`PyUnstable_Module_SetGIL` to "
-"indicate that they support running with the GIL disabled.  The function is "
-"only defined in the free-threaded build, so you should guard the call with "
-"``#ifdef Py_GIL_DISABLED`` to avoid compilation errors in the regular build."
+"Extensions that use legacy :ref:`single-phase initialization <single-phase-"
+"initialization>` (that is, :c:func:`PyModule_Create`) should "
+"call :c:func:`PyUnstable_Module_SetGIL` to indicate that they support "
+"running with the GIL disabled.  The function is only defined in the free-"
+"threaded build, so you should guard the call with ``#ifdef Py_GIL_DISABLED`` "
+"to avoid compilation errors in the regular build."
 msgstr ""
 "Tillägg som använder enfasinitialisering (dvs. :c:func:`PyModule_Create`) "
 "bör anropa :c:func:`PyUnstable_Module_SetGIL` för att ange att de stöder "
@@ -164,7 +165,7 @@ msgstr ""
 "trådade versionen, så du bör skydda anropet med ``#ifdef Py_GIL_DISABLED`` "
 "för att undvika kompileringsfel i den vanliga versionen."
 
-#: ../../howto/free-threading-extensions.rst:81
+#: ../../howto/free-threading-extensions.rst:78
 msgid ""
 "static struct PyModuleDef moduledef = {\n"
 "    PyModuleDef_HEAD_INIT,\n"
@@ -202,15 +203,15 @@ msgstr ""
 "    returnera m;\n"
 "}"
 
-#: ../../howto/free-threading-extensions.rst:101
+#: ../../howto/free-threading-extensions.rst:98
 msgid "General API Guidelines"
 msgstr "Allmänna API-riktlinjer"
 
-#: ../../howto/free-threading-extensions.rst:103
+#: ../../howto/free-threading-extensions.rst:100
 msgid "Most of the C API is thread-safe, but there are some exceptions."
 msgstr "Det mesta av C API:et är trådsäkert, men det finns några undantag."
 
-#: ../../howto/free-threading-extensions.rst:105
+#: ../../howto/free-threading-extensions.rst:102
 msgid ""
 "**Struct Fields**: Accessing fields in Python C API objects or structs "
 "directly is not thread-safe if the field may be concurrently modified."
@@ -218,21 +219,23 @@ msgstr ""
 "**Strukturfält**: Direkt åtkomst till fält i Python C API-objekt eller "
 "strukturer är inte trådsäkert om fältet kan ändras samtidigt."
 
-#: ../../howto/free-threading-extensions.rst:107
+#: ../../howto/free-threading-extensions.rst:104
 msgid ""
-"**Macros**: Accessor macros like :c:macro:`PyList_GET_ITEM`, :c:macro:"
-"`PyList_SET_ITEM`, and macros like :c:macro:`PySequence_Fast_GET_SIZE` that "
-"use the object returned by :c:func:`PySequence_Fast` do not perform any "
-"error checking or locking. These macros are not thread-safe if the container "
-"object may be modified concurrently."
+"**Macros**: Accessor macros "
+"like :c:macro:`PyList_GET_ITEM`, :c:macro:`PyList_SET_ITEM`, and macros "
+"like :c:macro:`PySequence_Fast_GET_SIZE` that use the object returned "
+"by :c:func:`PySequence_Fast` do not perform any error checking or locking. "
+"These macros are not thread-safe if the container object may be modified "
+"concurrently."
 msgstr ""
-"**Makroer**: Accessormakron som :c:macro:`PyList_GET_ITEM`, :c:macro:"
-"`PyList_SET_ITEM` och makron som :c:macro:`PySequence_Fast_GET_SIZE` som "
-"använder det objekt som returneras av :c:func:`PySequence_Fast` utför ingen "
-"felkontroll eller låsning. Dessa makron är inte trådsäkra om "
-"containerobjektet kan ändras samtidigt."
+"**Makroer**: Accessormakron "
+"som :c:macro:`PyList_GET_ITEM`, :c:macro:`PyList_SET_ITEM` och makron "
+"som :c:macro:`PySequence_Fast_GET_SIZE` som använder det objekt som "
+"returneras av :c:func:`PySequence_Fast` utför ingen felkontroll eller "
+"låsning. Dessa makron är inte trådsäkra om containerobjektet kan ändras "
+"samtidigt."
 
-#: ../../howto/free-threading-extensions.rst:113
+#: ../../howto/free-threading-extensions.rst:110
 msgid ""
 "**Borrowed References**: C API functions that return :term:`borrowed "
 "references <borrowed reference>` may not be thread-safe if the containing "
@@ -244,27 +247,27 @@ msgstr ""
 "innehållande objektet ändras samtidigt.  Se avsnittet om :ref:`lånade "
 "referenser <borrowed-references>` för mer information."
 
-#: ../../howto/free-threading-extensions.rst:120
+#: ../../howto/free-threading-extensions.rst:117
 msgid "Container Thread Safety"
 msgstr "Säkerhet för containergänga"
 
-#: ../../howto/free-threading-extensions.rst:122
+#: ../../howto/free-threading-extensions.rst:119
 msgid ""
-"Containers like :c:struct:`PyListObject`, :c:struct:`PyDictObject`, and :c:"
-"struct:`PySetObject` perform internal locking in the free-threaded build.  "
-"For example, the :c:func:`PyList_Append` will lock the list before appending "
-"an item."
+"Containers like :c:struct:`PyListObject`, :c:struct:`PyDictObject`, "
+"and :c:struct:`PySetObject` perform internal locking in the free-threaded "
+"build.  For example, the :c:func:`PyList_Append` will lock the list before "
+"appending an item."
 msgstr ""
-"Behållare som :c:struct:`PyListObject`, :c:struct:`PyDictObject` och :c:"
-"struct:`PySetObject` utför intern låsning i den frittrådade versionen.  Till "
-"exempel kommer :c:func:`PyList_Append` att låsa listan innan ett objekt "
-"läggs till."
+"Behållare som :c:struct:`PyListObject`, :c:struct:`PyDictObject` "
+"och :c:struct:`PySetObject` utför intern låsning i den frittrådade "
+"versionen.  Till exempel kommer :c:func:`PyList_Append` att låsa listan "
+"innan ett objekt läggs till."
 
-#: ../../howto/free-threading-extensions.rst:130
+#: ../../howto/free-threading-extensions.rst:127
 msgid "``PyDict_Next``"
 msgstr "``PyDict_Next``"
 
-#: ../../howto/free-threading-extensions.rst:132
+#: ../../howto/free-threading-extensions.rst:129
 msgid ""
 "A notable exception is :c:func:`PyDict_Next`, which does not lock the "
 "dictionary.  You should use :c:macro:`Py_BEGIN_CRITICAL_SECTION` to protect "
@@ -276,7 +279,7 @@ msgstr ""
 "skydda ordlistan medan du itererar över den om ordlistan kan ändras "
 "samtidigt:"
 
-#: ../../howto/free-threading-extensions.rst:137
+#: ../../howto/free-threading-extensions.rst:134
 msgid ""
 "Py_BEGIN_CRITICAL_SECTION(dict);\n"
 "PyObject *key, *value;\n"
@@ -294,23 +297,23 @@ msgstr ""
 "}\n"
 "Py_END_CRITICAL_SECTION();"
 
-#: ../../howto/free-threading-extensions.rst:147
+#: ../../howto/free-threading-extensions.rst:144
 msgid "Borrowed References"
 msgstr "Lånade referenser"
 
-#: ../../howto/free-threading-extensions.rst:151
+#: ../../howto/free-threading-extensions.rst:148
 msgid ""
 "Some C API functions return :term:`borrowed references <borrowed "
 "reference>`. These APIs are not thread-safe if the containing object is "
-"modified concurrently.  For example, it's not safe to use :c:func:"
-"`PyList_GetItem` if the list may be modified concurrently."
+"modified concurrently.  For example, it's not safe to "
+"use :c:func:`PyList_GetItem` if the list may be modified concurrently."
 msgstr ""
 "Vissa C API-funktioner returnerar :term:`lånade referenser <borrowed "
 "reference>`. Dessa API:er är inte trådsäkra om det objekt som innehåller dem "
-"ändras samtidigt.  Det är t.ex. inte säkert att använda :c:func:"
-"`PyList_GetItem` om listan kan ändras samtidigt."
+"ändras samtidigt.  Det är t.ex. inte säkert att "
+"använda :c:func:`PyList_GetItem` om listan kan ändras samtidigt."
 
-#: ../../howto/free-threading-extensions.rst:156
+#: ../../howto/free-threading-extensions.rst:153
 msgid ""
 "The following table lists some borrowed reference APIs and their "
 "replacements that return :term:`strong references <strong reference>`."
@@ -318,113 +321,115 @@ msgstr ""
 "I följande tabell listas några API:er för lånade referenser och deras "
 "ersättare som returnerar :term:`strong referenser <strong reference>`."
 
-#: ../../howto/free-threading-extensions.rst:160
+#: ../../howto/free-threading-extensions.rst:157
 msgid "Borrowed reference API"
 msgstr "Lånad referens API"
 
-#: ../../howto/free-threading-extensions.rst:160
+#: ../../howto/free-threading-extensions.rst:157
 msgid "Strong reference API"
 msgstr "Stark referens API"
 
-#: ../../howto/free-threading-extensions.rst:162
+#: ../../howto/free-threading-extensions.rst:159
 msgid ":c:func:`PyList_GetItem`"
 msgstr ":c:func:`PyList_GetItem`"
 
-#: ../../howto/free-threading-extensions.rst:162
-#: ../../howto/free-threading-extensions.rst:164
+#: ../../howto/free-threading-extensions.rst:159
+#: ../../howto/free-threading-extensions.rst:161
 msgid ":c:func:`PyList_GetItemRef`"
 msgstr ":c:func:`PyList_GetItemRef`"
 
-#: ../../howto/free-threading-extensions.rst:164
+#: ../../howto/free-threading-extensions.rst:161
 msgid ":c:func:`PyList_GET_ITEM`"
 msgstr ":c:func:`PyList_GET_ITEM`"
 
-#: ../../howto/free-threading-extensions.rst:166
+#: ../../howto/free-threading-extensions.rst:163
 msgid ":c:func:`PyDict_GetItem`"
 msgstr ":c:func:`PyDict_GetItem`"
 
-#: ../../howto/free-threading-extensions.rst:166
-#: ../../howto/free-threading-extensions.rst:168
+#: ../../howto/free-threading-extensions.rst:163
+#: ../../howto/free-threading-extensions.rst:165
 msgid ":c:func:`PyDict_GetItemRef`"
 msgstr ":c:func:`PyDict_GetItemRef`"
 
-#: ../../howto/free-threading-extensions.rst:168
+#: ../../howto/free-threading-extensions.rst:165
 msgid ":c:func:`PyDict_GetItemWithError`"
 msgstr ":c:func:`PyDict_GetItemWithError`"
 
-#: ../../howto/free-threading-extensions.rst:170
+#: ../../howto/free-threading-extensions.rst:167
 msgid ":c:func:`PyDict_GetItemString`"
 msgstr ":c:func:`PyDict_GetItemString`"
 
-#: ../../howto/free-threading-extensions.rst:170
+#: ../../howto/free-threading-extensions.rst:167
 msgid ":c:func:`PyDict_GetItemStringRef`"
 msgstr ":c:func:`PyDict_GetItemStringRef`"
 
-#: ../../howto/free-threading-extensions.rst:172
+#: ../../howto/free-threading-extensions.rst:169
 msgid ":c:func:`PyDict_SetDefault`"
 msgstr ":c:func:`PyDict_SetDefault`"
 
-#: ../../howto/free-threading-extensions.rst:172
+#: ../../howto/free-threading-extensions.rst:169
 msgid ":c:func:`PyDict_SetDefaultRef`"
 msgstr ":c:func:`PyDict_SetDefaultRef`"
 
-#: ../../howto/free-threading-extensions.rst:174
+#: ../../howto/free-threading-extensions.rst:171
 msgid ":c:func:`PyDict_Next`"
 msgstr ":c:func:`PyDict_Next`"
 
-#: ../../howto/free-threading-extensions.rst:174
+#: ../../howto/free-threading-extensions.rst:171
 msgid "none (see :ref:`PyDict_Next`)"
 msgstr "ingen (se :ref:`PyDict_Next`)"
 
-#: ../../howto/free-threading-extensions.rst:176
-msgid ":c:func:`PyWeakref_GetObject`"
+#: ../../howto/free-threading-extensions.rst:173
+#, fuzzy
+msgid ":c:func:`!PyWeakref_GetObject`"
 msgstr ":c:func:`PyWeakref_GetObject`"
 
-#: ../../howto/free-threading-extensions.rst:176
-#: ../../howto/free-threading-extensions.rst:178
+#: ../../howto/free-threading-extensions.rst:173
+#: ../../howto/free-threading-extensions.rst:175
 msgid ":c:func:`PyWeakref_GetRef`"
 msgstr ":c:func:`PyWeakref_GetRef`"
 
-#: ../../howto/free-threading-extensions.rst:178
-msgid ":c:func:`PyWeakref_GET_OBJECT`"
+#: ../../howto/free-threading-extensions.rst:175
+#, fuzzy
+msgid ":c:func:`!PyWeakref_GET_OBJECT`"
 msgstr ":c:func:`PyWeakref_GET_OBJECT`"
 
-#: ../../howto/free-threading-extensions.rst:180
+#: ../../howto/free-threading-extensions.rst:177
 msgid ":c:func:`PyImport_AddModule`"
 msgstr ":c:func:`PyImport_AddModule`"
 
-#: ../../howto/free-threading-extensions.rst:180
+#: ../../howto/free-threading-extensions.rst:177
 msgid ":c:func:`PyImport_AddModuleRef`"
 msgstr ":c:func:`PyImport_AddModuleRef`"
 
-#: ../../howto/free-threading-extensions.rst:182
+#: ../../howto/free-threading-extensions.rst:179
 msgid ":c:func:`PyCell_GET`"
 msgstr ":c:func:`PyCell_GET`"
 
-#: ../../howto/free-threading-extensions.rst:182
+#: ../../howto/free-threading-extensions.rst:179
 msgid ":c:func:`PyCell_Get`"
 msgstr ":c:func:`PyCell_Get`"
 
-#: ../../howto/free-threading-extensions.rst:185
+#: ../../howto/free-threading-extensions.rst:182
 msgid ""
-"Not all APIs that return borrowed references are problematic.  For example, :"
-"c:func:`PyTuple_GetItem` is safe because tuples are immutable. Similarly, "
-"not all uses of the above APIs are problematic.  For example, :c:func:"
-"`PyDict_GetItem` is often used for parsing keyword argument dictionaries in "
-"function calls; those keyword argument dictionaries are effectively private "
-"(not accessible by other threads), so using borrowed references in that "
-"context is safe."
+"Not all APIs that return borrowed references are problematic.  For "
+"example, :c:func:`PyTuple_GetItem` is safe because tuples are immutable. "
+"Similarly, not all uses of the above APIs are problematic.  For "
+"example, :c:func:`PyDict_GetItem` is often used for parsing keyword argument "
+"dictionaries in function calls; those keyword argument dictionaries are "
+"effectively private (not accessible by other threads), so using borrowed "
+"references in that context is safe."
 msgstr ""
 "Det är inte alla API:er som returnerar lånade referenser som är "
 "problematiska.  Till exempel är :c:func:`PyTuple_GetItem` säkert eftersom "
 "tuples är oföränderliga. På samma sätt är inte alla användningar av "
-"ovanstående API:er problematiska.  Till exempel används :c:func:"
-"`PyDict_GetItem` ofta för att analysera ordlistor med nyckelordsargument i "
-"funktionsanrop; dessa ordlistor med nyckelordsargument är i praktiken "
-"privata (inte tillgängliga för andra trådar), så det är säkert att använda "
-"lånade referenser i det sammanhanget."
+"ovanstående API:er problematiska.  Till exempel "
+"används :c:func:`PyDict_GetItem` ofta för att analysera ordlistor med "
+"nyckelordsargument i funktionsanrop; dessa ordlistor med nyckelordsargument "
+"är i praktiken privata (inte tillgängliga för andra trådar), så det är "
+"säkert att använda lånade referenser i det sammanhanget."
 
-#: ../../howto/free-threading-extensions.rst:193
+#: ../../howto/free-threading-extensions.rst:190
 msgid ""
 "Some of these functions were added in Python 3.13.  You can use the "
 "`pythoncapi-compat <https://github.com/python/pythoncapi-compat>`_ package "
@@ -435,36 +440,38 @@ msgstr ""
 "tillhandahålla implementeringar av dessa funktioner för äldre Python-"
 "versioner."
 
-#: ../../howto/free-threading-extensions.rst:201
+#: ../../howto/free-threading-extensions.rst:198
 msgid "Memory Allocation APIs"
 msgstr "API:er för minnesallokering"
 
-#: ../../howto/free-threading-extensions.rst:203
+#: ../../howto/free-threading-extensions.rst:200
 msgid ""
-"Python's memory management C API provides functions in three different :ref:"
-"`allocation domains <allocator-domains>`: \"raw\", \"mem\", and \"object\". "
-"For thread-safety, the free-threaded build requires that only Python objects "
-"are allocated using the object domain, and that all Python objects are "
-"allocated using that domain.  This differs from the prior Python versions, "
-"where this was only a best practice and not a hard requirement."
+"Python's memory management C API provides functions in three "
+"different :ref:`allocation domains <allocator-domains>`: \"raw\", \"mem\", "
+"and \"object\". For thread-safety, the free-threaded build requires that "
+"only Python objects are allocated using the object domain, and that all "
+"Python objects are allocated using that domain.  This differs from the prior "
+"Python versions, where this was only a best practice and not a hard "
+"requirement."
 msgstr ""
 
-#: ../../howto/free-threading-extensions.rst:212
+#: ../../howto/free-threading-extensions.rst:209
 msgid ""
 "Search for uses of :c:func:`PyObject_Malloc` in your extension and check "
-"that the allocated memory is used for Python objects. Use :c:func:"
-"`PyMem_Malloc` to allocate buffers instead of :c:func:`PyObject_Malloc`."
+"that the allocated memory is used for Python objects. "
+"Use :c:func:`PyMem_Malloc` to allocate buffers instead "
+"of :c:func:`PyObject_Malloc`."
 msgstr ""
 "Sök efter användningar av :c:func:`PyObject_Malloc` i ditt tillägg och "
-"kontrollera att det allokerade minnet används för Python-objekt. Använd :c:"
-"func:`PyMem_Malloc` för att allokera buffertar istället för :c:func:"
-"`PyObject_Malloc`."
+"kontrollera att det allokerade minnet används för Python-objekt. "
+"Använd :c:func:`PyMem_Malloc` för att allokera buffertar istället "
+"för :c:func:`PyObject_Malloc`."
 
-#: ../../howto/free-threading-extensions.rst:219
+#: ../../howto/free-threading-extensions.rst:216
 msgid "Thread State and GIL APIs"
 msgstr "Trådstatus och GIL API:er"
 
-#: ../../howto/free-threading-extensions.rst:221
+#: ../../howto/free-threading-extensions.rst:218
 msgid ""
 "Python provides a set of functions and macros to manage thread state and the "
 "GIL, such as:"
@@ -472,25 +479,33 @@ msgstr ""
 "Python tillhandahåller en uppsättning funktioner och makron för att hantera "
 "trådstatus och GIL, t.ex:"
 
-#: ../../howto/free-threading-extensions.rst:224
+#: ../../howto/free-threading-extensions.rst:221
+#, fuzzy
+msgid ""
+":c:func:`PyThreadState_Ensure`, :c:func:`PyThreadState_EnsureFromView`, "
+"and :c:func:`PyThreadState_Release`"
+msgstr ":c:func:`PyGILState_Ensure` och :c:func:`PyGILState_Release`"
+
+#: ../../howto/free-threading-extensions.rst:223
 msgid ":c:func:`PyGILState_Ensure` and :c:func:`PyGILState_Release`"
 msgstr ":c:func:`PyGILState_Ensure` och :c:func:`PyGILState_Release`"
 
-#: ../../howto/free-threading-extensions.rst:225
+#: ../../howto/free-threading-extensions.rst:224
 msgid ":c:func:`PyEval_SaveThread` and :c:func:`PyEval_RestoreThread`"
 msgstr ":c:func:`PyEval_SaveThread` och :c:func:`PyEval_RestoreThread`"
 
-#: ../../howto/free-threading-extensions.rst:226
+#: ../../howto/free-threading-extensions.rst:225
 msgid ":c:macro:`Py_BEGIN_ALLOW_THREADS` and :c:macro:`Py_END_ALLOW_THREADS`"
 msgstr ":c:macro:`Py_BEGIN_ALLOW_THREADS` och :c:macro:`Py_END_ALLOW_THREADS`"
 
-#: ../../howto/free-threading-extensions.rst:228
+#: ../../howto/free-threading-extensions.rst:227
+#, fuzzy
 msgid ""
 "These functions should still be used in the free-threaded build to manage "
 "thread state even when the :term:`GIL` is disabled.  For example, if you "
-"create a thread outside of Python, you must call :c:func:`PyGILState_Ensure` "
-"before calling into the Python API to ensure that the thread has a valid "
-"Python thread state."
+"create a thread outside of Python, you must "
+"call :c:func:`PyThreadState_Ensure` before calling into the Python API to "
+"ensure that the thread has a valid Python thread state."
 msgstr ""
 "Dessa funktioner bör fortfarande användas i den fritt trådade versionen för "
 "att hantera trådstatus även när :term:`GIL` är inaktiverad.  Om du t.ex. "
@@ -498,23 +513,23 @@ msgstr ""
 "innan du anropar Python API för att säkerställa att tråden har ett giltigt "
 "Python-trådtillstånd."
 
-#: ../../howto/free-threading-extensions.rst:234
+#: ../../howto/free-threading-extensions.rst:233
 msgid ""
-"You should continue to call :c:func:`PyEval_SaveThread` or :c:macro:"
-"`Py_BEGIN_ALLOW_THREADS` around blocking operations, such as I/O or lock "
-"acquisitions, to allow other threads to run the :term:`cyclic garbage "
-"collector <garbage collection>`."
+"You should continue to call :c:func:`PyEval_SaveThread` "
+"or :c:macro:`Py_BEGIN_ALLOW_THREADS` around blocking operations, such as I/O "
+"or lock acquisitions, to allow other threads to run the :term:`cyclic "
+"garbage collector <garbage collection>`."
 msgstr ""
-"Du bör fortsätta att anropa :c:func:`PyEval_SaveThread` eller :c:macro:"
-"`Py_BEGIN_ALLOW_THREADS` runt blockerande operationer, t.ex. I/O eller "
-"låsförvärv, för att tillåta andra trådar att köra :term:`cyclic garbage "
-"collector <garbage collection>`."
+"Du bör fortsätta att anropa :c:func:`PyEval_SaveThread` "
+"eller :c:macro:`Py_BEGIN_ALLOW_THREADS` runt blockerande operationer, t.ex. "
+"I/O eller låsförvärv, för att tillåta andra trådar att köra :term:`cyclic "
+"garbage collector <garbage collection>`."
 
-#: ../../howto/free-threading-extensions.rst:241
+#: ../../howto/free-threading-extensions.rst:240
 msgid "Protecting Internal Extension State"
 msgstr "Skydd av intern förlängningstillstånd"
 
-#: ../../howto/free-threading-extensions.rst:243
+#: ../../howto/free-threading-extensions.rst:242
 msgid ""
 "Your extension may have internal state that was previously protected by the "
 "GIL.  You may need to add locking to protect this state.  The approach will "
@@ -525,7 +540,7 @@ msgstr ""
 "Tillvägagångssättet beror på ditt tillägg, men några vanliga mönster "
 "inkluderar:"
 
-#: ../../howto/free-threading-extensions.rst:247
+#: ../../howto/free-threading-extensions.rst:246
 msgid ""
 "**Caches**: global caches are a common source of shared state.  Consider "
 "using a lock to protect the cache or disabling it in the free-threaded build "
@@ -535,7 +550,7 @@ msgstr ""
 "att använda ett lås för att skydda cacheminnet eller inaktivera det i den "
 "frittrådade versionen om cacheminnet inte är avgörande för prestandan."
 
-#: ../../howto/free-threading-extensions.rst:250
+#: ../../howto/free-threading-extensions.rst:249
 msgid ""
 "**Global State**: global state may need to be protected by a lock or moved "
 "to thread local storage. C11 and C++11 provide the ``thread_local`` or "
@@ -547,11 +562,11 @@ msgstr ""
 "``_Thread_local`` för `trådlokal lagring <https://en.cppreference.com/w/c/"
 "language/storage_duration>`_."
 
-#: ../../howto/free-threading-extensions.rst:257
+#: ../../howto/free-threading-extensions.rst:256
 msgid "Critical Sections"
 msgstr "Kritiska avsnitt"
 
-#: ../../howto/free-threading-extensions.rst:261
+#: ../../howto/free-threading-extensions.rst:260
 msgid ""
 "In the free-threaded build, CPython provides a mechanism called \"critical "
 "sections\" to protect data that would otherwise be protected by the GIL. "
@@ -566,18 +581,18 @@ msgstr ""
 "beteende när man använder vissa C API-funktioner eller hanterar delat "
 "tillstånd i den fritt trådade versionen."
 
-#: ../../howto/free-threading-extensions.rst:268
+#: ../../howto/free-threading-extensions.rst:267
 msgid "What Are Critical Sections?"
 msgstr "Vad är kritiska avsnitt?"
 
-#: ../../howto/free-threading-extensions.rst:270
+#: ../../howto/free-threading-extensions.rst:269
 msgid ""
 "Conceptually, critical sections act as a deadlock avoidance layer built on "
 "top of simple mutexes. Each thread maintains a stack of active critical "
 "sections. When a thread needs to acquire a lock associated with a critical "
-"section (e.g., implicitly when calling a thread-safe C API function like :c:"
-"func:`PyDict_SetItem`, or explicitly using macros), it attempts to acquire "
-"the underlying mutex."
+"section (e.g., implicitly when calling a thread-safe C API function "
+"like :c:func:`PyDict_SetItem`, or explicitly using macros), it attempts to "
+"acquire the underlying mutex."
 msgstr ""
 "I princip fungerar kritiska sektioner som ett lager för att undvika dödlägen "
 "ovanpå enkla mutexar. Varje tråd upprätthåller en stack med aktiva kritiska "
@@ -586,15 +601,15 @@ msgstr ""
 "som :c:func:`PyDict_SetItem`, eller explicit med hjälp av makron), försöker "
 "den förvärva den underliggande mutexen."
 
-#: ../../howto/free-threading-extensions.rst:278
+#: ../../howto/free-threading-extensions.rst:277
 msgid "Using Critical Sections"
 msgstr "Använda kritiska avsnitt"
 
-#: ../../howto/free-threading-extensions.rst:280
+#: ../../howto/free-threading-extensions.rst:279
 msgid "The primary APIs for using critical sections are:"
 msgstr "De primära API:erna för att använda kritiska sektioner är:"
 
-#: ../../howto/free-threading-extensions.rst:282
+#: ../../howto/free-threading-extensions.rst:281
 msgid ""
 ":c:macro:`Py_BEGIN_CRITICAL_SECTION` and :c:macro:`Py_END_CRITICAL_SECTION` "
 "- For locking a single object"
@@ -602,15 +617,16 @@ msgstr ""
 ":c:macro:`Py_BEGIN_CRITICAL_SECTION` och :c:macro:`Py_END_CRITICAL_SECTION` "
 "- För låsning av ett enda objekt"
 
-#: ../../howto/free-threading-extensions.rst:285
+#: ../../howto/free-threading-extensions.rst:284
 msgid ""
-":c:macro:`Py_BEGIN_CRITICAL_SECTION2` and :c:macro:"
-"`Py_END_CRITICAL_SECTION2` - For locking two objects simultaneously"
+":c:macro:`Py_BEGIN_CRITICAL_SECTION2` "
+"and :c:macro:`Py_END_CRITICAL_SECTION2` - For locking two objects "
+"simultaneously"
 msgstr ""
-":c:macro:`Py_BEGIN_CRITICAL_SECTION2` och :c:macro:"
-"`Py_END_CRITICAL_SECTION2` - För låsning av två objekt samtidigt"
+":c:macro:`Py_BEGIN_CRITICAL_SECTION2` "
+"och :c:macro:`Py_END_CRITICAL_SECTION2` - För låsning av två objekt samtidigt"
 
-#: ../../howto/free-threading-extensions.rst:288
+#: ../../howto/free-threading-extensions.rst:287
 msgid ""
 "These macros must be used in matching pairs and must appear in the same C "
 "scope, since they establish a new local scope.  These macros are no-ops in "
@@ -622,7 +638,7 @@ msgstr ""
 "icke-frittrådade builds, så de kan utan problem läggas till i kod som "
 "behöver stödja båda build-typerna."
 
-#: ../../howto/free-threading-extensions.rst:293
+#: ../../howto/free-threading-extensions.rst:292
 msgid ""
 "A common use of a critical section would be to lock an object while "
 "accessing an internal attribute of it.  For example, if an extension type "
@@ -634,7 +650,7 @@ msgstr ""
 "internt räknefält kan du använda en kritisk sektion när du läser eller "
 "skriver fältet::"
 
-#: ../../howto/free-threading-extensions.rst:298
+#: ../../howto/free-threading-extensions.rst:297
 msgid ""
 "// read the count, returns new reference to internal count value\n"
 "PyObject *result;\n"
@@ -660,11 +676,11 @@ msgstr ""
 "obj->räkning = ny_räkning;\n"
 "Py_END_CRITICAL_SECTION();"
 
-#: ../../howto/free-threading-extensions.rst:312
+#: ../../howto/free-threading-extensions.rst:311
 msgid "How Critical Sections Work"
 msgstr "Hur kritiska avsnitt fungerar"
 
-#: ../../howto/free-threading-extensions.rst:314
+#: ../../howto/free-threading-extensions.rst:313
 msgid ""
 "Unlike traditional locks, critical sections do not guarantee exclusive "
 "access throughout their entire duration. If a thread would block while "
@@ -678,7 +694,7 @@ msgstr ""
 "eller utföra I/O), avbryts den kritiska sektionen tillfälligt - alla lås "
 "frigörs - och återupptas sedan när blockeringsoperationen är klar."
 
-#: ../../howto/free-threading-extensions.rst:320
+#: ../../howto/free-threading-extensions.rst:319
 msgid ""
 "This behavior is similar to what happens with the GIL when a thread makes a "
 "blocking call. The key differences are:"
@@ -686,11 +702,11 @@ msgstr ""
 "Det här beteendet liknar det som händer med GIL när en tråd gör ett "
 "blockerande anrop. De viktigaste skillnaderna är:"
 
-#: ../../howto/free-threading-extensions.rst:323
+#: ../../howto/free-threading-extensions.rst:322
 msgid "Critical sections operate on a per-object basis rather than globally"
 msgstr "Kritiska sektioner fungerar per objekt i stället för globalt"
 
-#: ../../howto/free-threading-extensions.rst:325
+#: ../../howto/free-threading-extensions.rst:324
 msgid ""
 "Critical sections follow a stack discipline within each thread (the "
 "\"begin\" and \"end\" macros enforce this since they must be paired and "
@@ -700,7 +716,7 @@ msgstr ""
 "och \"end\" upprätthåller detta eftersom de måste vara parade och inom samma "
 "omfattning)"
 
-#: ../../howto/free-threading-extensions.rst:328
+#: ../../howto/free-threading-extensions.rst:327
 msgid ""
 "Critical sections automatically release and reacquire locks around potential "
 "blocking operations"
@@ -708,15 +724,15 @@ msgstr ""
 "Kritiska sektioner frigör och återtar automatiskt lås runt potentiella "
 "blockeringsoperationer"
 
-#: ../../howto/free-threading-extensions.rst:332
+#: ../../howto/free-threading-extensions.rst:331
 msgid "Deadlock Avoidance"
 msgstr "Undvikande av dödläge"
 
-#: ../../howto/free-threading-extensions.rst:334
+#: ../../howto/free-threading-extensions.rst:333
 msgid "Critical sections help avoid deadlocks in two ways:"
 msgstr "Kritiska avsnitt hjälper till att undvika dödlägen på två sätt:"
 
-#: ../../howto/free-threading-extensions.rst:336
+#: ../../howto/free-threading-extensions.rst:335
 msgid ""
 "If a thread tries to acquire a lock that's already held by another thread, "
 "it first suspends all of its active critical sections, temporarily releasing "
@@ -726,7 +742,7 @@ msgstr ""
 "avbryter den först alla sina aktiva kritiska sektioner och frigör "
 "tillfälligt deras lås"
 
-#: ../../howto/free-threading-extensions.rst:340
+#: ../../howto/free-threading-extensions.rst:339
 msgid ""
 "When the blocking operation completes, only the top-most critical section is "
 "reacquired first"
@@ -734,7 +750,7 @@ msgstr ""
 "När blockeringsoperationen är klar återfås endast den översta kritiska "
 "sektionen först"
 
-#: ../../howto/free-threading-extensions.rst:343
+#: ../../howto/free-threading-extensions.rst:342
 msgid ""
 "This means you cannot rely on nested critical sections to lock multiple "
 "objects at once, as the inner critical section may suspend the outer ones. "
@@ -746,7 +762,7 @@ msgstr ""
 "avbryta de yttre. Använd istället :c:macro:`Py_BEGIN_CRITICAL_SECTION2` för "
 "att låsa två objekt samtidigt."
 
-#: ../../howto/free-threading-extensions.rst:347
+#: ../../howto/free-threading-extensions.rst:346
 msgid ""
 "Note that the locks described above are only :c:type:`PyMutex` based locks. "
 "The critical section implementation does not know about or affect other "
@@ -757,11 +773,11 @@ msgid ""
 "not be released and therefore does not get the same deadlock avoidance."
 msgstr ""
 
-#: ../../howto/free-threading-extensions.rst:356
+#: ../../howto/free-threading-extensions.rst:355
 msgid "Important Considerations"
 msgstr "Viktiga överväganden"
 
-#: ../../howto/free-threading-extensions.rst:358
+#: ../../howto/free-threading-extensions.rst:357
 msgid ""
 "Critical sections may temporarily release their locks, allowing other "
 "threads to modify the protected data. Be careful about making assumptions "
@@ -771,7 +787,7 @@ msgstr ""
 "för andra trådar att modifiera de skyddade data. Var försiktig med att göra "
 "antaganden om datatillståndet efter operationer som kan blockera."
 
-#: ../../howto/free-threading-extensions.rst:362
+#: ../../howto/free-threading-extensions.rst:361
 msgid ""
 "Because locks can be temporarily released (suspended), entering a critical "
 "section does not guarantee exclusive access to the protected resource "
@@ -787,7 +803,7 @@ msgstr ""
 "O), kommer alla lås som tråden har via kritiska sektioner att frigöras. "
 "Detta liknar hur GIL kan frigöras under blockerande anrop."
 
-#: ../../howto/free-threading-extensions.rst:369
+#: ../../howto/free-threading-extensions.rst:368
 msgid ""
 "Only the lock(s) associated with the most recently entered (top-most) "
 "critical section are guaranteed to be held at any given time. Locks for "
@@ -797,7 +813,7 @@ msgstr ""
 "kritiska sektionen garanteras att hållas vid varje given tidpunkt. Lås för "
 "yttre, nästlade kritiska sektioner kan ha upphävts."
 
-#: ../../howto/free-threading-extensions.rst:373
+#: ../../howto/free-threading-extensions.rst:372
 msgid ""
 "You can lock at most two objects simultaneously with these APIs. If you need "
 "to lock more objects, you'll need to restructure your code."
@@ -805,7 +821,7 @@ msgstr ""
 "Du kan låsa högst två objekt samtidigt med dessa API:er. Om du behöver låsa "
 "fler objekt måste du omstrukturera din kod."
 
-#: ../../howto/free-threading-extensions.rst:376
+#: ../../howto/free-threading-extensions.rst:375
 msgid ""
 "While critical sections will not deadlock if you attempt to lock the same "
 "object twice, they are less efficient than purpose-built reentrant locks for "
@@ -815,7 +831,7 @@ msgstr ""
 "två gånger, är de mindre effektiva än specialbyggda reentranta lås för detta "
 "användningsfall."
 
-#: ../../howto/free-threading-extensions.rst:380
+#: ../../howto/free-threading-extensions.rst:379
 msgid ""
 "When using :c:macro:`Py_BEGIN_CRITICAL_SECTION2`, the order of the objects "
 "doesn't affect correctness (the implementation handles deadlock avoidance), "
@@ -826,7 +842,7 @@ msgstr ""
 "deadlock), men det är god praxis att alltid låsa objekt i en konsekvent "
 "ordning."
 
-#: ../../howto/free-threading-extensions.rst:384
+#: ../../howto/free-threading-extensions.rst:383
 msgid ""
 "Remember that the critical section macros are primarily for protecting "
 "access to *Python objects* that might be involved in internal CPython "
@@ -841,10 +857,44 @@ msgstr ""
 "synkroniseringsprimitiver vara mer lämpliga."
 
 #: ../../howto/free-threading-extensions.rst:392
+msgid "Per-Object Locks (``ob_mutex``)"
+msgstr ""
+
+#: ../../howto/free-threading-extensions.rst:394
+msgid ""
+"In the free-threaded build, each Python object contains "
+"a :c:member:`~PyObject.ob_mutex` field of type :c:type:`PyMutex`.  This "
+"mutex is **reserved for use by the critical section API** "
+"(:c:macro:`Py_BEGIN_CRITICAL_SECTION` / :c:macro:`Py_END_CRITICAL_SECTION`)."
+msgstr ""
+
+#: ../../howto/free-threading-extensions.rst:401
+msgid ""
+"Do **not** lock ``ob_mutex`` directly with ``PyMutex_Lock(&obj->ob_mutex)``. "
+"Mixing direct ``PyMutex_Lock`` calls with the critical section API on the "
+"same mutex can cause deadlocks."
+msgstr ""
+
+#: ../../howto/free-threading-extensions.rst:405
+msgid ""
+"Even if your own code never uses critical sections on a particular object "
+"type, **CPython internals may use the critical section API on any Python "
+"object**."
+msgstr ""
+
+#: ../../howto/free-threading-extensions.rst:408
+msgid ""
+"If your extension type needs its own lock, add a separate :c:type:`PyMutex` "
+"field (or another synchronization primitive) to your object "
+"struct. :c:type:`PyMutex` is very lightweight, so there is negligible cost "
+"to having an additional one."
+msgstr ""
+
+#: ../../howto/free-threading-extensions.rst:415
 msgid "Building Extensions for the Free-Threaded Build"
 msgstr "Bygga tillägg för Free-Threaded-versionen"
 
-#: ../../howto/free-threading-extensions.rst:394
+#: ../../howto/free-threading-extensions.rst:417
 msgid ""
 "C API extensions need to be built specifically for the free-threaded build. "
 "The wheels, shared libraries, and binaries are indicated by a ``t`` suffix."
@@ -852,23 +902,23 @@ msgstr ""
 "C API-tillägg måste byggas specifikt för den fritt trådade versionen. "
 "Hjulen, de delade biblioteken och binärerna anges med suffixet \"t\"."
 
-#: ../../howto/free-threading-extensions.rst:397
+#: ../../howto/free-threading-extensions.rst:420
 msgid ""
 "`pypa/manylinux <https://github.com/pypa/manylinux>`_ supports the free-"
 "threaded build, with the ``t`` suffix, such as ``python3.14t``."
 msgstr ""
 
-#: ../../howto/free-threading-extensions.rst:399
+#: ../../howto/free-threading-extensions.rst:422
 msgid ""
 "`pypa/cibuildwheel <https://github.com/pypa/cibuildwheel>`_ supports "
 "building wheels for the free-threaded build of Python 3.14 and newer."
 msgstr ""
 
-#: ../../howto/free-threading-extensions.rst:403
+#: ../../howto/free-threading-extensions.rst:426
 msgid "Limited C API and Stable ABI"
 msgstr "Begränsat C API och stabilt ABI"
 
-#: ../../howto/free-threading-extensions.rst:405
+#: ../../howto/free-threading-extensions.rst:428
 msgid ""
 "The free-threaded build does not currently support the :ref:`Limited C API "
 "<limited-c-api>` or the stable ABI.  If you use `setuptools <https://"
@@ -878,14 +928,14 @@ msgid ""
 "API when building with the free-threaded build."
 msgstr ""
 "Den fritt trådade byggnaden stöder för närvarande inte :ref:`Limited C API "
-"<limited-c-api>` eller det stabila ABI.  Om du använder `setuptools &lt;"
-"https://setuptools.pypa.io/en/latest/setuptools.html&gt;`_ för att bygga "
+"<limited-c-api>` eller det stabila ABI.  Om du använder `setuptools "
+"&lt;https://setuptools.pypa.io/en/latest/setuptools.html&gt;`_ för att bygga "
 "ditt tillägg och för närvarande ställer in ``py_limited_api=True`` kan du "
 "använda ``py_limited_api=not sysconfig.get_config_var(\"Py_GIL_DISABLED\")`` "
 "för att välja bort det begränsade API:et när du bygger med den fritt trådade "
 "versionen."
 
-#: ../../howto/free-threading-extensions.rst:413
+#: ../../howto/free-threading-extensions.rst:436
 msgid ""
 "You will need to build separate wheels specifically for the free-threaded "
 "build.  If you currently use the stable ABI, you can continue to build a "
@@ -895,11 +945,11 @@ msgstr ""
 "versionen.  Om du för närvarande använder den stabila ABI kan du fortsätta "
 "att bygga ett enda hjul för flera icke-frittrådade Python-versioner."
 
-#: ../../howto/free-threading-extensions.rst:419
+#: ../../howto/free-threading-extensions.rst:442
 msgid "Windows"
 msgstr "Fönster"
 
-#: ../../howto/free-threading-extensions.rst:421
+#: ../../howto/free-threading-extensions.rst:444
 msgid ""
 "Due to a limitation of the official Windows installer, you will need to "
 "manually define ``Py_GIL_DISABLED=1`` when building extensions from source."
@@ -908,7 +958,7 @@ msgstr ""
 "måste du manuellt definiera ``Py_GIL_DISABLED=1`` när du bygger tillägg från "
 "källan."
 
-#: ../../howto/free-threading-extensions.rst:426
+#: ../../howto/free-threading-extensions.rst:449
 msgid ""
 "`Porting Extension Modules to Support Free-Threading <https://py-free-"
 "threading.github.io/porting/>`_: A community-maintained porting guide for "
