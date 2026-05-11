@@ -6,15 +6,16 @@
 # Translators:
 # 99 <wh2099@pm.me>, 2026
 # python-doc bot, 2026
+# Freesand Leo <yuqinju@163.com>, 2026
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-08 18:34+0000\n"
+"POT-Creation-Date: 2026-05-09 14:43+0000\n"
 "PO-Revision-Date: 2025-09-16 00:00+0000\n"
-"Last-Translator: python-doc bot, 2026\n"
+"Last-Translator: Freesand Leo <yuqinju@163.com>, 2026\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/python-doc/"
 "teams/5390/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -400,7 +401,7 @@ msgstr ""
 
 #: ../../c-api/gcsupport.rst:240
 msgid "Traversal"
-msgstr ""
+msgstr "遍历"
 
 #: ../../c-api/gcsupport.rst:242
 msgid ""
@@ -418,6 +419,10 @@ msgid ""
 "argument.  If *visit* returns a non-zero value, that value should be "
 "returned immediately."
 msgstr ""
+"针对垃圾收集对象的遍历函数，被垃圾收集器用于检测引用循环。 具体实现必须为 "
+"*self* 直接包含的每个对象调用 *visit* 函数，传给 *visit* 的形参为所包含对象和"
+"传给处理器的 *arg* 值。 *visit* 函数调用不可附带 ``NULL`` 对象作为参数。 如"
+"果 *visit* 返回非零值，则该值应当被立即返回。"
 
 #: ../../c-api/gcsupport.rst:255
 msgid ""
@@ -426,6 +431,9 @@ msgid ""
 "that the instance owns. For example, this is a (slightly outdated) traversal "
 "function for the :py:class:`threading.local` class::"
 msgstr ""
+"一个典型的 :c:member:`!tp_traverse` 函数会在实例所拥有的每个属于 Python 对象"
+"的实例成员上调用 :c:func:`Py_VISIT` 便捷宏。 例如，下面是一个针对 :py:class:"
+"`threading.local` 类的（略微过时的）遍历函数::"
 
 #: ../../c-api/gcsupport.rst:261
 msgid ""
@@ -440,18 +448,32 @@ msgid ""
 "    return 0;\n"
 "}"
 msgstr ""
+"static int\n"
+"local_traverse(PyObject *op, visitproc visit, void *arg)\n"
+"{\n"
+"    localobject *self = (localobject *) op;\n"
+"    Py_VISIT(Py_TYPE(self));\n"
+"    Py_VISIT(self->args);\n"
+"    Py_VISIT(self->kw);\n"
+"    Py_VISIT(self->dict);\n"
+"    return 0;\n"
+"}"
 
 #: ../../c-api/gcsupport.rst:273
 msgid ""
 ":c:func:`Py_VISIT` requires the *visit* and *arg* parameters to :c:func:`!"
 "local_traverse` to have these specific names; don't name them just anything."
 msgstr ""
+":c:func:`Py_VISIT` 要求传给 :c:func:`!local_traverse` 的 *visit* 和 *arg* 形"
+"参具有这些指定名称；请不要随意命名它们。"
 
 #: ../../c-api/gcsupport.rst:277
 msgid ""
 "Instances of :ref:`heap-allocated types <heap-types>` hold a reference to "
 "their type. Their traversal function must therefore visit the type::"
 msgstr ""
+":ref:`堆分配类型 <heap-types>` 的实例会持有一个对其类型的引用。 因此它们的遍"
+"历函数必须访问其类型::"
 
 #: ../../c-api/gcsupport.rst:280
 msgid "Py_VISIT(Py_TYPE(self));"
@@ -482,6 +504,10 @@ msgid ""
 "    return err;\n"
 "}"
 msgstr ""
+"int err = PyObject_VisitManagedDict((PyObject*)self, visit, arg);\n"
+"if (err) {\n"
+"    return err;\n"
+"}"
 
 #: ../../c-api/gcsupport.rst:296
 msgid ""
@@ -692,10 +718,12 @@ msgid ""
 "These functions return a :term:`borrowed reference`, which is valid for the "
 "duration of the :c:member:`!tp_traverse` handler call."
 msgstr ""
+"这些函数将返回 :term:`borrowed reference`，它会在 :c:member:`!tp_traverse` 处"
+"理器调用持续期间保持可用。"
 
 #: ../../c-api/gcsupport.rst:452
 msgid ":c:func:`PyType_GetModule`, :c:func:`PyType_GetModuleByToken`"
-msgstr ""
+msgstr ":c:func:`PyType_GetModule`, :c:func:`PyType_GetModuleByToken`"
 
 #: ../../c-api/gcsupport.rst:457
 msgid "Controlling the Garbage Collector State"
