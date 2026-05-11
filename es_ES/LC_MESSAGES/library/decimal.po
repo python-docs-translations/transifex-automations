@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-05 16:45+0000\n"
+"POT-Creation-Date: 2026-05-11 18:10+0000\n"
 "PO-Revision-Date: 2025-09-15 01:04+0000\n"
 "Last-Translator: eulalio barbero espinosa <eulalio@disroot.org>, 2026\n"
 "Language-Team: Spanish (Spain) (https://app.transifex.com/python-doc/"
@@ -1306,6 +1306,10 @@ msgid ""
 "class:`Decimal` context.  Raises :exc:`OverflowError` if *number* is an "
 "infinity or :exc:`ValueError` if it is a (quiet or signaling) NaN."
 msgstr ""
+"Si no se da *ndigits* o ``None``, devuelve el :class:`int` más cercano a "
+"*number*, redondeando los empates a par, e ignorando el modo de redondeo del "
+"contexto :class:`Decimal`.  Lanza :exc:`OverflowError` si *number* es un "
+"infinito o :exc:`ValueError` si es un NaN (silencioso o señalizador)."
 
 #: ../../library/decimal.rst:935
 msgid ""
@@ -1318,22 +1322,35 @@ msgid ""
 "length of the coefficient after the quantize operation would be greater than "
 "the current context's precision.  In other words, for the non-corner cases:"
 msgstr ""
+"Si *ndigits* es un :class:`int`, se respeta el modo de redondeo del contexto "
+"y se devuelve un :class:`Decimal` que representa *number* redondeado al "
+"múltiplo más cercano de ``Decimal('1E-ndigits')``; en este caso, "
+"``round(number, ndigits)`` es equivalente a ``self.quantize(Decimal('1E-"
+"ndigits'))``.  Devuelve ``Decimal('NaN')`` si *number* es un NaN "
+"silencioso.  Lanza :class:`InvalidOperation` si *number* es un infinito, un "
+"NaN con señal, o si la longitud del coeficiente después de la operación de "
+"cuantización sería mayor que la precisión del contexto actual.  En otras "
+"palabras, para los casos no esquinados:"
 
 #: ../../library/decimal.rst:945
 msgid ""
 "if *ndigits* is positive, return *number* rounded to *ndigits* decimal "
 "places;"
 msgstr ""
+"si *ndigits* es positivo, devuelve *number* redondeado a *ndigits* decimales;"
 
 #: ../../library/decimal.rst:947
 msgid "if *ndigits* is zero, return *number* rounded to the nearest integer;"
 msgstr ""
+"si *ndigits* es cero, devuelve *number* redondeado al entero más próximo;"
 
 #: ../../library/decimal.rst:948
 msgid ""
 "if *ndigits* is negative, return *number* rounded to the nearest multiple of "
 "``10**abs(ndigits)``."
 msgstr ""
+"si *ndigits* es negativo, devuelve *number* redondeado al múltiplo más "
+"cercano de ``10**abs(ndigits)``."
 
 #: ../../library/decimal.rst:951
 msgid "For example::"
@@ -1354,6 +1371,18 @@ msgid ""
 ">>> round(Decimal('3.75'), -1)\n"
 "Decimal('0E+1')"
 msgstr ""
+">>> from decimal import Decimal, getcontext, ROUND_DOWN\n"
+">>> getcontext().rounding = ROUND_DOWN\n"
+">>> round(Decimal('3.75'))     # redondeo de contexto ignorado\n"
+"4\n"
+">>> round(Decimal('3.5'))      # round-ties-to-even\n"
+"4\n"
+">>> round(Decimal('3.75'), 0)  # utiliza el redondeo de contexto\n"
+"Decimal('3')\n"
+">>> round(Decimal('3.75'), 1)\n"
+"Decimal('3.7')\n"
+">>> round(Decimal('3.75'), -1)\n"
+"Decimal('0E+1')"
 
 #: ../../library/decimal.rst:970
 msgid "Logical operands"
@@ -1367,6 +1396,11 @@ msgid ""
 "`Decimal` instance whose exponent and sign are both zero, and whose digits "
 "are all either ``0`` or ``1``."
 msgstr ""
+"Los métodos :meth:`~Decimal.logical_and`, :meth:`~Decimal.logical_invert`, :"
+"meth:`~Decimal.logical_or`, y :meth:`~Decimal.logical_xor` esperan que sus "
+"argumentos sean *logical operands*.  Un *logical operand* es una instancia "
+"de :class:`Decimal` cuyo exponente y signo son ambos cero, y cuyos dígitos "
+"son todos ``0`` o ``1``."
 
 #: ../../library/decimal.rst:984
 msgid "Context objects"
@@ -1424,6 +1458,12 @@ msgid ""
 "    s = calculate_something()\n"
 "s = +s  # Round the final result back to the default precision"
 msgstr ""
+"from decimal import localcontext\n"
+"\n"
+"with localcontext() as ctx:\n"
+"    ctx.prec = 42   # Realice un cálculo de alta precisión\n"
+"    s = calculate_something()\n"
+"s = +s  # Redondea el resultado final a la precisión predeterminada"
 
 #: ../../library/decimal.rst:1024
 msgid "Using keyword arguments, the code would be the following::"
@@ -1437,6 +1477,11 @@ msgid ""
 "    s = calculate_something()\n"
 "s = +s"
 msgstr ""
+"from decimal import localcontext\n"
+"\n"
+"with localcontext(prec=42) as ctx:\n"
+"    s = calculate_something()\n"
+"s = +s"
 
 #: ../../library/decimal.rst:1032
 msgid ""
@@ -1577,6 +1622,8 @@ msgid ""
 ">>> Context(prec=6, Emax=999, clamp=1).create_decimal('1.23e999')\n"
 "Decimal('1.23000E+999')"
 msgstr ""
+">>> Context(prec=6, Emax=999, clamp=1).create_decimal('1.23e999')\n"
+"Decimal('1.23000E+999')"
 
 #: ../../library/decimal.rst:1140
 msgid ""
@@ -1652,6 +1699,10 @@ msgid ""
 "context precision, rounding method, flags, and traps are applied to the "
 "conversion."
 msgstr ""
+"Crea una nueva instancia Decimal a partir de un flotante *f* pero "
+"redondeando utilizando *self* como contexto.  A diferencia del método de la "
+"clase :meth:`Decimal.from_float`, la precisión del contexto, el método de "
+"redondeo, las banderas y las trampas se aplican a la conversión."
 
 #: ../../library/decimal.rst:1203
 msgid ""
@@ -1664,6 +1715,14 @@ msgid ""
 "    ...\n"
 "decimal.Inexact: None"
 msgstr ""
+">>> context = Context(prec=5, rounding=ROUND_DOWN)\n"
+">>> context.create_decimal_from_float(math.pi)\n"
+"Decimal('3.1415')\n"
+">>> context = Context(prec=5, traps=[Inexact])\n"
+">>> context.create_decimal_from_float(math.pi)\n"
+"Traceback (most recent call last):\n"
+"    ...\n"
+"decimal.Inexact: None"
 
 #: ../../library/decimal.rst:1218
 msgid ""
@@ -1692,7 +1751,7 @@ msgstr ""
 
 #: ../../library/decimal.rst:1241
 msgid "Return the sum of *x* and *y*."
-msgstr ""
+msgstr "Devuelve la suma de *x* e *y*."
 
 #: ../../library/decimal.rst:1246
 msgid "Returns the same Decimal object *x*."
@@ -1700,7 +1759,7 @@ msgstr ""
 
 #: ../../library/decimal.rst:1251
 msgid "Compares *x* and *y* numerically."
-msgstr ""
+msgstr "Compara *x* e *y* numéricamente."
 
 #: ../../library/decimal.rst:1256
 msgid "Compares the values of the two operands numerically."
@@ -1717,7 +1776,7 @@ msgstr ""
 
 #: ../../library/decimal.rst:1271
 msgid "Returns a copy of *x* with the sign set to 0."
-msgstr ""
+msgstr "Devuelve una copia de *x* con el signo establecido en 0."
 
 #: ../../library/decimal.rst:1276
 msgid "Returns a copy of *x* with the sign inverted."
