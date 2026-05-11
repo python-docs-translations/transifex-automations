@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-08 21:17+0000\n"
+"POT-Creation-Date: 2026-05-11 18:59+0000\n"
 "PO-Revision-Date: 2025-07-18 19:58+0000\n"
 "Last-Translator: eulalio barbero espinosa <eulalio@disroot.org>, 2026\n"
 "Language-Team: Spanish (Spain) (https://app.transifex.com/python-doc/"
@@ -1578,7 +1578,7 @@ msgstr ""
 
 #: ../../library/decimal.rst:868
 msgid "Return the square root of the argument to full precision."
-msgstr ""
+msgstr "Devuelve la raíz cuadrada del argumento con toda precisión."
 
 #: ../../library/decimal.rst:873 ../../library/decimal.rst:1510
 msgid ""
@@ -1618,6 +1618,11 @@ msgid ""
 "``rounding`` parameter if given, else by the given ``context``.  If neither "
 "parameter is given then the rounding mode of the current context is used."
 msgstr ""
+"Redondea al entero más cercano, señalando :const:`Inexact` o :const:"
+"`Rounded` según corresponda si se produce el redondeo.  El modo de redondeo "
+"viene determinado por el parámetro ``rounding`` si se indica, o por el "
+"parámetro ``context``.  Si no se da ninguno de los dos parámetros, se "
+"utiliza el modo de redondeo del contexto actual."
 
 #: ../../library/decimal.rst:896
 msgid ""
@@ -1625,10 +1630,15 @@ msgid ""
 "`Rounded`.  If given, applies *rounding*; otherwise, uses the rounding "
 "method in either the supplied *context* or the current context."
 msgstr ""
+"Redondea al entero más cercano sin indicar :const:`Inexact` o :const:"
+"`Rounded`. Si se indica, aplica el *redondeo*; de lo contrario, utiliza el "
+"método de redondeo en el *contexto* suministrado o en el contexto actual."
 
 #: ../../library/decimal.rst:900
 msgid "Decimal numbers can be rounded using the :func:`.round` function:"
 msgstr ""
+"Los números decimales pueden redondearse utilizando la función :func:`."
+"round`:"
 
 #: ../../library/decimal.rst:905
 msgid ""
@@ -1637,6 +1647,10 @@ msgid ""
 "class:`Decimal` context.  Raises :exc:`OverflowError` if *number* is an "
 "infinity or :exc:`ValueError` if it is a (quiet or signaling) NaN."
 msgstr ""
+"Si no se da *ndigits* o ``None``, devuelve el :class:`int` más cercano a "
+"*number*, redondeando los empates a par, e ignorando el modo de redondeo del "
+"contexto :class:`Decimal`.  Lanza :exc:`OverflowError` si *number* es un "
+"infinito o :exc:`ValueError` si es un NaN (silencioso o señalizador)."
 
 #: ../../library/decimal.rst:911
 msgid ""
@@ -1649,22 +1663,35 @@ msgid ""
 "length of the coefficient after the quantize operation would be greater than "
 "the current context's precision.  In other words, for the non-corner cases:"
 msgstr ""
+"Si *ndigits* es un :class:`int`, se respeta el modo de redondeo del contexto "
+"y se devuelve un :class:`Decimal` que representa *number* redondeado al "
+"múltiplo más cercano de ``Decimal('1E-ndigits')``; en este caso, "
+"``round(number, ndigits)`` es equivalente a ``self.quantize(Decimal('1E-"
+"ndigits'))``.  Devuelve ``Decimal('NaN')`` si *number* es un NaN "
+"silencioso.  Lanza :class:`InvalidOperation` si *number* es un infinito, un "
+"NaN con señal, o si la longitud del coeficiente después de la operación de "
+"cuantización sería mayor que la precisión del contexto actual.  En otras "
+"palabras, para los casos no esquinados:"
 
 #: ../../library/decimal.rst:921
 msgid ""
 "if *ndigits* is positive, return *number* rounded to *ndigits* decimal "
 "places;"
 msgstr ""
+"si *ndigits* es positivo, devuelve *number* redondeado a *ndigits* decimales;"
 
 #: ../../library/decimal.rst:923
 msgid "if *ndigits* is zero, return *number* rounded to the nearest integer;"
 msgstr ""
+"si *ndigits* es cero, devuelve *number* redondeado al entero más próximo;"
 
 #: ../../library/decimal.rst:924
 msgid ""
 "if *ndigits* is negative, return *number* rounded to the nearest multiple of "
 "``10**abs(ndigits)``."
 msgstr ""
+"si *ndigits* es negativo, devuelve *number* redondeado al múltiplo más "
+"cercano de ``10**abs(ndigits)``."
 
 #: ../../library/decimal.rst:927
 msgid "For example::"
@@ -1685,10 +1712,22 @@ msgid ""
 ">>> round(Decimal('3.75'), -1)\n"
 "Decimal('0E+1')"
 msgstr ""
+">>> from decimal import Decimal, getcontext, ROUND_DOWN\n"
+">>> getcontext().rounding = ROUND_DOWN\n"
+">>> round(Decimal('3.75'))     # redondeo de contexto ignorado\n"
+"4\n"
+">>> round(Decimal('3.5'))      # round-ties-to-even\n"
+"4\n"
+">>> round(Decimal('3.75'), 0)  # utiliza el redondeo de contexto\n"
+"Decimal('3')\n"
+">>> round(Decimal('3.75'), 1)\n"
+"Decimal('3.7')\n"
+">>> round(Decimal('3.75'), -1)\n"
+"Decimal('0E+1')"
 
 #: ../../library/decimal.rst:946
 msgid "Logical operands"
-msgstr ""
+msgstr "Operandos lógicos"
 
 #: ../../library/decimal.rst:948
 msgid ""
@@ -1698,10 +1737,15 @@ msgid ""
 "`Decimal` instance whose exponent and sign are both zero, and whose digits "
 "are all either ``0`` or ``1``."
 msgstr ""
+"Los métodos :meth:`~Decimal.logical_and`, :meth:`~Decimal.logical_invert`, :"
+"meth:`~Decimal.logical_or`, y :meth:`~Decimal.logical_xor` esperan que sus "
+"argumentos sean *logical operands*.  Un *logical operand* es una instancia "
+"de :class:`Decimal` cuyo exponente y signo son ambos cero, y cuyos dígitos "
+"son todos ``0`` o ``1``."
 
 #: ../../library/decimal.rst:960
 msgid "Context objects"
-msgstr ""
+msgstr "Objetos de contexto"
 
 #: ../../library/decimal.rst:962
 msgid ""
@@ -1709,26 +1753,33 @@ msgid ""
 "set rules for rounding, determine which signals are treated as exceptions, "
 "and limit the range for exponents."
 msgstr ""
+"Los contextos son entornos para las operaciones aritméticas.  Gobiernan la "
+"precisión, establecen reglas para el redondeo, determinan qué señales se "
+"tratan como excepciones y limitan el rango de los exponentes."
 
 #: ../../library/decimal.rst:966
 msgid ""
 "Each thread has its own current context which is accessed or changed using "
 "the :func:`getcontext` and :func:`setcontext` functions:"
 msgstr ""
+"Cada subproceso tiene su propio contexto actual al que se accede o se cambia "
+"utilizando las funciones :func:`getcontext` y :func:`setcontext`:"
 
 #: ../../library/decimal.rst:972
 msgid "Return the current context for the active thread."
-msgstr ""
+msgstr "Devuelve el contexto actual del hilo activo."
 
 #: ../../library/decimal.rst:977
 msgid "Set the current context for the active thread to *c*."
-msgstr ""
+msgstr "Establece el contexto actual para el hilo activo en *c*."
 
 #: ../../library/decimal.rst:979
 msgid ""
 "You can also use the :keyword:`with` statement and the :func:`localcontext` "
 "function to temporarily change the active context."
 msgstr ""
+"También puede utilizar la sentencia :keyword:`with` y la función :func:"
+"`localcontext` para cambiar temporalmente el contexto activo."
 
 #: ../../library/decimal.rst:984
 msgid ""
@@ -1738,6 +1789,12 @@ msgid ""
 "specified, a copy of the current context is used.  The *kwargs* argument is "
 "used to set the attributes of the new context."
 msgstr ""
+"Devuelve un gestor de contexto que establecerá el contexto actual para el "
+"subproceso activo en una copia de *ctx* al entrar en la sentencia with y "
+"restaurará el contexto anterior al salir de la sentencia with. Si no se "
+"especifica ningún contexto, se utilizará una copia del contexto actual.  El "
+"argumento *kwargs* se utiliza para establecer los atributos del nuevo "
+"contexto."
 
 #: ../../library/decimal.rst:990
 msgid ""
@@ -1745,6 +1802,9 @@ msgid ""
 "places, performs a calculation, and then automatically restores the previous "
 "context::"
 msgstr ""
+"Por ejemplo, el siguiente código establece la precisión decimal actual en 42 "
+"posiciones, realiza un cálculo y, a continuación, restaura automáticamente "
+"el contexto anterior::"
 
 #: ../../library/decimal.rst:993
 msgid ""
@@ -1755,10 +1815,17 @@ msgid ""
 "    s = calculate_something()\n"
 "s = +s  # Round the final result back to the default precision"
 msgstr ""
+"from decimal import localcontext\n"
+"\n"
+"with localcontext() as ctx:\n"
+"    ctx.prec = 42   # Realice un cálculo de alta precisión\n"
+"    s = calculate_something()\n"
+"s = +s  # Redondea el resultado final a la precisión predeterminada"
 
 #: ../../library/decimal.rst:1000
 msgid "Using keyword arguments, the code would be the following::"
 msgstr ""
+"Utilizando argumentos de palabras clave, el código sería el siguiente::"
 
 #: ../../library/decimal.rst:1002
 msgid ""
@@ -1768,6 +1835,11 @@ msgid ""
 "    s = calculate_something()\n"
 "s = +s"
 msgstr ""
+"from decimal import localcontext\n"
+"\n"
+"with localcontext(prec=42) as ctx:\n"
+"    s = calculate_something()\n"
+"s = +s"
 
 #: ../../library/decimal.rst:1008
 msgid ""
@@ -1775,18 +1847,26 @@ msgid ""
 "`Context` doesn't support.  Raises either :exc:`TypeError` or :exc:"
 "`ValueError` if *kwargs* supplies an invalid value for an attribute."
 msgstr ""
+"Lanza :exc:`TypeError` si *kwargs* proporciona un atributo que :class:"
+"`Context` no soporta.  Muestra :exc:`TypeError` o :exc:`ValueError` si "
+"*kwargs* proporciona un valor no válido para un atributo."
 
 #: ../../library/decimal.rst:1012
 msgid ""
 ":meth:`localcontext` now supports setting context attributes through the use "
 "of keyword arguments."
 msgstr ""
+":meth:`localcontext` ahora permite establecer atributos de contexto mediante "
+"el uso de argumentos de palabra clave."
 
 #: ../../library/decimal.rst:1015
 msgid ""
 "New contexts can also be created using the :class:`Context` constructor "
 "described below. In addition, the module provides three pre-made contexts:"
 msgstr ""
+"También se pueden crear nuevos contextos utilizando el constructor :class:"
+"`Context` que se describe a continuación. Además, el módulo proporciona tres "
+"contextos prefabricados:"
 
 #: ../../library/decimal.rst:1021
 msgid ""
@@ -1796,11 +1876,19 @@ msgid ""
 "exceptions) except :const:`Inexact`, :const:`Rounded`, and :const:"
 "`Subnormal`."
 msgstr ""
+"Se trata de un contexto estándar definido por la Especificación General de "
+"Aritmética Decimal.  La precisión se fija en nueve.  El redondeo se "
+"establece en :const:`ROUND_HALF_UP`.  Todos los indicadores están "
+"desactivados.  Todas las trampas están habilitadas (tratadas como "
+"excepciones) excepto :const:`Inexact`, :const:`Rounded`, y :const:"
+"`Subnormal`."
 
 #: ../../library/decimal.rst:1027
 msgid ""
 "Because many of the traps are enabled, this context is useful for debugging."
 msgstr ""
+"Debido a que muchas de las trampas están activadas, este contexto es útil "
+"para la depuración."
 
 #: ../../library/decimal.rst:1032
 msgid ""
@@ -1809,6 +1897,10 @@ msgid ""
 "`ROUND_HALF_EVEN`.  All flags are cleared.  No traps are enabled (so that "
 "exceptions are not raised during computations)."
 msgstr ""
+"Se trata de un contexto estándar definido por la Especificación General de "
+"Aritmética Decimal.  La precisión se fija en nueve.  El redondeo se "
+"establece en :const:`ROUND_HALF_EVEN`.  Se borran todas las banderas.  No se "
+"activan trampas (para que no se produzcan excepciones durante los cálculos)."
 
 #: ../../library/decimal.rst:1037
 msgid ""
@@ -1817,6 +1909,11 @@ msgid ""
 "exceptions.  This allows an application to complete a run in the presence of "
 "conditions that would otherwise halt the program."
 msgstr ""
+"Debido a que las trampas están deshabilitadas, este contexto es útil para "
+"aplicaciones que prefieren tener como resultado ``NaN`` o ``Infinity`` en "
+"lugar de lanzar excepciones.  Esto permite a una aplicación completar una "
+"ejecución en presencia de condiciones que de otro modo detendrían el "
+"programa."
 
 #: ../../library/decimal.rst:1045
 msgid ""
@@ -1825,6 +1922,10 @@ msgid ""
 "changing the default for new contexts created by the :class:`Context` "
 "constructor."
 msgstr ""
+"Este contexto es utilizado por el constructor :class:`Context` como "
+"prototipo para nuevos contextos.  Cambiar un campo (como la precisión) tiene "
+"el efecto de cambiar el predeterminado para los nuevos contextos creados por "
+"el constructor :class:`Context`."
 
 #: ../../library/decimal.rst:1049
 msgid ""
@@ -1833,12 +1934,20 @@ msgid ""
 "defaults.  Changing the fields after threads have started is not recommended "
 "as it would require thread synchronization to prevent race conditions."
 msgstr ""
+"Este contexto es muy útil en entornos multihilo.  Cambiar uno de los campos "
+"antes de que se inicien los subprocesos tiene el efecto de establecer los "
+"valores predeterminados de todo el sistema.  No se recomienda cambiar los "
+"campos después de que se hayan iniciado los subprocesos, ya que requeriría "
+"la sincronización de los subprocesos para evitar condiciones de carrera."
 
 #: ../../library/decimal.rst:1054
 msgid ""
 "In single threaded environments, it is preferable to not use this context at "
 "all.  Instead, simply create contexts explicitly as described below."
 msgstr ""
+"En entornos monohilo, es preferible no utilizar este contexto en absoluto.  "
+"En su lugar, simplemente crear contextos explícitamente como se describe a "
+"continuación."
 
 #: ../../library/decimal.rst:1057
 msgid ""
@@ -1846,12 +1955,17 @@ msgid ""
 "rounding`\\ =\\ :const:`ROUND_HALF_EVEN`, and enabled traps for :class:"
 "`Overflow`, :class:`InvalidOperation`, and :class:`DivisionByZero`."
 msgstr ""
+"Los valores por defecto son :attr:`Context.prec`\\ =\\ ``28``, :attr:"
+"`Context.rounding`\\ = :const:`ROUND_HALF_EVEN`, y trampas habilitadas para :"
+"class:`Overflow`, :class:`InvalidOperation`, y :class:`DivisionByZero`."
 
 #: ../../library/decimal.rst:1062
 msgid ""
 "In addition to the three supplied contexts, new contexts can be created with "
 "the :class:`Context` constructor."
 msgstr ""
+"Además de los tres contextos suministrados, se pueden crear nuevos contextos "
+"con el constructor :class:`Context`."
 
 #: ../../library/decimal.rst:1068
 msgid ""
@@ -1859,24 +1973,34 @@ msgid ""
 "default values are copied from the :const:`DefaultContext`.  If the *flags* "
 "field is not specified or is :const:`None`, all flags are cleared."
 msgstr ""
+"Crea un nuevo contexto.  Si un campo no se especifica o es :const:`None`, se "
+"copian los valores por defecto de :const:`DefaultContext`. Si el campo "
+"*flags* no se especifica o es :const:`None`, se borran todas las banderas."
 
 #: ../../library/decimal.rst:1072
 msgid ""
 "*prec* is an integer in the range [``1``, :const:`MAX_PREC`] that sets the "
 "precision for arithmetic operations in the context."
 msgstr ""
+"*prec* es un entero en el rango [``1``, :const:`MAX_PREC`] que establece la "
+"precisión para las operaciones aritméticas en el contexto."
 
 #: ../../library/decimal.rst:1075
 msgid ""
 "The *rounding* option is one of the constants listed in the section "
 "`Rounding Modes`_."
 msgstr ""
+"La opción *rounding* es una de las constantes enumeradas en la sección "
+"`Rounding Modes`_."
 
 #: ../../library/decimal.rst:1078
 msgid ""
 "The *traps* and *flags* fields list any signals to be set. Generally, new "
 "contexts should only set traps and leave the flags clear."
 msgstr ""
+"Los campos *traps* y *flags* enumeran las señales que deben activarse. "
+"Generalmente, los nuevos contextos sólo deberían establecer trampas y dejar "
+"las banderas en blanco."
 
 #: ../../library/decimal.rst:1081
 msgid ""
@@ -1884,6 +2008,9 @@ msgid ""
 "allowable for exponents. *Emin* must be in the range [:const:`MIN_EMIN`, "
 "``0``], *Emax* in the range [``0``, :const:`MAX_EMAX`]."
 msgstr ""
+"Los campos *Emin* y *Emax* son enteros que especifican los límites "
+"exteriores permitidos para los exponentes. *Emin* debe estar en el rango [:"
+"const:`MIN_EMIN`, ``0``], *Emax* en el rango [``0``, :const:`MAX_EMAX`]."
 
 #: ../../library/decimal.rst:1085
 msgid ""
@@ -1891,6 +2018,9 @@ msgid ""
 "``1``, exponents are printed with a capital ``E``; otherwise, a lowercase "
 "``e`` is used: ``Decimal('6.02e+23')``."
 msgstr ""
+"El campo *capitals* puede ser ``0`` o ``1`` (por defecto). Si se establece "
+"en ``1``, los exponentes se imprimen con una mayúscula ``E``; de lo "
+"contrario, se utiliza una minúscula ``e``: ``Decimal('6.02e+23')``."
 
 #: ../../library/decimal.rst:1089
 msgid ""
@@ -1905,18 +2035,32 @@ msgid ""
 "value of the number but loses information about significant trailing zeros.  "
 "For example::"
 msgstr ""
+"El campo *clamp* puede ser ``0`` (por defecto) o ``1``. Si se establece en "
+"``1``, el exponente ``e`` de una instancia :class:`Decimal` representable en "
+"este contexto está estrictamente limitado al rango ``Emin - prec + 1 <= e <= "
+"Emax - prec + 1``.  Si *clamp* es ``0``, se cumple una condición más débil: "
+"el exponente ajustado de la instancia :class:`Decimal` es como máximo :attr:"
+"`~Context.Emax`.  Cuando *clamp* es ``1``, un número normal grande tendrá, "
+"siempre que sea posible, su exponente reducido y un número correspondiente "
+"de ceros añadidos a su coeficiente, con el fin de ajustarse a las "
+"restricciones de exponente; esto preserva el valor del número, pero pierde "
+"información sobre ceros finales significativos.  Por ejemplo::"
 
 #: ../../library/decimal.rst:1101
 msgid ""
 ">>> Context(prec=6, Emax=999, clamp=1).create_decimal('1.23e999')\n"
 "Decimal('1.23000E+999')"
 msgstr ""
+">>> Context(prec=6, Emax=999, clamp=1).create_decimal('1.23e999')\n"
+"Decimal('1.23000E+999')"
 
 #: ../../library/decimal.rst:1104
 msgid ""
 "A *clamp* value of ``1`` allows compatibility with the fixed-width decimal "
 "interchange formats specified in IEEE 754."
 msgstr ""
+"Un valor de *clamp* de ``1`` permite la compatibilidad con los formatos de "
+"intercambio decimal de ancho fijo especificados en IEEE 754."
 
 #: ../../library/decimal.rst:1107
 msgid ""
@@ -1930,22 +2074,32 @@ msgid ""
 "exp(context=C)``.  Each :class:`Context` method accepts a Python integer (an "
 "instance of :class:`int`) anywhere that a Decimal instance is accepted."
 msgstr ""
+"La clase :class:`Context` define varios métodos de propósito general, así "
+"como un gran número de métodos para realizar operaciones aritméticas "
+"directamente en un contexto determinado. Además, para cada uno de los "
+"métodos :class:`Decimal` descritos anteriormente (a excepción de los "
+"métodos :meth:`~Decimal.adjusted` y :meth:`~Decimal.as_tuple` ) existe un "
+"método :class:`Context` correspondiente.  Por ejemplo, para una instancia "
+"de :class:`Context` ``C`` y una instancia de :class:`Decimal` ``x`` , ``C."
+"exp(x)`` es equivalente a ``x.exp(context=C)``. Cada método :class:`Context` "
+"acepta un entero Python (una instancia de :class:`int`) en cualquier lugar "
+"donde se acepte una instancia Decimal."
 
 #: ../../library/decimal.rst:1120
 msgid "Resets all of the flags to ``0``."
-msgstr ""
+msgstr "Restablece todas las banderas a ``0``."
 
 #: ../../library/decimal.rst:1124
 msgid "Resets all of the traps to ``0``."
-msgstr ""
+msgstr "Restablece todas las trampas a ``0``."
 
 #: ../../library/decimal.rst:1130
 msgid "Return a duplicate of the context."
-msgstr ""
+msgstr "Devuelve un duplicado del contexto."
 
 #: ../../library/decimal.rst:1134
 msgid "Return a copy of the Decimal instance num."
-msgstr ""
+msgstr "Devuelve una copia de la instancia Decimal num."
 
 #: ../../library/decimal.rst:1138
 msgid ""
@@ -1953,6 +2107,10 @@ msgid ""
 "Unlike the :class:`Decimal` constructor, the context precision, rounding "
 "method, flags, and traps are applied to the conversion."
 msgstr ""
+"Crea una nueva instancia de Decimal a partir de *num* pero utilizando *self* "
+"como contexto. A diferencia del constructor :class:`Decimal`, la precisión "
+"del contexto, el método de redondeo, las banderas y las trampas se aplican a "
+"la conversión."
 
 #: ../../library/decimal.rst:1142
 msgid ""
@@ -1962,6 +2120,11 @@ msgid ""
 "the following example, using unrounded inputs means that adding zero to a "
 "sum can change the result:"
 msgstr ""
+"Esto es útil porque las constantes se dan a menudo con una precisión mayor "
+"de la que necesita la aplicación.  Otra ventaja es que el redondeo elimina "
+"inmediatamente los efectos no deseados de los dígitos que superan la "
+"precisión actual. En el siguiente ejemplo, el uso de entradas no redondeadas "
+"significa que añadir cero a una suma puede cambiar el resultado:"
 
 #: ../../library/decimal.rst:1148
 msgid ""
@@ -1971,6 +2134,11 @@ msgid ""
 ">>> Decimal('3.4445') + Decimal(0) + Decimal('1.0023')\n"
 "Decimal('4.44')"
 msgstr ""
+">>> getcontext().prec = 3\n"
+">>> Decimal('3.4445') + Decimal('1.0023')\n"
+"Decimal('4.45')\n"
+">>> Decimal('3.4445') + Decimal(0) + Decimal('1.0023')\n"
+"Decimal('4.44')"
 
 #: ../../library/decimal.rst:1156
 msgid ""
@@ -1978,6 +2146,9 @@ msgid ""
 "the argument is a string, no leading or trailing whitespace or underscores "
 "are permitted."
 msgstr ""
+"Este método implementa la operación to-number de la especificación IBM. Si "
+"el argumento es una cadena, no se permiten espacios en blanco ni guiones "
+"bajos."
 
 #: ../../library/decimal.rst:1162
 msgid ""
@@ -1986,6 +2157,10 @@ msgid ""
 "context precision, rounding method, flags, and traps are applied to the "
 "conversion."
 msgstr ""
+"Crea una nueva instancia Decimal a partir de un flotante *f* pero "
+"redondeando utilizando *self* como contexto.  A diferencia del método de la "
+"clase :meth:`Decimal.from_float`, la precisión del contexto, el método de "
+"redondeo, las banderas y las trampas se aplican a la conversión."
 
 #: ../../library/decimal.rst:1167
 msgid ""
@@ -1998,6 +2173,14 @@ msgid ""
 "    ...\n"
 "decimal.Inexact: None"
 msgstr ""
+">>> context = Context(prec=5, rounding=ROUND_DOWN)\n"
+">>> context.create_decimal_from_float(math.pi)\n"
+"Decimal('3.1415')\n"
+">>> context = Context(prec=5, traps=[Inexact])\n"
+">>> context.create_decimal_from_float(math.pi)\n"
+"Traceback (most recent call last):\n"
+"    ...\n"
+"decimal.Inexact: None"
 
 #: ../../library/decimal.rst:1182
 msgid ""
@@ -2005,10 +2188,13 @@ msgid ""
 "value for subnormal results.  When underflow occurs, the exponent is set to :"
 "const:`Etiny`."
 msgstr ""
+"Devuelve un valor igual a ``Emin - prec + 1`` que es el valor mínimo de "
+"exponente para resultados subnormales.  Cuando se produce subdesbordamiento, "
+"el exponente se fija en :const:`Etiny`."
 
 #: ../../library/decimal.rst:1188
 msgid "Returns a value equal to ``Emax - prec + 1``."
-msgstr ""
+msgstr "Devuelve un valor igual a ``Emax - prec + 1``."
 
 #: ../../library/decimal.rst:1190
 msgid ""
@@ -2019,39 +2205,47 @@ msgid ""
 "similar to those for the :class:`Decimal` class and are only briefly "
 "recounted here."
 msgstr ""
+"El enfoque habitual para trabajar con decimales es crear instancias de :"
+"class:`Decimal` y luego aplicar operaciones aritméticas que tienen lugar "
+"dentro del contexto actual para el hilo activo.  Un enfoque alternativo es "
+"utilizar métodos de contexto para calcular dentro de un contexto "
+"específico.  Los métodos son similares a los de la clase :class:`Decimal` y "
+"sólo se describen brevemente aquí."
 
 #: ../../library/decimal.rst:1200
 msgid "Returns the absolute value of *x*."
-msgstr ""
+msgstr "Devuelve el valor absoluto de *x*."
 
 #: ../../library/decimal.rst:1205
 msgid "Return the sum of *x* and *y*."
-msgstr ""
+msgstr "Devuelve la suma de *x* e *y*."
 
 #: ../../library/decimal.rst:1210
 msgid "Returns the same Decimal object *x*."
-msgstr ""
+msgstr "Devuelve el mismo objeto Decimal *x*."
 
 #: ../../library/decimal.rst:1215
 msgid "Compares *x* and *y* numerically."
-msgstr ""
+msgstr "Compara *x* e *y* numéricamente."
 
 #: ../../library/decimal.rst:1220
 msgid "Compares the values of the two operands numerically."
-msgstr ""
+msgstr "Compara numéricamente los valores de los dos operandos."
 
 #: ../../library/decimal.rst:1225
 msgid "Compares two operands using their abstract representation."
-msgstr ""
+msgstr "Compara dos operandos utilizando su representación abstracta."
 
 #: ../../library/decimal.rst:1230
 msgid ""
 "Compares two operands using their abstract representation, ignoring sign."
 msgstr ""
+"Compara dos operandos utilizando su representación abstracta, ignorando el "
+"signo."
 
 #: ../../library/decimal.rst:1235
 msgid "Returns a copy of *x* with the sign set to 0."
-msgstr ""
+msgstr "Devuelve una copia de *x* con el signo establecido en 0."
 
 #: ../../library/decimal.rst:1240
 msgid "Returns a copy of *x* with the sign inverted."
