@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-08 19:31+0000\n"
+"POT-Creation-Date: 2026-05-13 17:14+0000\n"
 "PO-Revision-Date: 2026-05-08 17:18+0000\n"
 "Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>, 2026\n"
 "Language-Team: Swedish (https://app.transifex.com/python-doc/teams/5390/"
@@ -100,7 +100,7 @@ msgid ""
 ":mod:`marshal` cannot be used to serialize user-defined classes and their "
 "instances.  :mod:`!pickle` can save and restore class instances "
 "transparently, however the class definition must be importable and live in "
-"the same module as when the object was stored."
+"the same module as when the object was pickled."
 msgstr ""
 
 #: ../../library/pickle.rst:64
@@ -1273,14 +1273,13 @@ msgid ""
 "If a string is returned, the string should be interpreted as the name of a "
 "global variable.  It should be the object's local name relative to its "
 "module; the pickle module searches the module namespace to determine the "
-"object's module.  This behaviour is typically useful for singletons."
+"object's module: for a given ``obj`` to be pickled, the ``__module__`` "
+"attribute is looked up on ``obj`` directly, which falls back to a lookup on "
+"the type of ``obj`` if no ``__module__`` instance attribute is set. This "
+"behaviour is typically useful for singletons."
 msgstr ""
-"Om en sträng returneras ska strängen tolkas som namnet på en global "
-"variabel.  Det bör vara objektets lokala namn i förhållande till dess modul; "
-"pickle-modulen söker i modulnamnrymden för att fastställa objektets modul.  "
-"Detta beteende är typiskt användbart för singletons."
 
-#: ../../library/pickle.rst:701
+#: ../../library/pickle.rst:704
 msgid ""
 "When a tuple is returned, it must be between two and six items long. "
 "Optional items can either be omitted, or ``None`` can be provided as their "
@@ -1290,7 +1289,7 @@ msgstr ""
 "Valfria objekt kan antingen utelämnas, eller så kan ``None`` anges som "
 "värde.  Semantiken för varje objekt är i ordning:"
 
-#: ../../library/pickle.rst:707
+#: ../../library/pickle.rst:710
 msgid ""
 "A callable object that will be called to create the initial version of the "
 "object."
@@ -1298,7 +1297,7 @@ msgstr ""
 "Ett anropsbart objekt som kommer att anropas för att skapa den första "
 "versionen av objektet."
 
-#: ../../library/pickle.rst:710
+#: ../../library/pickle.rst:713
 msgid ""
 "A tuple of arguments for the callable object.  An empty tuple must be given "
 "if the callable does not accept any argument."
@@ -1306,7 +1305,7 @@ msgstr ""
 "En tupel av argument för det anropbara objektet.  En tom tupel måste anges "
 "om det anropbara objektet inte accepterar något argument."
 
-#: ../../library/pickle.rst:713
+#: ../../library/pickle.rst:716
 msgid ""
 "Optionally, the object's state, which will be passed to the object's :meth:"
 "`__setstate__` method as previously described.  If the object has no such "
@@ -1318,7 +1317,7 @@ msgstr ""
 "någon sådan metod måste värdet vara en dictionary och det kommer att läggas "
 "till i objektets attribut :attr:`~object.__dict__`."
 
-#: ../../library/pickle.rst:718
+#: ../../library/pickle.rst:721
 msgid ""
 "Optionally, an iterator (and not a sequence) yielding successive items. "
 "These items will be appended to the object either using ``obj.append(item)`` "
@@ -1330,7 +1329,7 @@ msgid ""
 "items to append, so both must be supported.)"
 msgstr ""
 
-#: ../../library/pickle.rst:728
+#: ../../library/pickle.rst:731
 msgid ""
 "Optionally, an iterator (not a sequence) yielding successive key-value "
 "pairs.  These items will be stored to the object using ``obj[key] = "
@@ -1342,7 +1341,7 @@ msgstr ""
 "Detta används främst för dictionary-subklasser, men kan användas av andra "
 "klasser så länge de implementerar :meth:`__setitem__`."
 
-#: ../../library/pickle.rst:733
+#: ../../library/pickle.rst:736
 msgid ""
 "Optionally, a callable with a ``(obj, state)`` signature. This callable "
 "allows the user to programmatically control the state-updating behavior of a "
@@ -1356,11 +1355,11 @@ msgstr ""
 "använda ``obj`` statiska :meth:`__setstate__` metod. Om inte ``None``, "
 "kommer denna anropsbarhet att ha prioritet över ``obj`` :meth:`__setstate__`."
 
-#: ../../library/pickle.rst:739
+#: ../../library/pickle.rst:742
 msgid "The optional sixth tuple item, ``(obj, state)``, was added."
 msgstr "Det valfria sjätte tuple-objektet, ``(obj, state)``, lades till."
 
-#: ../../library/pickle.rst:745
+#: ../../library/pickle.rst:748
 msgid ""
 "Alternatively, a :meth:`__reduce_ex__` method may be defined.  The only "
 "difference is this method should take a single integer argument, the "
@@ -1377,11 +1376,11 @@ msgstr ""
 "denna metod är att tillhandahålla bakåtkompatibla reduce-värden för äldre "
 "Python-versioner."
 
-#: ../../library/pickle.rst:757
+#: ../../library/pickle.rst:760
 msgid "Persistence of External Objects"
 msgstr "Persistens för externa objekt"
 
-#: ../../library/pickle.rst:763
+#: ../../library/pickle.rst:766
 msgid ""
 "For the benefit of object persistence, the :mod:`!pickle` module supports "
 "the notion of a reference to an object outside the pickled data stream.  "
@@ -1390,7 +1389,7 @@ msgid ""
 "object (for any newer protocol)."
 msgstr ""
 
-#: ../../library/pickle.rst:769
+#: ../../library/pickle.rst:772
 msgid ""
 "The resolution of such persistent IDs is not defined by the :mod:`!pickle` "
 "module; it will delegate this resolution to the user-defined methods on the "
@@ -1398,7 +1397,7 @@ msgid ""
 "persistent_load` respectively."
 msgstr ""
 
-#: ../../library/pickle.rst:774
+#: ../../library/pickle.rst:777
 msgid ""
 "To pickle objects that have an external persistent ID, the pickler must have "
 "a custom :meth:`~Pickler.persistent_id` method that takes an object as an "
@@ -1416,7 +1415,7 @@ msgstr ""
 "det objektet, tillsammans med en markör så att unpickllern känner igen det "
 "som ett persistent ID."
 
-#: ../../library/pickle.rst:781
+#: ../../library/pickle.rst:784
 msgid ""
 "To unpickle external objects, the unpickler must have a custom :meth:"
 "`~Unpickler.persistent_load` method that takes a persistent ID object and "
@@ -1426,7 +1425,7 @@ msgstr ""
 "`~Unpickler.persistent_load`\\-metod som tar ett persistent ID-objekt och "
 "returnerar det refererade objektet."
 
-#: ../../library/pickle.rst:785
+#: ../../library/pickle.rst:788
 msgid ""
 "Here is a comprehensive example presenting how persistent ID can be used to "
 "pickle external objects by reference."
@@ -1434,7 +1433,7 @@ msgstr ""
 "Här följer ett omfattande exempel som visar hur persistent ID kan användas "
 "för att plocka externa objekt genom referens."
 
-#: ../../library/pickle.rst:788
+#: ../../library/pickle.rst:791
 msgid ""
 "# Simple example presenting how persistent ID can be used to pickle\n"
 "# external objects by reference.\n"
@@ -1626,11 +1625,11 @@ msgstr ""
 "if __name__ == '__main__':\n"
 "    main()\n"
 
-#: ../../library/pickle.rst:793
+#: ../../library/pickle.rst:796
 msgid "Dispatch Tables"
 msgstr "Expeditionsbord"
 
-#: ../../library/pickle.rst:795
+#: ../../library/pickle.rst:798
 msgid ""
 "If one wants to customize pickling of some classes without disturbing any "
 "other code which depends on pickling, then one can create a pickler with a "
@@ -1640,7 +1639,7 @@ msgstr ""
 "kod som är beroende av betningen, kan man skapa en betare med en privat "
 "dispatch-tabell."
 
-#: ../../library/pickle.rst:799
+#: ../../library/pickle.rst:802
 msgid ""
 "The global dispatch table managed by the :mod:`copyreg` module is available "
 "as :data:`!copyreg.dispatch_table`.  Therefore, one may choose to use a "
@@ -1651,11 +1650,11 @@ msgstr ""
 "använda en modifierad kopia av :data:`!copyreg.dispatch_table` som en privat "
 "dispatch-tabell."
 
-#: ../../library/pickle.rst:804
+#: ../../library/pickle.rst:807
 msgid "For example ::"
 msgstr "Till exempel ::"
 
-#: ../../library/pickle.rst:806
+#: ../../library/pickle.rst:809
 msgid ""
 "f = io.BytesIO()\n"
 "p = pickle.Pickler(f)\n"
@@ -1667,7 +1666,7 @@ msgstr ""
 "p.dispatch_table = copyreg.dispatch_table.copy()\n"
 "p.dispatch_table[SomeClass] = reduce_SomeClass"
 
-#: ../../library/pickle.rst:811
+#: ../../library/pickle.rst:814
 msgid ""
 "creates an instance of :class:`pickle.Pickler` with a private dispatch table "
 "which handles the ``SomeClass`` class specially.  Alternatively, the code ::"
@@ -1675,7 +1674,7 @@ msgstr ""
 "skapar en instans av :class:`pickle.Pickler` med en privat dispatch-tabell "
 "som hanterar klassen ``SomeClass`` speciellt.  Alternativt kan koden ::"
 
-#: ../../library/pickle.rst:815
+#: ../../library/pickle.rst:818
 msgid ""
 "class MyPickler(pickle.Pickler):\n"
 "    dispatch_table = copyreg.dispatch_table.copy()\n"
@@ -1689,7 +1688,7 @@ msgstr ""
 "f = io.BytesIO()\n"
 "p = MyPickler(f)"
 
-#: ../../library/pickle.rst:821
+#: ../../library/pickle.rst:824
 msgid ""
 "does the same but all instances of ``MyPickler`` will by default share the "
 "private dispatch table.  On the other hand, the code ::"
@@ -1697,7 +1696,7 @@ msgstr ""
 "gör samma sak men alla instanser av ``MyPickler`` kommer som standard att "
 "dela den privata dispatch-tabellen.  Å andra sidan, koden ::"
 
-#: ../../library/pickle.rst:824
+#: ../../library/pickle.rst:827
 msgid ""
 "copyreg.pickle(SomeClass, reduce_SomeClass)\n"
 "f = io.BytesIO()\n"
@@ -1707,7 +1706,7 @@ msgstr ""
 "f = io.BytesIO()\n"
 "p = pickle.Pickler(f)"
 
-#: ../../library/pickle.rst:828
+#: ../../library/pickle.rst:831
 msgid ""
 "modifies the global dispatch table shared by all users of the :mod:`copyreg` "
 "module."
@@ -1715,11 +1714,11 @@ msgstr ""
 "ändrar den globala fördelningstabellen som delas av alla användare av "
 "modulen :mod:`copyreg`."
 
-#: ../../library/pickle.rst:833
+#: ../../library/pickle.rst:836
 msgid "Handling Stateful Objects"
 msgstr "Hantering av Stateful-objekt"
 
-#: ../../library/pickle.rst:839
+#: ../../library/pickle.rst:842
 msgid ""
 "Here's an example that shows how to modify pickling behavior for a class. "
 "The :class:`!TextReader` class below opens a text file, and returns the line "
@@ -1739,7 +1738,7 @@ msgstr ""
 "__setstate__` och :meth:`!__getstate__` används för att implementera detta "
 "beteende. ::"
 
-#: ../../library/pickle.rst:847
+#: ../../library/pickle.rst:850
 msgid ""
 "class TextReader:\n"
 "    \"\"\"Print and number lines in a text file.\"\"\"\n"
@@ -1815,11 +1814,11 @@ msgstr ""
 "        # Finally, save the file.\n"
 "        self.file = file"
 
-#: ../../library/pickle.rst:885
+#: ../../library/pickle.rst:888
 msgid "A sample usage might be something like this::"
 msgstr "Ett exempel på användning kan vara ungefär så här::"
 
-#: ../../library/pickle.rst:887
+#: ../../library/pickle.rst:890
 msgid ""
 ">>> reader = TextReader(\"hello.txt\")\n"
 ">>> reader.readline()\n"
@@ -1839,11 +1838,11 @@ msgstr ""
 ">>> new_reader.readline()\n"
 "'3: Goodbye!'"
 
-#: ../../library/pickle.rst:899
+#: ../../library/pickle.rst:902
 msgid "Custom Reduction for Types, Functions, and Other Objects"
 msgstr "Anpassad reduktion för typer, funktioner och andra objekt"
 
-#: ../../library/pickle.rst:903
+#: ../../library/pickle.rst:906
 msgid ""
 "Sometimes, :attr:`~Pickler.dispatch_table` may not be flexible enough. In "
 "particular we may want to customize pickling based on another criterion than "
@@ -1855,7 +1854,7 @@ msgstr ""
 "än objektets typ, eller så kanske vi vill anpassa betningen av funktioner "
 "och klasser."
 
-#: ../../library/pickle.rst:908
+#: ../../library/pickle.rst:911
 msgid ""
 "For those cases, it is possible to subclass from the :class:`Pickler` class "
 "and implement a :meth:`~Pickler.reducer_override` method. This method can "
@@ -1869,7 +1868,7 @@ msgstr ""
 "Den kan alternativt returnera :data:`NotImplemented` för att återgå till det "
 "traditionella beteendet."
 
-#: ../../library/pickle.rst:913
+#: ../../library/pickle.rst:916
 msgid ""
 "If both the :attr:`~Pickler.dispatch_table` and :meth:`~Pickler."
 "reducer_override` are defined, then :meth:`~Pickler.reducer_override` method "
@@ -1879,7 +1878,7 @@ msgstr ""
 "reducer_override` är definierade, så har metoden :meth:`~Pickler."
 "reducer_override` prioritet."
 
-#: ../../library/pickle.rst:918
+#: ../../library/pickle.rst:921
 msgid ""
 "For performance reasons, :meth:`~Pickler.reducer_override` may not be called "
 "for the following objects: ``None``, ``True``, ``False``, and exact "
@@ -1892,7 +1891,7 @@ msgstr ""
 "class:`int`, :class:`float`, :class:`bytes`, :class:`str`, :class:`dict`, :"
 "class:`set`, :class:`frozenset`, :class:`list` och :class:`tuple`."
 
-#: ../../library/pickle.rst:924
+#: ../../library/pickle.rst:927
 msgid ""
 "Here is a simple example where we allow pickling and reconstructing a given "
 "class::"
@@ -1900,7 +1899,7 @@ msgstr ""
 "Här är ett enkelt exempel där vi tillåter betning och rekonstruktion av en "
 "given klass::"
 
-#: ../../library/pickle.rst:927
+#: ../../library/pickle.rst:930
 msgid ""
 "import io\n"
 "import pickle\n"
@@ -1958,11 +1957,11 @@ msgstr ""
 "assert unpickled_class.__name__ == \"MyClass\"\n"
 "assert unpickled_class.my_attribute == 1"
 
-#: ../../library/pickle.rst:959
+#: ../../library/pickle.rst:962
 msgid "Out-of-band Buffers"
 msgstr "Buffertar utanför bandet"
 
-#: ../../library/pickle.rst:963
+#: ../../library/pickle.rst:966
 msgid ""
 "In some contexts, the :mod:`!pickle` module is used to transfer massive "
 "amounts of data.  Therefore, it can be important to minimize the number of "
@@ -1972,7 +1971,7 @@ msgid ""
 "involves copying data to and from the pickle stream."
 msgstr ""
 
-#: ../../library/pickle.rst:970
+#: ../../library/pickle.rst:973
 msgid ""
 "This constraint can be eschewed if both the *provider* (the implementation "
 "of the object types to be transferred) and the *consumer* (the "
@@ -1984,11 +1983,11 @@ msgstr ""
 "kommunikationssystemet) stöder de överföringsmöjligheter utanför bandet som "
 "tillhandahålls av pickle protocol 5 och högre."
 
-#: ../../library/pickle.rst:976
+#: ../../library/pickle.rst:979
 msgid "Provider API"
 msgstr "Leverantörs-API"
 
-#: ../../library/pickle.rst:978
+#: ../../library/pickle.rst:981
 msgid ""
 "The large data objects to be pickled must implement a :meth:`~object."
 "__reduce_ex__` method specialized for protocol 5 and higher, which returns "
@@ -2000,7 +1999,7 @@ msgstr ""
 "returnerar en :class:`PickleBuffer`\\-instans (i stället för t.ex. ett :"
 "class:`bytes`\\-objekt) för alla stora data."
 
-#: ../../library/pickle.rst:983
+#: ../../library/pickle.rst:986
 msgid ""
 "A :class:`PickleBuffer` object *signals* that the underlying buffer is "
 "eligible for out-of-band data transfer.  Those objects remain compatible "
@@ -2009,11 +2008,11 @@ msgid ""
 "themselves."
 msgstr ""
 
-#: ../../library/pickle.rst:990
+#: ../../library/pickle.rst:993
 msgid "Consumer API"
 msgstr "API för konsumenter"
 
-#: ../../library/pickle.rst:992
+#: ../../library/pickle.rst:995
 msgid ""
 "A communications system can enable custom handling of the :class:"
 "`PickleBuffer` objects generated when serializing an object graph."
@@ -2021,7 +2020,7 @@ msgstr ""
 "Ett kommunikationssystem kan möjliggöra anpassad hantering av :class:"
 "`PickleBuffer`\\-objekt som genereras vid serialisering av en objektgraf."
 
-#: ../../library/pickle.rst:995
+#: ../../library/pickle.rst:998
 msgid ""
 "On the sending side, it needs to pass a *buffer_callback* argument to :class:"
 "`Pickler` (or to the :func:`dump` or :func:`dumps` function), which will be "
@@ -2036,7 +2035,7 @@ msgstr ""
 "inte att få sina data kopierade till pickle-strömmen, endast en billig "
 "markör kommer att infogas."
 
-#: ../../library/pickle.rst:1002
+#: ../../library/pickle.rst:1005
 msgid ""
 "On the receiving side, it needs to pass a *buffers* argument to :class:"
 "`Unpickler` (or to the :func:`load` or :func:`loads` function), which is an "
@@ -2054,7 +2053,7 @@ msgstr ""
 "förväntas av rekonstruktörerna av de objekt vars betning producerade de "
 "ursprungliga :class:`PickleBuffer`\\-objekten."
 
-#: ../../library/pickle.rst:1010
+#: ../../library/pickle.rst:1013
 msgid ""
 "Between the sending side and the receiving side, the communications system "
 "is free to implement its own transfer mechanism for out-of-band buffers. "
@@ -2066,11 +2065,11 @@ msgstr ""
 "Potentiella optimeringar inkluderar användning av delat minne eller "
 "datatypberoende komprimering."
 
-#: ../../library/pickle.rst:1016
+#: ../../library/pickle.rst:1019
 msgid "Example"
 msgstr "Exempel"
 
-#: ../../library/pickle.rst:1018
+#: ../../library/pickle.rst:1021
 msgid ""
 "Here is a trivial example where we implement a :class:`bytearray` subclass "
 "able to participate in out-of-band buffer pickling::"
@@ -2078,7 +2077,7 @@ msgstr ""
 "Här är ett trivialt exempel där vi implementerar en :class:`bytearray`\\-"
 "underklass som kan delta i buffer pickling utanför bandet::"
 
-#: ../../library/pickle.rst:1021
+#: ../../library/pickle.rst:1024
 msgid ""
 "class ZeroCopyByteArray(bytearray):\n"
 "\n"
@@ -2122,7 +2121,7 @@ msgstr ""
 "            else:\n"
 "                return cls(obj)"
 
-#: ../../library/pickle.rst:1042
+#: ../../library/pickle.rst:1045
 msgid ""
 "The reconstructor (the ``_reconstruct`` class method) returns the buffer's "
 "providing object if it has the right type.  This is an easy way to simulate "
@@ -2132,7 +2131,7 @@ msgstr ""
 "tillhandahållande objekt om det har rätt typ.  Detta är ett enkelt sätt att "
 "simulera nollkopieringsbeteende i detta leksaksexempel."
 
-#: ../../library/pickle.rst:1046
+#: ../../library/pickle.rst:1049
 msgid ""
 "On the consumer side, we can pickle those objects the usual way, which when "
 "unserialized will give us a copy of the original object::"
@@ -2140,7 +2139,7 @@ msgstr ""
 "På konsumentsidan kan vi plocka upp dessa objekt på vanligt sätt, vilket när "
 "det är oserialiserat ger oss en kopia av det ursprungliga objektet::"
 
-#: ../../library/pickle.rst:1049
+#: ../../library/pickle.rst:1052
 msgid ""
 "b = ZeroCopyByteArray(b\"abc\")\n"
 "data = pickle.dumps(b, protocol=5)\n"
@@ -2154,7 +2153,7 @@ msgstr ""
 "print(b == new_b)  # True\n"
 "print(b is new_b)  # False: a copy was made"
 
-#: ../../library/pickle.rst:1055
+#: ../../library/pickle.rst:1058
 msgid ""
 "But if we pass a *buffer_callback* and then give back the accumulated "
 "buffers when unserializing, we are able to get back the original object::"
@@ -2163,7 +2162,7 @@ msgstr ""
 "ackumulerade buffertarna när vi unserialiserar, kan vi få tillbaka det "
 "ursprungliga objektet::"
 
-#: ../../library/pickle.rst:1058
+#: ../../library/pickle.rst:1061
 msgid ""
 "b = ZeroCopyByteArray(b\"abc\")\n"
 "buffers = []\n"
@@ -2179,7 +2178,7 @@ msgstr ""
 "print(b == new_b)  # True\n"
 "print(b is new_b)  # True: no copy was made"
 
-#: ../../library/pickle.rst:1065
+#: ../../library/pickle.rst:1068
 msgid ""
 "This example is limited by the fact that :class:`bytearray` allocates its "
 "own memory: you cannot create a :class:`bytearray` instance that is backed "
@@ -2195,15 +2194,15 @@ msgstr ""
 "att göra så få kopior som möjligt) vid överföring mellan olika processer "
 "eller system."
 
-#: ../../library/pickle.rst:1072
+#: ../../library/pickle.rst:1075
 msgid ":pep:`574` -- Pickle protocol 5 with out-of-band data"
 msgstr ":pep:`574` -- Pickle protokoll 5 med data utanför bandet"
 
-#: ../../library/pickle.rst:1078
+#: ../../library/pickle.rst:1081
 msgid "Restricting Globals"
 msgstr "Begränsning av globaler"
 
-#: ../../library/pickle.rst:1083
+#: ../../library/pickle.rst:1086
 msgid ""
 "By default, unpickling will import any class or function that it finds in "
 "the pickle data.  For many applications, this behaviour is unacceptable as "
@@ -2216,7 +2215,7 @@ msgstr ""
 "godtycklig kod.  Tänk bara på vad den här handgjorda pickle-dataströmmen gör "
 "när den laddas::"
 
-#: ../../library/pickle.rst:1088
+#: ../../library/pickle.rst:1091
 msgid ""
 ">>> import pickle\n"
 ">>> pickle.loads(b\"cos\\nsystem\\n(S'echo hello world'\\ntR.\")\n"
@@ -2228,7 +2227,7 @@ msgstr ""
 "hello world\n"
 "0"
 
-#: ../../library/pickle.rst:1093
+#: ../../library/pickle.rst:1096
 msgid ""
 "In this example, the unpickler imports the :func:`os.system` function and "
 "then apply the string argument \"echo hello world\".  Although this example "
@@ -2240,7 +2239,7 @@ msgstr ""
 "är ofarligt är det inte svårt att föreställa sig ett exempel som kan skada "
 "ditt system."
 
-#: ../../library/pickle.rst:1097
+#: ../../library/pickle.rst:1100
 msgid ""
 "For this reason, you may want to control what gets unpickled by customizing :"
 "meth:`Unpickler.find_class`.  Unlike its name suggests, :meth:`Unpickler."
@@ -2254,7 +2253,7 @@ msgstr ""
 "eller en funktion) begärs.  Det är alltså möjligt att antingen helt förbjuda "
 "globaler eller begränsa dem till en säker delmängd."
 
-#: ../../library/pickle.rst:1103
+#: ../../library/pickle.rst:1106
 msgid ""
 "Here is an example of an unpickler allowing only few safe classes from the :"
 "mod:`builtins` module to be loaded::"
@@ -2262,7 +2261,7 @@ msgstr ""
 "Här är ett exempel på en unpickler som tillåter att endast ett fåtal säkra "
 "klasser från modulen :mod:`builtins` laddas::"
 
-#: ../../library/pickle.rst:1106
+#: ../../library/pickle.rst:1109
 msgid ""
 "import builtins\n"
 "import io\n"
@@ -2316,11 +2315,11 @@ msgstr ""
 "    \"\"\"Helper function analogous to pickle.loads().\"\"\"\n"
 "    return RestrictedUnpickler(io.BytesIO(s)).load()"
 
-#: ../../library/pickle.rst:1132
+#: ../../library/pickle.rst:1135
 msgid "A sample usage of our unpickler working as intended::"
 msgstr "Ett exempel på användning av vår unpickler som fungerar som avsett::"
 
-#: ../../library/pickle.rst:1134
+#: ../../library/pickle.rst:1137
 msgid ""
 ">>> restricted_loads(pickle.dumps([1, 2, range(15)]))\n"
 "[1, 2, range(0, 15)]\n"
@@ -2348,7 +2347,7 @@ msgstr ""
 "  ...\n"
 "pickle.UnpicklingError: global 'builtins.eval' is forbidden"
 
-#: ../../library/pickle.rst:1151
+#: ../../library/pickle.rst:1154
 msgid ""
 "As our examples shows, you have to be careful with what you allow to be "
 "unpickled.  Therefore if security is a concern, you may want to consider "
@@ -2359,28 +2358,28 @@ msgstr ""
 "unpickled.  Om säkerhet är ett problem kan du därför överväga alternativ som "
 "marshalling API i :mod:`xmlrpc.client` eller tredjepartslösningar."
 
-#: ../../library/pickle.rst:1158
+#: ../../library/pickle.rst:1161
 msgid "Performance"
 msgstr "Prestanda"
 
-#: ../../library/pickle.rst:1160
+#: ../../library/pickle.rst:1163
 msgid ""
 "Recent versions of the pickle protocol (from protocol 2 and upwards) feature "
 "efficient binary encodings for several common features and built-in types. "
 "Also, the :mod:`!pickle` module has a transparent optimizer written in C."
 msgstr ""
 
-#: ../../library/pickle.rst:1168
+#: ../../library/pickle.rst:1171
 msgid "Examples"
 msgstr "Exempel"
 
-#: ../../library/pickle.rst:1170
+#: ../../library/pickle.rst:1173
 msgid ""
 "For the simplest code, use the :func:`dump` and :func:`load` functions. ::"
 msgstr ""
 "För den enklaste koden, använd funktionerna :func:`dump` och :func:`load`. ::"
 
-#: ../../library/pickle.rst:1172
+#: ../../library/pickle.rst:1175
 msgid ""
 "import pickle\n"
 "\n"
@@ -2408,11 +2407,11 @@ msgstr ""
 "    # Pickle the 'data' dictionary using the highest protocol available.\n"
 "    pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)"
 
-#: ../../library/pickle.rst:1186
+#: ../../library/pickle.rst:1189
 msgid "The following example reads the resulting pickled data. ::"
 msgstr "I följande exempel läses den resulterande picklade datan. ::"
 
-#: ../../library/pickle.rst:1188
+#: ../../library/pickle.rst:1191
 msgid ""
 "import pickle\n"
 "\n"
@@ -2428,11 +2427,11 @@ msgstr ""
 "    # have to specify it.\n"
 "    data = pickle.load(f)"
 
-#: ../../library/pickle.rst:1203
+#: ../../library/pickle.rst:1206
 msgid "Command-line interface"
 msgstr "Kommandoradsgränssnitt"
 
-#: ../../library/pickle.rst:1205
+#: ../../library/pickle.rst:1208
 msgid ""
 "The :mod:`!pickle` module can be invoked as a script from the command line, "
 "it will display contents of the pickle files. However, when the pickle file "
@@ -2441,70 +2440,70 @@ msgid ""
 "`pickletools CLI usage <pickletools-cli>`."
 msgstr ""
 
-#: ../../library/pickle.rst:1211
+#: ../../library/pickle.rst:1214
 msgid "python -m pickle pickle_file [pickle_file ...]"
 msgstr "python -m pickle pickle_file [pickle_file ...]"
 
-#: ../../library/pickle.rst:1215
+#: ../../library/pickle.rst:1218
 msgid "The following option is accepted:"
 msgstr "Följande alternativ accepteras:"
 
-#: ../../library/pickle.rst:1221
+#: ../../library/pickle.rst:1224
 msgid ""
 "A pickle file to read, or ``-`` to indicate reading from standard input."
 msgstr ""
 "En pickle-fil som ska läsas, eller ``\\-`` för att ange läsning från "
 "standardinmatning."
 
-#: ../../library/pickle.rst:1226
+#: ../../library/pickle.rst:1229
 msgid "Module :mod:`copyreg`"
 msgstr "Modul :mod:`copyreg`"
 
-#: ../../library/pickle.rst:1227
+#: ../../library/pickle.rst:1230
 msgid "Pickle interface constructor registration for extension types."
 msgstr "Registrering av Pickle-gränssnittskonstruktörer för tilläggstyper."
 
-#: ../../library/pickle.rst:1229
+#: ../../library/pickle.rst:1232
 msgid "Module :mod:`pickletools`"
 msgstr "Modul :mod:`pickletools`"
 
-#: ../../library/pickle.rst:1230
+#: ../../library/pickle.rst:1233
 msgid "Tools for working with and analyzing pickled data."
 msgstr "Verktyg för att arbeta med och analysera betade data."
 
-#: ../../library/pickle.rst:1232
+#: ../../library/pickle.rst:1235
 msgid "Module :mod:`shelve`"
 msgstr "Modul :mod:`shelve`"
 
-#: ../../library/pickle.rst:1233
+#: ../../library/pickle.rst:1236
 msgid "Indexed databases of objects; uses :mod:`!pickle`."
 msgstr ""
 
-#: ../../library/pickle.rst:1235
+#: ../../library/pickle.rst:1238
 msgid "Module :mod:`copy`"
 msgstr "Modul :mod:`copy`"
 
-#: ../../library/pickle.rst:1236
+#: ../../library/pickle.rst:1239
 msgid "Shallow and deep object copying."
 msgstr "Kopiering av grunda och djupa objekt."
 
-#: ../../library/pickle.rst:1238
+#: ../../library/pickle.rst:1241
 msgid "Module :mod:`marshal`"
 msgstr "Modul :mod:`marshal`"
 
-#: ../../library/pickle.rst:1239
+#: ../../library/pickle.rst:1242
 msgid "High-performance serialization of built-in types."
 msgstr "Högpresterande serialisering av inbyggda typer."
 
-#: ../../library/pickle.rst:1243
+#: ../../library/pickle.rst:1246
 msgid "Footnotes"
 msgstr "Fotnoter"
 
-#: ../../library/pickle.rst:1244
+#: ../../library/pickle.rst:1247
 msgid "Don't confuse this with the :mod:`marshal` module"
 msgstr "Förväxla inte detta med modulen :mod:`marshal`"
 
-#: ../../library/pickle.rst:1246
+#: ../../library/pickle.rst:1249
 msgid ""
 "This is why :keyword:`lambda` functions cannot be pickled:  all :keyword:`!"
 "lambda` functions share the same name:  ``<lambda>``."
@@ -2512,7 +2511,7 @@ msgstr ""
 "Det är därför som :keyword:`lambda` funktioner inte kan picklas: alla :"
 "keyword:`!lambda` funktioner har samma namn: ``<lambda>``."
 
-#: ../../library/pickle.rst:1249
+#: ../../library/pickle.rst:1252
 msgid ""
 "The exception raised will likely be an :exc:`ImportError` or an :exc:"
 "`AttributeError` but it could be something else."
@@ -2520,7 +2519,7 @@ msgstr ""
 "Det undantag som tas upp kommer troligen att vara ett :exc:`ImportError` "
 "eller ett :exc:`AttributeError`, men det kan vara något annat."
 
-#: ../../library/pickle.rst:1252
+#: ../../library/pickle.rst:1255
 msgid ""
 "The :mod:`copy` module uses this protocol for shallow and deep copying "
 "operations."
@@ -2528,7 +2527,7 @@ msgstr ""
 "Modulen :mod:`copy` använder detta protokoll för ytliga och djupa "
 "kopieringsoperationer."
 
-#: ../../library/pickle.rst:1255
+#: ../../library/pickle.rst:1258
 msgid ""
 "The limitation on alphanumeric characters is due to the fact that persistent "
 "IDs in protocol 0 are delimited by the newline character.  Therefore if any "
@@ -2580,22 +2579,22 @@ msgstr "kopiera"
 msgid "protocol"
 msgstr "protokoll"
 
-#: ../../library/pickle.rst:759
+#: ../../library/pickle.rst:762
 msgid "persistent_id (pickle protocol)"
 msgstr "persistent_id (pickle-protokoll)"
 
-#: ../../library/pickle.rst:759
+#: ../../library/pickle.rst:762
 msgid "persistent_load (pickle protocol)"
 msgstr "persistent_load (pickle-protokoll)"
 
-#: ../../library/pickle.rst:835
+#: ../../library/pickle.rst:838
 msgid "__getstate__() (copy protocol)"
 msgstr "__getstate__() (kopiera protokoll)"
 
-#: ../../library/pickle.rst:835
+#: ../../library/pickle.rst:838
 msgid "__setstate__() (copy protocol)"
 msgstr "__setstate__() (kopiera protokoll)"
 
-#: ../../library/pickle.rst:1080
+#: ../../library/pickle.rst:1083
 msgid "find_class() (pickle protocol)"
 msgstr "find_class() (pickle-protokoll)"
