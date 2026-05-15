@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-11 16:26+0000\n"
+"POT-Creation-Date: 2026-05-13 16:14+0000\n"
 "PO-Revision-Date: 2025-09-16 00:00+0000\n"
 "Last-Translator: Blessing Oluronbi, 2026\n"
 "Language-Team: Polish (https://app.transifex.com/python-doc/teams/5390/pl/)\n"
@@ -48,6 +48,11 @@ msgid ""
 "path`, and must be named after the module name plus an extension listed in :"
 "py:attr:`importlib.machinery.EXTENSION_SUFFIXES`."
 msgstr ""
+"Aby można było importować współdzielona biblioteka współdzieloną domyślny "
+"(czyli przez :py:class:`importlib.machinery.ExtensionFileLoader` ), musi być "
+"ona dostępna w :py:attr:`sys.path`, a jej nazwa musi składać się z nazwy "
+"moduł i rozszerzenia wymienionego w:py:attr:`importlib.machinery."
+"EXTENSION_SUFFIXES` ."
 
 #: ../../c-api/extension-modules.rst:22
 msgid ""
@@ -56,10 +61,15 @@ msgid ""
 "is Setuptools, whose documentation can be found at https://setuptools.pypa."
 "io/en/latest/setuptools.html."
 msgstr ""
+"Kompilację, pakowanie i dystrybucję modułów rozszerzeń zewnętrzny wykonywać "
+"za pomocą narzędzi firm trzecich, co wykracza poza zakres niniejszego "
+"dokumentu. Jednym z odpowiednich narzędzi jest Setuptools, którego "
+"dokumentację można znaleźć pod adresem https://setuptools.pypa.io/en/latest/"
+"setuptools.html."
 
 #: ../../c-api/extension-modules.rst:30
 msgid "Extension export hook"
-msgstr ""
+msgstr "Hak eksportowy przedłużacza"
 
 #: ../../c-api/extension-modules.rst:34
 msgid ""
@@ -68,11 +78,15 @@ msgid ""
 "the :ref:`extension-pyinit` section or earlier versions of this "
 "documentation if you plan to support earlier Python versions."
 msgstr ""
+"wparcie Obsługa haka :samp:`PyModExport_{<name>}` eksportu została dodana w "
+"Python 3.15. Starszy sposób definiowania moduł jest nadal dostępny: zapoznaj "
+"się z :ref:`extension-pyinit` sekcją lub wcześniejszymi  wersja tej "
+"dokumentacji, jeśli planujesz wparcie wparcie wersja Pythona."
 
 #: ../../c-api/extension-modules.rst:39
 msgid ""
 "The export hook must be an exported function with the following signature:"
-msgstr ""
+msgstr "Hak eksportowy musi być eksportowaną funkcja o następującym podpisie:"
 
 #: ../../c-api/extension-modules.rst:43
 msgid ""
@@ -80,6 +94,9 @@ msgid ""
 "hook>` must be named :samp:`PyModExport_{<name>}`, with ``<name>`` replaced "
 "by the module's name."
 msgstr ""
+"W przypadku modułów z nazwami zawierającymi wyłącznie znaki ASCII, parametr :"
+"ref:`export hook <extension-export-hook>` musi mieć nazwę :samp:"
+"`PyModExport_{<name>}`, a ``<name>``następnie zostać zastąpiony nazwą modułu."
 
 #: ../../c-api/extension-modules.rst:47
 msgid ""
@@ -87,6 +104,10 @@ msgid ""
 "`PyModExportU_{<name>}` (note the ``U``), with ``<name>`` encoded using "
 "Python's *punycode* encoding with hyphens replaced by underscores. In Python:"
 msgstr ""
+"W przypadku nazw modułów spoza zestawu ASCII hak eksportu musi zostać "
+"nazwany :samp:`PyModExportU_{<name>}`(zwróć uwagę na ``U`` ), ``<name>`` "
+"zakodowany przy użyciu kodowania *punycode* języka Python, z myślnikami "
+"zastąpionymi podkreśleniami. W Python:"
 
 #: ../../c-api/extension-modules.rst:51
 msgid ""
@@ -97,6 +118,12 @@ msgid ""
 "        suffix = b'U_' + name.encode('punycode').replace(b'-', b'_')\n"
 "    return b'PyModExport' + suffix"
 msgstr ""
+"def hook_name(name):\n"
+"try:\n"
+"przyrostek = b'_' + name.encode('ascii')\n"
+"except UnicodeEncodeError:\n"
+"przyrostek = b'U_' + name.encode('punycode').replace(b'-', b'_')\n"
+"zwracać b'PyModExport' + przyrostek"
 
 #: ../../c-api/extension-modules.rst:60
 msgid ""
@@ -104,6 +131,9 @@ msgid ""
 "an entry with a slot ID of ``0``. These slots describe how the module should "
 "be created and initialized."
 msgstr ""
+"Hak eksportu zwracać tablica :c:type:`PySlot` wpisów zakończoną wpisem o "
+"identyfikatorze slotu równym ``0``. Sloty te opisują sposób tworzenia i "
+"inicjalizacji moduł."
 
 #: ../../c-api/extension-modules.rst:64
 msgid ""
@@ -111,36 +141,44 @@ msgid ""
 "Typically, it should use ``static`` storage. Prefer using the :c:macro:"
 "`Py_mod_create` and :c:macro:`Py_mod_exec` slots for any dynamic behavior."
 msgstr ""
+"Ta tablica musi ważny prawidłowa i stała do momentu zamknięcia ``static`` "
+"interpreter . Zazwyczaj powinna korzystać :c:macro:`Py_mod_create`z :c:macro:"
+"`Py_mod_exec` pamięci masowej. Preferowane jest używanie slotów i w "
+"przypadku wszelkich dynamicznych  zachowanie."
 
 #: ../../c-api/extension-modules.rst:69
 msgid ""
 "The export hook may return ``NULL`` with an exception set to signal failure."
-msgstr ""
+msgstr "Hak eksportu może zwracać ``NULL`` wyjątek ustawiony na sygnał awarii."
 
 #: ../../c-api/extension-modules.rst:71
 msgid ""
 "It is recommended to define the export hook function using a helper macro:"
 msgstr ""
+"Zaleca się zdefiniowanie  funkcja haka eksportu za pomocą makro pomocniczego:"
 
 #: ../../c-api/extension-modules.rst:75
 msgid "Declare an extension module export hook. This macro:"
-msgstr ""
+msgstr "Zadeklaruj hak eksportu moduł rozszerzenia. To makro:"
 
 #: ../../c-api/extension-modules.rst:78
 msgid "specifies the :c:expr:`PySlot*` return type,"
-msgstr ""
+msgstr "określa :c:expr:`PySlot*` typ zwracać,"
 
 #: ../../c-api/extension-modules.rst:79 ../../c-api/extension-modules.rst:224
 msgid "adds any special linkage declarations required by the platform, and"
 msgstr ""
+"dodaje wszelkie specjalne deklaracje połączeń wymagane przez platformę i"
 
 #: ../../c-api/extension-modules.rst:80 ../../c-api/extension-modules.rst:225
 msgid "for C++, declares the function as ``extern \"C\"``."
-msgstr ""
+msgstr "dla C++ deklaruje funkcja jako"
 
 #: ../../c-api/extension-modules.rst:82 ../../c-api/extension-modules.rst:255
 msgid "For example, a module called ``spam`` would be defined like this::"
 msgstr ""
+"Na przykład moduł o ``spam`` nazwie zostałby zdefiniowany w następujący "
+"sposób:"
 
 #: ../../c-api/extension-modules.rst:84
 msgid ""
@@ -160,12 +198,29 @@ msgid ""
 "    return spam_slots;\n"
 "}"
 msgstr ""
+"PyABIInfo_VAR(abi_info);\n"
+"\n"
+"static PySlot spam_slots[] = {\n"
+"PySlot_STATIC_DATA(Py_mod_abi, &abi_info),\n"
+"PySlot_STATIC_DATA(Py_mod_name, \"spam\"),\n"
+"PySlot_FUNC(Py_mod_init, spam_init_function),\n"
+"...\n"
+"PySlot_END\n"
+"};\n"
+"\n"
+"PyMODEXPORT_FUNC\n"
+"PyModExport_spam(void)\n"
+"{\n"
+"zwracać spam_slots;\n"
+"}"
 
 #: ../../c-api/extension-modules.rst:100
 msgid ""
 "The export hook is typically the only non-\\ ``static`` item defined in the "
 "module's C source."
 msgstr ""
+"Hak eksportu jest zazwyczaj jedynym elementem innym niż \\  ``static`` "
+"zdefiniowanym w kodzie źródłowym moduł C."
 
 #: ../../c-api/extension-modules.rst:103
 msgid ""
@@ -174,6 +229,10 @@ msgid ""
 "``PyABIInfo_Check(&abi_info, \"modulename\")`` first to raise an exception, "
 "rather than crash, in common cases of ABI mismatch."
 msgstr ""
+"Hak powinien być krótki – najlepiej jeden wiersz, jak powyżej. Jeśli jednak "
+"musisz użyć API Python C API w tej funkcja, zaleca się  najpierw wywołać ją, "
+"aby zgłosić rzucić wyjątek, zamiast spowodować awarię, w typowych "
+"przypadkach niezgodności ABI."
 
 #: ../../c-api/extension-modules.rst:111
 msgid ""
@@ -185,20 +244,32 @@ msgid ""
 "pep-0489/#multiple-modules-in-one-library>`__ section in :pep:`489` for "
 "details."
 msgstr ""
+"Możliwe jest eksportowanie wielu moduł z jednej biblioteki współdzielona "
+"biblioteka poprzez zdefiniowanie wielu haków eksportu. Ich importowanie "
+"wymaga jednak użycia niestandardowego importera lub odpowiednio nazwanych "
+"kopii/linków pliku rozszerzenia, ponieważ mechanizm importu Pythona znajduje "
+"tylko funkcja odpowiadającą nazwie pliku. Szczegółowe informacje  moduł "
+"można znaleźć w sekcji „Wiele modułów w jednej biblioteka”. <https://peps."
+"python.org/pep-0489/#multiple-modules-in-one-library>`__  section in :pep:"
+"`489` for details."
 
 #: ../../c-api/extension-modules.rst:123
 msgid "Multi-phase initialization"
-msgstr ""
+msgstr "Inicjalizacja wielofazowa"
 
 #: ../../c-api/extension-modules.rst:125
 msgid "The process of creating an extension module follows several phases:"
 msgstr ""
+"przetwarzanie/proces przetwarzanie tworzenia moduł rozszerzenia przebiega w "
+"kilku fazach:"
 
 #: ../../c-api/extension-modules.rst:127
 msgid ""
 "Python finds and calls the export hook to get information on how to create "
 "the module."
 msgstr ""
+"Python wyszukuje i wywołuje hak eksportu, aby uzyskać informacje o sposobie "
+"tworzenia moduł."
 
 #: ../../c-api/extension-modules.rst:129
 msgid ""
@@ -208,6 +279,11 @@ msgid ""
 "c:data:`Py_mod_gil` and :c:data:`Py_mod_multiple_interpreters` influence "
 "this step."
 msgstr ""
+"Zanim zostanie wykonany jakikolwiek istotny kod, Python może określić, jakie "
+"możliwości obsługuje moduł, i dostosować środowisko lub odmówić załadowania "
+"niekompatybilnego rozszerzenia. Na ten krok  wpływają sloty takie jak :c:"
+"data:`Py_mod_abi` ,  :c:data:`Py_mod_gil`i :c:data:"
+"`Py_mod_multiple_interpreters` ."
 
 #: ../../c-api/extension-modules.rst:134
 msgid ""
@@ -215,6 +291,9 @@ msgid ""
 "the equivalent of calling :py:meth:`~object.__new__` when creating an "
 "object. This step can be overridden using the :c:data:`Py_mod_create` slot."
 msgstr ""
+"domyślny Python sam tworzy obiekt moduł – czyli wykonuje czynność "
+"odpowiadającą wywołaniu :py:meth:`~object.__new__` podczas tworzenia "
+"obiektu. Ten krok można pominąć za pomocą :c:data:`Py_mod_create` slotu."
 
 #: ../../c-api/extension-modules.rst:137
 msgid ""
@@ -222,6 +301,9 @@ msgid ""
 "attr:`~module.__loader__`, and inserts the module object into :py:attr:`sys."
 "modules`."
 msgstr ""
+"Python ustawia początkowe atrybuty moduł, takie jak :attr:`~module."
+"__package__` i :attr:`~module.__loader__`, i wstawia obiekt modułu do :py:"
+"attr:`sys.modules`."
 
 #: ../../c-api/extension-modules.rst:140
 msgid ""
