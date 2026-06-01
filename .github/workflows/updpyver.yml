@@ -28,17 +28,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out ${{ github.repository }}
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Set up Python 3
-        uses: actions/setup-python@v6.2.0
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
           python-version: '3'
           cache: 'pip'
           cache-dependency-path: 'requirements.txt'
-          pip-install: -r requirements.txt
+
+      - name: Install Python dependencies
+        run: |
+          python -m venv .venv
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
+          .venv/bin/python -m pip install -r requirements.txt
 
       - name: Update versions.txt file
         run: |
@@ -46,7 +52,7 @@ jobs:
 
       - name: Commit changes to a new branch
         if: ${{ success() && !contains(fromJSON('["push", "pull_request"]'), github.event_name) }}
-        uses: devops-infra/action-commit-push@v1.3.2
+        uses: devops-infra/action-commit-push@9dbeef2fbc33d3949c568ddac2f3de0ee5010e85 # v1.3.2
         with:
           github_token: "${{ secrets.GITHUB_TOKEN }}"
           commit_prefix: "[AUTO]"
@@ -56,7 +62,7 @@ jobs:
 
       - name: Create pull request
         if: ${{ success() && !contains(fromJSON('["push", "pull_request"]'), github.event_name) }}
-        uses: devops-infra/action-pull-request@v1.2.1
+        uses: devops-infra/action-pull-request@c5a99ac1b5457fc14b5586d68b15f2f23fda8f6f # v1.2.1
         with:
           github_token: "${{ secrets.GITHUB_TOKEN }}"
           source_branch: update/version
