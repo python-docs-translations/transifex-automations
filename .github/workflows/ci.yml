@@ -240,7 +240,9 @@ jobs:
           git diff-index --cached --quiet HEAD || { git commit -vm "Update translations from Transifex"; }
 
       - name: Push changes
-        working-directory: cpython/Doc/locales
         if: ${{ contains(fromJSON('["schedule", "workflow_dispatch"]'), github.event_name) }}
-        run: |
-          git push
+        uses: ad-m/github-push-action@881a6320fdb16eb5318c5054f31c218aec2b324c # v1.3.0
+        with:
+          directory: cpython/Doc/locales
+          branch: ${{ matrix.cpython_version }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
