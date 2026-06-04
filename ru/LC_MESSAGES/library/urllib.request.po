@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-01 15:01+0000\n"
+"POT-Creation-Date: 2026-06-03 20:27+0000\n"
 "PO-Revision-Date: 2025-09-15 01:05+0000\n"
 "Last-Translator: python-doc bot, 2025\n"
 "Language-Team: Russian (https://app.transifex.com/python-doc/teams/5390/"
@@ -1675,15 +1675,10 @@ msgstr ""
 #: ../../library/urllib.request.rst:1009
 msgid ""
 "*host* is either an authority (e.g. ``\"python.org\"``) or a URL containing "
-"an authority component (e.g. ``\"http://python.org/\"``). In either case, "
+"an authority component (e.g. ``\"https://python.org/\"``). In either case, "
 "the authority must not contain a userinfo component (so, ``\"python.org\"`` "
 "and ``\"python.org:80\"`` are fine, ``\"joe:password@python.org\"`` is not)."
 msgstr ""
-"*host* — это либо авторитет (например, ``\"python.org\"``), либо URL-адрес, "
-"содержащий компонент авторитета (например, ``\"http://python.org/\"``). В "
-"любом случае полномочия не должны содержать компонент userinfo (поэтому "
-"``\"python.org\"`` и ``\"python.org:80\"`` подходят, ``\"joe:password@python."
-"org\" `` нет)."
 
 #: ../../library/urllib.request.rst:1018
 msgid "HTTPBasicAuthHandler Objects"
@@ -1873,24 +1868,17 @@ msgstr ""
 #: ../../library/urllib.request.rst:1205
 msgid ""
 ">>> import urllib.request\n"
-">>> with urllib.request.urlopen('http://www.python.org/') as f:\n"
-"...     print(f.read(300))\n"
-"...\n"
-"b'<!doctype html>\\n<!--[if lt IE 7]>   <html class=\"no-js ie6 lt-ie7 lt-"
-"ie8 lt-ie9\">   <![endif]-->\\n<!--[if IE 7]>      <html class=\"no-js ie7 "
-"lt-ie8 lt-ie9\">          <![endif]-->\\n<!--[if IE 8]>      <html "
-"class=\"no-js ie8 lt-ie9\">"
+">>> with urllib.request.urlopen('https://www.python.org/') as f:\n"
+"...     # The response may be compressed (for example, 'gzip').\n"
+"...     print(f.headers.get('Content-Encoding'))\n"
+"...     data = f.read()\n"
+"...     if f.headers.get('Content-Encoding') == 'gzip':\n"
+"...         import gzip\n"
+"...         data = gzip.decompress(data)\n"
+"...     print(data[:300].decode('utf-8', errors='replace'))"
 msgstr ""
-">>> import urllib.request\n"
-">>> with urllib.request.urlopen('http://www.python.org/') as f:\n"
-"...     print(f.read(300))\n"
-"...\n"
-"b'<!doctype html>\\n<!--[if lt IE 7]>   <html class=\"no-js ie6 lt-ie7 lt-"
-"ie8 lt-ie9\">   <![endif]-->\\n<!--[if IE 7]>      <html class=\"no-js ie7 "
-"lt-ie8 lt-ie9\">          <![endif]-->\\n<!--[if IE 8]>      <html "
-"class=\"no-js ie8 lt-ie9\">"
 
-#: ../../library/urllib.request.rst:1211
+#: ../../library/urllib.request.rst:1215
 msgid ""
 "Note that urlopen returns a bytes object.  This is because there is no way "
 "for urlopen to automatically determine the encoding of the byte stream it "
@@ -1904,69 +1892,60 @@ msgstr ""
 "возвращенный объект байтов в строку, как только определит или угадает "
 "соответствующую кодировку."
 
-#: ../../library/urllib.request.rst:1217
+#: ../../library/urllib.request.rst:1221
 msgid ""
 "The following HTML spec document, https://html.spec.whatwg.org/#charset, "
 "lists the various ways in which an HTML or an XML document could have "
 "specified its encoding information."
 msgstr ""
 
-#: ../../library/urllib.request.rst:1221
+#: ../../library/urllib.request.rst:1225
 msgid ""
 "For additional information, see the W3C document: https://www.w3.org/"
 "International/questions/qa-html-encoding-declarations."
 msgstr ""
 
-#: ../../library/urllib.request.rst:1223
+#: ../../library/urllib.request.rst:1227
 msgid ""
 "As the python.org website uses *utf-8* encoding as specified in its meta "
 "tag, we will use the same for decoding the bytes object::"
 msgstr ""
 
-#: ../../library/urllib.request.rst:1226
+#: ../../library/urllib.request.rst:1230
 msgid ""
-">>> with urllib.request.urlopen('http://www.python.org/') as f:\n"
-"...     print(f.read(100).decode('utf-8'))\n"
-"...\n"
-"<!doctype html>\n"
-"<!--[if lt IE 7]>   <html class=\"no-js ie6 lt-ie7 lt-ie8 lt-ie9\">   <!"
-"[endif]-->\n"
-"<!-"
+">>> with urllib.request.urlopen('https://www.python.org/') as f:\n"
+"...     # Check for compression and decode appropriately.\n"
+"...     enc = f.headers.get('Content-Encoding')\n"
+"...     data = f.read()\n"
+"...     if enc == 'gzip':\n"
+"...         import gzip\n"
+"...         data = gzip.decompress(data)\n"
+"...     print(data[:100].decode('utf-8', errors='replace'))\n"
+"..."
 msgstr ""
 
-#: ../../library/urllib.request.rst:1233
+#: ../../library/urllib.request.rst:1240
 msgid ""
 "It is also possible to achieve the same result without using the :term:"
 "`context manager` approach::"
 msgstr ""
 
-#: ../../library/urllib.request.rst:1236
+#: ../../library/urllib.request.rst:1243
 msgid ""
 ">>> import urllib.request\n"
-">>> f = urllib.request.urlopen('http://www.python.org/')\n"
+">>> f = urllib.request.urlopen('https://www.python.org/')\n"
 ">>> try:\n"
-"...     print(f.read(100).decode('utf-8'))\n"
+"...     enc = f.headers.get('Content-Encoding')\n"
+"...     data = f.read()\n"
+"...     if enc == 'gzip':\n"
+"...         import gzip\n"
+"...         data = gzip.decompress(data)\n"
+"...     print(data[:100].decode('utf-8', errors='replace'))\n"
 "... finally:\n"
-"...     f.close()\n"
-"...\n"
-"<!doctype html>\n"
-"<!--[if lt IE 7]>   <html class=\"no-js ie6 lt-ie7 lt-ie8 lt-ie9\">   <!"
-"[endif]-->\n"
-"<!--"
+"...     f.close()"
 msgstr ""
-">>> import urllib.request\n"
-">>> f = urllib.request.urlopen('http://www.python.org/')\n"
-">>> try:\n"
-"...     print(f.read(100).decode('utf-8'))\n"
-"... finally:\n"
-"...     f.close()\n"
-"...\n"
-"<!doctype html>\n"
-"<!--[if lt IE 7]>   <html class=\"no-js ie6 lt-ie7 lt-ie8 lt-ie9\">   <!"
-"[endif]-->\n"
-"<!--"
 
-#: ../../library/urllib.request.rst:1247
+#: ../../library/urllib.request.rst:1255
 msgid ""
 "In the following example, we are sending a data-stream to the stdin of a CGI "
 "and reading the data it returns to us. Note that this example will only work "
@@ -1977,7 +1956,7 @@ msgstr ""
 "будет работать только в том случае, если установка Python поддерживает "
 "SSL. ::"
 
-#: ../../library/urllib.request.rst:1251
+#: ../../library/urllib.request.rst:1259
 msgid ""
 ">>> import urllib.request\n"
 ">>> req = urllib.request.Request(url='https://localhost/cgi-bin/test.cgi',\n"
@@ -1995,11 +1974,11 @@ msgstr ""
 "...\n"
 "Got Data: \"This data is passed to stdin of the CGI\""
 
-#: ../../library/urllib.request.rst:1259
+#: ../../library/urllib.request.rst:1267
 msgid "The code for the sample CGI used in the above example is::"
 msgstr "Код примера CGI, использованного в приведенном выше примере:"
 
-#: ../../library/urllib.request.rst:1261
+#: ../../library/urllib.request.rst:1269
 msgid ""
 "#!/usr/bin/env python\n"
 "import sys\n"
@@ -2011,11 +1990,11 @@ msgstr ""
 "data = sys.stdin.read()\n"
 "print('Content-type: text/plain\\n\\nGot Data: \"%s\"' % data)"
 
-#: ../../library/urllib.request.rst:1266
+#: ../../library/urllib.request.rst:1274
 msgid "Here is an example of doing a ``PUT`` request using :class:`Request`::"
 msgstr "Вот пример выполнения запроса PUT с использованием :class:`Request`::"
 
-#: ../../library/urllib.request.rst:1268
+#: ../../library/urllib.request.rst:1276
 msgid ""
 "import urllib.request\n"
 "DATA = b'some data'\n"
@@ -2035,11 +2014,11 @@ msgstr ""
 "print(f.status)\n"
 "print(f.reason)"
 
-#: ../../library/urllib.request.rst:1276
+#: ../../library/urllib.request.rst:1284
 msgid "Use of Basic HTTP Authentication::"
 msgstr "Использование базовой HTTP-аутентификации::"
 
-#: ../../library/urllib.request.rst:1278
+#: ../../library/urllib.request.rst:1286
 msgid ""
 "import urllib.request\n"
 "# Create an OpenerDirector with support for Basic HTTP Authentication...\n"
@@ -2067,7 +2046,7 @@ msgstr ""
 "with urllib.request.urlopen('http://www.example.com/login.html') as f:\n"
 "    print(f.read().decode('utf-8'))"
 
-#: ../../library/urllib.request.rst:1291
+#: ../../library/urllib.request.rst:1299
 msgid ""
 ":func:`build_opener` provides many handlers by default, including a :class:"
 "`ProxyHandler`.  By default, :class:`ProxyHandler` uses the environment "
@@ -2081,7 +2060,7 @@ msgstr ""
 "используемая схема URL. Например, переменная среды :envvar:`!http_proxy` "
 "считывается для получения URL-адреса HTTP-прокси."
 
-#: ../../library/urllib.request.rst:1297
+#: ../../library/urllib.request.rst:1305
 msgid ""
 "This example replaces the default :class:`ProxyHandler` with one that uses "
 "programmatically supplied proxy URLs, and adds proxy authorization support "
@@ -2092,7 +2071,7 @@ msgstr ""
 "добавляется поддержка авторизации прокси-сервера с помощью :class:"
 "`ProxyBasicAuthHandler`. ::"
 
-#: ../../library/urllib.request.rst:1301
+#: ../../library/urllib.request.rst:1309
 msgid ""
 "proxy_handler = urllib.request.ProxyHandler({'http': 'http://www.example."
 "com:3128/'})\n"
@@ -2114,26 +2093,26 @@ msgstr ""
 "with opener.open('http://www.example.com/login.html') as f:\n"
 "   print(f.read().decode('utf-8'))"
 
-#: ../../library/urllib.request.rst:1310
+#: ../../library/urllib.request.rst:1318
 msgid "Adding HTTP headers:"
 msgstr "Добавление HTTP-заголовков:"
 
-#: ../../library/urllib.request.rst:1312
+#: ../../library/urllib.request.rst:1320
 msgid "Use the *headers* argument to the :class:`Request` constructor, or::"
 msgstr "Используйте аргумент *headers* для конструктора :class:`Request` или::"
 
-#: ../../library/urllib.request.rst:1314
+#: ../../library/urllib.request.rst:1322
 msgid ""
 "import urllib.request\n"
 "req = urllib.request.Request('http://www.example.com/')\n"
-"req.add_header('Referer', 'http://www.python.org/')\n"
+"req.add_header('Referer', 'https://www.python.org/')\n"
 "# Customize the default User-Agent header value:\n"
 "req.add_header('User-Agent', 'urllib-example/0.1 (Contact: . . .)')\n"
 "with urllib.request.urlopen(req) as f:\n"
 "    print(f.read().decode('utf-8'))"
 msgstr ""
 
-#: ../../library/urllib.request.rst:1323
+#: ../../library/urllib.request.rst:1331
 msgid ""
 ":class:`OpenerDirector` automatically adds a :mailheader:`User-Agent` header "
 "to every :class:`Request`.  To change this::"
@@ -2141,7 +2120,7 @@ msgstr ""
 ":class:`OpenerDirector` автоматически добавляет заголовок :mailheader:`User-"
 "Agent` к каждому :class:`Request`. Чтобы изменить это:"
 
-#: ../../library/urllib.request.rst:1326
+#: ../../library/urllib.request.rst:1334
 msgid ""
 "import urllib.request\n"
 "opener = urllib.request.build_opener()\n"
@@ -2150,7 +2129,7 @@ msgid ""
 "   print(f.read().decode('utf-8'))"
 msgstr ""
 
-#: ../../library/urllib.request.rst:1332
+#: ../../library/urllib.request.rst:1340
 msgid ""
 "Also, remember that a few standard headers (:mailheader:`Content-Length`, :"
 "mailheader:`Content-Type` and :mailheader:`Host`) are added when the :class:"
@@ -2161,7 +2140,7 @@ msgstr ""
 "когда :class:`Request` передается :func: `urlopen` (или :meth:"
 "`OpenerDirector.open`)."
 
-#: ../../library/urllib.request.rst:1339
+#: ../../library/urllib.request.rst:1347
 msgid ""
 "Here is an example session that uses the ``GET`` method to retrieve a URL "
 "containing parameters::"
@@ -2169,25 +2148,18 @@ msgstr ""
 "Вот пример сеанса, в котором используется метод GET для получения URL-"
 "адреса, содержащего параметры:"
 
-#: ../../library/urllib.request.rst:1342
+#: ../../library/urllib.request.rst:1350
 msgid ""
 ">>> import urllib.request\n"
 ">>> import urllib.parse\n"
 ">>> params = urllib.parse.urlencode({'spam': 1, 'eggs': 2, 'bacon': 0})\n"
-">>> url = \"http://www.musi-cal.com/cgi-bin/query?%s\" % params\n"
+">>> url = \"https://www.python.org/?%s\" % params\n"
 ">>> with urllib.request.urlopen(url) as f:\n"
 "...     print(f.read().decode('utf-8'))\n"
 "..."
 msgstr ""
-">>> import urllib.request\n"
-">>> import urllib.parse\n"
-">>> params = urllib.parse.urlencode({'spam': 1, 'eggs': 2, 'bacon': 0})\n"
-">>> url = \"http://www.musi-cal.com/cgi-bin/query?%s\" % params\n"
-">>> with urllib.request.urlopen(url) as f:\n"
-"...     print(f.read().decode('utf-8'))\n"
-"..."
 
-#: ../../library/urllib.request.rst:1350
+#: ../../library/urllib.request.rst:1358
 msgid ""
 "The following example uses the ``POST`` method instead. Note that params "
 "output from urlencode is encoded to bytes before it is sent to urlopen as "
@@ -2197,27 +2169,18 @@ msgstr ""
 "что выходные данные params из urlencode кодируются в байтах перед отправкой "
 "в ​​urlopen как данные::"
 
-#: ../../library/urllib.request.rst:1353
+#: ../../library/urllib.request.rst:1361
 msgid ""
 ">>> import urllib.request\n"
 ">>> import urllib.parse\n"
 ">>> data = urllib.parse.urlencode({'spam': 1, 'eggs': 2, 'bacon': 0})\n"
 ">>> data = data.encode('ascii')\n"
-">>> with urllib.request.urlopen(\"http://requestb.in/xrbl82xr\", data) as "
-"f:\n"
+">>> with urllib.request.urlopen(\"https://httpbin.org/post\", data) as f:\n"
 "...     print(f.read().decode('utf-8'))\n"
 "..."
 msgstr ""
-">>> import urllib.request\n"
-">>> import urllib.parse\n"
-">>> data = urllib.parse.urlencode({'spam': 1, 'eggs': 2, 'bacon': 0})\n"
-">>> data = data.encode('ascii')\n"
-">>> with urllib.request.urlopen(\"http://requestb.in/xrbl82xr\", data) as "
-"f:\n"
-"...     print(f.read().decode('utf-8'))\n"
-"..."
 
-#: ../../library/urllib.request.rst:1361
+#: ../../library/urllib.request.rst:1369
 msgid ""
 "The following example uses an explicitly specified HTTP proxy, overriding "
 "environment settings::"
@@ -2225,23 +2188,18 @@ msgstr ""
 "В следующем примере используется явно указанный HTTP-прокси, "
 "переопределяющий настройки среды:"
 
-#: ../../library/urllib.request.rst:1364
+#: ../../library/urllib.request.rst:1372
 msgid ""
 ">>> import urllib.request\n"
 ">>> proxies = {'http': 'http://proxy.example.com:8080/'}\n"
-">>> opener = urllib.request.FancyURLopener(proxies)\n"
-">>> with opener.open(\"http://www.python.org\") as f:\n"
+">>> opener = urllib.request.build_opener(urllib.request."
+"ProxyHandler(proxies))\n"
+">>> with opener.open(\"https://www.python.org\") as f:\n"
 "...     f.read().decode('utf-8')\n"
 "..."
 msgstr ""
-">>> import urllib.request\n"
-">>> proxies = {'http': 'http://proxy.example.com:8080/'}\n"
-">>> opener = urllib.request.FancyURLopener(proxies)\n"
-">>> with opener.open(\"http://www.python.org\") as f:\n"
-"...     f.read().decode('utf-8')\n"
-"..."
 
-#: ../../library/urllib.request.rst:1371
+#: ../../library/urllib.request.rst:1379
 msgid ""
 "The following example uses no proxies at all, overriding environment "
 "settings::"
@@ -2249,25 +2207,20 @@ msgstr ""
 "В следующем примере вообще не используются прокси-серверы, переопределяя "
 "настройки среды::"
 
-#: ../../library/urllib.request.rst:1373
+#: ../../library/urllib.request.rst:1381
 msgid ""
 ">>> import urllib.request\n"
-">>> opener = urllib.request.FancyURLopener({})\n"
-">>> with opener.open(\"http://www.python.org/\") as f:\n"
+">>> opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))\n"
+">>> with opener.open(\"https://www.python.org/\") as f:\n"
 "...     f.read().decode('utf-8')\n"
 "..."
 msgstr ""
-">>> import urllib.request\n"
-">>> opener = urllib.request.FancyURLopener({})\n"
-">>> with opener.open(\"http://www.python.org/\") as f:\n"
-"...     f.read().decode('utf-8')\n"
-"..."
 
-#: ../../library/urllib.request.rst:1381
+#: ../../library/urllib.request.rst:1389
 msgid "Legacy interface"
 msgstr "Устаревший интерфейс"
 
-#: ../../library/urllib.request.rst:1383
+#: ../../library/urllib.request.rst:1391
 msgid ""
 "The following functions and classes are ported from the Python 2 module "
 "``urllib`` (as opposed to ``urllib2``).  They might become deprecated at "
@@ -2276,7 +2229,7 @@ msgstr ""
 "Следующие функции и классы перенесены из модуля Python 2 urllib (в отличие "
 "от urllib2). В какой-то момент в будущем они могут стать устаревшими."
 
-#: ../../library/urllib.request.rst:1389
+#: ../../library/urllib.request.rst:1397
 msgid ""
 "Copy a network object denoted by a URL to a local file. If the URL points to "
 "a local file, the object will not be copied unless filename is supplied. "
@@ -2293,7 +2246,7 @@ msgstr ""
 "`urlopen` возвращается (для удаленного объекта). Исключения те же, что и "
 "для :func:`urlopen`."
 
-#: ../../library/urllib.request.rst:1396
+#: ../../library/urllib.request.rst:1404
 msgid ""
 "The second argument, if present, specifies the file location to copy to (if "
 "absent, the location will be a tempfile with a generated name). The third "
@@ -2314,27 +2267,22 @@ msgstr ""
 "быть ``-1`` на старых FTP-серверах, которые не возвращают размер файла в "
 "ответ на запрос на получение."
 
-#: ../../library/urllib.request.rst:1405
+#: ../../library/urllib.request.rst:1413
 msgid "The following example illustrates the most common usage scenario::"
 msgstr ""
 "Следующий пример иллюстрирует наиболее распространенный сценарий "
 "использования:"
 
-#: ../../library/urllib.request.rst:1407
+#: ../../library/urllib.request.rst:1415
 msgid ""
 ">>> import urllib.request\n"
-">>> local_filename, headers = urllib.request.urlretrieve('http://python."
+">>> local_filename, headers = urllib.request.urlretrieve('https://python."
 "org/')\n"
 ">>> html = open(local_filename)\n"
 ">>> html.close()"
 msgstr ""
-">>> import urllib.request\n"
-">>> local_filename, headers = urllib.request.urlretrieve('http://python."
-"org/')\n"
-">>> html = open(local_filename)\n"
-">>> html.close()"
 
-#: ../../library/urllib.request.rst:1412
+#: ../../library/urllib.request.rst:1420
 msgid ""
 "If the *url* uses the :file:`http:` scheme identifier, the optional *data* "
 "argument may be given to specify a ``POST`` request (normally the request "
@@ -2348,7 +2296,7 @@ msgstr ""
 "стандартном формате :mimetype:`application/x-www-form-urlencoded`; см. "
 "функцию :func:`urllib.parse.urlencode`."
 
-#: ../../library/urllib.request.rst:1418
+#: ../../library/urllib.request.rst:1426
 msgid ""
 ":func:`urlretrieve` will raise :exc:`~urllib.error.ContentTooShortError` "
 "when it detects that the amount of data available  was less than the "
@@ -2360,7 +2308,7 @@ msgstr ""
 "заголовке *Content-Length*). Это может произойти, например, при прерывании "
 "загрузки."
 
-#: ../../library/urllib.request.rst:1423
+#: ../../library/urllib.request.rst:1431
 msgid ""
 "The *Content-Length* is treated as a lower bound: if there's more data  to "
 "read, urlretrieve reads more data, but if less data is available,  it raises "
@@ -2370,7 +2318,7 @@ msgstr ""
 "больше данных, urlretrive считывает больше данных, но если доступно меньше "
 "данных, возникает исключение."
 
-#: ../../library/urllib.request.rst:1427
+#: ../../library/urllib.request.rst:1435
 msgid ""
 "You can still retrieve the downloaded data in this case, it is stored in "
 "the :attr:`!content` attribute of the exception instance."
@@ -2378,7 +2326,7 @@ msgstr ""
 "В этом случае вы все равно можете получить загруженные данные, они хранятся "
 "в атрибуте :attr:`!content` экземпляра исключения."
 
-#: ../../library/urllib.request.rst:1430
+#: ../../library/urllib.request.rst:1438
 msgid ""
 "If no *Content-Length* header was supplied, urlretrieve can not check the "
 "size of the data it has downloaded, and just returns it.  In this case you "
@@ -2388,7 +2336,7 @@ msgstr ""
 "проверить размер загруженных данных и просто возвращает их. В этом случае "
 "вам остается лишь предположить, что загрузка прошла успешно."
 
-#: ../../library/urllib.request.rst:1436
+#: ../../library/urllib.request.rst:1444
 msgid ""
 "Cleans up temporary files that may have been left behind by previous calls "
 "to :func:`urlretrieve`."
@@ -2396,7 +2344,7 @@ msgstr ""
 "Очищает временные файлы, которые могли остаться после предыдущих вызовов :"
 "func:`urlretrieve`."
 
-#: ../../library/urllib.request.rst:1443
+#: ../../library/urllib.request.rst:1451
 msgid ""
 "Base class for opening and reading URLs.  Unless you need to support opening "
 "objects using schemes other than :file:`http:`, :file:`ftp:`, or :file:`file:"
@@ -2407,7 +2355,7 @@ msgstr ""
 "`, :file:`ftp:` или :file:`file:`, вы, вероятно, захотите использовать :"
 "class:`FancyURLopener`."
 
-#: ../../library/urllib.request.rst:1447
+#: ../../library/urllib.request.rst:1455
 msgid ""
 "By default, the :class:`URLopener` class sends a :mailheader:`User-Agent` "
 "header of ``urllib/VVV``, where *VVV* is the :mod:`urllib` version number. "
@@ -2423,7 +2371,7 @@ msgstr ""
 "атрибута класса :attr:`version` соответствующее строковое значение в "
 "определении подкласса."
 
-#: ../../library/urllib.request.rst:1453
+#: ../../library/urllib.request.rst:1461
 msgid ""
 "The optional *proxies* parameter should be a dictionary mapping scheme names "
 "to proxy URLs, where an empty dictionary turns proxies off completely.  Its "
@@ -2436,7 +2384,7 @@ msgstr ""
 "этом случае будут использоваться настройки прокси-сервера среды, если они "
 "присутствуют, как описано в определении :func:`urlopen` выше."
 
-#: ../../library/urllib.request.rst:1458
+#: ../../library/urllib.request.rst:1466
 msgid ""
 "Additional keyword parameters, collected in *x509*, may be used for "
 "authentication of the client when using the :file:`https:` scheme.  The "
@@ -2449,7 +2397,7 @@ msgstr ""
 "предоставления ключа и сертификата SSL; оба необходимы для поддержки "
 "аутентификации клиента."
 
-#: ../../library/urllib.request.rst:1463
+#: ../../library/urllib.request.rst:1471
 msgid ""
 ":class:`URLopener` objects will raise an :exc:`OSError` exception if the "
 "server returns an error code."
@@ -2457,7 +2405,7 @@ msgstr ""
 "Объекты :class:`URLopener` вызовут исключение :exc:`OSError`, если сервер "
 "вернет код ошибки."
 
-#: ../../library/urllib.request.rst:1468
+#: ../../library/urllib.request.rst:1476
 msgid ""
 "Open *fullurl* using the appropriate protocol.  This method sets up cache "
 "and proxy information, then calls the appropriate open method with its input "
@@ -2471,16 +2419,16 @@ msgstr ""
 "вызывается :meth:`open_unknown`. Аргумент *data* имеет то же значение, что и "
 "аргумент *data* функции :func:`urlopen`."
 
-#: ../../library/urllib.request.rst:1474
+#: ../../library/urllib.request.rst:1482
 msgid "This method always quotes *fullurl* using :func:`~urllib.parse.quote`."
 msgstr ""
 "Этот метод всегда цитирует *fullurl*, используя :func:`~urllib.parse.quote`."
 
-#: ../../library/urllib.request.rst:1478
+#: ../../library/urllib.request.rst:1486
 msgid "Overridable interface to open unknown URL types."
 msgstr "Переопределяемый интерфейс для открытия неизвестных типов URL."
 
-#: ../../library/urllib.request.rst:1483
+#: ../../library/urllib.request.rst:1491
 msgid ""
 "Retrieves the contents of *url* and places it in *filename*.  The return "
 "value is a tuple consisting of a local filename and either an :class:`email."
@@ -2511,7 +2459,7 @@ msgstr ""
 "будет вызываться один раз в начале и после чтения каждого фрагмента данных "
 "из сети. *reporthook* игнорируется для локальных URL-адресов."
 
-#: ../../library/urllib.request.rst:1496
+#: ../../library/urllib.request.rst:1504
 msgid ""
 "If the *url* uses the :file:`http:` scheme identifier, the optional *data* "
 "argument may be given to specify a ``POST`` request (normally the request "
@@ -2525,7 +2473,7 @@ msgstr ""
 "mimetype:`application/x-www-form-urlencoded`; см. функцию :func:`urllib."
 "parse.urlencode`."
 
-#: ../../library/urllib.request.rst:1505
+#: ../../library/urllib.request.rst:1513
 msgid ""
 "Variable that specifies the user agent of the opener object.  To get :mod:"
 "`urllib` to tell servers that it is a particular user agent, set this in a "
@@ -2537,7 +2485,7 @@ msgstr ""
 "пользовательский агент, установите это в подклассе как переменную класса или "
 "в конструкторе перед вызовом базового конструктора."
 
-#: ../../library/urllib.request.rst:1515
+#: ../../library/urllib.request.rst:1523
 msgid ""
 ":class:`FancyURLopener` subclasses :class:`URLopener` providing default "
 "handling for the following HTTP response codes: 301, 302, 303, 307 and 401.  "
@@ -2555,7 +2503,7 @@ msgstr ""
 "кодов ответа 30x рекурсия ограничена значением атрибута *maxtries*, который "
 "по умолчанию равен 10."
 
-#: ../../library/urllib.request.rst:1522
+#: ../../library/urllib.request.rst:1530
 msgid ""
 "For all other response codes, the method :meth:`~BaseHandler."
 "http_error_default` is called which you can override in subclasses to handle "
@@ -2565,7 +2513,7 @@ msgstr ""
 "http_error_default`, который вы можете переопределить в подклассах для "
 "соответствующей обработки ошибки."
 
-#: ../../library/urllib.request.rst:1527
+#: ../../library/urllib.request.rst:1535
 msgid ""
 "According to the letter of :rfc:`2616`, 301 and 302 responses to POST "
 "requests must not be automatically redirected without confirmation by the "
@@ -2578,13 +2526,13 @@ msgstr ""
 "браузеры допускают автоматическое перенаправление этих ответов, заменяя POST "
 "на GET, и :mod:`urllib` воспроизводит это поведение."
 
-#: ../../library/urllib.request.rst:1532
+#: ../../library/urllib.request.rst:1540
 msgid ""
 "The parameters to the constructor are the same as those for :class:"
 "`URLopener`."
 msgstr "Параметры конструктора такие же, как и у :class:`URLopener`."
 
-#: ../../library/urllib.request.rst:1536
+#: ../../library/urllib.request.rst:1544
 msgid ""
 "When performing basic authentication, a :class:`FancyURLopener` instance "
 "calls its :meth:`prompt_user_passwd` method.  The default implementation "
@@ -2598,7 +2546,7 @@ msgstr ""
 "При необходимости подкласс может переопределить этот метод для поддержки "
 "более подходящего поведения."
 
-#: ../../library/urllib.request.rst:1541
+#: ../../library/urllib.request.rst:1549
 msgid ""
 "The :class:`FancyURLopener` class offers one additional method that should "
 "be overloaded to provide the appropriate behavior:"
@@ -2606,7 +2554,7 @@ msgstr ""
 "Класс :class:`FancyURLopener` предлагает один дополнительный метод, который "
 "следует перегрузить, чтобы обеспечить соответствующее поведение:"
 
-#: ../../library/urllib.request.rst:1546
+#: ../../library/urllib.request.rst:1554
 msgid ""
 "Return information needed to authenticate the user at the given host in the "
 "specified security realm.  The return value should be a tuple, ``(user, "
@@ -2617,7 +2565,7 @@ msgstr ""
 "кортежем ``(пользователь, пароль)``, который можно использовать для базовой "
 "аутентификации."
 
-#: ../../library/urllib.request.rst:1550
+#: ../../library/urllib.request.rst:1558
 msgid ""
 "The implementation prompts for this information on the terminal; an "
 "application should override this method to use an appropriate interaction "
@@ -2627,11 +2575,11 @@ msgstr ""
 "переопределить этот метод, чтобы использовать соответствующую модель "
 "взаимодействия в локальной среде."
 
-#: ../../library/urllib.request.rst:1556
+#: ../../library/urllib.request.rst:1564
 msgid ":mod:`urllib.request` Restrictions"
 msgstr "Ограничения :mod:`urllib.request`"
 
-#: ../../library/urllib.request.rst:1562
+#: ../../library/urllib.request.rst:1570
 msgid ""
 "Currently, only the following protocols are supported: HTTP (versions 0.9 "
 "and 1.0), FTP, local files, and data URLs."
@@ -2639,11 +2587,11 @@ msgstr ""
 "В настоящее время поддерживаются только следующие протоколы: HTTP (версии "
 "0.9 и 1.0), FTP, локальные файлы и URL-адреса данных."
 
-#: ../../library/urllib.request.rst:1565
+#: ../../library/urllib.request.rst:1573
 msgid "Added support for data URLs."
 msgstr "Добавлена ​​поддержка URL-адресов данных."
 
-#: ../../library/urllib.request.rst:1567
+#: ../../library/urllib.request.rst:1575
 msgid ""
 "The caching feature of :func:`urlretrieve` has been disabled until someone "
 "finds the time to hack proper processing of Expiration time headers."
@@ -2652,13 +2600,13 @@ msgstr ""
 "нибудь не найдет время взломать правильную обработку заголовков времени "
 "истечения срока действия."
 
-#: ../../library/urllib.request.rst:1570
+#: ../../library/urllib.request.rst:1578
 msgid ""
 "There should be a function to query whether a particular URL is in the cache."
 msgstr ""
 "Должна быть функция для запроса, находится ли конкретный URL-адрес в кеше."
 
-#: ../../library/urllib.request.rst:1572
+#: ../../library/urllib.request.rst:1580
 msgid ""
 "For backward compatibility, if a URL appears to point to a local file but "
 "the file can't be opened, the URL is re-interpreted using the FTP protocol.  "
@@ -2669,7 +2617,7 @@ msgstr ""
 "использованием протокола FTP. Иногда это может привести к появлению "
 "запутанных сообщений об ошибках."
 
-#: ../../library/urllib.request.rst:1576
+#: ../../library/urllib.request.rst:1584
 msgid ""
 "The :func:`urlopen` and :func:`urlretrieve` functions can cause arbitrarily "
 "long delays while waiting for a network connection to be set up.  This means "
@@ -2681,7 +2629,7 @@ msgstr ""
 "означает, что сложно создать интерактивный веб-клиент с использованием этих "
 "функций без использования потоков."
 
-#: ../../library/urllib.request.rst:1585
+#: ../../library/urllib.request.rst:1593
 msgid ""
 "The data returned by :func:`urlopen` or :func:`urlretrieve` is the raw data "
 "returned by the server.  This may be binary data (such as an image), plain "
@@ -2698,7 +2646,7 @@ msgstr ""
 "возвращаемые данные представляют собой HTML, вы можете использовать модуль :"
 "mod:`html.parser` для их анализа."
 
-#: ../../library/urllib.request.rst:1594
+#: ../../library/urllib.request.rst:1602
 msgid ""
 "The code handling the FTP protocol cannot differentiate between a file and a "
 "directory.  This can lead to unexpected behavior when attempting to read a "
@@ -2731,11 +2679,11 @@ msgstr ""
 "`FancyURLopener` или изменения *_urlopener* в соответствии с вашими "
 "потребностями."
 
-#: ../../library/urllib.request.rst:1611
+#: ../../library/urllib.request.rst:1619
 msgid ":mod:`urllib.response` --- Response classes used by urllib"
 msgstr ":mod:`urllib.response` --- Классы ответов, используемые urllib"
 
-#: ../../library/urllib.request.rst:1616
+#: ../../library/urllib.request.rst:1624
 msgid ""
 "The :mod:`urllib.response` module defines functions and classes which define "
 "a minimal file-like interface, including ``read()`` and ``readline()``. "
@@ -2749,7 +2697,7 @@ msgstr ""
 "модуля :mod:`urllib.request`. Типичным объектом ответа является экземпляр :"
 "class:`urllib.response.addinourl`:"
 
-#: ../../library/urllib.request.rst:1625
+#: ../../library/urllib.request.rst:1633
 msgid ""
 "URL of the resource retrieved, commonly used to determine if a redirect was "
 "followed."
@@ -2757,7 +2705,7 @@ msgstr ""
 "URL-адрес полученного ресурса, обычно используемый для определения того, "
 "было ли выполнено перенаправление."
 
-#: ../../library/urllib.request.rst:1629
+#: ../../library/urllib.request.rst:1637
 msgid ""
 "Returns the headers of the response in the form of an :class:`~email.message."
 "EmailMessage` instance."
@@ -2765,34 +2713,34 @@ msgstr ""
 "Возвращает заголовки ответа в форме экземпляра :class:`~email.message."
 "EmailMessage`."
 
-#: ../../library/urllib.request.rst:1635
+#: ../../library/urllib.request.rst:1643
 msgid "Status code returned by server."
 msgstr "Код состояния, возвращенный сервером."
 
-#: ../../library/urllib.request.rst:1639
+#: ../../library/urllib.request.rst:1647
 msgid "Deprecated in favor of :attr:`~addinfourl.url`."
 msgstr "Устарело в пользу :attr:`~addinourl.url`."
 
-#: ../../library/urllib.request.rst:1644
+#: ../../library/urllib.request.rst:1652
 msgid "Deprecated in favor of :attr:`~addinfourl.headers`."
 msgstr "Устарело в пользу :attr:`~addinourl.headers`."
 
-#: ../../library/urllib.request.rst:1649 ../../library/urllib.request.rst:1654
+#: ../../library/urllib.request.rst:1657 ../../library/urllib.request.rst:1662
 msgid "Deprecated in favor of :attr:`~addinfourl.status`."
 msgstr "Устарело в пользу :attr:`~addinourl.status`."
 
-#: ../../library/urllib.request.rst:1558 ../../library/urllib.request.rst:1581
+#: ../../library/urllib.request.rst:1566 ../../library/urllib.request.rst:1589
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../../library/urllib.request.rst:1558 ../../library/urllib.request.rst:1581
+#: ../../library/urllib.request.rst:1566 ../../library/urllib.request.rst:1589
 msgid "protocol"
 msgstr "протокол"
 
-#: ../../library/urllib.request.rst:1558 ../../library/urllib.request.rst:1592
+#: ../../library/urllib.request.rst:1566 ../../library/urllib.request.rst:1600
 msgid "FTP"
 msgstr "FTP"
 
-#: ../../library/urllib.request.rst:1581
+#: ../../library/urllib.request.rst:1589
 msgid "HTML"
 msgstr "HTML"
