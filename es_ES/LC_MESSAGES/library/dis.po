@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 17:16+0000\n"
+"POT-Creation-Date: 2026-06-09 18:10+0000\n"
 "PO-Revision-Date: 2025-09-15 01:04+0000\n"
 "Last-Translator: eulalio barbero espinosa <eulalio@disroot.org>, 2026\n"
 "Language-Team: Spanish (Spain) (https://app.transifex.com/python-doc/"
@@ -1307,13 +1307,16 @@ msgstr ""
 
 #: ../../library/dis.rst:1078
 msgid "Pushes ``co_consts[consti]`` onto the stack."
-msgstr ""
+msgstr "Añade ``co_consts[consti]`` a la pila."
 
 #: ../../library/dis.rst:1083
 msgid ""
 "Pushes the value associated with ``co_names[namei]`` onto the stack. The "
 "name is looked up within the locals, then the globals, then the builtins."
 msgstr ""
+"Empuja a la pila el valor asociado a ``co_names[namei]``. El nombre se busca "
+"primero en las variables locales, luego en las globales y, por último, en "
+"las integradas."
 
 #: ../../library/dis.rst:1089
 msgid ""
@@ -1330,6 +1333,11 @@ msgid ""
 "variables in :ref:`annotation scopes <annotation-scopes>` within class "
 "bodies."
 msgstr ""
+"Extrae una estructura de mapeo de la pila y busca el valor en "
+"``co_names[namei]``. Si no encuentra el nombre allí, lo busca en las "
+"variables globales y, a continuación, en las integradas, de forma similar a :"
+"opcode:`LOAD_GLOBAL`. Esto se utiliza para cargar variables globales en :ref:"
+"`annotation scopes <annotation-scopes>` dentro del cuerpo de las clases."
 
 #: ../../library/dis.rst:1109
 msgid ""
@@ -1347,14 +1355,21 @@ msgid ""
 "\n"
 "STACK.append(value)"
 msgstr ""
+"if count == 0:\n"
+"    value = ()\n"
+"else:\n"
+"    value = tuple(STACK[-count:])\n"
+"    STACK = STACK[:-count]\n"
+"\n"
+"STACK.append(value)"
 
 #: ../../library/dis.rst:1123
 msgid "Works as :opcode:`BUILD_TUPLE`, but creates a list."
-msgstr ""
+msgstr "Funciona igual que  :opcode:`BUILD_TUPLE`, pero crea una lista."
 
 #: ../../library/dis.rst:1128
 msgid "Works as :opcode:`BUILD_TUPLE`, but creates a set."
-msgstr ""
+msgstr "Funciona igual que :opcode:`BUILD_TUPLE`, pero crea un conjunto."
 
 #: ../../library/dis.rst:1133
 msgid ""
@@ -1362,6 +1377,9 @@ msgid ""
 "that the dictionary holds *count* entries: ``{..., STACK[-4]: STACK[-3], "
 "STACK[-2]: STACK[-1]}``."
 msgstr ""
+"Añade un nuevo objeto diccionario a la pila. Retira *count* elementos de ``2 "
+"* count``, de modo que el diccionario contenga *count* entradas: ``{..., "
+"STACK[-4]: STACK[-3], STACK[-2]: STACK[-1]}``."
 
 #: ../../library/dis.rst:1137
 msgid ""
@@ -1375,6 +1393,10 @@ msgid ""
 "top element on the stack which contains a tuple of keys, then starting from "
 "``STACK[-2]``, pops *count* values to form values in the built dictionary."
 msgstr ""
+"La versión de  :opcode:`BUILD_MAP` especializada en claves constantes. "
+"Extrae el elemento superior de la pila, que contiene una tupla de claves, y, "
+"a continuación, partiendo de ``STACK[-2]``, extrae *count* valores para "
+"formar los valores del diccionario creado."
 
 #: ../../library/dis.rst:1153
 msgid ""
@@ -1387,6 +1409,8 @@ msgid ""
 "seq = STACK.pop()\n"
 "list.extend(STACK[-i], seq)"
 msgstr ""
+"seq = STACK.pop()\n"
+"list.extend(STACK[-i], seq)"
 
 #: ../../library/dis.rst:1166
 msgid "Used to build lists."
@@ -1397,16 +1421,20 @@ msgid ""
 "seq = STACK.pop()\n"
 "set.update(STACK[-i], seq)"
 msgstr ""
+"seq = STACK.pop()\n"
+"set.update(STACK[-i], seq)"
 
 #: ../../library/dis.rst:1178
 msgid "Used to build sets."
-msgstr ""
+msgstr "Se utiliza para construir sets."
 
 #: ../../library/dis.rst:1187
 msgid ""
 "map = STACK.pop()\n"
 "dict.update(STACK[-i], map)"
 msgstr ""
+"map = STACK.pop()\n"
+"dict.update(STACK[-i], map)"
 
 #: ../../library/dis.rst:1190
 msgid "Used to build dicts."
@@ -1415,12 +1443,16 @@ msgstr ""
 #: ../../library/dis.rst:1197
 msgid "Like :opcode:`DICT_UPDATE` but raises an exception for duplicate keys."
 msgstr ""
+"Es como :opcode:`DICT_UPDATE`, pero lanza una excepción si hay claves "
+"duplicadas."
 
 #: ../../library/dis.rst:1204
 msgid ""
 "If the low bit of ``namei`` is not set, this replaces ``STACK[-1]`` with "
 "``getattr(STACK[-1], co_names[namei>>1])``."
 msgstr ""
+"Si el bit menos significativo de ``namei`` no está activado, esto sustituye "
+"``STACK[-1]`` por ``getattr(STACK[-1], co_names[namei>>1])``."
 
 #: ../../library/dis.rst:1207
 msgid ""
@@ -1439,6 +1471,8 @@ msgid ""
 "If the low bit of ``namei`` is set, then a ``NULL`` or ``self`` is pushed to "
 "the stack before the attribute or unbound method respectively."
 msgstr ""
+"Si se establece el bit bajo de ``namei``, se inserta en la pila un  ``NULL`` "
+"o un ``self`` antes del atributo o del método sin vincular, respectivamente."
 
 #: ../../library/dis.rst:1223
 msgid ""
@@ -1446,6 +1480,10 @@ msgid ""
 "argument forms (e.g. ``super().method()``, ``super().attr`` and ``super(cls, "
 "self).method()``, ``super(cls, self).attr``)."
 msgstr ""
+"Este código de operación implementa :func:`super`, tanto en su forma sin "
+"argumentos como en la de dos argumentos (por ejemplo, ``super().method()``,  "
+"``super().attr``  y ``super(cls, self).method()``,  ``super(cls, self)."
+"attr``)."
 
 #: ../../library/dis.rst:1227
 msgid "It pops three values from the stack (from top of stack down):"
@@ -1475,12 +1513,19 @@ msgid ""
 "`LOAD_ATTR`, which results in pushing ``NULL`` and the loaded method. When "
 "it is unset a single value is pushed to the stack."
 msgstr ""
+"El bit menos significativo de ``namei`` indica que se debe intentar cargar "
+"un método, al igual que con :opcode:`LOAD_ATTR`, lo que da lugar a que se "
+"inserten en la pila ``NULL``  y el método cargado. Cuando no está activado, "
+"se inserta un único valor en la pila."
 
 #: ../../library/dis.rst:1240
 msgid ""
 "The second-low bit of ``namei``, if set, means that this was a two-argument "
 "call to :func:`super` (unset means zero-argument)."
 msgstr ""
+"Si el segundo bit menos significativo de ``namei``, significa que se trata "
+"de una llamada con dos argumentos a  :func:`super` (si está a cero, "
+"significa que no hay argumentos)."
 
 #: ../../library/dis.rst:1248
 msgid ""
@@ -1498,10 +1543,12 @@ msgstr ""
 #: ../../library/dis.rst:1259
 msgid "Performs ``is`` comparison, or ``is not`` if ``invert`` is 1."
 msgstr ""
+"Realiza una comparación de tipo ``is``, o ``is not`` si ``invert`` es 1."
 
 #: ../../library/dis.rst:1266
 msgid "Performs ``in`` comparison, or ``not in`` if ``invert`` is 1."
 msgstr ""
+"Realiza una comparación de tipo ``in``, o ``not in`` si ``invert`` es 1."
 
 #: ../../library/dis.rst:1273
 msgid ""
@@ -1518,6 +1565,9 @@ msgid ""
 "``STACK[-1]``. The resulting object is pushed onto the stack, to be "
 "subsequently stored by a :opcode:`STORE_FAST` instruction."
 msgstr ""
+"Carga el atributo ``co_names[namei]`` del módulo que se encuentra en "
+"``STACK[-1]``. El objeto resultante se coloca en la pila, para ser "
+"almacenado posteriormente mediante la instrucción :opcode:`STORE_FAST`."
 
 #: ../../library/dis.rst:1288
 msgid "Increments bytecode counter by *delta*."
@@ -1554,6 +1604,8 @@ msgid ""
 "If ``STACK[-1]`` is false, increments the bytecode counter by *delta*. "
 "``STACK[-1]`` is popped."
 msgstr ""
+"Si ``STACK[-1]`` es falso, se incrementa el contador de bytecode en *delta*. "
+"Se retira ``STACK[-1]`` de la pila."
 
 #: ../../library/dis.rst:1339
 msgid ""
@@ -1574,6 +1626,10 @@ msgid ""
 "iterator below it).  If the iterator indicates it is exhausted then the byte "
 "code counter is incremented by *delta*."
 msgstr ""
+"``STACK[-1]`` es un :term:`iterator`.  Llama a su método :meth:`~iterator."
+"__next__`. Si este devuelve un nuevo valor, añádelo a la pila (dejando el "
+"iterador debajo). Si el iterador indica que se ha agotado, el contador de "
+"código byte se incrementa en *delta*."
 
 #: ../../library/dis.rst:1365
 msgid "Up until 3.11 the iterator was popped when it was exhausted."
@@ -1581,24 +1637,30 @@ msgstr ""
 
 #: ../../library/dis.rst:1370
 msgid "Loads the global named ``co_names[namei>>1]`` onto the stack."
-msgstr ""
+msgstr "Carga la variable global denominada ``co_names[namei>>1]`` en la pila."
 
 #: ../../library/dis.rst:1372
 msgid ""
 "If the low bit of ``namei`` is set, then a ``NULL`` is pushed to the stack "
 "before the global variable."
 msgstr ""
+"Si el bit menos significativo de ``namei`` está a 1, se inserta un ``NULL`` "
+"en la pila antes de la variable global."
 
 #: ../../library/dis.rst:1378
 msgid ""
 "Pushes a reference to the local ``co_varnames[var_num]`` onto the stack."
 msgstr ""
+"Inserta en la pila una referencia al objeto ``co_varnames[var_num]`` local."
 
 #: ../../library/dis.rst:1380
 msgid ""
 "This opcode is now only used in situations where the local variable is "
 "guaranteed to be initialized. It cannot raise :exc:`UnboundLocalError`."
 msgstr ""
+"Este código de operación solo se utiliza ahora en situaciones en las que se "
+"garantiza que la variable local está inicializada. No puede provocar un "
+"error de :exc:`UnboundLocalError`."
 
 #: ../../library/dis.rst:1386
 msgid ""
@@ -1612,6 +1674,9 @@ msgid ""
 "raising an :exc:`UnboundLocalError` if the local variable has not been "
 "initialized."
 msgstr ""
+"Inserta una referencia a la variable local ``co_varnames[var_num]`` en la "
+"pila, lo que provoca un error de  :exc:`UnboundLocalError` si la variable "
+"local no se ha inicializado."
 
 #: ../../library/dis.rst:1401
 msgid ""
@@ -1619,10 +1684,15 @@ msgid ""
 "pushes ``NULL`` onto the stack if the local variable has not been "
 "initialized) and sets ``co_varnames[var_num]`` to ``NULL``."
 msgstr ""
+"Empuja una referencia a la variable local ``co_varnames[var_num]`` a la pila "
+"(o empuja ``NULL`` a la pila si la variable local no se ha inicializado) y "
+"establece ``co_varnames[var_num]`` en ``NULL``."
 
 #: ../../library/dis.rst:1409
 msgid "Stores ``STACK.pop()`` into the local ``co_varnames[var_num]``."
 msgstr ""
+"Guarda el archivo ``STACK.pop()`` en la carpeta ``co_varnames[var_num]`` "
+"local."
 
 #: ../../library/dis.rst:1413
 msgid ""
@@ -1639,7 +1709,7 @@ msgstr ""
 
 #: ../../library/dis.rst:1428
 msgid "Deletes local ``co_varnames[var_num]``."
-msgstr ""
+msgstr "Elimina el archivo local ``co_varnames[var_num]``."
 
 #: ../../library/dis.rst:1433
 msgid ""
@@ -1675,12 +1745,16 @@ msgid ""
 "Stores ``STACK.pop()`` into the cell contained in slot ``i`` of the \"fast "
 "locals\" storage."
 msgstr ""
+"Almacena ``STACK.pop()`` en la celda situada en la ranura ``i`` del espacio "
+"de almacenamiento «fast locals»."
 
 #: ../../library/dis.rst:1472
 msgid ""
 "Empties the cell contained in slot ``i`` of the \"fast locals\" storage. "
 "Used by the :keyword:`del` statement."
 msgstr ""
+"Vacía la celda contenida en la ranura ``i`` del almacenamiento «fast "
+"locals». Lo utiliza la instrucción  :keyword:`del`."
 
 #: ../../library/dis.rst:1483
 msgid ""
