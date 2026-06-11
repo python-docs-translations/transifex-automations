@@ -1306,6 +1306,15 @@ msgid ""
 "\n"
 "print('json' in sys.modules)  # True - now loaded"
 msgstr ""
+"lazy import json\n"
+"import sys\n"
+"\n"
+"print('json' in sys.modules)  # False - json 模块尚未被加载\n"
+"\n"
+"# 首次使用将触发加载操作\n"
+"result = json.dumps({\"hello\": \"world\"})\n"
+"\n"
+"print('json' in sys.modules)  # True - 现在已被加载"
 
 #: ../../reference/simple_stmts.rst:916
 msgid ""
@@ -1313,14 +1322,16 @@ msgid ""
 "`SyntaxError`), it is raised at the point where the lazy import is first "
 "used, not at the import statement itself."
 msgstr ""
+"如果在模块加载期间发生错误 (如 :exc:`ImportError` 或 :exc:`SyntaxError`)，它"
+"将在首次使用该惰性导入的位置被引发，而非 import 语句本身。"
 
 #: ../../reference/simple_stmts.rst:920
 msgid "See :pep:`810` for the full specification of lazy imports."
-msgstr ""
+msgstr "请参阅 :pep:`810` 查看惰性导入的完整规范说明。"
 
 #: ../../reference/simple_stmts.rst:927
 msgid "Compatibility via ``__lazy_modules__``"
-msgstr ""
+msgstr "通过 ``__lazy_modules__`` 实现兼容"
 
 #: ../../reference/simple_stmts.rst:932
 msgid ""
@@ -1361,6 +1372,7 @@ msgid ""
 "For ``from``-style imports, the relevant name is the module following "
 "``from``, not the names of its members::"
 msgstr ""
+"对于 ``from`` 形式的导入，对应名称为 ``from`` 之后的模块，而非其成员的名称::"
 
 #: ../../reference/simple_stmts.rst:957
 msgid ""
@@ -1372,6 +1384,13 @@ msgid ""
 "mypackage.sub.utils\n"
 "import json                  # loaded eagerly (not in __lazy_modules__)"
 msgstr ""
+"# 在 mypackage/mymodule.py 中\n"
+"__lazy_modules__ = [\"mypackage\", \"mypackage.sub.utils\"]\n"
+"\n"
+"from . import helper         # 惰性加载: . 求值为 mypackage\n"
+"from .sub.utils import func  # 惰性加载: .sub.utils 求值为 mypackage.sub."
+"utils\n"
+"import json                  # 立即加载（不在 __lazy_modules__ 中）"
 
 #: ../../reference/simple_stmts.rst:964
 msgid ""
@@ -1379,6 +1398,8 @@ msgid ""
 "keyword:`finally` blocks are always eager, regardless of :attr:`!"
 "__lazy_modules__`."
 msgstr ""
+"函数、类语句体或 :keyword:`try`/:keyword:`except`/:keyword:`finally` 代码块内"
+"部的导入都将立即加载，不会考虑 :attr:`!__lazy_modules__`。"
 
 #: ../../reference/simple_stmts.rst:973
 msgid "Future statements"
@@ -2138,7 +2159,7 @@ msgstr "as"
 
 #: ../../reference/simple_stmts.rst:740 ../../reference/simple_stmts.rst:880
 msgid "lazy"
-msgstr ""
+msgstr "lazy"
 
 #: ../../reference/simple_stmts.rst:740
 msgid "ImportError"
@@ -2159,11 +2180,11 @@ msgstr "相关"
 
 #: ../../reference/simple_stmts.rst:880
 msgid "lazy import"
-msgstr ""
+msgstr "lazy import"
 
 #: ../../reference/simple_stmts.rst:929
 msgid "__lazy_modules__"
-msgstr ""
+msgstr "__lazy_modules__"
 
 #: ../../reference/simple_stmts.rst:975
 msgid "future"
