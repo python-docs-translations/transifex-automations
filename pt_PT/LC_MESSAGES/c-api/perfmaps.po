@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 18:19+0000\n"
+"POT-Creation-Date: 2026-06-19 16:29+0000\n"
 "PO-Revision-Date: 2025-09-16 00:00+0000\n"
 "Last-Translator: André Moreira <afrmscb@gmail.com>, 2026\n"
 "Language-Team: Portuguese (Portugal) (https://app.transifex.com/python-doc/"
@@ -40,22 +40,31 @@ msgid ""
 "kernel/git/torvalds/linux.git/tree/tools/perf/Documentation/jit-interface."
 "txt>`_."
 msgstr ""
+"Nas plataformas suportadas (Linux e macOS), o *runtime* pode tirar partido "
+"de *perf map files* para tornar as funções Python visíveis para uma "
+"ferramenta de *profiling* externa (como a `perf <https://perf.wiki.kernel."
+"org/index.php/Main_Page>`_ ou a `samply <https://github.com/mstange/samply/"
+">`_). Um processo em execução pode criar um ficheiro na diretoria ``/tmp``, "
+"o qual contém entradas capazes de mapear uma secção de código executável "
+"para um nome. Esta interface encontra-se descrita na `documentação da "
+"ferramenta Linux Perf <https://git.kernel.org/pub/scm/linux/kernel/git/"
+"torvalds/linux.git/tree/tools/perf/Documentation/jit-interface.txt>`_."
 
 #: ../../c-api/perfmaps.rst:17
 msgid ""
 "In Python, these helper APIs can be used by libraries and features that rely "
 "on generating machine code on the fly."
 msgstr ""
-"Em Python, essas APIs auxiliares podem ser usadas por bibliotecas e recursos "
-"que dependem da geração de código de máquina em tempo real."
+"Em Python, estas APIs auxiliares podem ser aproveitadas por bibliotecas e "
+"funcionalidades que dependem da geração de código de máquina *on the fly*."
 
 #: ../../c-api/perfmaps.rst:20
 msgid ""
 "Note that holding an :term:`attached thread state` is not required for these "
 "APIs."
 msgstr ""
-"Observe que não é necessário manter um :term:`estado de thread anexado` para "
-"essas APIs."
+"Note-se que não é obrigatório deter um :term:`attached thread state` para "
+"interagir com estas APIs."
 
 #: ../../c-api/perfmaps.rst:24
 msgid ""
@@ -66,12 +75,13 @@ msgid ""
 "`PyUnstable_WritePerfMapEntry` and it will initialize the state on first "
 "call."
 msgstr ""
-"Abra o ficheiro ``/tmp/perf-$pid.map``, a menos que já esteja aberto, e crie "
-"um bloqueio para garantir gravações seguras no ficheiro (desde que as "
-"gravações sejam feitas através de :c:func:`PyUnstable_WritePerfMapEntry`). "
-"Normalmente, não há necessidade de chamar isso explicitamente; basta usar :c:"
-"func:`PyUnstable_WritePerfMapEntry` e ele inicializará o estado na primeira "
-"chamada."
+"Abre o ficheiro ``/tmp/perf-$pid.map``, a menos que este já se encontre "
+"aberto, e cria um bloqueio para assegurar escritas *thread-safe* no ficheiro "
+"(desde que as mesmas sejam efetuadas via :c:func:"
+"`PyUnstable_WritePerfMapEntry`). Normally, não existe necessidade de efetuar "
+"esta chamada de forma explícita; basta recorrer a :c:func:"
+"`PyUnstable_WritePerfMapEntry` para que o estado seja inicializado logo na "
+"primeira chamada."
 
 #: ../../c-api/perfmaps.rst:30
 msgid ""
@@ -79,10 +89,9 @@ msgid ""
 "file, or ``-2`` on failure to create a lock. Check ``errno`` for more "
 "information about the cause of a failure."
 msgstr ""
-"Retorna ``0`` em caso de sucesso, ``-1`` em caso de falha ao criar/abrir o "
-"ficheiro de mapa de desempenho ou ``-2`` em caso de falha ao criar um "
-"bloqueio. Verifique ``errno`` para obter mais informações sobre a causa da "
-"falha."
+"Devolve ``0`` em caso de sucesso, ``-1`` se ocorrer uma falha ao criar/abrir "
+"o ficheiro de *perf map*, ou ``-2`` se falhar a criação de um bloqueio. "
+"Consulte ``errno`` para mais informações sobre a causa da falha."
 
 #: ../../c-api/perfmaps.rst:36
 msgid ""
@@ -90,14 +99,14 @@ msgid ""
 "thread safe. Here is what an example entry looks like::"
 msgstr ""
 "Escreve uma única entrada no ficheiro ``/tmp/perf-$pid.map``. Esta função é "
-"segura para threads. Aqui está um exemplo de como uma entrada parece-se::"
+"*thread-safe*. Abaixo apresenta-se um exemplo do aspeto de uma entrada::"
 
 #: ../../c-api/perfmaps.rst:39
 msgid ""
 "# address      size  name\n"
 "7f3529fcf759 b     py::bar:/run/t.py"
 msgstr ""
-"# endereço      tamanho  nome\n"
+"# endereço     tamanho nome\n"
 "7f3529fcf759 b     py::bar:/run/t.py"
 
 #: ../../c-api/perfmaps.rst:42
@@ -106,9 +115,9 @@ msgid ""
 "if the perf map file is not already opened. Returns ``0`` on success, or the "
 "same error codes as :c:func:`PyUnstable_PerfMapState_Init` on failure."
 msgstr ""
-"Chamará :c:func:`PyUnstable_PerfMapState_Init` antes de gravar a entrada, se "
-"o ficheiro de mapa de desempenho ainda não estiver aberto. Retorna ``0`` em "
-"caso de sucesso ou os mesmos códigos de erro que :c:func:"
+"Invocará :c:func:`PyUnstable_PerfMapState_Init` antes de escrever a entrada, "
+"caso o ficheiro de *perf map* não esteja aberto. Devolve ``0`` em caso de "
+"sucesso, ou os mesmos códigos de erro que :c:func:"
 "`PyUnstable_PerfMapState_Init` em caso de falha."
 
 #: ../../c-api/perfmaps.rst:48
@@ -118,17 +127,19 @@ msgid ""
 "general, there shouldn't be a reason to explicitly call this, except to "
 "handle specific scenarios such as forking."
 msgstr ""
-"Fecha o ficheiro de mapa de desempenho aberto por :c:func:"
-"`PyUnstable_PerfMapState_Init`. Isto é chamado pelo próprio tempo de "
-"execução durante o encerramento do interpretador. Em geral, não deve haver "
-"motivo para chamar isto explicitamente, exceto para lidar com cenários "
-"específicos, como forking."
+"Fecha o ficheiro de *perf map* aberto por :c:func:"
+"`PyUnstable_PerfMapState_Init`. Esta ação é desencadeada pelo próprio "
+"*runtime* durante o encerramento do interpretador. De modo geral, não existe "
+"motivo para chamar esta função explicitamente, exceto para gerir cenários "
+"específicos como *forking*."
 
 #: ../../c-api/perfmaps.rst:55
 msgid ""
 "Open the ``/tmp/perf-$pid.map`` file and append the content of "
 "*parent_filename* to it."
 msgstr ""
+"Abre o ficheiro ``/tmp/perf-$pid.map`` e acrescenta-lhe o conteúdo de "
+"*parent_filename*."
 
 #: ../../c-api/perfmaps.rst:58
 msgid ""
@@ -136,22 +147,31 @@ msgid ""
 "platforms that support perf maps (currently only Linux). On other platforms, "
 "it does nothing."
 msgstr ""
+"Esta função encontra-se disponível em todas as plataformas, mas apenas gera "
+"dados de saída nas plataformas que suportam *perf maps* (atualmente, apenas "
+"o Linux). Nas restantes plataformas, não executa qualquer ação."
 
 #: ../../c-api/perfmaps.rst:65
 msgid "Compile the given code object using the current perf trampoline."
 msgstr ""
+"Compila o objeto de código fornecido recorrendo ao *perf trampoline* atual."
 
 #: ../../c-api/perfmaps.rst:67
 msgid ""
 "The \"current\" trampoline is the one set by the runtime or the most recent :"
 "c:func:`PyUnstable_PerfTrampoline_SetPersistAfterFork` call."
 msgstr ""
+"O *trampoline* \"atual\" é o que foi configurado pelo *runtime* ou pela "
+"chamada mais recente a :c:func:"
+"`PyUnstable_PerfTrampoline_SetPersistAfterFork`."
 
 #: ../../c-api/perfmaps.rst:70
 msgid ""
 "If no trampoline is set, falls back to normal compilation (no perf map "
 "entry)."
 msgstr ""
+"Se nenhum *trampoline* estiver configurado, reverte para a compilação normal "
+"(sem qualquer entrada de *perf map*)."
 
 #: ../../c-api/perfmaps.rst:0
 msgid "Parameters"
@@ -159,7 +179,7 @@ msgstr "Parâmetros"
 
 #: ../../c-api/perfmaps.rst:72
 msgid "The code object to compile."
-msgstr ""
+msgstr "O objeto de código a compilar."
 
 #: ../../c-api/perfmaps.rst:0
 msgid "Returns"
@@ -167,28 +187,35 @@ msgstr "Devolve"
 
 #: ../../c-api/perfmaps.rst:73 ../../c-api/perfmaps.rst:89
 msgid "0 on success, -1 on failure."
-msgstr ""
+msgstr "0 em caso de sucesso, -1 em caso de falha."
 
 #: ../../c-api/perfmaps.rst:79
 msgid "Set whether the perf trampoline should persist after a fork."
 msgstr ""
+"Configura se o *perf trampoline* deve persistir após a ocorrência de um "
+"*fork*."
 
 #: ../../c-api/perfmaps.rst:81
 msgid ""
 "If ``enable`` is true (non-zero): perf map file remains open/valid post-"
 "fork. Child process inherits all existing perf map entries."
 msgstr ""
+"Se ``enable`` for verdadeiro (diferente de zero): o ficheiro de *perf map* "
+"permanece aberto/válido após o *fork*. O processo filho herda todas as "
+"entradas de *perf map* existentes."
 
 #: ../../c-api/perfmaps.rst:83
 msgid ""
 "If ``enable`` is false (zero): perf map closes post-fork. Child process gets "
 "empty perf map."
 msgstr ""
+"Se ``enable`` for falso (zero): o *perf map* é fechado após o *fork*. O "
+"processo filho obtém um *perf map* vazio."
 
 #: ../../c-api/perfmaps.rst:86
 msgid "Default: false (clears on fork)."
-msgstr ""
+msgstr "Predefinição: falso (limpa ao efetuar o *fork*)."
 
 #: ../../c-api/perfmaps.rst:88
 msgid "1 to enable, 0 to disable."
-msgstr ""
+msgstr "1 para ativar, 0 para desativar."
