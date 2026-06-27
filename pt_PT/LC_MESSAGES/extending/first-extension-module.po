@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-05 16:27+0000\n"
+"POT-Creation-Date: 2026-06-27 15:10+0000\n"
 "PO-Revision-Date: 2026-05-08 18:36+0000\n"
 "Last-Translator: André Moreira <afrmscb@gmail.com>, 2026\n"
 "Language-Team: Portuguese (Portugal) (https://app.transifex.com/python-doc/"
@@ -25,13 +25,15 @@ msgstr ""
 
 #: ../../extending/first-extension-module.rst:9
 msgid "Your first C API extension module"
-msgstr ""
+msgstr "O seu primeiro módulo de extensão da C API"
 
 #: ../../extending/first-extension-module.rst:11
 msgid ""
 "This tutorial will take you through creating a simple Python extension "
 "module written in C or C++."
 msgstr ""
+"Este tutorial irá acompanhá-lo na criação de um módulo de extensão simples "
+"do Python escrito em C ou C++."
 
 #: ../../extending/first-extension-module.rst:14
 msgid ""
@@ -39,6 +41,9 @@ msgid ""
 "extension modules, see the :ref:`recommended third party tools <c-api-"
 "tools>`."
 msgstr ""
+"Iremos utilizar diretamente a C API de baixo nível do Python. Para formas "
+"mais fáceis de criar módulos de extensão, consulte as :ref:`ferramentas de "
+"terceiros recomendadas <c-api-tools>`."
 
 #: ../../extending/first-extension-module.rst:18
 msgid ""
@@ -46,6 +51,9 @@ msgid ""
 "define functions in Python code before starting to write them in C. See :ref:"
 "`tutorial-index` for an introduction to Python itself."
 msgstr ""
+"O tutorial pressupõe conhecimentos básicos sobre Python: deve ser capaz de "
+"definir funções em código Python antes de começar a escrevê-las em C. "
+"Consulte o :ref:`tutorial-index` para uma introdução ao próprio Python."
 
 #: ../../extending/first-extension-module.rst:22
 msgid ""
@@ -54,6 +62,11 @@ msgid ""
 "be expected to know, like ``static`` functions or linkage declarations, "
 "understanding these is not necessary for success."
 msgstr ""
+"O tutorial deverá ser acessível para qualquer pessoa que consiga escrever "
+"uma biblioteca C básica. Embora mencionemos vários conceitos que não se "
+"espera que um principiante em C conheça, como funções ``static`` ou "
+"declarações de ligação (*linkage declarations*), compreendê-los não é "
+"estritamente necessário para o sucesso."
 
 #: ../../extending/first-extension-module.rst:27
 msgid ""
@@ -61,6 +74,10 @@ msgid ""
 "will not teach you important concepts, like error handling and reference "
 "counting, which are covered in later chapters."
 msgstr ""
+"Focar-nos-emos em dar-lhe uma \"sensação\" de como é a C API do Python. Este "
+"módulo não ensinará conceitos importantes, como a gestão de erros e a "
+"contagem de referências (*reference counting*), que são abordados em "
+"capítulos posteriores."
 
 #: ../../extending/first-extension-module.rst:31
 msgid ""
@@ -68,6 +85,9 @@ msgid ""
 "or Windows. On other systems, you might need to adjust some details -- for "
 "example, a system command name."
 msgstr ""
+"Assumiremos que utiliza um sistema do tipo Unix (incluindo macOS e Linux), "
+"ou Windows. Noutros sistemas, poderá ser necessário ajustar alguns detalhes "
+"— por exemplo, o nome de um comando do sistema."
 
 #: ../../extending/first-extension-module.rst:36
 msgid ""
@@ -75,6 +95,9 @@ msgid ""
 "installed. On Linux, headers are often in a package like ``python3-dev`` or "
 "``python3-devel``."
 msgstr ""
+"Precisa de ter um compilador C adequado e os cabeçalhos de desenvolvimento "
+"(*headers*) do Python instalados. No Linux, os *headers* encontram-se "
+"frequentemente num pacote como ``python3-dev`` ou ``python3-devel``."
 
 #: ../../extending/first-extension-module.rst:40
 msgid ""
@@ -84,6 +107,12 @@ msgid ""
 "<https://docs.astral.sh/uv/>`_ (``uv pip install``). Preferably, have a :ref:"
 "`virtual environment <venv-def>` activated."
 msgstr ""
+"Deve ser capaz de instalar pacotes Python. Este tutorial utiliza o `pip "
+"<https://pip.pypa.io/>`__ (``pip install``), mas pode substituí-lo por "
+"qualquer ferramenta capaz de compilar (*build*) e instalar projetos baseados "
+"em ``pyproject.toml``, como o `uv <https://docs.astral.sh/uv/>`_ (``uv pip "
+"install``). De preferência, tenha um :ref:`ambiente virtual <venv-def>` "
+"ativado."
 
 #: ../../extending/first-extension-module.rst:49
 msgid ""
@@ -91,6 +120,9 @@ msgid ""
 "extension that's compatible with earlier versions of CPython, please follow "
 "an earlier version of this documentation."
 msgstr ""
+"Este tutorial utiliza APIs que foram adicionadas no CPython 3.15. Para criar "
+"uma extensão que seja compatível com versões anteriores do CPython, por "
+"favor siga uma versão anterior desta documentação."
 
 #: ../../extending/first-extension-module.rst:53
 msgid ""
@@ -98,10 +130,13 @@ msgid ""
 "to be compatible with earlier standards, please follow tutorials in "
 "documentation for Python 3.14 or below."
 msgstr ""
+"Este tutorial utiliza sintaxe C adicionada no C11 e C++20. Se a sua extensão "
+"precisar de ser compatível com normas (*standards*) anteriores, por favor "
+"siga os tutoriais na documentação do Python 3.14 ou inferior."
 
 #: ../../extending/first-extension-module.rst:59
 msgid "What we'll do"
-msgstr ""
+msgstr "O que vamos fazer"
 
 #: ../../extending/first-extension-module.rst:61
 msgid ""
@@ -112,12 +147,20 @@ msgid ""
 "as an integer. A manual page for :c:func:`system` might summarize it this "
 "way::"
 msgstr ""
+"Vamos criar um módulo de extensão chamado ``spam`` [#why-spam]_, que "
+"incluirá uma interface Python para a função :c:func:`system` da biblioteca "
+"padrão do C. Esta função está definida em ``stdlib.h``. Recebe uma *string* "
+"C como argumento, executa o argumento como um comando do sistema e devolve "
+"um valor de resultado como um número inteiro. Uma página de manual para :c:"
+"func:`system` poderia resumir isto desta forma::"
 
 #: ../../extending/first-extension-module.rst:69
 msgid ""
 "#include <stdlib.h>\n"
 "int system(const char *command);"
 msgstr ""
+"#include <stdlib.h>\n"
+"int system(const char *command);"
 
 #: ../../extending/first-extension-module.rst:72
 msgid ""
@@ -125,10 +168,15 @@ msgid ""
 "already exposed in Python. In production, use :py:func:`os.system` or :py:"
 "func:`subprocess.run` rather than the module you'll write here."
 msgstr ""
+"Note que, tal como muitas funções na biblioteca padrão do C, esta função já "
+"está exposta em Python. Em produção, utilize :py:func:`os.system` ou :py:"
+"func:`subprocess.run` em vez do módulo que irá escrever aqui."
 
 #: ../../extending/first-extension-module.rst:77
 msgid "We want this function to be callable from Python as follows:"
 msgstr ""
+"Queremos que esta função possa ser chamada a partir do Python da seguinte "
+"forma:"
 
 #: ../../extending/first-extension-module.rst:79
 msgid ""
@@ -138,6 +186,11 @@ msgid ""
 ">>> status\n"
 "0"
 msgstr ""
+">>> import spam\n"
+">>> status = spam.system(\"whoami\")\n"
+"User Name\n"
+">>> status\n"
+"0"
 
 #: ../../extending/first-extension-module.rst:89
 msgid ""
@@ -145,10 +198,12 @@ msgid ""
 "tutorials like this one because it has the same name on both Unix and "
 "Windows."
 msgstr ""
+"O comando do sistema ``whoami`` imprime o seu nome de utilizador. É útil em "
+"tutoriais como este porque tem o mesmo nome tanto em Unix como em Windows."
 
 #: ../../extending/first-extension-module.rst:95
 msgid "Start with the headers"
-msgstr ""
+msgstr "Começar com os *headers*"
 
 #: ../../extending/first-extension-module.rst:97
 msgid ""
@@ -156,6 +211,9 @@ msgid ""
 "command line. Then, create a file named :file:`spammodule.c` in your "
 "directory. [#why-spammodule]_"
 msgstr ""
+"Comece por criar uma diretoria para este tutorial e mude para ela na linha "
+"de comandos. De seguida, crie um ficheiro chamado :file:`spammodule.c` na "
+"sua diretoria. [#why-spammodule]_"
 
 #: ../../extending/first-extension-module.rst:102
 msgid ""
@@ -163,16 +221,21 @@ msgid ""
 "declarations of the Python C API, and :file:`stdlib.h` for the :c:func:"
 "`system` function. [#stdlib-h]_"
 msgstr ""
+"Neste ficheiro, iremos incluir dois *headers*: :file:`Python.h` para trazer "
+"todas as declarações da C API do Python, e :file:`stdlib.h` para a função :c:"
+"func:`system`. [#stdlib-h]_"
 
 #: ../../extending/first-extension-module.rst:106
 msgid "Add the following lines to :file:`spammodule.c`:"
-msgstr ""
+msgstr "Adicione as seguintes linhas a :file:`spammodule.c`:"
 
 #: ../../extending/first-extension-module.rst:108
 msgid ""
 "#include <Python.h>\n"
 "#include <stdlib.h>     // for system()\n"
 msgstr ""
+"#include <Python.h>\n"
+"#include <stdlib.h>     // for system()\n"
 
 #: ../../extending/first-extension-module.rst:112
 msgid ""
@@ -180,10 +243,14 @@ msgid ""
 "*after* :file:`Python.h`. On some systems, Python may define some pre-"
 "processor definitions that affect the standard headers."
 msgstr ""
+"Certifique-se de colocar o :file:`stdlib.h`, e quaisquer outros *includes* "
+"da biblioteca padrão, *depois* do :file:`Python.h`. Em alguns sistemas, o "
+"Python pode definir algumas diretivas de pré-processador que afetam os "
+"*headers* padrão."
 
 #: ../../extending/first-extension-module.rst:119
 msgid "Running your build tool"
-msgstr ""
+msgstr "Executar a sua ferramenta de *build*"
 
 #: ../../extending/first-extension-module.rst:121
 msgid ""
@@ -192,6 +259,10 @@ msgid ""
 "your build tool works, so that you can make and test incremental changes as "
 "you follow the rest of the text."
 msgstr ""
+"Apenas com os *includes* adicionados, a sua extensão não fará nada. Ainda "
+"assim, é uma boa altura para a compilar e tentar importá-la. Isto garantirá "
+"que a sua ferramenta de *build* funciona, permitindo-lhe fazer e testar "
+"alterações incrementais à medida que acompanha o resto do texto."
 
 #: ../../extending/first-extension-module.rst:126
 msgid ""
@@ -200,14 +271,21 @@ msgid ""
 "use `meson-python`_. (If you want to use another one, see :ref:`first-"
 "extension-other-tools`.)"
 msgstr ""
+"O próprio CPython não traz uma ferramenta para compilar módulos de extensão; "
+"é recomendado utilizar um projeto de terceiros para o efeito. Neste "
+"tutorial, iremos usar o `meson-python`_. (Se quiser utilizar outra, "
+"consulte :ref:`first-extension-other-tools`.)"
 
 #: ../../extending/first-extension-module.rst:135
 msgid "``meson-python`` requires defining a \"project\" using two extra files."
 msgstr ""
+"O ``meson-python`` requer a definição de um \"projeto\" utilizando dois "
+"ficheiros adicionais."
 
 #: ../../extending/first-extension-module.rst:137
 msgid "First, add ``pyproject.toml`` with these contents:"
 msgstr ""
+"Primeiro, adicione o ficheiro ``pyproject.toml`` com o seguinte conteúdo:"
 
 #: ../../extending/first-extension-module.rst:139
 msgid ""
@@ -221,10 +299,19 @@ msgid ""
 "name = 'sampleproject'\n"
 "version = '0'"
 msgstr ""
+"[build-system]\n"
+"build-backend = 'mesonpy'\n"
+"requires = ['meson-python']\n"
+"\n"
+"[project]\n"
+"# Informação de marcador de posição do projeto\n"
+"# (altere isto antes de distribuir o módulo)\n"
+"name = 'sampleproject'\n"
+"version = '0'"
 
 #: ../../extending/first-extension-module.rst:151
 msgid "Then, create ``meson.build`` containing the following:"
-msgstr ""
+msgstr "De seguida, crie o ficheiro ``meson.build`` com o seguinte conteúdo:"
 
 #: ../../extending/first-extension-module.rst:153
 msgid ""
@@ -238,28 +325,42 @@ msgid ""
 "   install: true,\n"
 ")"
 msgstr ""
+"project('sampleproject', 'c')\n"
+"\n"
+"py = import('python').find_installation(pure: false)\n"
+"\n"
+"py.extension_module(\n"
+"   'spam',          # nome do módulo Python importável\n"
+"   'spammodule.c',  # o ficheiro fonte C\n"
+"   install: true,\n"
+")"
 
 #: ../../extending/first-extension-module.rst:167
 msgid ""
 "See the `meson-python documentation <meson-python_>`_ for details on "
 "configuration."
 msgstr ""
+"Consulte a `documentação do meson-python <meson-python_>`_ para detalhes "
+"sobre a configuração."
 
 #: ../../extending/first-extension-module.rst:170
 msgid ""
 "Now, build install the *project in the current directory* (``.``) via "
 "``pip``:"
 msgstr ""
+"Agora, compile e instale o *projeto na diretoria atual* (``.``) via ``pip``:"
 
 #: ../../extending/first-extension-module.rst:172
 msgid "python -m pip -v install ."
-msgstr ""
+msgstr "python -m pip -v install ."
 
 #: ../../extending/first-extension-module.rst:176
 msgid ""
 "The ``-v`` (``--verbose``) option causes ``pip`` to show the output from the "
 "compiler, which is often useful during development."
 msgstr ""
+"A opção ``-v`` (``--verbose``) faz com que o ``pip`` mostre o *output* do "
+"compilador, o que é frequentemente útil durante o desenvolvimento."
 
 #: ../../extending/first-extension-module.rst:181
 msgid ""
@@ -267,18 +368,27 @@ msgid ""
 "in a :ref:`virtual environment <venv-def>`. (Or, if you prefer another tool "
 "that can build and install ``pyproject.toml``-based projects, use that.)"
 msgstr ""
+"Se não tiver o ``pip`` instalado, execute ``python -m ensurepip``, de "
+"preferência num :ref:`ambiente virtual <venv-def>`. (Ou, se preferir outra "
+"ferramenta capaz de compilar e instalar projetos baseados em ``pyproject."
+"toml``, utilize-a.)"
 
 #: ../../extending/first-extension-module.rst:189
 msgid ""
 "Note that you will need to run this command again every time you change your "
 "extension. Unlike Python, C has an explicit compilation step."
 msgstr ""
+"Note que precisará de executar este comando novamente sempre que alterar a "
+"sua extensão. Ao contrário do Python, o C tem um passo de compilação "
+"explícito."
 
 #: ../../extending/first-extension-module.rst:193
 msgid ""
 "When your extension is compiled and installed, start Python and try to "
 "import it. This should fail with the following exception:"
 msgstr ""
+"Quando a sua extensão estiver compilada e instalada, inicie o Python e tente "
+"importá-la. Isto deverá falhar com a seguinte exceção:"
 
 #: ../../extending/first-extension-module.rst:197
 msgid ""
@@ -288,10 +398,15 @@ msgid ""
 "ImportError: dynamic module does not define module export function "
 "(PyModExport_spam or PyInit_spam)"
 msgstr ""
+">>> import spam\n"
+"Traceback (most recent call last):\n"
+"   ...\n"
+"ImportError: dynamic module does not define module export function "
+"(PyModExport_spam or PyInit_spam)"
 
 #: ../../extending/first-extension-module.rst:206
 msgid "Module export hook"
-msgstr ""
+msgstr "*Hook* de exportação do módulo"
 
 #: ../../extending/first-extension-module.rst:208
 msgid ""
@@ -299,10 +414,13 @@ msgid ""
 "Python is looking for a \"module export function\", also known as a :ref:"
 "`module export hook <extension-export-hook>`. Let's define one."
 msgstr ""
+"A exceção que obteve ao tentar importar o módulo indicou que o Python está à "
+"procura de uma \"função de exportação de módulo\", também conhecida como um :"
+"ref:`hook de exportação de módulo <extension-export-hook>`. Vamos definir um."
 
 #: ../../extending/first-extension-module.rst:213
 msgid "First, add a prototype below the ``#include`` lines:"
-msgstr ""
+msgstr "Primeiro, adicione um protótipo abaixo das linhas ``#include``:"
 
 #: ../../extending/first-extension-module.rst:215
 msgid ""
@@ -310,6 +428,9 @@ msgid ""
 "PyMODEXPORT_FUNC PyModExport_spam(void);\n"
 "\n"
 msgstr ""
+"\n"
+"PyMODEXPORT_FUNC PyModExport_spam(void);\n"
+"\n"
 
 #: ../../extending/first-extension-module.rst:220
 msgid ""
@@ -317,6 +438,9 @@ msgid ""
 "warnings without it. It's generally better to add the prototype than to "
 "disable the warning."
 msgstr ""
+"O protótipo não é estritamente necessário, mas alguns compiladores modernos "
+"emitem avisos (*warnings*) sem ele. É geralmente melhor adicionar o "
+"protótipo do que desativar o aviso."
 
 #: ../../extending/first-extension-module.rst:224
 msgid ""
@@ -324,12 +448,17 @@ msgid ""
 "and adds any special linkage declarations needed to make the function "
 "visible and usable when CPython loads it."
 msgstr ""
+"A macro :c:macro:`PyMODEXPORT_FUNC` declara o tipo de retorno da função e "
+"adiciona quaisquer declarações de ligação (*linkage*) especiais necessárias "
+"para tornar a função visível e utilizável quando o CPython a carrega."
 
 #: ../../extending/first-extension-module.rst:228
 msgid ""
 "After the prototype, add the function itself. For now, make it return "
 "``NULL``:"
 msgstr ""
+"Após o protótipo, adicione a própria função. Por agora, faça com que devolva "
+"``NULL``:"
 
 #: ../../extending/first-extension-module.rst:231
 msgid ""
@@ -339,12 +468,19 @@ msgid ""
 "   return NULL;\n"
 "}"
 msgstr ""
+"PyMODEXPORT_FUNC\n"
+"PyModExport_spam(void)\n"
+"{\n"
+"   return NULL;\n"
+"}"
 
 #: ../../extending/first-extension-module.rst:239
 msgid ""
 "Compile and load the module again. You should get a different error this "
 "time."
 msgstr ""
+"Compile e carregue o módulo novamente. Desta vez, deverá obter um erro "
+"diferente."
 
 #: ../../extending/first-extension-module.rst:242
 msgid ""
@@ -354,6 +490,11 @@ msgid ""
 "SystemError: module export hook for module 'spam' failed without setting an "
 "exception"
 msgstr ""
+">>> import spam\n"
+"Traceback (most recent call last):\n"
+"   ...\n"
+"SystemError: module export hook for module 'spam' failed without setting an "
+"exception"
 
 #: ../../extending/first-extension-module.rst:249
 msgid ""
@@ -361,16 +502,23 @@ msgid ""
 "CPython complains about it. That's good -- it means that CPython found the "
 "function! Let's now make it do something useful."
 msgstr ""
+"Devolver simplesmente ``NULL`` *não* é o comportamento correto para um "
+"*hook* de exportação, e o CPython queixa-se disso. Isso é bom — significa "
+"que o CPython encontrou a função! Vamos agora fazer com que ela faça algo "
+"útil."
 
 #: ../../extending/first-extension-module.rst:256
 msgid "The slot table"
-msgstr ""
+msgstr "A tabela de *slots*"
 
 #: ../../extending/first-extension-module.rst:258
 msgid ""
 "Rather than ``NULL``, the export hook should return the information needed "
 "to create a module. Let's start with the basics: the name and docstring."
 msgstr ""
+"Em vez de ``NULL``, o *hook* de exportação deve devolver a informação "
+"necessária para criar um módulo. Vamos começar pelo básico: o nome e a "
+"*docstring*."
 
 #: ../../extending/first-extension-module.rst:262
 msgid ""
@@ -378,6 +526,9 @@ msgid ""
 "which are essentially key-value pairs. Define this array just before your "
 "export hook:"
 msgstr ""
+"A informação deve ser definida num *array* de entradas :c:type:`PySlot`, que "
+"são essencialmente pares chave-valor. Defina este *array* imediatamente "
+"antes do seu *hook* de exportação:"
 
 #: ../../extending/first-extension-module.rst:266
 msgid ""
@@ -391,6 +542,15 @@ msgid ""
 "   PySlot_END\n"
 "};"
 msgstr ""
+"PyABIInfo_VAR(abi_info);\n"
+"\n"
+"static PySlot spam_slots[] = {\n"
+"   PySlot_STATIC_DATA(Py_mod_abi, &abi_info),\n"
+"   PySlot_STATIC_DATA(Py_mod_name, \"spam\"),\n"
+"   PySlot_STATIC_DATA(Py_mod_doc, \"Um modulo maravilhoso com uma funcao de "
+"exemplo\"),\n"
+"   PySlot_END\n"
+"};"
 
 #: ../../extending/first-extension-module.rst:277
 msgid ""
@@ -398,6 +558,9 @@ msgid ""
 "``&abi_info``, ``\"spam\"``, and the docstring) is a pointer to constant, "
 "statically allocated data."
 msgstr ""
+"A macro :c:macro:`PySlot_STATIC_DATA` é utilizada quando o valor do *slot* "
+"(aqui: ``&abi_info``, ``\"spam\"`` e a *docstring*) é um ponteiro para dados "
+"constantes e alocados estaticamente."
 
 #: ../../extending/first-extension-module.rst:281
 msgid ""
@@ -405,18 +568,26 @@ msgid ""
 "a bit of boilerplate that helps prevent extensions compiled for a different "
 "version of Python from crashing the interpreter."
 msgstr ""
+"A macro ``PyABIInfo_VAR(abi_info);`` e o *slot* :c:data:`Py_mod_abi` são um "
+"pouco de *boilerplate* que ajuda a evitar que extensões compiladas para uma "
+"versão diferente do Python provoquem a falha (*crash*) do interpretador."
 
 #: ../../extending/first-extension-module.rst:285
 msgid ""
 "For both :c:data:`Py_mod_name` and :c:data:`Py_mod_doc`, the values are C "
 "strings -- that is, NUL-terminated, UTF-8 encoded byte arrays."
 msgstr ""
+"Para ambos :c:data:`Py_mod_name` e :c:data:`Py_mod_doc`, os valores são "
+"*strings* C — isto é, *arrays* de bytes codificados em UTF-8 e terminados em "
+"NUL."
 
 #: ../../extending/first-extension-module.rst:288
 msgid ""
 "Note ``PySlot_END`` sentinel entry at the end. This marks the end of the "
 "array. If you forget it, you'll trigger undefined behavior."
 msgstr ""
+"Note a entrada de sentinela ``PySlot_END`` no fim. Esta marca o fim do "
+"*array*. Se se esquecer dela, irá desencadear um comportamento indefinido."
 
 #: ../../extending/first-extension-module.rst:292
 msgid ""
@@ -425,10 +596,16 @@ msgid ""
 "export hook; all global variables and all other functions should generally "
 "be ``static``, so that they don't clash with other extensions."
 msgstr ""
+"O *array* está definido como ``static`` — ou seja, não é visível fora deste "
+"ficheiro ``.c``. Este será um tema comum. O CPython apenas precisa de aceder "
+"ao *hook* de exportação; todas as variáveis globais e todas as outras "
+"funções devem, geralmente, ser ``static``, para que não entrem em conflito "
+"com outras extensões."
 
 #: ../../extending/first-extension-module.rst:298
 msgid "Return this array from your export hook instead of ``NULL``:"
 msgstr ""
+"Devolva este *array* a partir do seu *hook* de exportação em vez de ``NULL``:"
 
 #: ../../extending/first-extension-module.rst:300
 msgid ""
@@ -438,10 +615,15 @@ msgid ""
 "   return spam_slots;\n"
 "}"
 msgstr ""
+"PyMODEXPORT_FUNC\n"
+"PyModExport_spam(void)\n"
+"{\n"
+"   return spam_slots;\n"
+"}"
 
 #: ../../extending/first-extension-module.rst:309
 msgid "Now, recompile and try it out:"
-msgstr ""
+msgstr "Agora, recompile e experimente:"
 
 #: ../../extending/first-extension-module.rst:311
 msgid ""
@@ -449,18 +631,23 @@ msgid ""
 ">>> print(spam)\n"
 "<module 'spam' from '/home/encukou/dev/cpython/spam.so'>"
 msgstr ""
+">>> import spam\n"
+">>> print(spam)\n"
+"<module 'spam' from '/home/encukou/dev/cpython/spam.so'>"
 
 #: ../../extending/first-extension-module.rst:317
 msgid "You have an extension module! Try ``help(spam)`` to see the docstring."
 msgstr ""
+"Já tem um módulo de extensão! Experimente ``help(spam)`` para ver a "
+"*docstring*."
 
 #: ../../extending/first-extension-module.rst:320
 msgid "The next step will be adding a function."
-msgstr ""
+msgstr "O próximo passo será adicionar uma função."
 
 #: ../../extending/first-extension-module.rst:326
 msgid "Exposing a function"
-msgstr ""
+msgstr "Expor uma função"
 
 #: ../../extending/first-extension-module.rst:328
 msgid ""
@@ -468,6 +655,10 @@ msgid ""
 "write a layer of glue code to convert arguments from Python objects to C "
 "values, and the C return value back to Python."
 msgstr ""
+"Para expor a função C :c:func:`system` diretamente ao Python, precisaremos "
+"de escrever uma camada de código de ligação (*glue code*) para converter "
+"argumentos de objetos Python para valores C, e o valor de retorno C de volta "
+"para Python."
 
 #: ../../extending/first-extension-module.rst:332
 msgid ""
@@ -476,10 +667,14 @@ msgid ""
 "-- regardless of the Python type -- are represented in C as pointers to the :"
 "c:type:`PyObject` structure."
 msgstr ""
+"Uma das formas mais simples de escrever código de ligação é uma função \":c:"
+"data:`METH_O`\", que recebe dois objetos Python e devolve um. Todos os "
+"objetos Python — independentemente do tipo Python — são representados em C "
+"como ponteiros para a estrutura :c:type:`PyObject`."
 
 #: ../../extending/first-extension-module.rst:337
 msgid "Add such a function above the slots array::"
-msgstr ""
+msgstr "Adicione uma função deste tipo acima do *array* de *slots*::"
 
 #: ../../extending/first-extension-module.rst:339
 msgid ""
@@ -489,6 +684,11 @@ msgid ""
 "   Py_RETURN_NONE;\n"
 "}"
 msgstr ""
+"static PyObject *\n"
+"spam_system(PyObject *self, PyObject *arg)\n"
+"{\n"
+"   Py_RETURN_NONE;\n"
+"}"
 
 #: ../../extending/first-extension-module.rst:345
 msgid ""
@@ -496,6 +696,9 @@ msgid ""
 "macro, which expands to a ``return`` statement that properly returns a "
 "Python :py:data:`None` object."
 msgstr ""
+"Por agora, ignoramos os argumentos e utilizamos a macro :c:macro:"
+"`Py_RETURN_NONE`, que se expande para uma instrução ``return`` que devolve "
+"corretamente um objeto :py:data:`None` do Python."
 
 #: ../../extending/first-extension-module.rst:349
 msgid ""
@@ -503,10 +706,13 @@ msgid ""
 "haven't yet added ``spam_system`` to the module, so you might get a warning "
 "that ``spam_system`` is unused."
 msgstr ""
+"Recompile a sua extensão para garantir que não tem erros de sintaxe. Ainda "
+"não adicionámos ``spam_system`` ao módulo, pelo que poderá obter um aviso "
+"(*warning*) de que ``spam_system`` não está a ser utilizada."
 
 #: ../../extending/first-extension-module.rst:356
 msgid "Method definitions"
-msgstr ""
+msgstr "Definições de métodos"
 
 #: ../../extending/first-extension-module.rst:358
 msgid ""
@@ -514,18 +720,20 @@ msgid ""
 "of information in a structure called :c:type:`PyMethodDef` [#why-"
 "pymethoddef]_:"
 msgstr ""
+"Para expor a função C ao Python, precisará de fornecer vários elementos de "
+"informação numa estrutura chamada :c:type:`PyMethodDef` [#why-pymethoddef]_:"
 
 #: ../../extending/first-extension-module.rst:362
 msgid "``ml_name``: the name of the Python function;"
-msgstr ""
+msgstr "``ml_name``: o nome da função Python;"
 
 #: ../../extending/first-extension-module.rst:363
 msgid "``ml_doc``: a docstring;"
-msgstr ""
+msgstr "``ml_doc``: uma *docstring*;"
 
 #: ../../extending/first-extension-module.rst:364
 msgid "``ml_meth``: the C function to be called; and"
-msgstr ""
+msgstr "``ml_meth``: a função C a ser chamada; e"
 
 #: ../../extending/first-extension-module.rst:365
 msgid ""
@@ -533,6 +741,10 @@ msgid ""
 "are passed to the C function. We'll use :c:data:`METH_O` here -- the flag "
 "that matches our ``spam_system`` function's signature."
 msgstr ""
+"``ml_flags``: um conjunto de *flags* que descreve detalhes como a forma como "
+"os argumentos Python são passados para a função C. Iremos utilizar :c:data:"
+"`METH_O` aqui — a *flag* que corresponde à assinatura da nossa função "
+"``spam_system``."
 
 #: ../../extending/first-extension-module.rst:370
 msgid ""
@@ -540,6 +752,9 @@ msgid ""
 "to be collected in an array, with a zero-filled sentinel at the end. Add "
 "this array just below the ``spam_system`` function:"
 msgstr ""
+"Como os módulos normalmente criam várias funções, estas definições precisam "
+"de ser reunidas num *array*, com uma sentinela preenchida com zeros no fim. "
+"Adicione este *array* logo abaixo da função ``spam_system``:"
 
 #: ../../extending/first-extension-module.rst:374
 msgid ""
@@ -555,17 +770,32 @@ msgid ""
 "};\n"
 "\n"
 msgstr ""
+"\n"
+"static PyMethodDef spam_methods[] = {\n"
+"    {\n"
+"        .ml_name=\"system\",\n"
+"        .ml_meth=spam_system,\n"
+"        .ml_flags=METH_O,\n"
+"        .ml_doc=\"Executar um comando da shell.\",\n"
+"    },\n"
+"    {NULL, NULL, 0, NULL}        /* Sentinela */\n"
+"};\n"
+"\n"
 
 #: ../../extending/first-extension-module.rst:378
 msgid ""
 "As with module slots, a zero-filled sentinel marks the end of the array."
 msgstr ""
+"Tal como acontece com os *slots* do módulo, uma sentinela preenchida com "
+"zeros marca o fim do *array*."
 
 #: ../../extending/first-extension-module.rst:380
 msgid ""
 "Next, we'll add the method to the module. Add a :c:data:`Py_mod_methods` "
 "slot to your :c:type:`PyMethodDef` array:"
 msgstr ""
+"De seguida, vamos adicionar o método ao módulo. Adicione um *slot* :c:data:"
+"`Py_mod_methods` ao seu *array* :c:type:`PyMethodDef`:"
 
 #: ../../extending/first-extension-module.rst:383
 msgid ""
@@ -582,16 +812,31 @@ msgid ""
 "};\n"
 "\n"
 msgstr ""
+"\n"
+"PyABIInfo_VAR(abi_info);\n"
+"\n"
+"static PySlot spam_slots[] = {\n"
+"    PySlot_STATIC_DATA(Py_mod_abi, &abi_info),\n"
+"    PySlot_STATIC_DATA(Py_mod_name, \"spam\"),\n"
+"    PySlot_STATIC_DATA(Py_mod_doc, \"Um modulo maravilhoso com uma funcao de "
+"exemplo\"),\n"
+"    PySlot_STATIC_DATA(Py_mod_methods, spam_methods),\n"
+"    PySlot_END\n"
+"};\n"
+"\n"
 
 #: ../../extending/first-extension-module.rst:388
 msgid ""
 "Recompile your extension again, and test it. Be sure to restart the Python "
 "interpreter, so that ``import spam`` picks up the new version of the module."
 msgstr ""
+"Recompile a sua extensão novamente e teste-a. Certifique-se de reiniciar o "
+"interpretador Python, para que o ``import spam`` carregue a nova versão do "
+"módulo."
 
 #: ../../extending/first-extension-module.rst:392
 msgid "You should now be able to call the function:"
-msgstr ""
+msgstr "Deverá agora ser capaz de chamar a função:"
 
 #: ../../extending/first-extension-module.rst:394
 msgid ""
@@ -601,18 +846,27 @@ msgid ""
 ">>> print(spam.system('whoami'))\n"
 "None"
 msgstr ""
+">>> import spam\n"
+">>> print(spam.system)\n"
+"<built-in function system>\n"
+">>> print(spam.system('whoami'))\n"
+"None"
 
 #: ../../extending/first-extension-module.rst:402
 msgid ""
 "Note that our ``spam.system`` does not yet run the ``whoami`` command; it "
 "only returns ``None``."
 msgstr ""
+"Note que o nosso ``spam.system`` ainda não executa o comando ``whoami``; "
+"apenas devolve ``None``."
 
 #: ../../extending/first-extension-module.rst:405
 msgid ""
 "Check that the function accepts exactly one argument, as specified by the :c:"
 "data:`METH_O` flag:"
 msgstr ""
+"Verifique se a função aceita exatamente um argumento, conforme especificado "
+"pela *flag* :c:data:`METH_O`:"
 
 #: ../../extending/first-extension-module.rst:408
 msgid ""
@@ -621,10 +875,14 @@ msgid ""
 "   ...\n"
 "TypeError: spam.system() takes exactly one argument (3 given)"
 msgstr ""
+">>> print(spam.system('too', 'many', 'arguments'))\n"
+"Traceback (most recent call last):\n"
+"   ...\n"
+"TypeError: spam.system() takes exactly one argument (3 given)"
 
 #: ../../extending/first-extension-module.rst:417
 msgid "Returning an integer"
-msgstr ""
+msgstr "Devolver um número inteiro"
 
 #: ../../extending/first-extension-module.rst:419
 msgid ""
@@ -633,6 +891,10 @@ msgid ""
 "object. Eventually this will be the exit code of a system command, but let's "
 "start with a fixed value, say, ``3``."
 msgstr ""
+"Agora, vamos olhar para o valor de retorno. Em vez de ``None``, queremos que "
+"o ``spam.system`` devolva um número — ou seja, um objeto :py:type:`int` do "
+"Python. Eventualmente, este será o código de saída (*exit code*) de um "
+"comando do sistema, mais vamos começar com um valor fixo, digamos, ``3``."
 
 #: ../../extending/first-extension-module.rst:425
 msgid ""
@@ -640,10 +902,14 @@ msgid ""
 "object from a C ``int`` value: :c:func:`PyLong_FromLong`. [#why-"
 "pylongfromlong]_"
 msgstr ""
+"A C API do Python fornece uma função para criar um objeto :py:type:`int` do "
+"Python a partir de um valor ``int`` em C: :c:func:`PyLong_FromLong`. [#why-"
+"pylongfromlong]__"
 
 #: ../../extending/first-extension-module.rst:428
 msgid "To call it, replace the ``Py_RETURN_NONE`` with the following 3 lines:"
 msgstr ""
+"Para a chamar, substitua o ``Py_RETURN_NONE`` pelas seguintes 3 linhas:"
 
 #: ../../extending/first-extension-module.rst:432
 msgid ""
@@ -655,12 +921,21 @@ msgid ""
 "   return result;\n"
 "}"
 msgstr ""
+"static PyObject *\n"
+"spam_system(PyObject *self, PyObject *arg)\n"
+"{\n"
+"   int status = 3;\n"
+"   PyObject *result = PyLong_FromLong(status);\n"
+"   return result;\n"
+"}"
 
 #: ../../extending/first-extension-module.rst:444
 msgid ""
 "Recompile, restart the Python interpreter again, and check that the function "
 "now returns 3:"
 msgstr ""
+"Recompile, reinicie o interpretador Python novamente e verifique se a função "
+"agora devolve 3:"
 
 #: ../../extending/first-extension-module.rst:447
 msgid ""
@@ -668,14 +943,17 @@ msgid ""
 ">>> spam.system('whoami')\n"
 "3"
 msgstr ""
+">>> import spam\n"
+">>> spam.system('whoami')\n"
+"3"
 
 #: ../../extending/first-extension-module.rst:455
 msgid "Accepting a string"
-msgstr ""
+msgstr "Aceitar uma *string*"
 
 #: ../../extending/first-extension-module.rst:457
 msgid "Finally, let's handle the function argument."
-msgstr ""
+msgstr "Por fim, vamos tratar do argumento da função."
 
 #: ../../extending/first-extension-module.rst:459
 msgid ""
@@ -683,6 +961,9 @@ msgid ""
 "``PyObject *self``, will be set to the ``spam`` module object. This isn't "
 "useful in our case, so we'll ignore it."
 msgstr ""
+"A nossa função C, :c:func:`!spam_system`, recebe dois argumentos. O "
+"primeiro, ``PyObject *self``, será definido para o objeto do módulo "
+"``spam``. Isto não é útil no nosso caso, pelo que iremos ignorá-lo."
 
 #: ../../extending/first-extension-module.rst:464
 msgid ""
@@ -691,6 +972,10 @@ msgid ""
 "use the information in it, we will need to convert it to a C value -- in "
 "this case, a C string (``const char *``)."
 msgstr ""
+"O outro, ``PyObject *arg``, será definido para o objeto que o utilizador "
+"passou a partir do Python. Esperamos que seja uma *string* Python. Para "
+"podermos utilizar a informação nela contida, precisaremos de a converter num "
+"valor C — neste caso, uma *string* C (``const char *``)."
 
 #: ../../extending/first-extension-module.rst:470
 msgid ""
@@ -700,12 +985,20 @@ msgid ""
 "be correct for system commands, but it's what :py:meth:`str.encode` uses by "
 "default, and the C API has special support for it.)"
 msgstr ""
+"Há uma ligeira incompatibilidade de tipos aqui: os objetos :py:class:`str` "
+"do Python armazenam texto Unicode, mas as *strings* C são *arrays* de bytes. "
+"Portanto, precisaremos de *codificar* os dados e utilizaremos a codificação "
+"UTF-8 para o efeito. (O UTF-8 pode nem sempre estar correto para comandos do "
+"sistema, mas é o que o :py:meth:`str.encode` utiliza por predefinição, e a C "
+"API tem suporte especial para ele.)"
 
 #: ../../extending/first-extension-module.rst:477
 msgid ""
 "The function to encode a Python string into a UTF-8 buffer is named :c:func:"
 "`PyUnicode_AsUTF8AndSize` [#why-pyunicodeasutf8]_. Call it like this:"
 msgstr ""
+"A função para codificar uma *string* Python num *buffer* UTF-8 chama-se :c:"
+"func:`PyUnicode_AsUTF8AndSize` [#why-pyunicodeasutf8]_. Chame-a desta forma:"
 
 #: ../../extending/first-extension-module.rst:481
 msgid ""
@@ -718,6 +1011,14 @@ msgid ""
 "   return result;\n"
 "}"
 msgstr ""
+"static PyObject *\n"
+"spam_system(PyObject *self, PyObject *arg)\n"
+"{\n"
+"   const char *command = PyUnicode_AsUTF8AndSize(arg, NULL);\n"
+"   int status = 3;\n"
+"   PyObject *result = PyLong_FromLong(status);\n"
+"   return result;\n"
+"}"
 
 #: ../../extending/first-extension-module.rst:493
 msgid ""
@@ -726,6 +1027,10 @@ msgid ""
 "This buffer is managed by the *arg* object, which means we don't need to "
 "free it, but we must follow some rules:"
 msgstr ""
+"Se o :c:func:`PyUnicode_AsUTF8AndSize` for bem-sucedido, o *command* irá "
+"apontar para a *string* C resultante — um *array* de bytes terminado em zero "
+"[#embedded-nul]_. Este *buffer* é gerido pelo objeto *arg*, o que significa "
+"que não precisamos de o libertar, mas temos de seguir algumas regras:"
 
 #: ../../extending/first-extension-module.rst:498
 msgid ""
@@ -733,10 +1038,13 @@ msgid ""
 "``spam_system`` returns, *arg* and the buffer it manages might be garbage-"
 "collected."
 msgstr ""
+"Apenas devemos utilizar o *buffer* dentro da função ``spam_system``. Após a "
+"``spam_system`` devolver, o *arg* e o *buffer* que este gere podem ser alvos "
+"de *garbage collection*."
 
 #: ../../extending/first-extension-module.rst:501
 msgid "We must not modify it. This is why we use ``const``."
-msgstr ""
+msgstr "Não o podemos modificar. É por isso que utilizamos ``const``."
 
 #: ../../extending/first-extension-module.rst:503
 msgid ""
@@ -746,6 +1054,11 @@ msgid ""
 "of this documentation. For now, be assured that we are already handling "
 "errors from :c:func:`PyLong_FromLong` correctly."
 msgstr ""
+"Se o :c:func:`PyUnicode_AsUTF8AndSize` *não* for bem-sucedido, devolve um "
+"ponteiro ``NULL``. Ao chamar *qualquer* C API do Python, precisamos sempre "
+"de tratar tais casos de erro. A forma de o fazer em geral é deixada para "
+"capítulos posteriores desta documentação. Por agora, tenha a certeza de que "
+"já estamos a tratar os erros de :c:func:`PyLong_FromLong` corretamente."
 
 #: ../../extending/first-extension-module.rst:510
 msgid ""
@@ -753,6 +1066,9 @@ msgid ""
 "errors is returning ``NULL`` from ``spam_system``. Add an ``if`` block for "
 "this:"
 msgstr ""
+"Para a chamada de :c:func:`PyUnicode_AsUTF8AndSize`, a forma correta de "
+"tratar erros é devolver ``NULL`` a partir de ``spam_system``. Adicione um "
+"bloco ``if`` para isto:"
 
 #: ../../extending/first-extension-module.rst:515
 msgid ""
@@ -768,6 +1084,17 @@ msgid ""
 "   return result;\n"
 "}"
 msgstr ""
+"static PyObject *\n"
+"spam_system(PyObject *self, PyObject *arg)\n"
+"{\n"
+"   const char *command = PyUnicode_AsUTF8AndSize(arg);\n"
+"   if (command == NULL) {\n"
+"      return NULL;\n"
+"   }\n"
+"   int status = 3;\n"
+"   PyObject *result = PyLong_FromLong(status);\n"
+"   return result;\n"
+"}"
 
 #: ../../extending/first-extension-module.rst:530
 msgid ""
@@ -775,6 +1102,9 @@ msgid ""
 "``import spam`` picks up the new version of your module, and try passing a "
 "non-string value to your function:"
 msgstr ""
+"Para testar que o tratamento de erros funciona, compile novamente, reinicie "
+"o Python para que o ``import spam`` carregue a nova versão do seu módulo, e "
+"tente passar um valor que não seja uma *string* para a sua função:"
 
 #: ../../extending/first-extension-module.rst:534
 msgid ""
@@ -784,12 +1114,19 @@ msgid ""
 "   ...\n"
 "TypeError: bad argument type for built-in operation"
 msgstr ""
+">>> import spam\n"
+">>> spam.system(3)\n"
+"Traceback (most recent call last):\n"
+"   ...\n"
+"TypeError: bad argument type for built-in operation"
 
 #: ../../extending/first-extension-module.rst:542
 msgid ""
 "Now, all that is left is calling the C library function :c:func:`system` "
 "with the ``char *`` buffer, and using its result instead of the ``3``:"
 msgstr ""
+"Agora, tudo o que resta é chamar a função da biblioteca C :c:func:`system` "
+"com o *buffer* ``char *``, e utilizar o seu resultado em vez do ``3``:"
 
 #: ../../extending/first-extension-module.rst:545
 msgid ""
@@ -805,12 +1142,25 @@ msgid ""
 "   return result;\n"
 "}"
 msgstr ""
+"static PyObject *\n"
+"spam_system(PyObject *self, PyObject *arg)\n"
+"{\n"
+"   const char *command = PyUnicode_AsUTF8AndSize(arg);\n"
+"   if (command == NULL) {\n"
+"      return NULL;\n"
+"   }\n"
+"   int status = system(command);\n"
+"   PyObject *result = PyLong_FromLong(status);\n"
+"   return result;\n"
+"}"
 
 #: ../../extending/first-extension-module.rst:560
 msgid ""
 "Compile your module, restart Python, and test. This time, you should see "
 "your username -- the output of the ``whoami`` system command:"
 msgstr ""
+"Compile o seu módulo, reinicie o Python e teste. Desta vez, deverá ver o seu "
+"nome de utilizador — o *output* do comando de sistema ``whoami``:"
 
 #: ../../extending/first-extension-module.rst:564
 msgid ""
@@ -820,12 +1170,19 @@ msgid ""
 ">>> result\n"
 "0"
 msgstr ""
+">>> import spam\n"
+">>> result = spam.system('whoami')\n"
+"User Name\n"
+">>> result\n"
+"0"
 
 #: ../../extending/first-extension-module.rst:572
 msgid ""
 "You can also test with other commands, like ``ls``, ``dir``, or one that "
 "doesn't exist:"
 msgstr ""
+"Também pode testar com outros comandos, como ``ls``, ``dir``, ou um que não "
+"exista:"
 
 #: ../../extending/first-extension-module.rst:575
 msgid ""
@@ -835,20 +1192,27 @@ msgid ""
 ">>> result\n"
 "32512"
 msgstr ""
+">>> import spam\n"
+">>> result = spam.system('nonexistent-command')\n"
+"sh: line 1: nonexistent-command: command not found\n"
+">>> result\n"
+"32512"
 
 #: ../../extending/first-extension-module.rst:585
 msgid "The result"
-msgstr ""
+msgstr "O resultado"
 
 #: ../../extending/first-extension-module.rst:588
 msgid ""
 "Congratulations! You have written a complete Python C API extension module, "
 "and completed this tutorial!"
 msgstr ""
+"Parabéns! Escreveu um módulo de extensão completo da C API do Python e "
+"concluiu este tutorial!"
 
 #: ../../extending/first-extension-module.rst:592
 msgid "Here is the entire source file, for your convenience:"
-msgstr ""
+msgstr "Aqui está o ficheiro de código-fonte completo, para sua conveniência:"
 
 #: ../../extending/first-extension-module.rst:596
 msgid ""
@@ -908,16 +1272,74 @@ msgid ""
 "   return spam_slots;\n"
 "}\n"
 msgstr ""
+"/// Includes\n"
+"\n"
+"#include <Python.h>\n"
+"#include <stdlib.h>     // para system()\n"
+"\n"
+"/// Implementacao de spam.system\n"
+"\n"
+"static PyObject *\n"
+"spam_system(PyObject *self, PyObject *arg)\n"
+"{\n"
+"   const char *command = PyUnicode_AsUTF8AndSize(arg, NULL);\n"
+"   if (command == NULL) {\n"
+"      return NULL;\n"
+"   }\n"
+"   int status = system(command);\n"
+"   PyObject *result = PyLong_FromLong(status);\n"
+"   return result;\n"
+"}\n"
+"\n"
+"/// Tabela de metodos do modulo\n"
+"\n"
+"static PyMethodDef spam_methods[] = {\n"
+"    {\n"
+"        .ml_name=\"system\",\n"
+"        .ml_meth=spam_system,\n"
+"        .ml_flags=METH_O,\n"
+"        .ml_doc=\"Executar um comando da shell.\",\n"
+"    },\n"
+"    {NULL, NULL, 0, NULL}        /* Sentinela */\n"
+"};\n"
+"\n"
+"/// Tabela de slots do modulo\n"
+"\n"
+"PyABIInfo_VAR(abi_info);\n"
+"\n"
+"static PySlot spam_slots[] = {\n"
+"    PySlot_STATIC_DATA(Py_mod_abi, &abi_info),\n"
+"    PySlot_STATIC_DATA(Py_mod_name, \"spam\"),\n"
+"    PySlot_STATIC_DATA(Py_mod_doc, \"Um modulo maravilhoso com uma funcao de "
+"exemplo\"),\n"
+"    PySlot_STATIC_DATA(Py_mod_methods, spam_methods),\n"
+"    PySlot_END\n"
+"};\n"
+"\n"
+"/// Prototipo do hook de exportacao\n"
+"\n"
+"PyMODEXPORT_FUNC PyModExport_spam(void);\n"
+"\n"
+"/// Hook de exportacao do modulo\n"
+"\n"
+"PyMODEXPORT_FUNC\n"
+"PyModExport_spam(void)\n"
+"{\n"
+"   return spam_slots;\n"
+"}\n"
 
 #: ../../extending/first-extension-module.rst:603
 msgid "Appendix: Other build tools"
-msgstr ""
+msgstr "Apêndice: Outras ferramentas de *build*"
 
 #: ../../extending/first-extension-module.rst:605
 msgid ""
 "You should be able to follow this tutorial -- except the *Running your build "
 "tool* section itself -- with a build tool other than ``meson-python``."
 msgstr ""
+"Deverá ser capaz de seguir este tutorial — exceto a própria secção *Running "
+"your build tool* — com uma ferramenta de *build* diferente de ``meson-"
+"python``."
 
 #: ../../extending/first-extension-module.rst:609
 msgid ""
@@ -925,22 +1347,30 @@ msgid ""
 "packaging.python.org/en/latest/guides/tool-recommendations/#build-backends-"
 "for-extension-modules>`_; be sure to choose one for the C language."
 msgstr ""
+"O Python Packaging User Guide tem uma `lista de ferramentas recomendadas "
+"<https://packaging.python.org/en/latest/guides/tool-recommendations/#build-"
+"backends-for-extension-modules>`_; certifique-se de escolher uma para a "
+"linguagem C."
 
 #: ../../extending/first-extension-module.rst:614
 msgid "Workaround for missing PyInit function"
-msgstr ""
+msgstr "Solução alternativa para a falta da função PyInit"
 
 #: ../../extending/first-extension-module.rst:616
 msgid ""
 "If your build tool output complains about missing ``PyInit_spam``, add the "
 "following function to your module for now:"
 msgstr ""
+"Se o *output* da sua ferramenta de *build* se queixar da falta de "
+"``PyInit_spam``, adicione a seguinte função ao seu módulo por agora:"
 
 #: ../../extending/first-extension-module.rst:619
 msgid ""
 "// A workaround\n"
 "void *PyInit_spam(void) { return NULL; }"
 msgstr ""
+"// Uma solução alternativa\n"
+"void *PyInit_spam(void) { return NULL; }"
 
 #: ../../extending/first-extension-module.rst:624
 msgid ""
@@ -949,6 +1379,11 @@ msgid ""
 "below. Current CPython does not need it, but some build tools may still "
 "assume that all extension modules need to define it."
 msgstr ""
+"Isto é um *shim* para uma :ref:`função de inicialização <extension-export-"
+"hook>` de estilo antigo, que era obrigatória em módulos de extensão para o "
+"CPython 3.14 e anteriores. O CPython atual não precisa dela, mas algumas "
+"ferramentas de *build* podem ainda assumir que todos os módulos de extensão "
+"a precisam de definir."
 
 #: ../../extending/first-extension-module.rst:629
 msgid ""
@@ -956,10 +1391,13 @@ msgid ""
 "initialization of spam failed without raising an exception`` instead of "
 "``ImportError: dynamic module does not define module export function``."
 msgstr ""
+"Se utilizar esta solução alternativa, obterá a exceção ``SystemError: "
+"initialization of spam failed without raising an exception`` em vez de "
+"``ImportError: dynamic module does not define module export function``."
 
 #: ../../extending/first-extension-module.rst:636
 msgid "Compiling directly"
-msgstr ""
+msgstr "Compilar diretamente"
 
 #: ../../extending/first-extension-module.rst:638
 msgid ""
@@ -967,6 +1405,10 @@ msgid ""
 "of various details of your platform and Python installation, of naming the "
 "resulting extension, and, later, of distributing your work."
 msgstr ""
+"A utilização de uma ferramenta de *build* de terceiros é fortemente "
+"recomendada, pois tratará de vários detalhes da sua plataforma e instalação "
+"do Python, da atribuição de nome à extensão resultante e, mais tarde, da "
+"distribuição do seu trabalho."
 
 #: ../../extending/first-extension-module.rst:643
 msgid ""
@@ -975,6 +1417,10 @@ msgid ""
 "this is system-specific; be prepared for issues you will need to solve "
 "yourself."
 msgstr ""
+"Se estiver a construir uma extensão para um sistema *específico*, ou apenas "
+"para si próprio, poderá preferir executar o seu compilador diretamente. A "
+"forma de o fazer é específica do sistema; esteja preparado para problemas "
+"que terá de resolver por si próprio."
 
 #: ../../extending/first-extension-module.rst:649
 msgid "Linux"
@@ -987,17 +1433,24 @@ msgid ""
 "that it corresponds to the CPython interpreter you'll use to load the "
 "module. Then, start with the following command:"
 msgstr ""
+"No Linux, o pacote de desenvolvimento do Python pode incluir um comando "
+"``python3-config`` que mostra as *flags* de compilador necessárias. Se o "
+"utilizar, verifique se este corresponde ao interpretador CPython que irá "
+"usar para carregar o módulo. De seguida, comece com o seguinte comando:"
 
 #: ../../extending/first-extension-module.rst:657
 msgid ""
 "gcc --shared $(python3-config --cflags --ldflags) spammodule.c -o spam.so"
 msgstr ""
+"gcc --shared $(python3-config --cflags --ldflags) spammodule.c -o spam.so"
 
 #: ../../extending/first-extension-module.rst:661
 msgid ""
 "This should generate a ``spam.so`` file that you need to put in a directory "
 "on :py:attr:`sys.path`."
 msgstr ""
+"Isto deverá gerar um ficheiro ``spam.so`` que precisa de colocar num "
+"diretório no :py:attr:`sys.path`."
 
 #: ../../extending/first-extension-module.rst:666
 msgid "Footnotes"
@@ -1005,7 +1458,7 @@ msgstr "Notas de Rodapé"
 
 #: ../../extending/first-extension-module.rst:667
 msgid "``spam`` is the favorite food of Monty Python fans..."
-msgstr ""
+msgstr "``spam`` é a comida favorita dos fãs dos Monty Python..."
 
 #: ../../extending/first-extension-module.rst:668
 msgid ""
@@ -1015,6 +1468,12 @@ msgid ""
 "named ``spam``, projects where Python isn't the primary language might use "
 "``py_spam.c``, and so on."
 msgstr ""
+"O nome do ficheiro de código-fonte depende inteiramente de si, embora "
+"algumas ferramentas possam ser exigentes quanto à extensão ``.c``. Este "
+"tutorial utiliza o sufixo tradicional ``*module.c``. Algumas pessoas usariam "
+"apenas :file:`spam.c` para implementar um módulo chamado ``spam``, projetos "
+"onde o Python não é a linguagem principal poderiam utilizar ``py_spam.c``, e "
+"assim sucessivamente."
 
 #: ../../extending/first-extension-module.rst:675
 msgid ""
@@ -1023,12 +1482,19 @@ msgid ""
 "includes>` for its own use or for backwards compatibility. However, it is "
 "good practice to explicitly include what you need."
 msgstr ""
+"A inclusão de :file:`stdlib.h` não é tecnicamente necessária, uma vez que o :"
+"file:`Python.h` já o inclui, bem como a :ref:`vários outros cabeçalhos "
+"standard <capi-system-includes>` para uso próprio ou por motivos de "
+"retrocompatibilidade. No entanto, é uma boa prática incluir explicitamente "
+"aquilo de que necessita."
 
 #: ../../extending/first-extension-module.rst:680
 msgid ""
 "The :c:type:`!PyMethodDef` structure is also used to create methods of "
 "classes, so there's no separate \":c:type:`!PyFunctionDef`\"."
 msgstr ""
+"A estrutura :c:type:`!PyMethodDef` também é utilizada para criar métodos de "
+"classes, pelo que não existe um \":c:type:`!PyFunctionDef`\" separado."
 
 #: ../../extending/first-extension-module.rst:683
 msgid ""
@@ -1036,12 +1502,17 @@ msgid ""
 "to a the Python :py:class:`int`, which was originally called ``long``; the "
 "``FromLong`` refers to the C ``long`` (or ``long int``) type."
 msgstr ""
+"O nome :c:func:`PyLong_FromLong` pode não parecer óbvio. ``PyLong`` refere-"
+"se ao :py:class:`int` do Python, que originalmente se chamava ``long``; o "
+"``FromLong`` refere-se ao tipo ``long`` (ou ``long int``) do C."
 
 #: ../../extending/first-extension-module.rst:688
 msgid ""
 "Here, ``PyUnicode`` refers to the original name of the Python :py:class:"
 "`str` class: ``unicode``."
 msgstr ""
+"Aqui, ``PyUnicode`` refere-se ao nome original da classe :py:class:`str` do "
+"Python: ``unicode``."
 
 #: ../../extending/first-extension-module.rst:691
 msgid ""
@@ -1049,6 +1520,9 @@ msgid ""
 "also retrieve the size of the buffer, using an output argument. We don't "
 "need this, so we set the second argument to NULL."
 msgstr ""
+"A parte ``AndSize`` do nome refere-se ao facto de esta função também poder "
+"obter o tamanho do *buffer*, utilizando um argumento de *output*. Não "
+"precisamos disto, pelo que definimos o segundo argumento para NULL."
 
 #: ../../extending/first-extension-module.rst:694
 msgid ""
@@ -1058,3 +1532,9 @@ msgid ""
 "lead to security issues, so the real ``os.system`` function size checks for "
 "this case and raises an error."
 msgstr ""
+"Estamos a ignorar o facto de as *strings* Python também poderem conter bytes "
+"NUL, que terminam uma *string* C. Por outras palavras, a nossa função irá "
+"tratar ``spam.system(\"foo\\0bar\")`` como ``spam.system(\"foo\")``. Esta "
+"possibilidade pode levar a problemas de segurança, pelo que a função ``os."
+"system`` real efetua uma verificação de tamanho para este caso e lança um "
+"erro."
