@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 15:10+0000\n"
+"POT-Creation-Date: 2026-06-29 16:50+0000\n"
 "PO-Revision-Date: 2026-05-08 18:37+0000\n"
 "Last-Translator: Freesand Leo <yuqinju@163.com>, 2026\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/python-doc/"
@@ -1018,6 +1018,10 @@ msgid ""
 "<free-threaded build>` of CPython. This usually requires some non-trivial "
 "changes to the source code; specifically:"
 msgstr ""
+"以 :ref:`稳定 ABI <stable-abi>` 作为目标的 C 扩展现在可以针对新的 *自由线程构"
+"建版稳定 ABI* (或称 ``abi3t``) 进行编译，这将使其能兼容 CPython 的 :term:`自"
+"由线程构建版 <free-threaded build>`。 这通常需要对源代码进行不小的更改；具体"
+"而言："
 
 #: ../../whatsnew/3.15.rst:507
 msgid ""
@@ -1025,6 +1029,9 @@ msgid ""
 "member:`~PyType_Spec.basicsize` and :c:func:`PyObject_GetTypeData`, rather "
 "than making :c:type:`PyObject` part of the instance struct; and"
 msgstr ""
+"切换至 :pep:`697` 中引入的 (Python 3.12)，如取负值的 :c:member:`~PyType_Spec."
+"basicsize` 和 :c:func:`PyObject_GetTypeData`，而不是将 :c:type:`PyObject` 作"
+"为实例结构体的一部分；并且"
 
 #: ../../whatsnew/3.15.rst:511
 msgid ""
@@ -1032,6 +1039,9 @@ msgid ""
 "`PyModExport_* <PyModExport_modulename>`, introduced for this purpose in :"
 "pep:`793`, with a new :c:type:`PySlot` structure introduced in :pep:`820`."
 msgstr ""
+"从 ``PyInit_`` 函数切换至新的导出钩子 :c:func:`PyModExport_* "
+"<PyModExport_modulename>`，它是在 :pep:`793` 中专门为此目的而引入的，使用新的"
+"在 :pep:`820` 中引入的 :c:type:`PySlot` 结构体。"
 
 #: ../../whatsnew/3.15.rst:516
 msgid ""
@@ -1040,6 +1050,9 @@ msgid ""
 "build for the existing Stable ABI (``abi3``) and the version-specific ABI "
 "for free-threading (``cp315t``) separately."
 msgstr ""
+"请注意稳定 ABI 并未提供 CPython 所必须提供的所有功能。 无法切换至 ``abi3t`` "
+"的扩展应当继续分别针对现有的稳定 ABI (``abi3``) 以及自由线程版本专属 ABI "
+"(``cp315t``) 进行构建。"
 
 #: ../../whatsnew/3.15.rst:522
 msgid ""
@@ -1051,20 +1064,27 @@ msgid ""
 "``abi3t`` by setting the macro :c:macro:`!Py_TARGET_ABI3T` as discussed in :"
 "ref:`abi3-compiling`."
 msgstr ""
+"针对自由线程构建版的稳定 ABI 通常应当在构建工具中选择（例如 Setuptools, "
+"meson-python, scikit-build-core 或 Maturin 之类）。 在编写时，这些工具 **并不"
+"** 支持 ``abi3t``。 如此你的工具也是这种情况，则要为 ``cp315t`` 单独编译。 如"
+"果你没有使用构建工具 -- 或是正在编写这样的工具 -- 你可以像在 :ref:`abi3-"
+"compiling` 中介绍的那样通过设置宏 :c:macro:`!Py_TARGET_ABI3T` 来选择 "
+"``abi3t``。"
 
 #: ../../whatsnew/3.15.rst:531
 msgid ""
 "A practical :ref:`migration guide <abi3t-migration-howto>` for switching to "
 "``abi3t`` is available."
 msgstr ""
+"一份关于切换到 ``abi3t`` 的实用 :ref:`迁移指南 <abi3t-migration-howto>`。"
 
 #: ../../whatsnew/3.15.rst:534
 msgid ":pep:`803` for further details."
-msgstr ""
+msgstr "更多细节参见 :pep:`803`。"
 
 #: ../../whatsnew/3.15.rst:540
 msgid ":pep:`788`: Protecting the C API from interpreter finalization"
-msgstr ""
+msgstr ":pep:`788`: 围绕解释器终结化对 C API 的保护"
 
 #: ../../whatsnew/3.15.rst:542
 msgid ""
@@ -1076,28 +1096,37 @@ msgid ""
 "leading to crashes when a thread concurrently deletes an interpreter while "
 "another thread is trying to attach to it."
 msgstr ""
+"在 C API 中，:term:`解释器终结化 <interpreter shutdown>` 对许多扩展来说都是一"
+"个问题，因为 :term:`附加 <attached thread state>` 线程状态会永久性地挂起线"
+"程，导致死锁和其他出错问题。 此外，历史上在使用一个解释器之前安全地检测它是否"
+"激活是不可能的，当一个线程并发地删除另一个线程正尝试附加的解释器时会造成程序"
+"崩溃。"
 
 #: ../../whatsnew/3.15.rst:550
 msgid "There are now several new suites of APIs to circumvent these problems:"
-msgstr ""
+msgstr "现在有几个新的 API 套件可以绕过这些问题："
 
 #: ../../whatsnew/3.15.rst:552
 msgid ""
 ":ref:`Interpreter guards <interpreter-guards>`, which prevent an interpreter "
 "from finalizing."
-msgstr ""
+msgstr ":ref:`解释器守卫 <interpreter-guards>`，它可以阻止解释器被终结。"
 
 #: ../../whatsnew/3.15.rst:554
 msgid ""
 ":ref:`Interpreter views <interpreter-views>`, which allow thread-safe access "
 "to an interpreter that may be concurrently finalizing or deleted."
 msgstr ""
+":ref:`解释器视图 <interpreter-views>`，它允许线程安全地访问可能被并发地终结或"
+"删除的解释器。"
 
 #: ../../whatsnew/3.15.rst:556
 msgid ""
 ":ref:`New APIs <c-api-attach-detach>` to automatically attach and detach "
 "thread states that come with built-in protection against finalization."
 msgstr ""
+"具有内置防终结保护的 :ref:`新 API <c-api-attach-detach>` 用于自动附加和分离线"
+"程状态。"
 
 #: ../../whatsnew/3.15.rst:559
 msgid ""
@@ -1107,14 +1136,18 @@ msgid ""
 "continue to work, but there will be no new ``PyGILState`` APIs in future "
 "versions of Python."
 msgstr ""
+"此外 ``PyGILState`` 族中的 API (最主要的是 :c:func:`PyGILState_Ensure` 和 :c:"
+"func:`PyGILState_Release`) 已被设为 :term:`soft deprecated`。 目前 **没有** "
+"移除它们的计划，现有的代码将继续可用，但在未来的 Python 版本中将不会有新的 "
+"``PyGILState``。"
 
 #: ../../whatsnew/3.15.rst:565
 msgid ":pep:`788` for further details."
-msgstr ""
+msgstr "详情见 :pep:`788`。"
 
 #: ../../whatsnew/3.15.rst:567
 msgid "(Contributed by Peter Bierma in :gh:`149101`.)"
-msgstr ""
+msgstr "（由 Peter Bierma 在 :gh:`149101` 中贡献。）"
 
 #: ../../whatsnew/3.15.rst:573
 msgid "Improved error messages"
@@ -1127,6 +1160,8 @@ msgid ""
 "does not exist, but a similar attribute is available through one of its "
 "members."
 msgstr ""
+"现在当访问的属性不存在于某个对象上，但类似的属性可通过它的某个成员访问时解释"
+"器会在 :exc:`AttributeError` 异常中提供更有帮助的建议。"
 
 #: ../../whatsnew/3.15.rst:579
 msgid ""
@@ -1134,6 +1169,8 @@ msgid ""
 "requested name, the error message will suggest accessing it via that inner "
 "attribute:"
 msgstr ""
+"举例来说，如果对象具有的一个属性本身暴露了所请求的名称，错误消息将建议通过该"
+"内部属性来访问它："
 
 #: ../../whatsnew/3.15.rst:582
 msgid ""
@@ -1153,6 +1190,21 @@ msgid ""
 "container = Container(circle)\n"
 "print(container.area)"
 msgstr ""
+"@dataclass\n"
+"class Circle:\n"
+"   radius: float\n"
+"\n"
+"   @property\n"
+"   def area(self) -> float:\n"
+"      return pi * self.radius**2\n"
+"\n"
+"class Container:\n"
+"   def __init__(self, inner: Circle) -> None:\n"
+"      self.inner = inner\n"
+"\n"
+"circle = Circle(radius=4.0)\n"
+"container = Container(circle)\n"
+"print(container.area)"
 
 #: ../../whatsnew/3.15.rst:600
 msgid "Running this code now produces a clearer suggestion:"
@@ -5217,12 +5269,18 @@ msgid ""
 "`_Py_c_abs` are :term:`soft deprecated`. (Contributed by Sergey B Kirpichev "
 "in :gh:`128813`.)"
 msgstr ""
+"函数 :c:func:`_Py_c_sum`, :c:func:`_Py_c_diff`, :c:func:`_Py_c_neg`, :c:func:"
+"`_Py_c_prod`, :c:func:`_Py_c_quot`, :c:func:`_Py_c_pow` 和 :c:func:"
+"`_Py_c_abs` 已被设为 :term:`soft deprecated`。 （由 Sergey B Kirpichev 在 :"
+"gh:`128813` 中贡献。）.)"
 
 #: ../../whatsnew/3.15.rst:2633
 msgid ""
 ":c:member:`~PyConfig.bytes_warning` is deprecated since 3.15 and will be "
 "removed in 3.17. (Contributed by Nikita Sobolev in :gh:`136355`.)"
 msgstr ""
+":c:member:`~PyConfig.bytes_warning` 自 3.15 起已弃用并将在 3.17 中移除。 "
+"（由 Nikita Sobolev 在 :gh:`136355` 中贡献。）"
 
 #: ../../whatsnew/3.15.rst:2637
 msgid ""
@@ -5230,6 +5288,9 @@ msgid ""
 "standard ``<math.h>`` :c:macro:`!INFINITY` instead. (Contributed by Sergey B "
 "Kirpichev in :gh:`141004`.)"
 msgstr ""
+":c:macro:`!Py_INFINITY` 宏已被设为 :term:`soft deprecated`，请改用 C11 标准 "
+"``<math.h>`` :c:macro:`!INFINITY`。 （由 Sergey B Kirpichev 在 :gh:`141004` "
+"中贡献。）"
 
 #: ../../whatsnew/3.15.rst:2641
 msgid "The following macros are :term:`soft deprecated`:"
@@ -5446,6 +5507,11 @@ msgid ""
 "to preserve the old behavior. (Contributed by Serhiy Storchaka in :gh:"
 "`138697`.)"
 msgstr ""
+"如果将一个短选项和一个单连字符长选项传给 :meth:`argparse.ArgumentParser."
+"add_argument`，*dest* 现在会根据单连字符长选项推出。 例如，在 "
+"``add_argument('-f', '-foo')`` 中，*dest* 现在将为 ``'foo'`` 而不是 "
+"``'f'``。 请传入显式的 *dest* 参数以保持旧行为。 （由 Serhiy Storchaka 在 :"
+"gh:`138697` 中贡献。）"
 
 #: ../../whatsnew/3.15.rst:2763
 msgid ""
