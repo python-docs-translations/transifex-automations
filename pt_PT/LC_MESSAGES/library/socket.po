@@ -5,16 +5,16 @@
 #
 # Translators:
 # python-doc bot, 2025
-# André Moreira <afrmscb@gmail.com>, 2025
+# André Moreira <afrmscb@gmail.com>, 2026
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-01 15:56+0000\n"
+"POT-Creation-Date: 2026-07-01 18:58+0000\n"
 "PO-Revision-Date: 2025-07-18 19:58+0000\n"
-"Last-Translator: André Moreira <afrmscb@gmail.com>, 2025\n"
+"Last-Translator: André Moreira <afrmscb@gmail.com>, 2026\n"
 "Language-Team: Portuguese (Portugal) (https://app.transifex.com/python-doc/"
 "teams/5390/pt_PT/)\n"
 "MIME-Version: 1.0\n"
@@ -1350,6 +1350,14 @@ msgid ""
 "else:\n"
 "    s = socket.create_server(addr)"
 msgstr ""
+"import socket\n"
+"\n"
+"addr = (\"\", 8080)  # todas as interfaces, porta 8080\n"
+"if socket.has_dualstack_ipv6():\n"
+"    s = socket.create_server(addr, family=socket.AF_INET6, "
+"dualstack_ipv6=True)\n"
+"else:\n"
+"    s = socket.create_server(addr)"
 
 #: ../../library/socket.rst:858
 msgid ""
@@ -2705,6 +2713,20 @@ msgid ""
 "itemsize)])\n"
 "    return msg, list(fds)"
 msgstr ""
+"import socket, array\n"
+"\n"
+"def recv_fds(sock, msglen, maxfds):\n"
+"    fds = array.array(\"i\")   # *Array* de inteiros\n"
+"    msg, ancdata, flags, addr = sock.recvmsg(msglen, socket.CMSG_LEN(maxfds "
+"* fds.itemsize))\n"
+"    for cmsg_level, cmsg_type, cmsg_data in ancdata:\n"
+"        if cmsg_level == socket.SOL_SOCKET and cmsg_type == socket."
+"SCM_RIGHTS:\n"
+"            # Adiciona os dados, ignorando quaisquer inteiros truncados no "
+"fim.\n"
+"            fds.frombytes(cmsg_data[:len(cmsg_data) - (len(cmsg_data) % fds."
+"itemsize)])\n"
+"    return msg, list(fds)"
 
 #: ../../library/socket.rst:1748
 msgid ""
