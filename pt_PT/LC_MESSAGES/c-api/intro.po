@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-17 15:27+0000\n"
+"POT-Creation-Date: 2026-07-03 17:26+0000\n"
 "PO-Revision-Date: 2025-09-15 01:03+0000\n"
 "Last-Translator: André Moreira <afrmscb@gmail.com>, 2026\n"
 "Language-Team: Portuguese (Portugal) (https://app.transifex.com/python-doc/"
@@ -1098,17 +1098,18 @@ msgstr ""
 msgid ""
 "Conversely, when a calling function passes in a reference to an  object, "
 "there are two possibilities: the function *steals* a  reference to the "
-"object, or it does not.  *Stealing a reference* means that when you pass a "
-"reference to a function, that function assumes that it now owns that "
-"reference, and you are not responsible for it any longer."
+"object, or it does not."
 msgstr ""
-"Por outro lado, quando uma função de chamada passa uma referência a um "
-"objeto, há duas possibilidades: a função *rouba* uma referência ao objeto ou "
-"não. *Roubar uma referência* significa que, quando passa uma referência a "
-"uma função, essa função assume que agora é dona dessa referência e você não "
-"é mais responsável por ela."
 
-#: ../../c-api/intro.rst:603
+#: ../../c-api/intro.rst:597
+msgid ""
+"*Stealing a reference* means that when you pass a reference to a function, "
+"that function assumes that it now owns that reference. Since the new owner "
+"can use :c:func:`!Py_DECREF` at its discretion, you (the caller) must not "
+"use that reference after the call."
+msgstr ""
+
+#: ../../c-api/intro.rst:606
 msgid ""
 "Few functions steal references; the two notable exceptions are :c:func:"
 "`PyList_SetItem` and :c:func:`PyTuple_SetItem`, which  steal a reference to "
@@ -1128,7 +1129,7 @@ msgstr ""
 "poderia ser assim (esquecendo o tratamento de erros por enquanto; uma "
 "maneira melhor de codificar isso é mostrada abaixo)::"
 
-#: ../../c-api/intro.rst:611
+#: ../../c-api/intro.rst:614
 msgid ""
 "PyObject *t;\n"
 "\n"
@@ -1144,7 +1145,7 @@ msgstr ""
 "PyTuple_SetItem(t, 1, PyLong_FromLong(2L));\n"
 "PyTuple_SetItem(t, 2, PyUnicode_FromString(\"three\"));"
 
-#: ../../c-api/intro.rst:618
+#: ../../c-api/intro.rst:621
 msgid ""
 "Here, :c:func:`PyLong_FromLong` returns a new reference which is immediately "
 "stolen by :c:func:`PyTuple_SetItem`.  When you want to keep using an object "
@@ -1157,7 +1158,7 @@ msgstr ""
 "`Py_INCREF` para obter outra referência antes de chamar a função que rouba a "
 "referência."
 
-#: ../../c-api/intro.rst:623
+#: ../../c-api/intro.rst:626
 msgid ""
 "Incidentally, :c:func:`PyTuple_SetItem` is the *only* way to set tuple "
 "items; :c:func:`PySequence_SetItem` and :c:func:`PyObject_SetItem` refuse to "
@@ -1169,7 +1170,7 @@ msgstr ""
 "se a fazer isso, pois tuplas são um tipo de dados imutável. Você só deve "
 "usar :c:func:`PyTuple_SetItem` para tuplas que você mesmo estiver criando."
 
-#: ../../c-api/intro.rst:628
+#: ../../c-api/intro.rst:631
 msgid ""
 "Equivalent code for populating a list can be written using :c:func:"
 "`PyList_New` and :c:func:`PyList_SetItem`."
@@ -1177,7 +1178,7 @@ msgstr ""
 "O código equivalente para preencher uma lista pode ser escrito usando :c:"
 "func:`PyList_New` e :c:func:`PyList_SetItem`."
 
-#: ../../c-api/intro.rst:631
+#: ../../c-api/intro.rst:634
 msgid ""
 "However, in practice, you will rarely use these ways of creating and "
 "populating a tuple or list.  There's a generic function, :c:func:"
@@ -1192,7 +1193,7 @@ msgstr ""
 "blocos de código acima podem ser substituídos pelo seguinte (que também "
 "cuida da verificação de erros)::"
 
-#: ../../c-api/intro.rst:637
+#: ../../c-api/intro.rst:640
 msgid ""
 "PyObject *tuple, *list;\n"
 "\n"
@@ -1204,7 +1205,7 @@ msgstr ""
 "tuple = Py_BuildValue(\"(iis)\", 1, 2, \"three\");\n"
 "list = Py_BuildValue(\"[iis]\", 1, 2, \"three\");"
 
-#: ../../c-api/intro.rst:642
+#: ../../c-api/intro.rst:645
 msgid ""
 "It is much more common to use :c:func:`PyObject_SetItem` and friends with "
 "items whose references you are only borrowing, like arguments that were "
@@ -1222,7 +1223,7 @@ msgstr ""
 "(\"ter ela roubada\"). Por exemplo, esta função define todos os itens de uma "
 "lista (na verdade, qualquer sequência mutável) para um determinado item::"
 
-#: ../../c-api/intro.rst:649
+#: ../../c-api/intro.rst:652
 msgid ""
 "int\n"
 "set_all(PyObject *target, PyObject *item)\n"
@@ -1266,7 +1267,7 @@ msgstr ""
 "    return 0;\n"
 "}"
 
-#: ../../c-api/intro.rst:672
+#: ../../c-api/intro.rst:675
 msgid ""
 "The situation is slightly different for function return values.   While "
 "passing a reference to most functions does not change your  ownership "
@@ -1288,7 +1289,7 @@ msgstr ""
 "func:`PyObject_GetItem` e :c:func:`PySequence_GetItem`, sempre retornam uma "
 "nova referência (o chamador torna-se o proprietário da referência)."
 
-#: ../../c-api/intro.rst:681
+#: ../../c-api/intro.rst:684
 msgid ""
 "It is important to realize that whether you own a reference returned  by a "
 "function depends on which function you call only --- *the plumage* (the type "
@@ -1306,7 +1307,7 @@ msgstr ""
 "`PySequence_GetItem` (que por acaso recebe exatamente os mesmos argumentos), "
 "possui uma referência ao objeto retornado."
 
-#: ../../c-api/intro.rst:693
+#: ../../c-api/intro.rst:696
 msgid ""
 "Here is an example of how you could write a function that computes the sum "
 "of the items in a list of integers; once using  :c:func:`PyList_GetItem`, "
@@ -1316,7 +1317,7 @@ msgstr ""
 "soma dos itens em uma lista de inteiros; uma vez usando :c:func:"
 "`PyList_GetItem` e outra usando :c:func:`PySequence_GetItem`. ::"
 
-#: ../../c-api/intro.rst:697
+#: ../../c-api/intro.rst:700
 msgid ""
 "long\n"
 "sum_list(PyObject *list)\n"
@@ -1362,7 +1363,7 @@ msgstr ""
 "    return total;\n"
 "}"
 
-#: ../../c-api/intro.rst:723
+#: ../../c-api/intro.rst:726
 msgid ""
 "long\n"
 "sum_sequence(PyObject *sequence)\n"
@@ -1421,11 +1422,11 @@ msgstr ""
 "    return total;\n"
 "}"
 
-#: ../../c-api/intro.rst:757
+#: ../../c-api/intro.rst:760
 msgid "Types"
 msgstr "Tipos"
 
-#: ../../c-api/intro.rst:759
+#: ../../c-api/intro.rst:762
 msgid ""
 "There are few other data types that play a significant role in  the Python/C "
 "API; most are simple C types such as :c:expr:`int`,  :c:expr:`long`, :c:expr:"
@@ -1443,7 +1444,7 @@ msgstr ""
 "e outro é usado para descrever o valor de um número complexo. Estes serão "
 "discutidos juntamente com as funções que os utilizam."
 
-#: ../../c-api/intro.rst:769
+#: ../../c-api/intro.rst:772
 msgid ""
 "A signed integral type such that ``sizeof(Py_ssize_t) == sizeof(size_t)``. "
 "C99 doesn't define such a thing directly (size_t is an unsigned integral "
@@ -1455,11 +1456,11 @@ msgstr ""
 "sinal). Veja :pep:`353` para mais detalhes. ``PY_SSIZE_T_MAX`` é o maior "
 "valor positivo do tipo :c:type:`Py_ssize_t`."
 
-#: ../../c-api/intro.rst:778
+#: ../../c-api/intro.rst:781
 msgid "Exceptions"
 msgstr "Exceções"
 
-#: ../../c-api/intro.rst:780
+#: ../../c-api/intro.rst:783
 msgid ""
 "The Python programmer only needs to deal with exceptions if specific  error "
 "handling is required; unhandled exceptions are automatically  propagated to "
@@ -1473,7 +1474,7 @@ msgstr ""
 "diante, até chegarem ao interpretador de nível superior, onde são "
 "comunicadas ao utilizador acompanhadas de um rastreio da pilha."
 
-#: ../../c-api/intro.rst:788
+#: ../../c-api/intro.rst:791
 msgid ""
 "For C programmers, however, error checking always has to be explicit.  All "
 "functions in the Python/C API can raise exceptions, unless an explicit claim "
@@ -1499,7 +1500,7 @@ msgstr ""
 "valor de retorno ambíguo, e exigem testes explícitos para erros com :c:func:"
 "`PyErr_Occurred`. Essas exceções são sempre documentadas explicitamente."
 
-#: ../../c-api/intro.rst:803
+#: ../../c-api/intro.rst:806
 msgid ""
 "Exception state is maintained in per-thread storage (this is  equivalent to "
 "using global storage in an unthreaded application).  A  thread can be in one "
@@ -1521,7 +1522,7 @@ msgstr ""
 "não seja a mais geral) para definir o estado de exceção, e :c:func:"
 "`PyErr_Clear` limpa o estado de exceção."
 
-#: ../../c-api/intro.rst:813
+#: ../../c-api/intro.rst:816
 msgid ""
 "The full exception state consists of three objects (all of which can  be "
 "``NULL``): the exception type, the corresponding exception  value, and the "
@@ -1543,7 +1544,7 @@ msgstr ""
 "ciclo principal do interpretador de bytecode Python, que se encarrega de "
 "transferi-la para ``sys.exc_info()`` e similares."
 
-#: ../../c-api/intro.rst:825
+#: ../../c-api/intro.rst:828
 msgid ""
 "Note that starting with Python 1.5, the preferred, thread-safe way to access "
 "the exception state from Python code is to call the function :func:`sys."
@@ -1568,7 +1569,7 @@ msgstr ""
 "vida útil muitas vezes indesejada para objetos que são referenciados pelos "
 "quadros da pilha no rastreamento."
 
-#: ../../c-api/intro.rst:836
+#: ../../c-api/intro.rst:839
 msgid ""
 "As a general principle, a function that calls another function to  perform "
 "some task should check whether the called function raised an  exception, and "
@@ -1586,7 +1587,7 @@ msgstr ""
 "acabou de ser levantada e perderia informações importantes sobre a causa "
 "exata do erro."
 
-#: ../../c-api/intro.rst:845
+#: ../../c-api/intro.rst:848
 msgid ""
 "A simple example of detecting exceptions and passing them on is shown in "
 "the :c:func:`!sum_sequence` example above.  It so happens that this example "
@@ -1600,7 +1601,7 @@ msgstr ""
 "a seguir mostra alguma limpeza de erros. Primeiro, para lembrá-lo porque "
 "gosta de Python, mostramos o código Python equivalente::"
 
-#: ../../c-api/intro.rst:851
+#: ../../c-api/intro.rst:854
 msgid ""
 "def incr_item(dict, key):\n"
 "    try:\n"
@@ -1616,11 +1617,11 @@ msgstr ""
 "        item = 0\n"
 "    dict[key] = item + 1"
 
-#: ../../c-api/intro.rst:860
+#: ../../c-api/intro.rst:863
 msgid "Here is the corresponding C code, in all its glory::"
 msgstr "Aqui está o código C correspondente, em toda a sua glória::"
 
-#: ../../c-api/intro.rst:862
+#: ../../c-api/intro.rst:865
 msgid ""
 "int\n"
 "incr_item(PyObject *dict, PyObject *key)\n"
@@ -1708,7 +1709,7 @@ msgstr ""
 "    return rv; /* -1 for error, 0 for success */\n"
 "}"
 
-#: ../../c-api/intro.rst:912
+#: ../../c-api/intro.rst:915
 msgid ""
 "This example represents an endorsed use of the ``goto`` statement  in C! It "
 "illustrates the use of :c:func:`PyErr_ExceptionMatches` and :c:func:"
@@ -1730,11 +1731,11 @@ msgstr ""
 "forma, o valor de retorno proposto é inicializado como ``-1`` (falha) e só é "
 "definido como sucesso após a chamada final ser bem-sucedida."
 
-#: ../../c-api/intro.rst:926
+#: ../../c-api/intro.rst:929
 msgid "Embedding Python"
 msgstr "Incorporando Python"
 
-#: ../../c-api/intro.rst:928
+#: ../../c-api/intro.rst:931
 msgid ""
 "The one important task that only embedders (as opposed to extension writers) "
 "of the Python interpreter have to worry about is the initialization, and "
@@ -1747,7 +1748,7 @@ msgstr ""
 "maioria das funcionalidades do interpretador só pode ser usada após a "
 "inicialização do interpretador."
 
-#: ../../c-api/intro.rst:941
+#: ../../c-api/intro.rst:944
 msgid ""
 "The basic initialization function is :c:func:`Py_Initialize`. This "
 "initializes the table of loaded modules, and creates the fundamental "
@@ -1759,7 +1760,7 @@ msgstr ""
 "`builtins`, :mod:`__main__` e :mod:`sys`. Ela também inicializa o caminho de "
 "pesquisa do módulo (``sys.path``)."
 
-#: ../../c-api/intro.rst:946
+#: ../../c-api/intro.rst:949
 msgid ""
 ":c:func:`Py_Initialize` does not set the \"script argument list\"  (``sys."
 "argv``). If this variable is needed by Python code that will be executed "
@@ -1772,7 +1773,7 @@ msgstr ""
 "c:member:`PyConfig.parse_argv`: consulte :ref:`Configuração da inicialização "
 "do Python <init-config>`."
 
-#: ../../c-api/intro.rst:951
+#: ../../c-api/intro.rst:954
 msgid ""
 "On most systems (in particular, on Unix and Windows, although the details "
 "are slightly different), :c:func:`Py_Initialize` calculates the module "
@@ -1793,7 +1794,7 @@ msgstr ""
 "chamado :file:`python` é encontrado no caminho de pesquisa do comando shell "
 "(a variável de ambiente :envvar:`PATH`)."
 
-#: ../../c-api/intro.rst:960
+#: ../../c-api/intro.rst:963
 msgid ""
 "For instance, if the Python executable is found in :file:`/usr/local/bin/"
 "python`, it will assume that the libraries are in :file:`/usr/local/lib/"
@@ -1812,7 +1813,7 @@ msgstr ""
 "inserir diretórios adicionais à frente do caminho padrão definindo :envvar:"
 "`PYTHONPATH`."
 
-#: ../../c-api/intro.rst:974
+#: ../../c-api/intro.rst:977
 msgid ""
 "The embedding application can steer the search by setting :c:member:"
 "`PyConfig.program_name` *before* calling :c:func:`Py_InitializeFromConfig`. "
@@ -1830,7 +1831,7 @@ msgstr ""
 "`Py_GetPath`, :c:func:`Py_GetPrefix`, :c:func:`Py_GetExecPrefix` e :c:func:"
 "`Py_GetProgramFullPath` (todos definidos em :file:`Modules/getpath.c`)."
 
-#: ../../c-api/intro.rst:985
+#: ../../c-api/intro.rst:988
 msgid ""
 "Sometimes, it is desirable to \"uninitialize\" Python.  For instance,  the "
 "application may want to start over (make another call to :c:func:"
@@ -1854,11 +1855,11 @@ msgstr ""
 "Python, por exemplo, a memória alocada por módulos de extensão atualmente "
 "não pode ser liberada."
 
-#: ../../c-api/intro.rst:999
+#: ../../c-api/intro.rst:1002
 msgid "Debugging Builds"
 msgstr "Depuração de compilações"
 
-#: ../../c-api/intro.rst:1001
+#: ../../c-api/intro.rst:1004
 msgid ""
 "Python can be built with several macros to enable extra checks of the "
 "interpreter and extension modules.  These checks tend to add a large amount "
@@ -1869,7 +1870,7 @@ msgstr ""
 "tendem a adicionar uma grande sobrecarga ao tempo de execução, por isso não "
 "estão ativadas por predefinição."
 
-#: ../../c-api/intro.rst:1005
+#: ../../c-api/intro.rst:1008
 msgid ""
 "A full list of the various types of debugging builds is in the file :file:"
 "`Misc/SpecialBuilds.txt` in the Python source distribution. Builds are "
@@ -1885,7 +1886,7 @@ msgstr ""
 "perfis de baixo nível do loop principal do interpretador. Apenas as "
 "compilações mais utilizadas serão descritas no restante desta secção."
 
-#: ../../c-api/intro.rst:1013
+#: ../../c-api/intro.rst:1016
 msgid ""
 "Compiling the interpreter with the :c:macro:`!Py_DEBUG` macro defined "
 "produces what is generally meant by :ref:`a debug build of Python <debug-"
@@ -1903,7 +1904,7 @@ msgstr ""
 "específica do Python. Quando :c:macro:`!Py_DEBUG` é ativada na compilação "
 "Unix, a otimização do compilador é desativada."
 
-#: ../../c-api/intro.rst:1021
+#: ../../c-api/intro.rst:1024
 msgid ""
 "In addition to the reference count debugging described below, extra checks "
 "are performed, see :ref:`Python Debug Build <debug-build>`."
@@ -1911,7 +1912,7 @@ msgstr ""
 "Além da depuração da contagem de referências descrita abaixo, são realizadas "
 "verificações adicionais, consulte :ref:`Python Debug Build <debug-build>`."
 
-#: ../../c-api/intro.rst:1024
+#: ../../c-api/intro.rst:1027
 msgid ""
 "Defining :c:macro:`Py_TRACE_REFS` enables reference tracing (see the :option:"
 "`configure --with-trace-refs option <--with-trace-refs>`). When defined, a "
@@ -1928,7 +1929,7 @@ msgstr ""
 "existentes são impressas. (No modo interativo, isso acontece após cada "
 "instrução executada pelo interpretador.)"
 
-#: ../../c-api/intro.rst:1031
+#: ../../c-api/intro.rst:1034
 msgid ""
 "Please refer to :file:`Misc/SpecialBuilds.txt` in the Python source "
 "distribution for more detailed information."
@@ -1936,11 +1937,11 @@ msgstr ""
 "Consulte o ficheiro :file:`Misc/SpecialBuilds.txt` na distribuição do código-"
 "fonte do Python para obter informações mais detalhadas."
 
-#: ../../c-api/intro.rst:1038
+#: ../../c-api/intro.rst:1041
 msgid "Recommended third party tools"
 msgstr "Ferramentas de terceiros recomendadas"
 
-#: ../../c-api/intro.rst:1040
+#: ../../c-api/intro.rst:1043
 msgid ""
 "The following third party tools offer both simpler and more sophisticated "
 "approaches to creating C, C++ and Rust extensions for Python:"
@@ -1948,39 +1949,39 @@ msgstr ""
 "As seguintes ferramentas de terceiros oferecem abordagens mais simples e "
 "sofisticadas para criar extensões C, C++ e Rust para Python:"
 
-#: ../../c-api/intro.rst:1043
+#: ../../c-api/intro.rst:1046
 msgid "`Cython <https://cython.org/>`_"
 msgstr "`Cython <https://cython.org/>`_"
 
-#: ../../c-api/intro.rst:1044
+#: ../../c-api/intro.rst:1047
 msgid "`cffi <https://cffi.readthedocs.io>`_"
 msgstr "`cffi <https://cffi.readthedocs.io>`_"
 
-#: ../../c-api/intro.rst:1045
+#: ../../c-api/intro.rst:1048
 msgid "`HPy <https://hpyproject.org/>`_"
 msgstr "`HPy <https://hpyproject.org/>`_"
 
-#: ../../c-api/intro.rst:1046
+#: ../../c-api/intro.rst:1049
 msgid "`nanobind <https://github.com/wjakob/nanobind>`_ (C++)"
 msgstr "`nanobind <https://github.com/wjakob/nanobind>`_ (C++)"
 
-#: ../../c-api/intro.rst:1047
+#: ../../c-api/intro.rst:1050
 msgid "`Numba <https://numba.pydata.org/>`_"
 msgstr "`Numba <https://numba.pydata.org/>`_"
 
-#: ../../c-api/intro.rst:1048
+#: ../../c-api/intro.rst:1051
 msgid "`pybind11 <https://pybind11.readthedocs.io/>`_ (C++)"
 msgstr "`pybind11 <https://pybind11.readthedocs.io/>`_ (C++)"
 
-#: ../../c-api/intro.rst:1049
+#: ../../c-api/intro.rst:1052
 msgid "`PyO3 <https://pyo3.rs/>`_ (Rust)"
 msgstr "`PyO3 <https://pyo3.rs/>`_ (Rust)"
 
-#: ../../c-api/intro.rst:1050
+#: ../../c-api/intro.rst:1053
 msgid "`SWIG <https://www.swig.org>`_"
 msgstr "`SWIG <https://www.swig.org>`_"
 
-#: ../../c-api/intro.rst:1052
+#: ../../c-api/intro.rst:1055
 msgid ""
 "Using tools such as these can help avoid writing code that is tightly bound "
 "to a particular version of CPython, avoid reference counting errors, and "
@@ -1999,7 +2000,7 @@ msgstr ""
 "compilação para outras implementações do Python a partir de um único "
 "conjunto de fontes."
 
-#: ../../c-api/intro.rst:1059
+#: ../../c-api/intro.rst:1062
 msgid ""
 "These projects are not supported by the same people who maintain Python, and "
 "issues need to be raised with the projects directly. Remember to check that "
@@ -2011,7 +2012,7 @@ msgstr ""
 "verificar se o projeto ainda é mantido e suportado, pois a lista acima pode "
 "ficar desatualizada."
 
-#: ../../c-api/intro.rst:1066
+#: ../../c-api/intro.rst:1069
 msgid ""
 "`Python Packaging User Guide: Binary Extensions <https://packaging.python."
 "org/guides/packaging-binary-extensions/>`_"
@@ -2019,7 +2020,7 @@ msgstr ""
 "`Guia do utilizador de empacotamento Python: Extensões binárias <https://"
 "packaging.python.org/guides/packaging-binary-extensions/>`_"
 
-#: ../../c-api/intro.rst:1067
+#: ../../c-api/intro.rst:1070
 msgid ""
 "The Python Packaging User Guide not only covers several available tools that "
 "simplify the creation of binary extensions, but also discusses the various "
@@ -2046,110 +2047,110 @@ msgstr "Py_INCREF (função C)"
 msgid "Py_DECREF (C function)"
 msgstr "Py_DECREF (função C)"
 
-#: ../../c-api/intro.rst:599
+#: ../../c-api/intro.rst:602
 msgid "PyList_SetItem (C function)"
 msgstr "PyList_SetItem (função C)"
 
-#: ../../c-api/intro.rst:599
+#: ../../c-api/intro.rst:602
 msgid "PyTuple_SetItem (C function)"
 msgstr "PyTuple_SetItem (função C)"
 
-#: ../../c-api/intro.rst:670
+#: ../../c-api/intro.rst:673
 msgid "set_all()"
 msgstr "set_all()"
 
-#: ../../c-api/intro.rst:689
+#: ../../c-api/intro.rst:692
 msgid "PyList_GetItem (C function)"
 msgstr "PyList_GetItem (função C)"
 
-#: ../../c-api/intro.rst:689
+#: ../../c-api/intro.rst:692
 msgid "PySequence_GetItem (C function)"
 msgstr "PySequence_GetItem (função C)"
 
-#: ../../c-api/intro.rst:719
+#: ../../c-api/intro.rst:722
 msgid "sum_list()"
 msgstr "sum_list()"
 
-#: ../../c-api/intro.rst:751 ../../c-api/intro.rst:843
+#: ../../c-api/intro.rst:754 ../../c-api/intro.rst:846
 msgid "sum_sequence()"
 msgstr "sum_sequence()"
 
-#: ../../c-api/intro.rst:786
+#: ../../c-api/intro.rst:789
 msgid "PyErr_Occurred (C function)"
 msgstr "PyErr_Occurred (função C)"
 
-#: ../../c-api/intro.rst:799
+#: ../../c-api/intro.rst:802
 msgid "PyErr_SetString (C function)"
 msgstr "PyErr_SetString (função C)"
 
-#: ../../c-api/intro.rst:799 ../../c-api/intro.rst:907
+#: ../../c-api/intro.rst:802 ../../c-api/intro.rst:910
 msgid "PyErr_Clear (C function)"
 msgstr "PyErr_Clear (função C)"
 
-#: ../../c-api/intro.rst:823
+#: ../../c-api/intro.rst:826
 msgid "exc_info (in module sys)"
 msgstr "exc_info (no módulo sys)"
 
-#: ../../c-api/intro.rst:858 ../../c-api/intro.rst:905
+#: ../../c-api/intro.rst:861 ../../c-api/intro.rst:908
 msgid "incr_item()"
 msgstr "incr_item()"
 
-#: ../../c-api/intro.rst:907
+#: ../../c-api/intro.rst:910
 msgid "PyErr_ExceptionMatches (C function)"
 msgstr "PyErr_ExceptionMatches (função C)"
 
-#: ../../c-api/intro.rst:907
+#: ../../c-api/intro.rst:910
 msgid "Py_XDECREF (C function)"
 msgstr "Py_XDECREF (função C)"
 
-#: ../../c-api/intro.rst:933
+#: ../../c-api/intro.rst:936
 msgid "Py_Initialize (C function)"
 msgstr "Py_Initialize (função C)"
 
-#: ../../c-api/intro.rst:933
+#: ../../c-api/intro.rst:936
 msgid "module"
 msgstr "módulo"
 
-#: ../../c-api/intro.rst:933
+#: ../../c-api/intro.rst:936
 msgid "builtins"
 msgstr "integrados"
 
-#: ../../c-api/intro.rst:933
+#: ../../c-api/intro.rst:936
 msgid "__main__"
 msgstr "__main__"
 
-#: ../../c-api/intro.rst:933
+#: ../../c-api/intro.rst:936
 msgid "sys"
 msgstr "sys"
 
-#: ../../c-api/intro.rst:933
+#: ../../c-api/intro.rst:936
 msgid "search"
 msgstr "pesquisa"
 
-#: ../../c-api/intro.rst:933
+#: ../../c-api/intro.rst:936
 msgid "path"
 msgstr "caminho"
 
-#: ../../c-api/intro.rst:933
+#: ../../c-api/intro.rst:936
 msgid "path (in module sys)"
 msgstr "path (no módulo sys)"
 
-#: ../../c-api/intro.rst:968
+#: ../../c-api/intro.rst:971
 msgid "Py_GetPath (C function)"
 msgstr "Py_GetPath (função C)"
 
-#: ../../c-api/intro.rst:968
+#: ../../c-api/intro.rst:971
 msgid "Py_GetPrefix (C function)"
 msgstr "Py_GetPrefix (função C)"
 
-#: ../../c-api/intro.rst:968
+#: ../../c-api/intro.rst:971
 msgid "Py_GetExecPrefix (C function)"
 msgstr "Py_GetExecPrefix (função C)"
 
-#: ../../c-api/intro.rst:968
+#: ../../c-api/intro.rst:971
 msgid "Py_GetProgramFullPath (C function)"
 msgstr "Py_GetProgramFullPath (função C)"
 
-#: ../../c-api/intro.rst:983
+#: ../../c-api/intro.rst:986
 msgid "Py_IsInitialized (C function)"
 msgstr "Py_IsInitialized (função C)"
