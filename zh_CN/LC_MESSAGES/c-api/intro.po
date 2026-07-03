@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-11 16:26+0000\n"
+"POT-Creation-Date: 2026-07-03 15:50+0000\n"
 "PO-Revision-Date: 2025-09-16 00:00+0000\n"
 "Last-Translator: Freesand Leo <yuqinju@163.com>, 2026\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/python-doc/"
@@ -1182,15 +1182,18 @@ msgstr ""
 msgid ""
 "Conversely, when a calling function passes in a reference to an  object, "
 "there are two possibilities: the function *steals* a  reference to the "
-"object, or it does not.  *Stealing a reference* means that when you pass a "
-"reference to a function, that function assumes that it now owns that "
-"reference, and you are not responsible for it any longer."
+"object, or it does not."
 msgstr ""
-"相反地，当调用方函数传入一个对象的引用时，存在两种可能：该函数 *窃取* 了一个"
-"对象的引用，或是没有窃取。*窃取引用* 意味着当你向一个函数传入引用时，该函数会"
-"假定它拥有该引用，而你将不再对它负有责任。"
 
-#: ../../c-api/intro.rst:748
+#: ../../c-api/intro.rst:742
+msgid ""
+"*Stealing a reference* means that when you pass a reference to a function, "
+"that function assumes that it now owns that reference. Since the new owner "
+"can use :c:func:`!Py_DECREF` at its discretion, you (the caller) must not "
+"use that reference after the call."
+msgstr ""
+
+#: ../../c-api/intro.rst:751
 msgid ""
 "Few functions steal references; the two notable exceptions are :c:func:"
 "`PyList_SetItem` and :c:func:`PyTuple_SetItem`, which  steal a reference to "
@@ -1207,7 +1210,7 @@ msgstr ""
 "的惯例；例如，创建元组 ``(1, 2, \"three\")`` 的代码看起来可以是这样的（暂时不"
 "要管错误处理；下面会显示更好的代码编写方式）::"
 
-#: ../../c-api/intro.rst:756
+#: ../../c-api/intro.rst:759
 msgid ""
 "PyObject *t;\n"
 "\n"
@@ -1223,7 +1226,7 @@ msgstr ""
 "PyTuple_SetItem(t, 1, PyLong_FromLong(2L));\n"
 "PyTuple_SetItem(t, 2, PyUnicode_FromString(\"three\"));"
 
-#: ../../c-api/intro.rst:763
+#: ../../c-api/intro.rst:766
 msgid ""
 "Here, :c:func:`PyLong_FromLong` returns a new reference which is immediately "
 "stolen by :c:func:`PyTuple_SetItem`.  When you want to keep using an object "
@@ -1234,7 +1237,7 @@ msgstr ""
 "`PyTuple_SetItem` 所窃取。 当你想要继续使用一个对象而对它的引用将被窃取时，请"
 "在调用窃取引用的函数之前使用 :c:func:`Py_INCREF` 来抓取另一个引用。"
 
-#: ../../c-api/intro.rst:768
+#: ../../c-api/intro.rst:771
 msgid ""
 "Incidentally, :c:func:`PyTuple_SetItem` is the *only* way to set tuple "
 "items; :c:func:`PySequence_SetItem` and :c:func:`PyObject_SetItem` refuse to "
@@ -1245,7 +1248,7 @@ msgstr ""
 "`PySequence_SetItem` 和 :c:func:`PyObject_SetItem` 会拒绝这样做因为元组是不可"
 "变数据类型。你应当只对你自己创建的元组使用 :c:func:`PyTuple_SetItem`。"
 
-#: ../../c-api/intro.rst:773
+#: ../../c-api/intro.rst:776
 msgid ""
 "Equivalent code for populating a list can be written using :c:func:"
 "`PyList_New` and :c:func:`PyList_SetItem`."
@@ -1253,7 +1256,7 @@ msgstr ""
 "等价于填充一个列表的代码可以使用 :c:func:`PyList_New` 和 :c:func:"
 "`PyList_SetItem` 来编写。"
 
-#: ../../c-api/intro.rst:776
+#: ../../c-api/intro.rst:779
 msgid ""
 "However, in practice, you will rarely use these ways of creating and "
 "populating a tuple or list.  There's a generic function, :c:func:"
@@ -1266,7 +1269,7 @@ msgstr ""
 "式字符串` 来指明。例如，上面的两个代码块可以用下面的代码来代替（还会负责错误"
 "检测）::"
 
-#: ../../c-api/intro.rst:782
+#: ../../c-api/intro.rst:785
 msgid ""
 "PyObject *tuple, *list;\n"
 "\n"
@@ -1278,7 +1281,7 @@ msgstr ""
 "tuple = Py_BuildValue(\"(iis)\", 1, 2, \"three\");\n"
 "list = Py_BuildValue(\"[iis]\", 1, 2, \"three\");"
 
-#: ../../c-api/intro.rst:787
+#: ../../c-api/intro.rst:790
 msgid ""
 "It is much more common to use :c:func:`PyObject_SetItem` and friends with "
 "items whose references you are only borrowing, like arguments that were "
@@ -1293,7 +1296,7 @@ msgstr ""
 "因为你不必为了把引用转走而获取一个新的引用（“让它被偷取”）。例如，这个函数将"
 "列表（实际上是任何可变序列）中的所有条目都设为给定的条目::"
 
-#: ../../c-api/intro.rst:794
+#: ../../c-api/intro.rst:797
 msgid ""
 "int\n"
 "set_all(PyObject *target, PyObject *item)\n"
@@ -1337,7 +1340,7 @@ msgstr ""
 "    return 0;\n"
 "}"
 
-#: ../../c-api/intro.rst:817
+#: ../../c-api/intro.rst:820
 msgid ""
 "The situation is slightly different for function return values.   While "
 "passing a reference to most functions does not change your  ownership "
@@ -1355,7 +1358,7 @@ msgstr ""
 "返回对象引用的通用函数，如 :c:func:`PyObject_GetItem` 和 :c:func:"
 "`PySequence_GetItem`，将总是返回一个新的引用（调用方将成为该引用的所有者）。"
 
-#: ../../c-api/intro.rst:826
+#: ../../c-api/intro.rst:829
 msgid ""
 "It is important to realize that whether you own a reference returned  by a "
 "function depends on which function you call only --- *the plumage* (the type "
@@ -1371,7 +1374,7 @@ msgstr ""
 "如果你使用 :c:func:`PySequence_GetItem` (它恰好接受完全相同的参数) 从同一个列"
 "表获取同样的条目，你就会拥有一个对所返回对象的引用。"
 
-#: ../../c-api/intro.rst:838
+#: ../../c-api/intro.rst:841
 msgid ""
 "Here is an example of how you could write a function that computes the sum "
 "of the items in a list of integers; once using  :c:func:`PyList_GetItem`, "
@@ -1380,7 +1383,7 @@ msgstr ""
 "下面是说明你要如何编写一个函数来计算一个整数列表中条目的示例；一个是使用 :c:"
 "func:`PyList_GetItem`，而另一个是使用 :c:func:`PySequence_GetItem` 函数::"
 
-#: ../../c-api/intro.rst:842
+#: ../../c-api/intro.rst:845
 msgid ""
 "long\n"
 "sum_list(PyObject *list)\n"
@@ -1426,7 +1429,7 @@ msgstr ""
 "    return total;\n"
 "}"
 
-#: ../../c-api/intro.rst:868
+#: ../../c-api/intro.rst:871
 msgid ""
 "long\n"
 "sum_sequence(PyObject *sequence)\n"
@@ -1484,11 +1487,11 @@ msgstr ""
 "    return total;\n"
 "}"
 
-#: ../../c-api/intro.rst:902
+#: ../../c-api/intro.rst:905
 msgid "Types"
 msgstr "类型"
 
-#: ../../c-api/intro.rst:904
+#: ../../c-api/intro.rst:907
 msgid ""
 "There are few other data types that play a significant role in  the Python/C "
 "API; most are simple C types such as :c:expr:`int`,  :c:expr:`long`, :c:expr:"
@@ -1503,7 +1506,7 @@ msgstr ""
 "构类型被用来描述静态表格以列出模块所导出的函数或新对象类型的数据属性，还有一"
 "个结构类型被用来描述复数的值。这些结构类型将与使用它们的函数放到一起讨论。"
 
-#: ../../c-api/intro.rst:914
+#: ../../c-api/intro.rst:917
 msgid ""
 "A signed integral type such that ``sizeof(Py_ssize_t) == sizeof(size_t)``. "
 "C99 doesn't define such a thing directly (size_t is an unsigned integral "
@@ -1514,11 +1517,11 @@ msgstr ""
 "直接定义这样的东西（size_t 是一个无符号整数类型）。请参阅 :pep:`353` 了解详"
 "情。``PY_SSIZE_T_MAX`` 是 :c:type:`Py_ssize_t` 类型的最大正数值。"
 
-#: ../../c-api/intro.rst:923
+#: ../../c-api/intro.rst:926
 msgid "Exceptions"
 msgstr "异常"
 
-#: ../../c-api/intro.rst:925
+#: ../../c-api/intro.rst:928
 msgid ""
 "The Python programmer only needs to deal with exceptions if specific  error "
 "handling is required; unhandled exceptions are automatically  propagated to "
@@ -1530,7 +1533,7 @@ msgstr ""
 "者，然后传递给调用者的调用者，依此类推，直到它们到达顶级解释器，在那里将它们"
 "报告给用户并伴随堆栈回溯。"
 
-#: ../../c-api/intro.rst:933
+#: ../../c-api/intro.rst:936
 msgid ""
 "For C programmers, however, error checking always has to be explicit.  All "
 "functions in the Python/C API can raise exceptions, unless an explicit claim "
@@ -1552,7 +1555,7 @@ msgstr ""
 "式的错误标示或是具有不明确的返回值，并需要用 :c:func:`PyErr_Occurred` 来进行"
 "显式的检测。这些例外总是会被明确地记入文档中。"
 
-#: ../../c-api/intro.rst:948
+#: ../../c-api/intro.rst:951
 msgid ""
 "Exception state is maintained in per-thread storage (this is  equivalent to "
 "using global storage in an unthreaded application).  A  thread can be in one "
@@ -1571,7 +1574,7 @@ msgstr ""
 "`PyErr_SetString` 是最常见的（尽管不是最通用的）设置异常状态的函数，而 :c:"
 "func:`PyErr_Clear` 可以清除异常状态。"
 
-#: ../../c-api/intro.rst:958
+#: ../../c-api/intro.rst:961
 msgid ""
 "The full exception state consists of three objects (all of which can  be "
 "``NULL``): the exception type, the corresponding exception  value, and the "
@@ -1590,7 +1593,7 @@ msgstr ""
 "或在它们之间传递时存在直至其到达 Python 字节码解释器的主循环，该循环会负责将"
 "其转移至 ``sys.exc_info()`` 等处。"
 
-#: ../../c-api/intro.rst:970
+#: ../../c-api/intro.rst:973
 msgid ""
 "Note that starting with Python 1.5, the preferred, thread-safe way to access "
 "the exception state from Python code is to call the function :func:`sys."
@@ -1610,7 +1613,7 @@ msgstr ""
 "无辜的函数覆盖了正在处理的异常所造成的常见错误；它还减少了回溯中由栈帧所引用"
 "的对象的往往不被需要的生命期延长。"
 
-#: ../../c-api/intro.rst:981
+#: ../../c-api/intro.rst:984
 msgid ""
 "As a general principle, a function that calls another function to  perform "
 "some task should check whether the called function raised an  exception, and "
@@ -1625,7 +1628,7 @@ msgstr ""
 "何对象引用，并返回一个错误标示，但它 *不应* 设置另一个异常 --- 那会覆盖刚引发"
 "的异常，并丢失有关错误确切原因的重要信息。"
 
-#: ../../c-api/intro.rst:990
+#: ../../c-api/intro.rst:993
 msgid ""
 "A simple example of detecting exceptions and passing them on is shown in "
 "the :c:func:`!sum_sequence` example above.  It so happens that this example "
@@ -1638,7 +1641,7 @@ msgstr ""
 "一些错误清理操作。首先，为了提醒你为什么喜欢 Python，我们展示了等价的 Python "
 "代码::"
 
-#: ../../c-api/intro.rst:996
+#: ../../c-api/intro.rst:999
 msgid ""
 "def incr_item(dict, key):\n"
 "    try:\n"
@@ -1654,11 +1657,11 @@ msgstr ""
 "        item = 0\n"
 "    dict[key] = item + 1"
 
-#: ../../c-api/intro.rst:1005
+#: ../../c-api/intro.rst:1008
 msgid "Here is the corresponding C code, in all its glory::"
 msgstr "对应的 C 代码如下："
 
-#: ../../c-api/intro.rst:1007
+#: ../../c-api/intro.rst:1010
 msgid ""
 "int\n"
 "incr_item(PyObject *dict, PyObject *key)\n"
@@ -1746,7 +1749,7 @@ msgstr ""
 "    return rv; /* -1 表示错误，0 表示成功 */\n"
 "}"
 
-#: ../../c-api/intro.rst:1057
+#: ../../c-api/intro.rst:1060
 msgid ""
 "This example represents an endorsed use of the ``goto`` statement  in C! It "
 "illustrates the use of :c:func:`PyErr_ExceptionMatches` and :c:func:"
@@ -1766,11 +1769,11 @@ msgstr ""
 "值也要被初始化为 ``-1`` (失败) 并且只有在最终执行的调用成功后才会被设置为成"
 "功。"
 
-#: ../../c-api/intro.rst:1071
+#: ../../c-api/intro.rst:1074
 msgid "Embedding Python"
 msgstr "嵌入 Python"
 
-#: ../../c-api/intro.rst:1073
+#: ../../c-api/intro.rst:1076
 msgid ""
 "The one important task that only embedders (as opposed to extension writers) "
 "of the Python interpreter have to worry about is the initialization, and "
@@ -1781,7 +1784,7 @@ msgstr ""
 "它的初始化，可能还有它的最终化。解释器的大多数功能只有在解释器被初始化之后才"
 "能被使用。"
 
-#: ../../c-api/intro.rst:1086
+#: ../../c-api/intro.rst:1089
 msgid ""
 "The basic initialization function is :c:func:`Py_Initialize`. This "
 "initializes the table of loaded modules, and creates the fundamental "
@@ -1792,7 +1795,7 @@ msgstr ""
 "建基本模块 :mod:`builtins`, :mod:`__main__` 和 :mod:`sys`。它还将初始化模块搜"
 "索路径 (``sys.path``)。"
 
-#: ../../c-api/intro.rst:1091
+#: ../../c-api/intro.rst:1094
 msgid ""
 ":c:func:`Py_Initialize` does not set the \"script argument list\"  (``sys."
 "argv``). If this variable is needed by Python code that will be executed "
@@ -1804,7 +1807,7 @@ msgstr ""
 "置 :c:member:`PyConfig.parse_argv`: 参见 :ref:`Python 初始化配置 <init-"
 "config>`。"
 
-#: ../../c-api/intro.rst:1096
+#: ../../c-api/intro.rst:1099
 msgid ""
 "On most systems (in particular, on Unix and Windows, although the details "
 "are slightly different), :c:func:`Py_Initialize` calculates the module "
@@ -1822,7 +1825,7 @@ msgstr ""
 "的名为 :file:`python` 的可执行文件所在父目录中查找名为 :file:`lib/python{X.Y}"
 "` 的目录。"
 
-#: ../../c-api/intro.rst:1105
+#: ../../c-api/intro.rst:1108
 msgid ""
 "For instance, if the Python executable is found in :file:`/usr/local/bin/"
 "python`, it will assume that the libraries are in :file:`/usr/local/lib/"
@@ -1838,7 +1841,7 @@ msgstr ""
 "被使用。）用户可以通过设置环境变量 :envvar:`PYTHONHOME`，或通过设置 :envvar:"
 "`PYTHONPATH` 在标准路径之前插入额外的目录来覆盖此行为。"
 
-#: ../../c-api/intro.rst:1113
+#: ../../c-api/intro.rst:1116
 msgid ""
 "The embedding application can steer the search by setting :c:member:"
 "`PyConfig.program_name` *before* calling :c:func:`Py_InitializeFromConfig`. "
@@ -1846,7 +1849,7 @@ msgid ""
 "is still inserted in front of the standard path."
 msgstr ""
 
-#: ../../c-api/intro.rst:1121
+#: ../../c-api/intro.rst:1124
 msgid ""
 "Sometimes, it is desirable to \"uninitialize\" Python.  For instance,  the "
 "application may want to start over (make another call to :c:func:"
@@ -1867,11 +1870,11 @@ msgstr ""
 "放所有由 Python 解释器所分配的内存，例如由扩展模块所分配的内存目前是不会被释"
 "放的。"
 
-#: ../../c-api/intro.rst:1135
+#: ../../c-api/intro.rst:1138
 msgid "Debugging Builds"
 msgstr "调试构建"
 
-#: ../../c-api/intro.rst:1137
+#: ../../c-api/intro.rst:1140
 msgid ""
 "Python can be built with several macros to enable extra checks of the "
 "interpreter and extension modules.  These checks tend to add a large amount "
@@ -1880,7 +1883,7 @@ msgstr ""
 "Python 可以附带某些宏来编译以启用对解释器和扩展模块的额外检查。这些检查会给运"
 "行时增加大量额外开销因此它们默认未被启用。"
 
-#: ../../c-api/intro.rst:1141
+#: ../../c-api/intro.rst:1144
 msgid ""
 "A full list of the various types of debugging builds is in the file :file:"
 "`Misc/SpecialBuilds.txt` in the Python source distribution. Builds are "
@@ -1893,21 +1896,21 @@ msgstr ""
 "txt`。可用的构建版有支持追踪引用计数，调试内存分配器，或是对主解释器循环的低"
 "层级性能分析等等。本节的剩余部分将只介绍最常用的几种构建版。"
 
-#: ../../c-api/intro.rst:1149
+#: ../../c-api/intro.rst:1152
 msgid ""
 "Compiling the interpreter with the :c:macro:`!Py_DEBUG` macro defined "
 "produces what is generally meant by :ref:`a debug build of Python <debug-"
 "build>`."
 msgstr ""
 
-#: ../../c-api/intro.rst:1152
+#: ../../c-api/intro.rst:1155
 msgid ""
 "On Unix, :c:macro:`!Py_DEBUG` can be enabled by adding :option:`--with-"
 "pydebug` to the :file:`./configure` command. This will also disable compiler "
 "optimization."
 msgstr ""
 
-#: ../../c-api/intro.rst:1155
+#: ../../c-api/intro.rst:1158
 msgid ""
 "On Windows, selecting a debug build (e.g., by passing the :option:`-d` "
 "option to :file:`PCbuild/build.bat`) automatically enables :c:macro:`!"
@@ -1916,13 +1919,13 @@ msgid ""
 "macro:`!Py_DEBUG`."
 msgstr ""
 
-#: ../../c-api/intro.rst:1160
+#: ../../c-api/intro.rst:1163
 msgid ""
 "In addition to the reference count debugging described below, extra checks "
 "are performed. See :ref:`Python Debug Build <debug-build>` for more details."
 msgstr ""
 
-#: ../../c-api/intro.rst:1163
+#: ../../c-api/intro.rst:1166
 msgid ""
 "Defining :c:macro:`Py_TRACE_REFS` enables reference tracing (see the :option:"
 "`configure --with-trace-refs option <--with-trace-refs>`). When defined, a "
@@ -1937,18 +1940,18 @@ msgstr ""
 "被追踪。在退出时，所有现存的引用将被打印出来。（在交互模式下这将在解释器运行"
 "每条语句之后发生）。"
 
-#: ../../c-api/intro.rst:1170
+#: ../../c-api/intro.rst:1173
 msgid ""
 "Please refer to :file:`Misc/SpecialBuilds.txt` in the Python source "
 "distribution for more detailed information."
 msgstr ""
 "有关更多详细信息，请参阅 Python 源代码中的 :file:`Misc/SpecialBuilds.txt`。"
 
-#: ../../c-api/intro.rst:1177
+#: ../../c-api/intro.rst:1180
 msgid "Recommended third party tools"
 msgstr "推荐的第三方工具"
 
-#: ../../c-api/intro.rst:1179
+#: ../../c-api/intro.rst:1182
 msgid ""
 "The following third party tools offer both simpler and more sophisticated "
 "approaches to creating C, C++ and Rust extensions for Python:"
@@ -1956,39 +1959,39 @@ msgstr ""
 "下列第三方工具提供了为 Python 创建 C, C++ 和 Rust 扩展的更简单或更高级的方"
 "式："
 
-#: ../../c-api/intro.rst:1182
+#: ../../c-api/intro.rst:1185
 msgid "`Cython <https://cython.org/>`_"
 msgstr "`Cython <https://cython.org/>`_"
 
-#: ../../c-api/intro.rst:1183
+#: ../../c-api/intro.rst:1186
 msgid "`cffi <https://cffi.readthedocs.io>`_"
 msgstr "`cffi <https://cffi.readthedocs.io>`_"
 
-#: ../../c-api/intro.rst:1184
+#: ../../c-api/intro.rst:1187
 msgid "`HPy <https://hpyproject.org/>`_"
 msgstr "`HPy <https://hpyproject.org/>`_"
 
-#: ../../c-api/intro.rst:1185
+#: ../../c-api/intro.rst:1188
 msgid "`nanobind <https://github.com/wjakob/nanobind>`_ (C++)"
 msgstr "`nanobind <https://github.com/wjakob/nanobind>`_ (C++)"
 
-#: ../../c-api/intro.rst:1186
+#: ../../c-api/intro.rst:1189
 msgid "`Numba <https://numba.pydata.org/>`_"
 msgstr "`Numba <https://numba.pydata.org/>`_"
 
-#: ../../c-api/intro.rst:1187
+#: ../../c-api/intro.rst:1190
 msgid "`pybind11 <https://pybind11.readthedocs.io/>`_ (C++)"
 msgstr "`pybind11 <https://pybind11.readthedocs.io/>`_ (C++)"
 
-#: ../../c-api/intro.rst:1188
+#: ../../c-api/intro.rst:1191
 msgid "`PyO3 <https://pyo3.rs/>`_ (Rust)"
 msgstr "`PyO3 <https://pyo3.rs/>`_ (Rust)"
 
-#: ../../c-api/intro.rst:1189
+#: ../../c-api/intro.rst:1192
 msgid "`SWIG <https://www.swig.org>`_"
 msgstr "`SWIG <https://www.swig.org>`_"
 
-#: ../../c-api/intro.rst:1191
+#: ../../c-api/intro.rst:1194
 msgid ""
 "Using tools such as these can help avoid writing code that is tightly bound "
 "to a particular version of CPython, avoid reference counting errors, and "
@@ -2003,7 +2006,7 @@ msgstr ""
 "Python 的新版本可通过更新此类工具来获得支持，并且你的代码通常都将自动使用更新"
 "且更高效的 API。有些工具还支持基于单个源代码集针对其他 Python 实现进行编译。"
 
-#: ../../c-api/intro.rst:1198
+#: ../../c-api/intro.rst:1201
 msgid ""
 "These projects are not supported by the same people who maintain Python, and "
 "issues need to be raised with the projects directly. Remember to check that "
@@ -2013,7 +2016,7 @@ msgstr ""
 "这些项目并不是由维护 Python 的同一批人提供支持的，程序相关的问题需要直接向项"
 "目提出。请记得检查项目是否仍然获得维护与支持，因为上面的列表可能会变得过时。"
 
-#: ../../c-api/intro.rst:1205
+#: ../../c-api/intro.rst:1208
 msgid ""
 "`Python Packaging User Guide: Binary Extensions <https://packaging.python."
 "org/guides/packaging-binary-extensions/>`_"
@@ -2021,7 +2024,7 @@ msgstr ""
 "`Python Packaging User Guide: Binary Extensions <https://packaging.python."
 "org/guides/packaging-binary-extensions/>`_"
 
-#: ../../c-api/intro.rst:1206
+#: ../../c-api/intro.rst:1209
 msgid ""
 "The Python Packaging User Guide not only covers several available tools that "
 "simplify the creation of binary extensions, but also discusses the various "
@@ -2046,94 +2049,94 @@ msgstr "Py_INCREF (C 函数)"
 msgid "Py_DECREF (C function)"
 msgstr "Py_DECREF (C 函数)"
 
-#: ../../c-api/intro.rst:744
+#: ../../c-api/intro.rst:747
 msgid "PyList_SetItem (C function)"
 msgstr "PyList_SetItem (C 函数)"
 
-#: ../../c-api/intro.rst:744
+#: ../../c-api/intro.rst:747
 msgid "PyTuple_SetItem (C function)"
 msgstr "PyTuple_SetItem (C 函数)"
 
-#: ../../c-api/intro.rst:815
+#: ../../c-api/intro.rst:818
 msgid "set_all()"
 msgstr "set_all()"
 
-#: ../../c-api/intro.rst:834
+#: ../../c-api/intro.rst:837
 msgid "PyList_GetItem (C function)"
 msgstr "PyList_GetItem (C 函数)"
 
-#: ../../c-api/intro.rst:834
+#: ../../c-api/intro.rst:837
 msgid "PySequence_GetItem (C function)"
 msgstr "PySequence_GetItem (C 函数)"
 
-#: ../../c-api/intro.rst:864
+#: ../../c-api/intro.rst:867
 msgid "sum_list()"
 msgstr "sum_list()"
 
-#: ../../c-api/intro.rst:896 ../../c-api/intro.rst:988
+#: ../../c-api/intro.rst:899 ../../c-api/intro.rst:991
 msgid "sum_sequence()"
 msgstr "sum_sequence()"
 
-#: ../../c-api/intro.rst:931
+#: ../../c-api/intro.rst:934
 msgid "PyErr_Occurred (C function)"
 msgstr "PyErr_Occurred (C 函数)"
 
-#: ../../c-api/intro.rst:944
+#: ../../c-api/intro.rst:947
 msgid "PyErr_SetString (C function)"
 msgstr "PyErr_SetString (C 函数)"
 
-#: ../../c-api/intro.rst:944 ../../c-api/intro.rst:1052
+#: ../../c-api/intro.rst:947 ../../c-api/intro.rst:1055
 msgid "PyErr_Clear (C function)"
 msgstr "PyErr_Clear (C 函数)"
 
-#: ../../c-api/intro.rst:968
+#: ../../c-api/intro.rst:971
 msgid "exc_info (in module sys)"
 msgstr "exc_info (在 sys 模块中)"
 
-#: ../../c-api/intro.rst:1003 ../../c-api/intro.rst:1050
+#: ../../c-api/intro.rst:1006 ../../c-api/intro.rst:1053
 msgid "incr_item()"
 msgstr "incr_item()"
 
-#: ../../c-api/intro.rst:1052
+#: ../../c-api/intro.rst:1055
 msgid "PyErr_ExceptionMatches (C function)"
 msgstr "PyErr_ExceptionMatches (C 函数)"
 
-#: ../../c-api/intro.rst:1052
+#: ../../c-api/intro.rst:1055
 msgid "Py_XDECREF (C function)"
 msgstr "Py_XDECREF (C 函数)"
 
-#: ../../c-api/intro.rst:1078
+#: ../../c-api/intro.rst:1081
 msgid "Py_Initialize (C function)"
 msgstr "Py_Initialize (C 函数)"
 
-#: ../../c-api/intro.rst:1078
+#: ../../c-api/intro.rst:1081
 msgid "module"
 msgstr "module"
 
-#: ../../c-api/intro.rst:1078
+#: ../../c-api/intro.rst:1081
 msgid "builtins"
 msgstr "builtins"
 
-#: ../../c-api/intro.rst:1078
+#: ../../c-api/intro.rst:1081
 msgid "__main__"
 msgstr "__main__"
 
-#: ../../c-api/intro.rst:1078
+#: ../../c-api/intro.rst:1081
 msgid "sys"
 msgstr "sys"
 
-#: ../../c-api/intro.rst:1078
+#: ../../c-api/intro.rst:1081
 msgid "search"
 msgstr "搜索"
 
-#: ../../c-api/intro.rst:1078
+#: ../../c-api/intro.rst:1081
 msgid "path"
 msgstr "path"
 
-#: ../../c-api/intro.rst:1078
+#: ../../c-api/intro.rst:1081
 msgid "path (in module sys)"
 msgstr "path (在 sys 模块中)"
 
-#: ../../c-api/intro.rst:1119
+#: ../../c-api/intro.rst:1122
 msgid "Py_IsInitialized (C function)"
 msgstr "Py_IsInitialized (C 函数)"
