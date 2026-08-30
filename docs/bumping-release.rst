@@ -67,7 +67,8 @@ exactly the same.
 9. Double-check resources in python-newest. New resources are named after their
    pot files (e.g. "3.11.pot"), and they should be renamed to match their slug (e.g. "whatsnew--3_11")
 
-10. Add the new project to the ``global`` [translation memory group](https://app.transifex.com/python-doc/settings/tm/) in Transifex organisation settings.
+10. Add the new project to the ``global`` [translation memory group](https://app.transifex.com/python-doc/settings/tm/)
+    in Transifex organisation settings.
 
 11. Announce that the maintenance is over, and that python-newest is now using
     new Python version
