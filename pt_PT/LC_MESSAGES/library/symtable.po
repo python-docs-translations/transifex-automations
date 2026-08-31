@@ -5,15 +5,16 @@
 #
 # Translators:
 # Rafael Fontenelle <rffontenelle@gmail.com>, 2026
+# André Moreira <afrmscb@gmail.com>, 2026
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-08 19:31+0000\n"
+"POT-Creation-Date: 2026-08-31 20:36+0000\n"
 "PO-Revision-Date: 2026-05-08 17:18+0000\n"
-"Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>, 2026\n"
+"Last-Translator: André Moreira <afrmscb@gmail.com>, 2026\n"
 "Language-Team: Portuguese (Portugal) (https://app.transifex.com/python-doc/"
 "teams/5390/pt_PT/)\n"
 "MIME-Version: 1.0\n"
@@ -38,6 +39,10 @@ msgid ""
 "every identifier in the code.  :mod:`!symtable` provides an interface to "
 "examine these tables."
 msgstr ""
+"As tabelas de símbolos são geradas pelo compilador a partir da AST "
+"imediatamente antes de o *bytecode* ser gerado. A tabela de símbolos é "
+"responsável por calcular o âmbito de cada identificador no código. O :mod:`!"
+"symtable` fornece uma *interface* para examinar estas tabelas."
 
 #: ../../library/symtable.rst:22
 msgid "Generating Symbol Tables"
@@ -303,6 +308,25 @@ msgid ""
 ">>> class_A.get_methods()\n"
 "('f', 'g', 'h')"
 msgstr ""
+">>> import symtable\n"
+">>> st = symtable.symtable('''\n"
+"... def outer(): pass\n"
+"...\n"
+"... class A:\n"
+"...    def f():\n"
+"...        def w(): pass\n"
+"...\n"
+"...    def g(self): pass\n"
+"...\n"
+"...    @classmethod\n"
+"...    async def h(cls): pass\n"
+"...\n"
+"...    global outer\n"
+"...    def outer(self): pass\n"
+"... ''', 'test', 'exec')\n"
+">>> class_A = st.get_children()[2]\n"
+">>> class_A.get_methods()\n"
+"('f', 'g', 'h')"
 
 #: ../../library/symtable.rst:228
 msgid ""
@@ -392,6 +416,12 @@ msgid ""
 "        def method(self):\n"
 "            return x"
 msgstr ""
+"def f():\n"
+"    x = 1  # function-scoped\n"
+"    class C:\n"
+"        x = 2  # class-scoped\n"
+"        def method(self):\n"
+"            return x"
 
 #: ../../library/symtable.rst:302
 msgid ""
@@ -441,6 +471,10 @@ msgid ""
 ">>> table.lookup(\"some_func\").is_namespace()\n"
 "True"
 msgstr ""
+">>> table = symtable.symtable(\"def some_func(): pass\", \"string\", "
+"\"exec\")\n"
+">>> table.lookup(\"some_func\").is_namespace()\n"
+"True"
 
 #: ../../library/symtable.rst:337
 msgid ""
@@ -473,10 +507,12 @@ msgid ""
 "The :mod:`!symtable` module can be executed as a script from the command "
 "line."
 msgstr ""
+"O módulo :mod:`!symtable` pode ser executado como um *script* a partir da "
+"linha de comandos."
 
 #: ../../library/symtable.rst:360
 msgid "python -m symtable [infile...]"
-msgstr ""
+msgstr "python -m symtable [infile...]"
 
 #: ../../library/symtable.rst:364
 msgid ""

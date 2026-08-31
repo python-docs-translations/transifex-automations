@@ -5,15 +5,16 @@
 #
 # Translators:
 # Rafael Fontenelle <rffontenelle@gmail.com>, 2026
+# André Moreira <afrmscb@gmail.com>, 2026
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-08 19:31+0000\n"
+"POT-Creation-Date: 2026-08-31 20:36+0000\n"
 "PO-Revision-Date: 2026-05-08 17:18+0000\n"
-"Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>, 2026\n"
+"Last-Translator: André Moreira <afrmscb@gmail.com>, 2026\n"
 "Language-Team: Portuguese (Portugal) (https://app.transifex.com/python-doc/"
 "teams/5390/pt_PT/)\n"
 "MIME-Version: 1.0\n"
@@ -33,7 +34,7 @@ msgstr "A utilizar Mock"
 
 #: ../../library/unittest.mock-examples.rst:30
 msgid "Mock patching methods"
-msgstr ""
+msgstr "Métodos de *patching* do Mock"
 
 #: ../../library/unittest.mock-examples.rst:32
 msgid "Common uses for :class:`Mock` objects include:"
@@ -95,7 +96,7 @@ msgstr ""
 
 #: ../../library/unittest.mock-examples.rst:76
 msgid "Mock for method calls on an object"
-msgstr ""
+msgstr "*Mock* para chamadas de métodos num objeto"
 
 #: ../../library/unittest.mock-examples.rst:78
 msgid ""
@@ -139,7 +140,7 @@ msgstr ""
 
 #: ../../library/unittest.mock-examples.rst:106
 msgid "Mocking classes"
-msgstr ""
+msgstr "Criar *mocks* de classes"
 
 #: ../../library/unittest.mock-examples.rst:108
 msgid ""
@@ -205,7 +206,7 @@ msgstr ""
 
 #: ../../library/unittest.mock-examples.rst:144
 msgid "Tracking all calls"
-msgstr ""
+msgstr "Rastrear todas as chamadas"
 
 #: ../../library/unittest.mock-examples.rst:146
 msgid ""
@@ -249,7 +250,7 @@ msgstr ""
 
 #: ../../library/unittest.mock-examples.rst:181
 msgid "Setting return values and attributes"
-msgstr ""
+msgstr "Definir valores de retorno e atributos"
 
 #: ../../library/unittest.mock-examples.rst:183
 msgid "Setting the return values on a mock object is trivially easy:"
@@ -370,7 +371,7 @@ msgstr ""
 
 #: ../../library/unittest.mock-examples.rst:322
 msgid "Creating a mock from an existing object"
-msgstr ""
+msgstr "Criar um *mock* a partir de um objeto existente"
 
 #: ../../library/unittest.mock-examples.rst:324
 msgid ""
@@ -502,7 +503,7 @@ msgstr ""
 
 #: ../../library/unittest.mock-examples.rst:389
 msgid "Patch decorators"
-msgstr ""
+msgstr "*Decorators* de *patch*"
 
 #: ../../library/unittest.mock-examples.rst:393
 msgid ""
@@ -704,7 +705,7 @@ msgstr ""
 
 #: ../../library/unittest.mock-examples.rst:523
 msgid "Further examples"
-msgstr ""
+msgstr "Outros exemplos"
 
 #: ../../library/unittest.mock-examples.rst:526
 msgid "Here are some more examples for some slightly more advanced scenarios."
@@ -909,6 +910,13 @@ msgid ""
 "...     assert mymodule.date.today() == dt.date(2010, 10, 8)\n"
 "...     assert mymodule.date(2009, 6, 8) == dt.date(2009, 6, 8)"
 msgstr ""
+">>> import datetime as dt\n"
+">>> with patch('mymodule.date') as mock_date:\n"
+"...     mock_date.today.return_value = dt.date(2010, 10, 8)\n"
+"...     mock_date.side_effect = lambda *args, **kw: dt.date(*args, **kw)\n"
+"...\n"
+"...     assert mymodule.date.today() == dt.date(2010, 10, 8)\n"
+"...     assert mymodule.date(2009, 6, 8) == dt.date(2009, 6, 8)"
 
 #: ../../library/unittest.mock-examples.rst:626
 msgid ""
@@ -952,7 +960,7 @@ msgstr ""
 
 #: ../../library/unittest.mock-examples.rst:643
 msgid "Mocking a generator method"
-msgstr ""
+msgstr "Fazer *mock* de um método gerador"
 
 #: ../../library/unittest.mock-examples.rst:645
 msgid ""
@@ -1090,6 +1098,18 @@ msgid ""
 "...\n"
 ">>> MyTest('test_foo').run()"
 msgstr ""
+">>> class MyTest(unittest.TestCase):\n"
+"...     def setUp(self):\n"
+"...         self.patcher = patch('mymodule.foo')\n"
+"...         self.mock_foo = self.patcher.start()\n"
+"...\n"
+"...     def test_foo(self):\n"
+"...         self.assertIs(mymodule.foo, self.mock_foo)\n"
+"...\n"
+"...     def tearDown(self):\n"
+"...         self.patcher.stop()\n"
+"...\n"
+">>> MyTest('test_foo').run()"
 
 #: ../../library/unittest.mock-examples.rst:726
 msgid ""
@@ -1129,7 +1149,7 @@ msgstr ""
 
 #: ../../library/unittest.mock-examples.rst:744
 msgid "Mocking unbound methods"
-msgstr ""
+msgstr "Fazer *mock* de métodos não vinculados"
 
 #: ../../library/unittest.mock-examples.rst:746
 msgid ""
@@ -1423,7 +1443,7 @@ msgstr ""
 
 #: ../../library/unittest.mock-examples.rst:942
 msgid "Nesting patches"
-msgstr ""
+msgstr "Aninhar *patches*"
 
 #: ../../library/unittest.mock-examples.rst:944
 msgid ""
@@ -1500,6 +1520,26 @@ msgid ""
 ">>> MyTest('test_foo').run()\n"
 ">>> assert mymodule.Foo is original"
 msgstr ""
+">>> class MyTest(unittest.TestCase):\n"
+"...\n"
+"...     def create_patch(self, name):\n"
+"...         patcher = patch(name)\n"
+"...         thing = patcher.start()\n"
+"...         self.addCleanup(patcher.stop)\n"
+"...         return thing\n"
+"...\n"
+"...     def test_foo(self):\n"
+"...         mock_foo = self.create_patch('mymodule.Foo')\n"
+"...         mock_bar = self.create_patch('mymodule.Bar')\n"
+"...         mock_spam = self.create_patch('mymodule.Spam')\n"
+"...\n"
+"...         assert mymodule.Foo is mock_foo\n"
+"...         assert mymodule.Bar is mock_bar\n"
+"...         assert mymodule.Spam is mock_spam\n"
+"...\n"
+">>> original = mymodule.Foo\n"
+">>> MyTest('test_foo').run()\n"
+">>> assert mymodule.Foo is original"
 
 #: ../../library/unittest.mock-examples.rst:990
 msgid "Mocking a dictionary with MagicMock"

@@ -5,15 +5,16 @@
 #
 # Translators:
 # Rafael Fontenelle <rffontenelle@gmail.com>, 2026
+# André Moreira <afrmscb@gmail.com>, 2026
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-01 17:14+0000\n"
+"POT-Creation-Date: 2026-08-31 20:36+0000\n"
 "PO-Revision-Date: 2026-05-08 17:16+0000\n"
-"Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>, 2026\n"
+"Last-Translator: André Moreira <afrmscb@gmail.com>, 2026\n"
 "Language-Team: Portuguese (Portugal) (https://app.transifex.com/python-doc/"
 "teams/5390/pt_PT/)\n"
 "MIME-Version: 1.0\n"
@@ -25,7 +26,7 @@ msgstr ""
 
 #: ../../c-api/threads.rst:6
 msgid "Thread states and the global interpreter lock"
-msgstr ""
+msgstr "Estados de threads e o lock global do interpretador"
 
 #: ../../c-api/threads.rst:13
 msgid ""
@@ -38,12 +39,24 @@ msgid ""
 "threads simultaneously increment the reference count of the same object, the "
 "reference count could end up being incremented only once instead of twice."
 msgstr ""
+"A menos que se trate de uma :term:`construção free-threaded <free-threaded "
+"build>` do :term:`CPython`, o interpretador Python geralmente não é *thread-"
+"safe*. Para suportar programas Python *multi-threaded*, existe um lock "
+"global, designado por :term:`lock global do interpretador <global "
+"interpreter lock>` ou :term:`GIL`, que deve ser detido por uma *thread* "
+"antes de aceder a objetos Python. Sem o *lock*, até as operações mais "
+"simples poderiam causar problemas num programa *multi-threaded*: por "
+"exemplo, quando duas *threads* incrementam em simultâneo a contagem de "
+"referências do mesmo objeto, a contagem de referências poderia acabar por "
+"ser incrementada apenas uma vez em vez de duas."
 
 #: ../../c-api/threads.rst:22
 msgid ""
 "As such, only a thread that holds the GIL may operate on Python objects or "
 "invoke Python's C API."
 msgstr ""
+"Como tal, apenas uma *thread* que detenha o GIL pode operar sobre objetos "
+"Python ou invocar a C API do Python."
 
 #: ../../c-api/threads.rst:27
 msgid ""
@@ -51,6 +64,11 @@ msgid ""
 "threads between bytecode instructions (see :func:`sys.setswitchinterval`). "
 "This is why locks are also necessary for thread-safety in pure-Python code."
 msgstr ""
+"De modo a emular concorrência, o interpretador tenta regularmente alternar "
+"entre *threads* no intervalo entre instruções de *bytecode* (consulte :func:"
+"`sys.setswitchinterval`). É por este motivo que os *locks* também são "
+"necessários para garantir a segurança de *threads* (*thread-safety*) em "
+"código Python puro."
 
 #: ../../c-api/threads.rst:31
 msgid ""
@@ -58,6 +76,10 @@ msgid ""
 "operations, such as reading or writing to a file. From the C API, this is "
 "done by :ref:`detaching the thread state <detaching-thread-state>`."
 msgstr ""
+"Adicionalmente, o *lock* global do interpretador é libertado durante "
+"operações de E/S (*I/O*) bloqueantes, tais como a leitura ou escrita num "
+"ficheiro. A partir da C API, isto é feito ao :ref:`desassociar o estado da "
+"thread <detaching-thread-state>`."
 
 #: ../../c-api/threads.rst:39
 msgid ""
@@ -67,6 +89,12 @@ msgid ""
 "thread state referenced by this pointer is considered to be :term:`attached "
 "<attached thread state>`."
 msgstr ""
+"O interpretador Python mantém alguma informação local à *thread* dentro de "
+"uma estrutura de dados chamada :c:type:`PyThreadState`, conhecida como um :"
+"term:`estado de thread <thread state>`. Cada *thread* possui um ponteiro "
+"local para um :c:type:`PyThreadState`; um estado de thread referenciado por "
+"este ponteiro é considerado como estando :term:`associado <attached thread "
+"state>`."
 
 #: ../../c-api/threads.rst:44
 msgid ""
@@ -78,6 +106,14 @@ msgid ""
 "the interpreter needs to keep track of which threads may access Python "
 "objects."
 msgstr ""
+"Uma *thread* apenas pode ter um :term:`estado de thread associado <attached "
+"thread state>` de cada vez. Um estado de thread associado é tipicamente "
+"análogo a deter o GIL, exceto em construções *free-threaded*. Em construções "
+"com o GIL ativo, a associação de um estado de thread irá bloquear até que o "
+"GIL possa ser adquirido. Contudo, mesmo em construções com o GIL desativado, "
+"continua a ser obrigatório ter um estado de thread associado, visto que o "
+"interpretador necessita de monitorizar quais as *threads* que podem aceder a "
+"objetos Python."
 
 #: ../../c-api/threads.rst:53
 msgid ""
@@ -85,6 +121,10 @@ msgid ""
 "GIL can be re-enabled or threads might be temporarily suspended (such as "
 "during a garbage collection)."
 msgstr ""
+"Mesmo numa construção *free-threaded*, a associação de um estado de thread "
+"pode bloquear, dado que o GIL pode ser reativado ou as *threads* podem ser "
+"suspensas temporariamente (como durante uma recolha de lixo — *garbage "
+"collection*)."
 
 #: ../../c-api/threads.rst:57
 msgid ""
@@ -95,6 +135,13 @@ msgid ""
 "thread, will the thread not have an attached thread state. If uncertain, "
 "check if :c:func:`PyThreadState_GetUnchecked` returns ``NULL``."
 msgstr ""
+"Geralmente, existirá sempre um estado de thread associado ao utilizar a C "
+"API do Python, inclusivamente durante a incorporação (*embedding*) e ao "
+"implementar métodos, pelo que é pouco comum necessitar de configurar um "
+"estado de thread por conta própria. Apenas em alguns casos específicos, tais "
+"como num bloco :c:macro:`Py_BEGIN_ALLOW_THREADS` ou numa *thread* recém-"
+"criada, é que a *thread* não terá um estado associado. Em caso de incerteza, "
+"verifique se :c:func:`PyThreadState_GetUnchecked` devolve ``NULL``."
 
 #: ../../c-api/threads.rst:64
 msgid ""
@@ -176,6 +223,9 @@ msgid ""
 "To detach it, :c:func:`PyEval_SaveThread` is called and the result is stored "
 "in a local variable."
 msgstr ""
+"O estado de thread associado pressupõe que o GIL está detido pelo "
+"interpretador. Para o desassociar, a função :c:func:`PyEval_SaveThread` é "
+"invocada e o resultado é armazenado numa variável local."
 
 #: ../../c-api/threads.rst:113
 msgid ""
@@ -185,6 +235,12 @@ msgid ""
 "state is reattached by calling :c:func:`PyEval_RestoreThread`, which will "
 "wait until the GIL can be acquired."
 msgstr ""
+"Ao desassociar o estado de thread, o GIL é libertado, o que permite a outras "
+"*threads* associarem-se ao interpretador e executarem enquanto a *thread* "
+"atual realiza operações de E/S (I/O) bloqueantes. Quando a operação de E/S "
+"termina, o estado de thread antigo é novamente associado através da "
+"invocação de :c:func:`PyEval_RestoreThread`, que aguardará até que o GIL "
+"possa ser adquirido."
 
 #: ../../c-api/threads.rst:120
 msgid ""
@@ -194,6 +250,12 @@ msgid ""
 "standard :mod:`zlib` and :mod:`hashlib` modules detach the :term:`thread "
 "state <attached thread state>` when compressing or hashing data."
 msgstr ""
+"Realizar operações de E/S (I/O) bloqueantes constitui o caso de utilização "
+"mais comum para desassociar o estado de thread, mas também é útil invocá-lo "
+"em torno de código nativo de longa execução que não necessite de aceder a "
+"objetos Python ou à C API do Python. Por exemplo, os módulos padrão :mod:"
+"`zlib` e :mod:`hashlib` desassociam o :term:`estado de thread <attached "
+"thread state>` ao comprimir ou gerar *hashes* de dados."
 
 #: ../../c-api/threads.rst:127
 msgid ""
@@ -204,6 +266,14 @@ msgid ""
 "currently suspends all threads for a short period of time while running the "
 "garbage collector."
 msgstr ""
+"Numa :term:`construção free-threaded <free-threaded build>`, o :term:`GIL` "
+"está geralmente fora de questão, mas **a desassociação do estado de thread "
+"continua a ser obrigatória**, porque o interpretador necessita "
+"periodicamente de bloquear todas as *threads* para obter uma vista "
+"consistente dos objetos Python sem o risco de condições de corrida (*race "
+"conditions*). Por exemplo, o CPython suspende atualmente todas as *threads* "
+"por um curto período de tempo enquanto executa a recolha de lixo (*garbage "
+"collector*)."
 
 #: ../../c-api/threads.rst:136
 msgid ""
@@ -211,10 +281,13 @@ msgid ""
 "interpreter finalization. See :ref:`cautions-regarding-runtime-finalization` "
 "for more details."
 msgstr ""
+"A desassociação do estado de thread pode levar a comportamentos inesperados "
+"durante a finalização do interpretador. Consulte :ref:`cautions-regarding-"
+"runtime-finalization` para obter mais detalhes."
 
 #: ../../c-api/threads.rst:142
 msgid "APIs"
-msgstr ""
+msgstr "APIs"
 
 #: ../../c-api/threads.rst:144
 msgid ""
@@ -229,6 +302,8 @@ msgid ""
 "These macros are still necessary on the :term:`free-threaded build` to "
 "prevent deadlocks."
 msgstr ""
+"Estas macros continuam a ser necessárias numa :term:`construção free-"
+"threaded <free-threaded build>` de modo a evitar *deadlocks*."
 
 #: ../../c-api/threads.rst:154
 msgid ""
@@ -284,6 +359,11 @@ msgid ""
 "party library with its own thread management), it doesn't hold an attached "
 "thread state."
 msgstr ""
+"Quando as *threads* são criadas recorrendo às APIs dedicadas do Python (como "
+"o módulo :mod:`threading`), é automaticamente associado um estado de thread "
+"às mesmas. Contudo, quando uma *thread* é instanciada a partir de código "
+"nativo (por exemplo, por uma biblioteca de terceiros com a sua própria "
+"gestão de *threads*), esta não detém um estado de thread associado."
 
 #: ../../c-api/threads.rst:190
 msgid ""
@@ -292,6 +372,11 @@ msgid ""
 "must first register these threads with the interpreter by creating a new "
 "thread state and attaching it."
 msgstr ""
+"Se necessitar de invocar código Python a partir destas *threads* "
+"(frequentemente isto fará parte de uma API de *callback* disponibilizada "
+"pela biblioteca de terceiros supracitada), deve primeiro registar estas "
+"*threads* junto do interpretador, criando um novo estado de thread e "
+"associando-o."
 
 #: ../../c-api/threads.rst:195
 msgid ""
@@ -472,6 +557,8 @@ msgid ""
 "These are the most commonly used types and functions when writing multi-"
 "threaded C extensions."
 msgstr ""
+"Estes são os tipos e funções mais comummente utilizados ao escrever "
+"extensões em C com suporte a múltiplas *threads*."
 
 #: ../../c-api/threads.rst:308
 msgid ""
@@ -618,7 +705,7 @@ msgstr ""
 
 #: ../../c-api/threads.rst:402
 msgid "GIL-state APIs"
-msgstr ""
+msgstr "APIs de estado do GIL"
 
 #: ../../c-api/threads.rst:404
 msgid ""
@@ -1043,7 +1130,7 @@ msgstr ""
 
 #: ../../c-api/threads.rst:670
 msgid "Asynchronous notifications"
-msgstr ""
+msgstr "Notificações assíncronas"
 
 #: ../../c-api/threads.rst:672
 msgid ""
@@ -1203,7 +1290,7 @@ msgstr ""
 
 #: ../../c-api/threads.rst:756
 msgid "Operating system thread APIs"
-msgstr ""
+msgstr "APIs de *threads* do sistema operativo"
 
 #: ../../c-api/threads.rst:760
 msgid "Sentinel value for an invalid thread ID."

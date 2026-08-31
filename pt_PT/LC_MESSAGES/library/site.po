@@ -5,15 +5,16 @@
 #
 # Translators:
 # Rafael Fontenelle <rffontenelle@gmail.com>, 2026
+# André Moreira <afrmscb@gmail.com>, 2026
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-13 15:42+0000\n"
+"POT-Creation-Date: 2026-08-31 20:36+0000\n"
 "PO-Revision-Date: 2026-05-08 17:18+0000\n"
-"Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>, 2026\n"
+"Last-Translator: André Moreira <afrmscb@gmail.com>, 2026\n"
 "Language-Team: Portuguese (Portugal) (https://app.transifex.com/python-doc/"
 "teams/5390/pt_PT/)\n"
 "MIME-Version: 1.0\n"
@@ -115,6 +116,12 @@ msgid ""
 "data:`sys.exec_prefix` no longer depend on the :mod:`!site` initialization, "
 "and are therefore unaffected by :option:`-S`."
 msgstr ""
+"O :mod:`!site` já não é responsável por atualizar o :data:`sys.prefix` e o :"
+"data:`sys.exec_prefix` em :ref:`sys-path-init-virtual-environments`. Isto é "
+"agora feito durante a :ref:`inicialização de caminhos <sys-path-init>`. Como "
+"resultado, sob :ref:`sys-path-init-virtual-environments`, o :data:`sys."
+"prefix` e o :data:`sys.exec_prefix` já não dependem da inicialização do :mod:"
+"`!site`, não sendo, portanto, afetados por :option:`-S`."
 
 #: ../../library/site.rst:63
 msgid ""
@@ -256,7 +263,7 @@ msgstr ""
 
 #: ../../library/site.rst:134
 msgid ":mod:`!sitecustomize`"
-msgstr ""
+msgstr ":mod:`!sitecustomize`"
 
 #: ../../library/site.rst:138
 msgid ""
@@ -271,10 +278,22 @@ msgid ""
 "`!sitecustomize` is ignored.  Any other exception causes a silent and "
 "perhaps mysterious failure of the process."
 msgstr ""
+"Após estas manipulações de caminhos, é feita uma tentativa de importar um "
+"módulo chamado :mod:`!sitecustomize`, que pode realizar personalizações "
+"arbitrárias específicas do ambiente. É normalmente criado por um "
+"administrador de sistemas no diretório *site-packages*. Se esta importação "
+"falhar com uma exceção :exc:`ImportError` ou uma subclasse desta, e o "
+"atributo :attr:`~ImportError.name` da exceção for igual a "
+"``'sitecustomize'``, esta é ignorada silenciosamente. Se o Python for "
+"iniciado sem fluxos de saída (*output streams*) disponíveis, como acontece "
+"com o :file:`pythonw.exe` em Windows (que é utilizado por omissão para "
+"iniciar o IDLE), qualquer tentativa de saída do :mod:`!sitecustomize` é "
+"ignorada. Qualquer outra exceção causa uma falha silenciosa e, porventura, "
+"misteriosa do processo."
 
 #: ../../library/site.rst:150
 msgid ":mod:`!usercustomize`"
-msgstr ""
+msgstr ":mod:`!usercustomize`"
 
 #: ../../library/site.rst:154
 msgid ""
@@ -287,6 +306,14 @@ msgid ""
 "`~ImportError.name` attribute equals ``'usercustomize'``, it is silently "
 "ignored."
 msgstr ""
+"Depois disso, é feita uma tentativa de importar um módulo chamado :mod:`!"
+"usercustomize`, que pode realizar personalizações arbitrárias específicas do "
+"utilizador, caso :data:`~site.ENABLE_USER_SITE` seja verdadeiro. Este "
+"ficheiro destina-se a ser criado no diretório *site-packages* do utilizador "
+"(ver abaixo), que faz parte do ``sys.path``, a menos que seja desativado "
+"por :option:`-s`. Se esta importação falhar com uma exceção :exc:"
+"`ImportError` ou uma subclasse desta, e o atributo :attr:`~ImportError.name` "
+"da exceção for igual a ``'usercustomize'``, esta é ignorada silenciosamente."
 
 #: ../../library/site.rst:162
 msgid ""
@@ -294,6 +321,10 @@ msgid ""
 "are empty, and the path manipulations are skipped; however the import of :"
 "mod:`sitecustomize` and :mod:`!usercustomize` is still attempted."
 msgstr ""
+"Note que, para alguns sistemas não Unix, o ``sys.prefix`` e o ``sys."
+"exec_prefix`` estão vazios e as manipulações de caminhos são ignoradas; no "
+"entanto, a importação de :mod:`sitecustomize` e :mod:`!usercustomize` "
+"continua a ser tentada."
 
 #: ../../library/site.rst:171
 msgid "Readline configuration"
@@ -310,6 +341,15 @@ msgid ""
 "`sitecustomize` or :mod:`usercustomize` module or your :envvar:"
 "`PYTHONSTARTUP` file."
 msgstr ""
+"Em sistemas que suportam o :mod:`readline`, este módulo também importará e "
+"configurará o módulo :mod:`rlcompleter`, se o Python for iniciado em :ref:"
+"`modo interativo <tut-interactive>` e sem a opção :option:`-S`. O "
+"comportamento por omissão é ativar a conclusão por tabulação (*tab "
+"completion*) e utilizar o :file:`~/.python_history` como o ficheiro para "
+"guardar o histórico. Para o desativar, elimine (ou sobreponha/faça "
+"*override* do) atributo :data:`sys.__interactivehook__` no seu módulo :mod:"
+"`sitecustomize` ou :mod:`usercustomize`, ou no seu ficheiro :envvar:"
+"`PYTHONSTARTUP`."
 
 #: ../../library/site.rst:182
 msgid "Activation of rlcompleter and history was made automatic."
@@ -408,16 +448,17 @@ msgstr "Devolve uma lista contendo todos os diretórios site-packages globais."
 
 #: ../../library/site.rst:248
 msgid ""
-"For each directory present in *prefixes* (or :data:`PREFIXES` if *prefixes* "
-"is ``None``), this function will find its site-packages subdirectory "
-"depending on the system environment, and will return a list of full paths."
+"For each directory given in *prefixes* (or :data:`PREFIXES` if *prefixes* is "
+"``None``), this function will compute its site-packages subdirectory "
+"depending on the system environment, and will return a list of full paths, "
+"which are not checked for existence."
 msgstr ""
 
-#: ../../library/site.rst:254
+#: ../../library/site.rst:255
 msgid "Added the optional *prefixes* parameter."
 msgstr ""
 
-#: ../../library/site.rst:260
+#: ../../library/site.rst:261
 msgid ""
 "Return the path of the user base directory, :data:`USER_BASE`.  If it is not "
 "initialized yet, this function will also set it, respecting :envvar:"
@@ -427,7 +468,7 @@ msgstr ""
 "ainda não estiver inicializado, esta função também o irá definir, "
 "respeitando a :envvar:`PYTHONUSERBASE`."
 
-#: ../../library/site.rst:269
+#: ../../library/site.rst:270
 msgid ""
 "Return the path of the user-specific site-packages directory, :data:"
 "`USER_SITE`.  If it is not initialized yet, this function will also set it, "
@@ -440,17 +481,19 @@ msgstr ""
 "específico do utilizador foi adicionado ao ``sys.path``, deve ser utilizado "
 "o :data:`ENABLE_USER_SITE`."
 
-#: ../../library/site.rst:281
+#: ../../library/site.rst:282
 msgid "Command-line interface"
 msgstr "Interface de linha de comandos"
 
-#: ../../library/site.rst:285
+#: ../../library/site.rst:286
 msgid ""
 "The :mod:`!site` module also provides a way to get the user directories from "
 "the command line:"
 msgstr ""
+"O módulo :mod:`!site` também fornece uma forma de obter os diretórios do "
+"utilizador a partir da linha de comandos:"
 
-#: ../../library/site.rst:288
+#: ../../library/site.rst:289
 msgid ""
 "$ python -m site --user-site\n"
 "/home/user/.local/lib/python3.11/site-packages"
@@ -458,7 +501,7 @@ msgstr ""
 "$ python -m site --user-site\n"
 "/home/user/.local/lib/python3.11/site-packages"
 
-#: ../../library/site.rst:293
+#: ../../library/site.rst:294
 msgid ""
 "If it is called without arguments, it will print the contents of :data:`sys."
 "path` on the standard output, followed by the value of :data:`USER_BASE` and "
@@ -470,15 +513,15 @@ msgstr ""
 "depois o mesmo para :data:`USER_SITE` e, finalmente, o valor de :data:"
 "`ENABLE_USER_SITE`."
 
-#: ../../library/site.rst:300
+#: ../../library/site.rst:301
 msgid "Print the path to the user base directory."
 msgstr "Imprime o caminho para o diretório base do utilizador."
 
-#: ../../library/site.rst:304
+#: ../../library/site.rst:305
 msgid "Print the path to the user site-packages directory."
 msgstr "Imprime o caminho para o diretório site-packages do utilizador."
 
-#: ../../library/site.rst:306
+#: ../../library/site.rst:307
 msgid ""
 "If both options are given, user base and user site will be printed (always "
 "in this order), separated by :data:`os.pathsep`."
@@ -487,7 +530,7 @@ msgstr ""
 "utilizador serão impressos (sempre por esta ordem), separados por :data:`os."
 "pathsep`."
 
-#: ../../library/site.rst:309
+#: ../../library/site.rst:310
 msgid ""
 "If any option is given, the script will exit with one of these values: ``0`` "
 "if the user site-packages directory is enabled, ``1`` if it was disabled by "
@@ -500,11 +543,11 @@ msgstr ""
 "segurança ou por um administrador, e um valor superior a 2 se ocorrer um "
 "erro."
 
-#: ../../library/site.rst:316
+#: ../../library/site.rst:317
 msgid ":pep:`370` -- Per user site-packages directory"
 msgstr ":pep:`370` — Diretório site-packages por utilizador"
 
-#: ../../library/site.rst:317
+#: ../../library/site.rst:318
 msgid ":ref:`sys-path-init` -- The initialization of :data:`sys.path`."
 msgstr ":ref:`sys-path-init` — A inicialização do :data:`sys.path`."
 
