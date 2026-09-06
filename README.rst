@@ -2,8 +2,8 @@
 transifex-automations
 =====================
 
-.. |ci| image:: https://github.com/python-docs-translations/transifex-automations/actions/workflows/ci.yml/badge.svg
-   :target: https://github.com/python-docs-translations/transifex-automations/actions/workflows/ci.yml
+.. |ci| image:: https://github.com/python-docs-translations/transifex-automations/actions/workflows/sync-translations.yml/badge.svg
+   :target: https://github.com/python-docs-translations/transifex-automations/actions/workflows/sync-translations.yml
 
 .. |lint| image:: https://github.com/python-docs-translations/transifex-automations/actions/workflows/lint.yml/badge.svg
    :target: https://github.com/python-docs-translations/transifex-automations/actions/workflows/lint.yml
