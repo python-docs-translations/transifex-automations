@@ -52,13 +52,13 @@ in one of the version projects to be populated to this project. This drastically
 reduces translation effort replicating one contribution to other strings that are
 exactly the same.
 
-6. Adjust the `CI workflow <https://github.com/python-docs-translations/transifex-automations/tree/main/.github/workflows>`_ with the new Python version:
+6. Adjust the `translation synchronization workflow <https://github.com/python-docs-translations/transifex-automations/tree/main/.github/workflows>`_ with the new Python version:
 
     #. Set ``PYTHON_NEWEST`` environment variable inside ``env`` to the new Python version
     #. Edit ``cpython_version`` inside ``strategy.matrix`` adding the new version to the beginning array
 
-7. Push source strings to python-newest by manually running the CI workflow:
-   Actions_ tab > CI > Run workflow button > "Branch: main" and confirm "Run workflow"
+7. Push source strings to python-newest by manually running the translation synchronization workflow:
+   Actions_ tab > Sync translations with Transifex > Run workflow button > "Branch: main" and confirm "Run workflow"
 
 .. _Actions: https://github.com/python-docs-translations/transifex-automations/actions
 
