@@ -1,6 +1,10 @@
 Python Docs Transifex Automations documentation
 ===============================================
 
+.. tip::
+
+    Python Docs Transifex projects is available at https://explore.transifex.com/python-doc/.
+
 For translators
 ---------------
 
