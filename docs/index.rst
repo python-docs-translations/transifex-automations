@@ -35,8 +35,9 @@ Machine translation
 ~~~~~~~~~~~~~~~~~~~
 
 Machine translation in the python-doc_ organization on Transifex uses the DeepL
-integration with a personal API key. Project admins can manage the integration
-in the `machine translation settings <https://app.transifex.com/python-doc/settings/machine-translations/>`_.
+integration with @m_aciek's personal API key (as of 2026-09-10; Discord user
+handle). Project admins can manage the integration in
+the `machine translation settings <https://app.transifex.com/python-doc/settings/machine-translations/>`_.
 
 .. _Python: https://www.python.org
 .. _python-doc: https://app.transifex.com/python-doc/
