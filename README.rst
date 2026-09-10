@@ -16,7 +16,7 @@ transifex-automations
 
 |ci| |lint| |docs| |size|
 
-Scripts and procedures for maintaining Python documentation translation infrastructure under `python-doc organization in Transifex`_.
+Scripts and procedures for maintaining Python documentation translation infrastructure under the `python-doc organization in Transifex`_.
 
 For information about translating on Transifex for both users and maintainers see the documentation_.
 
