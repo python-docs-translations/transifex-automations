@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-03 19:14+0000\n"
+"POT-Creation-Date: 2026-09-13 19:04+0000\n"
 "PO-Revision-Date: 2025-09-15 01:05+0000\n"
 "Last-Translator: python-doc bot, 2025\n"
 "Language-Team: Russian (https://app.transifex.com/python-doc/teams/5390/"
@@ -335,18 +335,55 @@ msgid ""
 "Because it's so flexible, :class:`XMLPullParser` can be inconvenient to use "
 "for simpler use-cases.  If you don't mind your application blocking on "
 "reading XML data but would still like to have incremental parsing "
-"capabilities, take a look at :func:`iterparse`.  It can be useful when "
-"you're reading a large XML document and don't want to hold it wholly in "
-"memory."
+"capabilities, take a look at :func:`iterparse`."
 msgstr ""
-"Из-за своей гибкости :class:`XMLPullParser` может быть неудобно использовать "
-"в более простых случаях. Если вы не возражаете против блокировки вашего "
-"приложения при чтении XML-данных, но все же хотели бы иметь возможности "
-"поэтапного анализа, взгляните на :func:`iterparse`. Это может быть полезно, "
-"когда вы читаете большой XML-документ и не хотите хранить его целиком в "
-"памяти."
 
-#: ../../library/xml.etree.elementtree.rst:168
+#: ../../library/xml.etree.elementtree.rst:167
+msgid ""
+"Note that both parsers build the tree incrementally: it is not freed "
+"incrementally, so every parsed element is kept until the whole document is "
+"read.  To keep the memory usage low, get rid of the data which is not needed "
+"any more."
+msgstr ""
+
+#: ../../library/xml.etree.elementtree.rst:172
+msgid ""
+"If the processed elements are large, it is enough to clear them. This works "
+"wherever they are in the tree, but the emptied elements are left in it::"
+msgstr ""
+
+#: ../../library/xml.etree.elementtree.rst:176
+msgid ""
+"for event, elem in ET.iterparse(source):\n"
+"    if elem.tag == 'record':\n"
+"        process(elem)\n"
+"        elem.clear()"
+msgstr ""
+
+#: ../../library/xml.etree.elementtree.rst:181
+msgid ""
+"If an element has a large number of children, remove the processed children "
+"from it::"
+msgstr ""
+
+#: ../../library/xml.etree.elementtree.rst:184
+msgid ""
+"for event, elem in ET.iterparse(source, events=('start', 'end')):\n"
+"    if event == 'start' and elem.tag == 'parent':\n"
+"        parent = elem\n"
+"    elif event == 'end' and elem.tag == 'child':\n"
+"        process(elem)\n"
+"        parent.remove(elem)"
+msgstr ""
+
+#: ../../library/xml.etree.elementtree.rst:191
+msgid ""
+"These examples are not universal, they only give an idea for two common "
+"cases. If you do not need a tree at all, parse with :class:`XMLParser` and a "
+"custom target instead; it is not built then, and nothing has to be removed."
+msgstr ""
+
+#: ../../library/xml.etree.elementtree.rst:197
 msgid ""
 "Where *immediate* feedback through events is wanted, calling method :meth:"
 "`XMLPullParser.flush` can help reduce delay; please make sure to study the "
@@ -356,11 +393,11 @@ msgstr ""
 "meth:`XMLPullParser.flush` может помочь уменьшить задержку; обязательно "
 "ознакомьтесь с соответствующими примечаниями по безопасности."
 
-#: ../../library/xml.etree.elementtree.rst:174
+#: ../../library/xml.etree.elementtree.rst:203
 msgid "Finding interesting elements"
 msgstr "Поиск интересных элементов"
 
-#: ../../library/xml.etree.elementtree.rst:176
+#: ../../library/xml.etree.elementtree.rst:205
 msgid ""
 ":class:`Element` has some useful methods that help iterate recursively over "
 "all the sub-tree below it (its children, their children, and so on).  For "
@@ -370,7 +407,7 @@ msgstr ""
 "рекурсивно перебирать все поддерево ниже него (его дочерние элементы, их "
 "дочерние элементы и т. д.). Например, :meth:`Element.iter`::"
 
-#: ../../library/xml.etree.elementtree.rst:180
+#: ../../library/xml.etree.elementtree.rst:209
 msgid ""
 ">>> for neighbor in root.iter('neighbor'):\n"
 "...     print(neighbor.attrib)\n"
@@ -390,7 +427,7 @@ msgstr ""
 "{'name': 'Costa Rica', 'direction': 'W'}\n"
 "{'name': 'Colombia', 'direction': 'E'}"
 
-#: ../../library/xml.etree.elementtree.rst:189
+#: ../../library/xml.etree.elementtree.rst:218
 msgid ""
 ":meth:`Element.findall` finds only elements with a tag which are direct "
 "children of the current element.  :meth:`Element.find` finds the *first* "
@@ -403,7 +440,7 @@ msgstr ""
 "получает доступ к текстовому содержимому элемента. :meth:`Element.get` "
 "получает доступ к атрибутам элемента::"
 
-#: ../../library/xml.etree.elementtree.rst:194
+#: ../../library/xml.etree.elementtree.rst:223
 msgid ""
 ">>> for country in root.findall('country'):\n"
 "...     rank = country.find('rank').text\n"
@@ -423,7 +460,7 @@ msgstr ""
 "Singapore 4\n"
 "Panama 68"
 
-#: ../../library/xml.etree.elementtree.rst:203
+#: ../../library/xml.etree.elementtree.rst:232
 msgid ""
 "More sophisticated specification of which elements to look for is possible "
 "by using :ref:`XPath <elementtree-xpath>`."
@@ -431,11 +468,11 @@ msgstr ""
 "Более сложная спецификация того, какие элементы искать, возможна с помощью :"
 "ref:`XPath <elementtree-xpath>`."
 
-#: ../../library/xml.etree.elementtree.rst:207
+#: ../../library/xml.etree.elementtree.rst:236
 msgid "Modifying an XML File"
 msgstr "Изменение XML-файла"
 
-#: ../../library/xml.etree.elementtree.rst:209
+#: ../../library/xml.etree.elementtree.rst:238
 msgid ""
 ":class:`ElementTree` provides a simple way to build XML documents and write "
 "them to files. The :meth:`ElementTree.write` method serves this purpose."
@@ -443,7 +480,7 @@ msgstr ""
 ":class:`ElementTree` предоставляет простой способ создания XML-документов и "
 "записи их в файлы. Этой цели служит метод :meth:`ElementTree.write`."
 
-#: ../../library/xml.etree.elementtree.rst:212
+#: ../../library/xml.etree.elementtree.rst:241
 msgid ""
 "Once created, an :class:`Element` object may be manipulated by directly "
 "changing its fields (such as :attr:`Element.text`), adding and modifying "
@@ -455,7 +492,7 @@ msgstr ""
 "атрибуты (метод :meth:`Element.set`), а также как добавление новых дочерних "
 "элементов (например, с помощью :meth:`Element.append`)."
 
-#: ../../library/xml.etree.elementtree.rst:217
+#: ../../library/xml.etree.elementtree.rst:246
 msgid ""
 "Let's say we want to add one to each country's rank, and add an ``updated`` "
 "attribute to the rank element::"
@@ -463,7 +500,7 @@ msgstr ""
 "Допустим, мы хотим добавить по одному к рейтингу каждой страны и добавить "
 "атрибут «обновлено» к элементу ранга:"
 
-#: ../../library/xml.etree.elementtree.rst:220
+#: ../../library/xml.etree.elementtree.rst:249
 msgid ""
 ">>> for rank in root.iter('rank'):\n"
 "...     new_rank = int(rank.text) + 1\n"
@@ -479,12 +516,12 @@ msgstr ""
 "...\n"
 ">>> tree.write('output.xml')"
 
-#: ../../library/xml.etree.elementtree.rst:227
-#: ../../library/xml.etree.elementtree.rst:271
+#: ../../library/xml.etree.elementtree.rst:256
+#: ../../library/xml.etree.elementtree.rst:300
 msgid "Our XML now looks like this:"
 msgstr "Наш XML теперь выглядит так:"
 
-#: ../../library/xml.etree.elementtree.rst:229
+#: ../../library/xml.etree.elementtree.rst:258
 msgid ""
 "<?xml version=\"1.0\"?>\n"
 "<data>\n"
@@ -534,7 +571,7 @@ msgstr ""
 "    </country>\n"
 "</data>"
 
-#: ../../library/xml.etree.elementtree.rst:255
+#: ../../library/xml.etree.elementtree.rst:284
 msgid ""
 "We can remove elements using :meth:`Element.remove`.  Let's say we want to "
 "remove all countries with a rank higher than 50::"
@@ -542,7 +579,7 @@ msgstr ""
 "Мы можем удалять элементы, используя :meth:`Element.remove`. Допустим, мы "
 "хотим удалить все страны с рейтингом выше 50::"
 
-#: ../../library/xml.etree.elementtree.rst:258
+#: ../../library/xml.etree.elementtree.rst:287
 msgid ""
 ">>> for country in root.findall('country'):\n"
 "...     # using root.findall() to avoid removal during traversal\n"
@@ -560,7 +597,7 @@ msgstr ""
 "...\n"
 ">>> tree.write('output.xml')"
 
-#: ../../library/xml.etree.elementtree.rst:266
+#: ../../library/xml.etree.elementtree.rst:295
 msgid ""
 "Note that concurrent modification while iterating can lead to problems, just "
 "like when iterating and modifying Python lists or dicts. Therefore, the "
@@ -572,7 +609,7 @@ msgstr ""
 "Python. Поэтому пример сначала собирает все совпадающие элементы с помощью "
 "root.findall() и только затем перебирает список совпадений."
 
-#: ../../library/xml.etree.elementtree.rst:273
+#: ../../library/xml.etree.elementtree.rst:302
 msgid ""
 "<?xml version=\"1.0\"?>\n"
 "<data>\n"
@@ -608,11 +645,11 @@ msgstr ""
 "    </country>\n"
 "</data>"
 
-#: ../../library/xml.etree.elementtree.rst:293
+#: ../../library/xml.etree.elementtree.rst:322
 msgid "Building XML documents"
 msgstr "Создание XML-документов"
 
-#: ../../library/xml.etree.elementtree.rst:295
+#: ../../library/xml.etree.elementtree.rst:324
 msgid ""
 "The :func:`SubElement` function also provides a convenient way to create new "
 "sub-elements for a given element::"
@@ -620,7 +657,7 @@ msgstr ""
 "Функция :func:`SubElement` также предоставляет удобный способ создания новых "
 "подэлементов для данного элемента:"
 
-#: ../../library/xml.etree.elementtree.rst:298
+#: ../../library/xml.etree.elementtree.rst:327
 msgid ""
 ">>> a = ET.Element('a')\n"
 ">>> b = ET.SubElement(a, 'b')\n"
@@ -636,11 +673,11 @@ msgstr ""
 ">>> ET.dump(a)\n"
 "<a><b /><c><d /></c></a>"
 
-#: ../../library/xml.etree.elementtree.rst:306
+#: ../../library/xml.etree.elementtree.rst:335
 msgid "Parsing XML with Namespaces"
 msgstr "Анализ XML с помощью пространств имен"
 
-#: ../../library/xml.etree.elementtree.rst:308
+#: ../../library/xml.etree.elementtree.rst:337
 msgid ""
 "If the XML input has `namespaces <https://en.wikipedia.org/wiki/"
 "XML_namespace>`__, tags and attributes with prefixes in the form ``prefix:"
@@ -656,7 +693,7 @@ msgstr ""
 "org/TR/xml-names/#defaulting>`__, этот полный URI добавляется ко всем тегам "
 "без префиксов."
 
-#: ../../library/xml.etree.elementtree.rst:316
+#: ../../library/xml.etree.elementtree.rst:345
 msgid ""
 "Here is an XML example that incorporates two namespaces, one with the prefix "
 "\"fictional\" and the other serving as the default namespace:"
@@ -664,7 +701,7 @@ msgstr ""
 "Вот пример XML, который включает в себя два пространства имен: одно с "
 "префиксом «вымышленный», а другое служит пространством имен по умолчанию:"
 
-#: ../../library/xml.etree.elementtree.rst:319
+#: ../../library/xml.etree.elementtree.rst:348
 msgid ""
 "<?xml version=\"1.0\"?>\n"
 "<actors xmlns:fictional=\"http://characters.example.com\"\n"
@@ -698,7 +735,7 @@ msgstr ""
 "    </actor>\n"
 "</actors>"
 
-#: ../../library/xml.etree.elementtree.rst:337
+#: ../../library/xml.etree.elementtree.rst:366
 msgid ""
 "One way to search and explore this XML example is to manually add the URI to "
 "every tag or attribute in the xpath of a :meth:`~Element.find` or :meth:"
@@ -708,7 +745,7 @@ msgstr ""
 "к каждому тегу или атрибуту в xpath :meth:`~Element.find` или :meth:"
 "`~Element.findall`::"
 
-#: ../../library/xml.etree.elementtree.rst:341
+#: ../../library/xml.etree.elementtree.rst:370
 msgid ""
 "root = fromstring(xml_text)\n"
 "for actor in root.findall('{http://people.example.com}actor'):\n"
@@ -724,7 +761,7 @@ msgstr ""
 "    for char in actor.findall('{http://characters.example.com}character'):\n"
 "        print(' |-->', char.text)"
 
-#: ../../library/xml.etree.elementtree.rst:348
+#: ../../library/xml.etree.elementtree.rst:377
 msgid ""
 "A better way to search the namespaced XML example is to create a dictionary "
 "with your own prefixes and use those in the search functions::"
@@ -732,7 +769,7 @@ msgstr ""
 "Лучший способ поиска в примере XML с пространством имен — создать словарь с "
 "собственными префиксами и использовать их в функциях поиска:"
 
-#: ../../library/xml.etree.elementtree.rst:351
+#: ../../library/xml.etree.elementtree.rst:380
 msgid ""
 "ns = {'real_person': 'http://people.example.com',\n"
 "      'role': 'http://characters.example.com'}\n"
@@ -752,11 +789,11 @@ msgstr ""
 "    for char in actor.findall('role:character', ns):\n"
 "        print(' |-->', char.text)"
 
-#: ../../library/xml.etree.elementtree.rst:360
+#: ../../library/xml.etree.elementtree.rst:389
 msgid "These two approaches both output::"
 msgstr "Эти два подхода оба выводят::"
 
-#: ../../library/xml.etree.elementtree.rst:362
+#: ../../library/xml.etree.elementtree.rst:391
 msgid ""
 "John Cleese\n"
 " |--> Lancelot\n"
@@ -774,11 +811,11 @@ msgstr ""
 " |--> Gunther\n"
 " |--> Commander Clement"
 
-#: ../../library/xml.etree.elementtree.rst:374
+#: ../../library/xml.etree.elementtree.rst:403
 msgid "XPath support"
 msgstr "Поддержка XPath"
 
-#: ../../library/xml.etree.elementtree.rst:376
+#: ../../library/xml.etree.elementtree.rst:405
 msgid ""
 "This module provides limited support for `XPath expressions <https://www.w3."
 "org/TR/xpath>`_ for locating elements in a tree.  The goal is to support a "
@@ -790,12 +827,12 @@ msgstr ""
 "поддержка небольшого подмножества сокращенного синтаксиса; полный механизм "
 "XPath выходит за рамки модуля."
 
-#: ../../library/xml.etree.elementtree.rst:382
-#: ../../library/xml.etree.elementtree.rst:780
+#: ../../library/xml.etree.elementtree.rst:411
+#: ../../library/xml.etree.elementtree.rst:813
 msgid "Example"
 msgstr "Пример"
 
-#: ../../library/xml.etree.elementtree.rst:384
+#: ../../library/xml.etree.elementtree.rst:413
 msgid ""
 "Here's an example that demonstrates some of the XPath capabilities of the "
 "module.  We'll be using the ``countrydata`` XML document from the :ref:"
@@ -805,7 +842,7 @@ msgstr ""
 "использовать XML-документ ``countrydata`` из раздела :ref:`Разбор XML "
 "<elementtree-parsing-xml>`::"
 
-#: ../../library/xml.etree.elementtree.rst:388
+#: ../../library/xml.etree.elementtree.rst:417
 msgid ""
 "import xml.etree.ElementTree as ET\n"
 "\n"
@@ -847,7 +884,7 @@ msgstr ""
 "# All 'neighbor' nodes that are the second child of their parent\n"
 "root.findall(\".//neighbor[2]\")"
 
-#: ../../library/xml.etree.elementtree.rst:408
+#: ../../library/xml.etree.elementtree.rst:437
 msgid ""
 "For XML with namespaces, use the usual qualified ``{namespace}tag`` "
 "notation::"
@@ -855,7 +892,7 @@ msgstr ""
 "Для XML с пространствами имен используйте обычную квалифицированную нотацию "
 "``{namespace}tag``::"
 
-#: ../../library/xml.etree.elementtree.rst:410
+#: ../../library/xml.etree.elementtree.rst:439
 msgid ""
 "# All dublin-core \"title\" tags in the document\n"
 "root.findall(\".//{http://purl.org/dc/elements/1.1/}title\")"
@@ -863,23 +900,23 @@ msgstr ""
 "# All dublin-core \"title\" tags in the document\n"
 "root.findall(\".//{http://purl.org/dc/elements/1.1/}title\")"
 
-#: ../../library/xml.etree.elementtree.rst:415
+#: ../../library/xml.etree.elementtree.rst:444
 msgid "Supported XPath syntax"
 msgstr "Поддерживаемый синтаксис XPath"
 
-#: ../../library/xml.etree.elementtree.rst:420
+#: ../../library/xml.etree.elementtree.rst:449
 msgid "Syntax"
 msgstr "Синтаксис"
 
-#: ../../library/xml.etree.elementtree.rst:420
+#: ../../library/xml.etree.elementtree.rst:449
 msgid "Meaning"
 msgstr "Значение"
 
-#: ../../library/xml.etree.elementtree.rst:422
+#: ../../library/xml.etree.elementtree.rst:451
 msgid "``tag``"
 msgstr "``tag``"
 
-#: ../../library/xml.etree.elementtree.rst:422
+#: ../../library/xml.etree.elementtree.rst:451
 msgid ""
 "Selects all child elements with the given tag. For example, ``spam`` selects "
 "all child elements named ``spam``, and ``spam/egg`` selects all "
@@ -896,15 +933,15 @@ msgstr ""
 "без него), а ``{}*`` выбирает только теги, которые не находятся в "
 "пространстве имен."
 
-#: ../../library/xml.etree.elementtree.rst:431
+#: ../../library/xml.etree.elementtree.rst:460
 msgid "Support for star-wildcards was added."
 msgstr "Была добавлена ​​поддержка звездочек."
 
-#: ../../library/xml.etree.elementtree.rst:434
+#: ../../library/xml.etree.elementtree.rst:463
 msgid "``*``"
 msgstr "``*``"
 
-#: ../../library/xml.etree.elementtree.rst:434
+#: ../../library/xml.etree.elementtree.rst:463
 msgid ""
 "Selects all child elements, including comments and processing instructions.  "
 "For example, ``*/egg`` selects all grandchildren named ``egg``."
@@ -912,11 +949,11 @@ msgstr ""
 "Выбирает все дочерние элементы, включая комментарии и инструкции по "
 "обработке. Например, ``*/egg`` выбирает всех внуков с именем ``egg``."
 
-#: ../../library/xml.etree.elementtree.rst:438
+#: ../../library/xml.etree.elementtree.rst:467
 msgid "``.``"
 msgstr "``.``"
 
-#: ../../library/xml.etree.elementtree.rst:438
+#: ../../library/xml.etree.elementtree.rst:467
 msgid ""
 "Selects the current node.  This is mostly useful at the beginning of the "
 "path, to indicate that it's a relative path."
@@ -924,11 +961,11 @@ msgstr ""
 "Выбирает текущий узел. Чаще всего это полезно в начале пути, чтобы указать, "
 "что это относительный путь."
 
-#: ../../library/xml.etree.elementtree.rst:442
+#: ../../library/xml.etree.elementtree.rst:471
 msgid "``//``"
 msgstr "``//``"
 
-#: ../../library/xml.etree.elementtree.rst:442
+#: ../../library/xml.etree.elementtree.rst:471
 msgid ""
 "Selects all subelements, on all levels beneath the current  element.  For "
 "example, ``.//egg`` selects all ``egg`` elements in the entire tree."
@@ -936,11 +973,11 @@ msgstr ""
 "Выбирает все подэлементы на всех уровнях ниже текущего элемента. Например, "
 "``.//egg`` выбирает все элементы ``egg`` во всем дереве."
 
-#: ../../library/xml.etree.elementtree.rst:446
+#: ../../library/xml.etree.elementtree.rst:475
 msgid "``..``"
 msgstr "``..``"
 
-#: ../../library/xml.etree.elementtree.rst:446
+#: ../../library/xml.etree.elementtree.rst:475
 msgid ""
 "Selects the parent element.  Returns ``None`` if the path attempts to reach "
 "the ancestors of the start element (the element ``find`` was called on)."
@@ -948,19 +985,19 @@ msgstr ""
 "Выбирает родительский элемент. Возвращает None, если путь пытается достичь "
 "предков начального элемента (был вызван элемент find)."
 
-#: ../../library/xml.etree.elementtree.rst:450
+#: ../../library/xml.etree.elementtree.rst:479
 msgid "``[@attrib]``"
 msgstr "``[@attrib]``"
 
-#: ../../library/xml.etree.elementtree.rst:450
+#: ../../library/xml.etree.elementtree.rst:479
 msgid "Selects all elements that have the given attribute."
 msgstr "Выбирает все элементы, имеющие данный атрибут."
 
-#: ../../library/xml.etree.elementtree.rst:452
+#: ../../library/xml.etree.elementtree.rst:481
 msgid "``[@attrib='value']``"
 msgstr "``[@attrib='value']``"
 
-#: ../../library/xml.etree.elementtree.rst:452
+#: ../../library/xml.etree.elementtree.rst:481
 msgid ""
 "Selects all elements for which the given attribute has the given value.  The "
 "value cannot contain quotes."
@@ -968,11 +1005,11 @@ msgstr ""
 "Выбирает все элементы, для которых данный атрибут имеет заданное значение. "
 "Значение не может содержать кавычки."
 
-#: ../../library/xml.etree.elementtree.rst:456
+#: ../../library/xml.etree.elementtree.rst:485
 msgid "``[@attrib!='value']``"
 msgstr "``[@attrib!='value']``"
 
-#: ../../library/xml.etree.elementtree.rst:456
+#: ../../library/xml.etree.elementtree.rst:485
 msgid ""
 "Selects all elements for which the given attribute does not have the given "
 "value. The value cannot contain quotes."
@@ -980,11 +1017,11 @@ msgstr ""
 "Выбирает все элементы, для которых данный атрибут не имеет заданного "
 "значения. Значение не может содержать кавычки."
 
-#: ../../library/xml.etree.elementtree.rst:462
+#: ../../library/xml.etree.elementtree.rst:491
 msgid "``[tag]``"
 msgstr "``[tag]``"
 
-#: ../../library/xml.etree.elementtree.rst:462
+#: ../../library/xml.etree.elementtree.rst:491
 msgid ""
 "Selects all elements that have a child named ``tag``.  Only immediate "
 "children are supported."
@@ -992,11 +1029,11 @@ msgstr ""
 "Выбирает все элементы, у которых есть дочерний элемент с именем «tag». "
 "Поддерживаются только непосредственные дети."
 
-#: ../../library/xml.etree.elementtree.rst:465
+#: ../../library/xml.etree.elementtree.rst:494
 msgid "``[.='text']``"
 msgstr "``[.='text']``"
 
-#: ../../library/xml.etree.elementtree.rst:465
+#: ../../library/xml.etree.elementtree.rst:494
 msgid ""
 "Selects all elements whose complete text content, including descendants, "
 "equals the given ``text``."
@@ -1004,11 +1041,11 @@ msgstr ""
 "Выбирает все элементы, полное текстовое содержимое которых, включая "
 "потомков, равно заданному ``тексту``."
 
-#: ../../library/xml.etree.elementtree.rst:470
+#: ../../library/xml.etree.elementtree.rst:499
 msgid "``[.!='text']``"
 msgstr "``[.!='text']``"
 
-#: ../../library/xml.etree.elementtree.rst:470
+#: ../../library/xml.etree.elementtree.rst:499
 msgid ""
 "Selects all elements whose complete text content, including descendants, "
 "does not equal the given ``text``."
@@ -1016,11 +1053,11 @@ msgstr ""
 "Выбирает все элементы, полное текстовое содержимое которых, включая "
 "потомков, не соответствует заданному ``тексту``."
 
-#: ../../library/xml.etree.elementtree.rst:476
+#: ../../library/xml.etree.elementtree.rst:505
 msgid "``[tag='text']``"
 msgstr "``[tag='text']``"
 
-#: ../../library/xml.etree.elementtree.rst:476
+#: ../../library/xml.etree.elementtree.rst:505
 msgid ""
 "Selects all elements that have a child named ``tag`` whose complete text "
 "content, including descendants, equals the given ``text``."
@@ -1029,11 +1066,11 @@ msgstr ""
 "полное текстовое содержимое которого, включая потомков, равно заданному "
 "«тексту»."
 
-#: ../../library/xml.etree.elementtree.rst:480
+#: ../../library/xml.etree.elementtree.rst:509
 msgid "``[tag!='text']``"
 msgstr "``[tag!='text']``"
 
-#: ../../library/xml.etree.elementtree.rst:480
+#: ../../library/xml.etree.elementtree.rst:509
 msgid ""
 "Selects all elements that have a child named ``tag`` whose complete text "
 "content, including descendants, does not equal the given ``text``."
@@ -1042,11 +1079,11 @@ msgstr ""
 "полное текстовое содержимое которого, включая потомков, не соответствует "
 "заданному «тексту»."
 
-#: ../../library/xml.etree.elementtree.rst:486
+#: ../../library/xml.etree.elementtree.rst:515
 msgid "``[position]``"
 msgstr "``[position]``"
 
-#: ../../library/xml.etree.elementtree.rst:486
+#: ../../library/xml.etree.elementtree.rst:515
 msgid ""
 "Selects all elements that are located at the given position.  The position "
 "can be either an integer (1 is the first position), the expression "
@@ -1058,7 +1095,7 @@ msgstr ""
 "позиции) или позицией относительно последней позиции (например, "
 "``last()-1``. )."
 
-#: ../../library/xml.etree.elementtree.rst:493
+#: ../../library/xml.etree.elementtree.rst:522
 msgid ""
 "Predicates (expressions within square brackets) must be preceded by a tag "
 "name, an asterisk, or another predicate.  ``position`` predicates must be "
@@ -1068,21 +1105,21 @@ msgstr ""
 "звездочка или другой предикат. Предикату ``position`` должно предшествовать "
 "имя тега."
 
-#: ../../library/xml.etree.elementtree.rst:498
-#: ../../library/xml.etree.elementtree.rst:832
+#: ../../library/xml.etree.elementtree.rst:527
+#: ../../library/xml.etree.elementtree.rst:865
 msgid "Reference"
 msgstr "Ссылка"
 
-#: ../../library/xml.etree.elementtree.rst:503
-#: ../../library/xml.etree.elementtree.rst:837
+#: ../../library/xml.etree.elementtree.rst:532
+#: ../../library/xml.etree.elementtree.rst:870
 msgid "Functions"
 msgstr "Функции"
 
-#: ../../library/xml.etree.elementtree.rst:507
+#: ../../library/xml.etree.elementtree.rst:536
 msgid "`C14N 2.0 <https://www.w3.org/TR/xml-c14n2/>`_ transformation function."
 msgstr "`C14N 2.0 <https://www.w3.org/TR/xml-c14n2/>`_ функция преобразования."
 
-#: ../../library/xml.etree.elementtree.rst:509
+#: ../../library/xml.etree.elementtree.rst:538
 msgid ""
 "Canonicalization is a way to normalise XML output in a way that allows byte-"
 "by-byte comparisons and digital signatures.  It reduces the freedom that XML "
@@ -1096,7 +1133,7 @@ msgstr ""
 "ограниченное представление XML. Основные ограничения касаются размещения "
 "объявлений пространств имен, порядка атрибутов и игнорируемых пробелов."
 
-#: ../../library/xml.etree.elementtree.rst:515
+#: ../../library/xml.etree.elementtree.rst:544
 msgid ""
 "This function takes an XML data string (*xml_data*) or a file path or file-"
 "like object (*from_file*) as input, converts it to the canonical form, and "
@@ -1111,11 +1148,11 @@ msgstr ""
 "если нет. Выходной файл получает текст, а не байты. Поэтому его следует "
 "открывать в текстовом режиме с кодировкой «utf-8»."
 
-#: ../../library/xml.etree.elementtree.rst:522
+#: ../../library/xml.etree.elementtree.rst:551
 msgid "Typical uses::"
 msgstr "Типичное применение::"
 
-#: ../../library/xml.etree.elementtree.rst:524
+#: ../../library/xml.etree.elementtree.rst:553
 msgid ""
 "xml_data = \"<root>...</root>\"\n"
 "print(canonicalize(xml_data))\n"
@@ -1135,29 +1172,29 @@ msgstr ""
 "with open(\"c14n_output.xml\", mode='w', encoding='utf-8') as out_file:\n"
 "    canonicalize(from_file=\"inputfile.xml\", out=out_file)"
 
-#: ../../library/xml.etree.elementtree.rst:533
+#: ../../library/xml.etree.elementtree.rst:562
 msgid "The configuration *options* are as follows:"
 msgstr "*options* конфигурации следующие:"
 
-#: ../../library/xml.etree.elementtree.rst:535
+#: ../../library/xml.etree.elementtree.rst:564
 msgid "*with_comments*: set to true to include comments (default: false)"
 msgstr ""
 "*with_comments*: установите значение true, чтобы включать комментарии (по "
 "умолчанию: false)"
 
-#: ../../library/xml.etree.elementtree.rst:536
+#: ../../library/xml.etree.elementtree.rst:565
 msgid ""
 "*strip_text*: set to true to strip whitespace before and after text content"
 msgstr ""
 "*strip_text*: установите значение true, чтобы удалить пробелы до и после "
 "текстового содержимого."
 
-#: ../../library/xml.etree.elementtree.rst:537
-#: ../../library/xml.etree.elementtree.rst:539
+#: ../../library/xml.etree.elementtree.rst:566
+#: ../../library/xml.etree.elementtree.rst:568
 msgid "(default: false)"
 msgstr "(по умолчанию: ложь)"
 
-#: ../../library/xml.etree.elementtree.rst:538
+#: ../../library/xml.etree.elementtree.rst:567
 msgid ""
 "*rewrite_prefixes*: set to true to replace namespace prefixes by "
 "\"n{number}\""
@@ -1165,34 +1202,34 @@ msgstr ""
 "*rewrite_prefixes*: установите значение true, чтобы заменить префиксы "
 "пространства имен на «n{number}»."
 
-#: ../../library/xml.etree.elementtree.rst:540
+#: ../../library/xml.etree.elementtree.rst:569
 msgid "*qname_aware_tags*: a set of qname aware tag names in which prefixes"
 msgstr ""
 "*qname_aware_tags*: набор имен тегов, поддерживающих qname, в которых "
 "префиксы"
 
-#: ../../library/xml.etree.elementtree.rst:541
-#: ../../library/xml.etree.elementtree.rst:543
+#: ../../library/xml.etree.elementtree.rst:570
+#: ../../library/xml.etree.elementtree.rst:572
 msgid "should be replaced in text content (default: empty)"
 msgstr "следует заменить в текстовом содержимом (по умолчанию: пусто)"
 
-#: ../../library/xml.etree.elementtree.rst:542
+#: ../../library/xml.etree.elementtree.rst:571
 msgid ""
 "*qname_aware_attrs*: a set of qname aware attribute names in which prefixes"
 msgstr ""
 "*qname_aware_attrs*: набор имен атрибутов, учитывающих qname, в которых "
 "префиксы"
 
-#: ../../library/xml.etree.elementtree.rst:544
+#: ../../library/xml.etree.elementtree.rst:573
 msgid "*exclude_attrs*: a set of attribute names that should not be serialised"
 msgstr ""
 "*exclude_attrs*: набор имен атрибутов, которые не следует сериализовать."
 
-#: ../../library/xml.etree.elementtree.rst:545
+#: ../../library/xml.etree.elementtree.rst:574
 msgid "*exclude_tags*: a set of tag names that should not be serialised"
 msgstr "*exclude_tags*: набор имен тегов, которые не следует сериализовать."
 
-#: ../../library/xml.etree.elementtree.rst:547
+#: ../../library/xml.etree.elementtree.rst:576
 msgid ""
 "In the option list above, \"a set\" refers to any collection or iterable of "
 "strings, no ordering is expected."
@@ -1200,7 +1237,7 @@ msgstr ""
 "В приведенном выше списке параметров «набор» относится к любой коллекции или "
 "итерации строк, упорядочение не предполагается."
 
-#: ../../library/xml.etree.elementtree.rst:555
+#: ../../library/xml.etree.elementtree.rst:584
 msgid ""
 "Comment element factory.  This factory function creates a special element "
 "that will be serialized as an XML comment by the standard serializer. *text* "
@@ -1208,7 +1245,7 @@ msgid ""
 "representing a comment."
 msgstr ""
 
-#: ../../library/xml.etree.elementtree.rst:560
+#: ../../library/xml.etree.elementtree.rst:589
 msgid ""
 "Note that :class:`XMLParser` skips over comments in the input instead of "
 "creating comment objects for them. An :class:`ElementTree` will only contain "
@@ -1220,7 +1257,7 @@ msgstr ""
 "`ElementTree` будет содержать узлы комментариев только в том случае, если "
 "они были вставлены в дерево с помощью одного из методов :class:`Element`."
 
-#: ../../library/xml.etree.elementtree.rst:567
+#: ../../library/xml.etree.elementtree.rst:596
 msgid ""
 "Writes an element tree or element structure to sys.stdout.  This function "
 "should be used for debugging only."
@@ -1228,7 +1265,7 @@ msgstr ""
 "Записывает дерево элементов или структуру элементов в sys.stdout. Эту "
 "функцию следует использовать только для отладки."
 
-#: ../../library/xml.etree.elementtree.rst:570
+#: ../../library/xml.etree.elementtree.rst:599
 msgid ""
 "The exact output format is implementation dependent.  In this version, it's "
 "written as an ordinary XML file."
@@ -1236,11 +1273,11 @@ msgstr ""
 "Точный формат вывода зависит от реализации. В этой версии он записан как "
 "обычный XML-файл."
 
-#: ../../library/xml.etree.elementtree.rst:573
+#: ../../library/xml.etree.elementtree.rst:602
 msgid "*elem* is an element tree or an individual element."
 msgstr "*elem* — дерево элементов или отдельный элемент."
 
-#: ../../library/xml.etree.elementtree.rst:575
+#: ../../library/xml.etree.elementtree.rst:604
 msgid ""
 "The :func:`dump` function now preserves the attribute order specified by the "
 "user."
@@ -1248,7 +1285,7 @@ msgstr ""
 "Функция :func:`dump` теперь сохраняет порядок атрибутов, указанный "
 "пользователем."
 
-#: ../../library/xml.etree.elementtree.rst:582
+#: ../../library/xml.etree.elementtree.rst:611
 msgid ""
 "Parses an XML section from a string constant.  Same as :func:`XML`.  *text* "
 "is a string containing XML data.  *parser* is an optional parser instance. "
@@ -1260,7 +1297,7 @@ msgstr ""
 "экземпляр синтаксического анализатора. Если не указано, используется "
 "стандартный парсер :class:`XMLParser`. Возвращает экземпляр :class:`Element`."
 
-#: ../../library/xml.etree.elementtree.rst:590
+#: ../../library/xml.etree.elementtree.rst:619
 msgid ""
 "Parses an XML document from a sequence of string fragments.  *sequence* is a "
 "list or other sequence containing XML data fragments.  *parser* is an "
@@ -1273,7 +1310,7 @@ msgstr ""
 "анализатора. Если не указано, используется стандартный парсер :class:"
 "`XMLParser`. Возвращает экземпляр :class:`Element`."
 
-#: ../../library/xml.etree.elementtree.rst:600
+#: ../../library/xml.etree.elementtree.rst:629
 msgid ""
 "Appends whitespace to the subtree to indent the tree visually. This can be "
 "used to generate pretty-printed XML output. *tree* can be an Element or "
@@ -1289,7 +1326,7 @@ msgstr ""
 "частичных поддеревьев внутри уже имеющегося дерева передайте начальный "
 "уровень отступа как *level*."
 
-#: ../../library/xml.etree.elementtree.rst:612
+#: ../../library/xml.etree.elementtree.rst:641
 msgid ""
 "Check if an object appears to be a valid element object.  *element* is an "
 "element instance.  Return ``True`` if this is an element object."
@@ -1297,7 +1334,7 @@ msgstr ""
 "Проверьте, является ли объект допустимым объектом-элементом. *element* — "
 "экземпляр элемента. Верните ``True``, если это объект-элемент."
 
-#: ../../library/xml.etree.elementtree.rst:618
+#: ../../library/xml.etree.elementtree.rst:647
 msgid ""
 "Parses an XML section into an element tree incrementally, and reports what's "
 "going on to the user.  *source* is a filename or :term:`file object` "
@@ -1315,7 +1352,7 @@ msgid ""
 "internal file object if *source* is a filename."
 msgstr ""
 
-#: ../../library/xml.etree.elementtree.rst:635
+#: ../../library/xml.etree.elementtree.rst:664
 msgid ""
 "Note that while :func:`iterparse` builds the tree incrementally, it issues "
 "blocking reads on *source* (or the file it names).  As such, it's unsuitable "
@@ -1327,7 +1364,14 @@ msgstr ""
 "он не подходит для приложений, в которых невозможно выполнить блокирующее "
 "чтение. Для полного неблокирующего анализа см. :class:`XMLPullParser`."
 
-#: ../../library/xml.etree.elementtree.rst:642
+#: ../../library/xml.etree.elementtree.rst:669
+msgid ""
+"The tree is only built incrementally, it is not freed incrementally: every "
+"parsed element is kept until the whole document is read. See :ref:"
+"`elementtree-pull-parsing` for how to keep the memory usage low."
+msgstr ""
+
+#: ../../library/xml.etree.elementtree.rst:675
 msgid ""
 ":func:`iterparse` only guarantees that it has seen the \">\" character of a "
 "starting tag when it emits a \"start\" event, so the attributes are defined, "
@@ -1341,27 +1385,27 @@ msgstr ""
 "определено. . То же самое относится и к дочерним элементам; они могут "
 "присутствовать, а могут и не присутствовать."
 
-#: ../../library/xml.etree.elementtree.rst:648
-#: ../../library/xml.etree.elementtree.rst:1529
+#: ../../library/xml.etree.elementtree.rst:681
+#: ../../library/xml.etree.elementtree.rst:1562
 msgid "If you need a fully populated element, look for \"end\" events instead."
 msgstr ""
 "Если вам нужен полностью заполненный элемент, вместо этого ищите «конечные» "
 "события."
 
-#: ../../library/xml.etree.elementtree.rst:650
+#: ../../library/xml.etree.elementtree.rst:683
 msgid "The *parser* argument."
 msgstr "Аргумент *parser*."
 
-#: ../../library/xml.etree.elementtree.rst:653
-#: ../../library/xml.etree.elementtree.rst:1533
+#: ../../library/xml.etree.elementtree.rst:686
+#: ../../library/xml.etree.elementtree.rst:1566
 msgid "The ``comment`` and ``pi`` events were added."
 msgstr "Были добавлены события ``comment`` и ``pi``."
 
-#: ../../library/xml.etree.elementtree.rst:656
+#: ../../library/xml.etree.elementtree.rst:689
 msgid "Added the :meth:`!close` method."
 msgstr "Добавлен метод :meth:`!close`."
 
-#: ../../library/xml.etree.elementtree.rst:662
+#: ../../library/xml.etree.elementtree.rst:695
 msgid ""
 "Parses an XML section into an element tree.  *source* is a filename or file "
 "object containing XML data.  *parser* is an optional parser instance.  If "
@@ -1373,7 +1417,7 @@ msgstr ""
 "синтаксического анализатора. Если не указано, используется стандартный "
 "парсер :class:`XMLParser`. Возвращает экземпляр :class:`ElementTree`."
 
-#: ../../library/xml.etree.elementtree.rst:670
+#: ../../library/xml.etree.elementtree.rst:703
 msgid ""
 "PI element factory.  This factory function creates a special element that "
 "will be serialized as an XML processing instruction.  *target* is a string "
@@ -1385,7 +1429,7 @@ msgstr ""
 "содержащая цель PI. *текст* — это строка, содержащая содержимое PI, если оно "
 "указано. Возвращает экземпляр элемента, представляющий инструкцию обработки."
 
-#: ../../library/xml.etree.elementtree.rst:675
+#: ../../library/xml.etree.elementtree.rst:708
 msgid ""
 "Note that :class:`XMLParser` skips over processing instructions in the input "
 "instead of creating PI objects for them. An :class:`ElementTree` will only "
@@ -1397,7 +1441,7 @@ msgstr ""
 "будет содержать узлы инструкций обработки только в том случае, если они были "
 "вставлены в дерево с помощью одного из :class:`Element` методов."
 
-#: ../../library/xml.etree.elementtree.rst:683
+#: ../../library/xml.etree.elementtree.rst:716
 msgid ""
 "Registers a namespace prefix.  The registry is global, and any existing "
 "mapping for either the given prefix or the namespace URI will be removed. "
@@ -1411,7 +1455,7 @@ msgstr ""
 "пространство имен uri. Теги и атрибуты в этом пространстве имен будут "
 "сериализованы с заданным префиксом, если это вообще возможно."
 
-#: ../../library/xml.etree.elementtree.rst:694
+#: ../../library/xml.etree.elementtree.rst:727
 msgid ""
 "Subelement factory.  This function creates an element instance, and appends "
 "it to an existing element."
@@ -1419,7 +1463,7 @@ msgstr ""
 "Завод субэлементов. Эта функция создает экземпляр элемента и добавляет его к "
 "существующему элементу."
 
-#: ../../library/xml.etree.elementtree.rst:697
+#: ../../library/xml.etree.elementtree.rst:730
 msgid ""
 "*parent* is the parent element.  *tag* is the subelement name.  *attrib* is "
 "an optional dictionary, containing element attributes.  *extra* contains "
@@ -1427,7 +1471,7 @@ msgid ""
 "instance."
 msgstr ""
 
-#: ../../library/xml.etree.elementtree.rst:707
+#: ../../library/xml.etree.elementtree.rst:740
 msgid ""
 "Generates a string representation of an XML element, including all "
 "subelements.  *element* is an :class:`Element` instance.  *encoding* [1]_ is "
@@ -1448,18 +1492,18 @@ msgstr ""
 "write`. Возвращает (необязательно) закодированную строку, содержащую данные "
 "XML."
 
-#: ../../library/xml.etree.elementtree.rst:716
-#: ../../library/xml.etree.elementtree.rst:743
-#: ../../library/xml.etree.elementtree.rst:1205
+#: ../../library/xml.etree.elementtree.rst:749
+#: ../../library/xml.etree.elementtree.rst:776
+#: ../../library/xml.etree.elementtree.rst:1238
 msgid "Added the *short_empty_elements* parameter."
 msgstr "Добавлен параметр *short_empty_elements*."
 
-#: ../../library/xml.etree.elementtree.rst:719
-#: ../../library/xml.etree.elementtree.rst:746
+#: ../../library/xml.etree.elementtree.rst:752
+#: ../../library/xml.etree.elementtree.rst:779
 msgid "Added the *xml_declaration* and *default_namespace* parameters."
 msgstr "Добавлены параметры *xml_declaration* и *default_namespace*."
 
-#: ../../library/xml.etree.elementtree.rst:722
+#: ../../library/xml.etree.elementtree.rst:755
 msgid ""
 "The :func:`tostring` function now preserves the attribute order specified by "
 "the user."
@@ -1467,7 +1511,7 @@ msgstr ""
 "Функция :func:`tostring` теперь сохраняет порядок атрибутов, указанный "
 "пользователем."
 
-#: ../../library/xml.etree.elementtree.rst:731
+#: ../../library/xml.etree.elementtree.rst:764
 msgid ""
 "Generates a string representation of an XML element, including all "
 "subelements.  *element* is an :class:`Element` instance.  *encoding* [1]_ is "
@@ -1492,7 +1536,7 @@ msgstr ""
 "исключением того, что ``b\"\".join(tostringlist(element)) == "
 "tostring(element)``."
 
-#: ../../library/xml.etree.elementtree.rst:749
+#: ../../library/xml.etree.elementtree.rst:782
 msgid ""
 "The :func:`tostringlist` function now preserves the attribute order "
 "specified by the user."
@@ -1500,7 +1544,7 @@ msgstr ""
 "Функция :func:`tostringlist` теперь сохраняет порядок атрибутов, указанный "
 "пользователем."
 
-#: ../../library/xml.etree.elementtree.rst:756
+#: ../../library/xml.etree.elementtree.rst:789
 msgid ""
 "Parses an XML section from a string constant.  This function can be used to "
 "embed \"XML literals\" in Python code.  *text* is a string containing XML "
@@ -1513,7 +1557,7 @@ msgstr ""
 "синтаксического анализатора. Если не указано, используется стандартный "
 "парсер :class:`XMLParser`. Возвращает экземпляр :class:`Element`."
 
-#: ../../library/xml.etree.elementtree.rst:764
+#: ../../library/xml.etree.elementtree.rst:797
 msgid ""
 "Parses an XML section from a string constant, and also returns a dictionary "
 "which maps from element id:s to elements.  *text* is a string containing XML "
@@ -1528,11 +1572,11 @@ msgstr ""
 "парсер :class:`XMLParser`. Возвращает кортеж, содержащий экземпляр :class:"
 "`Element` и словарь."
 
-#: ../../library/xml.etree.elementtree.rst:774
+#: ../../library/xml.etree.elementtree.rst:807
 msgid "XInclude support"
 msgstr "Поддержка XInclude"
 
-#: ../../library/xml.etree.elementtree.rst:776
+#: ../../library/xml.etree.elementtree.rst:809
 msgid ""
 "This module provides limited support for `XInclude directives <https://www."
 "w3.org/TR/xinclude/>`_, via the :mod:`xml.etree.ElementInclude` helper "
@@ -1544,7 +1588,7 @@ msgstr ""
 "ElementInclude`. Этот модуль можно использовать для вставки поддеревьев и "
 "текстовых строк в деревья элементов на основе информации в дереве."
 
-#: ../../library/xml.etree.elementtree.rst:782
+#: ../../library/xml.etree.elementtree.rst:815
 msgid ""
 "Here's an example that demonstrates use of the XInclude module. To include "
 "an XML document in the current document, use the ``{http://www.w3.org/2001/"
@@ -1557,7 +1601,7 @@ msgstr ""
 "``\"xml\"``. и используйте атрибут **href**, чтобы указать включаемый "
 "документ."
 
-#: ../../library/xml.etree.elementtree.rst:784
+#: ../../library/xml.etree.elementtree.rst:817
 msgid ""
 "<?xml version=\"1.0\"?>\n"
 "<document xmlns:xi=\"http://www.w3.org/2001/XInclude\">\n"
@@ -1569,7 +1613,7 @@ msgstr ""
 "  <xi:include href=\"source.xml\" parse=\"xml\" />\n"
 "</document>"
 
-#: ../../library/xml.etree.elementtree.rst:791
+#: ../../library/xml.etree.elementtree.rst:824
 msgid ""
 "By default, the **href** attribute is treated as a file name. You can use "
 "custom loaders to override this behaviour. Also note that the standard "
@@ -1580,7 +1624,7 @@ msgstr ""
 "Также обратите внимание, что стандартный помощник не поддерживает синтаксис "
 "XPointer."
 
-#: ../../library/xml.etree.elementtree.rst:793
+#: ../../library/xml.etree.elementtree.rst:826
 msgid ""
 "To process this file, load it as usual, and pass the root element to the :"
 "mod:`xml.etree.ElementTree` module:"
@@ -1588,7 +1632,7 @@ msgstr ""
 "Чтобы обработать этот файл, загрузите его как обычно и передайте корневой "
 "элемент модулю :mod:`xml.etree.ElementTree`:"
 
-#: ../../library/xml.etree.elementtree.rst:795
+#: ../../library/xml.etree.elementtree.rst:828
 msgid ""
 "from xml.etree import ElementTree, ElementInclude\n"
 "\n"
@@ -1604,7 +1648,7 @@ msgstr ""
 "\n"
 "ElementInclude.include(root)"
 
-#: ../../library/xml.etree.elementtree.rst:804
+#: ../../library/xml.etree.elementtree.rst:837
 msgid ""
 "The ElementInclude module replaces the ``{http://www.w3.org/2001/XInclude}"
 "include`` element with the root element from the **source.xml** document. "
@@ -1614,7 +1658,7 @@ msgstr ""
 "include`` корневым элементом из документа **source.xml**. Результат может "
 "выглядеть примерно так:"
 
-#: ../../library/xml.etree.elementtree.rst:806
+#: ../../library/xml.etree.elementtree.rst:839
 msgid ""
 "<document xmlns:xi=\"http://www.w3.org/2001/XInclude\">\n"
 "  <para>This is a paragraph.</para>\n"
@@ -1624,7 +1668,7 @@ msgstr ""
 "  <para>This is a paragraph.</para>\n"
 "</document>"
 
-#: ../../library/xml.etree.elementtree.rst:812
+#: ../../library/xml.etree.elementtree.rst:845
 msgid ""
 "If the **parse** attribute is omitted, it defaults to \"xml\". The href "
 "attribute is required."
@@ -1632,7 +1676,7 @@ msgstr ""
 "Если атрибут **parse** опущен, по умолчанию используется значение «xml». "
 "Атрибут href является обязательным."
 
-#: ../../library/xml.etree.elementtree.rst:814
+#: ../../library/xml.etree.elementtree.rst:847
 msgid ""
 "To include a text document, use the ``{http://www.w3.org/2001/XInclude}"
 "include`` element, and set the **parse** attribute to \"text\":"
@@ -1641,7 +1685,7 @@ msgstr ""
 "org/2001/XInclude}include`` и установите для атрибута **parse** значение "
 "\"text\":"
 
-#: ../../library/xml.etree.elementtree.rst:816
+#: ../../library/xml.etree.elementtree.rst:849
 msgid ""
 "<?xml version=\"1.0\"?>\n"
 "<document xmlns:xi=\"http://www.w3.org/2001/XInclude\">\n"
@@ -1653,11 +1697,11 @@ msgstr ""
 "  Copyright (c) <xi:include href=\"year.txt\" parse=\"text\" />.\n"
 "</document>"
 
-#: ../../library/xml.etree.elementtree.rst:823
+#: ../../library/xml.etree.elementtree.rst:856
 msgid "The result might look something like:"
 msgstr "Результат может выглядеть примерно так:"
 
-#: ../../library/xml.etree.elementtree.rst:825
+#: ../../library/xml.etree.elementtree.rst:858
 msgid ""
 "<document xmlns:xi=\"http://www.w3.org/2001/XInclude\">\n"
 "  Copyright (c) 2003.\n"
@@ -1667,7 +1711,7 @@ msgstr ""
 "  Copyright (c) 2003.\n"
 "</document>"
 
-#: ../../library/xml.etree.elementtree.rst:843
+#: ../../library/xml.etree.elementtree.rst:876
 msgid ""
 "Default loader. This default loader reads an included resource from disk. "
 "*href* is a URL.  *parse* is for parse mode either \"xml\" or \"text\". "
@@ -1685,7 +1729,7 @@ msgstr ""
 "Если режим анализа ``\"текст\"``, это строка. Если загрузчик дает сбой, он "
 "может вернуть None или вызвать исключение."
 
-#: ../../library/xml.etree.elementtree.rst:854
+#: ../../library/xml.etree.elementtree.rst:887
 msgid ""
 "This function expands XInclude directives in-place in tree pointed by "
 "*elem*. *elem* is either the root :class:`~xml.etree.ElementTree.Element` or "
@@ -1709,15 +1753,15 @@ msgstr ""
 "включений. Ограничено, чтобы снизить риск взрыва вредоносного контента. "
 "Передайте None, чтобы отключить ограничение."
 
-#: ../../library/xml.etree.elementtree.rst:864
+#: ../../library/xml.etree.elementtree.rst:897
 msgid "Added the *base_url* and *max_depth* parameters."
 msgstr "Добавлены параметры *base_url* и ​​*max_length*."
 
-#: ../../library/xml.etree.elementtree.rst:871
+#: ../../library/xml.etree.elementtree.rst:904
 msgid "Element Objects"
 msgstr "Объекты элементов"
 
-#: ../../library/xml.etree.elementtree.rst:879
+#: ../../library/xml.etree.elementtree.rst:912
 msgid ""
 "Element class.  This class defines the Element interface, and provides a "
 "reference implementation of this interface."
@@ -1725,14 +1769,14 @@ msgstr ""
 "Класс элемента. Этот класс определяет интерфейс Element и предоставляет "
 "эталонную реализацию этого интерфейса."
 
-#: ../../library/xml.etree.elementtree.rst:882
+#: ../../library/xml.etree.elementtree.rst:915
 msgid ""
 "*tag* is the element name.  *attrib* is an optional dictionary, containing "
 "element attributes.  *extra* contains additional attributes, given as "
 "keyword arguments."
 msgstr ""
 
-#: ../../library/xml.etree.elementtree.rst:886
+#: ../../library/xml.etree.elementtree.rst:919
 msgid ""
 "The element name and the attribute names and values are strings or :class:"
 "`QName` instances, and the text and the tail are strings or ``None``. The "
@@ -1745,7 +1789,7 @@ msgid ""
 "objects can be stored in the tree, but they cannot be serialized."
 msgstr ""
 
-#: ../../library/xml.etree.elementtree.rst:900
+#: ../../library/xml.etree.elementtree.rst:933
 msgid ""
 "A string identifying what kind of data this element represents (the element "
 "type, in other words)."
@@ -1753,7 +1797,7 @@ msgstr ""
 "Строка, определяющая, какие данные представляет этот элемент (другими "
 "словами, тип элемента)."
 
-#: ../../library/xml.etree.elementtree.rst:907
+#: ../../library/xml.etree.elementtree.rst:940
 msgid ""
 "These attributes can be used to hold additional data associated with the "
 "element.  Their values are usually strings but may be any application-"
@@ -1771,11 +1815,11 @@ msgstr ""
 "*tail* содержит либо текст между конечный тег элемента и следующий тег или "
 "``None``. Для XML-данных"
 
-#: ../../library/xml.etree.elementtree.rst:915
+#: ../../library/xml.etree.elementtree.rst:948
 msgid "<a><b>1<c>2<d/>3</c></b>4</a>"
 msgstr "<a><b>1<c>2<d/>3</c></b>4</a>"
 
-#: ../../library/xml.etree.elementtree.rst:919
+#: ../../library/xml.etree.elementtree.rst:952
 msgid ""
 "the *a* element has ``None`` for both *text* and *tail* attributes, the *b* "
 "element has *text* ``\"1\"`` and *tail* ``\"4\"``, the *c* element has "
@@ -1787,7 +1831,7 @@ msgstr ""
 "``\"2\"`` и *tail* ``None``, а элемент *d* имеет *text* ``None`` и *tail* "
 "``\"3\" ``."
 
-#: ../../library/xml.etree.elementtree.rst:924
+#: ../../library/xml.etree.elementtree.rst:957
 msgid ""
 "To collect the inner text of an element, see :meth:`itertext`, for example "
 "``\"\".join(element.itertext())``."
@@ -1795,11 +1839,11 @@ msgstr ""
 "Чтобы собрать внутренний текст элемента, см. :meth:`itertext`, например "
 "``\"\".join(element.itertext())``."
 
-#: ../../library/xml.etree.elementtree.rst:927
+#: ../../library/xml.etree.elementtree.rst:960
 msgid "Applications may store arbitrary objects in these attributes."
 msgstr "Приложения могут хранить в этих атрибутах произвольные объекты."
 
-#: ../../library/xml.etree.elementtree.rst:932
+#: ../../library/xml.etree.elementtree.rst:965
 msgid ""
 "A dictionary containing the element's attributes.  Note that while the "
 "*attrib* value is always a real mutable Python dictionary, an ElementTree "
@@ -1814,11 +1858,11 @@ msgstr ""
 "воспользоваться преимуществами таких реализаций, по возможности используйте "
 "приведенные ниже методы словаря."
 
-#: ../../library/xml.etree.elementtree.rst:938
+#: ../../library/xml.etree.elementtree.rst:971
 msgid "The following dictionary-like methods work on the element attributes."
 msgstr "Следующие словарные методы работают с атрибутами элементов."
 
-#: ../../library/xml.etree.elementtree.rst:943
+#: ../../library/xml.etree.elementtree.rst:976
 msgid ""
 "Resets an element.  This function removes all subelements, clears all "
 "attributes, and sets the text and tail attributes to ``None``."
@@ -1826,33 +1870,33 @@ msgstr ""
 "Сбрасывает элемент. Эта функция удаляет все подэлементы, очищает все "
 "атрибуты и устанавливает для атрибутов текста и хвоста значение «Нет»."
 
-#: ../../library/xml.etree.elementtree.rst:949
+#: ../../library/xml.etree.elementtree.rst:982
 msgid "Gets the element attribute named *key*."
 msgstr "Получает атрибут элемента с именем *key*."
 
-#: ../../library/xml.etree.elementtree.rst:951
+#: ../../library/xml.etree.elementtree.rst:984
 msgid ""
 "Returns the attribute value, or *default* if the attribute was not found."
 msgstr ""
 "Возвращает значение атрибута или *по умолчанию*, если атрибут не найден."
 
-#: ../../library/xml.etree.elementtree.rst:956
+#: ../../library/xml.etree.elementtree.rst:989
 msgid "Returns the element attributes as (name, value) pairs."
 msgstr ""
 
-#: ../../library/xml.etree.elementtree.rst:961
+#: ../../library/xml.etree.elementtree.rst:994
 msgid "Returns the element attribute names."
 msgstr ""
 
-#: ../../library/xml.etree.elementtree.rst:966
+#: ../../library/xml.etree.elementtree.rst:999
 msgid "Set the attribute *key* on the element to *value*."
 msgstr "Установите для атрибута *key* элемента значение *value*."
 
-#: ../../library/xml.etree.elementtree.rst:968
+#: ../../library/xml.etree.elementtree.rst:1001
 msgid "The following methods work on the element's children (subelements)."
 msgstr "Следующие методы работают с дочерними элементами (подэлементами)."
 
-#: ../../library/xml.etree.elementtree.rst:973
+#: ../../library/xml.etree.elementtree.rst:1006
 msgid ""
 "Adds the element *subelement* to the end of this element's internal list of "
 "subelements.  Raises :exc:`TypeError` if *subelement* is not an :class:"
@@ -1862,7 +1906,7 @@ msgstr ""
 "элемента. Вызывает :exc:`TypeError`, если *подэлемент* не является :class:"
 "`Element`."
 
-#: ../../library/xml.etree.elementtree.rst:980
+#: ../../library/xml.etree.elementtree.rst:1013
 msgid ""
 "Appends *subelements* from an iterable of elements. Raises :exc:`TypeError` "
 "if a subelement is not an :class:`Element`."
@@ -1870,7 +1914,7 @@ msgstr ""
 "Добавляет *подэлементы* из итерации элементов. Вызывает :exc:`TypeError`, "
 "если подэлемент не является :class:`Element`."
 
-#: ../../library/xml.etree.elementtree.rst:988
+#: ../../library/xml.etree.elementtree.rst:1021
 msgid ""
 "Finds the first subelement matching *match*.  *match* may be a tag name or "
 "a :ref:`path <elementtree-xpath>`.  Returns an element instance or "
@@ -1885,7 +1929,7 @@ msgstr ""
 "префикса, чтобы переместить все имена тегов без префикса в выражении в "
 "заданное пространство имен."
 
-#: ../../library/xml.etree.elementtree.rst:997
+#: ../../library/xml.etree.elementtree.rst:1030
 msgid ""
 "Finds all matching subelements, by tag name or :ref:`path <elementtree-"
 "xpath>`.  Returns a list containing all matching elements in document "
@@ -1900,7 +1944,7 @@ msgstr ""
 "качестве префикса, чтобы переместить все имена тегов без префикса в "
 "выражении в заданное пространство имен."
 
-#: ../../library/xml.etree.elementtree.rst:1006
+#: ../../library/xml.etree.elementtree.rst:1039
 msgid ""
 "Finds text for the first subelement matching *match*.  *match* may be a tag "
 "name or a :ref:`path <elementtree-xpath>`.  Returns the text content of the "
@@ -1919,7 +1963,7 @@ msgstr ""
 "Передайте ``''`` в качестве префикса, чтобы переместить все имена тегов без "
 "префикса в выражении в заданное пространство имен."
 
-#: ../../library/xml.etree.elementtree.rst:1017
+#: ../../library/xml.etree.elementtree.rst:1050
 msgid ""
 "Inserts *subelement* at the given position in this element.  Raises :exc:"
 "`TypeError` if *subelement* is not an :class:`Element`."
@@ -1927,7 +1971,7 @@ msgstr ""
 "Вставляет *подэлемент* в заданную позицию в этом элементе. Вызывает :exc:"
 "`TypeError`, если *подэлемент* не является :class:`Element`."
 
-#: ../../library/xml.etree.elementtree.rst:1023
+#: ../../library/xml.etree.elementtree.rst:1056
 msgid ""
 "Creates a tree :term:`iterator` with the current element as the root. The "
 "iterator iterates over this element and all elements below it, in document "
@@ -1941,7 +1985,7 @@ msgstr ""
 "итератора возвращаются только элементы, тег которых равен *tag*. Если "
 "древовидная структура изменяется во время итерации, результат не определен."
 
-#: ../../library/xml.etree.elementtree.rst:1034
+#: ../../library/xml.etree.elementtree.rst:1067
 msgid ""
 "Finds all matching subelements, by tag name or :ref:`path <elementtree-"
 "xpath>`.  Returns an iterable yielding all matching elements in document "
@@ -1953,7 +1997,7 @@ msgstr ""
 "элементы в порядке документа. *namespaces* — это необязательное "
 "сопоставление префикса пространства имен с полным именем."
 
-#: ../../library/xml.etree.elementtree.rst:1045
+#: ../../library/xml.etree.elementtree.rst:1078
 msgid ""
 "Creates a text iterator.  The iterator loops over this element and all "
 "subelements, in document order, and returns all inner text."
@@ -1961,7 +2005,7 @@ msgstr ""
 "Создает текстовый итератор. Итератор проходит по этому элементу и всем "
 "подэлементам в порядке документа и возвращает весь внутренний текст."
 
-#: ../../library/xml.etree.elementtree.rst:1053
+#: ../../library/xml.etree.elementtree.rst:1086
 msgid ""
 "Creates a new element object of the same type as this element.  Do not call "
 "this method, use the :func:`SubElement` factory function instead."
@@ -1969,7 +2013,7 @@ msgstr ""
 "Создает новый объект элемента того же типа, что и этот элемент. Не вызывайте "
 "этот метод, используйте вместо него фабричную функцию :func:`SubElement`."
 
-#: ../../library/xml.etree.elementtree.rst:1059
+#: ../../library/xml.etree.elementtree.rst:1092
 msgid ""
 "Removes *subelement* from the element.  Unlike the find\\* methods this "
 "method compares elements based on the instance identity, not on tag value or "
@@ -1979,7 +2023,7 @@ msgstr ""
 "сравнивает элементы на основе идентификатора экземпляра, а не значения тега "
 "или содержимого."
 
-#: ../../library/xml.etree.elementtree.rst:1063
+#: ../../library/xml.etree.elementtree.rst:1096
 msgid ""
 ":class:`Element` objects also support the following sequence type methods "
 "for working with subelements: :meth:`~object.__delitem__`, :meth:`~object."
@@ -1990,7 +2034,7 @@ msgstr ""
 "meth:`~object.__getitem__`, :meth:`~object.__setitem__`, : meth:`~object."
 "__len__`."
 
-#: ../../library/xml.etree.elementtree.rst:1068
+#: ../../library/xml.etree.elementtree.rst:1101
 msgid ""
 "Caution: Elements with no subelements will test as ``False``.  In a future "
 "release of Python, all elements will test as ``True`` regardless of whether "
@@ -2002,7 +2046,7 @@ msgstr ""
 "существуют ли подэлементы. Вместо этого отдайте предпочтение явным тестам "
 "``len(elem)`` или ``elem is not None``.::"
 
-#: ../../library/xml.etree.elementtree.rst:1073
+#: ../../library/xml.etree.elementtree.rst:1106
 msgid ""
 "element = root.find('foo')\n"
 "\n"
@@ -2020,11 +2064,11 @@ msgstr ""
 "if element is None:\n"
 "    print(\"element not found\")"
 
-#: ../../library/xml.etree.elementtree.rst:1081
+#: ../../library/xml.etree.elementtree.rst:1114
 msgid "Testing the truth value of an Element emits :exc:`DeprecationWarning`."
 msgstr "Проверка истинного значения элемента выдает :exc:`DeprecationWarning`."
 
-#: ../../library/xml.etree.elementtree.rst:1084
+#: ../../library/xml.etree.elementtree.rst:1117
 msgid ""
 "Prior to Python 3.8, the serialisation order of the XML attributes of "
 "elements was artificially made predictable by sorting the attributes by "
@@ -2039,7 +2083,7 @@ msgstr ""
 "котором атрибуты изначально анализировались или создавались пользовательским "
 "кодом."
 
-#: ../../library/xml.etree.elementtree.rst:1090
+#: ../../library/xml.etree.elementtree.rst:1123
 msgid ""
 "In general, user code should try not to depend on a specific ordering of "
 "attributes, given that the `XML Information Set <https://www.w3.org/TR/xml-"
@@ -2057,7 +2101,7 @@ msgstr ""
 "для криптографической подписи или наборов тестовых данных, каноническая "
 "сериализация доступна с помощью функции :func:`canonicalize`."
 
-#: ../../library/xml.etree.elementtree.rst:1098
+#: ../../library/xml.etree.elementtree.rst:1131
 msgid ""
 "In cases where canonical output is not applicable but a specific attribute "
 "order is still desirable on output, code should aim for creating the "
@@ -2073,7 +2117,7 @@ msgstr ""
 "сериализацией можно применить рецепт, подобный следующему, чтобы обеспечить "
 "соблюдение порядка независимо от создания Элемента:"
 
-#: ../../library/xml.etree.elementtree.rst:1105
+#: ../../library/xml.etree.elementtree.rst:1138
 msgid ""
 "def reorder_attributes(root):\n"
 "    for el in root.iter():\n"
@@ -2093,11 +2137,11 @@ msgstr ""
 "            attrib.clear()\n"
 "            attrib.update(attribs)"
 
-#: ../../library/xml.etree.elementtree.rst:1118
+#: ../../library/xml.etree.elementtree.rst:1151
 msgid "ElementTree Objects"
 msgstr "Объекты ElementTree"
 
-#: ../../library/xml.etree.elementtree.rst:1123
+#: ../../library/xml.etree.elementtree.rst:1156
 msgid ""
 "ElementTree wrapper class.  This class represents an entire element "
 "hierarchy, and adds some extra support for serialization to and from "
@@ -2106,7 +2150,7 @@ msgstr ""
 "Класс-оболочка ElementTree. Этот класс представляет всю иерархию элементов и "
 "добавляет дополнительную поддержку сериализации в стандартный XML и из него."
 
-#: ../../library/xml.etree.elementtree.rst:1127
+#: ../../library/xml.etree.elementtree.rst:1160
 msgid ""
 "*element* is the root element.  The tree is initialized with the contents of "
 "the XML *file* if given."
@@ -2114,7 +2158,7 @@ msgstr ""
 "*element* — корневой элемент. Дерево инициализируется содержимым *файла* "
 "XML, если он указан."
 
-#: ../../library/xml.etree.elementtree.rst:1133
+#: ../../library/xml.etree.elementtree.rst:1166
 msgid ""
 "Replaces the root element for this tree.  This discards the current contents "
 "of the tree, and replaces it with the given element.  Use with care.  "
@@ -2124,23 +2168,23 @@ msgstr ""
 "отбрасывается и заменяется данным элементом. Используйте с осторожностью. "
 "*element* — экземпляр элемента."
 
-#: ../../library/xml.etree.elementtree.rst:1140
+#: ../../library/xml.etree.elementtree.rst:1173
 msgid "Same as :meth:`Element.find`, starting at the root of the tree."
 msgstr "То же, что и :meth:`Element.find`, начиная с корня дерева."
 
-#: ../../library/xml.etree.elementtree.rst:1145
+#: ../../library/xml.etree.elementtree.rst:1178
 msgid "Same as :meth:`Element.findall`, starting at the root of the tree."
 msgstr "То же, что и :meth:`Element.findall`, начиная с корня дерева."
 
-#: ../../library/xml.etree.elementtree.rst:1150
+#: ../../library/xml.etree.elementtree.rst:1183
 msgid "Same as :meth:`Element.findtext`, starting at the root of the tree."
 msgstr "То же, что и :meth:`Element.findtext`, начиная с корня дерева."
 
-#: ../../library/xml.etree.elementtree.rst:1155
+#: ../../library/xml.etree.elementtree.rst:1188
 msgid "Returns the root element for this tree."
 msgstr "Возвращает корневой элемент этого дерева."
 
-#: ../../library/xml.etree.elementtree.rst:1160
+#: ../../library/xml.etree.elementtree.rst:1193
 msgid ""
 "Creates and returns a tree iterator for the root element.  The iterator "
 "loops over all elements in this tree, in section order.  *tag* is the tag to "
@@ -2150,11 +2194,11 @@ msgstr ""
 "перебирает все элементы в этом дереве в порядке разделов. *tag* — это тег, "
 "который нужно искать (по умолчанию возвращаются все элементы)."
 
-#: ../../library/xml.etree.elementtree.rst:1167
+#: ../../library/xml.etree.elementtree.rst:1200
 msgid "Same as :meth:`Element.iterfind`, starting at the root of the tree."
 msgstr "То же, что и :meth:`Element.iterfind`, начиная с корня дерева."
 
-#: ../../library/xml.etree.elementtree.rst:1174
+#: ../../library/xml.etree.elementtree.rst:1207
 msgid ""
 "Loads an external XML section into this element tree.  *source* is a file "
 "name or :term:`file object`.  *parser* is an optional parser instance. If "
@@ -2166,7 +2210,7 @@ msgstr ""
 "синтаксического анализатора. Если не указано, используется стандартный "
 "парсер :class:`XMLParser`. Возвращает корневой элемент раздела."
 
-#: ../../library/xml.etree.elementtree.rst:1184
+#: ../../library/xml.etree.elementtree.rst:1217
 msgid ""
 "Writes the element tree to a file, as XML.  *file* is a file name, or a :"
 "term:`file object` opened for writing.  *encoding* [1]_ is the output "
@@ -2193,7 +2237,7 @@ msgstr ""
 "умолчанию), они создаются как один самозакрывающийся тег, в противном случае "
 "они создаются как пара начальных/конечных тегов."
 
-#: ../../library/xml.etree.elementtree.rst:1198
+#: ../../library/xml.etree.elementtree.rst:1231
 msgid ""
 "The output is either a string (:class:`str`) or binary (:class:`bytes`). "
 "This is controlled by the *encoding* argument.  If *encoding* is "
@@ -2209,7 +2253,7 @@ msgstr ""
 "конфликтовать с типом *файла*, если это открытый :term:`файловый объект`; "
 "убедитесь, что вы не пытаетесь записать строку в двоичный поток и наоборот."
 
-#: ../../library/xml.etree.elementtree.rst:1208
+#: ../../library/xml.etree.elementtree.rst:1241
 msgid ""
 "The :meth:`write` method now preserves the attribute order specified by the "
 "user."
@@ -2217,11 +2261,11 @@ msgstr ""
 "Метод :meth:`write` теперь сохраняет порядок атрибутов, указанный "
 "пользователем."
 
-#: ../../library/xml.etree.elementtree.rst:1213
+#: ../../library/xml.etree.elementtree.rst:1246
 msgid "This is the XML file that is going to be manipulated::"
 msgstr "Это XML-файл, которым будут манипулировать:"
 
-#: ../../library/xml.etree.elementtree.rst:1215
+#: ../../library/xml.etree.elementtree.rst:1248
 msgid ""
 "<html>\n"
 "    <head>\n"
@@ -2243,13 +2287,13 @@ msgstr ""
 "    </body>\n"
 "</html>"
 
-#: ../../library/xml.etree.elementtree.rst:1225
+#: ../../library/xml.etree.elementtree.rst:1258
 msgid ""
 "Example of changing the attribute \"target\" of every link in first "
 "paragraph::"
 msgstr "Пример изменения атрибута «цель» каждой ссылки в первом абзаце:"
 
-#: ../../library/xml.etree.elementtree.rst:1227
+#: ../../library/xml.etree.elementtree.rst:1260
 msgid ""
 ">>> from xml.etree.ElementTree import ElementTree\n"
 ">>> tree = ElementTree()\n"
@@ -2281,11 +2325,11 @@ msgstr ""
 "...\n"
 ">>> tree.write(\"output.xhtml\")"
 
-#: ../../library/xml.etree.elementtree.rst:1245
+#: ../../library/xml.etree.elementtree.rst:1278
 msgid "QName Objects"
 msgstr "Объекты QName"
 
-#: ../../library/xml.etree.elementtree.rst:1250
+#: ../../library/xml.etree.elementtree.rst:1283
 msgid ""
 "QName wrapper.  This can be used to wrap a QName attribute value, in order "
 "to get proper namespace handling on output.  *text_or_uri* is a string "
@@ -2301,11 +2345,11 @@ msgstr ""
 "аргумент интерпретируется как URI, а этот аргумент интерпретируется как "
 "локальное имя. Экземпляры :class:`QName` непрозрачны."
 
-#: ../../library/xml.etree.elementtree.rst:1262
+#: ../../library/xml.etree.elementtree.rst:1295
 msgid "TreeBuilder Objects"
 msgstr "Объекты TreeBuilder"
 
-#: ../../library/xml.etree.elementtree.rst:1268
+#: ../../library/xml.etree.elementtree.rst:1301
 msgid ""
 "Generic element structure builder.  This builder converts a sequence of "
 "start, data, end, comment and pi method calls to a well-formed element "
@@ -2318,7 +2362,7 @@ msgstr ""
 "класс для построения структуры элементов с помощью специального анализатора "
 "XML или анализатора какого-либо другого XML-подобного формата."
 
-#: ../../library/xml.etree.elementtree.rst:1273
+#: ../../library/xml.etree.elementtree.rst:1306
 msgid ""
 "*element_factory*, when given, must be a callable accepting two positional "
 "arguments: a tag and a dict of attributes.  It is expected to return a new "
@@ -2328,7 +2372,7 @@ msgstr ""
 "принимающим два позиционных аргумента: тег и набор атрибутов. Ожидается, что "
 "он вернет новый экземпляр элемента."
 
-#: ../../library/xml.etree.elementtree.rst:1277
+#: ../../library/xml.etree.elementtree.rst:1310
 msgid ""
 "The *comment_factory* and *pi_factory* functions, when given, should behave "
 "like the :func:`Comment` and :func:`ProcessingInstruction` functions to "
@@ -2344,7 +2388,7 @@ msgstr ""
 "*insert_pis* имеет значение true, комментарии/pis будут вставлены в дерево, "
 "если они появляются внутри корневого элемента (но не за его пределами)."
 
-#: ../../library/xml.etree.elementtree.rst:1286
+#: ../../library/xml.etree.elementtree.rst:1319
 msgid ""
 "Flushes the builder buffers, and returns the toplevel document element.  "
 "Returns an :class:`Element` instance."
@@ -2352,18 +2396,18 @@ msgstr ""
 "Очищает буферы компоновщика и возвращает элемент документа верхнего уровня. "
 "Возвращает экземпляр :class:`Element`."
 
-#: ../../library/xml.etree.elementtree.rst:1292
+#: ../../library/xml.etree.elementtree.rst:1325
 msgid "Adds text to the current element.  *data* is a string."
 msgstr ""
 
-#: ../../library/xml.etree.elementtree.rst:1297
+#: ../../library/xml.etree.elementtree.rst:1330
 msgid ""
 "Closes the current element.  *tag* is the element name.  Returns the closed "
 "element."
 msgstr ""
 "Закрывает текущий элемент. *tag* — имя элемента. Возвращает закрытый элемент."
 
-#: ../../library/xml.etree.elementtree.rst:1303
+#: ../../library/xml.etree.elementtree.rst:1336
 msgid ""
 "Opens a new element.  *tag* is the element name.  *attrs* is a dictionary "
 "containing element attributes.  Returns the opened element."
@@ -2371,7 +2415,7 @@ msgstr ""
 "Открывает новый элемент. *tag* — имя элемента. *attrs* — словарь, содержащий "
 "атрибуты элементов. Возвращает открытый элемент."
 
-#: ../../library/xml.etree.elementtree.rst:1309
+#: ../../library/xml.etree.elementtree.rst:1342
 msgid ""
 "Creates a comment with the given *text*.  If ``insert_comments`` is true, "
 "this will also add it to the tree."
@@ -2379,7 +2423,7 @@ msgstr ""
 "Создает комментарий с заданным *текстом*. Если ``insert_comments`` имеет "
 "значение true, это также добавит его в дерево."
 
-#: ../../library/xml.etree.elementtree.rst:1317
+#: ../../library/xml.etree.elementtree.rst:1350
 msgid ""
 "Creates a process instruction with the given *target* name and *text*. If "
 "``insert_pis`` is true, this will also add it to the tree."
@@ -2387,7 +2431,7 @@ msgstr ""
 "Создает инструкцию процесса с заданным *целевым* именем и *текстом*. Если "
 "``insert_pis`` имеет значение true, это также добавит его в дерево."
 
-#: ../../library/xml.etree.elementtree.rst:1323
+#: ../../library/xml.etree.elementtree.rst:1356
 msgid ""
 "In addition, a custom :class:`TreeBuilder` object can provide the following "
 "methods:"
@@ -2395,7 +2439,7 @@ msgstr ""
 "Кроме того, пользовательский объект :class:`TreeBuilder` может предоставлять "
 "следующие методы:"
 
-#: ../../library/xml.etree.elementtree.rst:1328
+#: ../../library/xml.etree.elementtree.rst:1361
 msgid ""
 "Handles a doctype declaration.  *name* is the doctype name.  *pubid* is the "
 "public identifier.  *system* is the system identifier.  This method does not "
@@ -2405,7 +2449,7 @@ msgstr ""
 "— общедоступный идентификатор. *system* — идентификатор системы. Этот метод "
 "не существует в классе по умолчанию :class:`TreeBuilder`."
 
-#: ../../library/xml.etree.elementtree.rst:1336
+#: ../../library/xml.etree.elementtree.rst:1369
 msgid ""
 "Is called whenever the parser encounters a new namespace declaration, before "
 "the ``start()`` callback for the opening element that defines it. *prefix* "
@@ -2418,7 +2462,7 @@ msgstr ""
 "умолчанию и объявленное имя префикса пространства имен в противном случае. "
 "*uri* — это URI пространства имен."
 
-#: ../../library/xml.etree.elementtree.rst:1345
+#: ../../library/xml.etree.elementtree.rst:1378
 msgid ""
 "Is called after the ``end()`` callback of an element that declared a "
 "namespace prefix mapping, with the name of the *prefix* that went out of "
@@ -2428,7 +2472,7 @@ msgstr ""
 "сопоставление префикса пространства имен, с именем *префикса*, выходящим за "
 "пределы области видимости."
 
-#: ../../library/xml.etree.elementtree.rst:1357
+#: ../../library/xml.etree.elementtree.rst:1390
 msgid ""
 "A `C14N 2.0 <https://www.w3.org/TR/xml-c14n2/>`_ writer.  Arguments are the "
 "same as for the :func:`canonicalize` function.  This class does not build a "
@@ -2440,11 +2484,11 @@ msgstr ""
 "события обратного вызова непосредственно в сериализованную форму с помощью "
 "функции *write*."
 
-#: ../../library/xml.etree.elementtree.rst:1368
+#: ../../library/xml.etree.elementtree.rst:1401
 msgid "XMLParser Objects"
 msgstr "Объекты XMLParser"
 
-#: ../../library/xml.etree.elementtree.rst:1373
+#: ../../library/xml.etree.elementtree.rst:1406
 msgid ""
 "This class is the low-level building block of the module.  It uses :mod:`xml."
 "parsers.expat` for efficient, event-based parsing of XML.  It can be fed XML "
@@ -2462,7 +2506,7 @@ msgstr ""
 "стандартный :class:`TreeBuilder`. Если *кодировка* [1]_ задано, значение "
 "переопределяет кодировку, указанную в файле XML."
 
-#: ../../library/xml.etree.elementtree.rst:1381
+#: ../../library/xml.etree.elementtree.rst:1414
 msgid ""
 "Parameters are now :ref:`keyword-only <keyword-only_parameter>`. The *html* "
 "argument is no longer supported."
@@ -2470,7 +2514,7 @@ msgstr ""
 "Параметры теперь :ref:`keyword-only <keyword-only_parameter>`. Аргумент "
 "*html* больше не поддерживается."
 
-#: ../../library/xml.etree.elementtree.rst:1388
+#: ../../library/xml.etree.elementtree.rst:1421
 msgid ""
 "Finishes feeding data to the parser.  Returns the result of calling the "
 "``close()`` method of the *target* passed during construction; by default, "
@@ -2480,14 +2524,14 @@ msgstr ""
 "close() объекта *target*, переданного во время построения; по умолчанию это "
 "элемент документа верхнего уровня."
 
-#: ../../library/xml.etree.elementtree.rst:1395
+#: ../../library/xml.etree.elementtree.rst:1428
 msgid ""
 "Feeds data to the parser.  *data* is a string or encoded data (:class:"
 "`bytes` or a :term:`bytes-like object`)."
 msgstr ""
 
-#: ../../library/xml.etree.elementtree.rst:1401
-#: ../../library/xml.etree.elementtree.rst:1480
+#: ../../library/xml.etree.elementtree.rst:1434
+#: ../../library/xml.etree.elementtree.rst:1513
 msgid ""
 "Triggers parsing of any previously fed unparsed data, which can be used to "
 "ensure more immediate feedback, in particular with Expat >=2.6.0. The "
@@ -2504,8 +2548,8 @@ msgstr ""
 "последствия для безопасности; подробности см. в :meth:`xml.parsers.expat."
 "xmlparser.SetReparseDeferralEnabled`."
 
-#: ../../library/xml.etree.elementtree.rst:1408
-#: ../../library/xml.etree.elementtree.rst:1487
+#: ../../library/xml.etree.elementtree.rst:1441
+#: ../../library/xml.etree.elementtree.rst:1520
 msgid ""
 "Note that :meth:`flush` has been backported to some prior releases of "
 "CPython as a security fix.  Check for availability of :meth:`flush` using :"
@@ -2516,7 +2560,7 @@ msgstr ""
 "meth:`flush` с помощью :func:`hasattr`, если он используется в коде, "
 "работающем в различных версиях Python."
 
-#: ../../library/xml.etree.elementtree.rst:1416
+#: ../../library/xml.etree.elementtree.rst:1449
 msgid ""
 ":meth:`XMLParser.feed` calls *target*\\'s ``start(tag, attrs_dict)`` method "
 "for each opening tag, its ``end(tag)`` method for each closing tag, and data "
@@ -2535,7 +2579,7 @@ msgstr ""
 "построения древовидной структуры. Это пример подсчета максимальной глубины "
 "XML-файла:"
 
-#: ../../library/xml.etree.elementtree.rst:1424
+#: ../../library/xml.etree.elementtree.rst:1457
 msgid ""
 ">>> from xml.etree.ElementTree import XMLParser\n"
 ">>> class MaxDepth:                     # The target object of the parser\n"
@@ -2601,11 +2645,11 @@ msgstr ""
 ">>> parser.close()\n"
 "4"
 
-#: ../../library/xml.etree.elementtree.rst:1460
+#: ../../library/xml.etree.elementtree.rst:1493
 msgid "XMLPullParser Objects"
 msgstr "Объекты XMLPullParser"
 
-#: ../../library/xml.etree.elementtree.rst:1464
+#: ../../library/xml.etree.elementtree.rst:1497
 msgid ""
 "A pull parser suitable for non-blocking applications.  Its input-side API is "
 "similar to that of :class:`XMLParser`, but instead of pushing calls to a "
@@ -2626,13 +2670,13 @@ msgstr ""
 "получения подробной информации о пространстве имен). Если *events* опущено, "
 "сообщается только о ``конечных'` событиях."
 
-#: ../../library/xml.etree.elementtree.rst:1475
+#: ../../library/xml.etree.elementtree.rst:1508
 msgid ""
 "Feed the given data to the parser.  *data* is a string or encoded data (:"
 "class:`bytes` or a :term:`bytes-like object`)."
 msgstr ""
 
-#: ../../library/xml.etree.elementtree.rst:1496
+#: ../../library/xml.etree.elementtree.rst:1529
 msgid ""
 "Signal the parser that the data stream is terminated. Unlike :meth:"
 "`XMLParser.close`, this method always returns :const:`None`. Any events not "
@@ -2644,7 +2688,7 @@ msgstr ""
 "Любые события, которые еще не получены при закрытии парсера, все равно можно "
 "прочитать с помощью :meth:`read_events`."
 
-#: ../../library/xml.etree.elementtree.rst:1503
+#: ../../library/xml.etree.elementtree.rst:1536
 msgid ""
 "Return an iterator over the events which have been encountered in the data "
 "fed to the parser.  The iterator yields ``(event, elem)`` pairs, where "
@@ -2658,15 +2702,15 @@ msgstr ""
 "*elem* — обнаруженный объект :class:`Element`. или другое значение контекста "
 "следующим образом."
 
-#: ../../library/xml.etree.elementtree.rst:1509
+#: ../../library/xml.etree.elementtree.rst:1542
 msgid "``start``, ``end``: the current Element."
 msgstr "``start``, ``end``: текущий элемент."
 
-#: ../../library/xml.etree.elementtree.rst:1510
+#: ../../library/xml.etree.elementtree.rst:1543
 msgid "``comment``, ``pi``: the current comment / processing instruction"
 msgstr "``комментарий``, ``pi``: текущий комментарий/инструкция обработки."
 
-#: ../../library/xml.etree.elementtree.rst:1511
+#: ../../library/xml.etree.elementtree.rst:1544
 msgid ""
 "``start-ns``: a tuple ``(prefix, uri)`` naming the declared namespace "
 "mapping."
@@ -2674,11 +2718,11 @@ msgstr ""
 "``start-ns``: кортеж ``(prefix, uri)``, называющий объявленное отображение "
 "пространства имен."
 
-#: ../../library/xml.etree.elementtree.rst:1513
+#: ../../library/xml.etree.elementtree.rst:1546
 msgid "``end-ns``: :const:`None` (this may change in a future version)"
 msgstr "``end-ns``: :const:`None` (это может измениться в будущей версии)"
 
-#: ../../library/xml.etree.elementtree.rst:1515
+#: ../../library/xml.etree.elementtree.rst:1548
 msgid ""
 "Events provided in a previous call to :meth:`read_events` will not be "
 "yielded again.  Events are consumed from the internal queue only when they "
@@ -2692,7 +2736,7 @@ msgstr ""
 "параллельно перебирающих итераторы, полученные из :meth:`read_events`, будут "
 "иметь непредсказуемые результаты."
 
-#: ../../library/xml.etree.elementtree.rst:1523
+#: ../../library/xml.etree.elementtree.rst:1556
 msgid ""
 ":class:`XMLPullParser` only guarantees that it has seen the \">\" character "
 "of a starting tag when it emits a \"start\" event, so the attributes are "
@@ -2706,11 +2750,11 @@ msgstr ""
 "определено. . То же самое относится и к дочерним элементам; они могут "
 "присутствовать, а могут и не присутствовать."
 
-#: ../../library/xml.etree.elementtree.rst:1538
+#: ../../library/xml.etree.elementtree.rst:1571
 msgid "Exceptions"
 msgstr "Исключения"
 
-#: ../../library/xml.etree.elementtree.rst:1542
+#: ../../library/xml.etree.elementtree.rst:1575
 msgid ""
 "XML parse error, raised by the various parsing methods in this module when "
 "parsing fails.  The string representation of an instance of this exception "
@@ -2723,7 +2767,7 @@ msgstr ""
 "пользователю сообщение об ошибке. Кроме того, ему будут доступны следующие "
 "атрибуты:"
 
-#: ../../library/xml.etree.elementtree.rst:1549
+#: ../../library/xml.etree.elementtree.rst:1582
 msgid ""
 "A numeric error code from the expat parser. See the documentation of :mod:"
 "`xml.parsers.expat` for the list of error codes and their meanings."
@@ -2731,17 +2775,17 @@ msgstr ""
 "Числовой код ошибки из парсера экспатов. См. документацию :mod:`xml.parsers."
 "expat` для получения списка кодов ошибок и их значений."
 
-#: ../../library/xml.etree.elementtree.rst:1554
+#: ../../library/xml.etree.elementtree.rst:1587
 msgid ""
 "A tuple of *line*, *column* numbers, specifying where the error occurred."
 msgstr ""
 "Кортеж номеров *строки* и *столбца*, указывающий, где произошла ошибка."
 
-#: ../../library/xml.etree.elementtree.rst:1557
+#: ../../library/xml.etree.elementtree.rst:1590
 msgid "Footnotes"
 msgstr "Сноски"
 
-#: ../../library/xml.etree.elementtree.rst:1558
+#: ../../library/xml.etree.elementtree.rst:1591
 msgid ""
 "The encoding string included in XML output should conform to the appropriate "
 "standards.  For example, \"UTF-8\" is valid, but \"UTF8\" is not.  See "
