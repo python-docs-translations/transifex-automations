@@ -13,6 +13,7 @@ import re
 import sys
 import requests
 
+
 def validate_project_slug(slug: str) -> str:
     """Validates project name as 'python-newest' or 'python-3Y' (e.g. python-314)."""
     pattern = r"^(python-newest|python-3\d+)$"
@@ -52,7 +53,6 @@ def main():
     zero_word_resources = []
     current_url = url
 
-
     try:
         while current_url:
             response = requests.get(current_url, headers=headers)
@@ -79,7 +79,6 @@ def main():
         )
         for res in zero_word_resources:
             slug = res.get("attributes", {}).get("slug", "N/A")
-            res_id = res.get("id", "N/A")
             print(f" - {slug}")
 
         sys.exit(1)
