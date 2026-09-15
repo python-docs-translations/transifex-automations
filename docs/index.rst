@@ -40,4 +40,4 @@ See also  Translating_ in the Python Developer's Guide for more information.
    new-translators.rst
    commands.rst
    workflows.rst
-   placeholders.rst
+   admin-operations.rst
