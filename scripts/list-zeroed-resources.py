@@ -3,8 +3,8 @@ List resources with zero word count
 
 When pushing source strings from POT files to Transifex,
 now and then it fails silently and updates a resource
-with zero strings. This is only known when download the
-updated PO file with broken state (zero strings)
+with zero strings. This is discovered only when an
+updated PO file with a broken state (zero strings) is downloaded.
 """
 
 import argparse
@@ -75,7 +75,7 @@ def main():
 
     if zero_word_resources:
         print(
-            f"\nERROR: Found {len(zero_word_resources)} resource(s) with word_count equals 0 in project '{args.project}':"
+            f"\n::error ERROR: Found {len(zero_word_resources)} resource(s) with word_count equals 0 in project '{args.project}':"
         )
         for res in zero_word_resources:
             slug = res.get("attributes", {}).get("slug", "N/A")
