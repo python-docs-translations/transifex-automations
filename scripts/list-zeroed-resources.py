@@ -11,7 +11,8 @@ import argparse
 import os
 import re
 import sys
-import requests
+from transifex.api import transifex_api
+from transifex.api.jsonapi import exceptions
 
 
 def validate_project_slug(slug: str) -> str:
@@ -39,48 +40,42 @@ def main():
         help="Organization slug in Transifex (default: python-doc)",
     )
 
+    # Add annotation only on GitHub Action environment
+    annotation = ""
+    if os.getenv("CI"):
+        annotation = "::error "
+
     args = parser.parse_args()
 
-    api_token = os.getenv("TX_TOKEN")
-    project_id = f"o:{args.org}:p:{args.project}"
-
-    url = f"https://rest.api.transifex.com/resources?filter[project]={project_id}"
-    headers = {
-        "accept": "application/vnd.api+json",
-        "authorization": f"Bearer {api_token}",
-    }
-
-    zero_word_resources = []
-    current_url = url
+    if not (api_token := os.getenv("TX_TOKEN")):
+        print(
+            f"{annotation}Please set TX_TOKEN environment variable with a Transifex API Token."
+        )
+        sys.exit(1)
 
     try:
-        while current_url:
-            response = requests.get(current_url, headers=headers)
-            response.raise_for_status()
-            payload = response.json()
-
-            resources = payload.get("data", [])
-
-            for item in resources:
-                attributes = item.get("attributes", {})
-                if attributes.get("word_count") == 0:
-                    zero_word_resources.append(item)
-
-            # Pagination (if there are more pages)
-            current_url = payload.get("links", {}).get("next")
-
-    except requests.exceptions.RequestException as err:
-        print(f"ERROR: failed to query Transifex API: {err}")
+        transifex_api.setup(auth=api_token)
+        ORGANIZATION = transifex_api.Organization.get(slug=args.org)
+    except exceptions.JsonApiException:
+        print(
+            f"{annotation}Transifex auth failed. Is TX_TOKEN set with a valid API token? Do you have access to the organization?"
+        )
         sys.exit(1)
+
+    PROJECT = ORGANIZATION.fetch("projects").get(slug=args.project)
+    RESOURCES = transifex_api.Resource.filter(project=PROJECT).all()
+
+    zero_word_resources = []
+    for resource in RESOURCES:
+        if resource.attributes.get("word_count") == 0:
+            zero_word_resources.append(resource.attributes.get("slug"))
 
     if zero_word_resources:
         print(
-            f"\n::error ERROR: Found {len(zero_word_resources)} resource(s) with word_count equals 0 in project '{args.project}':"
+            f"{annotation}Found {len(zero_word_resources)} resource(s) with word_count equals 0 in project '{args.project}':"
         )
-        for res in zero_word_resources:
-            slug = res.get("attributes", {}).get("slug", "N/A")
-            print(f" - {slug}")
-
+        for resource_slug in zero_word_resources:
+            print(f"{annotation}- {resource_slug}")
         sys.exit(1)
 
 
