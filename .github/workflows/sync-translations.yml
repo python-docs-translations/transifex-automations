@@ -248,3 +248,12 @@ jobs:
           git remote set-url origin \
             "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git push
+
+      - name: Check for resources with zero words
+        if: ${{ github.event_name == 'schedule' ||
+               (github.event_name == 'workflow_dispatch' && github.event.inputs.push == 'true') }}
+        run: |
+          python scripts/list-zeroed-resources.py "$TX_PROJECT"
+        env:
+          TX_TOKEN: ${{ secrets.TX_TOKEN }}
+          TX_PROJECT: ${{ env.TX_PROJECT }}
