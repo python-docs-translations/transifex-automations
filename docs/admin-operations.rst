@@ -10,7 +10,7 @@ Recover a source resource with zero strings
 
 An upload can appear to succeed while leaving a Transifex resource with zero
 strings. The source POT file may still be correct, but subsequent downloads of
-that resource's translations produce broken PO files. This happened to
+that resource's translations produce broken PO files. For example, this happened to
 ``python-313.c-api--stable`` in `incident #246
 <https://github.com/python-docs-translations/transifex-automations/issues/246#issuecomment-5663674024>`_.
 The possible Transifex CLI upload bug is tracked in `transifex/cli#266
@@ -26,7 +26,7 @@ To restore the source strings:
    token with permission to upload source strings. Only Transifex admins can
    push sources with ``-s``.
 3. From the root of that branch, force-push the affected resource's source
-   strings. For the resource from incident #246, run:
+   strings. For example:
 
    .. code-block:: shell
 
