@@ -52,4 +52,4 @@ the `machine translation settings <https://app.transifex.com/python-doc/settings
    new-translators.rst
    commands.rst
    workflows.rst
-   placeholders.rst
+   admin-operations.rst
