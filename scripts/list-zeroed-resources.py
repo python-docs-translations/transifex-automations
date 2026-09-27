@@ -76,7 +76,9 @@ def main():
         )
         for resource_slug in zero_word_resources:
             print(f"{annotation}- {resource_slug}")
-        print("\nSee recovery guide at https://python-docs-transifex-automation.readthedocs.io/admin-operations.html#recover-a-source-resource-with-zero-strings")
+        print(
+            "\nSee recovery guide at https://python-docs-transifex-automation.readthedocs.io/admin-operations.html#recover-a-source-resource-with-zero-strings"
+        )
         sys.exit(1)
 
 
