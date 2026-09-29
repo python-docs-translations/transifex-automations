@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-31 15:58+0000\n"
+"POT-Creation-Date: 2026-09-29 18:58+0000\n"
 "PO-Revision-Date: 2025-09-16 00:01+0000\n"
 "Last-Translator: python-doc bot, 2026\n"
 "Language-Team: Spanish (Spain) (https://app.transifex.com/python-doc/"
@@ -450,7 +450,7 @@ msgid ""
 "learn more about :mod:`!ctypes` data types."
 msgstr ""
 
-#: ../../library/ctypes.rst:226 ../../library/ctypes.rst:2553
+#: ../../library/ctypes.rst:226 ../../library/ctypes.rst:2562
 msgid "Fundamental data types"
 msgstr "Tipos de datos fundamentales"
 
@@ -2011,7 +2011,17 @@ msgstr ""
 "un puntero de una función C, y se *sabe* que el puntero apunta realmente a "
 "un array en lugar de a un único elemento."
 
-#: ../../library/ctypes.rst:958
+#: ../../library/ctypes.rst:960
+msgid ""
+"Because pointer objects support subscription, they implicitly support :term:"
+"`iteration <iterator>`. Unless doing this in a controlled manner, such as by "
+"manually calling :func:`next` on a :func:`pointer` iterator, this will "
+"typically lead to infinite loops or crashes, because ctypes has no way of "
+"knowing when to stop iteration. In other words, a ``pointer`` iterator will "
+"infinitely yield arbitrary memory."
+msgstr ""
+
+#: ../../library/ctypes.rst:967
 msgid ""
 "Behind the scenes, the :func:`pointer` function does more than simply create "
 "pointer instances, it has to create pointer *types* first. This is done with "
@@ -2019,7 +2029,7 @@ msgid ""
 "returns a new type::"
 msgstr ""
 
-#: ../../library/ctypes.rst:963
+#: ../../library/ctypes.rst:972
 msgid ""
 ">>> PI = POINTER(c_int)\n"
 ">>> PI\n"
@@ -2043,7 +2053,7 @@ msgstr ""
 "<ctypes.LP_c_long object at 0x...>\n"
 ">>>"
 
-#: ../../library/ctypes.rst:974
+#: ../../library/ctypes.rst:983
 msgid ""
 "Calling the pointer type without an argument creates a ``NULL`` pointer. "
 "``NULL`` pointers have a ``False`` boolean value::"
@@ -2051,7 +2061,7 @@ msgstr ""
 "La llamada al tipo de puntero sin argumento crea un puntero ``NULL``. Los "
 "punteros ``NULL`` tienen un valor booleano ``False``::"
 
-#: ../../library/ctypes.rst:977
+#: ../../library/ctypes.rst:986
 msgid ""
 ">>> null_ptr = POINTER(c_int)()\n"
 ">>> print(bool(null_ptr))\n"
@@ -2063,13 +2073,13 @@ msgstr ""
 "False\n"
 ">>>"
 
-#: ../../library/ctypes.rst:982
+#: ../../library/ctypes.rst:991
 msgid ""
 ":mod:`!ctypes` checks for ``NULL`` when dereferencing pointers (but "
 "dereferencing invalid non-\\ ``NULL`` pointers would crash Python)::"
 msgstr ""
 
-#: ../../library/ctypes.rst:985
+#: ../../library/ctypes.rst:994
 msgid ""
 ">>> null_ptr[0]\n"
 "Traceback (most recent call last):\n"
@@ -2095,25 +2105,25 @@ msgstr ""
 "ValueError: NULL pointer access\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1000
+#: ../../library/ctypes.rst:1009
 msgid "Thread safety without the GIL"
 msgstr ""
 
-#: ../../library/ctypes.rst:1002
+#: ../../library/ctypes.rst:1011
 msgid ""
 "From Python 3.13 onward, the :term:`GIL` can be disabled on the :term:`free-"
 "threaded build`. In ctypes, reads and writes to a single object concurrently "
 "is safe, but not across multiple objects:"
 msgstr ""
 
-#: ../../library/ctypes.rst:1005
+#: ../../library/ctypes.rst:1014
 msgid ""
 ">>> number = c_int(42)\n"
 ">>> pointer_a = pointer(number)\n"
 ">>> pointer_b = pointer(number)"
 msgstr ""
 
-#: ../../library/ctypes.rst:1011
+#: ../../library/ctypes.rst:1020
 msgid ""
 "In the above, it's only safe for one object to read and write to the address "
 "at once if the GIL is disabled. So, ``pointer_a`` can be shared and written "
@@ -2122,7 +2132,7 @@ msgid ""
 "Lock` to synchronize access to memory:"
 msgstr ""
 
-#: ../../library/ctypes.rst:1016
+#: ../../library/ctypes.rst:1025
 msgid ""
 ">>> import threading\n"
 ">>> lock = threading.Lock()\n"
@@ -2134,11 +2144,11 @@ msgid ""
 "...    pointer_b.contents = 42"
 msgstr ""
 
-#: ../../library/ctypes.rst:1031
+#: ../../library/ctypes.rst:1040
 msgid "Type conversions"
 msgstr "Conversiones de tipos"
 
-#: ../../library/ctypes.rst:1033
+#: ../../library/ctypes.rst:1042
 msgid ""
 "Usually, ctypes does strict type checking.  This means, if you have "
 "``POINTER(c_int)`` in the :attr:`~_CFuncPtr.argtypes` list of a function or "
@@ -2157,7 +2167,7 @@ msgstr ""
 "lugar de tipos de punteros.  Así, para ``POINTER(c_int)``, ctypes acepta una "
 "matriz de c_int::"
 
-#: ../../library/ctypes.rst:1040
+#: ../../library/ctypes.rst:1049
 msgid ""
 ">>> class Bar(Structure):\n"
 "...     _fields_ = [(\"count\", c_int), (\"values\", POINTER(c_int))]\n"
@@ -2187,7 +2197,7 @@ msgstr ""
 "3\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1054
+#: ../../library/ctypes.rst:1063
 msgid ""
 "In addition, if a function argument is explicitly declared to be a pointer "
 "type (such as ``POINTER(c_int)``) in :attr:`~_CFuncPtr.argtypes`, an object "
@@ -2201,13 +2211,13 @@ msgstr ""
 "ctypes aplicará la conversión requerida :func:`byref` en este caso "
 "automáticamente."
 
-#: ../../library/ctypes.rst:1059
+#: ../../library/ctypes.rst:1068
 msgid "To set a POINTER type field to ``NULL``, you can assign ``None``::"
 msgstr ""
 "Para establecer un campo de tipo PUNTERO en ``NULL``, puede asignar "
 "``None``::"
 
-#: ../../library/ctypes.rst:1061
+#: ../../library/ctypes.rst:1070
 msgid ""
 ">>> bar.values = None\n"
 ">>>"
@@ -2215,7 +2225,7 @@ msgstr ""
 ">>> bar.values = None\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1066
+#: ../../library/ctypes.rst:1075
 msgid ""
 "Sometimes you have instances of incompatible types.  In C, you can cast one "
 "type into another type.  :mod:`!ctypes` provides a :func:`cast` function "
@@ -2224,7 +2234,7 @@ msgid ""
 "``values`` field, but not instances of other types::"
 msgstr ""
 
-#: ../../library/ctypes.rst:1072
+#: ../../library/ctypes.rst:1081
 msgid ""
 ">>> bar.values = (c_byte * 4)()\n"
 "Traceback (most recent call last):\n"
@@ -2240,11 +2250,11 @@ msgstr ""
 "instance\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1078
+#: ../../library/ctypes.rst:1087
 msgid "For these cases, the :func:`cast` function is handy."
 msgstr "Para estos casos, la función :func:`cast` resulta muy útil."
 
-#: ../../library/ctypes.rst:1080
+#: ../../library/ctypes.rst:1089
 msgid ""
 "The :func:`cast` function can be used to cast a ctypes instance into a "
 "pointer to a different ctypes data type.  :func:`cast` takes two parameters, "
@@ -2259,7 +2269,7 @@ msgstr ""
 "del segundo argumento, que hace referencia al mismo bloque de memoria que el "
 "primer argumento::"
 
-#: ../../library/ctypes.rst:1086
+#: ../../library/ctypes.rst:1095
 msgid ""
 ">>> a = (c_byte * 4)()\n"
 ">>> cast(a, POINTER(c_int))\n"
@@ -2271,7 +2281,7 @@ msgstr ""
 "<ctypes.LP_c_long object at ...>\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1091
+#: ../../library/ctypes.rst:1100
 msgid ""
 "So, :func:`cast` can be used to assign to the ``values`` field of ``Bar`` "
 "the structure::"
@@ -2279,7 +2289,7 @@ msgstr ""
 "Así, :func:`cast` puede utilizarse para asignar al campo ``values`` de "
 "``Bar`` la estructura::"
 
-#: ../../library/ctypes.rst:1094
+#: ../../library/ctypes.rst:1103
 msgid ""
 ">>> bar = Bar()\n"
 ">>> bar.values = cast((c_byte * 4)(), POINTER(c_int))\n"
@@ -2293,11 +2303,11 @@ msgstr ""
 "0\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1104
+#: ../../library/ctypes.rst:1113
 msgid "Incomplete Types"
 msgstr "Tipos incompletos"
 
-#: ../../library/ctypes.rst:1106
+#: ../../library/ctypes.rst:1115
 msgid ""
 "*Incomplete Types* are structures, unions or arrays whose members are not "
 "yet specified. In C, they are specified by forward declarations, which are "
@@ -2307,7 +2317,7 @@ msgstr ""
 "aún no se han especificado. En C, se especifican mediante declaraciones "
 "forward, que se definen más adelante::"
 
-#: ../../library/ctypes.rst:1110
+#: ../../library/ctypes.rst:1119
 msgid ""
 "struct cell; /* forward declaration */\n"
 "\n"
@@ -2323,13 +2333,13 @@ msgstr ""
 "    struct cell *next;\n"
 "};"
 
-#: ../../library/ctypes.rst:1117
+#: ../../library/ctypes.rst:1126
 msgid ""
 "The straightforward translation into ctypes code would be this, but it does "
 "not work::"
 msgstr "La traducción directa a código ctypes sería ésta, pero no funciona::"
 
-#: ../../library/ctypes.rst:1120
+#: ../../library/ctypes.rst:1129
 msgid ""
 ">>> class cell(Structure):\n"
 "...     _fields_ = [(\"name\", c_char_p),\n"
@@ -2351,14 +2361,14 @@ msgstr ""
 "NameError: name 'cell' is not defined\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1130
+#: ../../library/ctypes.rst:1139
 msgid ""
 "because the new ``class cell`` is not available in the class statement "
 "itself. In :mod:`!ctypes`, we can define the ``cell`` class and set the :"
 "attr:`~Structure._fields_` attribute later, after the class statement::"
 msgstr ""
 
-#: ../../library/ctypes.rst:1134
+#: ../../library/ctypes.rst:1143
 msgid ""
 ">>> from ctypes import *\n"
 ">>> class cell(Structure):\n"
@@ -2376,7 +2386,7 @@ msgstr ""
 "... (\"siguiente\", POINTER(cell))]\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1142
+#: ../../library/ctypes.rst:1151
 msgid ""
 "Let's try it. We create two instances of ``cell``, and let them point to "
 "each other, and finally follow the pointer chain a few times::"
@@ -2385,7 +2395,7 @@ msgstr ""
 "la una a la otra, y finalmente seguimos la cadena de punteros unas cuantas "
 "veces::"
 
-#: ../../library/ctypes.rst:1145
+#: ../../library/ctypes.rst:1154
 msgid ""
 ">>> c1 = cell()\n"
 ">>> c1.name = b\"foo\"\n"
@@ -2415,17 +2425,17 @@ msgstr ""
 "foo bar foo bar foo bar foo bar\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1163
+#: ../../library/ctypes.rst:1172
 msgid "Callback functions"
 msgstr "Funciones de devolución de llamada"
 
-#: ../../library/ctypes.rst:1165
+#: ../../library/ctypes.rst:1174
 msgid ""
 ":mod:`!ctypes` allows creating C callable function pointers from Python "
 "callables. These are sometimes called *callback functions*."
 msgstr ""
 
-#: ../../library/ctypes.rst:1168
+#: ../../library/ctypes.rst:1177
 msgid ""
 "First, you must create a class for the callback function. The class knows "
 "the calling convention, the return type, and the number and types of "
@@ -2435,7 +2445,7 @@ msgstr ""
 "llamada. La clase conoce la convención de llamada, el tipo de retorno y el "
 "número y tipos de argumentos que recibirá esta función."
 
-#: ../../library/ctypes.rst:1172
+#: ../../library/ctypes.rst:1181
 msgid ""
 "The :func:`CFUNCTYPE` factory function creates types for callback functions "
 "using the ``cdecl`` calling convention. On Windows, the :func:`WINFUNCTYPE` "
@@ -2447,7 +2457,7 @@ msgstr ""
 "función de fábrica :func:`WINFUNCTYPE` crea tipos para funciones de "
 "devolución de llamada utilizando la convención de llamada ``stdcall``."
 
-#: ../../library/ctypes.rst:1177
+#: ../../library/ctypes.rst:1186
 msgid ""
 "Both of these factory functions are called with the result type as first "
 "argument, and the callback functions expected argument types as the "
@@ -2457,7 +2467,7 @@ msgstr ""
 "argumento, y los tipos de argumento esperados de las funciones de devolución "
 "de llamada como argumentos restantes."
 
-#: ../../library/ctypes.rst:1181
+#: ../../library/ctypes.rst:1190
 msgid ""
 "I will present an example here which uses the standard C library's :c:func:`!"
 "qsort` function, that is used to sort items with the help of a callback "
@@ -2468,7 +2478,7 @@ msgstr ""
 "de una función de devolución de llamada. :c:func:`!qsort` se utilizará para "
 "ordenar una matriz de enteros::"
 
-#: ../../library/ctypes.rst:1185
+#: ../../library/ctypes.rst:1194
 msgid ""
 ">>> IntArray5 = c_int * 5\n"
 ">>> ia = IntArray5(5, 1, 7, 33, 99)\n"
@@ -2482,7 +2492,7 @@ msgstr ""
 ">>> qsort.restype = None\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1191
+#: ../../library/ctypes.rst:1200
 msgid ""
 ":func:`!qsort` must be called with a pointer to the data to sort, the number "
 "of items in the data array, the size of one item, and a pointer to the "
@@ -2498,7 +2508,7 @@ msgstr ""
 "devolver un entero negativo si el primer elemento es menor que el segundo, "
 "un cero si son iguales, y un entero positivo en caso contrario."
 
-#: ../../library/ctypes.rst:1197
+#: ../../library/ctypes.rst:1206
 msgid ""
 "So our callback function receives pointers to integers, and must return an "
 "integer. First we create the ``type`` for the callback function::"
@@ -2506,7 +2516,7 @@ msgstr ""
 "Así que nuestra función callback recibe punteros a enteros, y debe devolver "
 "un entero. Primero creamos el ``type`` para la función callback::"
 
-#: ../../library/ctypes.rst:1200
+#: ../../library/ctypes.rst:1209
 msgid ""
 ">>> CMPFUNC = CFUNCTYPE(c_int, POINTER(c_int), POINTER(c_int))\n"
 ">>>"
@@ -2514,7 +2524,7 @@ msgstr ""
 ">>> CMPFUNC = CFUNCTYPE(c_int, POINTER(c_int), POINTER(c_int))\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1203
+#: ../../library/ctypes.rst:1212
 msgid ""
 "To get started, here is a simple callback that shows the values it gets "
 "passed::"
@@ -2522,7 +2532,7 @@ msgstr ""
 "Para empezar, aquí tienes una simple llamada de retorno que muestra los "
 "valores que se le pasan::"
 
-#: ../../library/ctypes.rst:1206
+#: ../../library/ctypes.rst:1215
 msgid ""
 ">>> def py_cmp_func(a, b):\n"
 "...     print(\"py_cmp_func\", a[0], b[0])\n"
@@ -2538,11 +2548,11 @@ msgstr ""
 ">>> cmp_func = CMPFUNC(py_cmp_func)\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1213
+#: ../../library/ctypes.rst:1222
 msgid "The result::"
 msgstr "El resultado::"
 
-#: ../../library/ctypes.rst:1215
+#: ../../library/ctypes.rst:1224
 msgid ""
 ">>> qsort(ia, len(ia), sizeof(c_int), cmp_func)\n"
 "py_cmp_func 5 1\n"
@@ -2560,13 +2570,13 @@ msgstr ""
 "py_cmp_func 1 7\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1223
+#: ../../library/ctypes.rst:1232
 msgid "Now we can actually compare the two items and return a useful result::"
 msgstr ""
 "Ahora podemos realmente comparar los dos elementos y devolver un resultado "
 "útil::"
 
-#: ../../library/ctypes.rst:1225
+#: ../../library/ctypes.rst:1234
 msgid ""
 ">>> def py_cmp_func(a, b):\n"
 "...     print(\"py_cmp_func\", a[0], b[0])\n"
@@ -2594,12 +2604,12 @@ msgstr ""
 "py_cmp_func 5 7\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1238
+#: ../../library/ctypes.rst:1247
 msgid "As we can easily check, our array is sorted now::"
 msgstr ""
 "Como podemos comprobar fácilmente, nuestra matriz está ordenada ahora::"
 
-#: ../../library/ctypes.rst:1240
+#: ../../library/ctypes.rst:1249
 msgid ""
 ">>> for i in ia: print(i, end=\" \")\n"
 "...\n"
@@ -2611,7 +2621,7 @@ msgstr ""
 "1 5 7 33 99\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1245
+#: ../../library/ctypes.rst:1254
 msgid ""
 "The function factories can be used as decorator factories, so we may as well "
 "write::"
@@ -2619,7 +2629,7 @@ msgstr ""
 "Las fábricas de funciones se pueden utilizar como fábricas de decoradores, "
 "por lo que también podemos escribir::"
 
-#: ../../library/ctypes.rst:1248
+#: ../../library/ctypes.rst:1257
 msgid ""
 ">>> @CFUNCTYPE(c_int, POINTER(c_int), POINTER(c_int))\n"
 "... def py_cmp_func(a, b):\n"
@@ -2647,14 +2657,14 @@ msgstr ""
 "py_cmp_func 5 7\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1263
+#: ../../library/ctypes.rst:1272
 msgid ""
 "Make sure you keep references to :func:`CFUNCTYPE` objects as long as they "
 "are used from C code. :mod:`!ctypes` doesn't, and if you don't, they may be "
 "garbage collected, crashing your program when a callback is made."
 msgstr ""
 
-#: ../../library/ctypes.rst:1267
+#: ../../library/ctypes.rst:1276
 msgid ""
 "Also, note that if the callback function is called in a thread created "
 "outside of Python's control (e.g. by the foreign code that calls the "
@@ -2671,11 +2681,11 @@ msgstr ""
 "sobrevivirán a través de diferentes llamadas de retorno, incluso cuando esas "
 "llamadas se hagan desde el mismo hilo C."
 
-#: ../../library/ctypes.rst:1277
+#: ../../library/ctypes.rst:1286
 msgid "Accessing values exported from dlls"
 msgstr "Acceso a valores exportados desde dlls"
 
-#: ../../library/ctypes.rst:1279
+#: ../../library/ctypes.rst:1288
 msgid ""
 "Some shared libraries not only export functions, they also export variables. "
 "An example in the Python library itself is the :c:data:`Py_Version`, Python "
@@ -2686,14 +2696,14 @@ msgstr ""
 "`Py_Version`, número de versión en tiempo de ejecución de Python codificado "
 "en un único entero constante."
 
-#: ../../library/ctypes.rst:1283
+#: ../../library/ctypes.rst:1292
 msgid ""
 ":mod:`!ctypes` can access values like this with the :meth:`~_CData.in_dll` "
 "class methods of the type.  *pythonapi* is a predefined symbol giving access "
 "to the Python C api::"
 msgstr ""
 
-#: ../../library/ctypes.rst:1287
+#: ../../library/ctypes.rst:1296
 msgid ""
 ">>> version = ctypes.c_int.in_dll(ctypes.pythonapi, \"Py_Version\")\n"
 ">>> print(hex(version.value))\n"
@@ -2703,7 +2713,7 @@ msgstr ""
 ">>> print(hex(version.value))\n"
 "0x30c00a0"
 
-#: ../../library/ctypes.rst:1291
+#: ../../library/ctypes.rst:1300
 msgid ""
 "An extended example which also demonstrates the use of pointers accesses "
 "the :c:data:`PyImport_FrozenModules` pointer exported by Python."
@@ -2711,11 +2721,11 @@ msgstr ""
 "Un ejemplo ampliado que también demuestra el uso de punteros accede al "
 "puntero :c:data:`PyImport_FrozenModules` exportado por Python."
 
-#: ../../library/ctypes.rst:1294
+#: ../../library/ctypes.rst:1303
 msgid "Quoting the docs for that value:"
 msgstr "Citando la documentación para ese valor:"
 
-#: ../../library/ctypes.rst:1296
+#: ../../library/ctypes.rst:1305
 msgid ""
 "This pointer is initialized to point to an array of :c:struct:`_frozen` "
 "records, terminated by one whose members are all ``NULL`` or zero.  When a "
@@ -2729,13 +2739,13 @@ msgstr ""
 "terceros podría jugar con esto para proporcionar una colección de módulos "
 "congelados creada dinámicamente."
 
-#: ../../library/ctypes.rst:1301
+#: ../../library/ctypes.rst:1310
 msgid ""
 "So manipulating this pointer could even prove useful. To restrict the "
 "example size, we show only how this table can be read with :mod:`!ctypes`::"
 msgstr ""
 
-#: ../../library/ctypes.rst:1304
+#: ../../library/ctypes.rst:1313
 msgid ""
 ">>> from ctypes import *\n"
 ">>>\n"
@@ -2759,7 +2769,7 @@ msgstr ""
 "...\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1315
+#: ../../library/ctypes.rst:1324
 msgid ""
 "We have defined the :c:struct:`_frozen` data type, so we can get the pointer "
 "to the table::"
@@ -2767,7 +2777,7 @@ msgstr ""
 "Hemos definido el tipo de datos :c:struct:`_frozen`, por lo que podemos "
 "obtener el puntero a la tabla::"
 
-#: ../../library/ctypes.rst:1318
+#: ../../library/ctypes.rst:1327
 msgid ""
 ">>> FrozenTable = POINTER(struct_frozen)\n"
 ">>> table = FrozenTable.in_dll(pythonapi, \"_PyImport_FrozenBootstrap\")\n"
@@ -2777,7 +2787,7 @@ msgstr ""
 ">>> table = FrozenTable.in_dll(pythonapi, \"_PyImport_FrozenBootstrap\")\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1322
+#: ../../library/ctypes.rst:1331
 msgid ""
 "Since ``table`` is a ``pointer`` to the array of ``struct_frozen`` records, "
 "we can iterate over it, but we just have to make sure that our loop "
@@ -2791,7 +2801,7 @@ msgstr ""
 "probablemente se bloquearía con una violación de acceso o lo que sea, así "
 "que es mejor salir del bucle cuando lleguemos a la entrada ``NULL``::"
 
-#: ../../library/ctypes.rst:1328
+#: ../../library/ctypes.rst:1337
 msgid ""
 ">>> for item in table:\n"
 "...     if item.name is None:\n"
@@ -2813,7 +2823,7 @@ msgstr ""
 "zipimport 12345\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1338
+#: ../../library/ctypes.rst:1347
 msgid ""
 "The fact that standard Python has a frozen module and a frozen package "
 "(indicated by the negative ``size`` member) is not well known, it is only "
@@ -2824,21 +2834,21 @@ msgstr ""
 "sólo se utiliza para hacer pruebas. Pruébalo con ``import __hello__`` por "
 "ejemplo."
 
-#: ../../library/ctypes.rst:1346
+#: ../../library/ctypes.rst:1355
 msgid "Surprises"
 msgstr "Sorpresas"
 
-#: ../../library/ctypes.rst:1348
+#: ../../library/ctypes.rst:1357
 msgid ""
 "There are some edges in :mod:`!ctypes` where you might expect something "
 "other than what actually happens."
 msgstr ""
 
-#: ../../library/ctypes.rst:1351
+#: ../../library/ctypes.rst:1360
 msgid "Consider the following example::"
 msgstr "Considere el siguiente ejemplo::"
 
-#: ../../library/ctypes.rst:1353
+#: ../../library/ctypes.rst:1362
 msgid ""
 ">>> from ctypes import *\n"
 ">>> class POINT(Structure):\n"
@@ -2876,7 +2886,7 @@ msgstr ""
 "3 4 3 4\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1371
+#: ../../library/ctypes.rst:1380
 msgid ""
 "Hm. We certainly expected the last statement to print ``3 4 1 2``. What "
 "happened? Here are the steps of the ``rc.a, rc.b = rc.b, rc.a`` line above::"
@@ -2885,7 +2895,7 @@ msgstr ""
 "¿Qué ha ocurrido? Aquí están los pasos de la línea ``rc.a, rc.b = rc.b, rc."
 "a`` anterior::"
 
-#: ../../library/ctypes.rst:1374
+#: ../../library/ctypes.rst:1383
 msgid ""
 ">>> temp0, temp1 = rc.b, rc.a\n"
 ">>> rc.a = temp0\n"
@@ -2897,7 +2907,7 @@ msgstr ""
 ">>> rc.b = temp1\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1379
+#: ../../library/ctypes.rst:1388
 msgid ""
 "Note that ``temp0`` and ``temp1`` are objects still using the internal "
 "buffer of the ``rc`` object above. So executing ``rc.a = temp0`` copies the "
@@ -2911,7 +2921,7 @@ msgstr ""
 "vez, cambia el contenido de ``temp1``. Así, la última asignación ``rc.b = "
 "temp1``, no tiene el efecto esperado."
 
-#: ../../library/ctypes.rst:1385
+#: ../../library/ctypes.rst:1394
 msgid ""
 "Keep in mind that retrieving sub-objects from Structure, Unions, and Arrays "
 "doesn't *copy* the sub-object, instead it retrieves a wrapper object "
@@ -2921,7 +2931,7 @@ msgstr ""
 "Arrays no *copia* el subobjeto, sino que recupera un objeto envoltorio que "
 "accede al búfer subyacente del objeto raíz."
 
-#: ../../library/ctypes.rst:1389
+#: ../../library/ctypes.rst:1398
 msgid ""
 "Another example that may behave differently from what one would expect is "
 "this::"
@@ -2929,7 +2939,7 @@ msgstr ""
 "Otro ejemplo que puede comportarse de forma diferente a lo que cabría "
 "esperar es el siguiente::"
 
-#: ../../library/ctypes.rst:1391
+#: ../../library/ctypes.rst:1400
 msgid ""
 ">>> s = c_char_p()\n"
 ">>> s.value = b\"abc def ghi\"\n"
@@ -2947,7 +2957,7 @@ msgstr ""
 "False\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1401
+#: ../../library/ctypes.rst:1410
 msgid ""
 "Objects instantiated from :class:`c_char_p` can only have their value set to "
 "bytes or integers."
@@ -2955,7 +2965,7 @@ msgstr ""
 "Los objetos instanciados a partir de :class:`c_char_p` sólo pueden tener "
 "como valor bytes o enteros."
 
-#: ../../library/ctypes.rst:1404
+#: ../../library/ctypes.rst:1413
 msgid ""
 "Why is it printing ``False``?  ctypes instances are objects containing a "
 "memory block plus some :term:`descriptor`\\s accessing the contents of the "
@@ -2970,17 +2980,17 @@ msgstr ""
 "``contents`` del objeto.  Si se vuelve a acceder al contenido, se construye "
 "un nuevo objeto Python cada vez."
 
-#: ../../library/ctypes.rst:1414
+#: ../../library/ctypes.rst:1423
 msgid "Variable-sized data types"
 msgstr "Tipos de datos de tamaño variable"
 
-#: ../../library/ctypes.rst:1416
+#: ../../library/ctypes.rst:1425
 msgid ""
 ":mod:`!ctypes` provides some support for variable-sized arrays and "
 "structures."
 msgstr ""
 
-#: ../../library/ctypes.rst:1418
+#: ../../library/ctypes.rst:1427
 msgid ""
 "The :func:`resize` function can be used to resize the memory buffer of an "
 "existing ctypes object.  The function takes the object as first argument, "
@@ -2995,7 +3005,7 @@ msgstr ""
 "natural especificado por el tipo de objeto, un :exc:`ValueError` se plantea "
 "si esto se intenta::"
 
-#: ../../library/ctypes.rst:1424
+#: ../../library/ctypes.rst:1433
 msgid ""
 ">>> short_array = (c_short * 4)()\n"
 ">>> print(sizeof(short_array))\n"
@@ -3025,7 +3035,7 @@ msgstr ""
 "8\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1438
+#: ../../library/ctypes.rst:1447
 msgid ""
 "This is nice and fine, but how would one access the additional elements "
 "contained in this array?  Since the type still only knows about 4 elements, "
@@ -3035,7 +3045,7 @@ msgstr ""
 "contenidos en esta matriz?  Dado que el tipo todavía sólo conoce 4 "
 "elementos, obtenemos errores al acceder a otros elementos::"
 
-#: ../../library/ctypes.rst:1442
+#: ../../library/ctypes.rst:1451
 msgid ""
 ">>> short_array[:]\n"
 "[0, 0, 0, 0]\n"
@@ -3053,32 +3063,32 @@ msgstr ""
 "IndexError: invalid index\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1450
+#: ../../library/ctypes.rst:1459
 msgid ""
 "Another way to use variable-sized data types with :mod:`!ctypes` is to use "
 "the dynamic nature of Python, and (re-)define the data type after the "
 "required size is already known, on a case by case basis."
 msgstr ""
 
-#: ../../library/ctypes.rst:1458
+#: ../../library/ctypes.rst:1467
 msgid "ctypes reference"
 msgstr "referencia ctypes"
 
-#: ../../library/ctypes.rst:1463
+#: ../../library/ctypes.rst:1472
 msgid "Loading shared libraries"
 msgstr "Carga de bibliotecas compartidas"
 
-#: ../../library/ctypes.rst:1465
+#: ../../library/ctypes.rst:1474
 msgid ""
 "There are several ways to load shared libraries into the Python process.  "
 "One way is to instantiate :py:class:`CDLL` or one of its subclasses:"
 msgstr ""
 
-#: ../../library/ctypes.rst:1471
+#: ../../library/ctypes.rst:1480
 msgid "Represents a loaded shared library."
 msgstr ""
 
-#: ../../library/ctypes.rst:1473
+#: ../../library/ctypes.rst:1482
 msgid ""
 "Functions in this library use the standard C calling convention, and are "
 "assumed to return :c:expr:`int`. The Python :term:`global interpreter lock` "
@@ -3088,7 +3098,7 @@ msgid ""
 "PyDLL`."
 msgstr ""
 
-#: ../../library/ctypes.rst:1480
+#: ../../library/ctypes.rst:1489
 msgid ""
 "If you have an existing :py:attr:`handle <ctypes.CDLL._handle>` to an "
 "already loaded shared library, it can be passed as the *handle* argument to "
@@ -3097,20 +3107,20 @@ msgid ""
 "it may be adjusted and/or validated."
 msgstr ""
 
-#: ../../library/ctypes.rst:1486
+#: ../../library/ctypes.rst:1495
 msgid ""
 "If *handle* is ``None``, the underlying platform's :manpage:`dlopen(3)` or "
 "`LoadLibraryExW`_ function is used to load the library into the process, and "
 "to get a handle to it."
 msgstr ""
 
-#: ../../library/ctypes.rst:1490
+#: ../../library/ctypes.rst:1499
 msgid ""
 "*name* is the pathname of the shared library to open. If *name* does not "
 "contain a path separator, the library is found in a platform-specific way."
 msgstr ""
 
-#: ../../library/ctypes.rst:1494
+#: ../../library/ctypes.rst:1503
 msgid ""
 "On Windows, the ``.DLL`` suffix may be missing. (For details, see "
 "`LoadLibraryExW`_ documentation.) Other platform-specific prefixes and "
@@ -3119,7 +3129,7 @@ msgid ""
 "`ctypes-finding-shared-libraries` for more information."
 msgstr ""
 
-#: ../../library/ctypes.rst:1501
+#: ../../library/ctypes.rst:1510
 msgid ""
 "On non-Windows systems, *name* can  be ``None``. In this case, :c:func:`!"
 "dlopen` is called with ``NULL``, which opens the main program as a "
@@ -3127,17 +3137,17 @@ msgid ""
 "is more portable.)"
 msgstr ""
 
-#: ../../library/ctypes.rst:1507
+#: ../../library/ctypes.rst:1516
 msgid "CPython implementation detail"
 msgstr ""
 
-#: ../../library/ctypes.rst:1509
+#: ../../library/ctypes.rst:1518
 msgid ""
 "Since CPython is linked to ``libc``, a ``None`` *name* is often used to "
 "access the C standard library::"
 msgstr ""
 
-#: ../../library/ctypes.rst:1512
+#: ../../library/ctypes.rst:1521
 msgid ""
 ">>> printf = ctypes.CDLL(None).printf\n"
 ">>> printf.argtypes = [ctypes.c_char_p]\n"
@@ -3146,13 +3156,13 @@ msgid ""
 "6"
 msgstr ""
 
-#: ../../library/ctypes.rst:1518
+#: ../../library/ctypes.rst:1527
 msgid ""
 "To access the Python C API, prefer :py:data:`ctypes.pythonapi` which works "
 "across platforms."
 msgstr ""
 
-#: ../../library/ctypes.rst:1521
+#: ../../library/ctypes.rst:1530
 msgid ""
 "The *mode* parameter can be used to specify how the library is loaded.  For "
 "details, consult the :manpage:`dlopen(3)` manpage.  On Windows, *mode* is "
@@ -3164,7 +3174,7 @@ msgstr ""
 "`dlopen(3)`.  En Windows, *mode* se ignora.  En sistemas posix, RTLD_NOW se "
 "añade siempre, y no es configurable."
 
-#: ../../library/ctypes.rst:1526
+#: ../../library/ctypes.rst:1535
 msgid ""
 "The *use_errno* parameter, when set to true, enables a ctypes mechanism that "
 "allows accessing the system :data:`errno` error number in a safe way. :mod:`!"
@@ -3174,7 +3184,7 @@ msgid ""
 "private copy, the same happens immediately after the function call."
 msgstr ""
 
-#: ../../library/ctypes.rst:1533
+#: ../../library/ctypes.rst:1542
 msgid ""
 "The function :func:`ctypes.get_errno` returns the value of the ctypes "
 "private copy, and the function :func:`ctypes.set_errno` changes the ctypes "
@@ -3184,7 +3194,7 @@ msgstr ""
 "ctypes, y la función :func:`ctypes.set_errno` cambia la copia privada ctypes "
 "a un nuevo valor y devuelve el valor anterior."
 
-#: ../../library/ctypes.rst:1537
+#: ../../library/ctypes.rst:1546
 msgid ""
 "The *use_last_error* parameter, when set to true, enables the same mechanism "
 "for the Windows error code which is managed by the :func:`GetLastError` and :"
@@ -3199,7 +3209,7 @@ msgstr ""
 "se utilizan para solicitar y cambiar la copia privada ctypes del código de "
 "error de windows."
 
-#: ../../library/ctypes.rst:1543
+#: ../../library/ctypes.rst:1552
 msgid ""
 "The *winmode* parameter is used on Windows to specify how the library is "
 "loaded (since *mode* is ignored). It takes any value that is valid for the "
@@ -3209,7 +3219,7 @@ msgid ""
 "ensure the correct library and dependencies are loaded."
 msgstr ""
 
-#: ../../library/ctypes.rst:1550
+#: ../../library/ctypes.rst:1559
 msgid ""
 "On Windows creating a :class:`CDLL` instance may fail even if the DLL name "
 "exists. When a dependent DLL of the loaded DLL is not found, a :exc:"
@@ -3231,22 +3241,22 @@ msgstr ""
 "cuál no se encuentra utilizando las herramientas de depuración y rastreo de "
 "Windows."
 
-#: ../../library/ctypes.rst:1562
+#: ../../library/ctypes.rst:1571
 msgid ""
 "`Microsoft DUMPBIN tool <https://learn.microsoft.com/en-us/cpp/build/"
 "reference/dumpbin-reference?view=msvc-170>`_ -- A tool to find DLL "
 "dependents."
 msgstr ""
 
-#: ../../library/ctypes.rst:1565
+#: ../../library/ctypes.rst:1574
 msgid "Added *winmode* parameter."
 msgstr "Se ha añadido el parámetro *winmode*."
 
-#: ../../library/ctypes.rst:1570
+#: ../../library/ctypes.rst:1579
 msgid "The *name* parameter can now be a :term:`path-like object`."
 msgstr "El parámetro *nombre* ahora puede ser un  :term:`path-like object`."
 
-#: ../../library/ctypes.rst:1572
+#: ../../library/ctypes.rst:1581
 msgid ""
 "Instances of this class have no public methods.  Functions exported by the "
 "shared library can be accessed as attributes or by index.  Please note that "
@@ -3255,7 +3265,7 @@ msgid ""
 "hand, accessing it through an index returns a new object each time::"
 msgstr ""
 
-#: ../../library/ctypes.rst:1578
+#: ../../library/ctypes.rst:1587
 msgid ""
 ">>> from ctypes import CDLL\n"
 ">>> libc = CDLL(\"libc.so.6\")  # On Linux\n"
@@ -3271,26 +3281,26 @@ msgstr ""
 ">>> libc['time'] == libc['time']\n"
 "False"
 
-#: ../../library/ctypes.rst:1585
+#: ../../library/ctypes.rst:1594
 msgid ""
 "The following public attributes are available. Their name starts with an "
 "underscore to not clash with exported function names:"
 msgstr ""
 
-#: ../../library/ctypes.rst:1590
+#: ../../library/ctypes.rst:1599
 msgid "The system handle used to access the library."
 msgstr "Manejador del sistema utilizado para acceder a la biblioteca."
 
-#: ../../library/ctypes.rst:1594
+#: ../../library/ctypes.rst:1603
 msgid "The name of the library passed in the constructor."
 msgstr "El nombre de la biblioteca pasada en el constructor."
 
-#: ../../library/ctypes.rst:1600 ../../library/ctypes.rst:1617
-#: ../../library/ctypes.rst:1626
+#: ../../library/ctypes.rst:1609 ../../library/ctypes.rst:1626
+#: ../../library/ctypes.rst:1635
 msgid "See :py:class:`~ctypes.CDLL`, the superclass, for common information."
 msgstr ""
 
-#: ../../library/ctypes.rst:1602
+#: ../../library/ctypes.rst:1611
 msgid ""
 "Functions in this library use the ``stdcall`` calling convention, and are "
 "assumed to return the windows specific :class:`HRESULT` code.  :class:"
@@ -3299,42 +3309,42 @@ msgid ""
 "value signals a failure, an :class:`OSError` is automatically raised."
 msgstr ""
 
-#: ../../library/ctypes.rst:1608 ../../library/ctypes.rst:1622
-#: ../../library/ctypes.rst:1685 ../../library/ctypes.rst:1692
-#: ../../library/ctypes.rst:1828 ../../library/ctypes.rst:1987
-#: ../../library/ctypes.rst:2039 ../../library/ctypes.rst:2191
-#: ../../library/ctypes.rst:2263 ../../library/ctypes.rst:2272
-#: ../../library/ctypes.rst:2286 ../../library/ctypes.rst:2295
-#: ../../library/ctypes.rst:2304 ../../library/ctypes.rst:2319
-#: ../../library/ctypes.rst:2386 ../../library/ctypes.rst:2413
-#: ../../library/ctypes.rst:2845 ../../library/ctypes.rst:3268
+#: ../../library/ctypes.rst:1617 ../../library/ctypes.rst:1631
+#: ../../library/ctypes.rst:1694 ../../library/ctypes.rst:1701
+#: ../../library/ctypes.rst:1837 ../../library/ctypes.rst:1996
+#: ../../library/ctypes.rst:2048 ../../library/ctypes.rst:2200
+#: ../../library/ctypes.rst:2272 ../../library/ctypes.rst:2281
+#: ../../library/ctypes.rst:2295 ../../library/ctypes.rst:2304
+#: ../../library/ctypes.rst:2313 ../../library/ctypes.rst:2328
+#: ../../library/ctypes.rst:2395 ../../library/ctypes.rst:2422
+#: ../../library/ctypes.rst:2854 ../../library/ctypes.rst:3277
 msgid "Availability"
 msgstr "Disponibilidad"
 
-#: ../../library/ctypes.rst:1610
+#: ../../library/ctypes.rst:1619
 msgid ""
 ":exc:`WindowsError` used to be raised, which is now an alias of :exc:"
 "`OSError`."
 msgstr ":exc:`WindowsError` que ahora es un alias de :exc:`OSError`."
 
-#: ../../library/ctypes.rst:1619
+#: ../../library/ctypes.rst:1628
 msgid ""
 "Functions in these libraries use the ``stdcall`` calling convention, and are "
 "assumed to return :c:expr:`int` by default."
 msgstr ""
 
-#: ../../library/ctypes.rst:1628
+#: ../../library/ctypes.rst:1637
 msgid ""
 "When functions in this library are called, the Python GIL is *not* released "
 "during the function call, and after the function execution the Python error "
 "flag is checked. If the error flag is set, a Python exception is raised."
 msgstr ""
 
-#: ../../library/ctypes.rst:1633
+#: ../../library/ctypes.rst:1642
 msgid "Thus, this is only useful to call Python C API functions directly."
 msgstr ""
 
-#: ../../library/ctypes.rst:1638
+#: ../../library/ctypes.rst:1647
 msgid ""
 "Flag to use as *mode* parameter.  On platforms where this flag is not "
 "available, it is defined as the integer zero."
@@ -3342,7 +3352,7 @@ msgstr ""
 "Bandera a utilizar como parámetro *mode*.  En plataformas donde esta bandera "
 "no está disponible, se define como el entero cero."
 
-#: ../../library/ctypes.rst:1644
+#: ../../library/ctypes.rst:1653
 msgid ""
 "Flag to use as *mode* parameter.  On platforms where this is not available, "
 "it is the same as *RTLD_GLOBAL*."
@@ -3350,7 +3360,7 @@ msgstr ""
 "Bandera a utilizar como parámetro *mode*.  En plataformas en las que no está "
 "disponible, es el mismo que *RTLD_GLOBAL*."
 
-#: ../../library/ctypes.rst:1650
+#: ../../library/ctypes.rst:1659
 msgid ""
 "The default mode which is used to load shared libraries.  On OSX 10.3, this "
 "is *RTLD_GLOBAL*, otherwise it is the same as *RTLD_LOCAL*."
@@ -3358,7 +3368,7 @@ msgstr ""
 "El modo por defecto que se utiliza para cargar las bibliotecas compartidas.  "
 "En OSX 10.3, es *RTLD_GLOBAL*, de lo contrario es el mismo que *RTLD_LOCAL*."
 
-#: ../../library/ctypes.rst:1654
+#: ../../library/ctypes.rst:1663
 msgid ""
 "Shared libraries can also be loaded by using one of the prefabricated "
 "objects, which are instances of the :class:`LibraryLoader` class, either by "
@@ -3370,7 +3380,7 @@ msgstr ""
 "`LibraryLoader`, bien llamando al método :meth:`~LibraryLoader.LoadLibrary`, "
 "bien recuperando la biblioteca como atributo de la instancia del cargador."
 
-#: ../../library/ctypes.rst:1661
+#: ../../library/ctypes.rst:1670
 msgid ""
 "Class which loads shared libraries.  *dlltype* should be one of the :class:"
 "`CDLL`, :class:`PyDLL`, :class:`WinDLL`, or :class:`OleDLL` types."
@@ -3378,7 +3388,7 @@ msgstr ""
 "Clase que carga bibliotecas compartidas.  *dlltype* debe ser uno de los "
 "tipos :class:`CDLL`, :class:`PyDLL`, :class:`WinDLL`, o :class:`OleDLL`."
 
-#: ../../library/ctypes.rst:1664
+#: ../../library/ctypes.rst:1673
 msgid ""
 ":meth:`!__getattr__` has special behavior: It allows loading a shared "
 "library by accessing it as attribute of a library loader instance.  The "
@@ -3390,7 +3400,7 @@ msgstr ""
 "cargador de bibliotecas.  El resultado se almacena en caché, por lo que los "
 "accesos repetidos al atributo devuelven la misma biblioteca cada vez."
 
-#: ../../library/ctypes.rst:1670
+#: ../../library/ctypes.rst:1679
 msgid ""
 "Load a shared library into the process and return it.  This method always "
 "returns a new instance of the library."
@@ -3398,27 +3408,27 @@ msgstr ""
 "Carga una biblioteca compartida en el proceso y la devuelve.  Este método "
 "siempre devuelve una nueva instancia de la biblioteca."
 
-#: ../../library/ctypes.rst:1674
+#: ../../library/ctypes.rst:1683
 msgid "These prefabricated library loaders are available:"
 msgstr "Estos cargadores de bibliotecas prefabricados están disponibles:"
 
-#: ../../library/ctypes.rst:1678
+#: ../../library/ctypes.rst:1687
 msgid "Creates :class:`CDLL` instances."
 msgstr "Crea instancias de :class:`CDLL`."
 
-#: ../../library/ctypes.rst:1683
+#: ../../library/ctypes.rst:1692
 msgid "Creates :class:`WinDLL` instances."
 msgstr "Crea instancias de :class:`WinDLL`."
 
-#: ../../library/ctypes.rst:1690
+#: ../../library/ctypes.rst:1699
 msgid "Creates :class:`OleDLL` instances."
 msgstr "Crea instancias de :class:`OleDLL`."
 
-#: ../../library/ctypes.rst:1697
+#: ../../library/ctypes.rst:1706
 msgid "Creates :class:`PyDLL` instances."
 msgstr "Crea instancias de :class:`PyDLL`."
 
-#: ../../library/ctypes.rst:1702
+#: ../../library/ctypes.rst:1711
 msgid ""
 "An instance of :class:`PyDLL` that exposes Python C API functions as "
 "attributes.  Note that all these functions are assumed to return C :c:expr:"
@@ -3431,7 +3441,7 @@ msgstr ""
 "que tienes que asignar el atributo :attr:`!restype` correcto para usar estas "
 "funciones."
 
-#: ../../library/ctypes.rst:1707 ../../library/ctypes.rst:1709
+#: ../../library/ctypes.rst:1716 ../../library/ctypes.rst:1718
 msgid ""
 "Loading a library through any of these objects raises an :ref:`auditing "
 "event <auditing>` ``ctypes.dlopen`` with string argument ``name``, the name "
@@ -3441,7 +3451,7 @@ msgstr ""
 "ref:`auditing event <auditing>` ``ctypes.dlopen`` con el argumento de cadena "
 "``name``, el nombre utilizado para cargar la biblioteca."
 
-#: ../../library/ctypes.rst:1713 ../../library/ctypes.rst:1715
+#: ../../library/ctypes.rst:1722 ../../library/ctypes.rst:1724
 msgid ""
 "Accessing a function on a loaded library raises an auditing event ``ctypes."
 "dlsym`` with arguments ``library`` (the library object) and ``name`` (the "
@@ -3451,7 +3461,7 @@ msgstr ""
 "auditoría ``ctypes.dlsym`` con los argumentos ``library`` (el objeto de la "
 "biblioteca) y ``name`` (el nombre del símbolo como cadena o entero)."
 
-#: ../../library/ctypes.rst:1719 ../../library/ctypes.rst:1721
+#: ../../library/ctypes.rst:1728 ../../library/ctypes.rst:1730
 msgid ""
 "In cases when only the library handle is available rather than the object, "
 "accessing a function raises an auditing event ``ctypes.dlsym/handle`` with "
@@ -3462,11 +3472,11 @@ msgstr ""
 "``ctypes.dlsym/handle`` con los argumentos ``handle`` (el \"handle\" sin "
 "procesar de la biblioteca) y ``name``."
 
-#: ../../library/ctypes.rst:1729
+#: ../../library/ctypes.rst:1738
 msgid "Finding shared libraries"
 msgstr "Encontrar bibliotecas compartidas"
 
-#: ../../library/ctypes.rst:1731
+#: ../../library/ctypes.rst:1740
 msgid ""
 "When programming in a compiled language, shared libraries are accessed when "
 "compiling/linking a program, and when the program is run. The programmer "
@@ -3475,7 +3485,7 @@ msgid ""
 "library to load."
 msgstr ""
 
-#: ../../library/ctypes.rst:1737
+#: ../../library/ctypes.rst:1746
 msgid ""
 "While the mapping from short names to filenames is not consistently exposed "
 "by platforms, the :mod:`!ctypes.util` module provides a function, :func:`!"
@@ -3484,7 +3494,7 @@ msgid ""
 "platforms and configurations, the function is :term:`soft deprecated`."
 msgstr ""
 
-#: ../../library/ctypes.rst:1744
+#: ../../library/ctypes.rst:1753
 msgid ""
 "If wrapping a shared library with :mod:`!ctypes`, consider determining the "
 "shared library name at development time, and hardcoding it into the wrapper "
@@ -3494,11 +3504,11 @@ msgid ""
 "find_library` as a default or fallback."
 msgstr ""
 
-#: ../../library/ctypes.rst:1755
+#: ../../library/ctypes.rst:1764
 msgid "Try to find a library and return a pathname."
 msgstr ""
 
-#: ../../library/ctypes.rst:1757
+#: ../../library/ctypes.rst:1766
 msgid ""
 "*name* is the \"short\" library name without any prefix like ``lib``, suffix "
 "like ``.so``, ``.dylib`` or version number. (This is the form used for the "
@@ -3506,24 +3516,24 @@ msgid ""
 "passing to :py:class:`~ctypes.CDLL`."
 msgstr ""
 
-#: ../../library/ctypes.rst:1762
+#: ../../library/ctypes.rst:1771
 msgid "If no library can be found, return ``None``."
 msgstr ""
 
-#: ../../library/ctypes.rst:1764
+#: ../../library/ctypes.rst:1773
 msgid ""
 "The exact functionality is system dependent, and is *not guaranteed* to "
 "match the behavior of the compiler, linker, and loader used for (or by) "
 "Python. It is recommended to only use this function as a default or fallback,"
 msgstr ""
 
-#: ../../library/ctypes.rst:1771
+#: ../../library/ctypes.rst:1780
 msgid ""
 "This function is kept for use in cases where it works, but not expected to "
 "be updated for additional platforms and configurations."
 msgstr ""
 
-#: ../../library/ctypes.rst:1774
+#: ../../library/ctypes.rst:1783
 msgid ""
 "On Linux, :func:`!find_library` tries to run external programs (``/sbin/"
 "ldconfig``, ``gcc``, ``objdump`` and ``ld``) to find the library file. If "
@@ -3531,7 +3541,7 @@ msgid ""
 "by Python, the result of this function may be misleading."
 msgstr ""
 
-#: ../../library/ctypes.rst:1780
+#: ../../library/ctypes.rst:1789
 msgid ""
 "On Linux, the value of the environment variable ``LD_LIBRARY_PATH`` is used "
 "when searching for libraries, if a library cannot be found by any other "
@@ -3540,11 +3550,11 @@ msgstr ""
 "En Linux, el valor de la variable de entorno se usa al buscar bibliotecas, "
 "si no se puede encontrar una biblioteca por ningún otro medio."
 
-#: ../../library/ctypes.rst:1784
+#: ../../library/ctypes.rst:1793
 msgid "Here are some examples::"
 msgstr "He aquí algunos ejemplos::"
 
-#: ../../library/ctypes.rst:1786
+#: ../../library/ctypes.rst:1795
 msgid ""
 ">>> from ctypes.util import find_library\n"
 ">>> find_library(\"m\")\n"
@@ -3564,14 +3574,14 @@ msgstr ""
 "'libbz2.so.1.0'\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1795
+#: ../../library/ctypes.rst:1804
 msgid ""
 "On macOS and Android, :func:`!find_library` uses the system's standard "
 "naming schemes and paths to locate the library, and returns a full pathname "
 "if successful::"
 msgstr ""
 
-#: ../../library/ctypes.rst:1799
+#: ../../library/ctypes.rst:1808
 msgid ""
 ">>> from ctypes.util import find_library\n"
 ">>> find_library(\"c\")\n"
@@ -3595,27 +3605,27 @@ msgstr ""
 "'/System/Library/Frameworks/AGL.framework/AGL'\n"
 ">>>"
 
-#: ../../library/ctypes.rst:1810
+#: ../../library/ctypes.rst:1819
 msgid ""
 "On Windows, :func:`!find_library` searches along the system search path, and "
 "returns the full pathname, but since there is no predefined naming scheme a "
 "call like ``find_library(\"c\")`` will fail and return ``None``."
 msgstr ""
 
-#: ../../library/ctypes.rst:1817
+#: ../../library/ctypes.rst:1826
 msgid ""
 "Returns the filename of the VC runtime library used by Python, and by the "
 "extension modules."
 msgstr ""
 
-#: ../../library/ctypes.rst:1820
+#: ../../library/ctypes.rst:1829
 msgid ""
 "If the name of the library cannot be determined, ``None`` is returned. "
 "Notably, this will happen for recent versions of the VC runtime library, "
 "which are not directly loadable."
 msgstr ""
 
-#: ../../library/ctypes.rst:1824
+#: ../../library/ctypes.rst:1833
 msgid ""
 "If you need to free memory, for example, allocated by an extension module "
 "with a call to the ``free(void *)``, it is important that you use the "
@@ -3625,18 +3635,18 @@ msgstr ""
 "ampliación con una llamada a ``free(void *)``, es importante que utilice la "
 "función en la misma biblioteca que asignó la memoria."
 
-#: ../../library/ctypes.rst:1834
+#: ../../library/ctypes.rst:1843
 msgid "Listing loaded shared libraries"
 msgstr ""
 
-#: ../../library/ctypes.rst:1836
+#: ../../library/ctypes.rst:1845
 msgid ""
 "When writing code that relies on code loaded from shared libraries, it can "
 "be useful to know which shared libraries have already been loaded into the "
 "current process."
 msgstr ""
 
-#: ../../library/ctypes.rst:1840
+#: ../../library/ctypes.rst:1849
 msgid ""
 "The :mod:`!ctypes.util` module provides the :func:`~ctypes.util.dllist` "
 "function, which calls the different APIs provided by the various platforms "
@@ -3644,7 +3654,7 @@ msgid ""
 "current process."
 msgstr ""
 
-#: ../../library/ctypes.rst:1844
+#: ../../library/ctypes.rst:1853
 msgid ""
 "The exact output of this function will be system dependent. On most "
 "platforms, the first entry of this list represents the current process "
@@ -3652,7 +3662,7 @@ msgid ""
 "return may look like::"
 msgstr ""
 
-#: ../../library/ctypes.rst:1849
+#: ../../library/ctypes.rst:1858
 msgid ""
 ">>> from ctypes.util import dllist\n"
 ">>> dllist()\n"
@@ -3660,11 +3670,11 @@ msgid ""
 "linux-gnu/libc.so.6', ... ]"
 msgstr ""
 
-#: ../../library/ctypes.rst:1856
+#: ../../library/ctypes.rst:1865
 msgid "Foreign functions"
 msgstr "Funciones foráneas"
 
-#: ../../library/ctypes.rst:1858
+#: ../../library/ctypes.rst:1867
 msgid ""
 "As explained in the previous section, foreign functions can be accessed as "
 "attributes of loaded shared libraries.  The function objects created in this "
@@ -3679,7 +3689,7 @@ msgstr ""
 "devuelven el tipo de resultado por defecto especificado por el cargador de "
 "la biblioteca."
 
-#: ../../library/ctypes.rst:1863
+#: ../../library/ctypes.rst:1872
 msgid ""
 "They are instances of a private local class :class:`!_FuncPtr` (not exposed "
 "in :mod:`!ctypes`) which inherits from the private :class:`_CFuncPtr` class:"
@@ -3687,7 +3697,7 @@ msgstr ""
 "Son instancias de una clase local privada :class:`!_FuncPtr` (no expuesta "
 "en :mod:`!ctypes`) que hereda de la clase privada :class:`_CFuncPtr`:"
 
-#: ../../library/ctypes.rst:1866
+#: ../../library/ctypes.rst:1875
 msgid ""
 ">>> import ctypes\n"
 ">>> lib = ctypes.CDLL(None)\n"
@@ -3703,11 +3713,11 @@ msgstr ""
 ">>> lib._FuncPtr is ctypes._CFuncPtr\n"
 "False"
 
-#: ../../library/ctypes.rst:1877
+#: ../../library/ctypes.rst:1886
 msgid "Base class for C callable foreign functions."
 msgstr "Clase base para funciones foráneas invocables en C."
 
-#: ../../library/ctypes.rst:1879
+#: ../../library/ctypes.rst:1888
 msgid ""
 "Instances of foreign functions are also C compatible data types; they "
 "represent C function pointers."
@@ -3715,7 +3725,7 @@ msgstr ""
 "Las instancias de funciones fornáneas también son tipos de datos compatibles "
 "con C; representan punteros a funciones C."
 
-#: ../../library/ctypes.rst:1882
+#: ../../library/ctypes.rst:1891
 msgid ""
 "This behavior can be customized by assigning to special attributes of the "
 "foreign function object."
@@ -3723,7 +3733,7 @@ msgstr ""
 "Este comportamiento puede personalizarse asignando atributos especiales del "
 "objeto de función foránea."
 
-#: ../../library/ctypes.rst:1887
+#: ../../library/ctypes.rst:1896
 msgid ""
 "Assign a ctypes type to specify the result type of the foreign function. Use "
 "``None`` for :c:expr:`void`, a function not returning anything."
@@ -3732,7 +3742,7 @@ msgstr ""
 "ajena. Utilice ``None`` para :c:expr:`void`, una función que no devuelve "
 "nada."
 
-#: ../../library/ctypes.rst:1890
+#: ../../library/ctypes.rst:1899
 msgid ""
 "It is possible to assign a callable Python object that is not a ctypes type, "
 "in this case the function is assumed to return a C :c:expr:`int`, and the "
@@ -3749,7 +3759,7 @@ msgstr ""
 "datos ctypes como :attr:`!restype` y asigne un callable al atributo :attr:"
 "`errcheck`."
 
-#: ../../library/ctypes.rst:1899
+#: ../../library/ctypes.rst:1908
 msgid ""
 "Assign a tuple of ctypes types to specify the argument types that the "
 "function accepts.  Functions using the ``stdcall`` calling convention can "
@@ -3763,7 +3773,7 @@ msgstr ""
 "longitud de esta tupla; las funciones que utilizan la convención de llamada "
 "C también aceptan argumentos adicionales no especificados."
 
-#: ../../library/ctypes.rst:1905
+#: ../../library/ctypes.rst:1914
 msgid ""
 "When a foreign function is called, each actual argument is passed to the :"
 "meth:`~_CData.from_param` class method of the items in the :attr:`argtypes` "
@@ -3779,7 +3789,7 @@ msgstr ""
 "tupla :attr:`argtypes` convertirá una cadena pasada como argumento en un "
 "objeto bytes utilizando las reglas de conversión ctypes."
 
-#: ../../library/ctypes.rst:1912
+#: ../../library/ctypes.rst:1921
 msgid ""
 "New: It is now possible to put items in argtypes which are not ctypes types, "
 "but each item must have a :meth:`~_CData.from_param` method which returns a "
@@ -3792,7 +3802,7 @@ msgstr ""
 "ctypes).  Esto permite definir adaptadores que pueden adaptar objetos "
 "personalizados como parámetros de función."
 
-#: ../../library/ctypes.rst:1919
+#: ../../library/ctypes.rst:1928
 msgid ""
 "Assign a Python function or another callable to this attribute. The callable "
 "will be called with three or more arguments:"
@@ -3800,7 +3810,7 @@ msgstr ""
 "Asigna una función Python u otra llamada a este atributo. La llamada se "
 "realizará con tres o más argumentos:"
 
-#: ../../library/ctypes.rst:1926
+#: ../../library/ctypes.rst:1935
 msgid ""
 "*result* is what the foreign function returns, as specified by the :attr:`!"
 "restype` attribute."
@@ -3808,7 +3818,7 @@ msgstr ""
 "*result* es lo que devuelve la función ajena, tal y como se especifica en el "
 "atributo :attr:`!restype`."
 
-#: ../../library/ctypes.rst:1929
+#: ../../library/ctypes.rst:1938
 msgid ""
 "*func* is the foreign function object itself, this allows reusing the same "
 "callable object to check or post process the results of several functions."
@@ -3817,7 +3827,7 @@ msgstr ""
 "mismo objeto invocable para comprobar o postprocesar los resultados de "
 "varias funciones."
 
-#: ../../library/ctypes.rst:1933
+#: ../../library/ctypes.rst:1942
 msgid ""
 "*arguments* is a tuple containing the parameters originally passed to the "
 "function call, this allows specializing the behavior on the arguments used."
@@ -3826,7 +3836,7 @@ msgstr ""
 "la llamada de función, esto permite especializar el comportamiento en los "
 "argumentos utilizados."
 
-#: ../../library/ctypes.rst:1937
+#: ../../library/ctypes.rst:1946
 msgid ""
 "The object that this function returns will be returned from the foreign "
 "function call, but it can also check the result value and raise an exception "
@@ -3836,7 +3846,7 @@ msgstr ""
 "función externa, pero también puede comprobar el valor del resultado y "
 "lanzar una excepción si la llamada a la función externa falló."
 
-#: ../../library/ctypes.rst:1942 ../../library/ctypes.rst:1944
+#: ../../library/ctypes.rst:1951 ../../library/ctypes.rst:1953
 msgid ""
 "On Windows, when a foreign function call raises a system exception (for "
 "example, due to an access violation), it will be captured and replaced with "
@@ -3851,18 +3861,18 @@ msgstr ""
 "que permitirá a un gancho de auditoría sustituir la excepción por la suya "
 "propia."
 
-#: ../../library/ctypes.rst:1950 ../../library/ctypes.rst:1952
+#: ../../library/ctypes.rst:1959 ../../library/ctypes.rst:1961
 msgid ""
 "Some ways to invoke foreign function calls as well as some of the functions "
 "in this module may raise an auditing event ``ctypes.call_function`` with "
 "arguments ``function pointer`` and ``arguments``."
 msgstr ""
 
-#: ../../library/ctypes.rst:1959
+#: ../../library/ctypes.rst:1968
 msgid "Function prototypes"
 msgstr "Prototipos de funciones"
 
-#: ../../library/ctypes.rst:1961
+#: ../../library/ctypes.rst:1970
 msgid ""
 "Foreign functions can also be created by instantiating function prototypes. "
 "Function prototypes are similar to function prototypes in C; they describe a "
@@ -3881,7 +3891,7 @@ msgstr ""
 "aplicarse a funciones a través de la sintaxis ``@wrapper``. Véanse ejemplos "
 "en :ref:`ctypes-callback-functions`."
 
-#: ../../library/ctypes.rst:1972
+#: ../../library/ctypes.rst:1981
 msgid ""
 "The returned function prototype creates functions that use the standard C "
 "calling convention.  The function will release the GIL during the call.  If "
@@ -3896,7 +3906,7 @@ msgstr ""
 "antes y después de la llamada; *use_last_error* hace lo mismo para el código "
 "de error de Windows."
 
-#: ../../library/ctypes.rst:1982
+#: ../../library/ctypes.rst:1991
 msgid ""
 "The returned function prototype creates functions that use the ``stdcall`` "
 "calling convention.  The function will release the GIL during the call.  "
@@ -3906,7 +3916,7 @@ msgstr ""
 "de llamada ``stdcall``.  La función liberará el GIL durante la llamada.  "
 "*use_errno* y *use_last_error* tienen el mismo significado que arriba."
 
-#: ../../library/ctypes.rst:1992
+#: ../../library/ctypes.rst:2001
 msgid ""
 "The returned function prototype creates functions that use the Python "
 "calling convention.  The function will *not* release the GIL during the call."
@@ -3914,7 +3924,7 @@ msgstr ""
 "El prototipo de función devuelto crea funciones que utilizan la convención "
 "de llamadas de Python.  La función *no* liberará el GIL durante la llamada."
 
-#: ../../library/ctypes.rst:1995
+#: ../../library/ctypes.rst:2004
 msgid ""
 "Function prototypes created by these factory functions can be instantiated "
 "in different ways, depending on the type and number of the parameters in the "
@@ -3924,21 +3934,21 @@ msgstr ""
 "instanciarse de diferentes maneras, dependiendo del tipo y número de "
 "parámetros de la llamada:"
 
-#: ../../library/ctypes.rst:2002
+#: ../../library/ctypes.rst:2011
 msgid ""
 "Returns a foreign function at the specified address which must be an integer."
 msgstr ""
 "Devuelve una función ajena en la dirección especificada, que debe ser un "
 "número entero."
 
-#: ../../library/ctypes.rst:2009
+#: ../../library/ctypes.rst:2018
 msgid ""
 "Create a C callable function (a callback function) from a Python *callable*."
 msgstr ""
 "Crear una función callable en C (una función callback) a partir de una "
 "*callable* en Python."
 
-#: ../../library/ctypes.rst:2016
+#: ../../library/ctypes.rst:2025
 msgid ""
 "Returns a foreign function exported by a shared library. *func_spec* must be "
 "a 2-tuple ``(name_or_ordinal, library)``. The first item is the name of the "
@@ -3951,7 +3961,7 @@ msgstr ""
 "la función exportada como entero pequeño.  El segundo elemento es la "
 "instancia de la biblioteca compartida."
 
-#: ../../library/ctypes.rst:2026
+#: ../../library/ctypes.rst:2035
 msgid ""
 "Returns a foreign function that will call a COM method. *vtbl_index* is the "
 "index into the virtual function table, a small non-negative integer. *name* "
@@ -3964,14 +3974,14 @@ msgstr ""
 "al identificador de interfaz que se utiliza en los informes de error "
 "ampliados."
 
-#: ../../library/ctypes.rst:2031
+#: ../../library/ctypes.rst:2040
 msgid ""
 "If *iid* is not specified, an :exc:`OSError` is raised if the COM method "
 "call fails. If *iid* is specified, a :exc:`~ctypes.COMError` is raised "
 "instead."
 msgstr ""
 
-#: ../../library/ctypes.rst:2035
+#: ../../library/ctypes.rst:2044
 msgid ""
 "COM methods use a special calling convention: They require a pointer to the "
 "COM interface as first argument, in addition to those parameters that are "
@@ -3981,7 +3991,7 @@ msgstr ""
 "puntero a la interfaz COM como primer argumento, además de los parámetros "
 "especificados en la tupla :attr:`!argtypes`."
 
-#: ../../library/ctypes.rst:2042
+#: ../../library/ctypes.rst:2051
 msgid ""
 "The optional *paramflags* parameter creates foreign function wrappers with "
 "much more functionality than the features described above."
@@ -3989,7 +3999,7 @@ msgstr ""
 "El parámetro opcional *paramflags* crea envoltorios de funciones ajenas con "
 "mucha más funcionalidad que las características descritas anteriormente."
 
-#: ../../library/ctypes.rst:2045
+#: ../../library/ctypes.rst:2054
 msgid ""
 "*paramflags* must be a tuple of the same length as :attr:`~_CFuncPtr."
 "argtypes`."
@@ -3997,7 +4007,7 @@ msgstr ""
 "*paramflags* debe ser una tupla de la misma longitud que :attr:`~_CFuncPtr."
 "argtypes`."
 
-#: ../../library/ctypes.rst:2047
+#: ../../library/ctypes.rst:2056
 msgid ""
 "Each item in this tuple contains further information about a parameter, it "
 "must be a tuple containing one, two, or three items."
@@ -4005,7 +4015,7 @@ msgstr ""
 "Cada elemento de esta tupla contiene información adicional sobre un "
 "parámetro, debe ser una tupla que contenga uno, dos o tres elementos."
 
-#: ../../library/ctypes.rst:2050
+#: ../../library/ctypes.rst:2059
 msgid ""
 "The first item is an integer containing a combination of direction flags for "
 "the parameter:"
@@ -4013,31 +4023,31 @@ msgstr ""
 "El primer elemento es un número entero que contiene una combinación de "
 "indicadores de dirección para el parámetro:"
 
-#: ../../library/ctypes.rst:2053
+#: ../../library/ctypes.rst:2062
 msgid "1"
 msgstr "1"
 
-#: ../../library/ctypes.rst:2054
+#: ../../library/ctypes.rst:2063
 msgid "Specifies an input parameter to the function."
 msgstr "Especifica un parámetro de entrada a la función."
 
-#: ../../library/ctypes.rst:2056
+#: ../../library/ctypes.rst:2065
 msgid "2"
 msgstr "2"
 
-#: ../../library/ctypes.rst:2057
+#: ../../library/ctypes.rst:2066
 msgid "Output parameter.  The foreign function fills in a value."
 msgstr "Parámetro de salida.  La función externa rellena un valor."
 
-#: ../../library/ctypes.rst:2059
+#: ../../library/ctypes.rst:2068
 msgid "4"
 msgstr "4"
 
-#: ../../library/ctypes.rst:2060
+#: ../../library/ctypes.rst:2069
 msgid "Input parameter which defaults to the integer zero."
 msgstr "Parámetro de entrada que por defecto es el entero cero."
 
-#: ../../library/ctypes.rst:2062
+#: ../../library/ctypes.rst:2071
 msgid ""
 "The optional second item is the parameter name as string.  If this is "
 "specified, the foreign function can be called with named parameters."
@@ -4045,11 +4055,11 @@ msgstr ""
 "El segundo elemento opcional es el nombre del parámetro como cadena.  Si se "
 "especifica, se puede llamar a la función externa con parámetros con nombre."
 
-#: ../../library/ctypes.rst:2065
+#: ../../library/ctypes.rst:2074
 msgid "The optional third item is the default value for this parameter."
 msgstr "El tercer elemento opcional es el valor por defecto de este parámetro."
 
-#: ../../library/ctypes.rst:2068
+#: ../../library/ctypes.rst:2077
 msgid ""
 "The following example demonstrates how to wrap the Windows ``MessageBoxW`` "
 "function so that it supports default parameters and named arguments. The C "
@@ -4059,7 +4069,7 @@ msgstr ""
 "Windows para que admita parámetros por defecto y argumentos con nombre. La "
 "declaración C del archivo de cabecera de Windows es la siguiente::"
 
-#: ../../library/ctypes.rst:2072
+#: ../../library/ctypes.rst:2081
 msgid ""
 "WINUSERAPI int WINAPI\n"
 "MessageBoxW(\n"
@@ -4075,11 +4085,11 @@ msgstr ""
 "    LPCWSTR lpCaption,\n"
 "    UINT uType);"
 
-#: ../../library/ctypes.rst:2079 ../../library/ctypes.rst:2102
+#: ../../library/ctypes.rst:2088 ../../library/ctypes.rst:2111
 msgid "Here is the wrapping with :mod:`!ctypes`::"
 msgstr ""
 
-#: ../../library/ctypes.rst:2081
+#: ../../library/ctypes.rst:2090
 msgid ""
 ">>> from ctypes import c_int, WINFUNCTYPE, windll\n"
 ">>> from ctypes.wintypes import HWND, LPCWSTR, UINT\n"
@@ -4095,12 +4105,12 @@ msgstr ""
 "\"Hello from ctypes\"), (1, \"flags\", 0)\n"
 ">>> MessageBox = prototype((\"MessageBoxW\", windll.user32), paramflags)"
 
-#: ../../library/ctypes.rst:2087
+#: ../../library/ctypes.rst:2096
 msgid "The ``MessageBox`` foreign function can now be called in these ways::"
 msgstr ""
 "La función ajena ``MessageBox`` se puede llamar ahora de estas maneras::"
 
-#: ../../library/ctypes.rst:2089
+#: ../../library/ctypes.rst:2098
 msgid ""
 ">>> MessageBox()\n"
 ">>> MessageBox(text=\"Spam, spam, spam\")\n"
@@ -4110,7 +4120,7 @@ msgstr ""
 ">>> MessageBox(text=\"Spam, spam, spam\")\n"
 ">>> MessageBox(flags=2, text=\"foo bar\")"
 
-#: ../../library/ctypes.rst:2093
+#: ../../library/ctypes.rst:2102
 msgid ""
 "A second example demonstrates output parameters.  The win32 "
 "``GetWindowRect`` function retrieves the dimensions of a specified window by "
@@ -4122,7 +4132,7 @@ msgstr ""
 "copiándolas en la estructura ``RECT`` que el llamante debe suministrar.  "
 "Esta es la declaración en C::"
 
-#: ../../library/ctypes.rst:2097
+#: ../../library/ctypes.rst:2106
 msgid ""
 "WINUSERAPI BOOL WINAPI\n"
 "GetWindowRect(\n"
@@ -4134,7 +4144,7 @@ msgstr ""
 "     HWND hWnd,\n"
 "     LPRECT lpRect);"
 
-#: ../../library/ctypes.rst:2104
+#: ../../library/ctypes.rst:2113
 msgid ""
 ">>> from ctypes import POINTER, WINFUNCTYPE, windll, WinError\n"
 ">>> from ctypes.wintypes import BOOL, HWND, RECT\n"
@@ -4152,7 +4162,7 @@ msgstr ""
 "paramflags)\n"
 ">>>"
 
-#: ../../library/ctypes.rst:2111
+#: ../../library/ctypes.rst:2120
 msgid ""
 "Functions with output parameters will automatically return the output "
 "parameter value if there is a single one, or a tuple containing the output "
@@ -4164,7 +4174,7 @@ msgstr ""
 "valores de los parámetros de salida cuando hay más de uno, por lo que la "
 "función GetWindowRect devuelve ahora una instancia RECT, cuando se llama."
 
-#: ../../library/ctypes.rst:2116
+#: ../../library/ctypes.rst:2125
 msgid ""
 "Output parameters can be combined with the :attr:`~_CFuncPtr.errcheck` "
 "protocol to do further output processing and error checking.  The win32 "
@@ -4179,7 +4189,7 @@ msgstr ""
 "hacer la comprobación de errores, y lanza una excepción cuando la llamada "
 "api falló::"
 
-#: ../../library/ctypes.rst:2121
+#: ../../library/ctypes.rst:2130
 msgid ""
 ">>> def errcheck(result, func, args):\n"
 "...     if not result:\n"
@@ -4197,7 +4207,7 @@ msgstr ""
 ">>> GetWindowRect.errcheck = errcheck\n"
 ">>>"
 
-#: ../../library/ctypes.rst:2129
+#: ../../library/ctypes.rst:2138
 msgid ""
 "If the :attr:`~_CFuncPtr.errcheck` function returns the argument tuple it "
 "receives unchanged, :mod:`!ctypes` continues the normal processing it does "
@@ -4207,7 +4217,7 @@ msgid ""
 "take place::"
 msgstr ""
 
-#: ../../library/ctypes.rst:2135
+#: ../../library/ctypes.rst:2144
 msgid ""
 ">>> def errcheck(result, func, args):\n"
 "...     if not result:\n"
@@ -4227,11 +4237,11 @@ msgstr ""
 ">>> GetWindowRect.errcheck = errcheck\n"
 ">>>"
 
-#: ../../library/ctypes.rst:2148
+#: ../../library/ctypes.rst:2157
 msgid "Utility functions"
 msgstr "Funciones de utilidad"
 
-#: ../../library/ctypes.rst:2152
+#: ../../library/ctypes.rst:2161
 msgid ""
 "Returns the address of the memory buffer as integer.  *obj* must be an "
 "instance of a ctypes type."
@@ -4239,7 +4249,7 @@ msgstr ""
 "Devuelve la dirección del búfer de memoria como entero.  *obj* debe ser una "
 "instancia de un tipo ctypes."
 
-#: ../../library/ctypes.rst:2155
+#: ../../library/ctypes.rst:2164
 msgid ""
 "Raises an :ref:`auditing event <auditing>` ``ctypes.addressof`` with "
 "argument ``obj``."
@@ -4247,7 +4257,7 @@ msgstr ""
 "Lanza un :ref:`auditing event <auditing>` ``ctypes.addressof`` con el "
 "argumento ``obj``."
 
-#: ../../library/ctypes.rst:2160
+#: ../../library/ctypes.rst:2169
 msgid ""
 "Returns the alignment requirements of a ctypes type. *obj_or_type* must be a "
 "ctypes type or instance."
@@ -4255,7 +4265,7 @@ msgstr ""
 "Devuelve los requisitos de alineación de un tipo ctypes. *obj_or_type* debe "
 "ser un tipo o instancia ctypes."
 
-#: ../../library/ctypes.rst:2166
+#: ../../library/ctypes.rst:2175
 msgid ""
 "Returns a light-weight pointer to *obj*, which must be an instance of a "
 "ctypes type.  *offset* defaults to zero, and must be an integer that will be "
@@ -4265,15 +4275,15 @@ msgstr ""
 "ctypes.  *offset* por defecto es cero, y debe ser un entero que se añadirá "
 "al valor del puntero interno."
 
-#: ../../library/ctypes.rst:2170
+#: ../../library/ctypes.rst:2179
 msgid "``byref(obj, offset)`` corresponds to this C code::"
 msgstr "``byref(obj, offset)`` corresponde a este código C::"
 
-#: ../../library/ctypes.rst:2172
+#: ../../library/ctypes.rst:2181
 msgid "(((char *)&obj) + offset)"
 msgstr "(((char *)&obj) + offset)"
 
-#: ../../library/ctypes.rst:2174
+#: ../../library/ctypes.rst:2183
 msgid ""
 "The returned object can only be used as a foreign function call parameter. "
 "It behaves similar to ``pointer(obj)``, but the construction is a lot faster."
@@ -4282,19 +4292,19 @@ msgstr ""
 "función ajena. Se comporta de forma similar a ``pointer(obj)``, pero la "
 "construcción es mucho más rápida."
 
-#: ../../library/ctypes.rst:2180
+#: ../../library/ctypes.rst:2189
 msgid ""
 "Copies a COM pointer from *src* to *dst* and returns the Windows specific :c:"
 "type:`!HRESULT` value."
 msgstr ""
 
-#: ../../library/ctypes.rst:2183
+#: ../../library/ctypes.rst:2192
 msgid ""
 "If *src* is not ``NULL``, its ``AddRef`` method is called, incrementing the "
 "reference count."
 msgstr ""
 
-#: ../../library/ctypes.rst:2186
+#: ../../library/ctypes.rst:2195
 msgid ""
 "In contrast, the reference count of *dst* will not be decremented before "
 "assigning the new value. Unless *dst* is ``NULL``, the caller is responsible "
@@ -4302,7 +4312,7 @@ msgid ""
 "necessary."
 msgstr ""
 
-#: ../../library/ctypes.rst:2198
+#: ../../library/ctypes.rst:2207
 msgid ""
 "This function is similar to the cast operator in C. It returns a new "
 "instance of *type* which points to the same memory block as *obj*.  *type* "
@@ -4314,7 +4324,7 @@ msgstr ""
 "un tipo de puntero, y *obj* debe ser un objeto que pueda interpretarse como "
 "un puntero."
 
-#: ../../library/ctypes.rst:2207
+#: ../../library/ctypes.rst:2216
 msgid ""
 "This function creates a mutable character buffer. The returned object is a "
 "ctypes array of :class:`c_char`."
@@ -4322,41 +4332,41 @@ msgstr ""
 "Esta función crea un buffer de caracteres mutable. El objeto devuelto es una "
 "matriz ctypes de :class:`c_char`."
 
-#: ../../library/ctypes.rst:2210
+#: ../../library/ctypes.rst:2219
 msgid ""
 "If *size* is given (and not ``None``), it must be an :class:`int`. It "
 "specifies the size of the returned array."
 msgstr ""
 
-#: ../../library/ctypes.rst:2213
+#: ../../library/ctypes.rst:2222
 msgid ""
 "If the *init* argument is given, it must be :class:`bytes`. It is used to "
 "initialize the array items. Bytes not initialized this way are set to zero "
 "(NUL)."
 msgstr ""
 
-#: ../../library/ctypes.rst:2217
+#: ../../library/ctypes.rst:2226
 msgid ""
 "If *size* is not given (or if it is ``None``), the buffer is made one "
 "element larger than *init*, effectively adding a NUL terminator."
 msgstr ""
 
-#: ../../library/ctypes.rst:2220
+#: ../../library/ctypes.rst:2229
 msgid ""
 "If both arguments are given, *size* must not be less than ``len(init)``."
 msgstr ""
 
-#: ../../library/ctypes.rst:2224
+#: ../../library/ctypes.rst:2233
 msgid ""
 "If *size* is equal to ``len(init)``, a NUL terminator is not added. Do not "
 "treat such a buffer as a C string."
 msgstr ""
 
-#: ../../library/ctypes.rst:2227
+#: ../../library/ctypes.rst:2236
 msgid "For example::"
 msgstr "Por ejemplo::"
 
-#: ../../library/ctypes.rst:2229
+#: ../../library/ctypes.rst:2238
 msgid ""
 ">>> bytes(create_string_buffer(2))\n"
 "b'\\x00\\x00'\n"
@@ -4372,7 +4382,7 @@ msgid ""
 "ValueError: byte string too long"
 msgstr ""
 
-#: ../../library/ctypes.rst:2242
+#: ../../library/ctypes.rst:2251
 msgid ""
 "Raises an :ref:`auditing event <auditing>` ``ctypes.create_string_buffer`` "
 "with arguments ``init``, ``size``."
@@ -4380,7 +4390,7 @@ msgstr ""
 "Lanza un :ref:`auditing event <auditing>` ``ctypes.create_string_buffer`` "
 "con argumentos ``init``, ``size``."
 
-#: ../../library/ctypes.rst:2248
+#: ../../library/ctypes.rst:2257
 msgid ""
 "This function creates a mutable unicode character buffer. The returned "
 "object is a ctypes array of :class:`c_wchar`."
@@ -4388,13 +4398,13 @@ msgstr ""
 "Esta función crea un buffer de caracteres unicode mutable. El objeto "
 "devuelto es una matriz ctypes de :class:`c_wchar`."
 
-#: ../../library/ctypes.rst:2251
+#: ../../library/ctypes.rst:2260
 msgid ""
 "The function takes the same arguments as :func:`~create_string_buffer` "
 "except *init* must be a string and *size* counts :class:`c_wchar`."
 msgstr ""
 
-#: ../../library/ctypes.rst:2254
+#: ../../library/ctypes.rst:2263
 msgid ""
 "Raises an :ref:`auditing event <auditing>` ``ctypes.create_unicode_buffer`` "
 "with arguments ``init``, ``size``."
@@ -4402,7 +4412,7 @@ msgstr ""
 "Lanza un :ref:`auditing event  <auditing>` ``ctypes.create_unicode_buffer`` "
 "con argumentos ``init``, ``size``."
 
-#: ../../library/ctypes.rst:2259
+#: ../../library/ctypes.rst:2268
 msgid ""
 "This function is a hook which allows implementing in-process COM servers "
 "with ctypes.  It is called from the DllCanUnloadNow function that the "
@@ -4412,7 +4422,7 @@ msgstr ""
 "con ctypes.  Se llama desde la función DllCanUnloadNow que exporta la "
 "extensión dll _ctypes."
 
-#: ../../library/ctypes.rst:2268
+#: ../../library/ctypes.rst:2277
 msgid ""
 "This function is a hook which allows implementing in-process COM servers "
 "with ctypes.  It is called from the DllGetClassObject function that the "
@@ -4422,7 +4432,7 @@ msgstr ""
 "con ctypes.  Se llama desde la función DllGetClassObject que exporta la dll "
 "de extensión ``_ctypes``."
 
-#: ../../library/ctypes.rst:2278
+#: ../../library/ctypes.rst:2287
 msgid ""
 "Try to provide a list of paths of the shared libraries loaded into the "
 "current process.  These paths are not normalized or processed in any way.  "
@@ -4430,20 +4440,20 @@ msgid ""
 "The exact functionality is system dependent."
 msgstr ""
 
-#: ../../library/ctypes.rst:2283
+#: ../../library/ctypes.rst:2292
 msgid ""
 "On most platforms, the first element of the list represents the current "
 "executable file. It may be an empty string."
 msgstr ""
 
-#: ../../library/ctypes.rst:2291
+#: ../../library/ctypes.rst:2300
 msgid ""
 "Returns a textual description of the error code *code*.  If no error code is "
 "specified, the last error code is used by calling the Windows API function :"
 "func:`GetLastError`."
 msgstr ""
 
-#: ../../library/ctypes.rst:2300
+#: ../../library/ctypes.rst:2309
 msgid ""
 "Returns the last error code set by Windows in the calling thread. This "
 "function calls the Windows ``GetLastError()`` function directly, it does not "
@@ -4453,7 +4463,7 @@ msgstr ""
 "llamada. Esta función llama directamente a la función ``GetLastError()`` de "
 "Windows, no devuelve la copia ctypes-private del código de error."
 
-#: ../../library/ctypes.rst:2309
+#: ../../library/ctypes.rst:2318
 msgid ""
 "Returns the current value of the ctypes-private copy of the system :data:"
 "`errno` variable in the calling thread."
@@ -4461,7 +4471,7 @@ msgstr ""
 "Devuelve el valor actual de la copia ctypes-private de la variable del "
 "sistema :data:`errno` en el subproceso de llamada."
 
-#: ../../library/ctypes.rst:2312
+#: ../../library/ctypes.rst:2321
 msgid ""
 "Raises an :ref:`auditing event <auditing>` ``ctypes.get_errno`` with no "
 "arguments."
@@ -4469,7 +4479,7 @@ msgstr ""
 "Lanza un  :ref:`auditing event <auditing>` ``ctypes.get_errno`` sin "
 "argumentos."
 
-#: ../../library/ctypes.rst:2316
+#: ../../library/ctypes.rst:2325
 msgid ""
 "Returns the current value of the ctypes-private copy of the system :data:`!"
 "LastError` variable in the calling thread."
@@ -4477,7 +4487,7 @@ msgstr ""
 "Devuelve el valor actual de la copia ctypes-private de la variable del "
 "sistema :data:`!LastError` en el subproceso de llamada."
 
-#: ../../library/ctypes.rst:2321
+#: ../../library/ctypes.rst:2330
 msgid ""
 "Raises an :ref:`auditing event <auditing>` ``ctypes.get_last_error`` with no "
 "arguments."
@@ -4485,7 +4495,7 @@ msgstr ""
 "Lanza un :ref:`auditing event <auditing>` ``ctypes.get_last_error`` sin "
 "argumentos."
 
-#: ../../library/ctypes.rst:2326
+#: ../../library/ctypes.rst:2335
 msgid ""
 "Same as the standard C memmove library function: copies *count* bytes from "
 "*src* to *dst*. *dst* and *src* must be integers or ctypes instances that "
@@ -4495,7 +4505,7 @@ msgstr ""
 "bytes de *src* a *dst*. *dst* y *src* deben ser enteros o instancias de "
 "ctypes que puedan convertirse en punteros."
 
-#: ../../library/ctypes.rst:2333
+#: ../../library/ctypes.rst:2342
 msgid ""
 "Same as the standard C memset library function: fills the memory block at "
 "address *dst* with *count* bytes of value *c*. *dst* must be an integer "
@@ -4505,14 +4515,14 @@ msgstr ""
 "de memoria en la dirección *dst* con *count* bytes de valor *c*. *dst* debe "
 "ser un entero especificando una dirección, o una instancia de ctypes."
 
-#: ../../library/ctypes.rst:2340
+#: ../../library/ctypes.rst:2349
 msgid ""
 "Create or return a ctypes pointer type. Pointer types are cached and reused "
 "internally, so calling this function repeatedly is cheap. *type* must be a "
 "ctypes type."
 msgstr ""
 
-#: ../../library/ctypes.rst:2346
+#: ../../library/ctypes.rst:2355
 msgid ""
 "The resulting pointer type is cached in the ``__pointer_type__`` attribute "
 "of *type*. It is possible to set this attribute before the first call to "
@@ -4521,7 +4531,7 @@ msgid ""
 "relying on implementation details that may change in future Python versions."
 msgstr ""
 
-#: ../../library/ctypes.rst:2357
+#: ../../library/ctypes.rst:2366
 msgid ""
 "Create a new pointer instance, pointing to *obj*. The returned object is of "
 "the type ``POINTER(type(obj))``."
@@ -4529,7 +4539,7 @@ msgstr ""
 "Crea una nueva instancia de puntero, apuntando a *obj*. El objeto devuelto "
 "es del tipo ``POINTER(type(obj))``."
 
-#: ../../library/ctypes.rst:2360
+#: ../../library/ctypes.rst:2369
 msgid ""
 "Note: If you just want to pass a pointer to an object to a foreign function "
 "call, you should use ``byref(obj)`` which is much faster."
@@ -4537,7 +4547,7 @@ msgstr ""
 "Nota: Si sólo desea pasar un puntero a un objeto a una llamada a una función "
 "ajena, debe utilizar ``byref(obj)`` que es mucho más rápido."
 
-#: ../../library/ctypes.rst:2366
+#: ../../library/ctypes.rst:2375
 msgid ""
 "This function resizes the internal memory buffer of *obj*, which must be an "
 "instance of a ctypes type.  It is not possible to make the buffer smaller "
@@ -4549,7 +4559,7 @@ msgstr ""
 "pequeño que el tamaño nativo del tipo de objeto, dado por "
 "``sizeof(type(obj))``, pero es posible agrandar el buffer."
 
-#: ../../library/ctypes.rst:2374
+#: ../../library/ctypes.rst:2383
 msgid ""
 "Set the current value of the ctypes-private copy of the system :data:`errno` "
 "variable in the calling thread to *value* and return the previous value."
@@ -4558,7 +4568,7 @@ msgstr ""
 "sistema :data:`errno` en el subproceso de llamada a *valor* y devuelve el "
 "valor anterior."
 
-#: ../../library/ctypes.rst:2377
+#: ../../library/ctypes.rst:2386
 msgid ""
 "Raises an :ref:`auditing event <auditing>` ``ctypes.set_errno`` with "
 "argument ``errno``."
@@ -4566,7 +4576,7 @@ msgstr ""
 "Lanza un :ref:`auditing event  <auditing>` ``ctypes.set_errno`` con el "
 "argumento ``errno``."
 
-#: ../../library/ctypes.rst:2382
+#: ../../library/ctypes.rst:2391
 msgid ""
 "Sets the current value of the ctypes-private copy of the system :data:`!"
 "LastError` variable in the calling thread to *value* and return the previous "
@@ -4576,7 +4586,7 @@ msgstr ""
 "sistema :data:`!LastError` en el subproceso de llamada a *valor* y devuelve "
 "el valor anterior."
 
-#: ../../library/ctypes.rst:2388
+#: ../../library/ctypes.rst:2397
 msgid ""
 "Raises an :ref:`auditing event <auditing>` ``ctypes.set_last_error`` with "
 "argument ``error``."
@@ -4584,7 +4594,7 @@ msgstr ""
 "Lanza un :ref:`auditing event <auditing>` ``ctypes.set_last_error`` con el "
 "argumento ``error``."
 
-#: ../../library/ctypes.rst:2393
+#: ../../library/ctypes.rst:2402
 msgid ""
 "Returns the size in bytes of a ctypes type or instance memory buffer. Does "
 "the same as the C ``sizeof`` operator."
@@ -4592,7 +4602,7 @@ msgstr ""
 "Devuelve el tamaño en bytes de un búfer de memoria de tipo o instancia "
 "ctypes. Hace lo mismo que el operador C ``sizeof``."
 
-#: ../../library/ctypes.rst:2399
+#: ../../library/ctypes.rst:2408
 msgid ""
 "Return the byte string at *void \\*ptr*. If *size* is specified, it is used "
 "as size, otherwise the string is assumed to be zero-terminated."
@@ -4600,7 +4610,7 @@ msgstr ""
 "Devuelve la cadena de bytes en *void \\*ptr*. Si se especifica *size*, se "
 "utiliza como tamaño, de lo contrario se asume que la cadena termina en cero."
 
-#: ../../library/ctypes.rst:2403
+#: ../../library/ctypes.rst:2412
 msgid ""
 "Raises an :ref:`auditing event <auditing>` ``ctypes.string_at`` with "
 "arguments ``ptr``, ``size``."
@@ -4608,7 +4618,7 @@ msgstr ""
 "Lanza un :ref:`auditing event <auditing>` ``ctypes.string_at`` con "
 "argumentos ``ptr``, ``size``."
 
-#: ../../library/ctypes.rst:2408
+#: ../../library/ctypes.rst:2417
 msgid ""
 "Creates an instance of :exc:`OSError`.  If *code* is not specified, :func:"
 "`GetLastError` is called to determine the error code. If *descr* is not "
@@ -4616,7 +4626,7 @@ msgid ""
 "error."
 msgstr ""
 
-#: ../../library/ctypes.rst:2415
+#: ../../library/ctypes.rst:2424
 msgid ""
 "An instance of :exc:`WindowsError` used to be created, which is now an alias "
 "of :exc:`OSError`."
@@ -4624,7 +4634,7 @@ msgstr ""
 "Antes se creaba una instancia de :exc:`WindowsError`, que ahora es un alias "
 "de :exc:`OSError`."
 
-#: ../../library/ctypes.rst:2422
+#: ../../library/ctypes.rst:2431
 msgid ""
 "Return the wide-character string at *void \\*ptr*. If *size* is specified, "
 "it is used as the number of characters of the string, otherwise the string "
@@ -4634,7 +4644,7 @@ msgstr ""
 "*size*, se utiliza como el número de caracteres de la cadena; de lo "
 "contrario, se asume que la cadena termina en cero."
 
-#: ../../library/ctypes.rst:2427
+#: ../../library/ctypes.rst:2436
 msgid ""
 "Raises an :ref:`auditing event <auditing>` ``ctypes.wstring_at`` with "
 "arguments ``ptr``, ``size``."
@@ -4642,20 +4652,20 @@ msgstr ""
 "Lanza un :ref:`auditing event  <auditing>` ``ctypes.wstring_at`` con "
 "argumentos ``ptr``, ``size``."
 
-#: ../../library/ctypes.rst:2432
+#: ../../library/ctypes.rst:2441
 msgid ""
 "Return a :class:`memoryview` object of length *size* that references memory "
 "starting at *void \\*ptr*."
 msgstr ""
 
-#: ../../library/ctypes.rst:2435
+#: ../../library/ctypes.rst:2444
 msgid ""
 "If *readonly* is true, the returned :class:`!memoryview` object can not be "
 "used to modify the underlying memory. (Changes made by other means will "
 "still be reflected in the returned object.)"
 msgstr ""
 
-#: ../../library/ctypes.rst:2440
+#: ../../library/ctypes.rst:2449
 msgid ""
 "This function is similar to :func:`string_at` with the key difference of not "
 "making a copy of the specified memory. It is a semantically equivalent (but "
@@ -4665,17 +4675,17 @@ msgid ""
 "`~ctypes.byref` object.)"
 msgstr ""
 
-#: ../../library/ctypes.rst:2447
+#: ../../library/ctypes.rst:2456
 msgid ""
 "Raises an :ref:`auditing event <auditing>` ``ctypes.memoryview_at`` with "
 "arguments ``address``, ``size``, ``readonly``."
 msgstr ""
 
-#: ../../library/ctypes.rst:2455
+#: ../../library/ctypes.rst:2464
 msgid "Data types"
 msgstr "Tipos de datos"
 
-#: ../../library/ctypes.rst:2460
+#: ../../library/ctypes.rst:2469
 msgid ""
 "This non-public class is the common base class of all ctypes data types. "
 "Among other things, all ctypes type instances contain a memory block that "
@@ -4692,7 +4702,7 @@ msgstr ""
 "otros objetos Python que necesitan mantenerse vivos en caso de que el bloque "
 "de memoria contenga punteros."
 
-#: ../../library/ctypes.rst:2467
+#: ../../library/ctypes.rst:2476
 msgid ""
 "Common methods of ctypes data types, these are all class methods (to be "
 "exact, they are methods of the :term:`metaclass`):"
@@ -4700,7 +4710,7 @@ msgstr ""
 "Métodos comunes de los tipos de datos ctypes, todos ellos son métodos de "
 "clase (para ser exactos, son métodos del  :term:`metaclass`):"
 
-#: ../../library/ctypes.rst:2472
+#: ../../library/ctypes.rst:2481
 msgid ""
 "This method returns a ctypes instance that shares the buffer of the *source* "
 "object.  The *source* object must support the writeable buffer interface.  "
@@ -4714,7 +4724,7 @@ msgstr ""
 "buffer fuente en bytes; el valor por defecto es cero.  Si el búfer de origen "
 "no es lo suficientemente grande, aparece :exc:`ValueError`."
 
-#: ../../library/ctypes.rst:2478 ../../library/ctypes.rst:2488
+#: ../../library/ctypes.rst:2487 ../../library/ctypes.rst:2497
 msgid ""
 "Raises an :ref:`auditing event <auditing>` ``ctypes.cdata/buffer`` with "
 "arguments ``pointer``, ``size``, ``offset``."
@@ -4722,7 +4732,7 @@ msgstr ""
 "Lanza un :ref:`auditing event <auditing>` ``ctypes.cdata/buffer`` con "
 "argumentos ``pointer``, ``size``, ``offset``."
 
-#: ../../library/ctypes.rst:2482
+#: ../../library/ctypes.rst:2491
 msgid ""
 "This method creates a ctypes instance, copying the buffer from the *source* "
 "object buffer which must be readable.  The optional *offset* parameter "
@@ -4735,7 +4745,7 @@ msgstr ""
 "cero.  Si el búfer de origen no es lo suficientemente grande, se produce un "
 "error en :exc:`ValueError`."
 
-#: ../../library/ctypes.rst:2492
+#: ../../library/ctypes.rst:2501
 msgid ""
 "This method returns a ctypes type instance using the memory specified by "
 "*address* which must be an integer."
@@ -4743,7 +4753,7 @@ msgstr ""
 "Este método devuelve una instancia de tipo ctypes utilizando la memoria "
 "especificada por *address* que debe ser un entero."
 
-#: ../../library/ctypes.rst:2495 ../../library/ctypes.rst:2497
+#: ../../library/ctypes.rst:2504 ../../library/ctypes.rst:2506
 msgid ""
 "This method, and others that indirectly call this method, raises an :ref:"
 "`auditing event <auditing>` ``ctypes.cdata`` with argument ``address``."
@@ -4751,7 +4761,7 @@ msgstr ""
 "Este método, y otros que llaman indirectamente a este método, lanza un :ref:"
 "`auditing event <auditing>` ``ctypes.cdata`` con el argumento ``address``."
 
-#: ../../library/ctypes.rst:2503
+#: ../../library/ctypes.rst:2512
 msgid ""
 "This method adapts *obj* to a ctypes type.  It is called with the actual "
 "object used in a foreign function call when the type is present in the "
@@ -4763,7 +4773,7 @@ msgstr ""
 "tupla :attr:`~_CFuncPtr.argtypes` de la función ajena; debe devolver un "
 "objeto que pueda utilizarse como parámetro de llamada a función."
 
-#: ../../library/ctypes.rst:2508
+#: ../../library/ctypes.rst:2517
 msgid ""
 "All ctypes data types have a default implementation of this classmethod that "
 "normally returns *obj* if that is an instance of the type.  Some types "
@@ -4773,7 +4783,7 @@ msgstr ""
 "este método de clase que normalmente devuelve *obj* si es una instancia del "
 "tipo.  Algunos tipos aceptan también otros objetos."
 
-#: ../../library/ctypes.rst:2514
+#: ../../library/ctypes.rst:2523
 msgid ""
 "This method returns a ctypes type instance exported by a shared library. "
 "*name* is the name of the symbol that exports the data, *library* is the "
@@ -4783,22 +4793,22 @@ msgstr ""
 "biblioteca compartida. *name* es el nombre del símbolo que exporta los "
 "datos, *library* es la biblioteca compartida cargada."
 
-#: ../../library/ctypes.rst:2518
+#: ../../library/ctypes.rst:2527
 msgid "Common class variables of ctypes data types:"
 msgstr ""
 
-#: ../../library/ctypes.rst:2522
+#: ../../library/ctypes.rst:2531
 msgid ""
 "The pointer type that was created by calling :func:`POINTER` for "
 "corresponding ctypes data type. If a pointer type was not yet created, the "
 "attribute is missing."
 msgstr ""
 
-#: ../../library/ctypes.rst:2528
+#: ../../library/ctypes.rst:2537
 msgid "Common instance variables of ctypes data types:"
 msgstr "Variables de instancia comunes de los tipos de datos ctypes:"
 
-#: ../../library/ctypes.rst:2532
+#: ../../library/ctypes.rst:2541
 msgid ""
 "Sometimes ctypes data instances do not own the memory block they contain, "
 "instead they share part of the memory block of a base object.  The :attr:"
@@ -4810,7 +4820,7 @@ msgstr ""
 "objeto base.  El miembro de sólo lectura :attr:`_b_base_` es el objeto "
 "ctypes raíz propietario del bloque de memoria."
 
-#: ../../library/ctypes.rst:2539
+#: ../../library/ctypes.rst:2548
 msgid ""
 "This read-only variable is true when the ctypes data instance has allocated "
 "the memory block itself, false otherwise."
@@ -4819,7 +4829,7 @@ msgstr ""
 "ctypes ha asignado el bloque de memoria por sí misma, falsa en caso "
 "contrario."
 
-#: ../../library/ctypes.rst:2544
+#: ../../library/ctypes.rst:2553
 msgid ""
 "This member is either ``None`` or a dictionary containing Python objects "
 "that need to be kept alive so that the memory block contents is kept valid.  "
@@ -4831,7 +4841,7 @@ msgstr ""
 "mantenga válido.  Este objeto sólo se expone para depuración; nunca "
 "modifique el contenido de este diccionario."
 
-#: ../../library/ctypes.rst:2557
+#: ../../library/ctypes.rst:2566
 msgid ""
 "This non-public class is the base class of all fundamental ctypes data "
 "types. It is mentioned here because it contains the common attributes of the "
@@ -4845,11 +4855,11 @@ msgstr ""
 "de :class:`_CData`, por lo que hereda sus métodos y atributos. los tipos de "
 "datos ctypes que no son y no contienen punteros ahora pueden ser decapados."
 
-#: ../../library/ctypes.rst:2563
+#: ../../library/ctypes.rst:2572
 msgid "Instances have a single attribute:"
 msgstr "Las instancias tienen un único atributo:"
 
-#: ../../library/ctypes.rst:2567
+#: ../../library/ctypes.rst:2576
 msgid ""
 "This attribute contains the actual value of the instance. For integer and "
 "pointer types, it is an integer, for character types, it is a single "
@@ -4861,7 +4871,7 @@ msgstr ""
 "bytes de carácter único; para los tipos puntero de carácter, es un objeto o "
 "cadena de bytes de Python."
 
-#: ../../library/ctypes.rst:2572
+#: ../../library/ctypes.rst:2581
 msgid ""
 "When the ``value`` attribute is retrieved from a ctypes instance, usually a "
 "new object is returned each time.  :mod:`!ctypes` does *not* implement "
@@ -4869,17 +4879,17 @@ msgid ""
 "true for all other ctypes object instances."
 msgstr ""
 
-#: ../../library/ctypes.rst:2577
+#: ../../library/ctypes.rst:2586
 msgid "Each subclass has a class attribute:"
 msgstr ""
 
-#: ../../library/ctypes.rst:2581
+#: ../../library/ctypes.rst:2590
 msgid ""
 "Class attribute that contains an internal type code, as a single-character "
 "string. See :ref:`ctypes-fundamental-data-types` for a summary."
 msgstr ""
 
-#: ../../library/ctypes.rst:2585
+#: ../../library/ctypes.rst:2594
 msgid ""
 "Types marked \\* in the summary may be (or always are) aliases of a "
 "different :class:`_SimpleCData` subclass, and will not necessarily use the "
@@ -4890,7 +4900,7 @@ msgid ""
 "code will be unused."
 msgstr ""
 
-#: ../../library/ctypes.rst:2596
+#: ../../library/ctypes.rst:2605
 msgid ""
 "The :mod:`array` and :ref:`struct <format-characters>` modules, as well as "
 "third-party modules like `numpy <https://numpy.org/doc/stable/reference/"
@@ -4898,7 +4908,7 @@ msgid ""
 "slightly different -- type codes."
 msgstr ""
 
-#: ../../library/ctypes.rst:2601
+#: ../../library/ctypes.rst:2610
 msgid ""
 "Fundamental data types, when returned as foreign function call results, or, "
 "for example, by retrieving structure field members or array items, are "
@@ -4914,7 +4924,7 @@ msgstr ""
 "un :attr:`~_CFuncPtr.restype` de :class:`c_char_p`, siempre recibirá un "
 "objeto bytes de Python, *not* una instancia de :class:`c_char_p`."
 
-#: ../../library/ctypes.rst:2609
+#: ../../library/ctypes.rst:2618
 msgid ""
 "Subclasses of fundamental data types do *not* inherit this behavior. So, if "
 "a foreign functions :attr:`!restype` is a subclass of :class:`c_void_p`, you "
@@ -4927,11 +4937,11 @@ msgstr ""
 "llamada a la función. Por supuesto, puede obtener el valor del puntero "
 "accediendo al atributo ``value``."
 
-#: ../../library/ctypes.rst:2614
+#: ../../library/ctypes.rst:2623
 msgid "These are the fundamental ctypes data types:"
 msgstr "Estos son los tipos de datos ctypes fundamentales:"
 
-#: ../../library/ctypes.rst:2618
+#: ../../library/ctypes.rst:2627
 msgid ""
 "Represents the C :c:expr:`signed char` datatype, and interprets the value as "
 "small integer.  The constructor accepts an optional integer initializer; no "
@@ -4941,7 +4951,7 @@ msgstr ""
 "como un entero pequeño.  El constructor acepta un inicializador entero "
 "opcional; no se realiza ninguna comprobación de desbordamiento."
 
-#: ../../library/ctypes.rst:2625
+#: ../../library/ctypes.rst:2634
 msgid ""
 "Represents the C :c:expr:`char` datatype, and interprets the value as a "
 "single character.  The constructor accepts an optional string initializer, "
@@ -4951,7 +4961,7 @@ msgstr ""
 "único carácter.  El constructor acepta un inicializador de cadena opcional, "
 "la longitud de la cadena debe ser exactamente un carácter."
 
-#: ../../library/ctypes.rst:2632
+#: ../../library/ctypes.rst:2641
 msgid ""
 "Represents the C :c:expr:`char *` datatype when it points to a zero-"
 "terminated string.  For a general character pointer that may also point to "
@@ -4963,7 +4973,7 @@ msgstr ""
 "apuntar a datos binarios, debe utilizarse ``POINTER(c_char)``.  El "
 "constructor acepta una dirección entera o un objeto bytes."
 
-#: ../../library/ctypes.rst:2640
+#: ../../library/ctypes.rst:2649
 msgid ""
 "Represents the C :c:expr:`double` datatype.  The constructor accepts an "
 "optional float initializer."
@@ -4971,7 +4981,7 @@ msgstr ""
 "Representa el tipo de datos C :c:expr:`double`.  El constructor acepta un "
 "inicializador float opcional."
 
-#: ../../library/ctypes.rst:2646
+#: ../../library/ctypes.rst:2655
 msgid ""
 "Represents the C :c:expr:`long double` datatype.  The constructor accepts an "
 "optional float initializer.  On platforms where ``sizeof(long double) == "
@@ -4981,7 +4991,7 @@ msgstr ""
 "un inicializador float opcional.  En plataformas donde ``sizeof(long double) "
 "== sizeof(double)`` es un alias de :class:`c_double`."
 
-#: ../../library/ctypes.rst:2652
+#: ../../library/ctypes.rst:2661
 msgid ""
 "Represents the C :c:expr:`float` datatype.  The constructor accepts an "
 "optional float initializer."
@@ -4989,25 +4999,25 @@ msgstr ""
 "Representa el tipo de datos C :c:expr:`float`.  El constructor acepta un "
 "inicializador float opcional."
 
-#: ../../library/ctypes.rst:2658
+#: ../../library/ctypes.rst:2667
 msgid ""
 "Represents the C :c:expr:`double complex` datatype, if available.  The "
 "constructor accepts an optional :class:`complex` initializer."
 msgstr ""
 
-#: ../../library/ctypes.rst:2666
+#: ../../library/ctypes.rst:2675
 msgid ""
 "Represents the C :c:expr:`float complex` datatype, if available.  The "
 "constructor accepts an optional :class:`complex` initializer."
 msgstr ""
 
-#: ../../library/ctypes.rst:2674
+#: ../../library/ctypes.rst:2683
 msgid ""
 "Represents the C :c:expr:`long double complex` datatype, if available.  The "
 "constructor accepts an optional :class:`complex` initializer."
 msgstr ""
 
-#: ../../library/ctypes.rst:2682
+#: ../../library/ctypes.rst:2691
 msgid ""
 "Represents the C :c:expr:`signed int` datatype.  The constructor accepts an "
 "optional integer initializer; no overflow checking is done.  On platforms "
@@ -5018,13 +5028,13 @@ msgstr ""
 "desbordamiento.  En plataformas donde ``sizeof(int) == sizeof(long)`` es un "
 "alias de :class:`c_long`."
 
-#: ../../library/ctypes.rst:2689
+#: ../../library/ctypes.rst:2698
 msgid ""
 "Represents the C 8-bit :c:expr:`signed int` datatype.  It is an alias for :"
 "class:`c_byte`."
 msgstr ""
 
-#: ../../library/ctypes.rst:2695
+#: ../../library/ctypes.rst:2704
 msgid ""
 "Represents the C 16-bit :c:expr:`signed int` datatype.  Usually an alias "
 "for :class:`c_short`."
@@ -5032,7 +5042,7 @@ msgstr ""
 "Representa el tipo de datos C de 16 bits :c:expr:`signed int`.  Suele ser un "
 "alias de :class:`c_short`."
 
-#: ../../library/ctypes.rst:2701
+#: ../../library/ctypes.rst:2710
 msgid ""
 "Represents the C 32-bit :c:expr:`signed int` datatype.  Usually an alias "
 "for :class:`c_int`."
@@ -5040,7 +5050,7 @@ msgstr ""
 "Representa el tipo de datos C 32-bit :c:expr:`signed int`.  Suele ser un "
 "alias de :class:`c_int`."
 
-#: ../../library/ctypes.rst:2707
+#: ../../library/ctypes.rst:2716
 msgid ""
 "Represents the C 64-bit :c:expr:`signed int` datatype.  Usually an alias "
 "for :class:`c_longlong`."
@@ -5048,7 +5058,7 @@ msgstr ""
 "Representa el tipo de datos :c:expr:`signed int` de 64 bits de C.  Suele ser "
 "un alias de :class:`c_longlong`."
 
-#: ../../library/ctypes.rst:2713
+#: ../../library/ctypes.rst:2722
 msgid ""
 "Represents the C :c:expr:`signed long` datatype.  The constructor accepts an "
 "optional integer initializer; no overflow checking is done."
@@ -5057,7 +5067,7 @@ msgstr ""
 "un inicializador entero opcional; no se realiza ninguna comprobación de "
 "desbordamiento."
 
-#: ../../library/ctypes.rst:2719
+#: ../../library/ctypes.rst:2728
 msgid ""
 "Represents the C :c:expr:`signed long long` datatype.  The constructor "
 "accepts an optional integer initializer; no overflow checking is done. On "
@@ -5065,7 +5075,7 @@ msgid ""
 "class:`c_long`."
 msgstr ""
 
-#: ../../library/ctypes.rst:2727
+#: ../../library/ctypes.rst:2736
 msgid ""
 "Represents the C :c:expr:`signed short` datatype.  The constructor accepts "
 "an optional integer initializer; no overflow checking is done."
@@ -5074,26 +5084,26 @@ msgstr ""
 "un inicializador entero opcional; no se realiza ninguna comprobación de "
 "desbordamiento."
 
-#: ../../library/ctypes.rst:2733
+#: ../../library/ctypes.rst:2742
 msgid ""
 "Represents the C :c:type:`size_t` datatype. Usually an alias for another "
 "unsigned integer type."
 msgstr ""
 
-#: ../../library/ctypes.rst:2739
+#: ../../library/ctypes.rst:2748
 msgid ""
 "Represents the :c:type:`Py_ssize_t` datatype. This is a signed version of :c:"
 "type:`size_t`; that is, the POSIX :c:type:`ssize_t` type. Usually an alias "
 "for another integer type."
 msgstr ""
 
-#: ../../library/ctypes.rst:2749
+#: ../../library/ctypes.rst:2758
 msgid ""
 "Represents the C :c:type:`time_t` datatype. Usually an alias for another "
 "integer type."
 msgstr ""
 
-#: ../../library/ctypes.rst:2757
+#: ../../library/ctypes.rst:2766
 msgid ""
 "Represents the C :c:expr:`unsigned char` datatype, it interprets the value "
 "as small integer.  The constructor accepts an optional integer initializer; "
@@ -5103,7 +5113,7 @@ msgstr ""
 "como un entero pequeño.  El constructor acepta un inicializador entero "
 "opcional; no se realiza ninguna comprobación de desbordamiento."
 
-#: ../../library/ctypes.rst:2764
+#: ../../library/ctypes.rst:2773
 msgid ""
 "Represents the C :c:expr:`unsigned int` datatype.  The constructor accepts "
 "an optional integer initializer; no overflow checking is done.  On platforms "
@@ -5114,13 +5124,13 @@ msgstr ""
 "desbordamiento.  En plataformas donde ``sizeof(int) == sizeof(long)`` es un "
 "alias de :class:`c_ulong`."
 
-#: ../../library/ctypes.rst:2771
+#: ../../library/ctypes.rst:2780
 msgid ""
 "Represents the C 8-bit :c:expr:`unsigned int` datatype.  It is an alias for :"
 "class:`c_ubyte`."
 msgstr ""
 
-#: ../../library/ctypes.rst:2777
+#: ../../library/ctypes.rst:2786
 msgid ""
 "Represents the C 16-bit :c:expr:`unsigned int` datatype.  Usually an alias "
 "for :class:`c_ushort`."
@@ -5128,7 +5138,7 @@ msgstr ""
 "Representa el tipo de datos C 16-bit :c:expr:`unsigned int`.  Suele ser un "
 "alias de :class:`c_ushort`."
 
-#: ../../library/ctypes.rst:2783
+#: ../../library/ctypes.rst:2792
 msgid ""
 "Represents the C 32-bit :c:expr:`unsigned int` datatype.  Usually an alias "
 "for :class:`c_uint`."
@@ -5136,7 +5146,7 @@ msgstr ""
 "Representa el tipo de datos C 32-bit :c:expr:`unsigned int`.  Suele ser un "
 "alias de :class:`c_uint`."
 
-#: ../../library/ctypes.rst:2789
+#: ../../library/ctypes.rst:2798
 msgid ""
 "Represents the C 64-bit :c:expr:`unsigned int` datatype.  Usually an alias "
 "for :class:`c_ulonglong`."
@@ -5144,7 +5154,7 @@ msgstr ""
 "Representa el tipo de datos :c:expr:`unsigned int` de 64 bits de C.  Suele "
 "ser un alias de :class:`c_ulonglong`."
 
-#: ../../library/ctypes.rst:2795
+#: ../../library/ctypes.rst:2804
 msgid ""
 "Represents the C :c:expr:`unsigned long` datatype.  The constructor accepts "
 "an optional integer initializer; no overflow checking is done."
@@ -5153,7 +5163,7 @@ msgstr ""
 "acepta un inicializador entero opcional; no se realiza ninguna comprobación "
 "de desbordamiento."
 
-#: ../../library/ctypes.rst:2801
+#: ../../library/ctypes.rst:2810
 msgid ""
 "Represents the C :c:expr:`unsigned long long` datatype.  The constructor "
 "accepts an optional integer initializer; no overflow checking is done. On "
@@ -5161,7 +5171,7 @@ msgid ""
 "class:`c_long`."
 msgstr ""
 
-#: ../../library/ctypes.rst:2809
+#: ../../library/ctypes.rst:2818
 msgid ""
 "Represents the C :c:expr:`unsigned short` datatype.  The constructor accepts "
 "an optional integer initializer; no overflow checking is done."
@@ -5170,7 +5180,7 @@ msgstr ""
 "acepta un inicializador entero opcional; no se realiza ninguna comprobación "
 "de desbordamiento."
 
-#: ../../library/ctypes.rst:2815
+#: ../../library/ctypes.rst:2824
 msgid ""
 "Represents the C :c:expr:`void *` type.  The value is represented as "
 "integer. The constructor accepts an optional integer initializer."
@@ -5178,7 +5188,7 @@ msgstr ""
 "Representa el tipo C :c:expr:`void *`.  El valor se representa como un "
 "entero. El constructor acepta un inicializador entero opcional."
 
-#: ../../library/ctypes.rst:2821
+#: ../../library/ctypes.rst:2830
 msgid ""
 "Represents the C :c:type:`wchar_t` datatype, and interprets the value as a "
 "single character unicode string.  The constructor accepts an optional string "
@@ -5189,7 +5199,7 @@ msgstr ""
 "inicializador de cadena opcional, la longitud de la cadena debe ser "
 "exactamente un carácter."
 
-#: ../../library/ctypes.rst:2828
+#: ../../library/ctypes.rst:2837
 msgid ""
 "Represents the C :c:expr:`wchar_t *` datatype, which must be a pointer to a "
 "zero-terminated wide character string.  The constructor accepts an integer "
@@ -5199,7 +5209,7 @@ msgstr ""
 "una cadena de caracteres anchos terminada en cero.  El constructor acepta "
 "una dirección entera o una cadena."
 
-#: ../../library/ctypes.rst:2835
+#: ../../library/ctypes.rst:2844
 msgid ""
 "Represent the C :c:expr:`bool` datatype (more accurately, :c:expr:`_Bool` "
 "from C99).  Its value can be ``True`` or ``False``, and the constructor "
@@ -5209,7 +5219,7 @@ msgstr ""
 "`_Bool` de C99).  Su valor puede ser ``True`` o ``False``, y el constructor "
 "acepta cualquier objeto que tenga un valor de verdad."
 
-#: ../../library/ctypes.rst:2842
+#: ../../library/ctypes.rst:2851
 msgid ""
 "Represents a :c:type:`!HRESULT` value, which contains success or error "
 "information for a function or method call."
@@ -5217,7 +5227,7 @@ msgstr ""
 "Representa un valor :c:type:`!HRESULT`, que contiene información sobre el "
 "éxito o el error de una llamada a una función o método."
 
-#: ../../library/ctypes.rst:2850
+#: ../../library/ctypes.rst:2859
 msgid ""
 "Represents the C :c:expr:`PyObject *` datatype.  Calling this without an "
 "argument creates a ``NULL`` :c:expr:`PyObject *` pointer."
@@ -5225,11 +5235,11 @@ msgstr ""
 "Representa el tipo de dato C :c:expr:`PyObject *`.  Si se llama sin "
 "argumento, se crea un puntero ``NULL``:c:expr:`PyObject *`."
 
-#: ../../library/ctypes.rst:2853
+#: ../../library/ctypes.rst:2862
 msgid ":class:`!py_object` is now a :term:`generic type`."
 msgstr ""
 
-#: ../../library/ctypes.rst:2858
+#: ../../library/ctypes.rst:2867
 msgid ""
 "The :mod:`!ctypes.wintypes` module provides quite some other Windows "
 "specific data types, for example :c:type:`!HWND`, :c:type:`!WPARAM`, :c:type:"
@@ -5237,38 +5247,38 @@ msgid ""
 "MSG` or :c:type:`!RECT` are also defined."
 msgstr ""
 
-#: ../../library/ctypes.rst:2867
+#: ../../library/ctypes.rst:2876
 msgid "Structured data types"
 msgstr "Tipos de datos estructurados"
 
-#: ../../library/ctypes.rst:2872
+#: ../../library/ctypes.rst:2881
 msgid "Abstract base class for unions in native byte order."
 msgstr "Clase base abstracta para uniones en orden nativo de bytes."
 
-#: ../../library/ctypes.rst:2874
+#: ../../library/ctypes.rst:2883
 msgid ""
 "Unions share common attributes and behavior with structures; see :class:"
 "`Structure` documentation for details."
 msgstr ""
 
-#: ../../library/ctypes.rst:2879
+#: ../../library/ctypes.rst:2888
 msgid "Abstract base class for unions in *big endian* byte order."
 msgstr "Clase base abstracta para uniones en orden *big endian* de bytes."
 
-#: ../../library/ctypes.rst:2885
+#: ../../library/ctypes.rst:2894
 msgid "Abstract base class for unions in *little endian* byte order."
 msgstr "Clase base abstracta para uniones en orden *little endian* de bytes."
 
-#: ../../library/ctypes.rst:2891
+#: ../../library/ctypes.rst:2900
 msgid "Abstract base class for structures in *big endian* byte order."
 msgstr "Clase base abstracta para estructuras en orden *big endian* de bytes."
 
-#: ../../library/ctypes.rst:2896
+#: ../../library/ctypes.rst:2905
 msgid "Abstract base class for structures in *little endian* byte order."
 msgstr ""
 "Clase base abstracta para estructuras en orden *little endian* de bytes."
 
-#: ../../library/ctypes.rst:2898
+#: ../../library/ctypes.rst:2907
 msgid ""
 "Structures and unions with non-native byte order cannot contain pointer type "
 "fields, or any other data types containing pointer type fields."
@@ -5277,11 +5287,11 @@ msgstr ""
 "campos de tipo puntero, ni ningún otro tipo de datos que contenga campos de "
 "tipo puntero."
 
-#: ../../library/ctypes.rst:2904
+#: ../../library/ctypes.rst:2913
 msgid "Abstract base class for structures in *native* byte order."
 msgstr "Clase base abstracta para estructuras en orden *native* de bytes."
 
-#: ../../library/ctypes.rst:2906
+#: ../../library/ctypes.rst:2915
 msgid ""
 "Concrete structure and union types must be created by subclassing one of "
 "these types, and at least define a :attr:`_fields_` class variable. :mod:`!"
@@ -5289,7 +5299,7 @@ msgid ""
 "the fields by direct attribute accesses.  These are the"
 msgstr ""
 
-#: ../../library/ctypes.rst:2914
+#: ../../library/ctypes.rst:2923
 msgid ""
 "A sequence defining the structure fields.  The items must be 2-tuples or 3-"
 "tuples.  The first item is the name of the field, the second item specifies "
@@ -5300,7 +5310,7 @@ msgstr ""
 "elemento especifica el tipo del campo; puede ser cualquier tipo de datos "
 "ctypes."
 
-#: ../../library/ctypes.rst:2918
+#: ../../library/ctypes.rst:2927
 msgid ""
 "For integer type fields like :class:`c_int`, a third optional item can be "
 "given.  It must be a small positive integer defining the bit width of the "
@@ -5310,7 +5320,7 @@ msgstr ""
 "elemento opcional.  Debe ser un pequeño número entero positivo que defina la "
 "anchura de bits del campo."
 
-#: ../../library/ctypes.rst:2922
+#: ../../library/ctypes.rst:2931
 msgid ""
 "Field names must be unique within one structure or union.  This is not "
 "checked, only one field can be accessed when names are repeated."
@@ -5319,7 +5329,7 @@ msgstr ""
 "Esto no se comprueba, sólo se puede acceder a un campo cuando los nombres se "
 "repiten."
 
-#: ../../library/ctypes.rst:2925
+#: ../../library/ctypes.rst:2934
 msgid ""
 "It is possible to define the :attr:`_fields_` class variable *after* the "
 "class statement that defines the Structure subclass, this allows creating "
@@ -5329,7 +5339,7 @@ msgstr ""
 "sentencia de clase que define la subclase Structure, esto permite crear "
 "tipos de datos que se referencian directa o indirectamente a sí mismos::"
 
-#: ../../library/ctypes.rst:2929
+#: ../../library/ctypes.rst:2938
 msgid ""
 "class List(Structure):\n"
 "    pass\n"
@@ -5340,13 +5350,13 @@ msgstr ""
 "class List(Structure):    passList._fields_ = [(\"pnext\", "
 "POINTER(List)),                 ...                ]"
 
-#: ../../library/ctypes.rst:2935
+#: ../../library/ctypes.rst:2944
 msgid ""
 "The :attr:`!_fields_` class variable can only be set once. Later assignments "
 "will raise an :exc:`AttributeError`."
 msgstr ""
 
-#: ../../library/ctypes.rst:2938
+#: ../../library/ctypes.rst:2947
 msgid ""
 "Additionally, the :attr:`!_fields_` class variable must be defined before "
 "the structure or union type is first used: an instance or subclass is "
@@ -5356,25 +5366,25 @@ msgid ""
 "fields, as if :attr:`!_fields_` was empty."
 msgstr ""
 
-#: ../../library/ctypes.rst:2946
+#: ../../library/ctypes.rst:2955
 msgid ""
 "Sub-subclasses of structure types inherit the fields of the base class plus "
 "the :attr:`_fields_` defined in the sub-subclass, if any."
 msgstr ""
 
-#: ../../library/ctypes.rst:2952
+#: ../../library/ctypes.rst:2961
 msgid ""
 "An optional small integer that allows overriding the alignment of structure "
 "fields in the instance."
 msgstr ""
 
-#: ../../library/ctypes.rst:2955
+#: ../../library/ctypes.rst:2964
 msgid ""
 "This is only implemented for the MSVC-compatible memory layout (see :attr:"
 "`_layout_`)."
 msgstr ""
 
-#: ../../library/ctypes.rst:2958
+#: ../../library/ctypes.rst:2967
 msgid ""
 "Setting :attr:`!_pack_` to 0 is the same as not setting it at all. "
 "Otherwise, the value must be a positive power of two. The effect is "
@@ -5382,13 +5392,13 @@ msgid ""
 "larger *n* than what the compiler accepts."
 msgstr ""
 
-#: ../../library/ctypes.rst:2963
+#: ../../library/ctypes.rst:2972
 msgid ""
 ":attr:`!_pack_` must already be defined when :attr:`_fields_` is assigned, "
 "otherwise it will have no effect."
 msgstr ""
 
-#: ../../library/ctypes.rst:2968
+#: ../../library/ctypes.rst:2977
 msgid ""
 "For historical reasons, if :attr:`!_pack_` is non-zero, the MSVC-compatible "
 "layout will be used by default. On non-Windows platforms, this default is "
@@ -5396,57 +5406,57 @@ msgid ""
 "intended, set :attr:`~Structure._layout_` to ``'ms'`` explicitly."
 msgstr ""
 
-#: ../../library/ctypes.rst:2977
+#: ../../library/ctypes.rst:2986
 msgid ""
 "An optional small integer that allows increasing the alignment of the "
 "structure when being packed or unpacked to/from memory."
 msgstr ""
 
-#: ../../library/ctypes.rst:2980
+#: ../../library/ctypes.rst:2989
 msgid ""
 "The value must not be negative. The effect is equivalent to "
 "``__attribute__((aligned(N)))`` on GCC or ``#pragma align(N)`` on MSVC, "
 "except :mod:`!ctypes` may allow values that the compiler would reject."
 msgstr ""
 
-#: ../../library/ctypes.rst:2985
+#: ../../library/ctypes.rst:2994
 msgid ""
 ":attr:`!_align_` can only *increase* a structure's alignment requirements. "
 "Setting it to 0 or 1 has no effect."
 msgstr ""
 
-#: ../../library/ctypes.rst:2988
+#: ../../library/ctypes.rst:2997
 msgid ""
 "Using values that are not powers of two is discouraged and may lead to "
 "surprising behavior."
 msgstr ""
 
-#: ../../library/ctypes.rst:2991
+#: ../../library/ctypes.rst:3000
 msgid ""
 ":attr:`!_align_` must already be defined when :attr:`_fields_` is assigned, "
 "otherwise it will have no effect."
 msgstr ""
 
-#: ../../library/ctypes.rst:2998
+#: ../../library/ctypes.rst:3007
 msgid ""
 "An optional string naming the struct/union layout. It can currently be set "
 "to:"
 msgstr ""
 
-#: ../../library/ctypes.rst:3001
+#: ../../library/ctypes.rst:3010
 msgid ""
 "``\"ms\"``: the layout used by the Microsoft compiler (MSVC). On GCC and "
 "Clang, this layout can be selected with ``__attribute__((ms_struct))``."
 msgstr ""
 
-#: ../../library/ctypes.rst:3004
+#: ../../library/ctypes.rst:3013
 msgid ""
 "``\"gcc-sysv\"``: the layout used by GCC with the System V or “SysV-like” "
 "data model, as used on Linux and macOS. With this layout, :attr:`~Structure."
 "_pack_` must be unset or zero."
 msgstr ""
 
-#: ../../library/ctypes.rst:3008
+#: ../../library/ctypes.rst:3017
 msgid ""
 "If not set explicitly, ``ctypes`` will use a default that matches the "
 "platform conventions. This default may change in future Python releases (for "
@@ -5454,27 +5464,27 @@ msgid ""
 "between similar platforms is found). Currently the default will be:"
 msgstr ""
 
-#: ../../library/ctypes.rst:3014
+#: ../../library/ctypes.rst:3023
 msgid "On Windows: ``\"ms\"``"
 msgstr ""
 
-#: ../../library/ctypes.rst:3015
+#: ../../library/ctypes.rst:3024
 msgid ""
 "When :attr:`~Structure._pack_` is specified: ``\"ms\"``. (This is "
 "deprecated; see :attr:`~Structure._pack_` documentation.)"
 msgstr ""
 
-#: ../../library/ctypes.rst:3017
+#: ../../library/ctypes.rst:3026
 msgid "Otherwise: ``\"gcc-sysv\"``"
 msgstr ""
 
-#: ../../library/ctypes.rst:3019
+#: ../../library/ctypes.rst:3028
 msgid ""
 ":attr:`!_layout_` must already be defined when :attr:`~Structure._fields_` "
 "is assigned, otherwise it will have no effect."
 msgstr ""
 
-#: ../../library/ctypes.rst:3026
+#: ../../library/ctypes.rst:3035
 msgid ""
 "An optional sequence that lists the names of unnamed (anonymous) fields. :"
 "attr:`_anonymous_` must be already defined when :attr:`_fields_` is "
@@ -5484,7 +5494,7 @@ msgstr ""
 "(anónimos). :attr:`_anonymous_` debe estar ya definida cuando se asigne :"
 "attr:`_fields_`, de lo contrario no tendrá ningún efecto."
 
-#: ../../library/ctypes.rst:3030
+#: ../../library/ctypes.rst:3039
 msgid ""
 "The fields listed in this variable must be structure or union type fields. :"
 "mod:`!ctypes` will create descriptors in the structure type that allows "
@@ -5492,11 +5502,11 @@ msgid ""
 "structure or union field."
 msgstr ""
 
-#: ../../library/ctypes.rst:3035
+#: ../../library/ctypes.rst:3044
 msgid "Here is an example type (Windows)::"
 msgstr "He aquí un ejemplo de tipo (Windows)::"
 
-#: ../../library/ctypes.rst:3037
+#: ../../library/ctypes.rst:3046
 msgid ""
 "class _U(Union):\n"
 "    _fields_ = [(\"lptdesc\", POINTER(TYPEDESC)),\n"
@@ -5514,7 +5524,7 @@ msgstr ""
 "TYPEDESC(Structure):    _anonymous_ = (\"u\",)    _fields_ = [(\"u\", "
 "_U),                (\"vt\", VARTYPE)]"
 
-#: ../../library/ctypes.rst:3048
+#: ../../library/ctypes.rst:3057
 msgid ""
 "The ``TYPEDESC`` structure describes a COM data type, the ``vt`` field "
 "specifies which one of the union fields is valid.  Since the ``u`` field is "
@@ -5530,7 +5540,7 @@ msgstr ""
 "son equivalentes, pero el primero es más rápido ya que no necesita crear una "
 "instancia de unión temporal::"
 
-#: ../../library/ctypes.rst:3055
+#: ../../library/ctypes.rst:3064
 msgid ""
 "td = TYPEDESC()\n"
 "td.vt = VT_PTR\n"
@@ -5540,7 +5550,7 @@ msgstr ""
 "td = TYPEDESC()td.vt = VT_PTRtd.lptdesc = POINTER(some_type)td.u.lptdesc = "
 "POINTER(some_type)"
 
-#: ../../library/ctypes.rst:3060
+#: ../../library/ctypes.rst:3069
 msgid ""
 "It is possible to define sub-subclasses of structures, they inherit the "
 "fields of the base class.  If the subclass definition has a separate :attr:"
@@ -5552,7 +5562,7 @@ msgstr ""
 "`_fields_` separada, los campos especificados en ella se añaden a los campos "
 "de la clase base."
 
-#: ../../library/ctypes.rst:3065
+#: ../../library/ctypes.rst:3074
 msgid ""
 "Structure and union constructors accept both positional and keyword "
 "arguments.  Positional arguments are used to initialize member fields in the "
@@ -5569,13 +5579,13 @@ msgstr ""
 "`_fields_` con el mismo nombre, o crearán nuevos atributos para nombres no "
 "presentes en :attr:`_fields_`."
 
-#: ../../library/ctypes.rst:3075
+#: ../../library/ctypes.rst:3084
 msgid ""
 "Descriptor for fields of a :class:`Structure` and :class:`Union`. For "
 "example::"
 msgstr ""
 
-#: ../../library/ctypes.rst:3078
+#: ../../library/ctypes.rst:3087
 msgid ""
 ">>> class Color(Structure):\n"
 "...     _fields_ = (\n"
@@ -5598,100 +5608,100 @@ msgid ""
 "1"
 msgstr ""
 
-#: ../../library/ctypes.rst:3098
+#: ../../library/ctypes.rst:3107
 msgid "All attributes are read-only."
 msgstr ""
 
-#: ../../library/ctypes.rst:3100
+#: ../../library/ctypes.rst:3109
 msgid ""
 ":class:`!CField` objects are created via :attr:`~Structure._fields_`; do not "
 "instantiate the class directly."
 msgstr ""
 
-#: ../../library/ctypes.rst:3105
+#: ../../library/ctypes.rst:3114
 msgid ""
 "Previously, descriptors only had ``offset`` and ``size`` attributes and a "
 "readable string representation; the :class:`!CField` class was not available "
 "directly."
 msgstr ""
 
-#: ../../library/ctypes.rst:3111
+#: ../../library/ctypes.rst:3120
 msgid "Name of the field, as a string."
 msgstr ""
 
-#: ../../library/ctypes.rst:3115
+#: ../../library/ctypes.rst:3124
 msgid "Type of the field, as a :ref:`ctypes class <ctypes-data-types>`."
 msgstr ""
 
-#: ../../library/ctypes.rst:3120
+#: ../../library/ctypes.rst:3129
 msgid "Offset of the field, in bytes."
 msgstr ""
 
-#: ../../library/ctypes.rst:3122
+#: ../../library/ctypes.rst:3131
 msgid ""
 "For bitfields, this is the offset of the underlying byte-aligned *storage "
 "unit*; see :attr:`~CField.bit_offset`."
 msgstr ""
 
-#: ../../library/ctypes.rst:3127
+#: ../../library/ctypes.rst:3136
 msgid "Size of the field, in bytes."
 msgstr ""
 
-#: ../../library/ctypes.rst:3129
+#: ../../library/ctypes.rst:3138
 msgid ""
 "For bitfields, this is the size of the underlying *storage unit*. Typically, "
 "it has the same size as the bitfield's type."
 msgstr ""
 
-#: ../../library/ctypes.rst:3134
+#: ../../library/ctypes.rst:3143
 msgid "For non-bitfields, equivalent to :attr:`~CField.byte_size`."
 msgstr ""
 
-#: ../../library/ctypes.rst:3136
+#: ../../library/ctypes.rst:3145
 msgid ""
 "For bitfields, this contains a backwards-compatible bit-packed value that "
 "combines :attr:`~CField.bit_size` and :attr:`~CField.bit_offset`. Prefer "
 "using the explicit attributes instead."
 msgstr ""
 
-#: ../../library/ctypes.rst:3143
+#: ../../library/ctypes.rst:3152
 msgid "True if this is a bitfield."
 msgstr ""
 
-#: ../../library/ctypes.rst:3148
+#: ../../library/ctypes.rst:3157
 msgid ""
 "The location of a bitfield within its *storage unit*, that is, within :attr:"
 "`~CField.byte_size` bytes of memory starting at :attr:`~CField.byte_offset`."
 msgstr ""
 
-#: ../../library/ctypes.rst:3152
+#: ../../library/ctypes.rst:3161
 msgid ""
 "To get the field's value, read the storage unit as an integer, :ref:`shift "
 "left <shifting>` by :attr:`!bit_offset` and take the :attr:`!bit_size` least "
 "significant bits."
 msgstr ""
 
-#: ../../library/ctypes.rst:3156
+#: ../../library/ctypes.rst:3165
 msgid ""
 "For non-bitfields, :attr:`!bit_offset` is zero and :attr:`!bit_size` is "
 "equal to ``byte_size * 8``."
 msgstr ""
 
-#: ../../library/ctypes.rst:3161
+#: ../../library/ctypes.rst:3170
 msgid ""
 "True if this field is anonymous, that is, it contains nested sub-fields that "
 "should be merged into a containing structure or union."
 msgstr ""
 
-#: ../../library/ctypes.rst:3168
+#: ../../library/ctypes.rst:3177
 msgid "Arrays and pointers"
 msgstr "Matrices y punteros"
 
-#: ../../library/ctypes.rst:3172
+#: ../../library/ctypes.rst:3181
 msgid "Abstract base class for arrays."
 msgstr "Clase base abstracta para matrices."
 
-#: ../../library/ctypes.rst:3174
+#: ../../library/ctypes.rst:3183
 msgid ""
 "The recommended way to create concrete array types is by multiplying any :"
 "mod:`!ctypes` data type with a non-negative integer.  Alternatively, you can "
@@ -5701,11 +5711,11 @@ msgid ""
 "an :class:`Array`."
 msgstr ""
 
-#: ../../library/ctypes.rst:3181
+#: ../../library/ctypes.rst:3190
 msgid "Arrays are :ref:`generic <generics>` over the type of their elements."
 msgstr ""
 
-#: ../../library/ctypes.rst:3186
+#: ../../library/ctypes.rst:3195
 msgid ""
 "A positive integer specifying the number of elements in the array. Out-of-"
 "range subscripts result in an :exc:`IndexError`. Will be returned by :func:"
@@ -5715,11 +5725,11 @@ msgstr ""
 "matriz. Los subíndices fuera de rango resultan en un :exc:`IndexError`. Será "
 "devuelto por :func:`len`."
 
-#: ../../library/ctypes.rst:3193
+#: ../../library/ctypes.rst:3202
 msgid "Specifies the type of each element in the array."
 msgstr "Especifica el tipo de cada elemento de la matriz."
 
-#: ../../library/ctypes.rst:3196
+#: ../../library/ctypes.rst:3205
 msgid ""
 "Array subclass constructors accept positional arguments, used to initialize "
 "the elements in order."
@@ -5727,21 +5737,21 @@ msgstr ""
 "Los constructores de subclases de matrices aceptan argumentos posicionales, "
 "utilizados para inicializar los elementos en orden."
 
-#: ../../library/ctypes.rst:3201
+#: ../../library/ctypes.rst:3210
 msgid ""
 "Create an array. Equivalent to ``type * length``, where *type* is a :mod:`!"
 "ctypes` data type and *length* an integer."
 msgstr ""
 
-#: ../../library/ctypes.rst:3205
+#: ../../library/ctypes.rst:3214
 msgid "In favor of multiplication."
 msgstr ""
 
-#: ../../library/ctypes.rst:3211
+#: ../../library/ctypes.rst:3220
 msgid "Private, abstract base class for pointers."
 msgstr "Clase base abstracta y privada para punteros."
 
-#: ../../library/ctypes.rst:3213
+#: ../../library/ctypes.rst:3222
 msgid ""
 "Concrete pointer types are created by calling :func:`POINTER` with the type "
 "that will be pointed to; this is done automatically by :func:`pointer`."
@@ -5749,7 +5759,7 @@ msgstr ""
 "Los tipos de puntero concretos se crean llamando a :func:`POINTER` con el "
 "tipo al que se apuntará; esto lo hace automáticamente :func:`pointer`."
 
-#: ../../library/ctypes.rst:3217
+#: ../../library/ctypes.rst:3226
 msgid ""
 "If a pointer points to an array, its elements can be read and written using "
 "standard subscript and slice accesses.  Pointer objects have no size, so :"
@@ -5764,11 +5774,11 @@ msgstr ""
 "C), y los subíndices fuera de rango probablemente se bloquearán con una "
 "violación de acceso (si tienes suerte)."
 
-#: ../../library/ctypes.rst:3227
+#: ../../library/ctypes.rst:3236
 msgid "Specifies the type pointed to."
 msgstr "Especifica el tipo apuntado."
 
-#: ../../library/ctypes.rst:3231
+#: ../../library/ctypes.rst:3240
 msgid ""
 "Returns the object to which to pointer points.  Assigning to this attribute "
 "changes the pointer to point to the assigned object."
@@ -5776,11 +5786,11 @@ msgstr ""
 "Devuelve el objeto al que apunta el puntero.  La asignación a este atributo "
 "cambia el puntero para que apunte al objeto asignado."
 
-#: ../../library/ctypes.rst:3238
+#: ../../library/ctypes.rst:3247
 msgid "Exceptions"
 msgstr "Excepciones"
 
-#: ../../library/ctypes.rst:3242
+#: ../../library/ctypes.rst:3251
 msgid ""
 "This exception is raised when a foreign function call cannot convert one of "
 "the passed arguments."
@@ -5788,23 +5798,23 @@ msgstr ""
 "Esta excepción se produce cuando una llamada a una función ajena no puede "
 "convertir uno de los argumentos pasados."
 
-#: ../../library/ctypes.rst:3248
+#: ../../library/ctypes.rst:3257
 msgid "This exception is raised when a COM method call failed."
 msgstr ""
 
-#: ../../library/ctypes.rst:3252
+#: ../../library/ctypes.rst:3261
 msgid "The integer value representing the error code."
 msgstr ""
 
-#: ../../library/ctypes.rst:3256
+#: ../../library/ctypes.rst:3265
 msgid "The error message."
 msgstr ""
 
-#: ../../library/ctypes.rst:3260
+#: ../../library/ctypes.rst:3269
 msgid "The 5-tuple ``(descr, source, helpfile, helpcontext, progid)``."
 msgstr ""
 
-#: ../../library/ctypes.rst:3262
+#: ../../library/ctypes.rst:3271
 msgid ""
 "*descr* is the textual description.  *source* is the language-dependent "
 "``ProgID`` for the class or application that raised the error.  *helpfile* "
