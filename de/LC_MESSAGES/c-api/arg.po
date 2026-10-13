@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-25 21:06+0000\n"
+"POT-Creation-Date: 2026-10-13 22:49+0000\n"
 "PO-Revision-Date: 2025-07-18 19:57+0000\n"
 "Last-Translator: Swen Bachmann, 2026\n"
 "Language-Team: German (https://app.transifex.com/python-doc/teams/5390/de/)\n"
@@ -103,6 +103,12 @@ msgid ""
 "corresponding Python object, and shares the lifetime of this object. You "
 "won't have to release any memory yourself."
 msgstr ""
+"Andere Formate nehmen ein :class:`str` oder ein schreibgeschütztes :term:"
+"`bytes-ähnliches Objekt <bytes-like object>` entgegen, wie beispielsweise :"
+"class:`bytes`, und stellen einen ``const char *``-Zeiger auf dessen Puffer "
+"bereit. In diesem Fall wird der Puffer „ausgeliehen“: Er wird vom "
+"entsprechenden Python-Objekt verwaltet und hat dieselbe Lebensdauer wie "
+"dieses Objekt. Sie müssen selbst keinen Speicher freigeben."
 
 #: ../../c-api/arg.rst:61
 msgid ""
@@ -130,7 +136,7 @@ msgstr ""
 
 #: ../../c-api/arg.rst:80
 msgid "``s`` (:class:`str`) [const char \\*]"
-msgstr ""
+msgstr "``s`` (:class:`str`) [const char \\*]"
 
 #: ../../c-api/arg.rst:81
 msgid ""
@@ -159,6 +165,8 @@ msgstr ""
 #: ../../c-api/arg.rst:100
 msgid "``s*`` (:class:`str` or :term:`bytes-like object`) [Py_buffer]"
 msgstr ""
+"``s*`` (:class:`str` oder :term:`bytes-ähnliches Objekt <bytes-like "
+"object>`) [Py_buffer]"
 
 #: ../../c-api/arg.rst:101
 msgid ""
@@ -173,6 +181,8 @@ msgid ""
 "``s#`` (:class:`str`, read-only :term:`bytes-like object`) [const char \\*, :"
 "c:type:`Py_ssize_t`]"
 msgstr ""
+"``s#`` (:class:`str`, schreibgeschützt: :term:`bytes-ähnliches Objekt <bytes-"
+"like object>`) [const char \\*, :c:type:`Py_ssize_t`]"
 
 #: ../../c-api/arg.rst:107
 msgid ""
@@ -182,43 +192,62 @@ msgid ""
 "null bytes. Unicode objects are converted to C strings using ``'utf-8'`` "
 "encoding."
 msgstr ""
+"Ähnlich wie ``s*``, mit dem Unterschied, dass hier ein :ref:`geliehener "
+"Puffer <c-arg-borrowed-buffer>` bereitgestellt wird. Das Ergebnis wird in "
+"zwei C-Variablen gespeichert, wobei die erste ein Zeiger auf eine C-"
+"Zeichenkette und die zweite deren Länge ist. Die Zeichenkette darf "
+"eingebettete Null-Bytes enthalten. Unicode-Objekte werden mithilfe der "
+"``'utf-8'``-Kodierung in C-Zeichenketten konvertiert."
 
 #: ../../c-api/arg.rst:113 ../../c-api/arg.rst:558
 msgid "``z`` (:class:`str` or ``None``) [const char \\*]"
-msgstr ""
+msgstr "``z`` (:class:`str` oder ``None``) [const char \\*]"
 
 #: ../../c-api/arg.rst:114
 msgid ""
 "Like ``s``, but the Python object may also be ``None``, in which case the C "
 "pointer is set to ``NULL``."
 msgstr ""
+"Ähnlich wie bei ``s``, allerdings kann das Python-Objekt auch ``None`` sein; "
+"in diesem Fall wird der C-Zeiger auf ``NULL`` gesetzt."
 
 #: ../../c-api/arg.rst:117
 msgid ""
 "``z*`` (:class:`str`, :term:`bytes-like object` or ``None``) [Py_buffer]"
 msgstr ""
+"``z*`` (:class:`str`, :term:`bytes-ähnliches Objekt <bytes-like object>` "
+"oder ``None``) [Py_buffer]"
 
 #: ../../c-api/arg.rst:118
 msgid ""
 "Like ``s*``, but the Python object may also be ``None``, in which case the "
 "``buf`` member of the :c:type:`Py_buffer` structure is set to ``NULL``."
 msgstr ""
+"Ähnlich wie bei ``s*``, wobei das Python-Objekt auch ``None`` sein kann; in "
+"diesem Fall wird das Element ``buf`` der Struktur :c:type:`Py_buffer` auf "
+"``NULL`` gesetzt."
 
 #: ../../c-api/arg.rst:121
 msgid ""
 "``z#`` (:class:`str`, read-only :term:`bytes-like object` or ``None``) "
 "[const char \\*, :c:type:`Py_ssize_t`]"
 msgstr ""
+"``z#`` (:class:`str`, schreibgeschützt: :term:`bytes-ähnliches Objekt <bytes-"
+"like object>` oder ``None``) [const char \\*, :c:type:`Py_ssize_t`]"
 
 #: ../../c-api/arg.rst:122
 msgid ""
 "Like ``s#``, but the Python object may also be ``None``, in which case the C "
 "pointer is set to ``NULL``."
 msgstr ""
+"Ähnlich wie bei ``s#``, allerdings kann das Python-Objekt auch ``None`` "
+"sein; in diesem Fall wird der C-Zeiger auf ``NULL`` gesetzt."
 
 #: ../../c-api/arg.rst:125
 msgid "``y`` (read-only :term:`bytes-like object`) [const char \\*]"
 msgstr ""
+"``y`` (schreibgeschützt :term:`bytes-ähnliches Objekt <bytes-like object>`) "
+"[const char \\*]"
 
 #: ../../c-api/arg.rst:126
 msgid ""
@@ -236,25 +265,32 @@ msgstr ""
 
 #: ../../c-api/arg.rst:136
 msgid "``y*`` (:term:`bytes-like object`) [Py_buffer]"
-msgstr ""
+msgstr "``y*`` (:term:`Byte-ähnliches Objekt <bytes-like object>`) [Py_buffer]"
 
 #: ../../c-api/arg.rst:137
 msgid ""
 "This variant on ``s*`` doesn't accept Unicode objects, only bytes-like "
 "objects.  **This is the recommended way to accept binary data.**"
 msgstr ""
+"Diese Variante von ``s*`` akzeptiert keine Unicode-Objekte, sondern nur "
+"byteähnliche Objekte.  **Dies ist die empfohlene Vorgehensweise zum "
+"Akzeptieren von Binärdaten.**"
 
 #: ../../c-api/arg.rst:141
 msgid ""
 "``y#`` (read-only :term:`bytes-like object`) [const char \\*, :c:type:"
 "`Py_ssize_t`]"
 msgstr ""
+"``y#`` (schreibgeschützt: :term:`bytes-ähnliches Objekt <bytes-like "
+"object>`) [const char \\*, :c:type:`Py_ssize_t`]"
 
 #: ../../c-api/arg.rst:142
 msgid ""
 "This variant on ``s#`` doesn't accept Unicode objects, only bytes-like "
 "objects."
 msgstr ""
+"Diese Variante von ``s#`` akzeptiert keine Unicode-Objekte, sondern nur "
+"byteähnliche Objekte."
 
 #: ../../c-api/arg.rst:145
 msgid "``S`` (:class:`bytes`) [PyBytesObject \\*]"
@@ -293,6 +329,8 @@ msgstr ""
 #: ../../c-api/arg.rst:160
 msgid "``w*`` (read-write :term:`bytes-like object`) [Py_buffer]"
 msgstr ""
+"``w*`` (Lese-/Schreibzugriff: :term:`byteähnliches Objekt <bytes-like "
+"object>`) [Py_buffer]"
 
 #: ../../c-api/arg.rst:161
 msgid ""
@@ -304,13 +342,16 @@ msgstr ""
 
 #: ../../c-api/arg.rst:166
 msgid "``es`` (:class:`str`) [const char \\*encoding, char \\*\\*buffer]"
-msgstr ""
+msgstr "``es`` (:class:`str`) [const char \\*encoding, char \\*\\**buffer]"
 
 #: ../../c-api/arg.rst:167
 msgid ""
 "This variant on ``s`` is used for encoding Unicode into a character buffer. "
 "It only works for encoded data without embedded NUL bytes."
 msgstr ""
+"Diese Variante von ``s`` dient dazu, Unicode in einen Zeichenpuffer zu "
+"kodieren. Sie funktioniert nur bei kodierten Daten ohne eingebettete NUL-"
+"Bytes."
 
 #: ../../c-api/arg.rst:170
 msgid ""
@@ -322,6 +363,14 @@ msgid ""
 "references will be set to a buffer with the contents of the argument text. "
 "The text will be encoded in the encoding specified by the first argument."
 msgstr ""
+"Dieses Format erfordert zwei Argumente. Das erste wird nur als Eingabe "
+"verwendet und muss ein :c:expr:`const char*` sein, der auf den Namen einer "
+"Kodierung als NUL-terminierte Zeichenkette zeigt, oder ``NULL``; in diesem "
+"Fall wird die Kodierung ``'utf-8'`` verwendet. Ist die angegebene Kodierung "
+"in Python nicht bekannt, wird eine Ausnahme ausgelöst. Das zweite Argument "
+"muss ein :c:expr:`char**` sein; der Wert des Zeigers, auf den es verweist, "
+"wird auf einen Puffer mit dem Inhalt des Argumenttexts gesetzt. Der Text "
+"wird in der Kodierung abgelegt, die durch das erste Argument angegeben wird."
 
 #: ../../c-api/arg.rst:178
 msgid ""
@@ -330,12 +379,19 @@ msgid ""
 "newly allocated storage.  The caller is responsible for calling :c:func:"
 "`PyMem_Free` to free the allocated buffer after use."
 msgstr ""
+":c:func:`PyArg_ParseTuple` wird einen Puffer der erforderlichen Größe "
+"zuweisen, die kodierten Daten in diesen Puffer kopieren und *\\*buffer* so "
+"anpassen, dass er auf den neu zugewiesenen Speicher verweist. Der Aufrufer "
+"ist dafür verantwortlich, nach der Verwendung die Funktion :c:func:"
+"`PyMem_Free` aufzurufen, um den zugewiesenen Puffer freizugeben."
 
 #: ../../c-api/arg.rst:183
 msgid ""
 "``et`` (:class:`str`, :class:`bytes` or :class:`bytearray`) [const char "
 "\\*encoding, char \\*\\*buffer]"
 msgstr ""
+"``et`` (:class:`str`, :class:`bytes` oder :class:`bytearray`) [const char "
+"\\*encoding, char \\*\\*buffer]"
 
 #: ../../c-api/arg.rst:184
 msgid ""
@@ -349,6 +405,8 @@ msgid ""
 "``es#`` (:class:`str`) [const char \\*encoding, char \\*\\*buffer, :c:type:"
 "`Py_ssize_t` \\*buffer_length]"
 msgstr ""
+"``es#`` (:class:`str`) [const char \\*encoding, char \\*\\*buffer, :c:type:"
+"`Py_ssize_t` \\*buffer_length]"
 
 #: ../../c-api/arg.rst:189
 msgid ""
@@ -369,6 +427,16 @@ msgid ""
 "The third argument must be a pointer to an integer; the referenced integer "
 "will be set to the number of bytes in the output buffer."
 msgstr ""
+"Die Funktion benötigt drei Argumente. Das erste dient lediglich als Eingabe "
+"und muss ein :c:expr:`const char*` sein, das auf den Namen einer Kodierung "
+"als NUL-terminierte Zeichenkette verweist, oder ``NULL`` – in diesem Fall "
+"wird die Kodierung ``'utf-8'`` verwendet. Wenn die angegebene Kodierung "
+"Python nicht bekannt ist, wird eine Ausnahme ausgelöst.  Das zweite Argument "
+"muss ein :c:expr:`char**` sein. Der Wert des Zeigers, auf den es verweist, "
+"wird auf einen Puffer mit dem Inhalt des Textarguments gesetzt. Der Text "
+"wird in der durch das erste Argument angegebenen Kodierung kodiert. Das "
+"dritte Argument muss ein Zeiger auf eine Ganzzahl sein; die Ganzzahl, auf "
+"die verwiesen wird, wird auf die Anzahl der Bytes im Ausgabepuffer gesetzt."
 
 #: ../../c-api/arg.rst:203
 msgid "There are two modes of operation:"
@@ -403,6 +471,8 @@ msgid ""
 "``et#`` (:class:`str`, :class:`bytes` or :class:`bytearray`) [const char "
 "\\*encoding, char \\*\\*buffer, :c:type:`Py_ssize_t` \\*buffer_length]"
 msgstr ""
+"``et#`` (:class:`str`, :class:`bytes` or :class:`bytearray`) [const char "
+"\\*encoding, char \\*\\*buffer, :c:type:`Py_ssize_t` \\*buffer_length]"
 
 #: ../../c-api/arg.rst:220
 msgid ""
@@ -552,7 +622,7 @@ msgstr ""
 
 #: ../../c-api/arg.rst:287
 msgid "Allow :class:`bytearray` objects."
-msgstr ""
+msgstr ":class:`bytearray`-Objekte zulassen."
 
 #: ../../c-api/arg.rst:290 ../../c-api/arg.rst:617
 msgid "``C`` (:class:`str` of length 1) [int]"
@@ -587,6 +657,8 @@ msgstr ""
 #: ../../c-api/arg.rst:301
 msgid "Convert a Python complex number to a C :c:type:`Py_complex` structure."
 msgstr ""
+"Konvertieren Sie eine komplexe Zahl aus Python in eine C- :c:type:"
+"`Py_complex`-Struktur."
 
 #: ../../c-api/arg.rst:304
 msgid "Other objects"
@@ -594,7 +666,7 @@ msgstr ""
 
 #: ../../c-api/arg.rst:306 ../../c-api/arg.rst:630
 msgid "``O`` (object) [PyObject \\*]"
-msgstr ""
+msgstr "``O`` (Objekt) [PyObject \\*]"
 
 #: ../../c-api/arg.rst:307
 msgid ""
@@ -603,6 +675,11 @@ msgid ""
 "`strong reference` to the object is not created (i.e. its reference count is "
 "not increased). The pointer stored is not ``NULL``."
 msgstr ""
+"Speichert ein Python-Objekt (ohne jegliche Konvertierung) in einem C-"
+"Objektzeiger. Das C-Programm erhält somit das tatsächlich übergebene Objekt. "
+"Es wird keine neue :term:`starke Referenz <strong reference>` auf das Objekt "
+"erstellt (d.h., dessen Referenzzähler wird nicht erhöht). Der gespeicherte "
+"Zeiger ist kein ``NULL``."
 
 #: ../../c-api/arg.rst:313
 msgid "``O!`` (object) [*typeobject*, PyObject \\*]"
@@ -616,6 +693,12 @@ msgid ""
 "which the object pointer is stored.  If the Python object does not have the "
 "required type, :exc:`TypeError` is raised."
 msgstr ""
+"Speichert ein Python-Objekt in einem C-Objektzeiger. Dies ähnelt der "
+"Funktion ``O``, nimmt jedoch zwei C-Argumente entgegen: Das erste ist die "
+"Adresse eines Objekts vom Python-Typ, das zweite ist die Adresse der C-"
+"Variablen (vom Typ :c:expr:`PyObject*`), in der der Objektzeiger gespeichert "
+"wird. Wenn das Python-Objekt nicht den erforderlichen Typ aufweist, wird "
+"ein :exc:`TypeError` ausgelöst."
 
 #: ../../c-api/arg.rst:322
 msgid "``O&`` (object) [*converter*, *address*]"
@@ -745,6 +828,9 @@ msgid ""
 "*borrowed* references; do not release them (i.e. do not decrement their "
 "reference count)!"
 msgstr ""
+"Beachten Sie, dass es sich bei allen Python-Objektreferenzen, die dem "
+"Aufrufer übergeben werden, um *ausgeliehene* Referenzen handelt; geben Sie "
+"diese nicht frei (d.h., verringern Sie nicht deren Referenzanzahl)!"
 
 #: ../../c-api/arg.rst:398
 msgid ""
@@ -810,6 +896,10 @@ msgid ""
 "is only needed if :c:func:`PyArg_ParseTupleAndKeywords` is not used, since "
 "the latter already does this check."
 msgstr ""
+"Stellt sicher, dass die Schlüssel im Dictionary der Schlüsselwortargumente "
+"Zeichenketten sind. Das ist nur nötig, wenn :c:func:"
+"`PyArg_ParseTupleAndKeywords` nicht verwendet wird, da diese Funktion die "
+"Prüfung bereits durchführt."
 
 #: ../../c-api/arg.rst:460
 msgid ""
@@ -839,6 +929,21 @@ msgid ""
 "a tuple or contains the wrong number of elements; an exception will be set "
 "if there was a failure."
 msgstr ""
+"Eine einfachere Form der Parameterübernahme, die keine Formatzeichenkette "
+"zur Angabe der Argumenttypen verwendet. Funktionen, die ihre Parameter auf "
+"diese Weise übernehmen, sollten in Funktions- oder Methodentabellen als :c:"
+"macro:`METH_VARARGS` deklariert werden. Das Tupel mit den tatsächlichen "
+"Parametern wird als *args* übergeben; es muss wirklich ein Tupel sein. Die "
+"Länge des Tupels muss mindestens *min* und höchstens *max* betragen, wobei "
+"*min* und *max* gleich sein dürfen. Zusätzlich müssen der Funktion weitere "
+"Argumente übergeben werden, die jeweils ein Zeiger auf eine Variable vom "
+"Typ :c:expr:`PyObject*` sein müssen; diese werden mit den Werten aus *args* "
+"gefüllt und enthalten :term:`geliehene Referenzen <borrowed reference>`. Die "
+"Variablen, die optionalen und in *args* nicht angegebenen Parametern "
+"entsprechen, werden nicht gefüllt; sie sollten vom Aufrufer initialisiert "
+"werden. Diese Funktion gibt „wahr“ zurück, wenn sie erfolgreich war, und "
+"„falsch“, wenn *args* kein Tupel ist oder die falsche Anzahl an Elementen "
+"enthält; im Fehlerfall wird eine Ausnahme gesetzt."
 
 #: ../../c-api/arg.rst:486
 msgid ""
@@ -861,6 +966,18 @@ msgid ""
 "    return result;\n"
 "}"
 msgstr ""
+"static PyObject *\n"
+"weakref_ref(PyObject *self, PyObject *args)\n"
+"{\n"
+"    PyObject *object;\n"
+"    PyObject *callback = NULL;\n"
+"    PyObject *result = NULL;\n"
+"\n"
+"    if (PyArg_UnpackTuple(args, \"ref\", 1, 2, &object, &callback)) {\n"
+"        result = PyWeakref_NewRef(object, callback);\n"
+"    }\n"
+"    return result;\n"
+"}"
 
 #: ../../c-api/arg.rst:502
 msgid ""
@@ -870,7 +987,7 @@ msgstr ""
 
 #: ../../c-api/arg.rst:505
 msgid "PyArg_ParseTuple(args, \"O|O:ref\", &object, &callback)"
-msgstr ""
+msgstr "PyArg_ParseTuple(args, \"O|O:ref\", &object, &callback)"
 
 #: ../../c-api/arg.rst:510
 msgid "Building values"
@@ -903,6 +1020,15 @@ msgid ""
 "code is responsible for calling :c:func:`free` for that memory once :c:func:"
 "`Py_BuildValue` returns."
 msgstr ""
+"Wenn Speicherpuffer als Parameter übergeben werden, um Daten für die "
+"Erstellung von Objekten bereitzustellen – wie beispielsweise bei den "
+"Formaten ``s`` und ``s#`` –, werden die erforderlichen Daten kopiert. Auf "
+"die vom Aufrufer bereitgestellten Puffer wird von den mit :c:func:"
+"`Py_BuildValue` erstellten Objekten niemals verwiesen. Mit anderen Worten: "
+"Wenn Ihr Code :c:func:`malloc` aufruft und den zugewiesenen Speicher an :c:"
+"func:`Py_BuildValue` übergibt, ist Ihr Code dafür verantwortlich, :c:func:"
+"`free` für diesen Speicher aufzurufen, sobald :c:func:`Py_BuildValue` "
+"zurückkehrt."
 
 #: ../../c-api/arg.rst:533
 msgid ""
@@ -911,6 +1037,10 @@ msgid ""
 "return; and the entry in [square] brackets is the type of the C value(s) to "
 "be passed."
 msgstr ""
+"In der folgenden Beschreibung ist die in Anführungszeichen gesetzte Form die "
+"Formateinheit. Der Eintrag in (runden) Klammern ist der Python-Objekttyp, "
+"den die Formateinheit zurückgibt und der Eintrag in [eckigen] Klammern ist "
+"der Typ des bzw. der zu übergebenden C-Werte."
 
 #: ../../c-api/arg.rst:537
 msgid ""
@@ -921,7 +1051,7 @@ msgstr ""
 
 #: ../../c-api/arg.rst:541
 msgid "``s`` (:class:`str` or ``None``) [const char \\*]"
-msgstr ""
+msgstr "``s`` (:class:`str` oder ``None``) [const char \\*]"
 
 #: ../../c-api/arg.rst:542
 msgid ""
@@ -933,6 +1063,7 @@ msgstr ""
 msgid ""
 "``s#`` (:class:`str` or ``None``) [const char \\*, :c:type:`Py_ssize_t`]"
 msgstr ""
+"``s#`` (:class:`str` oder ``None``) [const char \\*, :c:type:`Py_ssize_t`]"
 
 #: ../../c-api/arg.rst:546
 msgid ""
@@ -943,7 +1074,7 @@ msgstr ""
 
 #: ../../c-api/arg.rst:550
 msgid "``y`` (:class:`bytes`) [const char \\*]"
-msgstr ""
+msgstr "``y`` (:class:`bytes`) [const char \\*]"
 
 #: ../../c-api/arg.rst:551
 msgid ""
@@ -953,7 +1084,7 @@ msgstr ""
 
 #: ../../c-api/arg.rst:554
 msgid "``y#`` (:class:`bytes`) [const char \\*, :c:type:`Py_ssize_t`]"
-msgstr ""
+msgstr "``y#`` (:class:`bytes`) [const char \\*, :c:type:`Py_ssize_t`]"
 
 #: ../../c-api/arg.rst:555
 msgid ""
@@ -969,6 +1100,7 @@ msgstr ""
 msgid ""
 "``z#`` (:class:`str` or ``None``) [const char \\*, :c:type:`Py_ssize_t`]"
 msgstr ""
+"``z#`` (:class:`str` oder ``None``) [const char \\*, :c:type:`Py_ssize_t`]"
 
 #: ../../c-api/arg.rst:562 ../../c-api/arg.rst:578
 msgid "Same as ``s#``."
@@ -976,7 +1108,7 @@ msgstr ""
 
 #: ../../c-api/arg.rst:564
 msgid "``u`` (:class:`str`) [const wchar_t \\*]"
-msgstr ""
+msgstr "``u`` (:class:`str`) [const wchar_t \\*]"
 
 #: ../../c-api/arg.rst:565
 msgid ""
@@ -984,10 +1116,13 @@ msgid ""
 "UCS-4) data to a Python Unicode object.  If the Unicode buffer pointer is "
 "``NULL``, ``None`` is returned."
 msgstr ""
+"Konvertiert einen null-terminierten :c:type:`wchar_t`-Puffer mit Unicode-"
+"Daten (UTF-16 oder UCS-4) in ein Python-Unicode-Objekt. Wenn der Zeiger auf "
+"den Unicode-Puffer auf ``NULL`` verweist, wird ``None`` zurückgegeben."
 
 #: ../../c-api/arg.rst:569
 msgid "``u#`` (:class:`str`) [const wchar_t \\*, :c:type:`Py_ssize_t`]"
-msgstr ""
+msgstr "``u#`` (:class:`str`) [const wchar_t \\*, :c:type:`Py_ssize_t`]"
 
 #: ../../c-api/arg.rst:570
 msgid ""
@@ -995,19 +1130,25 @@ msgid ""
 "Unicode object.   If the Unicode buffer pointer is ``NULL``, the length is "
 "ignored and ``None`` is returned."
 msgstr ""
+"Konvertiert einen Unicode-Datenpuffer (UTF-16 oder UCS-4) und dessen Länge "
+"in ein Python-Unicode-Objekt.   Wenn der Zeiger auf den Unicode-Puffer auf "
+"``NULL`` verweist, wird die Länge ignoriert und ``None`` zurückgegeben."
 
 #: ../../c-api/arg.rst:574
 msgid "``U`` (:class:`str` or ``None``) [const char \\*]"
-msgstr ""
+msgstr "``U`` (:class:`str` oder ``None``) [const char \\*]"
 
 #: ../../c-api/arg.rst:577
 msgid ""
 "``U#`` (:class:`str` or ``None``) [const char \\*, :c:type:`Py_ssize_t`]"
 msgstr ""
+"``U#`` (:class:`str` oder ``None``) [const char \\*, :c:type:`Py_ssize_t`]"
 
 #: ../../c-api/arg.rst:581
 msgid "Convert a plain C :c:expr:`int` to a Python integer object."
 msgstr ""
+"Konvertiert eine einfache C- :c:expr:`int`-Variable in ein Python-Integer-"
+"Objekt."
 
 #: ../../c-api/arg.rst:583
 msgid "``b`` (:class:`int`) [char]"
@@ -1030,30 +1171,40 @@ msgstr ""
 #: ../../c-api/arg.rst:593
 msgid "Convert a C :c:expr:`unsigned char` to a Python integer object."
 msgstr ""
+"Konvertiert ein C-Objekt vom Typ :c:expr:`unsigned char` in ein Python-"
+"Integer-Objekt."
 
 #: ../../c-api/arg.rst:596
 msgid "Convert a C :c:expr:`unsigned short int` to a Python integer object."
 msgstr ""
+"Konvertiert ein C-Objekt vom Typ :c:expr:`unsigned short int` in ein Python-"
+"Integer-Objekt."
 
 #: ../../c-api/arg.rst:599
 msgid "Convert a C :c:expr:`unsigned int` to a Python integer object."
 msgstr ""
+"Konvertiert ein C-Objekt vom Typ :c:expr:`unsigned int` in ein Python-"
+"Integer-Objekt."
 
 #: ../../c-api/arg.rst:602
 msgid "Convert a C :c:expr:`unsigned long` to a Python integer object."
 msgstr ""
+"Konvertiert ein C-Objekt vom Typ :c:expr:`unsigned long` in ein Python-"
+"Integer-Objekt."
 
 #: ../../c-api/arg.rst:605
 msgid "Convert a C :c:expr:`long long` to a Python integer object."
-msgstr ""
+msgstr "Wandelt ein C-:c:expr:`long long` in ein Python-Integer-Objekt um."
 
 #: ../../c-api/arg.rst:608
 msgid "Convert a C :c:expr:`unsigned long long` to a Python integer object."
 msgstr ""
+"Wandelt ein C-:c:expr:`unsigned long long` in ein Python-Integer-Objekt um."
 
 #: ../../c-api/arg.rst:611
 msgid "Convert a C :c:type:`Py_ssize_t` to a Python integer."
 msgstr ""
+"Konvertieren Sie eine C- :c:type:`Py_ssize_t`-Zahl in eine Python-Ganzzahl."
 
 #: ../../c-api/arg.rst:613
 msgid "``c`` (:class:`bytes` of length 1) [char]"
@@ -1064,20 +1215,26 @@ msgid ""
 "Convert a C :c:expr:`int` representing a byte to a Python :class:`bytes` "
 "object of length 1."
 msgstr ""
+"Konvertiere ein C- :c:expr:`int`, das ein Byte darstellt, in ein Python- :"
+"class:`bytes`-Objekt der Länge 1."
 
 #: ../../c-api/arg.rst:618
 msgid ""
 "Convert a C :c:expr:`int` representing a character to Python :class:`str` "
 "object of length 1."
 msgstr ""
+"Konvertiere ein C- :c:expr:`int`, das ein Zeichen darstellt, in ein Python- :"
+"class:`str`-Objekt der Länge 1."
 
 #: ../../c-api/arg.rst:622
 msgid "Convert a C :c:expr:`double` to a Python floating-point number."
 msgstr ""
+"Konvertieren Sie eine C- :c:expr:`double`-Zahl in eine Python-Gleitkommazahl."
 
 #: ../../c-api/arg.rst:625
 msgid "Convert a C :c:expr:`float` to a Python floating-point number."
 msgstr ""
+"Konvertieren Sie eine C- :c:expr:`float`-Zahl in eine Python-Gleitkommazahl."
 
 #: ../../c-api/arg.rst:627
 msgid "``D`` (:class:`complex`) [Py_complex \\*]"
@@ -1086,6 +1243,8 @@ msgstr ""
 #: ../../c-api/arg.rst:628
 msgid "Convert a C :c:type:`Py_complex` structure to a Python complex number."
 msgstr ""
+"Konvertieren Sie eine C- :c:type:`Py_complex`-Struktur in eine komplexe Zahl "
+"in Python."
 
 #: ../../c-api/arg.rst:631
 msgid ""
@@ -1096,10 +1255,18 @@ msgid ""
 "func:`Py_BuildValue` will return ``NULL`` but won't raise an exception.  If "
 "no exception has been raised yet, :exc:`SystemError` is set."
 msgstr ""
+"Ein Python-Objekt unverändert übergeben, aber eine neue :term:`starke "
+"Referenz <strong reference>` darauf erstellen (d.h., seine Referenzanzahl "
+"wird um eins erhöht). Handelt es sich bei dem übergebenen Objekt um einen "
+"Zeiger vom Typ „ ``NULL`` “, wird davon ausgegangen, dass dies darauf "
+"zurückzuführen ist, dass der Aufruf, der das Argument erzeugt hat, einen "
+"Fehler festgestellt und eine Ausnahme ausgelöst hat. Daher gibt :c:func:"
+"`Py_BuildValue` ``NULL`` zurück, löst jedoch keine Ausnahme aus.  Wenn noch "
+"keine Ausnahme ausgelöst wurde, wird :exc:`SystemError` gesetzt."
 
 #: ../../c-api/arg.rst:640
 msgid "``S`` (object) [PyObject \\*]"
-msgstr ""
+msgstr "``S`` (Objekt) [PyObject \\*]"
 
 #: ../../c-api/arg.rst:641
 msgid "Same as ``O``."
@@ -1107,7 +1274,7 @@ msgstr ""
 
 #: ../../c-api/arg.rst:643
 msgid "``N`` (object) [PyObject \\*]"
-msgstr ""
+msgstr "``N`` (Objekt) [PyObject \\*]"
 
 #: ../../c-api/arg.rst:644
 msgid ""
