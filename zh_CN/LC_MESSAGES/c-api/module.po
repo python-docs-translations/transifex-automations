@@ -5,15 +5,16 @@
 #
 # Translators:
 # Rafael Fontenelle <rffontenelle@gmail.com>, 2025
+# Alpha Du <alphanow@gmail.com>, 2026
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-09 16:02+0000\n"
+"POT-Creation-Date: 2026-10-17 19:14+0000\n"
 "PO-Revision-Date: 2025-07-18 19:57+0000\n"
-"Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>, 2025\n"
+"Last-Translator: Alpha Du <alphanow@gmail.com>, 2026\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/python-doc/"
 "teams/5390/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -639,7 +640,7 @@ msgstr ""
 
 #: ../../c-api/module.rst:458
 msgid "Process any execution slots (:c:data:`Py_mod_exec`) given in *def*."
-msgstr "执行参数*def*中给出的任意执行槽（:c:data:`Py_mod_exec`）。"
+msgstr "处理在 *def* 中给出的任何执行槽位 (:c:data:`Py_mod_exec`)。"
 
 #: ../../c-api/module.rst:464
 msgid ""
@@ -686,8 +687,8 @@ msgid ""
 "Add an object to *module* as *name*.  This is a convenience function which "
 "can be used from the module's initialization function."
 msgstr ""
-"将一个名称为*name*的对象添加到*module*模块中。这是一个方便的函数，可以在模块"
-"的初始化函数中使用。"
+"将一个对象以 *name* 为名称添加到 *module* 中。这是一个便捷函数，可在模块的初"
+"始化函数中使用。"
 
 #: ../../c-api/module.rst:497
 msgid ""
@@ -832,6 +833,21 @@ msgid ""
 "    return 0;\n"
 "}"
 msgstr ""
+"static int\n"
+"add_spam(PyObject *module, int value)\n"
+"{\n"
+"    PyObject *obj = PyLong_FromLong(value);\n"
+"    if (obj == NULL) {\n"
+"        return -1;\n"
+"    }\n"
+"    if (PyModule_AddObject(module, \"spam\", obj) < 0) {\n"
+"        Py_DECREF(obj);\n"
+"        return -1;\n"
+"    }\n"
+"    // PyModule_AddObject() stole a reference to obj:\n"
+"    // Py_DECREF(obj) is not needed here\n"
+"    return 0;\n"
+"}"
 
 #: ../../c-api/module.rst:581
 msgid ""
@@ -848,6 +864,18 @@ msgid ""
 "    return 0;\n"
 "}"
 msgstr ""
+"static int\n"
+"add_spam(PyObject *module, int value)\n"
+"{\n"
+"    PyObject *obj = PyLong_FromLong(value);\n"
+"    if (PyModule_AddObject(module, \"spam\", obj) < 0) {\n"
+"        Py_XDECREF(obj);\n"
+"        return -1;\n"
+"    }\n"
+"    // PyModule_AddObject() stole a reference to obj:\n"
+"    // Py_DECREF(obj) is not needed here\n"
+"    return 0;\n"
+"}"
 
 #: ../../c-api/module.rst:600
 msgid ""
