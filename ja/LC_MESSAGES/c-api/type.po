@@ -5,15 +5,16 @@
 #
 # Translators:
 # python-doc bot, 2025
+# Inada Naoki <songofacandy@gmail.com>, 2026
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-01 18:05+0000\n"
+"POT-Creation-Date: 2026-10-27 21:02+0000\n"
 "PO-Revision-Date: 2025-09-15 01:03+0000\n"
-"Last-Translator: python-doc bot, 2025\n"
+"Last-Translator: Inada Naoki <songofacandy@gmail.com>, 2026\n"
 "Language-Team: Japanese (https://app.transifex.com/python-doc/teams/5390/"
 "ja/)\n"
 "MIME-Version: 1.0\n"
@@ -32,8 +33,8 @@ msgstr "組み込み型を記述する際に用いられる、オブジェクト
 
 #: ../../c-api/type.rst:18
 msgid ""
-"This is the type object for type objects; it is the same object as :class:"
-"`type` in the Python layer."
+"This is the type object for type objects; it is the same object "
+"as :class:`type` in the Python layer."
 msgstr ""
 "型オブジェクト自身の型オブジェクトです。Python レイヤにおける :class:`type` "
 "と同じオブジェクトです。"
@@ -44,6 +45,10 @@ msgid ""
 "types derived from the standard type object.  Return 0 in all other cases. "
 "This function always succeeds."
 msgstr ""
+"オブジェクト *o* が型オブジェクトであれば、標準の型オブジェクトから派生した型"
+"のインスタンスも含めてゼロ以外を返します。\n"
+"それ以外の場合は 0 を返します。\n"
+"この関数は常に成功します。"
 
 #: ../../c-api/type.rst:31
 msgid ""
@@ -51,6 +56,10 @@ msgid ""
 "standard type object.  Return 0 in all other cases.  This function always "
 "succeeds."
 msgstr ""
+"オブジェクト *o* が標準の型オブジェクトのインスタンスであり、そのサブタイプの"
+"インスタンスではない場合にゼロ以外を返します。\n"
+"それ以外の場合は 0 を返します。\n"
+"この関数は常に成功します。"
 
 #: ../../c-api/type.rst:38
 msgid "Clear the internal lookup cache. Return the current version tag."
@@ -60,10 +69,15 @@ msgstr "内部の検索キャッシュをクリアします。現在のバージ
 msgid ""
 "Return the :c:member:`~PyTypeObject.tp_flags` member of *type*. This "
 "function is primarily meant for use with ``Py_LIMITED_API``; the individual "
-"flag bits are guaranteed to be stable across Python releases, but access to :"
-"c:member:`~PyTypeObject.tp_flags` itself is not part of the :ref:`limited "
-"API <limited-c-api>`."
+"flag bits are guaranteed to be stable across Python releases, but access "
+"to :c:member:`~PyTypeObject.tp_flags` itself is not part of "
+"the :ref:`limited API <limited-c-api>`."
 msgstr ""
+"*type* の :c:member:`~PyTypeObject.tp_flags` メンバーを返します。\n"
+"この関数は主に ``Py_LIMITED_API`` で使うことを想定しています。\n"
+"個々のフラグビットは Python のリリース間で安定していることが保証されます"
+"が、:c:member:`~PyTypeObject.tp_flags` 自体へのアクセスは :ref:`Limited API "
+"<limited-c-api>` の一部ではありません。"
 
 #: ../../c-api/type.rst:49
 msgid "The return type is now ``unsigned long`` rather than ``long``."
@@ -76,6 +90,11 @@ msgid ""
 "replacement for accessing :c:member:`~PyTypeObject.tp_dict` directly. The "
 "returned dictionary must be treated as read-only."
 msgstr ""
+"型オブジェクトの内部の名前空間を返します。\n"
+"通常は読み取り専用のプロキシ (:attr:`cls.__dict__ <type.__dict__>`) を通じて"
+"のみ公開されるものです。\n"
+":c:member:`~PyTypeObject.tp_dict` に直接アクセスする代わりに使えます。\n"
+"返された辞書は読み取り専用として扱わなければなりません。"
 
 #: ../../c-api/type.rst:61
 msgid ""
@@ -83,12 +102,17 @@ msgid ""
 "where direct access to the dict is necessary and indirect access (e.g. via "
 "the proxy or :c:func:`PyObject_GetAttr`) isn't adequate."
 msgstr ""
+"この関数は、辞書への直接アクセスが必要で、プロキシ"
+"や :c:func:`PyObject_GetAttr` などによる間接アクセスでは不十分な、特定の埋め"
+"込みや言語バインディングの用途を想定しています。"
 
 #: ../../c-api/type.rst:65
 msgid ""
 "Extension modules should continue to use ``tp_dict``, directly or "
 "indirectly, when setting up their own types."
 msgstr ""
+"拡張モジュールで独自の型を設定するときは、引き続き直接または間接的に "
+"``tp_dict`` を使ってください。"
 
 #: ../../c-api/type.rst:73
 msgid ""
@@ -107,64 +131,95 @@ msgid ""
 "error (e.g. no more watcher IDs available), return ``-1`` and set an "
 "exception."
 msgstr ""
+"*callback* を型ウォッチャーとして登録します。\n"
+"ゼロ以上の整数 ID を返します。\n"
+"以後 :c:func:`PyType_Watch` を呼び出すときには、この ID を渡す必要がありま"
+"す。\n"
+"エラー時 (例えば利用可能なウォッチャー ID が残っていない場合) は、例外を設定"
+"して ``-1`` を返します。"
 
 #: ../../c-api/type.rst:85
 msgid ""
 "In free-threaded builds, :c:func:`PyType_AddWatcher` is not thread-safe, so "
 "it must be called at start up (before spawning the first thread)."
 msgstr ""
+"フリースレッドビルドでは :c:func:`PyType_AddWatcher` はスレッドセーフではない"
+"ため、起動時 (最初のスレッドを作成する前) に呼び出さなければなりません。"
 
 #: ../../c-api/type.rst:93
 msgid ""
-"Clear watcher identified by *watcher_id* (previously returned from :c:func:"
-"`PyType_AddWatcher`). Return ``0`` on success, ``-1`` on error (e.g. if "
-"*watcher_id* was never registered.)"
+"Clear watcher identified by *watcher_id* (previously returned "
+"from :c:func:`PyType_AddWatcher`). Return ``0`` on success, ``-1`` on error "
+"(e.g. if *watcher_id* was never registered.)"
 msgstr ""
+"*watcher_id* (:c:func:`PyType_AddWatcher` が以前返した値) で指定したウォッ"
+"チャーを解除します。\n"
+"成功すると ``0``、エラー時 (例えば *watcher_id* が一度も登録されていない場"
+"合) は ``-1`` を返します。"
 
 #: ../../c-api/type.rst:97
 msgid ""
 "An extension should never call ``PyType_ClearWatcher`` with a *watcher_id* "
-"that was not returned to it by a previous call to :c:func:"
-"`PyType_AddWatcher`."
+"that was not returned to it by a previous call "
+"to :c:func:`PyType_AddWatcher`."
 msgstr ""
+"拡張モジュールは、以前 :c:func:`PyType_AddWatcher` の呼び出しで受け取ったもの"
+"でない *watcher_id* を渡して ``PyType_ClearWatcher`` を呼び出してはいけませ"
+"ん。"
 
 #: ../../c-api/type.rst:106
 msgid ""
-"Mark *type* as watched. The callback granted *watcher_id* by :c:func:"
-"`PyType_AddWatcher` will be called whenever :c:func:`PyType_Modified` "
-"reports a change to *type*. (The callback may be called only once for a "
-"series of consecutive modifications to *type*, if :c:func:`!_PyType_Lookup` "
-"is not called on *type* between the modifications; this is an implementation "
-"detail and subject to change.)"
+"Mark *type* as watched. The callback granted *watcher_id* "
+"by :c:func:`PyType_AddWatcher` will be called "
+"whenever :c:func:`PyType_Modified` reports a change to *type*. (The callback "
+"may be called only once for a series of consecutive modifications to *type*, "
+"if :c:func:`!_PyType_Lookup` is not called on *type* between the "
+"modifications; this is an implementation detail and subject to change.)"
 msgstr ""
+"*type* を監視対象にします。\n"
+":c:func:`PyType_Modified` が *type* の変更を報告するたび"
+"に、:c:func:`PyType_AddWatcher` から *watcher_id* を割り当てられたコールバッ"
+"クが呼び出されます。\n"
+"ただし、*type* に対する一連の変更の間に :c:func:`!_PyType_Lookup` が呼び出さ"
+"れなければ、コールバックは 1 度だけ呼び出されることがあります。\n"
+"これは実装詳細であり、変更される可能性があります。"
 
 #: ../../c-api/type.rst:113
 msgid ""
 "An extension should never call ``PyType_Watch`` with a *watcher_id* that was "
 "not returned to it by a previous call to :c:func:`PyType_AddWatcher`."
 msgstr ""
+"拡張モジュールは、以前 :c:func:`PyType_AddWatcher` の呼び出しで受け取ったもの"
+"でない *watcher_id* を渡して ``PyType_Watch`` を呼び出してはいけません。"
 
 #: ../../c-api/type.rst:121
 msgid ""
-"Mark *type* as not watched. This undoes a previous call to :c:func:"
-"`PyType_Watch`. *type* must not be ``NULL``."
+"Mark *type* as not watched. This undoes a previous call "
+"to :c:func:`PyType_Watch`. *type* must not be ``NULL``."
 msgstr ""
+"*type* を監視対象から外します。\n"
+"以前の :c:func:`PyType_Watch` の呼び出しを取り消します。\n"
+"*type* は ``NULL`` であってはいけません。"
 
 #: ../../c-api/type.rst:124
 msgid ""
 "An extension should never call this function with a *watcher_id* that was "
 "not returned to it by a previous call to :c:func:`PyType_AddWatcher`."
 msgstr ""
+"拡張モジュールは、以前 :c:func:`PyType_AddWatcher` の呼び出しで受け取ったもの"
+"でない *watcher_id* を渡して、この関数を呼び出してはいけません。"
 
 #: ../../c-api/type.rst:127
 msgid ""
 "On success, this function returns ``0``. On failure, this function returns "
 "``-1`` with an exception set."
 msgstr ""
+"成功すると ``0`` を返します。\n"
+"失敗すると例外を設定して ``-1`` を返します。"
 
 #: ../../c-api/type.rst:135
 msgid "Type of a type-watcher callback function."
-msgstr ""
+msgstr "型ウォッチャーのコールバック関数の型。"
 
 #: ../../c-api/type.rst:137
 msgid ""
@@ -172,12 +227,18 @@ msgid ""
 "called on *type* or any type in its MRO; violating this rule could cause "
 "infinite recursion."
 msgstr ""
+"コールバックは *type* を変更したり、*type* またはその MRO 内の型に対し"
+"て :c:func:`PyType_Modified` が呼び出されるようにしたりしてはいけません。\n"
+"この規則に違反すると、無限再帰を引き起こす可能性があります。"
 
 #: ../../c-api/type.rst:146
 msgid ""
 "Return non-zero if the type object *o* sets the feature *feature*. Type "
 "features are denoted by single bit flags."
 msgstr ""
+"型オブジェクト *o* に機能 *feature* が設定されていれば、ゼロ以外を返しま"
+"す。\n"
+"型の機能は、それぞれ 1 ビットのフラグで表します。"
 
 #: ../../c-api/type.rst:152
 msgid ""
@@ -186,18 +247,27 @@ msgid ""
 "<Py_TPFLAGS_LONG_SUBCLASS>`. This function is used by many ``_Check`` "
 "functions for common types."
 msgstr ""
+"型オブジェクト *type* にサブクラスフラグ *flag* が設定されていれば、ゼロ以外"
+"を返します。\n"
+"サブクラスフラグは :c:macro:`Py_TPFLAGS_*_SUBCLASS "
+"<Py_TPFLAGS_LONG_SUBCLASS>` で表します。\n"
+"この関数は、一般的な型の多くの ``_Check`` 関数で使われています。"
 
 #: ../../c-api/type.rst:158
 msgid ""
 ":c:func:`PyObject_TypeCheck`, which is used as a slower alternative in "
 "``_Check`` functions for types that don't come with subclass flags."
 msgstr ""
+":c:func:`PyObject_TypeCheck` は、サブクラスフラグのない型の ``_Check`` 関数"
+"で、より低速な代替として使われます。"
 
 #: ../../c-api/type.rst:164
 msgid ""
 "Return true if the type object includes support for the cycle detector; this "
 "tests the type flag :c:macro:`Py_TPFLAGS_HAVE_GC`."
 msgstr ""
+"型オブジェクトが循環参照の検出をサポートしている場合に真を返します。\n"
+"型のフラグ :c:macro:`Py_TPFLAGS_HAVE_GC` を調べます。"
 
 #: ../../c-api/type.rst:170
 msgid "Return true if *a* is a subtype of *b*."
@@ -205,10 +275,15 @@ msgstr "*a* が *b* のサブタイプの場合に真を返します。"
 
 #: ../../c-api/type.rst:172
 msgid ""
-"This function only checks for actual subtypes, which means that :meth:`~type."
-"__subclasscheck__` is not called on *b*.  Call :c:func:`PyObject_IsSubclass` "
-"to do the same check that :func:`issubclass` would do."
+"This function only checks for actual subtypes, which means "
+"that :meth:`~type.__subclasscheck__` is not called on *b*.  "
+"Call :c:func:`PyObject_IsSubclass` to do the same check "
+"that :func:`issubclass` would do."
 msgstr ""
+"この関数が調べるのは実際のサブタイプ関係だけで、*b* "
+"の :meth:`~type.__subclasscheck__` は呼び出しません。\n"
+":func:`issubclass` と同じ検査を行うには :c:func:`PyObject_IsSubclass` を呼び"
+"出してください。"
 
 #: ../../c-api/type.rst:180
 msgid ""
@@ -223,8 +298,8 @@ msgstr ""
 #: ../../c-api/type.rst:187
 msgid ""
 "Generic handler for the :c:member:`~PyTypeObject.tp_new` slot of a type "
-"object.  Create a new instance using the type's :c:member:`~PyTypeObject."
-"tp_alloc` slot."
+"object.  Create a new instance using the "
+"type's :c:member:`~PyTypeObject.tp_alloc` slot."
 msgstr ""
 "型オブジェクトの :c:member:`~PyTypeObject.tp_new` に対するジェネリックハンド"
 "ラです。型の :c:member:`~PyTypeObject.tp_alloc` スロットを使って新しいインス"
@@ -247,36 +322,52 @@ msgid ""
 "If some of the base classes implements the GC protocol and the provided type "
 "does not include the :c:macro:`Py_TPFLAGS_HAVE_GC` in its flags, then the GC "
 "protocol will be automatically implemented from its parents. On the "
-"contrary, if the type being created does include :c:macro:"
-"`Py_TPFLAGS_HAVE_GC` in its flags then it **must** implement the GC protocol "
-"itself by at least implementing the :c:member:`~PyTypeObject.tp_traverse` "
-"handle."
+"contrary, if the type being created does "
+"include :c:macro:`Py_TPFLAGS_HAVE_GC` in its flags then it **must** "
+"implement the GC protocol itself by at least implementing "
+"the :c:member:`~PyTypeObject.tp_traverse` handle."
 msgstr ""
+"基底クラスのいずれかが GC プロトコルを実装しており、指定した型のフラグ"
+"に :c:macro:`Py_TPFLAGS_HAVE_GC` が含まれていなければ、GC プロトコルの実装が"
+"基底クラスから自動的に継承されます。\n"
+"一方、作成する型のフラグに :c:macro:`Py_TPFLAGS_HAVE_GC` が含まれている場合"
+"は、少なくとも :c:member:`~PyTypeObject.tp_traverse` ハンドラを実装して、自分"
+"で GC プロトコルを実装 **しなければなりません**。"
 
 #: ../../c-api/type.rst:210
 msgid ""
-"Return the type's name. Equivalent to getting the type's :attr:`~type."
-"__name__` attribute."
+"Return the type's name. Equivalent to getting the "
+"type's :attr:`~type.__name__` attribute."
 msgstr ""
+"型の名前を返します。\n"
+"型の :attr:`~type.__name__` 属性の取得と同等です。"
 
 #: ../../c-api/type.rst:218
 msgid ""
-"Return the type's qualified name. Equivalent to getting the type's :attr:"
-"`~type.__qualname__` attribute."
+"Return the type's qualified name. Equivalent to getting the "
+"type's :attr:`~type.__qualname__` attribute."
 msgstr ""
+"型の修飾名を返します。\n"
+"型の :attr:`~type.__qualname__` 属性の取得と同等です。"
 
 #: ../../c-api/type.rst:225
 msgid ""
 "Return the type's fully qualified name. Equivalent to ``f\"{type.__module__}."
-"{type.__qualname__}\"``, or :attr:`type.__qualname__` if :attr:`type."
-"__module__` is not a string or is equal to ``\"builtins\"``."
+"{type.__qualname__}\"``, or :attr:`type.__qualname__` "
+"if :attr:`type.__module__` is not a string or is equal to ``\"builtins\"``."
 msgstr ""
+"型の完全修飾名を返します。\n"
+"``f\"{type.__module__}.{type.__qualname__}\"`` と同等です"
+"が、:attr:`type.__module__` が文字列でないか ``\"builtins\"`` の場合"
+"は :attr:`type.__qualname__` と同等です。"
 
 #: ../../c-api/type.rst:234
 msgid ""
-"Return the type's module name. Equivalent to getting the :attr:`type."
-"__module__` attribute."
+"Return the type's module name. Equivalent to getting "
+"the :attr:`type.__module__` attribute."
 msgstr ""
+"型のモジュール名を返します。\n"
+":attr:`type.__module__` 属性の取得と同等です。"
 
 #: ../../c-api/type.rst:242
 msgid ""
@@ -293,18 +384,23 @@ msgstr ""
 msgid ""
 "See :c:member:`PyType_Slot.slot` for possible values of the *slot* argument."
 msgstr ""
+"*slot* 引数に指定できる値は :c:member:`PyType_Slot.slot` を参照してください。"
 
 #: ../../c-api/type.rst:252
 msgid ""
 ":c:func:`PyType_GetSlot` can now accept all types. Previously, it was "
 "limited to :ref:`heap types <heap-types>`."
 msgstr ""
+":c:func:`PyType_GetSlot` がすべての型を受け付けるようになりました。\n"
+"以前は :ref:`ヒープ型 <heap-types>` に限られていました。"
 
 #: ../../c-api/type.rst:259
 msgid ""
 "Return the module object associated with the given type when the type was "
 "created using :c:func:`PyType_FromModuleAndSpec`."
 msgstr ""
+":c:func:`PyType_FromModuleAndSpec` で型を作成したときに、その型に関連付けたモ"
+"ジュールオブジェクトを返します。"
 
 #: ../../c-api/type.rst:262 ../../c-api/type.rst:309
 msgid ""
@@ -312,12 +408,17 @@ msgid ""
 "and will be valid as long as you hold a reference to *type*. Do not release "
 "it with :c:func:`Py_DECREF` or similar."
 msgstr ""
+"返される参照は *type* からの :term:`借用参照 <borrowed reference>` で、"
+"*type* への参照を保持している間は有効です。\n"
+":c:func:`Py_DECREF` などで解放しないでください。"
 
 #: ../../c-api/type.rst:266 ../../c-api/type.rst:287
 msgid ""
 "If no module is associated with the given type, sets :py:class:`TypeError` "
 "and returns ``NULL``."
 msgstr ""
+"指定された型にモジュールが関連付けられていない場合は、:py:class:`TypeError` "
+"を設定して ``NULL`` を返します。"
 
 #: ../../c-api/type.rst:269
 msgid ""
@@ -326,70 +427,91 @@ msgid ""
 "not return the intended result. ``Py_TYPE(self)`` may be a *subclass* of the "
 "intended class, and subclasses are not necessarily defined in the same "
 "module as their superclass. See :c:type:`PyCMethod` to get the class that "
-"defines the method. See :c:func:`PyType_GetModuleByDef` for cases when :c:"
-"type:`!PyCMethod` cannot be used."
+"defines the method. See :c:func:`PyType_GetModuleByDef` for cases "
+"when :c:type:`!PyCMethod` cannot be used."
 msgstr ""
 
 #: ../../c-api/type.rst:283
 msgid ""
 "Return the state of the module object associated with the given type. This "
-"is a shortcut for calling :c:func:`PyModule_GetState()` on the result of :c:"
-"func:`PyType_GetModule`."
+"is a shortcut for calling :c:func:`PyModule_GetState()` on the result "
+"of :c:func:`PyType_GetModule`."
 msgstr ""
+"指定された型に関連付けられたモジュールオブジェクトの状態を返します。\n"
+":c:func:`PyType_GetModule` の結果に対して :c:func:`PyModule_GetState()` を呼"
+"び出す処理の短縮形です。"
 
 #: ../../c-api/type.rst:290
 msgid ""
 "If the *type* has an associated module but its state is ``NULL``, returns "
 "``NULL`` without setting an exception."
 msgstr ""
+"*type* にモジュールが関連付けられていても、その状態が ``NULL`` の場合は、例外"
+"を設定せずに ``NULL`` を返します。"
 
 #: ../../c-api/type.rst:298
 msgid ""
-"Find the first superclass whose module was created from the given :c:type:"
-"`PyModuleDef` *def*, and return that module."
+"Find the first superclass whose module was created from the "
+"given :c:type:`PyModuleDef` *def*, and return that module."
 msgstr ""
 
 #: ../../c-api/type.rst:301
 msgid ""
 "If no module is found, raises a :py:class:`TypeError` and returns ``NULL``."
 msgstr ""
+"モジュールが見つからない場合は、:py:class:`TypeError` を送出して ``NULL`` を"
+"返します。"
 
 #: ../../c-api/type.rst:303
 msgid ""
-"This function is intended to be used together with :c:func:"
-"`PyModule_GetState()` to get module state from slot methods (such as :c:"
-"member:`~PyTypeObject.tp_init` or :c:member:`~PyNumberMethods.nb_add`) and "
-"other places where a method's defining class cannot be passed using the :c:"
-"type:`PyCMethod` calling convention."
+"This function is intended to be used together "
+"with :c:func:`PyModule_GetState()` to get module state from slot methods "
+"(such as :c:member:`~PyTypeObject.tp_init` "
+"or :c:member:`~PyNumberMethods.nb_add`) and other places where a method's "
+"defining class cannot be passed using the :c:type:`PyCMethod` calling "
+"convention."
 msgstr ""
+"この関数は、:c:member:`~PyTypeObject.tp_init` "
+"や :c:member:`~PyNumberMethods.nb_add` などのスロットメソッド"
+"や、:c:type:`PyCMethod` 呼び出し規約でメソッドの定義元クラスを渡せない場所"
+"で、\n"
+":c:func:`PyModule_GetState()` と組み合わせてモジュール状態を取得するために使"
+"うことを想定しています。"
 
 #: ../../c-api/type.rst:318
 msgid "Attempt to assign a version tag to the given type."
-msgstr ""
+msgstr "指定された型へのバージョンタグの割り当てを試みます。"
 
 #: ../../c-api/type.rst:320
 msgid ""
 "Returns 1 if the type already had a valid version tag or a new one was "
 "assigned, or 0 if a new tag could not be assigned."
 msgstr ""
+"型がすでに有効なバージョンタグを持っていたか、新しいタグを割り当てられた場合"
+"は 1 を返します。\n"
+"新しいタグを割り当てられなかった場合は 0 を返します。"
 
 #: ../../c-api/type.rst:328
 msgid ""
 "Return true if instances of *type* support creating weak references, false "
 "otherwise. This function always succeeds. *type* must not be ``NULL``."
 msgstr ""
+"*type* のインスタンスが弱参照の作成をサポートする場合は真、それ以外の場合は偽"
+"を返します。\n"
+"この関数は常に成功します。\n"
+"*type* は ``NULL`` であってはいけません。"
 
 #: ../../c-api/type.rst:332
 msgid ":ref:`weakrefobjects`"
-msgstr ""
+msgstr ":ref:`weakrefobjects`"
 
 #: ../../c-api/type.rst:333
 msgid ":py:mod:`weakref`"
-msgstr ""
+msgstr ":py:mod:`weakref`"
 
 #: ../../c-api/type.rst:337
 msgid "Creating Heap-Allocated Types"
-msgstr ""
+msgstr "ヒープに割り当てられる型の作成"
 
 #: ../../c-api/type.rst:339
 msgid ""
@@ -399,9 +521,11 @@ msgstr ""
 
 #: ../../c-api/type.rst:344
 msgid ""
-"Create and return a :ref:`heap type <heap-types>` from the *spec* (see :c:"
-"macro:`Py_TPFLAGS_HEAPTYPE`)."
+"Create and return a :ref:`heap type <heap-types>` from the *spec* "
+"(see :c:macro:`Py_TPFLAGS_HEAPTYPE`)."
 msgstr ""
+"*spec* から :ref:`ヒープ型 <heap-types>` を作成して返します "
+"(:c:macro:`Py_TPFLAGS_HEAPTYPE` を参照)。"
 
 #: ../../c-api/type.rst:347
 msgid ""
@@ -432,23 +556,29 @@ msgstr ""
 msgid ""
 "The *module* argument can be used to record the module in which the new "
 "class is defined. It must be a module object or ``NULL``. If not ``NULL``, "
-"the module is associated with the new type and can later be retrieved with :"
-"c:func:`PyType_GetModule`. The associated module is not inherited by "
+"the module is associated with the new type and can later be retrieved "
+"with :c:func:`PyType_GetModule`. The associated module is not inherited by "
 "subclasses; it must be specified for each class individually."
 msgstr ""
 
 #: ../../c-api/type.rst:371
 msgid "This function calls :c:func:`PyType_Ready` on the new type."
-msgstr ""
+msgstr "この関数は新しい型に対して :c:func:`PyType_Ready` を呼び出します。"
 
 #: ../../c-api/type.rst:373
 msgid ""
-"Note that this function does *not* fully match the behavior of calling :py:"
-"class:`type() <type>` or using the :keyword:`class` statement. With user-"
-"provided base types or metaclasses, prefer :ref:`calling <capi-call>` :py:"
-"class:`type` (or the metaclass) over ``PyType_From*`` functions. "
+"Note that this function does *not* fully match the behavior of "
+"calling :py:class:`type() <type>` or using the :keyword:`class` statement. "
+"With user-provided base types or metaclasses, prefer :ref:`calling <capi-"
+"call>` :py:class:`type` (or the metaclass) over ``PyType_From*`` functions. "
 "Specifically:"
 msgstr ""
+"この関数の動作は、:py:class:`type() <type>` の呼び出しや :keyword:`class` 文"
+"の使用と完全には一致 **しない** 点に注意してください。\n"
+"利用者が指定した基底型やメタクラスを使う場合は、``PyType_From*`` 関数より"
+"も :py:class:`type` (またはメタクラス) を :ref:`呼び出す <capi-call>` 方法を"
+"推奨します。\n"
+"具体的には、次の違いがあります。"
 
 #: ../../c-api/type.rst:380
 msgid ""
@@ -458,31 +588,37 @@ msgstr ""
 
 #: ../../c-api/type.rst:382
 msgid ":py:meth:`~object.__init__` is not called on the new class."
-msgstr ""
+msgstr "新しいクラスの :py:meth:`~object.__init__` は呼び出されません。"
 
 #: ../../c-api/type.rst:383
 msgid ":py:meth:`~object.__init_subclass__` is not called on any bases."
 msgstr ""
+"どの基底クラスの :py:meth:`~object.__init_subclass__` も呼び出されません。"
 
 #: ../../c-api/type.rst:384
 msgid ":py:meth:`~object.__set_name__` is not called on new descriptors."
 msgstr ""
+"新しいデスクリプタの :py:meth:`~object.__set_name__` は呼び出されません。"
 
 #: ../../c-api/type.rst:391
 msgid "Equivalent to ``PyType_FromMetaclass(NULL, module, spec, bases)``."
-msgstr ""
+msgstr "``PyType_FromMetaclass(NULL, module, spec, bases)`` と同等です。"
 
 #: ../../c-api/type.rst:397
 msgid ""
 "The function now accepts a single class as the *bases* argument and ``NULL`` "
 "as the ``tp_doc`` slot."
 msgstr ""
+"*bases* 引数に単一のクラスを、``tp_doc`` スロットに ``NULL`` を指定できるよう"
+"になりました。"
 
 #: ../../c-api/type.rst:402 ../../c-api/type.rst:420
 msgid ""
 "The function now finds and uses a metaclass corresponding to the provided "
 "base classes.  Previously, only :class:`type` instances were returned."
 msgstr ""
+"指定された基底クラスに対応するメタクラスを探して使うようになりました。\n"
+"以前は :class:`type` のインスタンスだけを返していました。"
 
 #: ../../c-api/type.rst:405 ../../c-api/type.rst:423 ../../c-api/type.rst:440
 msgid ""
@@ -494,11 +630,11 @@ msgstr ""
 
 #: ../../c-api/type.rst:414
 msgid "Equivalent to ``PyType_FromMetaclass(NULL, NULL, spec, bases)``."
-msgstr ""
+msgstr "``PyType_FromMetaclass(NULL, NULL, spec, bases)`` と同等です。"
 
 #: ../../c-api/type.rst:432
 msgid "Equivalent to ``PyType_FromMetaclass(NULL, NULL, spec, NULL)``."
-msgstr ""
+msgstr "``PyType_FromMetaclass(NULL, NULL, spec, NULL)`` と同等です。"
 
 #: ../../c-api/type.rst:436
 msgid ""
@@ -506,6 +642,9 @@ msgid ""
 "classes provided in *Py_tp_base[s]* slots. Previously, only :class:`type` "
 "instances were returned."
 msgstr ""
+"*Py_tp_base[s]* スロットに指定された基底クラスに対応するメタクラスを探して使"
+"うようになりました。\n"
+"以前は :class:`type` のインスタンスだけを返していました。"
 
 #: ../../c-api/type.rst:457
 msgid "Structure defining a type's behavior."
@@ -517,8 +656,8 @@ msgstr ""
 
 #: ../../c-api/type.rst:465
 msgid ""
-"If positive, specifies the size of the instance in bytes. It is used to set :"
-"c:member:`PyTypeObject.tp_basicsize`."
+"If positive, specifies the size of the instance in bytes. It is used to "
+"set :c:member:`PyTypeObject.tp_basicsize`."
 msgstr ""
 
 #: ../../c-api/type.rst:468
@@ -530,21 +669,22 @@ msgstr ""
 #: ../../c-api/type.rst:471
 msgid ""
 "If negative, the absolute value specifies how much space instances of the "
-"class need *in addition* to the superclass. Use :c:func:"
-"`PyObject_GetTypeData` to get a pointer to subclass-specific memory reserved "
-"this way. For negative :c:member:`!basicsize`, Python will insert padding "
-"when needed to meet :c:member:`~PyTypeObject.tp_basicsize`'s alignment "
-"requirements."
+"class need *in addition* to the superclass. "
+"Use :c:func:`PyObject_GetTypeData` to get a pointer to subclass-specific "
+"memory reserved this way. For negative :c:member:`!basicsize`, Python will "
+"insert padding when needed to meet :c:member:`~PyTypeObject.tp_basicsize`'s "
+"alignment requirements."
 msgstr ""
 
 #: ../../c-api/type.rst:481
 msgid "Previously, this field could not be negative."
-msgstr ""
+msgstr "以前はこのフィールドを負にできませんでした。"
 
 #: ../../c-api/type.rst:485
 msgid ""
-"Size of one element of a variable-size type, in bytes. Used to set :c:member:"
-"`PyTypeObject.tp_itemsize`. See ``tp_itemsize`` documentation for caveats."
+"Size of one element of a variable-size type, in bytes. Used to "
+"set :c:member:`PyTypeObject.tp_itemsize`. See ``tp_itemsize`` documentation "
+"for caveats."
 msgstr ""
 
 #: ../../c-api/type.rst:489
@@ -561,22 +701,28 @@ msgid ""
 "The base is not variable-sized (its :c:member:`~PyTypeObject.tp_itemsize` is "
 "zero)."
 msgstr ""
+"基底クラスが可変サイズではない (:c:member:`~PyTypeObject.tp_itemsize` がゼロ"
+"である) 場合。"
 
 #: ../../c-api/type.rst:498
 msgid ""
 "The requested :c:member:`PyType_Spec.basicsize` is positive, suggesting that "
 "the memory layout of the base class is known."
 msgstr ""
+"要求された :c:member:`PyType_Spec.basicsize` が正で、基底クラスのメモリレイア"
+"ウトを把握していると考えられる場合。"
 
 #: ../../c-api/type.rst:500
 msgid ""
 "The requested :c:member:`PyType_Spec.basicsize` is zero, suggesting that the "
 "subclass does not access the instance's memory directly."
 msgstr ""
+"要求された :c:member:`PyType_Spec.basicsize` がゼロで、サブクラスがインスタン"
+"スのメモリに直接アクセスしないと考えられる場合。"
 
 #: ../../c-api/type.rst:503
 msgid "With the :c:macro:`Py_TPFLAGS_ITEMS_AT_END` flag."
-msgstr ""
+msgstr ":c:macro:`Py_TPFLAGS_ITEMS_AT_END` フラグがある場合。"
 
 #: ../../c-api/type.rst:507
 msgid "Type flags, used to set :c:member:`PyTypeObject.tp_flags`."
@@ -584,8 +730,8 @@ msgstr ""
 
 #: ../../c-api/type.rst:509
 msgid ""
-"If the ``Py_TPFLAGS_HEAPTYPE`` flag is not set, :c:func:"
-"`PyType_FromSpecWithBases` sets it automatically."
+"If the ``Py_TPFLAGS_HEAPTYPE`` flag is not "
+"set, :c:func:`PyType_FromSpecWithBases` sets it automatically."
 msgstr ""
 
 #: ../../c-api/type.rst:514
@@ -610,10 +756,9 @@ msgstr ""
 
 #: ../../c-api/type.rst:534
 msgid ""
-"Slot IDs are named like the field names of the structures :c:type:"
-"`PyTypeObject`, :c:type:`PyNumberMethods`, :c:type:`PySequenceMethods`, :c:"
-"type:`PyMappingMethods` and :c:type:`PyAsyncMethods` with an added ``Py_`` "
-"prefix. For example, use:"
+"Slot IDs are named like the field names of the "
+"structures :c:type:`PyTypeObject`, :c:type:`PyNumberMethods`, :c:type:`PySequenceMethods`, :c:type:`PyMappingMethods` "
+"and :c:type:`PyAsyncMethods` with an added ``Py_`` prefix. For example, use:"
 msgstr ""
 
 #: ../../c-api/type.rst:540
@@ -632,31 +777,38 @@ msgstr ""
 msgid ""
 "The following “offset” fields cannot be set using :c:type:`PyType_Slot`:"
 msgstr ""
+"次の「オフセット」フィールドは :c:type:`PyType_Slot` では設定できません。"
 
 #: ../../c-api/type.rst:546
 msgid ""
-":c:member:`~PyTypeObject.tp_weaklistoffset` (use :c:macro:"
-"`Py_TPFLAGS_MANAGED_WEAKREF` instead if possible)"
+":c:member:`~PyTypeObject.tp_weaklistoffset` "
+"(use :c:macro:`Py_TPFLAGS_MANAGED_WEAKREF` instead if possible)"
 msgstr ""
+":c:member:`~PyTypeObject.tp_weaklistoffset` (可能なら代わり"
+"に :c:macro:`Py_TPFLAGS_MANAGED_WEAKREF` を使ってください)"
 
 #: ../../c-api/type.rst:548
 msgid ""
-":c:member:`~PyTypeObject.tp_dictoffset` (use :c:macro:"
-"`Py_TPFLAGS_MANAGED_DICT` instead if possible)"
+":c:member:`~PyTypeObject.tp_dictoffset` "
+"(use :c:macro:`Py_TPFLAGS_MANAGED_DICT` instead if possible)"
 msgstr ""
+":c:member:`~PyTypeObject.tp_dictoffset` (可能なら代わり"
+"に :c:macro:`Py_TPFLAGS_MANAGED_DICT` を使ってください)"
 
 #: ../../c-api/type.rst:550
 msgid ""
 ":c:member:`~PyTypeObject.tp_vectorcall_offset` (use "
 "``\"__vectorcalloffset__\"`` in :ref:`PyMemberDef <pymemberdef-offsets>`)"
 msgstr ""
+":c:member:`~PyTypeObject.tp_vectorcall_offset` (:ref:`PyMemberDef "
+"<pymemberdef-offsets>` で ``\"__vectorcalloffset__\"`` を使ってください)"
 
 #: ../../c-api/type.rst:554
 msgid ""
 "If it is not possible to switch to a ``MANAGED`` flag (for example, for "
-"vectorcall or to support Python older than 3.12), specify the offset in :c:"
-"member:`Py_tp_members <PyTypeObject.tp_members>`. See :ref:`PyMemberDef "
-"documentation <pymemberdef-offsets>` for details."
+"vectorcall or to support Python older than 3.12), specify the offset "
+"in :c:member:`Py_tp_members <PyTypeObject.tp_members>`. "
+"See :ref:`PyMemberDef documentation <pymemberdef-offsets>` for details."
 msgstr ""
 
 #: ../../c-api/type.rst:560
@@ -665,34 +817,39 @@ msgstr ""
 
 #: ../../c-api/type.rst:562
 msgid ""
-":c:member:`~PyTypeObject.tp_vectorcall` (use :c:member:`~PyTypeObject."
-"tp_new` and/or :c:member:`~PyTypeObject.tp_init`)"
+":c:member:`~PyTypeObject.tp_vectorcall` "
+"(use :c:member:`~PyTypeObject.tp_new` and/"
+"or :c:member:`~PyTypeObject.tp_init`)"
 msgstr ""
 
 #: ../../c-api/type.rst:566
 msgid ""
-"Internal fields: :c:member:`~PyTypeObject.tp_dict`, :c:member:`~PyTypeObject."
-"tp_mro`, :c:member:`~PyTypeObject.tp_cache`, :c:member:`~PyTypeObject."
-"tp_subclasses`, and :c:member:`~PyTypeObject.tp_weaklist`."
+"Internal "
+"fields: :c:member:`~PyTypeObject.tp_dict`, :c:member:`~PyTypeObject.tp_mro`, :c:member:`~PyTypeObject.tp_cache`, :c:member:`~PyTypeObject.tp_subclasses`, "
+"and :c:member:`~PyTypeObject.tp_weaklist`."
 msgstr ""
 
 #: ../../c-api/type.rst:573
 msgid ""
 "Setting :c:data:`Py_tp_bases` or :c:data:`Py_tp_base` may be problematic on "
-"some platforms. To avoid issues, use the *bases* argument of :c:func:"
-"`PyType_FromSpecWithBases` instead."
+"some platforms. To avoid issues, use the *bases* argument "
+"of :c:func:`PyType_FromSpecWithBases` instead."
 msgstr ""
 
 #: ../../c-api/type.rst:578
 msgid "Slots in :c:type:`PyBufferProcs` may be set in the unlimited API."
 msgstr ""
+":c:type:`PyBufferProcs` のスロットは、制限のない API では設定できます。"
 
 #: ../../c-api/type.rst:581
 msgid ""
-":c:member:`~PyBufferProcs.bf_getbuffer` and :c:member:`~PyBufferProcs."
-"bf_releasebuffer` are now available under the :ref:`limited API <limited-c-"
-"api>`."
+":c:member:`~PyBufferProcs.bf_getbuffer` "
+"and :c:member:`~PyBufferProcs.bf_releasebuffer` are now available under "
+"the :ref:`limited API <limited-c-api>`."
 msgstr ""
+":c:member:`~PyBufferProcs.bf_getbuffer` "
+"と :c:member:`~PyBufferProcs.bf_releasebuffer` が :ref:`Limited API <limited-"
+"c-api>` でも利用できるようになりました。"
 
 #: ../../c-api/type.rst:588
 msgid ""
