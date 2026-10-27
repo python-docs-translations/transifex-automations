@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-25 18:12+0000\n"
+"POT-Creation-Date: 2026-10-27 20:01+0000\n"
 "PO-Revision-Date: 2026-05-08 17:18+0000\n"
 "Last-Translator: Inada Naoki <songofacandy@gmail.com>, 2026\n"
 "Language-Team: Japanese (https://app.transifex.com/python-doc/teams/5390/"
@@ -52,16 +52,16 @@ msgstr ""
 ":func:`signal.signal` 関数を使って、シグナルを受信した時に実行されるハンドラ"
 "を定義することができます。 Python は標準でごく少数のシグナルハンドラをインス"
 "トールしています: :const:`SIGPIPE` は無視され (したがって、 pipe や socket に"
-"対する書き込みで生じたエラーは通常の Python 例外として報告されます)、 :const:"
-"`SIGINT` は :exc:`KeyboardInterrupt` 例外に変換されます。親プロセスが変更して"
-"いない場合は、これらはどれも上書きすることができます。"
+"対する書き込みで生じたエラーは通常の Python 例外として報告されま"
+"す)、 :const:`SIGINT` は :exc:`KeyboardInterrupt` 例外に変換されます。親プロ"
+"セスが変更していない場合は、これらはどれも上書きすることができます。"
 
 #: ../../library/signal.rst:24
 msgid ""
 "A handler for a particular signal, once set, remains installed until it is "
 "explicitly reset (Python emulates the BSD style interface regardless of the "
-"underlying implementation), with the exception of the handler for :const:"
-"`SIGCHLD`, which follows the underlying implementation."
+"underlying implementation), with the exception of the handler "
+"for :const:`SIGCHLD`, which follows the underlying implementation."
 msgstr ""
 "特定のシグナルに対するハンドラが一度設定されると、明示的にリセットしないかぎ"
 "り設定されたままになります (Python は背後の実装系に関係なく BSD 形式のイン"
@@ -74,6 +74,9 @@ msgid ""
 "differently. Several functions and signals are not available on these "
 "platforms."
 msgstr ""
+"WebAssembly プラットフォームではシグナルをエミュレートするため、動作が異なり"
+"ます。\n"
+"これらのプラットフォームでは一部の関数とシグナルを利用できません。"
 
 #: ../../library/signal.rst:34
 msgid "Execution of Python signal handlers"
@@ -87,16 +90,28 @@ msgid ""
 "handler at a later point (for example, at the next :term:`bytecode` "
 "instruction). This has consequences:"
 msgstr ""
+"Python のシグナルハンドラーは、低水準の (C の) シグナルハンドラー内では実行さ"
+"れません。\n"
+"低水準のシグナルハンドラーはフラグを設定し、:term:`virtual machine` に対し"
+"て、後の時点 (例えば次の :term:`bytecode` 命令の実行時) に対応する Python の"
+"シグナルハンドラーを実行するよう通知します。\n"
+"この仕組みにより、次のような動作になります。"
 
 #: ../../library/signal.rst:42
 msgid ""
-"It makes little sense to catch synchronous errors like :const:`SIGFPE` or :"
-"const:`SIGSEGV` that are caused by an invalid operation in C code.  Python "
-"will return from the signal handler to the C code, which is likely to raise "
-"the same signal again, causing Python to apparently hang.  From Python 3.3 "
-"onwards, you can use the :mod:`faulthandler` module to report on synchronous "
-"errors."
+"It makes little sense to catch synchronous errors like :const:`SIGFPE` "
+"or :const:`SIGSEGV` that are caused by an invalid operation in C code.  "
+"Python will return from the signal handler to the C code, which is likely to "
+"raise the same signal again, causing Python to apparently hang.  From Python "
+"3.3 onwards, you can use the :mod:`faulthandler` module to report on "
+"synchronous errors."
 msgstr ""
+"C コードの不正な操作によって生じる :const:`SIGFPE` や :const:`SIGSEGV` などの"
+"同期的なエラーを捕捉しても、ほとんど意味がありません。\n"
+"シグナルハンドラーから C コードに戻ると同じシグナルが再び発生する可能性が高"
+"く、Python が停止したように見えるためです。\n"
+"Python 3.3 以降では :mod:`faulthandler` モジュールで同期的なエラーを報告でき"
+"ます。"
 
 #: ../../library/signal.rst:49
 msgid ""
@@ -115,6 +130,9 @@ msgid ""
 "the main thread. See the :ref:`note below <handlers-and-exceptions>` for a "
 "discussion."
 msgstr ""
+"ハンドラーが例外を送出すると、メインスレッドではその時点で実行していた処理と"
+"は無関係に例外が発生します。\n"
+"詳しくは :ref:`後述の注意事項 <handlers-and-exceptions>` を参照してください。"
 
 #: ../../library/signal.rst:62
 msgid "Signals and threads"
@@ -130,8 +148,8 @@ msgid ""
 msgstr ""
 "Python のシグナルハンドラは、もしシグナルを受け取ったのが別のスレッドだったと"
 "しても、常にメインインタープリターの Python のメインスレッドで実行されます。"
-"このためシグナルをスレッド間通信に使うことはできません。代わりに :mod:"
-"`threading` モジュールが提供している同期プリミティブを利用できます。"
+"このためシグナルをスレッド間通信に使うことはできません。代わり"
+"に :mod:`threading` モジュールが提供している同期プリミティブを利用できます。"
 
 #: ../../library/signal.rst:69
 msgid ""
@@ -146,6 +164,9 @@ msgid ""
 "Synchronization primitives such as :class:`threading.Lock` should not be "
 "used within signal handlers.  Doing so can lead to unexpected deadlocks."
 msgstr ""
+":class:`threading.Lock` などの同期プリミティブをシグナルハンドラー内で使わな"
+"いでください。\n"
+"予期しないデッドロックを引き起こすおそれがあります。"
 
 #: ../../library/signal.rst:78
 msgid "Module contents"
@@ -153,35 +174,39 @@ msgstr "モジュールの内容"
 
 #: ../../library/signal.rst:80
 msgid ""
-"signal (SIG*), handler (:const:`SIG_DFL`, :const:`SIG_IGN`) and sigmask (:"
-"const:`SIG_BLOCK`, :const:`SIG_UNBLOCK`, :const:`SIG_SETMASK`) related "
-"constants listed below were turned into :class:`enums <enum.IntEnum>` (:"
-"class:`Signals`, :class:`Handlers` and :class:`Sigmasks` respectively). :"
-"func:`getsignal`, :func:`pthread_sigmask`, :func:`sigpending` and :func:"
-"`sigwait` functions return human-readable :class:`enums <enum.IntEnum>` as :"
-"class:`Signals` objects."
+"signal (SIG*), handler (:const:`SIG_DFL`, :const:`SIG_IGN`) and sigmask "
+"(:const:`SIG_BLOCK`, :const:`SIG_UNBLOCK`, :const:`SIG_SETMASK`) related "
+"constants listed below were turned into :class:`enums <enum.IntEnum>` "
+"(:class:`Signals`, :class:`Handlers` and :class:`Sigmasks` "
+"respectively). :func:`getsignal`, :func:`pthread_sigmask`, :func:`sigpending` "
+"and :func:`sigwait` functions return human-readable :class:`enums "
+"<enum.IntEnum>` as :class:`Signals` objects."
 msgstr ""
 
 #: ../../library/signal.rst:90
 msgid "The signal module defines three enums:"
-msgstr ""
+msgstr "signal モジュールは三つの列挙型を定義します。"
 
 #: ../../library/signal.rst:94
 msgid ""
 ":class:`enum.IntEnum` collection of SIG* constants and the CTRL_* constants."
-msgstr ""
+msgstr "SIG* 定数と CTRL_* 定数を集めた :class:`enum.IntEnum` です。"
 
 #: ../../library/signal.rst:100
 msgid ""
-":class:`enum.IntEnum` collection of the constants :const:`SIG_DFL` and :"
-"const:`SIG_IGN`."
+":class:`enum.IntEnum` collection of the constants :const:`SIG_DFL` "
+"and :const:`SIG_IGN`."
 msgstr ""
+":const:`SIG_DFL` と :const:`SIG_IGN` の定数を集めた :class:`enum.IntEnum` で"
+"す。"
 
 #: ../../library/signal.rst:106
 msgid ""
-":class:`enum.IntEnum` collection of the constants :const:`SIG_BLOCK`, :const:"
-"`SIG_UNBLOCK` and :const:`SIG_SETMASK`."
+":class:`enum.IntEnum` collection of the "
+"constants :const:`SIG_BLOCK`, :const:`SIG_UNBLOCK` and :const:`SIG_SETMASK`."
 msgstr ""
+":const:`SIG_BLOCK`、:const:`SIG_UNBLOCK`、:const:`SIG_SETMASK` の定数を集め"
+"た :class:`enum.IntEnum` です。"
 
 #: ../../library/signal.rst:108 ../../library/signal.rst:141
 #: ../../library/signal.rst:147 ../../library/signal.rst:153
@@ -208,10 +233,12 @@ msgid ""
 "See the man page :manpage:`sigprocmask(2)` and :manpage:`pthread_sigmask(3)` "
 "for further information."
 msgstr ""
+"詳細は :manpage:`sigprocmask(2)` と :manpage:`pthread_sigmask(3)` のマニュア"
+"ルページを参照してください。"
 
 #: ../../library/signal.rst:116
 msgid "The variables defined in the :mod:`!signal` module are:"
-msgstr ""
+msgstr ":mod:`!signal` モジュールでは以下の変数を定義します。"
 
 #: ../../library/signal.rst:121
 msgid ""
@@ -234,23 +261,23 @@ msgstr ""
 
 #: ../../library/signal.rst:135
 msgid "Abort signal from :manpage:`abort(3)`."
-msgstr ""
+msgstr ":manpage:`abort(3)` による中止シグナル。"
 
 #: ../../library/signal.rst:139
 msgid "Timer signal from :manpage:`alarm(2)`."
-msgstr ""
+msgstr ":manpage:`alarm(2)` によるタイマーシグナル。"
 
 #: ../../library/signal.rst:145
 msgid "Interrupt from keyboard (CTRL + BREAK)."
-msgstr ""
+msgstr "キーボードによる割り込み (CTRL + BREAK)。"
 
 #: ../../library/signal.rst:151
 msgid "Bus error (bad memory access)."
-msgstr ""
+msgstr "バスエラー (不正なメモリアクセス)。"
 
 #: ../../library/signal.rst:157
 msgid "Child process stopped or terminated."
-msgstr ""
+msgstr "子プロセスの停止または終了。"
 
 #: ../../library/signal.rst:163
 msgid "Alias to :data:`SIGCHLD`."
@@ -258,102 +285,111 @@ msgstr ":data:`SIGCHLD` のエイリアスです。"
 
 #: ../../library/signal.rst:169
 msgid "Continue the process if it is currently stopped"
-msgstr ""
+msgstr "停止中のプロセスの実行を再開する"
 
 #: ../../library/signal.rst:175
 msgid "Floating-point exception. For example, division by zero."
 msgstr ""
+"浮動小数点例外。\n"
+"例えばゼロによる除算。"
 
 #: ../../library/signal.rst:178
 msgid ""
 ":exc:`ZeroDivisionError` is raised when the second argument of a division or "
 "modulo operation is zero."
 msgstr ""
+"除算や剰余演算の二つ目の引数がゼロの場合、:exc:`ZeroDivisionError` が送出され"
+"ます。"
 
 #: ../../library/signal.rst:183
 msgid ""
 "Hangup detected on controlling terminal or death of controlling process."
-msgstr ""
+msgstr "制御端末のハングアップの検出、または制御プロセスの終了。"
 
 #: ../../library/signal.rst:189
 msgid "Illegal instruction."
-msgstr ""
+msgstr "不正な命令。"
 
 #: ../../library/signal.rst:193
 msgid "Interrupt from keyboard (CTRL + C)."
-msgstr ""
+msgstr "キーボードによる割り込み (CTRL + C)。"
 
 #: ../../library/signal.rst:195
 msgid "Default action is to raise :exc:`KeyboardInterrupt`."
-msgstr ""
+msgstr "デフォルトの動作は :exc:`KeyboardInterrupt` の送出です。"
 
 #: ../../library/signal.rst:199
 msgid "Kill signal."
-msgstr ""
+msgstr "強制終了シグナル。"
 
 #: ../../library/signal.rst:201
 msgid "It cannot be caught, blocked, or ignored."
-msgstr ""
+msgstr "捕捉、ブロック、無視はできません。"
 
 #: ../../library/signal.rst:207
 msgid "Broken pipe: write to pipe with no readers."
-msgstr ""
+msgstr "パイプの切断: 読み取り側のいないパイプへの書き込み。"
 
 #: ../../library/signal.rst:209
 msgid "Default action is to ignore the signal."
-msgstr ""
+msgstr "デフォルトの動作はシグナルの無視です。"
 
 #: ../../library/signal.rst:215
 msgid "Profiling timer expired."
-msgstr ""
+msgstr "プロファイリングタイマーの満了。"
 
 #: ../../library/signal.rst:221
 msgid "Terminal quit signal."
-msgstr ""
+msgstr "端末からの終了シグナル。"
 
 #: ../../library/signal.rst:227
 msgid "Segmentation fault: invalid memory reference."
-msgstr ""
+msgstr "セグメンテーション違反: 不正なメモリ参照。"
 
 #: ../../library/signal.rst:231
 msgid "Stop executing (cannot be caught or ignored)."
-msgstr ""
+msgstr "実行の停止 (捕捉や無視はできません)。"
 
 #: ../../library/signal.rst:237
 msgid ""
 "Stack fault on coprocessor. The Linux kernel does not raise this signal: it "
 "can only be raised in user space."
 msgstr ""
+"コプロセッサーのスタック障害。\n"
+"Linux カーネルはこのシグナルを発生させず、ユーザー空間からのみ発生させられま"
+"す。"
 
 #: ../../library/signal.rst:242
 msgid ""
-"On architectures where the signal is available. See the man page :manpage:"
-"`signal(7)` for further information."
+"On architectures where the signal is available. See the man "
+"page :manpage:`signal(7)` for further information."
 msgstr ""
+"このシグナルを利用できるアーキテクチャーに限ります。\n"
+"詳細は :manpage:`signal(7)` のマニュアルページを参照してください。"
 
 #: ../../library/signal.rst:249
 msgid "Termination signal."
-msgstr ""
+msgstr "終了シグナル。"
 
 #: ../../library/signal.rst:253
 msgid "User-defined signal 1."
-msgstr ""
+msgstr "ユーザー定義シグナル 1。"
 
 #: ../../library/signal.rst:259
 msgid "User-defined signal 2."
-msgstr ""
+msgstr "ユーザー定義シグナル 2。"
 
 #: ../../library/signal.rst:265
 msgid "Virtual timer expired."
-msgstr ""
+msgstr "仮想タイマーの満了。"
 
 #: ../../library/signal.rst:271
 msgid "Window resize signal."
-msgstr ""
+msgstr "ウィンドウサイズ変更シグナル。"
 
 #: ../../library/signal.rst:277
 msgid "CPU time limit exceeded."
-msgstr ""
+msgstr "CPU 時間の制限超過。"
 
 #: ../../library/signal.rst:283
 msgid ""
@@ -361,40 +397,52 @@ msgid ""
 "signal is defined as :const:`signal.SIGHUP`; the variable names are "
 "identical to the names used in C programs, as found in ``<signal.h>``.  The "
 "Unix man page for '``signal``' lists the existing signals (on some systems "
-"this is :manpage:`signal(2)`, on others the list is in :manpage:"
-"`signal(7)`). Note that not all systems define the same set of signal names; "
-"only those names defined by the system are defined by this module."
+"this is :manpage:`signal(2)`, on others the list is "
+"in :manpage:`signal(7)`). Note that not all systems define the same set of "
+"signal names; only those names defined by the system are defined by this "
+"module."
 msgstr ""
+"すべてのシグナル番号はシンボルとして定義されています。\n"
+"例えばハングアップシグナルは :const:`signal.SIGHUP` として定義されていま"
+"す。\n"
+"変数名は ``<signal.h>`` にある C プログラム用の名前と同じです。\n"
+"Unix の ``signal`` マニュアルページには、利用可能なシグナルが列挙されていま"
+"す (システムによって :manpage:`signal(2)` または :manpage:`signal(7)` に記載"
+"されています)。\n"
+"すべてのシステムが同じシグナル名を定義しているわけではなく、このモジュールで"
+"定義されるのはそのシステムで定義されている名前だけです。"
 
 #: ../../library/signal.rst:294
 msgid ""
 "The signal corresponding to the :kbd:`Ctrl+C` keystroke event. This signal "
 "can only be used with :func:`os.kill`."
 msgstr ""
-":kbd:`CTRL+C` キーストロークに該当するシグナル。このシグナルは :func:`os."
-"kill` でだけ利用できます。"
+":kbd:`CTRL+C` キーストロークに該当するシグナル。このシグナル"
+"は :func:`os.kill` でだけ利用できます。"
 
 #: ../../library/signal.rst:304
 msgid ""
 "The signal corresponding to the :kbd:`Ctrl+Break` keystroke event. This "
 "signal can only be used with :func:`os.kill`."
 msgstr ""
-":kbd:`CTRL+BREAK` キーストロークに該当するシグナル。このシグナルは :func:`os."
-"kill` でだけ利用できます。"
+":kbd:`CTRL+BREAK` キーストロークに該当するシグナル。このシグナル"
+"は :func:`os.kill` でだけ利用できます。"
 
 #: ../../library/signal.rst:314
 msgid ""
-"One more than the number of the highest signal number. Use :func:"
-"`valid_signals` to get valid signal numbers."
+"One more than the number of the highest signal number. "
+"Use :func:`valid_signals` to get valid signal numbers."
 msgstr ""
+"最大のシグナル番号に 1 を足した値です。\n"
+"有効なシグナル番号を取得するには :func:`valid_signals` を使ってください。"
 
 #: ../../library/signal.rst:320
 msgid ""
 "Decrements interval timer in real time, and delivers :const:`SIGALRM` upon "
 "expiration."
 msgstr ""
-"実時間でデクリメントするインターバルタイマーです。タイマーが発火したときに :"
-"const:`SIGALRM` を送ります。"
+"実時間でデクリメントするインターバルタイマーです。タイマーが発火したとき"
+"に :const:`SIGALRM` を送ります。"
 
 #: ../../library/signal.rst:326
 msgid ""
@@ -443,14 +491,14 @@ msgstr ""
 
 #: ../../library/signal.rst:360
 msgid "The :mod:`!signal` module defines one exception:"
-msgstr ""
+msgstr ":mod:`!signal` モジュールは一つの例外を定義します。"
 
 #: ../../library/signal.rst:364
 msgid ""
-"Raised to signal an error from the underlying :func:`setitimer` or :func:"
-"`getitimer` implementation. Expect this error if an invalid interval timer "
-"or a negative time is passed to :func:`setitimer`. This error is a subtype "
-"of :exc:`OSError`."
+"Raised to signal an error from the underlying :func:`setitimer` "
+"or :func:`getitimer` implementation. Expect this error if an invalid "
+"interval timer or a negative time is passed to :func:`setitimer`. This error "
+"is a subtype of :exc:`OSError`."
 msgstr ""
 "背後の :func:`setitimer` または :func:`getitimer` 実装からエラーを通知するた"
 "めに送出されます。無効なインタバルタイマーや負の時間が :func:`setitimer` に渡"
@@ -459,15 +507,15 @@ msgstr ""
 
 #: ../../library/signal.rst:369
 msgid ""
-"This error used to be a subtype of :exc:`IOError`, which is now an alias of :"
-"exc:`OSError`."
+"This error used to be a subtype of :exc:`IOError`, which is now an alias "
+"of :exc:`OSError`."
 msgstr ""
 "このエラーは以前は :exc:`IOError` のサブタイプでしたが、 :exc:`OSError` のエ"
 "イリアスになりました。"
 
 #: ../../library/signal.rst:374
 msgid "The :mod:`!signal` module defines the following functions:"
-msgstr ""
+msgstr ":mod:`!signal` モジュールは以下の関数を定義します。"
 
 #: ../../library/signal.rst:379
 msgid ""
@@ -489,32 +537,37 @@ msgstr ""
 
 #: ../../library/signal.rst:388
 msgid "See the man page :manpage:`alarm(2)` for further information."
-msgstr ""
+msgstr "詳細は :manpage:`alarm(2)` のマニュアルページを参照してください。"
 
 #: ../../library/signal.rst:393
 msgid ""
 "Return the current signal handler for the signal *signalnum*. The returned "
-"value may be a callable Python object, or one of the special values :const:"
-"`signal.SIG_IGN`, :const:`signal.SIG_DFL` or :const:`None`.  Here, :const:"
-"`signal.SIG_IGN` means that the signal was previously ignored, :const:"
-"`signal.SIG_DFL` means that the default way of handling the signal was "
-"previously in use, and ``None`` means that the previous signal handler was "
-"not installed from Python."
+"value may be a callable Python object, or one of the special "
+"values :const:`signal.SIG_IGN`, :const:`signal.SIG_DFL` or :const:`None`.  "
+"Here, :const:`signal.SIG_IGN` means that the signal was previously "
+"ignored, :const:`signal.SIG_DFL` means that the default way of handling the "
+"signal was previously in use, and ``None`` means that the previous signal "
+"handler was not installed from Python."
 msgstr ""
 "シグナル *signalnum* に対する現在のシグナルハンドラを返します。戻り値は呼び出"
-"し可能な Python オブジェクトか、 :const:`signal.SIG_IGN`\\ 、 :const:`signal."
-"SIG_DFL`\\ 、および :const:`None` といった特殊な値のいずれかです。ここで :"
-"const:`signal.SIG_IGN` は以前そのシグナルが無視されていたことを示し、 :const:"
-"`signal.SIG_DFL` は以前そのシグナルの標準の処理方法が使われていたことを示"
-"し、 ``None`` はシグナルハンドラがまだ Python によってインストールされていな"
-"いことを示します。"
+"し可能な Python オブジェクト"
+"か、 :const:`signal.SIG_IGN`\\ 、 :const:`signal.SIG_DFL`\\ 、およ"
+"び :const:`None` といった特殊な値のいずれかです。ここ"
+"で :const:`signal.SIG_IGN` は以前そのシグナルが無視されていたことを示"
+"し、 :const:`signal.SIG_DFL` は以前そのシグナルの標準の処理方法が使われていた"
+"ことを示し、 ``None`` はシグナルハンドラがまだ Python によってインストールさ"
+"れていないことを示します。"
 
 #: ../../library/signal.rst:404
 msgid ""
-"Returns the description of signal *signalnum*, such as \"Interrupt\" for :"
-"const:`SIGINT`. Returns :const:`None` if *signalnum* has no description. "
-"Raises :exc:`ValueError` if *signalnum* is invalid."
+"Returns the description of signal *signalnum*, such as \"Interrupt\" "
+"for :const:`SIGINT`. Returns :const:`None` if *signalnum* has no "
+"description. Raises :exc:`ValueError` if *signalnum* is invalid."
 msgstr ""
+"シグナル *signalnum* の説明を返します (例えば :const:`SIGINT` なら "
+"\"Interrupt\")。\n"
+"*signalnum* に説明がなければ :const:`None` を返します。\n"
+"*signalnum* が無効な場合は :exc:`ValueError` を送出します。"
 
 #: ../../library/signal.rst:413
 msgid ""
@@ -522,6 +575,9 @@ msgid ""
 "than ``range(1, NSIG)`` if some signals are reserved by the system for "
 "internal use."
 msgstr ""
+"このプラットフォームで有効なシグナル番号の集合を返します。\n"
+"システムが内部使用のために予約しているシグナルがある場合は、``range(1, "
+"NSIG)`` より少なくなることがあります。"
 
 #: ../../library/signal.rst:422
 msgid ""
@@ -533,19 +589,21 @@ msgstr ""
 
 #: ../../library/signal.rst:427
 msgid "See the man page :manpage:`signal(2)` for further information."
-msgstr ""
+msgstr "詳細は :manpage:`signal(2)` のマニュアルページを参照してください。"
 
 #: ../../library/signal.rst:429
 msgid ""
-"See also :func:`sigwait`, :func:`sigwaitinfo`, :func:`sigtimedwait` and :"
-"func:`sigpending`."
+"See also :func:`sigwait`, :func:`sigwaitinfo`, :func:`sigtimedwait` "
+"and :func:`sigpending`."
 msgstr ""
-":func:`sigwait`, :func:`sigwaitinfo`, :func:`sigtimedwait` :func:"
-"`sigpending` も参照してください。"
+":func:`sigwait`, :func:`sigwaitinfo`, :func:`sigtimedwait` :func:`sigpending` "
+"も参照してください。"
 
 #: ../../library/signal.rst:435
 msgid "Sends a signal to the calling process. Returns nothing."
 msgstr ""
+"呼び出し元のプロセスにシグナルを送ります。\n"
+"戻り値はありません。"
 
 #: ../../library/signal.rst:442
 msgid ""
@@ -554,12 +612,16 @@ msgid ""
 "``None``.  The *flags* argument is provided for future extensions; no flag "
 "values are currently defined."
 msgstr ""
+"ファイル記述子 *pidfd* が指すプロセスにシグナル *sig* を送ります。\n"
+"Python は現在 *siginfo* 引数に対応していないため、``None`` にしなければなりま"
+"せん。\n"
+"*flags* 引数は将来の拡張用で、現在定義されているフラグ値はありません。"
 
 #: ../../library/signal.rst:447
 msgid "See the :manpage:`pidfd_send_signal(2)` man page for more information."
 msgstr ""
-"さらに詳しい情報についてはオンラインマニュアルページ :manpage:"
-"`pidfd_send_signal(2)` を参照してください。"
+"さらに詳しい情報についてはオンラインマニュアルペー"
+"ジ :manpage:`pidfd_send_signal(2)` を参照してください。"
 
 #: ../../library/signal.rst:455
 msgid ""
@@ -578,12 +640,18 @@ msgid ""
 "attribute of :class:`threading.Thread` objects to get a suitable value for "
 "*thread_id*."
 msgstr ""
+"*thread_id* に指定する値は :func:`threading.get_ident` また"
+"は :class:`threading.Thread` オブジェクトの :attr:`~threading.Thread.ident` "
+"属性で取得できます。"
 
 #: ../../library/signal.rst:467
 msgid ""
 "If *signalnum* is 0, then no signal is sent, but error checking is still "
 "performed; this can be used to check if the target thread is still running."
 msgstr ""
+"*signalnum* が 0 の場合、シグナルは送られませんがエラーチェックは行われま"
+"す。\n"
+"これを使って対象のスレッドがまだ実行中かどうかを確認できます。"
 
 #: ../../library/signal.rst:470
 msgid ""
@@ -596,6 +664,7 @@ msgstr ""
 #: ../../library/signal.rst:474
 msgid "See the man page :manpage:`pthread_kill(3)` for further  information."
 msgstr ""
+"詳細は :manpage:`pthread_kill(3)` のマニュアルページを参照してください。"
 
 #: ../../library/signal.rst:476
 msgid "See also :func:`os.kill`."
@@ -643,13 +712,13 @@ msgstr ":data:`SIG_SETMASK`: シグナルマスク全体を *mask* としてセ�
 
 #: ../../library/signal.rst:497
 msgid ""
-"*mask* is a set of signal numbers (e.g. {:const:`signal.SIGINT`, :const:"
-"`signal.SIGTERM`}). Use :func:`~signal.valid_signals` for a full mask "
-"including all signals."
+"*mask* is a set of signal numbers (e.g. "
+"{:const:`signal.SIGINT`, :const:`signal.SIGTERM`}). "
+"Use :func:`~signal.valid_signals` for a full mask including all signals."
 msgstr ""
-"*mask* はシグナル番号の集合です (例えば {:const:`signal.SIGINT`, :const:"
-"`signal.SIGTERM`})。全てのシグナルを含む全集合として :func:`~signal."
-"valid_signals` を使うことが出来ます。"
+"*mask* はシグナル番号の集合です (例えば "
+"{:const:`signal.SIGINT`, :const:`signal.SIGTERM`})。全てのシグナルを含む全集"
+"合として :func:`~signal.valid_signals` を使うことが出来ます。"
 
 #: ../../library/signal.rst:501
 msgid ""
@@ -661,7 +730,7 @@ msgstr ""
 
 #: ../../library/signal.rst:504
 msgid ":data:`SIGKILL` and :data:`SIGSTOP` cannot be blocked."
-msgstr ""
+msgstr ":data:`SIGKILL` と :data:`SIGSTOP` はブロックできません。"
 
 #: ../../library/signal.rst:511
 msgid "See also :func:`pause`, :func:`sigpending` and :func:`sigwait`."
@@ -669,31 +738,33 @@ msgstr ":func:`pause`, :func:`sigpending`, :func:`sigwait` も参照して下さ
 
 #: ../../library/signal.rst:518
 msgid ""
-"Sets given interval timer (one of :const:`signal.ITIMER_REAL`, :const:"
-"`signal.ITIMER_VIRTUAL` or :const:`signal.ITIMER_PROF`) specified by *which* "
-"to fire after *seconds* (float is accepted, different from :func:`alarm`) "
-"and after that every *interval* seconds (if *interval* is non-zero). The "
-"interval timer specified by *which* can be cleared by setting *seconds* to "
-"zero."
+"Sets given interval timer (one "
+"of :const:`signal.ITIMER_REAL`, :const:`signal.ITIMER_VIRTUAL` "
+"or :const:`signal.ITIMER_PROF`) specified by *which* to fire after *seconds* "
+"(float is accepted, different from :func:`alarm`) and after that every "
+"*interval* seconds (if *interval* is non-zero). The interval timer specified "
+"by *which* can be cleared by setting *seconds* to zero."
 msgstr ""
-"*which* で指定されたタイマー (:const:`signal.ITIMER_REAL`, :const:`signal."
-"ITIMER_VIRTUAL`, :const:`signal.ITIMER_PROF` のどれか) を、 *seconds* 秒後と "
-"(:func:`alarm` と異なり、floatを指定できます)、それから (*interval* が0でなけ"
-"れば) *interval* 秒間隔で起動するように設定します。 *seconds* に0を指定する"
-"と、*which* で指定されたタイマーをクリアすることができます。"
+"*which* で指定されたタイマー "
+"(:const:`signal.ITIMER_REAL`, :const:`signal.ITIMER_VIRTUAL`, :const:`signal.ITIMER_PROF` "
+"のどれか) を、 *seconds* 秒後と (:func:`alarm` と異なり、floatを指定できま"
+"す)、それから (*interval* が0でなければ) *interval* 秒間隔で起動するように設"
+"定します。 *seconds* に0を指定すると、*which* で指定されたタイマーをクリアす"
+"ることができます。"
 
 #: ../../library/signal.rst:525
 msgid ""
 "When an interval timer fires, a signal is sent to the process. The signal "
 "sent is dependent on the timer being used; :const:`signal.ITIMER_REAL` will "
-"deliver :const:`SIGALRM`, :const:`signal.ITIMER_VIRTUAL` sends :const:"
-"`SIGVTALRM`, and :const:`signal.ITIMER_PROF` will deliver :const:`SIGPROF`."
+"deliver :const:`SIGALRM`, :const:`signal.ITIMER_VIRTUAL` "
+"sends :const:`SIGVTALRM`, and :const:`signal.ITIMER_PROF` will "
+"deliver :const:`SIGPROF`."
 msgstr ""
 "インターバルタイマーが起動したとき、シグナルがプロセスに送られます。送られる"
 "シグナルは利用されたタイマーの種類に依存します。 :const:`signal.ITIMER_REAL` "
-"の場合は :const:`SIGALRM` が、 :const:`signal.ITIMER_VIRTUAL` の場合は :"
-"const:`SIGVTALRM` が、 :const:`signal.ITIMER_PROF` の場合は :const:`SIGPROF` "
-"が送られます。"
+"の場合は :const:`SIGALRM` が、 :const:`signal.ITIMER_VIRTUAL` の場合"
+"は :const:`SIGVTALRM` が、 :const:`signal.ITIMER_PROF` の場合"
+"は :const:`SIGPROF` が送られます。"
 
 #: ../../library/signal.rst:531
 msgid "The old values are returned as a tuple: (delay, interval)."
@@ -701,8 +772,8 @@ msgstr "以前の値が (delay, interval) のタプルとして返されます�
 
 #: ../../library/signal.rst:533
 msgid ""
-"Attempting to pass an invalid interval timer will cause an :exc:"
-"`ItimerError`."
+"Attempting to pass an invalid interval timer will cause "
+"an :exc:`ItimerError`."
 msgstr ""
 "無効なインターバルタイマーを渡すと :exc:`ItimerError` 例外が発生します。"
 
@@ -719,6 +790,12 @@ msgid ""
 "This can be used by a library to wakeup a poll or select call, allowing the "
 "signal to be fully processed."
 msgstr ""
+"待機を解除するためのファイル記述子を *fd* に設定します。\n"
+"プログラムがハンドラーを登録したシグナルを受信すると、その番号が 1 バイトとし"
+"てこのファイル記述子に書き込まれます。\n"
+"対象のシグナルにハンドラーを登録していなければ何も書き込まれません。\n"
+"ライブラリはこの仕組みで poll や select の待機を解除し、シグナルを最後まで処"
+"理できます。"
 
 #: ../../library/signal.rst:555
 msgid ""
@@ -727,6 +804,11 @@ msgid ""
 "*fd* must be non-blocking.  It is up to the library to remove any bytes from "
 "*fd* before calling poll or select again."
 msgstr ""
+"以前の待機解除用ファイル記述子を返します (有効になっていなければ -1)。\n"
+"*fd* が -1 の場合はファイル記述子による待機解除を無効にします。\n"
+"-1 でない場合、*fd* は非ブロッキングでなければなりません。\n"
+"poll や select を再び呼ぶ前に *fd* のバイトをすべて読み出すのはライブラリの責"
+"任です。"
 
 #: ../../library/signal.rst:560 ../../library/signal.rst:615
 msgid ""
@@ -745,6 +827,9 @@ msgid ""
 "the fd to wake up when a signal arrives, but then they differ in how they "
 "determine *which* signal or signals have arrived."
 msgstr ""
+"この関数には一般的な使い方が二つあります。\n"
+"どちらもシグナルの到着時にファイル記述子で待機を解除しますが、*どの* シグナル"
+"が到着したかを判別する方法が異なります。"
 
 #: ../../library/signal.rst:570
 msgid ""
@@ -756,6 +841,15 @@ msgid ""
 "you should set ``warn_on_full_buffer=True``, which will at least cause a "
 "warning to be printed to stderr when signals are lost."
 msgstr ""
+"一つ目の方法では、ファイル記述子のバッファからデータを読み出し、そのバイト値"
+"からシグナル番号を取得します。\n"
+"これは単純ですが、まれに問題が起こります。\n"
+"通常、ファイル記述子のバッファ容量には上限があるため、シグナルが短時間に大量"
+"に到着するとバッファがいっぱいになり、一部のシグナルを取りこぼす可能性があり"
+"ます。\n"
+"この方法を使う場合は ``warn_on_full_buffer=True`` を設定してください。\n"
+"そうすれば、少なくともシグナルを取りこぼしたときに標準エラー出力に警告が表示"
+"されます。"
 
 #: ../../library/signal.rst:579
 msgid ""
@@ -766,6 +860,12 @@ msgid ""
 "``warn_on_full_buffer=False``, so that your users are not confused by "
 "spurious warning messages."
 msgstr ""
+"二つ目の方法では、ファイル記述子を待機解除のため *だけ* に使い、実際のバイト"
+"値は無視します。\n"
+"この場合はバッファが空かどうかだけを見ており、バッファがいっぱいになっても問"
+"題はありません。\n"
+"不要な警告メッセージで利用者を混乱させないよう、この方法では "
+"``warn_on_full_buffer=False`` を設定してください。"
 
 #: ../../library/signal.rst:586
 msgid "On Windows, the function now also supports socket handles."
@@ -788,6 +888,7 @@ msgstr ""
 #: ../../library/signal.rst:600
 msgid "See the man page :manpage:`siginterrupt(3)` for further information."
 msgstr ""
+"詳細は :manpage:`siginterrupt(3)` のマニュアルページを参照してください。"
 
 #: ../../library/signal.rst:602
 msgid ""
@@ -795,22 +896,25 @@ msgid ""
 "restart behaviour to interruptible by implicitly calling :c:func:`!"
 "siginterrupt` with a true *flag* value for the given signal."
 msgstr ""
+":func:`signal` でシグナルハンドラーを登録すると、対象のシグナルに対して "
+"*flag* を真にして :c:func:`!siginterrupt` が暗黙に呼び出され、システムコール"
+"を中断する動作にリセットされることに注意してください。"
 
 #: ../../library/signal.rst:609
 msgid ""
 "Set the handler for signal *signalnum* to the function *handler*.  *handler* "
 "can be a callable Python object taking two arguments (see below), or one of "
 "the special values :const:`signal.SIG_IGN` or :const:`signal.SIG_DFL`.  The "
-"previous signal handler will be returned (see the description of :func:"
-"`getsignal` above).  (See the Unix man page :manpage:`signal(2)` for further "
-"information.)"
+"previous signal handler will be returned (see the description "
+"of :func:`getsignal` above).  (See the Unix man page :manpage:`signal(2)` "
+"for further information.)"
 msgstr ""
 "シグナル *signalnum* に対するハンドラを関数 *handler* にします。 *handler* は"
-"二つの引数 (下記参照) を取る呼び出し可能な Python オブジェクトか、 :const:"
-"`signal.SIG_IGN` あるいは :const:`signal.SIG_DFL` といった特殊な値にすること"
-"ができます。以前に使われていたシグナルハンドラが返されます (上記の :func:"
-"`getsignal` の記述を参照してください)。 (さらに詳しい情報については Unix マ"
-"ニュアルページ :manpage:`signal(2)` を参照してください。)"
+"二つの引数 (下記参照) を取る呼び出し可能な Python オブジェクト"
+"か、 :const:`signal.SIG_IGN` あるいは :const:`signal.SIG_DFL` といった特殊な"
+"値にすることができます。以前に使われていたシグナルハンドラが返されます (上記"
+"の :func:`getsignal` の記述を参照してください)。 (さらに詳しい情報については "
+"Unix マニュアルページ :manpage:`signal(2)` を参照してください。)"
 
 #: ../../library/signal.rst:620
 msgid ""
@@ -821,18 +925,25 @@ msgid ""
 msgstr ""
 "*handler* は二つの引数とともに呼び出されます: シグナル番号、および現在のス"
 "タックフレーム (``None`` またはフレームオブジェクト; フレームオブジェクトにつ"
-"いての記述は :ref:`標準型の階層における説明 <frame-objects>` か、 :mod:"
-"`inspect` モジュールの属性の説明を参照してください)。"
+"いての記述は :ref:`標準型の階層における説明 <frame-objects>` "
+"か、 :mod:`inspect` モジュールの属性の説明を参照してください)。"
 
 #: ../../library/signal.rst:625
 msgid ""
-"On Windows, :func:`signal` can only be called with :const:`SIGABRT`, :const:"
-"`SIGFPE`, :const:`SIGILL`, :const:`SIGINT`, :const:`SIGSEGV`, :const:"
-"`SIGTERM`, or :const:`SIGBREAK`. A :exc:`ValueError` will be raised in any "
-"other case. Note that not all systems define the same set of signal names; "
+"On Windows, :func:`signal` can only be called "
+"with :const:`SIGABRT`, :const:`SIGFPE`, :const:`SIGILL`, :const:`SIGINT`, :const:`SIGSEGV`, :const:`SIGTERM`, "
+"or :const:`SIGBREAK`. A :exc:`ValueError` will be raised in any other case. "
+"Note that not all systems define the same set of signal names; "
 "an :exc:`AttributeError` will be raised if a signal name is not defined as "
 "``SIG*`` module level constant."
 msgstr ""
+"Windows では :func:`signal` に指定できるの"
+"は :const:`SIGABRT`、:const:`SIGFPE`、:const:`SIGILL`、:const:`SIGINT`、:const:`SIGSEGV`、:const:`SIGTERM`、:const:`SIGBREAK` "
+"だけです。\n"
+"他の値では :exc:`ValueError` が送出されます。\n"
+"すべてのシステムが同じシグナル名を定義しているわけではなく、``SIG*`` というモ"
+"ジュールレベルの定数が定義されていない名前を参照すると :exc:`AttributeError` "
+"が送出されます。"
 
 #: ../../library/signal.rst:636
 msgid ""
@@ -845,7 +956,7 @@ msgstr ""
 
 #: ../../library/signal.rst:642
 msgid "See the man page :manpage:`sigpending(2)` for further information."
-msgstr ""
+msgstr "詳細は :manpage:`sigpending(2)` のマニュアルページを参照してください。"
 
 #: ../../library/signal.rst:644
 msgid "See also :func:`pause`, :func:`pthread_sigmask` and :func:`sigwait`."
@@ -865,15 +976,16 @@ msgstr ""
 
 #: ../../library/signal.rst:657
 msgid "See the man page :manpage:`sigwait(3)` for further information."
-msgstr ""
+msgstr "詳細は :manpage:`sigwait(3)` のマニュアルページを参照してください。"
 
 #: ../../library/signal.rst:659
 msgid ""
-"See also :func:`pause`, :func:`pthread_sigmask`, :func:`sigpending`, :func:"
-"`sigwaitinfo` and :func:`sigtimedwait`."
+"See "
+"also :func:`pause`, :func:`pthread_sigmask`, :func:`sigpending`, :func:`sigwaitinfo` "
+"and :func:`sigtimedwait`."
 msgstr ""
-":func:`pause`, :func:`pthread_sigmask`, :func:`sigpending`, :func:"
-"`sigwaitinfo`, :func:`sigtimedwait` も参照して下さい。"
+":func:`pause`, :func:`pthread_sigmask`, :func:`sigpending`, :func:`sigwaitinfo`, :func:`sigtimedwait` "
+"も参照して下さい。"
 
 #: ../../library/signal.rst:667
 msgid ""
@@ -882,8 +994,9 @@ msgid ""
 "signal and removes it from the pending list of signals. If one of the "
 "signals in *sigset* is already pending for the calling thread, the function "
 "will return immediately with information about that signal. The signal "
-"handler is not called for the delivered signal. The function raises an :exc:"
-"`InterruptedError` if it is interrupted by a signal that is not in *sigset*."
+"handler is not called for the delivered signal. The function raises "
+"an :exc:`InterruptedError` if it is interrupted by a signal that is not in "
+"*sigset*."
 msgstr ""
 
 #: ../../library/signal.rst:676
@@ -892,10 +1005,14 @@ msgid ""
 "``siginfo_t`` structure, namely: ``si_signo``, ``si_code``, ``si_errno``, "
 "``si_pid``, ``si_uid``, ``si_status``, ``si_band``."
 msgstr ""
+"戻り値は ``siginfo_t`` 構造体に含まれるデータ、すなわち ``si_signo``、"
+"``si_code``、``si_errno``、``si_pid``、``si_uid``、``si_status``、"
+"``si_band`` を表すオブジェクトです。"
 
 #: ../../library/signal.rst:682
 msgid "See the man page :manpage:`sigwaitinfo(2)` for further information."
 msgstr ""
+"詳細は :manpage:`sigwaitinfo(2)` のマニュアルページを参照してください。"
 
 #: ../../library/signal.rst:684
 msgid "See also :func:`pause`, :func:`sigwait` and :func:`sigtimedwait`."
@@ -908,6 +1025,8 @@ msgid ""
 "the signal handler does not raise an exception (see :pep:`475` for the "
 "rationale)."
 msgstr ""
+"*sigset* に含まれないシグナルで中断され、そのハンドラーが例外を送出しなかった"
+"場合、関数を再試行するようになりました (理由は :pep:`475` を参照)。"
 
 #: ../../library/signal.rst:696
 msgid ""
@@ -915,10 +1034,15 @@ msgid ""
 "specifying a timeout. If *timeout* is specified as ``0``, a poll is "
 "performed. Returns :const:`None` if a timeout occurs."
 msgstr ""
+":func:`sigwaitinfo` と同様ですが、タイムアウトを指定する *timeout* 引数を追加"
+"で受け取ります。\n"
+"*timeout* に ``0`` を指定するとポーリングを行います。\n"
+"タイムアウトした場合は :const:`None` を返します。"
 
 #: ../../library/signal.rst:702
 msgid "See the man page :manpage:`sigtimedwait(2)` for further information."
 msgstr ""
+"詳細は :manpage:`sigtimedwait(2)` のマニュアルページを参照してください。"
 
 #: ../../library/signal.rst:704
 msgid "See also :func:`pause`, :func:`sigwait` and :func:`sigwaitinfo`."
@@ -930,6 +1054,9 @@ msgid ""
 "a signal not in *sigset* and the signal handler does not raise an exception "
 "(see :pep:`475` for the rationale)."
 msgstr ""
+"*sigset* に含まれないシグナルで中断され、そのハンドラーが例外を送出しなかった"
+"場合、*timeout* を再計算して関数を再試行するようになりました (理由"
+"は :pep:`475` を参照)。"
 
 #: ../../library/signal.rst:717
 msgid "Examples"
@@ -970,19 +1097,41 @@ msgid ""
 "\n"
 "signal.alarm(0)          # Disable the alarm"
 msgstr ""
+"import signal, os\n"
+"\n"
+"def handler(signum, frame):\n"
+"    signame = signal.Signals(signum).name\n"
+"    print(f'Signal handler called with signal {signame} ({signum})')\n"
+"    raise OSError(\"Couldn't open device!\")\n"
+"\n"
+"# シグナルハンドラーと 5 秒後のアラームを設定する\n"
+"signal.signal(signal.SIGALRM, handler)\n"
+"signal.alarm(5)\n"
+"\n"
+"# この open() は無期限に待機する可能性がある\n"
+"fd = os.open('/dev/ttyS0', os.O_RDWR)\n"
+"\n"
+"signal.alarm(0)          # アラームを解除する"
 
 #: ../../library/signal.rst:743
 msgid "Note on SIGPIPE"
-msgstr ""
+msgstr "SIGPIPE についての注意"
 
 #: ../../library/signal.rst:745
 msgid ""
-"Piping output of your program to tools like :manpage:`head(1)` will cause a :"
-"const:`SIGPIPE` signal to be sent to your process when the receiver of its "
-"standard output closes early.  This results in an exception like :code:"
-"`BrokenPipeError: [Errno 32] Broken pipe`.  To handle this case, wrap your "
-"entry point to catch this exception as follows::"
+"Piping output of your program to tools like :manpage:`head(1)` will cause "
+"a :const:`SIGPIPE` signal to be sent to your process when the receiver of "
+"its standard output closes early.  This results in an exception "
+"like :code:`BrokenPipeError: [Errno 32] Broken pipe`.  To handle this case, "
+"wrap your entry point to catch this exception as follows::"
 msgstr ""
+"プログラムの出力を :manpage:`head(1)` などのツールにパイプで渡していて、標準"
+"出力の受け取り側が先に閉じると、プロセスに :const:`SIGPIPE` シグナルが送られ"
+"ます。\n"
+"この結果、:code:`BrokenPipeError: [Errno 32] Broken pipe` のような例外が発生"
+"します。\n"
+"この状況に対処するには、次のようにエントリーポイントの処理を囲んで例外を捕捉"
+"します。 ::"
 
 #: ../../library/signal.rst:751
 msgid ""
@@ -1008,6 +1157,26 @@ msgid ""
 "if __name__ == '__main__':\n"
 "    main()"
 msgstr ""
+"import os\n"
+"import sys\n"
+"\n"
+"def main():\n"
+"    try:\n"
+"        # 大量の出力を模擬する (このループを実際のコードに置き換える)\n"
+"        for x in range(10000):\n"
+"            print(\"y\")\n"
+"        # この try ブロック内で SIGPIPE が発生するよう、\n"
+"        # ここで出力をフラッシュする。\n"
+"        sys.stdout.flush()\n"
+"    except BrokenPipeError:\n"
+"        # Python は終了時に標準ストリームをフラッシュするので、残りの出力を\n"
+"        # devnull にリダイレクトし、終了時の BrokenPipeError 再発を防ぐ\n"
+"        devnull = os.open(os.devnull, os.O_WRONLY)\n"
+"        os.dup2(devnull, sys.stdout.fileno())\n"
+"        sys.exit(1)  # EPIPE では Python はエラーコード 1 で終了する\n"
+"\n"
+"if __name__ == '__main__':\n"
+"    main()"
 
 #: ../../library/signal.rst:772
 msgid ""
@@ -1016,10 +1185,14 @@ msgid ""
 "unexpectedly whenever any socket connection is interrupted while your "
 "program is still writing to it."
 msgstr ""
+":exc:`BrokenPipeError` を避けるために :const:`SIGPIPE` の処理方法"
+"を :const:`SIG_DFL` に設定しないでください。\n"
+"そうすると、ソケットへの書き込み中に接続が切れるたびに、プログラムが予期せず"
+"終了してしまいます。"
 
 #: ../../library/signal.rst:781
 msgid "Note on Signal Handlers and Exceptions"
-msgstr ""
+msgstr "シグナルハンドラーと例外についての注意"
 
 #: ../../library/signal.rst:783
 msgid ""
@@ -1031,10 +1204,16 @@ msgid ""
 "exception resulting from a signal handler) may on rare occasions put the "
 "program in an unexpected state."
 msgstr ""
+"シグナルハンドラーが例外を送出すると、その例外はメインスレッドに伝播し、ど"
+"の :term:`bytecode` 命令の実行後にも発生する可能性があります。\n"
+"特に :exc:`KeyboardInterrupt` は実行中のどの時点でも発生し得ます。\n"
+"標準ライブラリを含むほとんどの Python コードはこれに対して堅牢にできないた"
+"め、:exc:`KeyboardInterrupt` (またはシグナルハンドラーによる他の例外) によっ"
+"て、まれにプログラムが予期しない状態になることがあります。"
 
 #: ../../library/signal.rst:790
 msgid "To illustrate this issue, consider the following code::"
-msgstr ""
+msgstr "この問題を示す例として、次のコードを考えてください。 ::"
 
 #: ../../library/signal.rst:792
 msgid ""
@@ -1053,17 +1232,38 @@ msgid ""
 "        ...\n"
 "        self.lock.release()"
 msgstr ""
+"class SpamContext:\n"
+"    def __init__(self):\n"
+"        self.lock = threading.Lock()\n"
+"\n"
+"    def __enter__(self):\n"
+"        # ここで KeyboardInterrupt が発生しても問題ない\n"
+"        self.lock.acquire()\n"
+"        # ここで KeyboardInterrupt が発生すると __exit__ は呼ばれない\n"
+"        ...\n"
+"        # 関数から戻る直前に KeyboardInterrupt が発生する可能性もある\n"
+"\n"
+"    def __exit__(self, exc_type, exc_val, exc_tb):\n"
+"        ...\n"
+"        self.lock.release()"
 
 #: ../../library/signal.rst:807
 msgid ""
-"For many programs, especially those that merely want to exit on :exc:"
-"`KeyboardInterrupt`, this is not a problem, but applications that are "
-"complex or require high reliability should avoid raising exceptions from "
+"For many programs, especially those that merely want to exit "
+"on :exc:`KeyboardInterrupt`, this is not a problem, but applications that "
+"are complex or require high reliability should avoid raising exceptions from "
 "signal handlers. They should also avoid catching :exc:`KeyboardInterrupt` as "
 "a means of gracefully shutting down.  Instead, they should install their "
 "own :const:`SIGINT` handler. Below is an example of an HTTP server that "
 "avoids :exc:`KeyboardInterrupt`::"
 msgstr ""
+"多くのプログラム、特に :exc:`KeyboardInterrupt` で単に終了するだけのプログラ"
+"ムでは問題になりませんが、複雑なアプリケーションや高い信頼性が必要なアプリ"
+"ケーションではシグナルハンドラーからの例外送出を避けるべきです。\n"
+"また、正常に終了処理を行う手段として :exc:`KeyboardInterrupt` を捕捉すること"
+"も避けてください。\n"
+"代わりに独自の :const:`SIGINT` ハンドラーを登録してください。\n"
+"以下は :exc:`KeyboardInterrupt` を発生させない HTTP サーバーの例です。 ::"
 
 #: ../../library/signal.rst:815
 msgid ""
@@ -1097,3 +1297,32 @@ msgid ""
 "serve_forever(httpd)\n"
 "print(\"Shutdown...\")"
 msgstr ""
+"import signal\n"
+"import socket\n"
+"from selectors import DefaultSelector, EVENT_READ\n"
+"from http.server import HTTPServer, SimpleHTTPRequestHandler\n"
+"\n"
+"interrupt_read, interrupt_write = socket.socketpair()\n"
+"\n"
+"def handler(signum, frame):\n"
+"    print('Signal handler called with signal', signum)\n"
+"    interrupt_write.send(b'\\0')\n"
+"signal.signal(signal.SIGINT, handler)\n"
+"\n"
+"def serve_forever(httpd):\n"
+"    sel = DefaultSelector()\n"
+"    sel.register(interrupt_read, EVENT_READ)\n"
+"    sel.register(httpd, EVENT_READ)\n"
+"\n"
+"    while True:\n"
+"        for key, _ in sel.select():\n"
+"            if key.fileobj == interrupt_read:\n"
+"                interrupt_read.recv(1)\n"
+"                return\n"
+"            if key.fileobj == httpd:\n"
+"                httpd.handle_request()\n"
+"\n"
+"print(\"Serving on port 8000\")\n"
+"httpd = HTTPServer(('', 8000), SimpleHTTPRequestHandler)\n"
+"serve_forever(httpd)\n"
+"print(\"Shutdown...\")"

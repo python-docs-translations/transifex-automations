@@ -5,15 +5,16 @@
 #
 # Translators:
 # Rafael Fontenelle <rffontenelle@gmail.com>, 2026
+# Inada Naoki <songofacandy@gmail.com>, 2026
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-21 19:19+0000\n"
+"POT-Creation-Date: 2026-10-27 20:01+0000\n"
 "PO-Revision-Date: 2026-05-08 17:16+0000\n"
-"Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>, 2026\n"
+"Last-Translator: Inada Naoki <songofacandy@gmail.com>, 2026\n"
 "Language-Team: Japanese (https://app.transifex.com/python-doc/teams/5390/"
 "ja/)\n"
 "MIME-Version: 1.0\n"
@@ -28,17 +29,21 @@ msgstr "同期プリミティブ"
 
 #: ../../c-api/synchronization.rst:8
 msgid "The C-API provides a basic mutual exclusion lock."
-msgstr ""
+msgstr "C API は基本的な相互排他ロックを提供します。"
 
 #: ../../c-api/synchronization.rst:12
 msgid ""
 "A mutual exclusion lock.  The :c:type:`!PyMutex` should be initialized to "
 "zero to represent the unlocked state.  For example::"
 msgstr ""
+"相互排他ロックです。\n"
+":c:type:`!PyMutex` は、ロックされていない状態を表すために 0 で初期化する必要"
+"があります。\n"
+"例えば次のようにします。 ::"
 
 #: ../../c-api/synchronization.rst:15
 msgid "PyMutex mutex = {0};"
-msgstr ""
+msgstr "PyMutex mutex = {0};"
 
 #: ../../c-api/synchronization.rst:17
 msgid ""
@@ -46,6 +51,10 @@ msgid ""
 "contents and address of a :c:type:`!PyMutex` are meaningful, and it must "
 "remain at a fixed, writable location in memory."
 msgstr ""
+":c:type:`!PyMutex` のインスタンスは、コピーしたり移動したりしてはなりませ"
+"ん。\n"
+":c:type:`!PyMutex` は内容とアドレスの両方が意味を持つため、書き込み可能なメモ"
+"リ上の固定された場所に置き続ける必要があります。"
 
 #: ../../c-api/synchronization.rst:23
 msgid ""
@@ -53,6 +62,10 @@ msgid ""
 "considered unstable.  The size may change in future Python releases without "
 "a deprecation period."
 msgstr ""
+":c:type:`!PyMutex` は現在 1 バイトを占めますが、このサイズは安定した仕様では"
+"ありません。\n"
+"将来の Python リリースでは、非推奨の期間を設けずにサイズを変更する可能性があ"
+"ります。"
 
 #: ../../c-api/synchronization.rst:31
 msgid ""
@@ -61,16 +74,26 @@ msgid ""
 "temporarily detach the :term:`thread state <attached thread state>` if one "
 "exists."
 msgstr ""
+"ミューテックス *m* をロックします。\n"
+"別のスレッドがすでにロックしている場合、呼び出し元のスレッドはロックが解除さ"
+"れるまでブロックします。\n"
+"ブロック中は、:term:`スレッド状態 <attached thread state>` があれば一時的にデ"
+"タッチします。"
 
 #: ../../c-api/synchronization.rst:39
 msgid ""
 "Unlock mutex *m*. The mutex must be locked --- otherwise, the function will "
 "issue a fatal error."
 msgstr ""
+"ミューテックス *m* のロックを解除します。\n"
+"ミューテックスはロックされていなければなりません。\n"
+"ロックされていない場合、この関数は致命的なエラーを発生させます。"
 
 #: ../../c-api/synchronization.rst:46
 msgid "Returns non-zero if the mutex *m* is currently locked, zero otherwise."
 msgstr ""
+"ミューテックス *m* が現在ロックされていれば 0 以外を、そうでなければ 0 を返し"
+"ます。"
 
 #: ../../c-api/synchronization.rst:50
 msgid ""
@@ -78,10 +101,13 @@ msgid ""
 "should not be used to make concurrency control decisions, as the lock state "
 "may change immediately after the check."
 msgstr ""
+"この関数はアサーションとデバッグだけを目的としています。\n"
+"確認した直後にロックの状態が変わる可能性があるため、並行処理の制御の判断には"
+"使わないでください。"
 
 #: ../../c-api/synchronization.rst:59
 msgid "Python critical section API"
-msgstr ""
+msgstr "Python のクリティカルセクション API"
 
 #: ../../c-api/synchronization.rst:61
 msgid ""
@@ -90,15 +116,28 @@ msgid ""
 "intended to replace reliance on the :term:`global interpreter lock`, and are "
 "no-ops in versions of Python with the global interpreter lock."
 msgstr ""
+"クリティカルセクション API は、:term:`フリースレッドの <free threading>` "
+"CPython のオブジェクトごとのロックに、デッドロックを避ける層を加えます。\n"
+":term:`グローバルインタープリタロック <global interpreter lock>` への依存を置"
+"き換えるためのもので、グローバルインタープリタロックを持つバージョンの "
+"Python では何もしません。"
 
 #: ../../c-api/synchronization.rst:66
 msgid ""
 "Critical sections are intended to be used for custom types implemented in C-"
-"API extensions. They should generally not be used with built-in types like :"
-"class:`list` and :class:`dict` because their public C-APIs already use "
-"critical sections internally, with the notable exception of :c:func:"
-"`PyDict_Next`, which requires critical section to be acquired externally."
+"API extensions. They should generally not be used with built-in types "
+"like :class:`list` and :class:`dict` because their public C-APIs already use "
+"critical sections internally, with the notable exception "
+"of :c:func:`PyDict_Next`, which requires critical section to be acquired "
+"externally."
 msgstr ""
+"クリティカルセクションは、C API を使う拡張で実装した独自の型のためのもので"
+"す。\n"
+":class:`list` や :class:`dict` などの組み込み型の公開 C API は内部でクリティ"
+"カルセクションを使っているため、通常はこれらの型に対して使わないでくださ"
+"い。\n"
+"重要な例外は :c:func:`PyDict_Next` で、外側でクリティカルセクションを開始して"
+"おく必要があります。"
 
 #: ../../c-api/synchronization.rst:73
 msgid ""
@@ -110,6 +149,15 @@ msgid ""
 "suspend the critical section thereby releasing the per-object lock, so other "
 "threads can acquire the per-object lock for the same object."
 msgstr ""
+"クリティカルセクションは、実行中のクリティカルセクションを暗黙的に中断するこ"
+"とでデッドロックを避けます。\n"
+"そのため、:c:type:`PyMutex` のような従来のロックが提供する排他的アクセスとは"
+"異なります。\n"
+"クリティカルセクションを開始すると、対象のオブジェクトのロックを取得しま"
+"す。\n"
+"内部で実行するコードが C API 関数を呼ぶと、クリティカルセクションを中断してそ"
+"のロックを解放する場合があります。\n"
+"すると、別のスレッドが同じオブジェクトのロックを取得できます。"
 
 #: ../../c-api/synchronization.rst:81
 msgid ""
@@ -119,6 +167,12 @@ msgid ""
 "with a C type that does not extend or wrap :c:type:`PyObject` but still "
 "needs to call into the C API in a manner that might lead to deadlocks."
 msgstr ""
+"Python オブジェクトの代わりに :c:type:`PyMutex` ポインタを受け取る形式もあり"
+"ます。\n"
+":c:type:`PyObject` がない状況でクリティカルセクションを開始する場合に使ってく"
+"ださい。\n"
+"例えば、:c:type:`PyObject` を拡張もラップもしていない C の型を扱うものの、"
+"デッドロックを起こす可能性がある形で C API を呼び出す必要がある場合です。"
 
 #: ../../c-api/synchronization.rst:87
 msgid ""
@@ -130,12 +184,18 @@ msgstr ""
 
 #: ../../c-api/synchronization.rst:94
 msgid ""
-"Operations that need to lock two objects at once must use :c:macro:"
-"`Py_BEGIN_CRITICAL_SECTION2`.  You *cannot* use nested critical sections to "
-"lock more than one object at once, because the inner critical section may "
-"suspend the outer critical sections.  This API does not provide a way to "
-"lock more than two objects at once."
+"Operations that need to lock two objects at once must "
+"use :c:macro:`Py_BEGIN_CRITICAL_SECTION2`.  You *cannot* use nested critical "
+"sections to lock more than one object at once, because the inner critical "
+"section may suspend the outer critical sections.  This API does not provide "
+"a way to lock more than two objects at once."
 msgstr ""
+"2 個のオブジェクトを同時にロックする操作に"
+"は、:c:macro:`Py_BEGIN_CRITICAL_SECTION2` を使う必要があります。\n"
+"複数のオブジェクトを同時にロックするために、クリティカルセクションを入れ子に"
+"することは *できません*。\n"
+"内側のクリティカルセクションが外側のものを中断する場合があるためです。\n"
+"この API は、3 個以上のオブジェクトを同時にロックする方法を提供しません。"
 
 #: ../../c-api/synchronization.rst:100
 msgid "Example usage::"
@@ -152,6 +212,14 @@ msgid ""
 "   Py_RETURN_NONE;\n"
 "}"
 msgstr ""
+"static PyObject *\n"
+"set_field(MyObject *self, PyObject *value)\n"
+"{\n"
+"   Py_BEGIN_CRITICAL_SECTION(self);\n"
+"   Py_SETREF(self->field, Py_XNewRef(value));\n"
+"   Py_END_CRITICAL_SECTION();\n"
+"   Py_RETURN_NONE;\n"
+"}"
 
 #: ../../c-api/synchronization.rst:111
 msgid ""
@@ -159,21 +227,28 @@ msgid ""
 "can call arbitrary code through an object's deallocation function.  The "
 "critical section API avoids potential deadlocks due to reentrancy and lock "
 "ordering by allowing the runtime to temporarily suspend the critical section "
-"if the code triggered by the finalizer blocks and calls :c:func:"
-"`PyEval_SaveThread`."
+"if the code triggered by the finalizer blocks and "
+"calls :c:func:`PyEval_SaveThread`."
 msgstr ""
+"上の例では、:c:macro:`Py_SETREF` が :c:macro:`Py_DECREF` を呼び出し、オブジェ"
+"クトの解放関数を通じて任意のコードが実行される可能性があります。\n"
+"ファイナライザが実行するコードがブロックして :c:func:`PyEval_SaveThread` を呼"
+"び出した場合、\n"
+"クリティカルセクション API はランタイムによるクリティカルセクションの一時的な"
+"中断を許すことで、再入やロックの順序に起因するデッドロックを避けます。"
 
 #: ../../c-api/synchronization.rst:119
 msgid ""
 "Acquires the per-object lock for the object *op* and begins a critical "
 "section."
 msgstr ""
+"オブジェクト *op* のロックを取得し、クリティカルセクションを開始します。"
 
 #: ../../c-api/synchronization.rst:122 ../../c-api/synchronization.rst:136
 #: ../../c-api/synchronization.rst:153 ../../c-api/synchronization.rst:168
 #: ../../c-api/synchronization.rst:182 ../../c-api/synchronization.rst:199
 msgid "In the free-threaded build, this macro expands to::"
-msgstr ""
+msgstr "フリースレッドビルドでは、このマクロは次のように展開されます。 ::"
 
 #: ../../c-api/synchronization.rst:124
 msgid ""
@@ -181,14 +256,17 @@ msgid ""
 "    PyCriticalSection _py_cs;\n"
 "    PyCriticalSection_Begin(&_py_cs, (PyObject*)(op))"
 msgstr ""
+"{\n"
+"    PyCriticalSection _py_cs;\n"
+"    PyCriticalSection_Begin(&_py_cs, (PyObject*)(op))"
 
 #: ../../c-api/synchronization.rst:128 ../../c-api/synchronization.rst:174
 msgid "In the default build, this macro expands to ``{``."
-msgstr ""
+msgstr "デフォルトのビルドでは、このマクロは ``{`` に展開されます。"
 
 #: ../../c-api/synchronization.rst:134
 msgid "Locks the mutex *m* and begins a critical section."
-msgstr ""
+msgstr "ミューテックス *m* をロックし、クリティカルセクションを開始します。"
 
 #: ../../c-api/synchronization.rst:138
 msgid ""
@@ -196,30 +274,38 @@ msgid ""
 "     PyCriticalSection _py_cs;\n"
 "     PyCriticalSection_BeginMutex(&_py_cs, m)"
 msgstr ""
+"{\n"
+"     PyCriticalSection _py_cs;\n"
+"     PyCriticalSection_BeginMutex(&_py_cs, m)"
 
 #: ../../c-api/synchronization.rst:142
 msgid ""
 "Note that unlike :c:macro:`Py_BEGIN_CRITICAL_SECTION`, there is no cast for "
 "the argument of the macro - it must be a :c:type:`PyMutex` pointer."
 msgstr ""
+":c:macro:`Py_BEGIN_CRITICAL_SECTION` と異なり、このマクロは引数をキャストしま"
+"せん。\n"
+"引数は :c:type:`PyMutex` ポインタでなければなりません。"
 
 #: ../../c-api/synchronization.rst:145 ../../c-api/synchronization.rst:191
 msgid "On the default build, this macro expands to ``{``."
-msgstr ""
+msgstr "デフォルトのビルドでは、このマクロは ``{`` に展開されます。"
 
 #: ../../c-api/synchronization.rst:151
 msgid "Ends the critical section and releases the per-object lock."
-msgstr ""
+msgstr "クリティカルセクションを終了し、オブジェクトのロックを解放します。"
 
 #: ../../c-api/synchronization.rst:155
 msgid ""
 "    PyCriticalSection_End(&_py_cs);\n"
 "}"
 msgstr ""
+"    PyCriticalSection_End(&_py_cs);\n"
+"}"
 
 #: ../../c-api/synchronization.rst:158 ../../c-api/synchronization.rst:204
 msgid "In the default build, this macro expands to ``}``."
-msgstr ""
+msgstr "デフォルトのビルドでは、このマクロは ``}`` に展開されます。"
 
 #: ../../c-api/synchronization.rst:164
 msgid ""
@@ -227,6 +313,10 @@ msgid ""
 "critical section.  The locks are acquired in a consistent order (lowest "
 "address first) to avoid lock ordering deadlocks."
 msgstr ""
+"オブジェクト *a* と *b* のロックを取得し、クリティカルセクションを開始しま"
+"す。\n"
+"ロックの順序によるデッドロックを避けるため、常に同じ順序 (アドレスが小さいも"
+"のから) でロックを取得します。"
 
 #: ../../c-api/synchronization.rst:170
 msgid ""
@@ -234,10 +324,14 @@ msgid ""
 "    PyCriticalSection2 _py_cs2;\n"
 "    PyCriticalSection2_Begin(&_py_cs2, (PyObject*)(a), (PyObject*)(b))"
 msgstr ""
+"{\n"
+"    PyCriticalSection2 _py_cs2;\n"
+"    PyCriticalSection2_Begin(&_py_cs2, (PyObject*)(a), (PyObject*)(b))"
 
 #: ../../c-api/synchronization.rst:180
 msgid "Locks the mutexes *m1* and *m2* and begins a critical section."
 msgstr ""
+"ミューテックス *m1* と *m2* をロックし、クリティカルセクションを開始します。"
 
 #: ../../c-api/synchronization.rst:184
 msgid ""
@@ -245,94 +339,115 @@ msgid ""
 "     PyCriticalSection2 _py_cs2;\n"
 "     PyCriticalSection2_BeginMutex(&_py_cs2, m1, m2)"
 msgstr ""
+"{\n"
+"     PyCriticalSection2 _py_cs2;\n"
+"     PyCriticalSection2_BeginMutex(&_py_cs2, m1, m2)"
 
 #: ../../c-api/synchronization.rst:188
 msgid ""
 "Note that unlike :c:macro:`Py_BEGIN_CRITICAL_SECTION2`, there is no cast for "
 "the arguments of the macro - they must be :c:type:`PyMutex` pointers."
 msgstr ""
+":c:macro:`Py_BEGIN_CRITICAL_SECTION2` と異なり、このマクロは引数をキャストし"
+"ません。\n"
+"引数は :c:type:`PyMutex` ポインタでなければなりません。"
 
 #: ../../c-api/synchronization.rst:197
 msgid "Ends the critical section and releases the per-object locks."
-msgstr ""
+msgstr "クリティカルセクションを終了し、オブジェクトのロックを解放します。"
 
 #: ../../c-api/synchronization.rst:201
 msgid ""
 "    PyCriticalSection2_End(&_py_cs2);\n"
 "}"
 msgstr ""
+"    PyCriticalSection2_End(&_py_cs2);\n"
+"}"
 
 #: ../../c-api/synchronization.rst:210
 msgid "Legacy locking APIs"
-msgstr ""
+msgstr "従来のロック API"
 
 #: ../../c-api/synchronization.rst:212
 msgid ""
-"These APIs are obsolete since Python 3.13 with the introduction of :c:type:"
-"`PyMutex`."
+"These APIs are obsolete since Python 3.13 with the introduction "
+"of :c:type:`PyMutex`."
 msgstr ""
+"これらの API は、Python 3.13 で :c:type:`PyMutex` が導入されたことにより旧式"
+"となりました。"
 
 #: ../../c-api/synchronization.rst:218
 msgid "A pointer to a mutual exclusion lock."
-msgstr ""
+msgstr "相互排他ロックへのポインタです。"
 
 #: ../../c-api/synchronization.rst:223
 msgid ""
 "A :term:`soft deprecated` alias to :c:expr:`long long`, the integer type "
 "used for the timeout argument of :c:func:`PyThread_acquire_lock_timed`."
 msgstr ""
+":c:expr:`long long` の :term:`緩やかに非推奨とされた <soft deprecated>` 別名"
+"です。\n"
+":c:func:`PyThread_acquire_lock_timed` のタイムアウト引数に使う整数型です。"
 
 #: ../../c-api/synchronization.rst:230
 msgid ""
-"The maximum timeout, in microseconds, supported by :c:func:"
-"`PyThread_acquire_lock_timed`."
+"The maximum timeout, in microseconds, supported "
+"by :c:func:`PyThread_acquire_lock_timed`."
 msgstr ""
+":c:func:`PyThread_acquire_lock_timed` がサポートする最大タイムアウト値で、単"
+"位はマイクロ秒です。"
 
 #: ../../c-api/synchronization.rst:234
 msgid ""
 "This differs from :data:`_thread.TIMEOUT_MAX`, which is expressed in seconds."
-msgstr ""
+msgstr ":data:`_thread.TIMEOUT_MAX` の単位が秒であることとは異なります。"
 
 #: ../../c-api/synchronization.rst:239
 msgid "The result of acquiring a lock with a timeout."
-msgstr ""
+msgstr "タイムアウト付きでロックを取得した結果です。"
 
 #: ../../c-api/synchronization.rst:245
 msgid "Failed to acquire the lock."
-msgstr ""
+msgstr "ロックを取得できませんでした。"
 
 #: ../../c-api/synchronization.rst:249
 msgid "The lock was successfully acquired."
-msgstr ""
+msgstr "ロックを取得しました。"
 
 #: ../../c-api/synchronization.rst:253
 msgid "The lock was interrupted by a signal."
-msgstr ""
+msgstr "ロックの取得がシグナルで中断されました。"
 
 #: ../../c-api/synchronization.rst:258
 msgid "Allocate a new lock."
-msgstr ""
+msgstr "新しいロックを確保します。"
 
 #: ../../c-api/synchronization.rst:260
 msgid ""
 "On success, this function returns a lock; on failure, this function returns "
 "``0`` without an exception set."
 msgstr ""
+"成功するとロックを返します。\n"
+"失敗すると、例外を設定せずに ``0`` を返します。"
 
 #: ../../c-api/synchronization.rst:263 ../../c-api/synchronization.rst:271
 #: ../../c-api/synchronization.rst:291 ../../c-api/synchronization.rst:309
 #: ../../c-api/synchronization.rst:317
 msgid "The caller does not need to hold an :term:`attached thread state`."
 msgstr ""
+"呼び出し元に :term:`スレッド状態がアタッチされている <attached thread "
+"state>` 必要はありません。"
 
 #: ../../c-api/synchronization.rst:268
 msgid ""
 "Destroy *lock*. The lock should not be held by any thread when calling this."
 msgstr ""
+"*lock* を破棄します。\n"
+"呼び出す際に、どのスレッドもこのロックを保持していてはなりません。"
 
 #: ../../c-api/synchronization.rst:276
 msgid "Acquire *lock* with a timeout."
-msgstr ""
+msgstr "タイムアウト付きで *lock* を取得します。"
 
 #: ../../c-api/synchronization.rst:278
 msgid ""
@@ -341,24 +456,32 @@ msgid ""
 "*microseconds* is ``-1``, this will wait indefinitely until the lock has "
 "been released."
 msgstr ""
+"ロックを取得するまで *microseconds* マイクロ秒待ちます。\n"
+"タイムアウトすると :c:enumerator:`PY_LOCK_FAILURE` を返します。\n"
+"*microseconds* が ``-1`` の場合は、ロックが解放されるまで無期限に待ちます。"
 
 #: ../../c-api/synchronization.rst:283
 msgid ""
 "If *intr_flag* is ``1``, acquiring the lock may be interrupted by a signal, "
 "in which case this function returns :c:enumerator:`PY_LOCK_INTR`. Upon "
-"interruption, it's generally expected that the caller makes a call to :c:"
-"func:`Py_MakePendingCalls` to propagate an exception to Python code."
+"interruption, it's generally expected that the caller makes a call "
+"to :c:func:`Py_MakePendingCalls` to propagate an exception to Python code."
 msgstr ""
+"*intr_flag* が ``1`` の場合、ロックの取得がシグナルで中断されることがありま"
+"す。\n"
+"その場合は :c:enumerator:`PY_LOCK_INTR` を返します。\n"
+"中断されたときは、通常、呼び出し元が :c:func:`Py_MakePendingCalls` を呼んで "
+"Python コードに例外を伝えることが想定されています。"
 
 #: ../../c-api/synchronization.rst:288
 msgid ""
-"If the lock is successfully acquired, this function returns :c:enumerator:"
-"`PY_LOCK_ACQUIRED`."
-msgstr ""
+"If the lock is successfully acquired, this function "
+"returns :c:enumerator:`PY_LOCK_ACQUIRED`."
+msgstr "ロックの取得に成功すると :c:enumerator:`PY_LOCK_ACQUIRED` を返します。"
 
 #: ../../c-api/synchronization.rst:296
 msgid "Acquire *lock*."
-msgstr ""
+msgstr "*lock* を取得します。"
 
 #: ../../c-api/synchronization.rst:298
 msgid ""
@@ -366,6 +489,8 @@ msgid ""
 "function will wait until the lock can be acquired and will always return "
 "``1``."
 msgstr ""
+"*waitflag* が ``1`` で、別のスレッドが現在ロックを保持している場合、ロックを"
+"取得できるまで待ち、常に ``1`` を返します。"
 
 #: ../../c-api/synchronization.rst:302
 msgid ""
@@ -373,15 +498,22 @@ msgid ""
 "not wait and instead return ``0``. If the lock is not held by any other "
 "thread, then this function will acquire it and return ``1``."
 msgstr ""
+"*waitflag* が ``0`` で、別のスレッドがロックを保持している場合は、待たずに "
+"``0`` を返します。\n"
+"他のスレッドがロックを保持していなければ、ロックを取得して ``1`` を返します。"
 
 #: ../../c-api/synchronization.rst:306
 msgid ""
 "Unlike :c:func:`PyThread_acquire_lock_timed`, acquiring the lock cannot be "
 "interrupted by a signal."
 msgstr ""
+":c:func:`PyThread_acquire_lock_timed` と異なり、ロックの取得がシグナルで中断"
+"されることはありません。"
 
 #: ../../c-api/synchronization.rst:314
 msgid ""
 "Release *lock*. If *lock* is not held, then this function issues a fatal "
 "error."
 msgstr ""
+"*lock* を解放します。\n"
+"*lock* が保持されていない場合、この関数は致命的なエラーを発生させます。"
