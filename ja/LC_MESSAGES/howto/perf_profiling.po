@@ -5,15 +5,16 @@
 #
 # Translators:
 # Rafael Fontenelle <rffontenelle@gmail.com>, 2025
+# Inada Naoki <songofacandy@gmail.com>, 2026
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-09 16:02+0000\n"
+"POT-Creation-Date: 2026-10-27 21:53+0000\n"
 "PO-Revision-Date: 2025-07-18 19:57+0000\n"
-"Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>, 2025\n"
+"Last-Translator: Inada Naoki <songofacandy@gmail.com>, 2026\n"
 "Language-Team: Japanese (https://app.transifex.com/python-doc/teams/5390/"
 "ja/)\n"
 "MIME-Version: 1.0\n"
@@ -71,7 +72,7 @@ msgstr ""
 
 #: ../../howto/perf_profiling.rst:36
 msgid "For example, consider the following script:"
-msgstr ""
+msgstr "例えば、次のスクリプトを考えます:"
 
 #: ../../howto/perf_profiling.rst:38
 msgid ""
@@ -90,18 +91,34 @@ msgid ""
 "if __name__ == \"__main__\":\n"
 "    baz(1000000)"
 msgstr ""
+"def foo(n):\n"
+"    result = 0\n"
+"    for _ in range(n):\n"
+"        result += 1\n"
+"    return result\n"
+"\n"
+"def bar(n):\n"
+"    foo(n)\n"
+"\n"
+"def baz(n):\n"
+"    bar(n)\n"
+"\n"
+"if __name__ == \"__main__\":\n"
+"    baz(1000000)"
 
 #: ../../howto/perf_profiling.rst:55
 msgid "We can run ``perf`` to sample CPU stack traces at 9999 hertz::"
 msgstr ""
+"``perf`` を実行して、CPU のスタックトレースを 9999 Hz でサンプリングできま"
+"す。 ::"
 
 #: ../../howto/perf_profiling.rst:57
 msgid "$ perf record -F 9999 -g -o perf.data python my_script.py"
-msgstr ""
+msgstr "$ perf record -F 9999 -g -o perf.data python my_script.py"
 
 #: ../../howto/perf_profiling.rst:59
 msgid "Then we can use ``perf report`` to analyze the data:"
-msgstr ""
+msgstr "続いて ``perf report`` でデータを分析します:"
 
 #: ../../howto/perf_profiling.rst:61
 msgid ""
@@ -167,11 +184,16 @@ msgid ""
 "functions use the same C function to evaluate bytecode so we cannot know "
 "which Python function corresponds to which bytecode-evaluating function."
 msgstr ""
+"このように、Python 関数は出力に現れず、Python バイトコードを評価する関数 "
+"``_PyEval_EvalFrameDefault`` だけが表示されます。\n"
+"すべての Python 関数が同じ C 関数でバイトコードを評価するため、これだけではど"
+"の Python 関数に対応する評価処理か分からず、あまり役に立ちません。"
 
 #: ../../howto/perf_profiling.rst:105
 msgid ""
 "Instead, if we run the same experiment with ``perf`` support enabled we get:"
 msgstr ""
+"一方、``perf`` サポートを有効にして同じ実験を行うと、次のようになります:"
 
 #: ../../howto/perf_profiling.rst:107
 msgid ""
@@ -238,25 +260,31 @@ msgstr ""
 
 #: ../../howto/perf_profiling.rst:152
 msgid "How to enable ``perf`` profiling support"
-msgstr ""
+msgstr "``perf`` プロファイリングサポートを有効にする方法"
 
 #: ../../howto/perf_profiling.rst:154
 msgid ""
 "``perf`` profiling support can be enabled either from the start using the "
 "environment variable :envvar:`PYTHONPERFSUPPORT` or the :option:`-X perf <-"
-"X>` option, or dynamically using :func:`sys.activate_stack_trampoline` and :"
-"func:`sys.deactivate_stack_trampoline`."
+"X>` option, or dynamically using :func:`sys.activate_stack_trampoline` "
+"and :func:`sys.deactivate_stack_trampoline`."
 msgstr ""
+"``perf`` プロファイリングサポートは、環境変数 :envvar:`PYTHONPERFSUPPORT` ま"
+"たは :option:`-X perf <-X>` オプションで起動時から有効にできます。\n"
+":func:`sys.activate_stack_trampoline` "
+"と :func:`sys.deactivate_stack_trampoline` で動的に切り替えることもできます。"
 
 #: ../../howto/perf_profiling.rst:160
 msgid ""
 "The :mod:`!sys` functions take precedence over the :option:`!-X` option, "
 "the :option:`!-X` option takes precedence over the environment variable."
 msgstr ""
+":mod:`!sys` の関数は :option:`!-X` オプションより優先され、:option:`!-X` オプ"
+"ションは環境変数より優先されます。"
 
 #: ../../howto/perf_profiling.rst:163
 msgid "Example, using the environment variable::"
-msgstr ""
+msgstr "環境変数を使う例です。 ::"
 
 #: ../../howto/perf_profiling.rst:165
 msgid ""
@@ -266,7 +294,7 @@ msgstr ""
 
 #: ../../howto/perf_profiling.rst:168
 msgid "Example, using the :option:`!-X` option::"
-msgstr ""
+msgstr ":option:`!-X` オプションを使う例です。 ::"
 
 #: ../../howto/perf_profiling.rst:170
 msgid ""
@@ -276,7 +304,7 @@ msgstr ""
 
 #: ../../howto/perf_profiling.rst:173
 msgid "Example, using the :mod:`sys` APIs in file :file:`example.py`:"
-msgstr ""
+msgstr ":file:`example.py` で :mod:`sys` API を使う例です:"
 
 #: ../../howto/perf_profiling.rst:175
 msgid ""
@@ -288,10 +316,17 @@ msgid ""
 "\n"
 "non_profiled_stuff()"
 msgstr ""
+"import sys\n"
+"\n"
+"sys.activate_stack_trampoline(\"perf\")\n"
+"do_profiled_stuff()\n"
+"sys.deactivate_stack_trampoline()\n"
+"\n"
+"non_profiled_stuff()"
 
 #: ../../howto/perf_profiling.rst:185
 msgid "...then::"
-msgstr ""
+msgstr "続いて次を実行します。 ::"
 
 #: ../../howto/perf_profiling.rst:187
 msgid ""
@@ -301,7 +336,7 @@ msgstr ""
 
 #: ../../howto/perf_profiling.rst:192
 msgid "How to obtain the best results"
-msgstr ""
+msgstr "最良の結果を得る方法"
 
 #: ../../howto/perf_profiling.rst:194
 msgid ""
@@ -317,10 +352,11 @@ msgstr ""
 msgid ""
 "You can check if your system has been compiled with this flag by running::"
 msgstr ""
+"このフラグを使ってコンパイルされたかどうかは、次を実行して確認できます。 ::"
 
 #: ../../howto/perf_profiling.rst:203
 msgid "$ python -m sysconfig | grep 'no-omit-frame-pointer'"
-msgstr ""
+msgstr "$ python -m sysconfig | grep 'no-omit-frame-pointer'"
 
 #: ../../howto/perf_profiling.rst:205
 msgid ""
@@ -328,3 +364,6 @@ msgid ""
 "compiled with frame pointers and therefore it may not be able to show Python "
 "functions in the output of ``perf``."
 msgstr ""
+"何も表示されなければ、インタープリタはフレームポインタなしでコンパイルされて"
+"います。\n"
+"その場合、``perf`` の出力に Python 関数を表示できない可能性があります。"

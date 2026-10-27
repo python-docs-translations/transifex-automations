@@ -6,15 +6,16 @@
 # Translators:
 # Rafael Fontenelle <rffontenelle@gmail.com>, 2025
 # Cheesecake, 2025
+# Inada Naoki <songofacandy@gmail.com>, 2026
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-03 15:39+0000\n"
+"POT-Creation-Date: 2026-10-27 21:53+0000\n"
 "PO-Revision-Date: 2025-07-18 19:57+0000\n"
-"Last-Translator: Cheesecake, 2025\n"
+"Last-Translator: Inada Naoki <songofacandy@gmail.com>, 2026\n"
 "Language-Team: Japanese (https://app.transifex.com/python-doc/teams/5390/"
 "ja/)\n"
 "MIME-Version: 1.0\n"
@@ -90,23 +91,24 @@ msgstr ""
 #: ../../c-api/memory.rst:49
 msgid ""
 "To avoid memory corruption, extension writers should never try to operate on "
-"Python objects with the functions exported by the C library: :c:func:"
-"`malloc`, :c:func:`calloc`, :c:func:`realloc` and :c:func:`free`.  This will "
-"result in  mixed calls between the C allocator and the Python memory manager "
-"with fatal consequences, because they implement different algorithms and "
-"operate on different heaps.  However, one may safely allocate and release "
-"memory blocks with the C library allocator for individual purposes, as shown "
-"in the following example::"
+"Python objects with the functions exported by the C "
+"library: :c:func:`malloc`, :c:func:`calloc`, :c:func:`realloc` "
+"and :c:func:`free`.  This will result in  mixed calls between the C "
+"allocator and the Python memory manager with fatal consequences, because "
+"they implement different algorithms and operate on different heaps.  "
+"However, one may safely allocate and release memory blocks with the C "
+"library allocator for individual purposes, as shown in the following "
+"example::"
 msgstr ""
 "メモリ管理の崩壊を避けるため、拡張モジュールの作者は決して Python  オブジェク"
-"トを C ライブラリが公開している関数: :c:func:`malloc` 、 :c:func:"
-"`calloc` 、 :c:func:`realloc` および :c:func:`free` で操作しようとしてはなり"
-"ません。こうした関数を使うと、C のメモリ操作関数と Python メモリマネージャと"
-"の間で関数呼び出しが交錯します。 C のメモリ操作関数とPython メモリマネージャ"
-"は異なるアルゴリズムで実装されていて、異なるヒープを操作するため、呼び出しの"
-"交錯は致命的な結果を招きます。とはいえ、個別の目的のためなら、 C ライブラリの"
-"メモリ操作関数を使って安全にメモリを確保したり解放したりできます。例えば、以"
-"下がそのような例です::"
+"トを C ライブラリが公開している関"
+"数: :c:func:`malloc` 、 :c:func:`calloc` 、 :c:func:`realloc` およ"
+"び :c:func:`free` で操作しようとしてはなりません。こうした関数を使うと、C の"
+"メモリ操作関数と Python メモリマネージャとの間で関数呼び出しが交錯します。 C "
+"のメモリ操作関数とPython メモリマネージャは異なるアルゴリズムで実装されてい"
+"て、異なるヒープを操作するため、呼び出しの交錯は致命的な結果を招きます。とは"
+"いえ、個別の目的のためなら、 C ライブラリのメモリ操作関数を使って安全にメモリ"
+"を確保したり解放したりできます。例えば、以下がそのような例です::"
 
 #: ../../c-api/memory.rst:58
 msgid ""
@@ -120,6 +122,15 @@ msgid ""
 "free(buf); /* malloc'ed */\n"
 "return res;"
 msgstr ""
+"PyObject *res;\n"
+"char *buf = (char *) malloc(BUFSIZ); /* I/O 用 */\n"
+"\n"
+"if (buf == NULL)\n"
+"    return PyErr_NoMemory();\n"
+"...buf を使って何らかの I/O 操作を行う...\n"
+"res = PyBytes_FromString(buf);\n"
+"free(buf); /* malloc で割り当て済み */\n"
+"return res;"
 
 #: ../../c-api/memory.rst:68
 msgid ""
@@ -182,7 +193,7 @@ msgstr ""
 
 #: ../../c-api/memory.rst:96
 msgid "Allocator Domains"
-msgstr ""
+msgstr "アロケータドメイン"
 
 #: ../../c-api/memory.rst:100
 msgid ""
@@ -196,13 +207,13 @@ msgid ""
 "allocation functions belonging to a given domain for only the purposes "
 "hinted by that domain (although this is the recommended practice). For "
 "example, one could use the memory returned by :c:func:`PyMem_RawMalloc` for "
-"allocating Python objects or the memory returned by :c:func:"
-"`PyObject_Malloc` for allocating memory for buffers."
+"allocating Python objects or the memory returned "
+"by :c:func:`PyObject_Malloc` for allocating memory for buffers."
 msgstr ""
 
 #: ../../c-api/memory.rst:112
 msgid "The three allocation domains are:"
-msgstr ""
+msgstr "三つの割り当てドメインは次のとおりです。"
 
 #: ../../c-api/memory.rst:114
 msgid ""
@@ -254,6 +265,10 @@ msgid ""
 "and :c:func:`!free`; call ``malloc(1)`` (or ``calloc(1, 1)``) when "
 "requesting zero bytes."
 msgstr ""
+":ref:`デフォルトの生メモリアロケータ <default-memory-allocators>` "
+"は :c:func:`malloc`、:c:func:`calloc`、:c:func:`realloc`、:c:func:`!free` を"
+"使います。\n"
+"0 バイトの要求には ``malloc(1)`` または ``calloc(1, 1)`` を呼び出します。"
 
 #: ../../c-api/memory.rst:146 ../../c-api/memory.rst:217
 #: ../../c-api/memory.rst:325
@@ -315,13 +330,13 @@ msgstr ""
 
 #: ../../c-api/memory.rst:176
 msgid ""
-"Unless *p* is ``NULL``, it must have been returned by a previous call to :c:"
-"func:`PyMem_RawMalloc`, :c:func:`PyMem_RawRealloc` or :c:func:"
-"`PyMem_RawCalloc`."
+"Unless *p* is ``NULL``, it must have been returned by a previous call "
+"to :c:func:`PyMem_RawMalloc`, :c:func:`PyMem_RawRealloc` "
+"or :c:func:`PyMem_RawCalloc`."
 msgstr ""
-"*p* が ``NULL`` でない限り、*p* はそれより前の :c:func:`PyMem_RawMalloc`, :c:"
-"func:`PyMem_RawRealloc`, :c:func:`PyMem_RawCalloc` の呼び出しにより返されなけ"
-"ればなりません。"
+"*p* が ``NULL`` でない限り、*p* はそれより前"
+"の :c:func:`PyMem_RawMalloc`, :c:func:`PyMem_RawRealloc`, :c:func:`PyMem_RawCalloc` "
+"の呼び出しにより返されなければなりません。"
 
 #: ../../c-api/memory.rst:180
 msgid ""
@@ -334,14 +349,14 @@ msgstr ""
 #: ../../c-api/memory.rst:186
 msgid ""
 "Frees the memory block pointed to by *p*, which must have been returned by a "
-"previous call to :c:func:`PyMem_RawMalloc`, :c:func:`PyMem_RawRealloc` or :c:"
-"func:`PyMem_RawCalloc`.  Otherwise, or if ``PyMem_RawFree(p)`` has been "
-"called before, undefined behavior occurs."
+"previous call to :c:func:`PyMem_RawMalloc`, :c:func:`PyMem_RawRealloc` "
+"or :c:func:`PyMem_RawCalloc`.  Otherwise, or if ``PyMem_RawFree(p)`` has "
+"been called before, undefined behavior occurs."
 msgstr ""
-"*p* が指すメモリブロックを解放します。 *p* は以前呼び出した :c:func:"
-"`PyMem_RawMalloc`, :c:func:`PyMem_RawRealloc`,  :c:func:`PyMem_RawCalloc` の"
-"返した値でなければなりません。それ以外の場合や ``PyMem_RawFree(p)`` を呼び出"
-"した後だった場合、未定義の動作になります。"
+"*p* が指すメモリブロックを解放します。 *p* は以前呼び出し"
+"た :c:func:`PyMem_RawMalloc`, :c:func:`PyMem_RawRealloc`,  :c:func:`PyMem_RawCalloc` "
+"の返した値でなければなりません。それ以外の場合や ``PyMem_RawFree(p)`` を呼び"
+"出した後だった場合、未定義の動作になります。"
 
 #: ../../c-api/memory.rst:191 ../../c-api/memory.rst:261
 #: ../../c-api/memory.rst:369
@@ -364,8 +379,8 @@ msgstr ""
 
 #: ../../c-api/memory.rst:203
 msgid ""
-"The :ref:`default memory allocator <default-memory-allocators>` uses the :"
-"ref:`pymalloc memory allocator <pymalloc>`."
+"The :ref:`default memory allocator <default-memory-allocators>` uses "
+"the :ref:`pymalloc memory allocator <pymalloc>`."
 msgstr ""
 
 #: ../../c-api/memory.rst:208 ../../c-api/memory.rst:320
@@ -414,12 +429,12 @@ msgstr ""
 
 #: ../../c-api/memory.rst:247
 msgid ""
-"Unless *p* is ``NULL``, it must have been returned by a previous call to :c:"
-"func:`PyMem_Malloc`, :c:func:`PyMem_Realloc` or :c:func:`PyMem_Calloc`."
+"Unless *p* is ``NULL``, it must have been returned by a previous call "
+"to :c:func:`PyMem_Malloc`, :c:func:`PyMem_Realloc` or :c:func:`PyMem_Calloc`."
 msgstr ""
-"*p* が ``NULL`` でない限り、*p* はそれより前の :c:func:`PyMem_Malloc`, :c:"
-"func:`PyMem_Realloc` または :c:func:`PyMem_Calloc` の呼び出しにより返されなけ"
-"ればなりません。"
+"*p* が ``NULL`` でない限り、*p* はそれより前"
+"の :c:func:`PyMem_Malloc`, :c:func:`PyMem_Realloc` また"
+"は :c:func:`PyMem_Calloc` の呼び出しにより返されなければなりません。"
 
 #: ../../c-api/memory.rst:250
 msgid ""
@@ -432,14 +447,14 @@ msgstr ""
 #: ../../c-api/memory.rst:256
 msgid ""
 "Frees the memory block pointed to by *p*, which must have been returned by a "
-"previous call to :c:func:`PyMem_Malloc`, :c:func:`PyMem_Realloc` or :c:func:"
-"`PyMem_Calloc`.  Otherwise, or if ``PyMem_Free(p)`` has been called before, "
-"undefined behavior occurs."
+"previous call to :c:func:`PyMem_Malloc`, :c:func:`PyMem_Realloc` "
+"or :c:func:`PyMem_Calloc`.  Otherwise, or if ``PyMem_Free(p)`` has been "
+"called before, undefined behavior occurs."
 msgstr ""
-"*p* が指すメモリブロックを解放します。 *p* は以前呼び出した :c:func:"
-"`PyMem_Malloc`、 :c:func:`PyMem_Realloc`、または :c:func:`PyMem_Calloc` の返"
-"した値でなければなりません。それ以外の場合や ``PyMem_Free(p)`` を呼び出した後"
-"だった場合、未定義の動作になります。"
+"*p* が指すメモリブロックを解放します。 *p* は以前呼び出し"
+"た :c:func:`PyMem_Malloc`、 :c:func:`PyMem_Realloc`、また"
+"は :c:func:`PyMem_Calloc` の返した値でなければなりません。それ以外の場合や "
+"``PyMem_Free(p)`` を呼び出した後だった場合、未定義の動作になります。"
 
 #: ../../c-api/memory.rst:263
 msgid ""
@@ -455,6 +470,9 @@ msgid ""
 "of memory.  Returns a pointer cast to ``TYPE*``.  The memory will not have "
 "been initialized in any way."
 msgstr ""
+":c:func:`PyMem_Malloc` と同じですが、``(n * sizeof(TYPE))`` バイトのメモリを"
+"割り当て、``TYPE*`` にキャストしたポインタを返します。\n"
+"メモリはいかなる方法でも初期化されません。"
 
 #: ../../c-api/memory.rst:276
 msgid ""
@@ -463,6 +481,11 @@ msgid ""
 "will be a pointer to the new memory area, or ``NULL`` in the event of "
 "failure."
 msgstr ""
+":c:func:`PyMem_Realloc` と同じですが、メモリブロックを ``(n * "
+"sizeof(TYPE))`` バイトにリサイズし、``TYPE*`` にキャストしたポインタを返しま"
+"す。\n"
+"戻ったときの ``p`` は、新しいメモリ領域へのポインタ、または失敗した場合は "
+"``NULL`` です。"
 
 #: ../../c-api/memory.rst:281
 msgid ""
@@ -523,11 +546,14 @@ msgid ""
 "functions in this domain by the methods described in the :ref:`Customize "
 "Memory Allocators <customize-memory-allocators>` section."
 msgstr ""
+":ref:`メモリアロケータのカスタマイズ <customize-memory-allocators>` で説明す"
+"る方法でこのドメインの割り当て関数を差し替えて処理を挟む場合、返されるメモリ"
+"を Python オブジェクトへ安全にキャストできる保証はありません。"
 
 #: ../../c-api/memory.rst:315
 msgid ""
-"The :ref:`default object allocator <default-memory-allocators>` uses the :"
-"ref:`pymalloc memory allocator <pymalloc>`."
+"The :ref:`default object allocator <default-memory-allocators>` uses "
+"the :ref:`pymalloc memory allocator <pymalloc>`."
 msgstr ""
 
 #: ../../c-api/memory.rst:328
@@ -561,13 +587,13 @@ msgstr ""
 
 #: ../../c-api/memory.rst:355
 msgid ""
-"Unless *p* is ``NULL``, it must have been returned by a previous call to :c:"
-"func:`PyObject_Malloc`, :c:func:`PyObject_Realloc` or :c:func:"
-"`PyObject_Calloc`."
+"Unless *p* is ``NULL``, it must have been returned by a previous call "
+"to :c:func:`PyObject_Malloc`, :c:func:`PyObject_Realloc` "
+"or :c:func:`PyObject_Calloc`."
 msgstr ""
-"*p* が ``NULL`` でない限り、*p* はそれより前の :c:func:`PyObject_Malloc`, :c:"
-"func:`PyObject_Realloc` または :c:func:`PyObject_Calloc` の呼び出しにより返さ"
-"れなければなりません。"
+"*p* が ``NULL`` でない限り、*p* はそれより前"
+"の :c:func:`PyObject_Malloc`, :c:func:`PyObject_Realloc` また"
+"は :c:func:`PyObject_Calloc` の呼び出しにより返されなければなりません。"
 
 #: ../../c-api/memory.rst:358
 msgid ""
@@ -580,22 +606,22 @@ msgstr ""
 #: ../../c-api/memory.rst:364
 msgid ""
 "Frees the memory block pointed to by *p*, which must have been returned by a "
-"previous call to :c:func:`PyObject_Malloc`, :c:func:`PyObject_Realloc` or :c:"
-"func:`PyObject_Calloc`.  Otherwise, or if ``PyObject_Free(p)`` has been "
-"called before, undefined behavior occurs."
+"previous call to :c:func:`PyObject_Malloc`, :c:func:`PyObject_Realloc` "
+"or :c:func:`PyObject_Calloc`.  Otherwise, or if ``PyObject_Free(p)`` has "
+"been called before, undefined behavior occurs."
 msgstr ""
-"*p* が指すメモリブロックを解放します。 *p* は以前呼び出した :c:func:"
-"`PyObject_Malloc`、 :c:func:`PyObject_Realloc`、または :c:func:"
-"`PyObject_Calloc` の返した値でなければなりません。それ以外の場合や "
-"``PyObject_Free(p)`` を呼び出した後だった場合、未定義の動作になります。"
+"*p* が指すメモリブロックを解放します。 *p* は以前呼び出し"
+"た :c:func:`PyObject_Malloc`、 :c:func:`PyObject_Realloc`、また"
+"は :c:func:`PyObject_Calloc` の返した値でなければなりません。それ以外の場合"
+"や ``PyObject_Free(p)`` を呼び出した後だった場合、未定義の動作になります。"
 
 #: ../../c-api/memory.rst:375
 msgid "Default Memory Allocators"
-msgstr ""
+msgstr "デフォルトのメモリアロケータ"
 
 #: ../../c-api/memory.rst:377
 msgid "Default memory allocators:"
-msgstr ""
+msgstr "デフォルトのメモリアロケータは次のとおりです。"
 
 #: ../../c-api/memory.rst:380
 msgid "Configuration"
@@ -671,27 +697,34 @@ msgstr "説明:"
 
 #: ../../c-api/memory.rst:390
 msgid "Name: value for :envvar:`PYTHONMALLOC` environment variable."
-msgstr ""
+msgstr "名前: 環境変数 :envvar:`PYTHONMALLOC` に指定する値。"
 
 #: ../../c-api/memory.rst:391
 msgid ""
-"``malloc``: system allocators from the standard C library, C functions: :c:"
-"func:`malloc`, :c:func:`calloc`, :c:func:`realloc` and :c:func:`free`."
+"``malloc``: system allocators from the standard C library, C "
+"functions: :c:func:`malloc`, :c:func:`calloc`, :c:func:`realloc` "
+"and :c:func:`free`."
 msgstr ""
+"``malloc``: 標準 C ライブラリのシステムアロケータ。\n"
+"C 関数 :c:func:`malloc`、:c:func:`calloc`、:c:func:`realloc`、:c:func:`free` "
+"です。"
 
 #: ../../c-api/memory.rst:393
 msgid "``pymalloc``: :ref:`pymalloc memory allocator <pymalloc>`."
-msgstr ""
+msgstr "``pymalloc``: :ref:`pymalloc メモリアロケータ <pymalloc>`。"
 
 #: ../../c-api/memory.rst:394
 msgid ""
 "\"+ debug\": with :ref:`debug hooks on the Python memory allocators <pymem-"
 "debug-hooks>`."
 msgstr ""
+"\"+ debug\": :ref:`Python メモリアロケータのデバッグフック <pymem-debug-"
+"hooks>` 付き。"
 
 #: ../../c-api/memory.rst:396
 msgid "\"Debug build\": :ref:`Python build in debug mode <debug-build>`."
 msgstr ""
+"「デバッグビルド」: :ref:`デバッグモードでの Python ビルド <debug-build>`。"
 
 #: ../../c-api/memory.rst:401
 msgid "Customize Memory Allocators"
@@ -702,6 +735,8 @@ msgid ""
 "Structure used to describe a memory block allocator. The structure has the "
 "following fields:"
 msgstr ""
+"メモリブロックのアロケータを記述する構造体です。\n"
+"以下のフィールドを持ちます。"
 
 #: ../../c-api/memory.rst:411 ../../c-api/memory.rst:658
 msgid "Field"
@@ -753,9 +788,11 @@ msgstr "メモリブロックを解放する"
 
 #: ../../c-api/memory.rst:425
 msgid ""
-"The :c:type:`!PyMemAllocator` structure was renamed to :c:type:"
-"`PyMemAllocatorEx` and a new ``calloc`` field was added."
+"The :c:type:`!PyMemAllocator` structure was renamed "
+"to :c:type:`PyMemAllocatorEx` and a new ``calloc`` field was added."
 msgstr ""
+":c:type:`!PyMemAllocator` 構造体を :c:type:`PyMemAllocatorEx` に改名し、新し"
+"い ``calloc`` フィールドを追加しました。"
 
 #: ../../c-api/memory.rst:432
 msgid "Enum used to identify an allocator domain. Domains:"
@@ -850,71 +887,87 @@ msgid ""
 "the :c:func:`PyMem_SetupDebugHooks` function must be called to reinstall the "
 "debug hooks on top on the new allocator."
 msgstr ""
-"新しいアロケータがフックでない (1つ前のアロケータを呼び出さない) 場合、 :c:"
-"func:`PyMem_SetupDebugHooks` 関数を呼び出して、新しいアロケータの上にデバッグ"
-"フックを再度設置しなければなりません。"
+"新しいアロケータがフックでない (1つ前のアロケータを呼び出さない) 場"
+"合、 :c:func:`PyMem_SetupDebugHooks` 関数を呼び出して、新しいアロケータの上に"
+"デバッグフックを再度設置しなければなりません。"
 
 #: ../../c-api/memory.rst:487
 msgid ""
 "See also :c:member:`PyPreConfig.allocator` and :ref:`Preinitialize Python "
 "with PyPreConfig <c-preinit>`."
 msgstr ""
+":c:member:`PyPreConfig.allocator` と :ref:`PyPreConfig による Python の事前初"
+"期化 <c-preinit>` も参照してください。"
 
 #: ../../c-api/memory.rst:492
 msgid ":c:func:`PyMem_SetAllocator` does have the following contract:"
-msgstr ""
+msgstr ":c:func:`PyMem_SetAllocator` には次の規約があります。"
 
 #: ../../c-api/memory.rst:494
 msgid ""
-"It can be called after :c:func:`Py_PreInitialize` and before :c:func:"
-"`Py_InitializeFromConfig` to install a custom memory allocator. There are no "
-"restrictions over the installed allocator other than the ones imposed by the "
-"domain (for instance, the Raw Domain allows the allocator to be called "
-"without the GIL held). See :ref:`the section on allocator domains <allocator-"
-"domains>` for more information."
+"It can be called after :c:func:`Py_PreInitialize` and "
+"before :c:func:`Py_InitializeFromConfig` to install a custom memory "
+"allocator. There are no restrictions over the installed allocator other than "
+"the ones imposed by the domain (for instance, the Raw Domain allows the "
+"allocator to be called without the GIL held). See :ref:`the section on "
+"allocator domains <allocator-domains>` for more information."
 msgstr ""
 
 #: ../../c-api/memory.rst:502
 msgid ""
-"If called after Python has finish initializing (after :c:func:"
-"`Py_InitializeFromConfig` has been called) the allocator **must** wrap the "
-"existing allocator. Substituting the current allocator for some other "
-"arbitrary one is **not supported**."
+"If called after Python has finish initializing "
+"(after :c:func:`Py_InitializeFromConfig` has been called) the allocator "
+"**must** wrap the existing allocator. Substituting the current allocator for "
+"some other arbitrary one is **not supported**."
 msgstr ""
+"Python の初期化完了後 (:c:func:`Py_InitializeFromConfig` の呼び出し後) に呼び"
+"出す場合、アロケータは既存のアロケータを **必ず** ラップしなければなりませ"
+"ん。\n"
+"現在のアロケータを別の任意のアロケータで置き換えることは **サポートされていま"
+"せん**。"
 
 #: ../../c-api/memory.rst:507
 msgid "All allocators must be thread-safe."
-msgstr ""
+msgstr "すべてのアロケータがスレッドセーフである必要があります。"
 
 #: ../../c-api/memory.rst:513
 msgid ""
 "Setup :ref:`debug hooks in the Python memory allocators <pymem-debug-hooks>` "
 "to detect memory errors."
 msgstr ""
+"メモリエラーを検出するために :ref:`Python メモリアロケータのデバッグフック "
+"<pymem-debug-hooks>` を設定します。"
 
 #: ../../c-api/memory.rst:520
 msgid "Debug hooks on the Python memory allocators"
-msgstr ""
+msgstr "Python メモリアロケータのデバッグフック"
 
 #: ../../c-api/memory.rst:522
 msgid ""
-"When :ref:`Python is built in debug mode <debug-build>`, the :c:func:"
-"`PyMem_SetupDebugHooks` function is called at the :ref:`Python "
+"When :ref:`Python is built in debug mode <debug-build>`, "
+"the :c:func:`PyMem_SetupDebugHooks` function is called at the :ref:`Python "
 "preinitialization <c-preinit>` to setup debug hooks on Python memory "
 "allocators to detect memory errors."
 msgstr ""
+":ref:`デバッグモードで Python をビルドした <debug-build>` 場合、:ref:`Python "
+"の事前初期化 <c-preinit>` で :c:func:`PyMem_SetupDebugHooks` を呼び出し、メモ"
+"リエラーを検出するデバッグフックをメモリアロケータに設定します。"
 
 #: ../../c-api/memory.rst:527
 msgid ""
 "The :envvar:`PYTHONMALLOC` environment variable can be used to install debug "
 "hooks on a Python compiled in release mode (ex: ``PYTHONMALLOC=debug``)."
 msgstr ""
+"リリースモードでコンパイルした Python でも、環境変数 :envvar:`PYTHONMALLOC` "
+"でデバッグフックを設定できます (例: ``PYTHONMALLOC=debug``)。"
 
 #: ../../c-api/memory.rst:530
 msgid ""
 "The :c:func:`PyMem_SetupDebugHooks` function can be used to set debug hooks "
 "after calling :c:func:`PyMem_SetAllocator`."
 msgstr ""
+":c:func:`PyMem_SetAllocator` を呼び出した後"
+"で、:c:func:`PyMem_SetupDebugHooks` によってデバッグフックを設定できます。"
 
 #: ../../c-api/memory.rst:533
 msgid ""
@@ -925,6 +978,14 @@ msgid ""
 "bytes\" filled with the byte ``0xFD`` (``PYMEM_FORBIDDENBYTE``). Strings of "
 "these bytes are unlikely to be valid addresses, floats, or ASCII strings."
 msgstr ""
+"これらのデバッグフックは、動的に割り当てられたメモリブロックを識別しやすい特"
+"別なビットパターンで埋めます。\n"
+"新しく割り当てたメモリはバイト ``0xCD`` (``PYMEM_CLEANBYTE``)、解放したメモリ"
+"はバイト ``0xDD`` (``PYMEM_DEADBYTE``) で埋めます。\n"
+"メモリブロックの前後には、バイト ``0xFD`` (``PYMEM_FORBIDDENBYTE``) で埋めた"
+"「禁止バイト」を置きます。\n"
+"これらのバイトの並びは、有効なアドレス、浮動小数点数、ASCII 文字列にはなりに"
+"くいものです。"
 
 #: ../../c-api/memory.rst:540
 msgid "Runtime checks:"
@@ -935,14 +996,19 @@ msgid ""
 "Detect API violations. For example, detect if :c:func:`PyObject_Free` is "
 "called on a memory block allocated by :c:func:`PyMem_Malloc`."
 msgstr ""
+"API の誤用を検出します。\n"
+"例えば、:c:func:`PyMem_Malloc` で割り当てたメモリブロック"
+"に :c:func:`PyObject_Free` を呼び出した場合を検出します。"
 
 #: ../../c-api/memory.rst:544
 msgid "Detect write before the start of the buffer (buffer underflow)."
 msgstr ""
+"バッファの先頭より前への書き込み (バッファアンダーフロー) を検出します。"
 
 #: ../../c-api/memory.rst:545
 msgid "Detect write after the end of the buffer (buffer overflow)."
 msgstr ""
+"バッファの末尾より後への書き込み (バッファオーバーフロー) を検出します。"
 
 #: ../../c-api/memory.rst:546
 msgid ""
@@ -959,6 +1025,10 @@ msgid ""
 "displayed if :mod:`tracemalloc` is tracing Python memory allocations and the "
 "memory block was traced."
 msgstr ""
+"エラーの場合、デバッグフックは :mod:`tracemalloc` を使って、メモリブロックを"
+"割り当てた箇所のトレースバックを取得します。\n"
+"表示されるのは、:mod:`tracemalloc` が Python のメモリ割り当てを追跡しており、"
+"そのブロックが追跡対象だった場合だけです。"
 
 #: ../../c-api/memory.rst:556
 msgid ""
@@ -979,6 +1049,8 @@ msgid ""
 "Number of bytes originally asked for.  This is a size_t, big-endian (easier "
 "to read in a memory dump)."
 msgstr ""
+"元の要求バイト数です。\n"
+"メモリダンプで読みやすいように、ビッグエンディアンの size_t で格納します。"
 
 #: ../../c-api/memory.rst:565
 msgid "``p[-S]``"
@@ -986,19 +1058,19 @@ msgstr "``p[-S]``"
 
 #: ../../c-api/memory.rst:566
 msgid "API identifier (ASCII character):"
-msgstr ""
+msgstr "API 識別子 (ASCII 文字)。"
 
 #: ../../c-api/memory.rst:568
 msgid "``'r'`` for :c:macro:`PYMEM_DOMAIN_RAW`."
-msgstr ""
+msgstr ":c:macro:`PYMEM_DOMAIN_RAW` は ``'r'``。"
 
 #: ../../c-api/memory.rst:569
 msgid "``'m'`` for :c:macro:`PYMEM_DOMAIN_MEM`."
-msgstr ""
+msgstr ":c:macro:`PYMEM_DOMAIN_MEM` は ``'m'``。"
 
 #: ../../c-api/memory.rst:570
 msgid "``'o'`` for :c:macro:`PYMEM_DOMAIN_OBJ`."
-msgstr ""
+msgstr ":c:macro:`PYMEM_DOMAIN_OBJ` は ``'o'``。"
 
 #: ../../c-api/memory.rst:572
 msgid "``p[-S+1:0]``"
@@ -1007,6 +1079,8 @@ msgstr "``p[-S+1:0]``"
 #: ../../c-api/memory.rst:573
 msgid "Copies of PYMEM_FORBIDDENBYTE.  Used to catch under- writes and reads."
 msgstr ""
+"PYMEM_FORBIDDENBYTE の繰り返しです。\n"
+"領域の手前への書き込みや読み取りを検出するために使います。"
 
 #: ../../c-api/memory.rst:575
 msgid "``p[0:N]``"
@@ -1022,6 +1096,14 @@ msgid ""
 "like function is called requesting a smaller memory block, the excess old "
 "bytes are also filled with PYMEM_DEADBYTE."
 msgstr ""
+"要求されたメモリ領域は、未初期化メモリへのアクセスを検出するために "
+"PYMEM_CLEANBYTE で埋めます。\n"
+"realloc 系の関数で領域を拡大した場合、追加部分も PYMEM_CLEANBYTE で埋めま"
+"す。\n"
+"free 系の関数を呼び出すと、解放済みメモリへのアクセスを検出するために "
+"PYMEM_DEADBYTE で上書きします。\n"
+"realloc 系の関数で領域を縮小した場合も、不要になった元の領域を "
+"PYMEM_DEADBYTE で埋めます。"
 
 #: ../../c-api/memory.rst:584
 msgid "``p[N:N+S]``"
@@ -1030,6 +1112,8 @@ msgstr "``p[N:N+S]``"
 #: ../../c-api/memory.rst:585
 msgid "Copies of PYMEM_FORBIDDENBYTE.  Used to catch over- writes and reads."
 msgstr ""
+"PYMEM_FORBIDDENBYTE の繰り返しです。\n"
+"領域の後ろへの書き込みや読み取りを検出するために使います。"
 
 #: ../../c-api/memory.rst:587
 msgid "``p[N+S:N+2*S]``"
@@ -1040,6 +1124,8 @@ msgid ""
 "Only used if the ``PYMEM_DEBUG_SERIALNO`` macro is defined (not defined by "
 "default)."
 msgstr ""
+"``PYMEM_DEBUG_SERIALNO`` マクロが定義されている場合だけ使います (デフォルトで"
+"は未定義)。"
 
 #: ../../c-api/memory.rst:591
 msgid ""
@@ -1050,6 +1136,12 @@ msgid ""
 "static function bumpserialno() in obmalloc.c is the only place the serial "
 "number is incremented, and exists so you can set such a breakpoint easily."
 msgstr ""
+"malloc 系または realloc 系の関数の呼び出しごとに 1 増える通し番号です。\n"
+"ビッグエンディアンの :c:type:`size_t` で格納します。\n"
+"後で「不正なメモリ」を検出した場合、この番号を使って次回の実行でブレークポイ"
+"ントを設定すると、そのブロックを渡した瞬間を捉えられます。\n"
+"obmalloc.c の静的関数 bumpserialno() だけがこの番号を増やし、そのようなブレー"
+"クポイントを簡単に設定できるようになっています。"
 
 #: ../../c-api/memory.rst:598
 msgid ""
@@ -1063,14 +1155,24 @@ msgid ""
 "memory is getting used) or PYMEM_CLEANBYTE (meaning uninitialized memory is "
 "getting used)."
 msgstr ""
+"realloc 系や free 系の関数は、まず領域の前後の PYMEM_FORBIDDENBYTE が変わって"
+"いないことを確認します。\n"
+"変更されていれば stderr に診断情報を出力し、Py_FatalError() でプログラムを中"
+"止します。\n"
+"もう一つの主な失敗の形は、プログラムが特別なビットパターンを読み取り、アドレ"
+"スとして使おうとしてメモリエラーになることです。\n"
+"その時点でデバッガからオブジェクトを調べると、全体が PYMEM_DEADBYTE (解放済み"
+"メモリを使用) または PYMEM_CLEANBYTE (未初期化メモリを使用) で埋まっている可"
+"能性が高いです。"
 
 #: ../../c-api/memory.rst:607
 msgid ""
 "The :c:func:`PyMem_SetupDebugHooks` function now also works on Python "
-"compiled in release mode.  On error, the debug hooks now use :mod:"
-"`tracemalloc` to get the traceback where a memory block was allocated. The "
-"debug hooks now also check if the GIL is held when functions of :c:macro:"
-"`PYMEM_DOMAIN_OBJ` and :c:macro:`PYMEM_DOMAIN_MEM` domains are called."
+"compiled in release mode.  On error, the debug hooks now "
+"use :mod:`tracemalloc` to get the traceback where a memory block was "
+"allocated. The debug hooks now also check if the GIL is held when functions "
+"of :c:macro:`PYMEM_DOMAIN_OBJ` and :c:macro:`PYMEM_DOMAIN_MEM` domains are "
+"called."
 msgstr ""
 
 #: ../../c-api/memory.rst:615
@@ -1080,6 +1182,10 @@ msgid ""
 "``0xDD`` and ``0xFD`` to use the same values than Windows CRT debug "
 "``malloc()`` and ``free()``."
 msgstr ""
+"Windows CRT のデバッグ版 ``malloc()`` と ``free()`` と同じ値を使うため、バイ"
+"トパターン ``0xCB`` (``PYMEM_CLEANBYTE``)、``0xDB`` (``PYMEM_DEADBYTE``)、"
+"``0xFB`` (``PYMEM_FORBIDDENBYTE``) を、それぞれ ``0xCD``、``0xDD``、``0xFD`` "
+"に変更しました。"
 
 #: ../../c-api/memory.rst:625
 msgid "The pymalloc allocator"
@@ -1090,15 +1196,15 @@ msgid ""
 "Python has a *pymalloc* allocator optimized for small objects (smaller or "
 "equal to 512 bytes) with a short lifetime. It uses memory mappings called "
 "\"arenas\" with a fixed size of either 256 KiB on 32-bit platforms or 1 MiB "
-"on 64-bit platforms. It falls back to :c:func:`PyMem_RawMalloc` and :c:func:"
-"`PyMem_RawRealloc` for allocations larger than 512 bytes."
+"on 64-bit platforms. It falls back to :c:func:`PyMem_RawMalloc` "
+"and :c:func:`PyMem_RawRealloc` for allocations larger than 512 bytes."
 msgstr ""
 
 #: ../../c-api/memory.rst:633
 msgid ""
 "*pymalloc* is the :ref:`default allocator <default-memory-allocators>` of "
-"the :c:macro:`PYMEM_DOMAIN_MEM` (ex: :c:func:`PyMem_Malloc`) and :c:macro:"
-"`PYMEM_DOMAIN_OBJ` (ex: :c:func:`PyObject_Malloc`) domains."
+"the :c:macro:`PYMEM_DOMAIN_MEM` (ex: :c:func:`PyMem_Malloc`) "
+"and :c:macro:`PYMEM_DOMAIN_OBJ` (ex: :c:func:`PyObject_Malloc`) domains."
 msgstr ""
 
 #: ../../c-api/memory.rst:637
@@ -1107,11 +1213,11 @@ msgstr "アリーナアロケータは、次の関数を使います:"
 
 #: ../../c-api/memory.rst:639
 msgid ":c:func:`!VirtualAlloc` and :c:func:`!VirtualFree` on Windows,"
-msgstr ""
+msgstr "Windows では :c:func:`!VirtualAlloc` と :c:func:`!VirtualFree`。"
 
 #: ../../c-api/memory.rst:640
 msgid ":c:func:`!mmap` and :c:func:`!munmap` if available,"
-msgstr ""
+msgstr "利用可能なら :c:func:`!mmap` と :c:func:`!munmap`。"
 
 #: ../../c-api/memory.rst:641
 msgid ":c:func:`malloc` and :c:func:`free` otherwise."
@@ -1120,9 +1226,14 @@ msgstr "それ以外の場合は :c:func:`malloc` と :c:func:`free`。"
 #: ../../c-api/memory.rst:643
 msgid ""
 "This allocator is disabled if Python is configured with the :option:`--"
-"without-pymalloc` option. It can also be disabled at runtime using the :"
-"envvar:`PYTHONMALLOC` environment variable (ex: ``PYTHONMALLOC=malloc``)."
+"without-pymalloc` option. It can also be disabled at runtime using "
+"the :envvar:`PYTHONMALLOC` environment variable (ex: "
+"``PYTHONMALLOC=malloc``)."
 msgstr ""
+":option:`--without-pymalloc` オプションで Python を構成した場合、このアロケー"
+"タは無効になります。\n"
+"環境変数 :envvar:`PYTHONMALLOC` で実行時に無効にすることもできます (例: "
+"``PYTHONMALLOC=malloc``)。"
 
 #: ../../c-api/memory.rst:648
 msgid "Customize pymalloc Arena Allocator"
@@ -1145,7 +1256,7 @@ msgstr "size バイトのアリーナを割り当てます"
 
 #: ../../c-api/memory.rst:664
 msgid "``void free(void *ctx, void *ptr, size_t size)``"
-msgstr ""
+msgstr "``void free(void *ctx, void *ptr, size_t size)``"
 
 #: ../../c-api/memory.rst:664
 msgid "free an arena"
@@ -1166,26 +1277,34 @@ msgstr "tracemalloc C API"
 #: ../../c-api/memory.rst:683
 msgid "Track an allocated memory block in the :mod:`tracemalloc` module."
 msgstr ""
+"割り当てられたメモリブロックを :mod:`tracemalloc` モジュールで追跡します。"
 
 #: ../../c-api/memory.rst:685
 msgid ""
 "Return ``0`` on success, return ``-1`` on error (failed to allocate memory "
 "to store the trace). Return ``-2`` if tracemalloc is disabled."
 msgstr ""
+"成功した場合は ``0`` を返し、エラーの場合 (トレースを格納するメモリを割り当て"
+"られなかった場合) は ``-1`` を返します。\n"
+"tracemalloc が無効なら ``-2`` を返します。"
 
 #: ../../c-api/memory.rst:688
 msgid "If memory block is already tracked, update the existing trace."
 msgstr ""
+"そのメモリブロックがすでに追跡されていれば、既存のトレースを更新します。"
 
 #: ../../c-api/memory.rst:692
 msgid ""
 "Untrack an allocated memory block in the :mod:`tracemalloc` module. Do "
 "nothing if the block was not tracked."
 msgstr ""
+"割り当てられたメモリブロックを :mod:`tracemalloc` モジュールの追跡対象から外"
+"します。\n"
+"追跡されていなければ何もしません。"
 
 #: ../../c-api/memory.rst:695
 msgid "Return ``-2`` if tracemalloc is disabled, otherwise return ``0``."
-msgstr ""
+msgstr "tracemalloc が無効なら ``-2``、それ以外の場合は ``0`` を返します。"
 
 #: ../../c-api/memory.rst:701
 msgid "Examples"
@@ -1212,6 +1331,15 @@ msgid ""
 "PyMem_Free(buf); /* allocated with PyMem_Malloc */\n"
 "return res;"
 msgstr ""
+"PyObject *res;\n"
+"char *buf = (char *) PyMem_Malloc(BUFSIZ); /* I/O 用 */\n"
+"\n"
+"if (buf == NULL)\n"
+"    return PyErr_NoMemory();\n"
+"/* ...buf を使って何らかの I/O 操作を行う... */\n"
+"res = PyBytes_FromString(buf);\n"
+"PyMem_Free(buf); /* PyMem_Malloc で割り当て済み */\n"
+"return res;"
 
 #: ../../c-api/memory.rst:716
 msgid "The same code using the type-oriented function set::"
@@ -1260,8 +1388,9 @@ msgstr ""
 #: ../../c-api/memory.rst:743
 msgid ""
 "In addition to the functions aimed at handling raw memory blocks from the "
-"Python heap, objects in Python are allocated and released with :c:macro:"
-"`PyObject_New`, :c:macro:`PyObject_NewVar` and :c:func:`PyObject_Del`."
+"Python heap, objects in Python are allocated and released "
+"with :c:macro:`PyObject_New`, :c:macro:`PyObject_NewVar` "
+"and :c:func:`PyObject_Del`."
 msgstr ""
 
 #: ../../c-api/memory.rst:747
@@ -1274,16 +1403,16 @@ msgstr ""
 
 #: ../../c-api/memory.rst:43
 msgid "malloc (C function)"
-msgstr ""
+msgstr "malloc (C 関数)"
 
 #: ../../c-api/memory.rst:43
 msgid "calloc (C function)"
-msgstr ""
+msgstr "calloc (C 関数)"
 
 #: ../../c-api/memory.rst:43
 msgid "realloc (C function)"
-msgstr ""
+msgstr "realloc (C 関数)"
 
 #: ../../c-api/memory.rst:43
 msgid "free (C function)"
-msgstr ""
+msgstr "free (C 関数)"
