@@ -5,15 +5,16 @@
 #
 # Translators:
 # python-doc bot, 2025
+# Inada Naoki <songofacandy@gmail.com>, 2026
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-05 16:37+0000\n"
+"POT-Creation-Date: 2026-10-29 22:26+0000\n"
 "PO-Revision-Date: 2025-09-22 16:49+0000\n"
-"Last-Translator: python-doc bot, 2025\n"
+"Last-Translator: Inada Naoki <songofacandy@gmail.com>, 2026\n"
 "Language-Team: Japanese (https://app.transifex.com/python-doc/teams/5390/"
 "ja/)\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +25,7 @@ msgstr ""
 
 #: ../../howto/gdb_helpers.rst:5
 msgid "Debugging C API extensions and CPython Internals with GDB"
-msgstr ""
+msgstr "GDB による C API 拡張と CPython 内部のデバッグ"
 
 #: ../../howto/gdb_helpers.rst:9
 msgid ""
@@ -32,6 +33,9 @@ msgid ""
 "be used with the GDB debugger to debug CPython extensions and the CPython "
 "interpreter itself."
 msgstr ""
+"このドキュメントでは、Python の GDB 拡張 ``python-gdb.py`` を GDB デバッガと"
+"組み合わせて、CPython 拡張や CPython インタープリタ自体をデバッグする方法を説"
+"明します。"
 
 #: ../../howto/gdb_helpers.rst:13
 msgid ""
@@ -40,6 +44,10 @@ msgid ""
 "default, GDB (or any of its front-ends) doesn't support high-level "
 "information specific to the CPython interpreter."
 msgstr ""
+"クラッシュやデッドロックなどの低レベルの問題を調べて修正するには、GDB などの"
+"低レベルのデバッガが役立ちます。\n"
+"デフォルトでは GDB (およびそのフロントエンド) は CPython インタープリタ固有の"
+"高レベルの情報に対応していません。"
 
 #: ../../howto/gdb_helpers.rst:18
 msgid ""
@@ -48,6 +56,10 @@ msgid ""
 "functions. Given a Python object represented by a :c:expr:`PyObject *` "
 "pointer, the extension surfaces the type and value of the object."
 msgstr ""
+"``python-gdb.py`` 拡張は CPython インタープリタの情報を GDB に追加します。\n"
+"実行中の Python 関数のスタックを調べるのに役立ちます。\n"
+":c:expr:`PyObject *` ポインタで表された Python オブジェクトについて、型と値を"
+"表示できます。"
 
 #: ../../howto/gdb_helpers.rst:23
 msgid ""
@@ -55,22 +67,28 @@ msgid ""
 "CPython that are written in C can use this document to learn how to use the "
 "``python-gdb.py`` extension with GDB."
 msgstr ""
+"このドキュメントは、CPython 拡張の開発者や CPython の C で書かれた部分を扱う"
+"開発者が、GDB で ``python-gdb.py`` 拡張を使う方法を学ぶためのものです。"
 
 #: ../../howto/gdb_helpers.rst:29
 msgid ""
 "This document assumes that you are familiar with the basics of GDB and the "
-"CPython C API. It consolidates guidance from the `devguide <https://devguide."
-"python.org>`_  and the `Python wiki <https://wiki.python.org/moin/"
+"CPython C API. It consolidates guidance from the `devguide <https://"
+"devguide.python.org>`_  and the `Python wiki <https://wiki.python.org/moin/"
 "DebuggingWithGdb>`_."
 msgstr ""
+"このドキュメントは GDB と CPython C API の基礎を理解していることを前提として"
+"います。\n"
+"`開発者ガイド <https://devguide.python.org>`_ と `Python wiki <https://"
+"wiki.python.org/moin/DebuggingWithGdb>`_ の説明をまとめたものです。"
 
 #: ../../howto/gdb_helpers.rst:36
 msgid "Prerequisites"
-msgstr ""
+msgstr "前提条件"
 
 #: ../../howto/gdb_helpers.rst:38
 msgid "You need to have:"
-msgstr ""
+msgstr "次のものが必要です:"
 
 #: ../../howto/gdb_helpers.rst:40
 msgid ""
@@ -82,11 +100,11 @@ msgstr ""
 msgid ""
 "GDB-compatible debugging information for Python and any extension you are "
 "debugging."
-msgstr ""
+msgstr "Python およびデバッグ対象の拡張の、GDB に対応したデバッグ情報。"
 
 #: ../../howto/gdb_helpers.rst:44
 msgid "The ``python-gdb.py`` extension."
-msgstr ""
+msgstr "``python-gdb.py`` 拡張。"
 
 #: ../../howto/gdb_helpers.rst:46
 msgid ""
@@ -94,10 +112,15 @@ msgid ""
 "not at all. Below, we include tips for a few common systems as examples. "
 "Note that even if the instructions match your system, they might be outdated."
 msgstr ""
+"この拡張は Python と一緒にビルドされますが、別途配布されていることも、配布さ"
+"れていないこともあります。\n"
+"以下では一般的なシステムをいくつか例に挙げて説明します。\n"
+"お使いのシステムに該当する手順でも、情報が古くなっている可能性に注意してくだ"
+"さい。"
 
 #: ../../howto/gdb_helpers.rst:52
 msgid "Setup with Python built from source"
-msgstr ""
+msgstr "ソースからビルドした Python での設定"
 
 #: ../../howto/gdb_helpers.rst:54
 msgid ""
@@ -105,6 +128,8 @@ msgid ""
 "available, and the build should add a ``python-gdb.py`` file to the root "
 "directory of your repository."
 msgstr ""
+"CPython をソースからビルドすると、通常はデバッグ情報が利用でき、リポジトリの"
+"ルートディレクトリに ``python-gdb.py`` ファイルが追加されます。"
 
 #: ../../howto/gdb_helpers.rst:58
 msgid ""
@@ -112,34 +137,42 @@ msgid ""
 "to GDB's \"auto-load-safe-path\". If you haven't done this, recent versions "
 "of GDB will print out a warning with instructions on how to do this."
 msgstr ""
+"サポートを有効にするには、``python-gdb.py`` のあるディレクトリを GDB の "
+"\"auto-load-safe-path\" に追加する必要があります。\n"
+"追加していない場合、最近の GDB は追加方法を示す警告を表示します。"
 
 #: ../../howto/gdb_helpers.rst:65
 msgid ""
 "If you do not see instructions for your version of GDB, put this in your "
 "configuration file (``~/.gdbinit`` or ``~/.config/gdb/gdbinit``)::"
 msgstr ""
+"お使いの GDB で手順が表示されない場合は、設定ファイル (``~/.gdbinit`` または "
+"``~/.config/gdb/gdbinit``) に次を記述してください。 ::"
 
 #: ../../howto/gdb_helpers.rst:70
 msgid "You can also add multiple paths, separated by ``:``."
-msgstr ""
+msgstr "``:`` で区切って複数のパスを追加することもできます。"
 
 #: ../../howto/gdb_helpers.rst:74
 msgid "Setup for Python from a Linux distro"
-msgstr ""
+msgstr "Linux ディストリビューションの Python での設定"
 
 #: ../../howto/gdb_helpers.rst:76
 msgid ""
 "Most Linux systems provide debug information for the system Python in a "
 "package called ``python-debuginfo``, ``python-dbg`` or similar. For example:"
 msgstr ""
+"多くの Linux システムでは、システムの Python のデバッグ情報を ``python-"
+"debuginfo`` や ``python-dbg`` などの名前のパッケージで提供しています。\n"
+"例えば:"
 
 #: ../../howto/gdb_helpers.rst:80
 msgid "Fedora:"
-msgstr ""
+msgstr "Fedora:"
 
 #: ../../howto/gdb_helpers.rst:87
 msgid "Ubuntu:"
-msgstr ""
+msgstr "Ubuntu:"
 
 #: ../../howto/gdb_helpers.rst:93
 msgid ""
@@ -148,14 +181,18 @@ msgid ""
 "``python-gdb.py`` extension; you generally do need to install the debug info "
 "package separately."
 msgstr ""
+"最近の Linux システムの一部では、GDB が *debuginfod* を使ってデバッグシンボル"
+"を自動的にダウンロードできます。\n"
+"ただし、これでは ``python-gdb.py`` 拡張はインストールされません。\n"
+"通常はデバッグ情報のパッケージを別途インストールする必要があります。"
 
 #: ../../howto/gdb_helpers.rst:100
 msgid "Using the Debug build and Development mode"
-msgstr ""
+msgstr "デバッグビルドと開発モードの利用"
 
 #: ../../howto/gdb_helpers.rst:102
 msgid "For easier debugging, you might want to:"
-msgstr ""
+msgstr "デバッグを容易にするため、次の方法も検討してください:"
 
 #: ../../howto/gdb_helpers.rst:104
 msgid ""
@@ -163,10 +200,14 @@ msgid ""
 "source, use ``configure --with-pydebug``. On Linux distros, install and run "
 "a package like ``python-debug`` or ``python-dbg``, if available.)"
 msgstr ""
+"Python の :ref:`デバッグビルド <debug-build>` を使う。(ソースからビルドする場"
+"合は ``configure --with-pydebug`` を使います。Linux ディストリビューションで"
+"は、``python-debug`` や ``python-dbg`` などのパッケージがあればインストールし"
+"て実行します。)"
 
 #: ../../howto/gdb_helpers.rst:107
 msgid "Use the runtime :ref:`development mode <devmode>` (``-X dev``)."
-msgstr ""
+msgstr "実行時の :ref:`開発モード <devmode>` (``-X dev``) を使う。"
 
 #: ../../howto/gdb_helpers.rst:109
 msgid ""
@@ -177,29 +218,35 @@ msgstr ""
 
 #: ../../howto/gdb_helpers.rst:115
 msgid "Using the ``python-gdb`` extension"
-msgstr ""
+msgstr "``python-gdb`` 拡張の利用"
 
 #: ../../howto/gdb_helpers.rst:117
 msgid ""
 "When the extension is loaded, it provides two main features: pretty printers "
 "for Python values, and additional commands."
 msgstr ""
+"この拡張を読み込むと、主に二つの機能が利用できます。\n"
+"Python の値を整形して表示するプリティプリンタと、追加のコマンドです。"
 
 #: ../../howto/gdb_helpers.rst:121
 msgid "Pretty-printers"
-msgstr ""
+msgstr "プリティプリンタ"
 
 #: ../../howto/gdb_helpers.rst:123
 msgid ""
 "This is what a GDB backtrace looks like (truncated) when this extension is "
 "enabled::"
 msgstr ""
+"この拡張を有効にすると、GDB のバックトレースは次のようになります (一部省"
+"略)。 ::"
 
 #: ../../howto/gdb_helpers.rst:142
 msgid ""
 "Notice how the dictionary argument to ``PyDict_GetItemString`` is displayed "
 "as its ``repr()``, rather than an opaque ``PyObject *`` pointer."
 msgstr ""
+"``PyDict_GetItemString`` の引数の辞書が、内部の分からない ``PyObject *`` ポイ"
+"ンタではなく ``repr()`` の結果として表示されている点に注目してください。"
 
 #: ../../howto/gdb_helpers.rst:145
 msgid ""
@@ -208,12 +255,18 @@ msgid ""
 "object, then cast the value to a pointer of the appropriate type.  For "
 "example::"
 msgstr ""
+"この拡張は ``PyObject *`` 型の値に専用の表示処理を提供します。\n"
+"オブジェクトの低レベルの詳細を調べるには、適切な型のポインタにキャストしてく"
+"ださい。\n"
+"例えば次のようにします。 ::"
 
 #: ../../howto/gdb_helpers.rst:168
 msgid ""
 "Note that the pretty-printers do not actually call ``repr()``. For basic "
 "types, they try to match its result closely."
 msgstr ""
+"プリティプリンタは実際に ``repr()`` を呼び出すわけではありません。\n"
+"基本的な型では、その結果にできるだけ近い表示を行います。"
 
 #: ../../howto/gdb_helpers.rst:171
 msgid ""
@@ -223,6 +276,10 @@ msgid ""
 "representation that is not distinguishable from one of a regular machine-"
 "level integer::"
 msgstr ""
+"一部の型の専用の表示処理は、標準の型に対する GDB 組み込みの表示処理とよく似て"
+"いるため、混同しやすいことがあります。\n"
+"例えば Python の ``int`` (:c:expr:`PyLongObject *`) のプリティプリンタによる"
+"表示は、通常の機械レベルの整数の表示と区別がつきません。 ::"
 
 #: ../../howto/gdb_helpers.rst:183
 msgid ""
@@ -241,6 +298,8 @@ msgid ""
 "A similar confusion can arise with the ``str`` type, where the output looks "
 "a lot like gdb's built-in printer for ``char *``::"
 msgstr ""
+"``str`` 型でも、GDB 組み込みの ``char *`` の表示とよく似ているため、同様に混"
+"同しやすいことがあります。 ::"
 
 #: ../../howto/gdb_helpers.rst:195
 msgid ""
@@ -248,16 +307,22 @@ msgid ""
 "does Python's ``repr`` for strings) whereas the standard printer for ``char "
 "*`` values uses double-quotes and contains a hexadecimal address::"
 msgstr ""
+"``str`` インスタンスのプリティプリンタは、デフォルトでシングルクォートを使い"
+"ます (Python の文字列の ``repr`` と同様です)。\n"
+"一方、``char *`` の標準の表示はダブルクォートを使い、16 進数のアドレスも含み"
+"ます。 ::"
 
 #: ../../howto/gdb_helpers.rst:202
 msgid ""
-"Again, the implementation details can be revealed with a cast to :c:expr:"
-"`PyUnicodeObject *`::"
+"Again, the implementation details can be revealed with a cast "
+"to :c:expr:`PyUnicodeObject *`::"
 msgstr ""
+"この場合も :c:expr:`PyUnicodeObject *` にキャストすると実装の詳細を確認できま"
+"す。 ::"
 
 #: ../../howto/gdb_helpers.rst:210
 msgid "``py-list``"
-msgstr ""
+msgstr "``py-list``"
 
 #: ../../howto/gdb_helpers.rst:212
 msgid ""
@@ -265,6 +330,10 @@ msgid ""
 "(if any) for the current frame in the selected thread.  The current line is "
 "marked with a \">\"::"
 msgstr ""
+"この拡張は ``py-list`` コマンドを追加します。\n"
+"このコマンドは選択中のスレッドの現在のフレームに対応する Python ソースコード"
+"があれば、それを表示します。\n"
+"現在の行には \">\" が付きます。 ::"
 
 #: ../../howto/gdb_helpers.rst:229
 msgid ""
@@ -272,10 +341,12 @@ msgid ""
 "source, and ``py-list START,END`` to list a specific range of lines within "
 "the Python source."
 msgstr ""
+"Python ソース内の別の行から表示するには ``py-list START`` を、特定の行範囲を"
+"表示するには ``py-list START,END`` を使います。"
 
 #: ../../howto/gdb_helpers.rst:234
 msgid "``py-up`` and ``py-down``"
-msgstr ""
+msgstr "``py-up`` と ``py-down``"
 
 #: ../../howto/gdb_helpers.rst:236
 msgid ""
@@ -283,6 +354,8 @@ msgid ""
 "and ``down`` commands, but try to move at the level of CPython frames, "
 "rather than C frames."
 msgstr ""
+"``py-up`` と ``py-down`` は GDB の通常の ``up`` と ``down`` に相当するコマン"
+"ドですが、C のフレームではなく CPython のフレーム単位で移動しようとします。"
 
 #: ../../howto/gdb_helpers.rst:240
 msgid ""
@@ -295,7 +368,7 @@ msgstr ""
 
 #: ../../howto/gdb_helpers.rst:246
 msgid "They emit the frame number (at the C level) within the thread."
-msgstr ""
+msgstr "これらのコマンドはスレッド内の (C レベルの) フレーム番号を表示します。"
 
 #: ../../howto/gdb_helpers.rst:248 ../../howto/gdb_helpers.rst:298
 msgid "For example::"
@@ -303,7 +376,7 @@ msgstr "例えば::"
 
 #: ../../howto/gdb_helpers.rst:261
 msgid "so we're at the top of the Python stack."
-msgstr ""
+msgstr "これで Python スタックの先頭に到達しました。"
 
 #: ../../howto/gdb_helpers.rst:263
 msgid ""
@@ -311,34 +384,41 @@ msgid ""
 "``backtrace`` command. The command skips C frames which are not executing "
 "Python code."
 msgstr ""
+"フレーム番号は GDB の標準の ``backtrace`` コマンドで表示されるものと対応しま"
+"す。\n"
+"Python コードを実行していない C のフレームはスキップされます。"
 
 #: ../../howto/gdb_helpers.rst:267
 msgid "Going back down::"
-msgstr ""
+msgstr "逆向きに戻ると次のようになります。 ::"
 
 #: ../../howto/gdb_helpers.rst:289
 msgid "and we're at the bottom of the Python stack."
-msgstr ""
+msgstr "これで Python スタックの末尾に到達しました。"
 
 #: ../../howto/gdb_helpers.rst:293
 msgid "``py-bt``"
-msgstr ""
+msgstr "``py-bt``"
 
 #: ../../howto/gdb_helpers.rst:295
 msgid ""
 "The ``py-bt`` command attempts to display a Python-level backtrace of the "
 "current thread."
 msgstr ""
+"``py-bt`` コマンドは現在のスレッドの Python レベルのバックトレースを表示しよ"
+"うとします。"
 
 #: ../../howto/gdb_helpers.rst:314
 msgid ""
 "The frame numbers correspond to those displayed by GDB's standard "
 "``backtrace`` command."
 msgstr ""
+"フレーム番号は GDB の標準の ``backtrace`` コマンドで表示されるものと対応しま"
+"す。"
 
 #: ../../howto/gdb_helpers.rst:318
 msgid "``py-print``"
-msgstr ""
+msgstr "``py-print``"
 
 #: ../../howto/gdb_helpers.rst:320
 msgid ""
@@ -346,20 +426,25 @@ msgid ""
 "looks in locals within the current thread, then globals, then finally "
 "builtins::"
 msgstr ""
+"``py-print`` コマンドは Python の名前を検索し、その値を表示しようとします。\n"
+"現在のスレッドのローカル変数、グローバル変数、組み込みの名前の順に検索しま"
+"す。 ::"
 
 #: ../../howto/gdb_helpers.rst:335
 msgid "``py-locals``"
-msgstr ""
+msgstr "``py-locals``"
 
 #: ../../howto/gdb_helpers.rst:337
 msgid ""
 "The ``py-locals`` command looks up all Python locals within the current "
 "Python frame in the selected thread, and prints their representations::"
 msgstr ""
+"``py-locals`` コマンドは、選択中のスレッドの現在の Python フレームにあるすべ"
+"てのローカル変数を調べ、それぞれの値の表現を表示します。 ::"
 
 #: ../../howto/gdb_helpers.rst:347
 msgid "Use with GDB commands"
-msgstr ""
+msgstr "GDB コマンドとの併用"
 
 #: ../../howto/gdb_helpers.rst:349
 msgid ""
@@ -367,12 +452,17 @@ msgid ""
 "can use a frame numbers shown by ``py-bt`` with the ``frame`` command to go "
 "a specific frame within the selected thread, like this::"
 msgstr ""
+"拡張のコマンドは GDB 組み込みのコマンドを補完します。\n"
+"例えば、``py-bt`` が表示するフレーム番号を ``frame`` コマンドに渡すと、選択中"
+"のスレッドの特定のフレームに移動できます。 ::"
 
 #: ../../howto/gdb_helpers.rst:368
 msgid ""
 "The ``info threads`` command will give you a list of the threads within the "
 "process, and you can use the ``thread`` command to select a different one::"
 msgstr ""
+"``info threads`` コマンドはプロセス内のスレッドの一覧を表示します。\n"
+"``thread`` コマンドを使うと別のスレッドを選択できます。 ::"
 
 #: ../../howto/gdb_helpers.rst:376
 msgid ""
@@ -380,3 +470,7 @@ msgid ""
 "run a command on all threads.  With ``py-bt``, this lets you see what every "
 "thread is doing at the Python level::"
 msgstr ""
+"``thread apply all COMMAND`` (省略形は ``t a a COMMAND``) を使うと、すべての"
+"スレッドでコマンドを実行できます。\n"
+"``py-bt`` と組み合わせると、各スレッドが Python レベルで何を実行しているか確"
+"認できます。 ::"
