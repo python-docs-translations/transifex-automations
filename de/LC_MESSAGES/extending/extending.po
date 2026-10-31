@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-19 19:33+0000\n"
+"POT-Creation-Date: 2026-10-31 18:01+0000\n"
 "PO-Revision-Date: 2025-09-16 00:00+0000\n"
 "Last-Translator: Jyst Breisgau, 2026\n"
 "Language-Team: German (https://app.transifex.com/python-doc/teams/5390/de/)\n"
@@ -774,6 +774,8 @@ msgid ""
 "PyObject *arglist;\n"
 "...\n"
 "arglist = Py_BuildValue(\"(l)\", eventcode);\n"
+"if (arglist == NULL)\n"
+"    return NULL;\n"
 "result = PyObject_CallObject(my_callback, arglist);\n"
 "Py_DECREF(arglist);\n"
 "if (result == NULL)\n"
@@ -781,29 +783,14 @@ msgid ""
 "/* Here maybe use the result */\n"
 "Py_DECREF(result);"
 msgstr ""
-"PyObject *arglist;\n"
-"...\n"
-"arglist = Py_BuildValue(\"(l)\", eventcode);\n"
-"result = PyObject_CallObject(my_callback, arglist);\n"
-"Py_DECREF(arglist);\n"
-"if (result == NULL)\n"
-"    return NULL; /* Fehler zurückgeben */\n"
-"/* Hier kann das Ergebnis möglicherweise verwendet werden */\n"
-"Py_DECREF(result);"
 
-#: ../../extending/extending.rst:344
+#: ../../extending/extending.rst:346
 msgid ""
 "Note the placement of ``Py_DECREF(arglist)`` immediately after the call, "
-"before the error check!  Also note that strictly speaking this code is not "
-"complete: :c:func:`Py_BuildValue` may run out of memory, and this should be "
-"checked."
+"before the error check!"
 msgstr ""
-"Beachten Sie, dass „ ``Py_DECREF(arglist)`` “ unmittelbar nach dem Aufruf "
-"und vor der Fehlerprüfung steht! Beachten Sie außerdem, dass dieser Code "
-"streng genommen nicht vollständig ist: Bei „ :c:func:`Py_BuildValue` "
-"“ könnte der Speicher knapp werden, was überprüft werden sollte."
 
-#: ../../extending/extending.rst:348
+#: ../../extending/extending.rst:349
 msgid ""
 "You may also call a function with keyword arguments by "
 "using :c:func:`PyObject_Call`, which supports arguments and keyword "
@@ -815,33 +802,32 @@ msgstr ""
 "Schlüsselwortargumente unterstützt. Wie im obigen Beispiel verwenden wir "
 "` :c:func:`Py_BuildValue` `, um das Wörterbuch zu erstellen. ::"
 
-#: ../../extending/extending.rst:352
+#: ../../extending/extending.rst:353
 msgid ""
-"PyObject *dict;\n"
+"PyObject *arglist, *dict;\n"
 "...\n"
+"arglist = PyTuple_New(0);\n"
+"if (arglist == NULL)\n"
+"    return NULL;\n"
 "dict = Py_BuildValue(\"{s:i}\", \"name\", val);\n"
-"result = PyObject_Call(my_callback, NULL, dict);\n"
+"if (dict == NULL) {\n"
+"    Py_DECREF(arglist);\n"
+"    return NULL;\n"
+"}\n"
+"result = PyObject_Call(my_callback, arglist, dict);\n"
+"Py_DECREF(arglist);\n"
 "Py_DECREF(dict);\n"
 "if (result == NULL)\n"
 "    return NULL; /* Pass error back */\n"
 "/* Here maybe use the result */\n"
 "Py_DECREF(result);"
 msgstr ""
-"PyObject *dict;\n"
-"...\n"
-"dict = Py_BuildValue(\"{s:i}\", \"name\", val);\n"
-"result = PyObject_Call(my_callback, NULL, dict);\n"
-"Py_DECREF(dict);\n"
-"if (result == NULL)\n"
-"    return NULL; /* Fehler zurückgeben */\n"
-"/* Hier kann das Ergebnis möglicherweise verwendet werden */\n"
-"Py_DECREF(result);"
 
-#: ../../extending/extending.rst:368
+#: ../../extending/extending.rst:377
 msgid "Extracting Parameters in Extension Functions"
 msgstr "Parameter in Erweiterungsfunktionen extrahieren"
 
-#: ../../extending/extending.rst:370
+#: ../../extending/extending.rst:379
 msgid ""
 "The :ref:`tutorial <first-extension-module>` uses a \":c:data:`METH_O`\" "
 "function, which is limited to a single Python argument. If you want more, "
@@ -855,7 +841,7 @@ msgstr ""
 "Funktion ein :py:class:`tuple` an Argumenten anstelle eines einzelnen "
 "Objekts."
 
-#: ../../extending/extending.rst:376
+#: ../../extending/extending.rst:385
 msgid ""
 "For unpacking the tuple, CPython provides the :c:func:`PyArg_ParseTuple` "
 "function, declared as follows::"
@@ -863,11 +849,11 @@ msgstr ""
 "Zum Entpacken des Tupels stellt CPython die Funktion "
 "„ :c:func:`PyArg_ParseTuple` “ zur Verfügung, die wie folgt deklariert ist::"
 
-#: ../../extending/extending.rst:379
+#: ../../extending/extending.rst:388
 msgid "int PyArg_ParseTuple(PyObject *arg, const char *format, ...);"
 msgstr "int PyArg_ParseTuple(PyObject *arg, const char *format, ...);"
 
-#: ../../extending/extending.rst:381
+#: ../../extending/extending.rst:390
 msgid ""
 "The *arg* argument must be a tuple object containing an argument list passed "
 "from Python to a C function.  The *format* argument must be a format string, "
@@ -881,7 +867,7 @@ msgstr ""
 "API-Referenzhandbuch erläutert wird. Die übrigen Argumente müssen Adressen "
 "von Variablen sein, deren Typ durch die Formatzeichenfolge bestimmt wird."
 
-#: ../../extending/extending.rst:387
+#: ../../extending/extending.rst:396
 msgid ""
 "For example, to receive a single Python :py:class:`str` object and turn it "
 "into a C buffer, you would use ``\"s\"`` as the format string::"
@@ -890,7 +876,7 @@ msgstr ""
 "und es in einen C-Puffer umzuwandeln, würden Sie „ ``\"s\"`` “ als "
 "Formatzeichenfolge verwenden::"
 
-#: ../../extending/extending.rst:390
+#: ../../extending/extending.rst:399
 msgid ""
 "const char *command;\n"
 "if (!PyArg_ParseTuple(args, \"s\", &command)) {\n"
@@ -902,7 +888,7 @@ msgstr ""
 "    return NULL;\n"
 "}"
 
-#: ../../extending/extending.rst:395
+#: ../../extending/extending.rst:404
 msgid ""
 "If an error is detected in the argument list, :c:func:`!PyArg_ParseTuple` "
 "returns ``NULL`` (the error indicator for functions returning object "
@@ -915,7 +901,7 @@ msgstr ""
 "``NULL``` zurückgeben, wobei sie sich auf die von "
 "` :c:func:`PyArg_ParseTuple`` gesetzte Ausnahme stützt."
 
-#: ../../extending/extending.rst:400
+#: ../../extending/extending.rst:409
 msgid ""
 "Note that while :c:func:`PyArg_ParseTuple` checks that the Python arguments "
 "have the required types, it cannot check the validity of the addresses of C "
@@ -928,7 +914,7 @@ msgstr ""
 "kann: Wenn Sie hier Fehler machen, stürzt Ihr Code wahrscheinlich ab oder "
 "überschreibt zumindest zufällige Bits im Speicher. Seien Sie also vorsichtig!"
 
-#: ../../extending/extending.rst:405
+#: ../../extending/extending.rst:414
 msgid ""
 "Note that any Python object references which are provided to the caller are "
 "*borrowed* references; do not decrement their reference count!"
@@ -937,15 +923,15 @@ msgstr ""
 "Aufrufer übergeben werden, um *geliehene* Referenzen handelt; verringern Sie "
 "deren Referenzanzahl nicht!"
 
-#: ../../extending/extending.rst:408
+#: ../../extending/extending.rst:417
 msgid "Some example calls::"
 msgstr "Einige Beispielaufrufe::"
 
-#: ../../extending/extending.rst:410 ../../extending/extending.rst:1003
+#: ../../extending/extending.rst:419 ../../extending/extending.rst:1012
 msgid "#include <Python.h>"
 msgstr "#include <Python.h>"
 
-#: ../../extending/extending.rst:414
+#: ../../extending/extending.rst:423
 msgid ""
 "int ok;\n"
 "int i, j;\n"
@@ -965,7 +951,7 @@ msgstr ""
 "ok = PyArg_ParseTuple(args, \"\"); /* Keine Argumente */\n"
 "    /* Python-Aufruf: f() */"
 
-#: ../../extending/extending.rst:425
+#: ../../extending/extending.rst:434
 msgid ""
 "ok = PyArg_ParseTuple(args, \"s\", &s); /* A string */\n"
 "    /* Possible Python call: f('whoops!') */"
@@ -973,7 +959,7 @@ msgstr ""
 "ok = PyArg_ParseTuple(args, \"s\", &s); /* Eine Zeichenkette */\n"
 "    /* Mögliche Python-Aufrufform: f('whoops!') */"
 
-#: ../../extending/extending.rst:430
+#: ../../extending/extending.rst:439
 msgid ""
 "ok = PyArg_ParseTuple(args, \"lls\", &k, &l, &s); /* Two longs and a string "
 "*/\n"
@@ -983,7 +969,7 @@ msgstr ""
 "eine Zeichenkette */\n"
 "    /* Mögliche Python-Aufrufform: f(1, 2, 'three') */"
 
-#: ../../extending/extending.rst:435
+#: ../../extending/extending.rst:444
 msgid ""
 "ok = PyArg_ParseTuple(args, \"(ii)s#\", &i, &j, &s, &size);\n"
 "    /* A pair of ints and a string, whose size is also returned */\n"
@@ -994,7 +980,7 @@ msgstr ""
 "ebenfalls zurückgegeben wird */\n"
 "    /* Mögliche Python-Aufrufform: f((1, 2), 'three') */"
 
-#: ../../extending/extending.rst:441
+#: ../../extending/extending.rst:450
 msgid ""
 "{\n"
 "    const char *file;\n"
@@ -1021,7 +1007,7 @@ msgstr ""
 "       f('spam', 'wb', 100000) */\n"
 "}"
 
-#: ../../extending/extending.rst:455
+#: ../../extending/extending.rst:464
 msgid ""
 "{\n"
 "    int left, top, right, bottom, h, v;\n"
@@ -1041,7 +1027,7 @@ msgstr ""
 "       f(((0, 0), (400, 300)), (10, 10)) */\n"
 "}"
 
-#: ../../extending/extending.rst:466
+#: ../../extending/extending.rst:475
 msgid ""
 "{\n"
 "    Py_complex c;\n"
@@ -1058,11 +1044,11 @@ msgstr ""
 "    /* Mögliche Python-Aufrufform: myfunction(1+2j) */\n"
 "}"
 
-#: ../../extending/extending.rst:477
+#: ../../extending/extending.rst:486
 msgid "Keyword Parameters for Extension Functions"
 msgstr "Schlüsselwortparameter für Erweiterungsfunktionen"
 
-#: ../../extending/extending.rst:479
+#: ../../extending/extending.rst:488
 msgid ""
 "If you also want your function to accept :term:`keyword arguments <keyword "
 "argument>`, use the :c:data:`METH_KEYWORDS` flag in combination "
@@ -1075,7 +1061,7 @@ msgstr ""
 "(:c:data:`!METH_KEYWORDS` “ kann auch mit anderen Flags verwendet werden; "
 "die zulässigen Kombinationen finden Sie in der Dokumentation.)"
 
-#: ../../extending/extending.rst:485
+#: ../../extending/extending.rst:494
 msgid ""
 "In this case, the C function should accept a third ``PyObject *`` parameter "
 "which will be a dictionary of keywords. "
@@ -1087,14 +1073,14 @@ msgstr ""
 "handelt. Verwenden Sie „ :c:func:`PyArg_ParseTupleAndKeywords` “, um die "
 "Argumente einer solchen Funktion zu analysieren."
 
-#: ../../extending/extending.rst:492
+#: ../../extending/extending.rst:501
 msgid ""
 "The :c:func:`PyArg_ParseTupleAndKeywords` function is declared as follows::"
 msgstr ""
 "Die Funktion „ :c:func:`PyArg_ParseTupleAndKeywords` “ ist wie folgt "
 "deklariert:"
 
-#: ../../extending/extending.rst:494
+#: ../../extending/extending.rst:503
 msgid ""
 "int PyArg_ParseTupleAndKeywords(PyObject *arg, PyObject *kwdict,\n"
 "                                const char *format, char * const "
@@ -1104,7 +1090,7 @@ msgstr ""
 "                                const char *format, char * const "
 "*kwlist, ...);"
 
-#: ../../extending/extending.rst:497
+#: ../../extending/extending.rst:506
 msgid ""
 "The *arg* and *format* parameters are identical to those of "
 "the :c:func:`PyArg_ParseTuple` function.  The *kwdict* parameter is the "
@@ -1125,7 +1111,7 @@ msgstr ""
 "zurück, andernfalls gibt sie „false“ zurück und löst eine entsprechende "
 "Ausnahme aus."
 
-#: ../../extending/extending.rst:507
+#: ../../extending/extending.rst:516
 msgid ""
 "Nested tuples cannot be parsed when using keyword arguments!  Keyword "
 "parameters passed in which are not present in the *kwlist* will "
@@ -1136,7 +1122,7 @@ msgstr ""
 "nicht in der *kwlist* enthalten sind, wird ein „ :exc:`TypeError` "
 "“ ausgelöst."
 
-#: ../../extending/extending.rst:513
+#: ../../extending/extending.rst:522
 msgid ""
 "Here is an example module which uses keywords, based on an example by Geoff "
 "Philbrick (philbrick@hks.com)::"
@@ -1144,7 +1130,7 @@ msgstr ""
 "Hier ist ein Beispielmodul, das Schlüsselwörter verwendet und auf einem "
 "Beispiel von Geoff Philbrick (philbrick@hks.com) basiert::"
 
-#: ../../extending/extending.rst:516
+#: ../../extending/extending.rst:525
 msgid ""
 "#define PY_SSIZE_T_CLEAN\n"
 "#include <Python.h>\n"
@@ -1221,11 +1207,11 @@ msgstr ""
 "    {NULL, NULL, 0, NULL}   /* Sentinel */\n"
 "};"
 
-#: ../../extending/extending.rst:554
+#: ../../extending/extending.rst:563
 msgid "Building Arbitrary Values"
 msgstr "Beliebige Werte bilden"
 
-#: ../../extending/extending.rst:556
+#: ../../extending/extending.rst:565
 msgid ""
 "This function is the counterpart to :c:func:`PyArg_ParseTuple`.  It is "
 "declared as follows::"
@@ -1233,11 +1219,11 @@ msgstr ""
 "Diese Funktion ist das Gegenstück zu „ :c:func:`PyArg_ParseTuple` “. Sie ist "
 "wie folgt deklariert:"
 
-#: ../../extending/extending.rst:559
+#: ../../extending/extending.rst:568
 msgid "PyObject *Py_BuildValue(const char *format, ...);"
 msgstr "PyObject *Py_BuildValue(const char *format, ...);"
 
-#: ../../extending/extending.rst:561
+#: ../../extending/extending.rst:570
 msgid ""
 "It recognizes a set of format units similar to the ones recognized "
 "by :c:func:`PyArg_ParseTuple`, but the arguments (which are input to the "
@@ -1251,7 +1237,7 @@ msgstr ""
 "das sich für die Rückgabe aus einer von Python aufgerufenen C-Funktion "
 "eignet."
 
-#: ../../extending/extending.rst:566
+#: ../../extending/extending.rst:575
 msgid ""
 "One difference with :c:func:`PyArg_ParseTuple`: while the latter requires "
 "its first argument to be a tuple (since Python argument lists are always "
@@ -1272,12 +1258,12 @@ msgstr ""
 "diese Formateinheit beschrieben wird. Um die Rückgabe eines Tupels der Größe "
 "0 oder 1 zu erzwingen, setzen Sie die Formatzeichenfolge in Klammern."
 
-#: ../../extending/extending.rst:574
+#: ../../extending/extending.rst:583
 msgid ""
 "Examples (to the left the call, to the right the resulting Python value):"
 msgstr "Beispiele (links der Aufruf, rechts der resultierende Python-Wert):"
 
-#: ../../extending/extending.rst:576
+#: ../../extending/extending.rst:585
 msgid ""
 "Py_BuildValue(\"\")                        None\n"
 "Py_BuildValue(\"i\", 123)                  123\n"
@@ -1315,11 +1301,11 @@ msgstr ""
 "Py_BuildValue(\"((ii)(ii)) (ii)\",\n"
 "              1, 2, 3, 4, 5, 6)          (((1, 2), (3, 4)), (5, 6))"
 
-#: ../../extending/extending.rst:600
+#: ../../extending/extending.rst:609
 msgid "Reference Counts"
 msgstr "Referenzzähler"
 
-#: ../../extending/extending.rst:602
+#: ../../extending/extending.rst:611
 msgid ""
 "In languages like C or C++, the programmer is responsible for dynamic "
 "allocation and deallocation of memory on the heap.  In C, this is done using "
@@ -1334,7 +1320,7 @@ msgstr ""
 "` verwendet, die im Wesentlichen dieselbe Bedeutung haben; wir beschränken "
 "die folgende Erörterung daher auf den Fall von C."
 
-#: ../../extending/extending.rst:608
+#: ../../extending/extending.rst:617
 msgid ""
 "Every block of memory allocated with :c:func:`malloc` should eventually be "
 "returned to the pool of available memory by exactly one call "
@@ -1362,7 +1348,7 @@ msgstr ""
 "der Zugriff auf nicht initialisierte Daten – Core-Dumps, falsche Ergebnisse, "
 "mysteriöse Abstürze."
 
-#: ../../extending/extending.rst:619
+#: ../../extending/extending.rst:628
 msgid ""
 "Common causes of memory leaks are unusual paths through the code.  For "
 "instance, a function may allocate a block of memory, do some calculation, "
@@ -1394,7 +1380,7 @@ msgstr ""
 "nutzt.  Daher ist es wichtig, Speicherlecks durch eine Programmierkonvention "
 "oder -strategie zu verhindern, die diese Art von Fehlern minimiert."
 
-#: ../../extending/extending.rst:632
+#: ../../extending/extending.rst:641
 msgid ""
 "Since Python makes heavy use of :c:func:`malloc` and :c:func:`free`, it "
 "needs a strategy to avoid memory leaks as well as the use of freed memory.  "
@@ -1413,7 +1399,7 @@ msgstr ""
 "wird. Wenn der Zähler Null erreicht, wurde der letzte Verweis auf das Objekt "
 "gelöscht und das Objekt wird freigegeben."
 
-#: ../../extending/extending.rst:640
+#: ../../extending/extending.rst:649
 msgid ""
 "An alternative strategy is called :dfn:`automatic garbage collection`. "
 "(Sometimes, reference counting is also referred to as a garbage collection "
@@ -1443,7 +1429,7 @@ msgstr ""
 "automatischer Garbage Collector für C verfügbar sein. Bis dahin müssen wir "
 "uns mit der Referenzzählung begnügen."
 
-#: ../../extending/extending.rst:652
+#: ../../extending/extending.rst:661
 msgid ""
 "While Python uses the traditional reference counting implementation, it also "
 "offers a cycle detector that works to detect reference cycles.  This allows "
@@ -1469,7 +1455,7 @@ msgstr ""
 "Zyklus verwiesen wird, selbst wenn keine weiteren Verweise auf den Zyklus "
 "selbst mehr vorhanden sind."
 
-#: ../../extending/extending.rst:663
+#: ../../extending/extending.rst:672
 msgid ""
 "The cycle detector is able to detect garbage cycles and can reclaim them. "
 "The :mod:`gc` module exposes a way to run the detector "
@@ -1482,11 +1468,11 @@ msgstr ""
 "Konfigurationsschnittstellen und die Möglichkeit, den Detektor zur Laufzeit "
 "zu deaktivieren."
 
-#: ../../extending/extending.rst:672
+#: ../../extending/extending.rst:681
 msgid "Reference Counting in Python"
 msgstr "Referenzzählung in Python"
 
-#: ../../extending/extending.rst:674
+#: ../../extending/extending.rst:683
 msgid ""
 "There are two macros, ``Py_INCREF(x)`` and ``Py_DECREF(x)``, which handle "
 "the incrementing and decrementing of the reference "
@@ -1504,7 +1490,7 @@ msgstr ""
 "im :dfn:`Typobjekt` des Objekts. Zu diesem (und anderen) Zwecken enthält "
 "jedes Objekt zudem einen Zeiger auf sein Typobjekt."
 
-#: ../../extending/extending.rst:681
+#: ../../extending/extending.rst:690
 msgid ""
 "The big question now remains: when to use ``Py_INCREF(x)`` and "
 "``Py_DECREF(x)``? Let's first introduce some terms.  Nobody \"owns\" an "
@@ -1527,7 +1513,7 @@ msgstr ""
 "entsorgen: weitergeben, speichern oder ` :c:func:`Py_DECREF`` aufrufen. Wenn "
 "man vergisst, eine eigene Referenz zu entsorgen, entsteht ein Speicherleck."
 
-#: ../../extending/extending.rst:690
+#: ../../extending/extending.rst:699
 msgid ""
 "It is also possible to :dfn:`borrow` [#borrow]_ a reference to an object.  "
 "The borrower of a reference should not call :c:func:`Py_DECREF`.  The "
@@ -1544,7 +1530,7 @@ msgstr ""
 "freigegebenen Speicher zu nutzen, und sollte vollständig vermieden werden "
 "[#dont-check-refcount]_."
 
-#: ../../extending/extending.rst:696
+#: ../../extending/extending.rst:705
 msgid ""
 "The advantage of borrowing over owning a reference is that you don't need to "
 "take care of disposing of the reference on all possible paths through the "
@@ -1564,7 +1550,7 @@ msgstr ""
 "nachdem der Eigentümer, von dem sie ausgeliehen wurde, diese tatsächlich "
 "bereits freigegeben hat."
 
-#: ../../extending/extending.rst:704
+#: ../../extending/extending.rst:713
 msgid ""
 "A borrowed reference can be changed into an owned reference by "
 "calling :c:func:`Py_INCREF`.  This does not affect the status of the owner "
@@ -1579,11 +1565,11 @@ msgstr ""
 "vollen Eigentümerrechte (der neue Eigentümer muss die Referenz ebenso wie "
 "der vorherige Eigentümer ordnungsgemäß entsorgen)."
 
-#: ../../extending/extending.rst:714
+#: ../../extending/extending.rst:723
 msgid "Ownership Rules"
 msgstr "Eigentumsregelungen"
 
-#: ../../extending/extending.rst:716
+#: ../../extending/extending.rst:725
 msgid ""
 "Whenever an object reference is passed into or out of a function, it is part "
 "of the function's interface specification whether ownership is transferred "
@@ -1594,7 +1580,7 @@ msgstr ""
 "Funktion, ob mit der Referenz auch das Eigentumsrecht übertragen wird oder "
 "nicht."
 
-#: ../../extending/extending.rst:720
+#: ../../extending/extending.rst:729
 msgid ""
 "Most functions that return a reference to an object pass on ownership with "
 "the reference.  In particular, all functions whose function it is to create "
@@ -1614,7 +1600,7 @@ msgstr ""
 "` :c:func:`PyLong_FromLong` ` einen Cache mit häufig verwendeten Werten und "
 "kann eine Referenz auf einen im Cache gespeicherten Eintrag zurückgeben."
 
-#: ../../extending/extending.rst:728
+#: ../../extending/extending.rst:737
 msgid ""
 "Many functions that extract objects from other objects also transfer "
 "ownership with the reference, for "
@@ -1632,7 +1618,7 @@ msgstr ""
 "und :c:func:`PyDict_GetItemString` geben alle Referenzen zurück, die Sie "
 "sich aus dem Tupel, der Liste oder dem Wörterbuch „ausleihen“."
 
-#: ../../extending/extending.rst:735
+#: ../../extending/extending.rst:744
 msgid ""
 "The function :c:func:`PyImport_AddModule` also returns a borrowed reference, "
 "even though it may actually create the object it returns: this is possible "
@@ -1643,7 +1629,7 @@ msgstr ""
 "möglicherweise tatsächlich erstellt: Dies ist möglich, da eine eigene "
 "Referenz auf das Objekt in „ ``sys.modules`` “ gespeichert ist."
 
-#: ../../extending/extending.rst:739
+#: ../../extending/extending.rst:748
 msgid ""
 "When you pass an object reference into another function, in general, the "
 "function borrows the reference from you --- if it needs to store it, it will "
@@ -1664,7 +1650,7 @@ msgstr ""
 "dass :c:func:`PyDict_SetItem` und ähnliche Funktionen die Eigentümerschaft "
 "nicht übernehmen – sie verhalten sich „normal“.)"
 
-#: ../../extending/extending.rst:747
+#: ../../extending/extending.rst:756
 msgid ""
 "When a C function is called from Python, it borrows references to its "
 "arguments from the caller.  The caller owns a reference to the object, so "
@@ -1679,7 +1665,7 @@ msgstr ""
 "Referenz gespeichert oder weitergegeben werden muss, muss sie durch den "
 "Aufruf von ` :c:func:`Py_INCREF`` in eine eigene Referenz umgewandelt werden."
 
-#: ../../extending/extending.rst:753
+#: ../../extending/extending.rst:762
 msgid ""
 "The object reference returned from a C function that is called from Python "
 "must be an owned reference --- ownership is transferred from the function to "
@@ -1689,11 +1675,11 @@ msgstr ""
 "Objektreferenz muss eine „Owned Reference“ sein – das Eigentumsrecht wird "
 "von der Funktion auf ihren Aufrufer übertragen."
 
-#: ../../extending/extending.rst:761
+#: ../../extending/extending.rst:770
 msgid "Thin Ice"
 msgstr "Dünnes Eis"
 
-#: ../../extending/extending.rst:763
+#: ../../extending/extending.rst:772
 msgid ""
 "There are a few situations where seemingly harmless use of a borrowed "
 "reference can lead to problems.  These all have to do with implicit "
@@ -1705,7 +1691,7 @@ msgstr ""
 "impliziten Aufrufen des Interpreters zusammen, die dazu führen können, dass "
 "der Eigentümer einer Referenz diese freigibt."
 
-#: ../../extending/extending.rst:767
+#: ../../extending/extending.rst:776
 msgid ""
 "The first and most important case to know about is using :c:func:`Py_DECREF` "
 "on an unrelated object while borrowing a reference to a list item.  For "
@@ -1715,7 +1701,7 @@ msgstr ""
 "„ :c:func:`Py_DECREF` “ auf ein nicht zugehöriges Objekt, während eine "
 "Referenz auf ein Listenelement ausgeliehen wird. Zum Beispiel:"
 
-#: ../../extending/extending.rst:770
+#: ../../extending/extending.rst:779
 msgid ""
 "void\n"
 "bug(PyObject *list)\n"
@@ -1735,7 +1721,7 @@ msgstr ""
 "    PyObject_Print(item, stdout, 0); /* FEHLER! */\n"
 "}"
 
-#: ../../extending/extending.rst:779
+#: ../../extending/extending.rst:788
 msgid ""
 "This function first borrows a reference to ``list[0]``, then replaces "
 "``list[1]`` with the value ``0``, and finally prints the borrowed reference. "
@@ -1745,7 +1731,7 @@ msgstr ""
 "``list[1]`` durch den Wert ``0`` und gibt schließlich die entnommene "
 "Referenz aus. Sieht harmlos aus, oder? Aber das ist es nicht!"
 
-#: ../../extending/extending.rst:783
+#: ../../extending/extending.rst:792
 msgid ""
 "Let's follow the control flow into :c:func:`PyList_SetItem`.  The list owns "
 "references to all its items, so when item 1 is replaced, it has to dispose "
@@ -1778,7 +1764,7 @@ msgstr ""
 "gesamte Abfolge erfolgt synchron innerhalb des Aufrufs von "
 "` :c:func:`PyList_SetItem` `."
 
-#: ../../extending/extending.rst:797
+#: ../../extending/extending.rst:806
 msgid ""
 "Since it is written in Python, the :meth:`!__del__` method can execute "
 "arbitrary Python code.  Could it perhaps do something to invalidate the "
@@ -1797,7 +1783,7 @@ msgstr ""
 "Referenz auf dieses Objekt, würde sie den damit verbundenen Speicher "
 "freigeben und dadurch ``item`` ungültig machen."
 
-#: ../../extending/extending.rst:805
+#: ../../extending/extending.rst:814
 msgid ""
 "The solution, once you know the source of the problem, is easy: temporarily "
 "increment the reference count.  The correct version of the function reads::"
@@ -1806,7 +1792,7 @@ msgstr ""
 "erhöht vorübergehend die Referenzanzahl. Die korrekte Version der Funktion "
 "lautet wie folgt:"
 
-#: ../../extending/extending.rst:808
+#: ../../extending/extending.rst:817
 msgid ""
 "void\n"
 "no_bug(PyObject *list)\n"
@@ -1830,7 +1816,7 @@ msgstr ""
 "    Py_DECREF(item);\n"
 "}"
 
-#: ../../extending/extending.rst:819
+#: ../../extending/extending.rst:828
 msgid ""
 "This is a true story.  An older version of Python contained variants of this "
 "bug and someone spent a considerable amount of time in a C debugger to "
@@ -1841,7 +1827,7 @@ msgstr ""
 "Debugger, um herauszufinden, warum seine ` :meth:`!__del__` `-Methoden "
 "fehlschlugen..."
 
-#: ../../extending/extending.rst:823
+#: ../../extending/extending.rst:832
 msgid ""
 "The second case of problems with a borrowed reference is a variant involving "
 "threads.  Normally, multiple threads in the Python interpreter can't get in "
@@ -1866,7 +1852,7 @@ msgstr ""
 "warten. Offensichtlich weist die folgende Funktion dasselbe Problem wie die "
 "vorherige auf::"
 
-#: ../../extending/extending.rst:833
+#: ../../extending/extending.rst:842
 msgid ""
 "void\n"
 "bug(PyObject *list)\n"
@@ -1888,11 +1874,11 @@ msgstr ""
 "    PyObject_Print(item, stdout, 0); /* FEHLER! */\n"
 "}"
 
-#: ../../extending/extending.rst:847
+#: ../../extending/extending.rst:856
 msgid "NULL Pointers"
 msgstr "NULL-Zeiger"
 
-#: ../../extending/extending.rst:849
+#: ../../extending/extending.rst:858
 msgid ""
 "In general, functions that take object references as arguments do not expect "
 "you to pass them ``NULL`` pointers, and will dump core (or cause later core "
@@ -1913,7 +1899,7 @@ msgstr ""
 "Funktionen weitergeben – würde jede Funktion auf „ ``NULL`` “ prüfen, gäbe "
 "es viele redundante Prüfungen und der Code würde langsamer laufen."
 
-#: ../../extending/extending.rst:857
+#: ../../extending/extending.rst:866
 msgid ""
 "It is better to test for ``NULL`` only at the \"source:\" when a pointer "
 "that may be ``NULL`` is received, for example, from :c:func:`malloc` or from "
@@ -1924,7 +1910,7 @@ msgstr ""
 "von „ :c:func:`malloc` “ oder von einer Funktion, die eine Ausnahme auslösen "
 "könnte."
 
-#: ../../extending/extending.rst:861
+#: ../../extending/extending.rst:870
 msgid ""
 "The macros :c:func:`Py_INCREF` and :c:func:`Py_DECREF` do not check for "
 "``NULL`` pointers --- however, their variants :c:func:`Py_XINCREF` "
@@ -1934,7 +1920,7 @@ msgstr ""
 "auf Zeiger vom Typ „ ``NULL`` “ – ihre Varianten „ :c:func:`Py_XINCREF` "
 "“ und „ :c:func:`Py_XDECREF` “ hingegen schon."
 
-#: ../../extending/extending.rst:865
+#: ../../extending/extending.rst:874
 msgid ""
 "The macros for checking for a particular object type (``Pytype_Check()``) "
 "don't check for ``NULL`` pointers --- again, there is much code that calls "
@@ -1948,7 +1934,7 @@ msgstr ""
 "verschiedener erwarteter Typen zu prüfen, was zu redundanten Prüfungen "
 "führen würde. Es gibt keine Varianten mit einer Überprüfung auf „ ``NULL`` “."
 
-#: ../../extending/extending.rst:871
+#: ../../extending/extending.rst:880
 msgid ""
 "The C function calling mechanism guarantees that the argument list passed to "
 "C functions (``args`` in the examples) is never ``NULL`` --- in fact it "
@@ -1959,7 +1945,7 @@ msgstr ""
 "„ ``NULL`` “ ist – vielmehr wird garantiert, dass es sich stets um ein Tupel "
 "„ [#old-calling-convention]_ “ handelt."
 
-#: ../../extending/extending.rst:875
+#: ../../extending/extending.rst:884
 msgid ""
 "It is a severe error to ever let a ``NULL`` pointer \"escape\" to the Python "
 "user."
@@ -1967,11 +1953,11 @@ msgstr ""
 "Es ist ein schwerwiegender Fehler, einen Zeiger vom Typ „ ``NULL`` “ jemals "
 "an den Python-Benutzer „durchrutschen“ zu lassen."
 
-#: ../../extending/extending.rst:886
+#: ../../extending/extending.rst:895
 msgid "Writing Extensions in C++"
 msgstr "Erweiterungen in C++ schreiben"
 
-#: ../../extending/extending.rst:888
+#: ../../extending/extending.rst:897
 msgid ""
 "It is possible to write extension modules in C++.  Some restrictions apply.  "
 "If the main program (the Python interpreter) is compiled and linked by the C "
@@ -1995,11 +1981,11 @@ msgstr ""
 "Symbol ` ``__cplusplus`` ` definiert ist (alle aktuellen C++-Compiler "
 "definieren dieses Symbol)."
 
-#: ../../extending/extending.rst:902
+#: ../../extending/extending.rst:911
 msgid "Providing a C API for an Extension Module"
 msgstr "Bereitstellung einer C-API für ein Erweiterungsmodul"
 
-#: ../../extending/extending.rst:904
+#: ../../extending/extending.rst:913
 msgid ""
 "Many extension modules just provide new functions and types to be used from "
 "Python, but sometimes the code in an extension module can be useful for "
@@ -2019,7 +2005,7 @@ msgstr ""
 "sollte dieser neue Collection-Typ eine Reihe von C-Funktionen für die "
 "direkte Bearbeitung durch andere Erweiterungsmodule bieten."
 
-#: ../../extending/extending.rst:912
+#: ../../extending/extending.rst:921
 msgid ""
 "At first sight this seems easy: just write the functions (without declaring "
 "them ``static``, of course), provide an appropriate header file, and "
@@ -2050,7 +2036,7 @@ msgstr ""
 "dessen Funktionen man aufrufen möchte, möglicherweise noch nicht geladen "
 "worden!"
 
-#: ../../extending/extending.rst:924
+#: ../../extending/extending.rst:933
 msgid ""
 "Portability therefore requires not to make any assumptions about symbol "
 "visibility. This means that all symbols in extension modules should be "
@@ -2067,7 +2053,7 @@ msgstr ""
 "von anderen Erweiterungsmodulen aus zugänglich sein *sollten*, auf andere "
 "Weise exportiert werden müssen."
 
-#: ../../extending/extending.rst:931
+#: ../../extending/extending.rst:940
 msgid ""
 "Python provides a special mechanism to pass C-level information (pointers) "
 "from one extension module to another one: Capsules. A Capsule is a Python "
@@ -2088,7 +2074,7 @@ msgstr ""
 "importieren, den Wert dieses Namens abrufen und anschließend den Zeiger aus "
 "der Capsule entnehmen."
 
-#: ../../extending/extending.rst:939
+#: ../../extending/extending.rst:948
 msgid ""
 "There are many ways in which Capsules can be used to export the C API of an "
 "extension module. Each function could get its own Capsule, or all C API "
@@ -2105,7 +2091,7 @@ msgstr ""
 "unterschiedliche Weise zwischen dem Modul, das den Code bereitstellt, und "
 "den Client-Modulen aufteilen."
 
-#: ../../extending/extending.rst:945
+#: ../../extending/extending.rst:954
 msgid ""
 "Whichever method you choose, it's important to name your Capsules properly. "
 "The function :c:func:`PyCapsule_New` takes a name parameter (:c:expr:`const "
@@ -2122,7 +2108,7 @@ msgstr ""
 "zur Laufzeit; es gibt keine Möglichkeit, eine unbenannte Kapsel von einer "
 "anderen zu unterscheiden."
 
-#: ../../extending/extending.rst:952
+#: ../../extending/extending.rst:961
 msgid ""
 "In particular, Capsules used to expose C APIs should be given a name "
 "following this convention::"
@@ -2130,11 +2116,11 @@ msgstr ""
 "Insbesondere sollten Capsules, die zur Bereitstellung von C-APIs dienen, "
 "einen Namen erhalten, der dieser Konvention entspricht::"
 
-#: ../../extending/extending.rst:955
+#: ../../extending/extending.rst:964
 msgid "modulename.attributename"
 msgstr "Modulname.Attributname"
 
-#: ../../extending/extending.rst:957
+#: ../../extending/extending.rst:966
 msgid ""
 "The convenience function :c:func:`PyCapsule_Import` makes it easy to load a "
 "C API provided via a Capsule, but only if the Capsule's name matches this "
@@ -2147,7 +2133,7 @@ msgstr ""
 "API ein hohes Maß an Sicherheit, dass die von ihnen geladene Capsule die "
 "richtige C-API enthält."
 
-#: ../../extending/extending.rst:962
+#: ../../extending/extending.rst:971
 msgid ""
 "The following example demonstrates an approach that puts most of the burden "
 "on the writer of the exporting module, which is appropriate for commonly "
@@ -2166,7 +2152,7 @@ msgstr ""
 "Abrufen seiner C-API-Zeiger übernimmt; Client-Module müssen dieses Makro "
 "lediglich aufrufen, bevor sie auf die C-API zugreifen."
 
-#: ../../extending/extending.rst:970
+#: ../../extending/extending.rst:979
 msgid ""
 "The exporting module is a modification of the :mod:`!spam` module from "
 "the :ref:`tutorial <first-extension-module>`. The function :func:`!"
@@ -2184,7 +2170,7 @@ msgstr ""
 "Hinzufügen von „spam“ zu jedem Befehl). Diese Funktion :c:func:`!"
 "PySpam_System` wird auch in andere Erweiterungsmodule exportiert."
 
-#: ../../extending/extending.rst:978
+#: ../../extending/extending.rst:987
 msgid ""
 "The function :c:func:`!PySpam_System` is a plain C function, declared "
 "``static`` like everything else::"
@@ -2192,7 +2178,7 @@ msgstr ""
 "Die Funktion „ :c:func:`!PySpam_System` “ ist eine einfache C-Funktion, die "
 "wie alles andere unter „ ``static`` “ deklariert ist::"
 
-#: ../../extending/extending.rst:981
+#: ../../extending/extending.rst:990
 msgid ""
 "static int\n"
 "PySpam_System(const char *command)\n"
@@ -2206,12 +2192,12 @@ msgstr ""
 "    return system(command);\n"
 "}"
 
-#: ../../extending/extending.rst:987
+#: ../../extending/extending.rst:996
 msgid "The function :c:func:`!spam_system` is modified in a trivial way::"
 msgstr ""
 "Die Funktion „ :c:func:`!spam_system` “ wird auf einfache Weise geändert::"
 
-#: ../../extending/extending.rst:989
+#: ../../extending/extending.rst:998
 msgid ""
 "static PyObject *\n"
 "spam_system(PyObject *self, PyObject *args)\n"
@@ -2237,15 +2223,15 @@ msgstr ""
 "    return PyLong_FromLong(sts);\n"
 "}"
 
-#: ../../extending/extending.rst:1001
+#: ../../extending/extending.rst:1010
 msgid "In the beginning of the module, right after the line ::"
 msgstr "Am Anfang des Moduls, direkt nach der Zeile ::"
 
-#: ../../extending/extending.rst:1005
+#: ../../extending/extending.rst:1014
 msgid "two more lines must be added::"
 msgstr "Es müssen noch zwei Zeilen hinzugefügt werden::"
 
-#: ../../extending/extending.rst:1007
+#: ../../extending/extending.rst:1016
 msgid ""
 "#define SPAM_MODULE\n"
 "#include \"spammodule.h\""
@@ -2253,7 +2239,7 @@ msgstr ""
 "#define SPAM_MODULE\n"
 "#include \"spammodule.h\""
 
-#: ../../extending/extending.rst:1010
+#: ../../extending/extending.rst:1019
 msgid ""
 "The ``#define`` is used to tell the header file that it is being included in "
 "the exporting module, not a client module. Finally, the "
@@ -2265,7 +2251,7 @@ msgstr ""
 "Schließlich muss die Funktion `:c:data:`mod_exec <Py_mod_exec>` des Moduls "
 "die Initialisierung des C-API-Zeiger-Arrays übernehmen::"
 
-#: ../../extending/extending.rst:1014
+#: ../../extending/extending.rst:1023
 msgid ""
 "static int\n"
 "spam_module_exec(PyObject *m)\n"
@@ -2308,7 +2294,7 @@ msgstr ""
 "    return 0;\n"
 "}"
 
-#: ../../extending/extending.rst:1033
+#: ../../extending/extending.rst:1042
 msgid ""
 "Note that ``PySpam_API`` is declared ``static``; otherwise the pointer array "
 "would disappear when :c:func:`!PyInit_spam` terminates!"
@@ -2317,7 +2303,7 @@ msgstr ""
 "andernfalls würde das Zeiger-Array verschwinden, wenn „ :c:func:`!"
 "PyInit_spam` “ beendet wird!"
 
-#: ../../extending/extending.rst:1036
+#: ../../extending/extending.rst:1045
 msgid ""
 "The bulk of the work is in the header file :file:`spammodule.h`, which looks "
 "like this::"
@@ -2325,7 +2311,7 @@ msgstr ""
 "Der Großteil des Codes befindet sich in der Header-Datei "
 "„ :file:`spammodule.h` “, die wie folgt aussieht::"
 
-#: ../../extending/extending.rst:1039
+#: ../../extending/extending.rst:1048
 msgid ""
 "#ifndef Py_SPAMMODULE_H\n"
 "#define Py_SPAMMODULE_H\n"
@@ -2426,7 +2412,7 @@ msgstr ""
 "\n"
 "#endif /* !defined(Py_SPAMMODULE_H) */"
 
-#: ../../extending/extending.rst:1087
+#: ../../extending/extending.rst:1096
 msgid ""
 "All that a client module must do in order to have access to the "
 "function :c:func:`!PySpam_System` is to call the function (or rather "
@@ -2438,7 +2424,7 @@ msgstr ""
 "import_spam` “ in seiner :c:data:`mod_exec <Py_mod_exec>` function:: "
 "aufrufen:"
 
-#: ../../extending/extending.rst:1091
+#: ../../extending/extending.rst:1100
 msgid ""
 "static int\n"
 "client_module_exec(PyObject *m)\n"
@@ -2460,7 +2446,7 @@ msgstr ""
 "    return 0;\n"
 "}"
 
-#: ../../extending/extending.rst:1101
+#: ../../extending/extending.rst:1110
 msgid ""
 "The main disadvantage of this approach is that the file :file:`spammodule.h` "
 "is rather complicated. However, the basic structure is the same for each "
@@ -2471,7 +2457,7 @@ msgstr ""
 "für jede exportierte Funktion gleich ist, muss man sie nur einmal "
 "verinnerlichen."
 
-#: ../../extending/extending.rst:1105
+#: ../../extending/extending.rst:1114
 msgid ""
 "Finally it should be mentioned that Capsules offer additional functionality, "
 "which is especially useful for memory allocation and deallocation of the "
@@ -2488,11 +2474,11 @@ msgstr ""
 "„ :file:`Objects/capsule.c` “ in der Python-Quellcode-Distribution) "
 "beschrieben."
 
-#: ../../extending/extending.rst:1113
+#: ../../extending/extending.rst:1122
 msgid "Footnotes"
 msgstr "Fußnoten"
 
-#: ../../extending/extending.rst:1114
+#: ../../extending/extending.rst:1123
 msgid ""
 "The metaphor of \"borrowing\" a reference is not completely correct: the "
 "owner still has a copy of the reference."
@@ -2500,7 +2486,7 @@ msgstr ""
 "Die Metapher, dass eine Referenz „ausgeliehen“ wird, ist nicht ganz "
 "zutreffend: Der Eigentümer verfügt weiterhin über eine Kopie der Referenz."
 
-#: ../../extending/extending.rst:1117
+#: ../../extending/extending.rst:1126
 msgid ""
 "Checking that the reference count is at least 1 **does not work** --- the "
 "reference count itself could be in freed memory and may thus be reused for "
@@ -2510,7 +2496,7 @@ msgstr ""
 "nicht** – die Referenzanzahl selbst könnte sich in freigegebenem Speicher "
 "befinden und somit für ein anderes Objekt wiederverwendet werden!"
 
-#: ../../extending/extending.rst:1122
+#: ../../extending/extending.rst:1131
 msgid ""
 "These guarantees don't hold when you use the \"old\" style calling "
 "convention --- this is still found in much existing code."
@@ -2522,14 +2508,14 @@ msgstr ""
 msgid "PyObject_CallObject (C function)"
 msgstr "PyObject_CallObject (C-Funktion)"
 
-#: ../../extending/extending.rst:363
+#: ../../extending/extending.rst:372
 msgid "PyArg_ParseTuple (C function)"
 msgstr "PyArg_ParseTuple (C-Funktion)"
 
-#: ../../extending/extending.rst:490
+#: ../../extending/extending.rst:499
 msgid "PyArg_ParseTupleAndKeywords (C function)"
 msgstr "PyArg_ParseTupleAndKeywords (C-Funktion)"
 
-#: ../../extending/extending.rst:511
+#: ../../extending/extending.rst:520
 msgid "Philbrick, Geoff"
 msgstr "Philbrick, Geoff"
