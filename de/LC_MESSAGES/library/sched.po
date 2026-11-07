@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-25 18:08+0000\n"
+"POT-Creation-Date: 2026-11-07 18:23+0000\n"
 "PO-Revision-Date: 2025-09-16 00:01+0000\n"
 "Last-Translator: Swen Bachmann, 2026\n"
 "Language-Team: German (https://app.transifex.com/python-doc/teams/5390/de/)\n"
@@ -23,17 +23,19 @@ msgstr ""
 
 #: ../../library/sched.rst:2
 msgid ":mod:`!sched` --- Event scheduler"
-msgstr ""
+msgstr ":mod:`!sched` --- Ereignis-Scheduler"
 
 #: ../../library/sched.rst:7
 msgid "**Source code:** :source:`Lib/sched.py`"
-msgstr ""
+msgstr "**Quellcode:** :source:`Lib/sched.py`"
 
 #: ../../library/sched.rst:13
 msgid ""
 "The :mod:`!sched` module defines a class which implements a general purpose "
 "event scheduler:"
 msgstr ""
+"Das Modul :mod:`!sched` legt eine Klasse fest, die einen Ereignis-Scheduler "
+"für allgemeine Zwecke umsetzt:"
 
 #: ../../library/sched.rst:18
 msgid ""
@@ -46,15 +48,26 @@ msgid ""
 "argument ``0`` after each event is run to allow other threads an opportunity "
 "to run in multi-threaded applications."
 msgstr ""
+"Die Klasse :class:`scheduler` legt eine allgemeine Schnittstelle zum "
+"Einplanen von Ereignissen fest. Sie braucht zwei Funktionen, um tatsächlich "
+"mit der „Außenwelt“ umzugehen: *timefunc* sollte ohne Argumente aufrufbar "
+"sein und eine Zahl zurückgeben (die „Zeit“, in welchen Einheiten auch "
+"immer). Die Funktion *delayfunc* sollte mit einem Argument aufrufbar sein, "
+"das zur Ausgabe von *timefunc* passt, und sollte um so viele Zeiteinheiten "
+"verzögern. *delayfunc* wird außerdem nach jedem ausgeführten Ereignis mit "
+"dem Argument ``0`` aufgerufen, um in Anwendungen mit mehreren Threads "
+"anderen Threads Gelegenheit zum Laufen zu geben."
 
 #: ../../library/sched.rst:27
 msgid "*timefunc* and *delayfunc* parameters are optional."
-msgstr ""
+msgstr "Die Parameter *timefunc* und *delayfunc* sind wahlfrei."
 
 #: ../../library/sched.rst:30
 msgid ""
 ":class:`scheduler` class can be safely used in multi-threaded environments."
 msgstr ""
+"Die Klasse :class:`scheduler` lässt sich in Umgebungen mit mehreren Threads "
+"gefahrlos verwenden."
 
 #: ../../library/sched.rst:34
 msgid "Example::"
@@ -90,14 +103,42 @@ msgid ""
 "From print_time 1652342840.369612 default\n"
 "1652342840.3697174"
 msgstr ""
+">>> import sched, time\n"
+">>> s = sched.scheduler(time.time, time.sleep)\n"
+">>> def print_time(a='default'):\n"
+"...     print(\"From print_time\", time.time(), a)\n"
+"...\n"
+">>> def print_some_times():\n"
+"...     print(time.time())\n"
+"...     s.enter(10, 1, print_time)\n"
+"...     s.enter(5, 2, print_time, argument=('positional',))\n"
+"...     # despite having higher priority, 'keyword' runs after 'positional' "
+"as enter() is relative\n"
+"...     s.enter(5, 1, print_time, kwargs={'a': 'keyword'})\n"
+"...     s.enterabs(1_650_000_000, 10, print_time, argument=(\"first "
+"enterabs\",))\n"
+"...     s.enterabs(1_650_000_000, 5, print_time, argument=(\"second "
+"enterabs\",))\n"
+"...     s.run()\n"
+"...     print(time.time())\n"
+"...\n"
+">>> print_some_times()\n"
+"1652342830.3640375\n"
+"From print_time 1652342830.3642538 second enterabs\n"
+"From print_time 1652342830.3643398 first enterabs\n"
+"From print_time 1652342835.3694863 positional\n"
+"From print_time 1652342835.3696074 keyword\n"
+"From print_time 1652342840.369612 default\n"
+"1652342840.3697174"
 
 #: ../../library/sched.rst:65
 msgid "Scheduler Objects"
-msgstr ""
+msgstr "Scheduler-Objekte"
 
 #: ../../library/sched.rst:67
 msgid ":class:`scheduler` instances have the following methods and attributes:"
 msgstr ""
+":class:`scheduler`-Instanzen haben die folgenden Methoden und Attribute:"
 
 #: ../../library/sched.rst:72
 msgid ""
@@ -106,6 +147,11 @@ msgid ""
 "constructor. Events scheduled for the same *time* will be executed in the "
 "order of their *priority*. A lower number represents a higher priority."
 msgstr ""
+"Plant ein neues Ereignis ein. Das Argument *time* sollte von einem Zahlentyp "
+"sein, der zum Rückgabewert der Funktion *timefunc* passt, die dem "
+"Konstruktor übergeben wurde. Ereignisse, die für dieselbe *time* eingeplant "
+"sind, werden in der Reihenfolge ihrer *priority* ausgeführt. Eine kleinere "
+"Zahl steht für eine höhere Priorität."
 
 #: ../../library/sched.rst:77
 msgid ""
@@ -113,20 +159,26 @@ msgid ""
 "*argument* is a sequence holding the positional arguments for *action*. "
 "*kwargs* is a dictionary holding the keyword arguments for *action*."
 msgstr ""
+"Das Ereignis auszuführen bedeutet, ``action(*argument, **kwargs)`` "
+"auszuführen. *argument* ist eine Folge mit den Positionsargumenten für "
+"*action*. *kwargs* ist ein Dictionary mit den Schlüsselwortargumenten für "
+"*action*."
 
 #: ../../library/sched.rst:81
 msgid ""
 "Return value is an event which may be used for later cancellation of the "
 "event (see :meth:`cancel`)."
 msgstr ""
+"Der Rückgabewert ist ein Ereignis, über das sich das Ereignis später "
+"abbrechen lässt (siehe :meth:`cancel`)."
 
 #: ../../library/sched.rst:84 ../../library/sched.rst:97
 msgid "*argument* parameter is optional."
-msgstr ""
+msgstr "Der Parameter *argument* ist wahlfrei."
 
 #: ../../library/sched.rst:87 ../../library/sched.rst:100
 msgid "*kwargs* parameter was added."
-msgstr ""
+msgstr "Der Parameter *kwargs* wurde hinzugefügt."
 
 #: ../../library/sched.rst:93
 msgid ""
@@ -134,16 +186,22 @@ msgid ""
 "the other arguments, the effect and the return value are the same as those "
 "for :meth:`enterabs`."
 msgstr ""
+"Plant ein Ereignis für *delay* weitere Zeiteinheiten ein. Abgesehen von der "
+"relativen Zeit sind die übrigen Argumente, die Wirkung und der Rückgabewert "
+"dieselben wie bei :meth:`enterabs`."
 
 #: ../../library/sched.rst:105
 msgid ""
 "Remove the event from the queue. If *event* is not an event currently in the "
 "queue, this method will raise a :exc:`ValueError`."
 msgstr ""
+"Entfernt das Ereignis aus der Warteschlange. Ist *event* kein Ereignis, das "
+"aktuell in der Warteschlange steht, löst diese Methode ein :exc:`ValueError` "
+"aus."
 
 #: ../../library/sched.rst:111
 msgid "Return ``True`` if the event queue is empty."
-msgstr ""
+msgstr "Gibt ``True`` zurück, wenn die Ereigniswarteschlange leer ist."
 
 #: ../../library/sched.rst:116
 msgid ""
@@ -151,6 +209,10 @@ msgid ""
 "function passed to the constructor) for the next event, then execute it and "
 "so on until there are no more scheduled events."
 msgstr ""
+"Führt alle eingeplanten Ereignisse aus. Diese Methode wartet (über die "
+"Funktion *delayfunc*, die dem Konstruktor übergeben wurde) auf das nächste "
+"Ereignis, führt es dann aus und so weiter, bis keine eingeplanten Ereignisse "
+"mehr vorhanden sind."
 
 #: ../../library/sched.rst:120
 msgid ""
@@ -160,6 +222,12 @@ msgid ""
 "time value of the next scheduled event in the scheduler's event queue.  If "
 "the queue is empty, returns ``None``."
 msgstr ""
+"Ist *blocking* falsch, werden sofort alle Ereignisse in der Warteschlange "
+"ausgeführt, deren Zeitwert kleiner oder gleich dem aktuellen Wert von "
+"*timefunc* ist (sofern es solche gibt), und die Differenz zwischen dem "
+"aktuellen Wert von *timefunc* und dem Zeitwert des nächsten eingeplanten "
+"Ereignisses in der Ereigniswarteschlange des Schedulers zurückgegeben. Ist "
+"die Warteschlange leer, wird ``None`` zurückgegeben."
 
 #: ../../library/sched.rst:126
 msgid ""
@@ -168,6 +236,10 @@ msgid ""
 "an exception is raised by *action*, the event will not be attempted in "
 "future calls to :meth:`run`."
 msgstr ""
+"Sowohl *action* als auch *delayfunc* können eine Ausnahme auslösen. In "
+"beiden Fällen hält der Scheduler einen widerspruchsfreien Zustand und gibt "
+"die Ausnahme weiter. Löst *action* eine Ausnahme aus, wird das Ereignis in "
+"künftigen Aufrufen von :meth:`run` nicht mehr versucht."
 
 #: ../../library/sched.rst:131
 msgid ""
@@ -176,10 +248,14 @@ msgid ""
 "dropped; the calling code is responsible for canceling  events which are no "
 "longer pertinent."
 msgstr ""
+"Braucht eine Folge von Ereignissen länger als die Zeit, die bis zum nächsten "
+"Ereignis verfügbar ist, fällt der Scheduler einfach zurück. Es werden keine "
+"Ereignisse verworfen. Der aufrufende Code ist dafür zuständig, Ereignisse "
+"abzubrechen, die nicht mehr einschlägig sind."
 
 #: ../../library/sched.rst:136
 msgid "*blocking* parameter was added."
-msgstr ""
+msgstr "Der Parameter *blocking* wurde hinzugefügt."
 
 #: ../../library/sched.rst:141
 msgid ""
@@ -187,7 +263,11 @@ msgid ""
 "will be run.  Each event is shown as a :term:`named tuple` with the "
 "following fields:  time, priority, action, argument, kwargs."
 msgstr ""
+"Nur lesbares Attribut, das eine Liste der bevorstehenden Ereignisse in der "
+"Reihenfolge zurückgibt, in der sie ausgeführt werden. Jedes Ereignis wird "
+"als :term:`benanntes Tupel <named tuple>` mit den folgenden Feldern "
+"dargestellt: time, priority, action, argument, kwargs."
 
 #: ../../library/sched.rst:9
 msgid "event scheduling"
-msgstr ""
+msgstr "Ereignisse einplanen"
