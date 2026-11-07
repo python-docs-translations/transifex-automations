@@ -5,15 +5,16 @@
 #
 # Translators:
 # python-doc bot, 2025
+# Swen Bachmann, 2026
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 22:26+0000\n"
+"POT-Creation-Date: 2026-11-07 21:36+0000\n"
 "PO-Revision-Date: 2025-09-22 16:49+0000\n"
-"Last-Translator: python-doc bot, 2025\n"
+"Last-Translator: Swen Bachmann, 2026\n"
 "Language-Team: German (https://app.transifex.com/python-doc/teams/5390/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,7 +24,7 @@ msgstr ""
 
 #: ../../howto/gdb_helpers.rst:5
 msgid "Debugging C API extensions and CPython Internals with GDB"
-msgstr ""
+msgstr "C-API-Erweiterungen und CPython-Interna mit GDB debuggen"
 
 #: ../../howto/gdb_helpers.rst:9
 msgid ""
@@ -31,6 +32,9 @@ msgid ""
 "be used with the GDB debugger to debug CPython extensions and the CPython "
 "interpreter itself."
 msgstr ""
+"Dieses Dokument erklärt, wie sich die Python-GDB-Erweiterung ``python-"
+"gdb.py`` zusammen mit dem Debugger GDB nutzen lässt, um CPython-"
+"Erweiterungen und den CPython-Interpreter selbst zu debuggen."
 
 #: ../../howto/gdb_helpers.rst:13
 msgid ""
@@ -39,6 +43,11 @@ msgid ""
 "default, GDB (or any of its front-ends) doesn't support high-level "
 "information specific to the CPython interpreter."
 msgstr ""
+"Bei der Fehlersuche nach tiefliegenden Problemen wie Abstürzen oder "
+"Verklemmungen hilft ein Debugger auf niedriger Ebene wie GDB, die Ursache zu "
+"finden und zu beheben. Von sich aus unterstützt GDB (oder eines seiner "
+"Frontends) jedoch keine höheren Informationen, die speziell den CPython-"
+"Interpreter betreffen."
 
 #: ../../howto/gdb_helpers.rst:18
 msgid ""
@@ -47,6 +56,11 @@ msgid ""
 "functions. Given a Python object represented by a :c:expr:`PyObject *` "
 "pointer, the extension surfaces the type and value of the object."
 msgstr ""
+"Die Erweiterung ``python-gdb.py`` ergänzt GDB um Informationen über den "
+"CPython-Interpreter. Sie hilft dabei, den Stapel der gerade ausgeführten "
+"Python-Funktionen zu untersuchen. Zu einem Python-Objekt, das durch einen "
+"Zeiger :c:expr:`PyObject *` dargestellt wird, zeigt die Erweiterung Typ und "
+"Wert des Objekts an."
 
 #: ../../howto/gdb_helpers.rst:23
 msgid ""
@@ -54,6 +68,9 @@ msgid ""
 "CPython that are written in C can use this document to learn how to use the "
 "``python-gdb.py`` extension with GDB."
 msgstr ""
+"Wer an CPython-Erweiterungen arbeitet oder an den in C geschriebenen Teilen "
+"von CPython herumbastelt, kann anhand dieses Dokuments lernen, wie sich die "
+"Erweiterung ``python-gdb.py`` mit GDB einsetzen lässt."
 
 #: ../../howto/gdb_helpers.rst:29
 msgid ""
@@ -62,14 +79,18 @@ msgid ""
 "devguide.python.org>`_  and the `Python wiki <https://wiki.python.org/moin/"
 "DebuggingWithGdb>`_."
 msgstr ""
+"Dieses Dokument setzt voraus, dass du mit den Grundlagen von GDB und dem "
+"CPython-C-API vertraut bist. Es bündelt die Hinweise aus dem `devguide "
+"<https://devguide.python.org>`_  und dem `Python-Wiki <https://"
+"wiki.python.org/moin/DebuggingWithGdb>`_."
 
 #: ../../howto/gdb_helpers.rst:36
 msgid "Prerequisites"
-msgstr ""
+msgstr "Voraussetzungen"
 
 #: ../../howto/gdb_helpers.rst:38
 msgid "You need to have:"
-msgstr ""
+msgstr "Du brauchst:"
 
 #: ../../howto/gdb_helpers.rst:40
 msgid ""
@@ -82,10 +103,12 @@ msgid ""
 "GDB-compatible debugging information for Python and any extension you are "
 "debugging."
 msgstr ""
+"GDB-kompatible Debug-Informationen für Python und für jede Erweiterung, die "
+"du debuggst."
 
 #: ../../howto/gdb_helpers.rst:44
 msgid "The ``python-gdb.py`` extension."
-msgstr ""
+msgstr "Die Erweiterung ``python-gdb.py``."
 
 #: ../../howto/gdb_helpers.rst:46
 msgid ""
@@ -93,10 +116,14 @@ msgid ""
 "not at all. Below, we include tips for a few common systems as examples. "
 "Note that even if the instructions match your system, they might be outdated."
 msgstr ""
+"Die Erweiterung wird mit Python gebaut, kann aber separat oder gar nicht "
+"ausgeliefert werden. Weiter unten findest du beispielhaft Hinweise für "
+"einige verbreitete Systeme. Beachte, dass die Anleitungen auch dann veraltet "
+"sein können, wenn sie zu deinem System passen."
 
 #: ../../howto/gdb_helpers.rst:52
 msgid "Setup with Python built from source"
-msgstr ""
+msgstr "Einrichtung bei aus den Quellen gebautem Python"
 
 #: ../../howto/gdb_helpers.rst:54
 msgid ""
@@ -104,6 +131,9 @@ msgid ""
 "available, and the build should add a ``python-gdb.py`` file to the root "
 "directory of your repository."
 msgstr ""
+"Wenn du CPython aus den Quellen baust, sollten Debug-Informationen vorhanden "
+"sein, und der Build sollte eine Datei ``python-gdb.py`` im Wurzelverzeichnis "
+"deines Repositorys ablegen."
 
 #: ../../howto/gdb_helpers.rst:58
 msgid ""
@@ -111,34 +141,42 @@ msgid ""
 "to GDB's \"auto-load-safe-path\". If you haven't done this, recent versions "
 "of GDB will print out a warning with instructions on how to do this."
 msgstr ""
+"Damit die Unterstützung aktiv wird, musst du das Verzeichnis mit ``python-"
+"gdb.py`` in GDBs „auto-load-safe-path“ aufnehmen. Hast du das noch nicht "
+"getan, gibt neuere GDB-Versionen eine Warnung mit einer Anleitung dazu aus."
 
 #: ../../howto/gdb_helpers.rst:65
 msgid ""
 "If you do not see instructions for your version of GDB, put this in your "
 "configuration file (``~/.gdbinit`` or ``~/.config/gdb/gdbinit``)::"
 msgstr ""
+"Siehst du keine Anleitung für deine GDB-Version, dann schreibe Folgendes in "
+"deine Konfigurationsdatei (``~/.gdbinit`` oder ``~/.config/gdb/gdbinit``)::"
 
 #: ../../howto/gdb_helpers.rst:70
 msgid "You can also add multiple paths, separated by ``:``."
-msgstr ""
+msgstr "Du kannst auch mehrere Pfade angeben, getrennt durch ``:``."
 
 #: ../../howto/gdb_helpers.rst:74
 msgid "Setup for Python from a Linux distro"
-msgstr ""
+msgstr "Einrichtung bei Python aus einer Linux-Distribution"
 
 #: ../../howto/gdb_helpers.rst:76
 msgid ""
 "Most Linux systems provide debug information for the system Python in a "
 "package called ``python-debuginfo``, ``python-dbg`` or similar. For example:"
 msgstr ""
+"Die meisten Linux-Systeme stellen Debug-Informationen für das System-Python "
+"in einem Paket namens ``python-debuginfo``, ``python-dbg`` oder ähnlich "
+"bereit. Zum Beispiel:"
 
 #: ../../howto/gdb_helpers.rst:80
 msgid "Fedora:"
-msgstr ""
+msgstr "Fedora:"
 
 #: ../../howto/gdb_helpers.rst:87
 msgid "Ubuntu:"
-msgstr ""
+msgstr "Ubuntu:"
 
 #: ../../howto/gdb_helpers.rst:93
 msgid ""
@@ -147,14 +185,18 @@ msgid ""
 "``python-gdb.py`` extension; you generally do need to install the debug info "
 "package separately."
 msgstr ""
+"Auf mehreren neueren Linux-Systemen kann GDB Debug-Symbole automatisch über "
+"*debuginfod* herunterladen. Damit wird allerdings nicht die Erweiterung "
+"``python-gdb.py`` installiert. Das Debug-Info-Paket musst du in der Regel "
+"trotzdem separat installieren."
 
 #: ../../howto/gdb_helpers.rst:100
 msgid "Using the Debug build and Development mode"
-msgstr ""
+msgstr "Debug-Build und Entwicklungsmodus nutzen"
 
 #: ../../howto/gdb_helpers.rst:102
 msgid "For easier debugging, you might want to:"
-msgstr ""
+msgstr "Um die Fehlersuche zu erleichtern, kannst du Folgendes tun:"
 
 #: ../../howto/gdb_helpers.rst:104
 msgid ""
@@ -162,10 +204,15 @@ msgid ""
 "source, use ``configure --with-pydebug``. On Linux distros, install and run "
 "a package like ``python-debug`` or ``python-dbg``, if available.)"
 msgstr ""
+"Verwende einen :ref:`Debug-Build <debug-build>` von Python. (Beim Bauen aus "
+"den Quellen nimm ``configure --with-pydebug``. Auf Linux-Distributionen "
+"installiere und starte ein Paket wie ``python-debug`` oder ``python-dbg``, "
+"sofern verfügbar.)"
 
 #: ../../howto/gdb_helpers.rst:107
 msgid "Use the runtime :ref:`development mode <devmode>` (``-X dev``)."
 msgstr ""
+"Verwende den :ref:`Entwicklungsmodus <devmode>` zur Laufzeit (``-X dev``)."
 
 #: ../../howto/gdb_helpers.rst:109
 msgid ""
@@ -173,32 +220,41 @@ msgid ""
 "hides the bug you are trying to find, but in most cases they make the "
 "process easier."
 msgstr ""
+"Beides schaltet zusätzliche Zusicherungen ein und einige Optimierungen aus. "
+"Manchmal verdeckt das genau den Fehler, den du suchst, in den meisten Fällen "
+"erleichtert es aber die Arbeit."
 
 #: ../../howto/gdb_helpers.rst:115
 msgid "Using the ``python-gdb`` extension"
-msgstr ""
+msgstr "Die Erweiterung ``python-gdb`` verwenden"
 
 #: ../../howto/gdb_helpers.rst:117
 msgid ""
 "When the extension is loaded, it provides two main features: pretty printers "
 "for Python values, and additional commands."
 msgstr ""
+"Ist die Erweiterung geladen, bietet sie zwei wesentliche Dinge: Pretty-"
+"Printing für Python-Werte und zusätzliche Befehle."
 
 #: ../../howto/gdb_helpers.rst:121
 msgid "Pretty-printers"
-msgstr ""
+msgstr "Lesbare Ausgabe mit Pretty-Printern"
 
 #: ../../howto/gdb_helpers.rst:123
 msgid ""
 "This is what a GDB backtrace looks like (truncated) when this extension is "
 "enabled::"
 msgstr ""
+"So sieht ein GDB-Backtrace (gekürzt) aus, wenn diese Erweiterung aktiv ist::"
 
 #: ../../howto/gdb_helpers.rst:142
 msgid ""
 "Notice how the dictionary argument to ``PyDict_GetItemString`` is displayed "
 "as its ``repr()``, rather than an opaque ``PyObject *`` pointer."
 msgstr ""
+"Beachte, wie das Dictionary-Argument von ``PyDict_GetItemString`` als sein "
+"``repr()`` angezeigt wird und nicht als undurchsichtiger Zeiger ``PyObject "
+"*``."
 
 #: ../../howto/gdb_helpers.rst:145
 msgid ""
@@ -207,12 +263,18 @@ msgid ""
 "object, then cast the value to a pointer of the appropriate type.  For "
 "example::"
 msgstr ""
+"Die Erweiterung arbeitet, indem sie eine eigene Ausgaberoutine für Werte des "
+"Typs ``PyObject *`` bereitstellt.  Brauchst du Zugriff auf tiefer liegende "
+"Details eines Objekts, dann wandle den Wert in einen Zeiger des passenden "
+"Typs um.  Zum Beispiel::"
 
 #: ../../howto/gdb_helpers.rst:168
 msgid ""
 "Note that the pretty-printers do not actually call ``repr()``. For basic "
 "types, they try to match its result closely."
 msgstr ""
+"Beachte, dass die Pretty-Printings nicht wirklich ``repr()`` aufrufen. Bei "
+"einfachen Typen versuchen sie, dessen Ergebnis möglichst genau nachzubilden."
 
 #: ../../howto/gdb_helpers.rst:171
 msgid ""
@@ -222,6 +284,11 @@ msgid ""
 "representation that is not distinguishable from one of a regular machine-"
 "level integer::"
 msgstr ""
+"Verwirrend kann sein, dass die eigene Ausgabe für manche Typen der "
+"eingebauten Ausgabe von GDB für Standardtypen sehr ähnlich sieht.  Die "
+"Pretty-Printing für ein Python-``int`` (:c:expr:`PyLongObject *`) liefert "
+"zum Beispiel eine Darstellung, die sich nicht von der einer gewöhnlichen "
+"maschinennahen Ganzzahl unterscheiden lässt::"
 
 #: ../../howto/gdb_helpers.rst:183
 msgid ""
@@ -240,6 +307,8 @@ msgid ""
 "A similar confusion can arise with the ``str`` type, where the output looks "
 "a lot like gdb's built-in printer for ``char *``::"
 msgstr ""
+"Eine ähnliche Verwirrung kann beim Typ ``str`` entstehen, wo die Ausgabe der "
+"eingebauten GDB-Ausgabe für ``char *`` sehr ähnlich sieht::"
 
 #: ../../howto/gdb_helpers.rst:195
 msgid ""
@@ -247,16 +316,22 @@ msgid ""
 "does Python's ``repr`` for strings) whereas the standard printer for ``char "
 "*`` values uses double-quotes and contains a hexadecimal address::"
 msgstr ""
+"Der Pretty-Printer für ``str``-Instanzen verwendet standardmäßig einfache "
+"Anführungszeichen (so wie Pythons ``repr`` für Zeichenketten), während die "
+"Standardausgabe für ``char *``-Werte doppelte Anführungszeichen verwendet "
+"und eine hexadezimale Adresse enthält::"
 
 #: ../../howto/gdb_helpers.rst:202
 msgid ""
 "Again, the implementation details can be revealed with a cast "
 "to :c:expr:`PyUnicodeObject *`::"
 msgstr ""
+"Auch hier lassen sich die Interna durch eine Umwandlung "
+"in :c:expr:`PyUnicodeObject *` sichtbar machen::"
 
 #: ../../howto/gdb_helpers.rst:210
 msgid "``py-list``"
-msgstr ""
+msgstr "``py-list``"
 
 #: ../../howto/gdb_helpers.rst:212
 msgid ""
@@ -264,6 +339,9 @@ msgid ""
 "(if any) for the current frame in the selected thread.  The current line is "
 "marked with a \">\"::"
 msgstr ""
+"Die Erweiterung ergänzt einen Befehl ``py-list``, der den Python-Quellcode "
+"(sofern vorhanden) für den aktuellen Rahmen im ausgewählten Thread "
+"auflistet.  Die aktuelle Zeile ist mit „>“ markiert::"
 
 #: ../../howto/gdb_helpers.rst:229
 msgid ""
@@ -271,10 +349,13 @@ msgid ""
 "source, and ``py-list START,END`` to list a specific range of lines within "
 "the Python source."
 msgstr ""
+"Mit ``py-list START`` listest du ab einer anderen Zeilennummer innerhalb des "
+"Python-Quellcodes auf, mit ``py-list START,END`` einen bestimmten "
+"Zeilenbereich innerhalb des Python-Quellcodes."
 
 #: ../../howto/gdb_helpers.rst:234
 msgid "``py-up`` and ``py-down``"
-msgstr ""
+msgstr "``py-up`` and ``py-down``"
 
 #: ../../howto/gdb_helpers.rst:236
 msgid ""
@@ -282,6 +363,9 @@ msgid ""
 "and ``down`` commands, but try to move at the level of CPython frames, "
 "rather than C frames."
 msgstr ""
+"Die Befehle ``py-up`` und ``py-down`` entsprechen den gewöhnlichen GDB-"
+"Befehlen ``up`` und ``down``, versuchen aber, sich auf Ebene der CPython-"
+"Rahmen zu bewegen statt auf Ebene der C-Rahmen."
 
 #: ../../howto/gdb_helpers.rst:240
 msgid ""
@@ -291,10 +375,15 @@ msgid ""
 "function (that is, the core bytecode interpreter loop within CPython) and "
 "look up the value of the related ``PyFrameObject *``."
 msgstr ""
+"GDB kann die zugehörigen Rahmeninformationen nicht immer lesen. Das hängt "
+"davon ab, mit welcher Optimierungsstufe CPython übersetzt wurde. Intern "
+"suchen die Befehle nach C-Rahmen, die die Standard-Rahmenauswertungsfunktion "
+"ausführen (also die zentrale Bytecode-Interpreterschleife in CPython), und "
+"lesen den Wert des zugehörigen ``PyFrameObject *`` aus."
 
 #: ../../howto/gdb_helpers.rst:246
 msgid "They emit the frame number (at the C level) within the thread."
-msgstr ""
+msgstr "Sie geben die Rahmennummer (auf C-Ebene) innerhalb des Threads aus."
 
 #: ../../howto/gdb_helpers.rst:248 ../../howto/gdb_helpers.rst:298
 msgid "For example::"
@@ -302,7 +391,7 @@ msgstr "Zum Beispiel::"
 
 #: ../../howto/gdb_helpers.rst:261
 msgid "so we're at the top of the Python stack."
-msgstr ""
+msgstr "also sind wir an der Spitze des Python-Stapels."
 
 #: ../../howto/gdb_helpers.rst:263
 msgid ""
@@ -310,34 +399,40 @@ msgid ""
 "``backtrace`` command. The command skips C frames which are not executing "
 "Python code."
 msgstr ""
+"Die Rahmennummern entsprechen denen, die GDBs Standardbefehl ``backtrace`` "
+"anzeigt. Der Befehl überspringt C-Rahmen, die keinen Python-Code ausführen."
 
 #: ../../howto/gdb_helpers.rst:267
 msgid "Going back down::"
-msgstr ""
+msgstr "Und zurück nach unten::"
 
 #: ../../howto/gdb_helpers.rst:289
 msgid "and we're at the bottom of the Python stack."
-msgstr ""
+msgstr "und wir sind am Fuß des Python-Stapels."
 
 #: ../../howto/gdb_helpers.rst:293
 msgid "``py-bt``"
-msgstr ""
+msgstr "``py-bt``"
 
 #: ../../howto/gdb_helpers.rst:295
 msgid ""
 "The ``py-bt`` command attempts to display a Python-level backtrace of the "
 "current thread."
 msgstr ""
+"Der Befehl ``py-bt`` versucht, einen Backtrace des aktuellen Threads auf "
+"Python-Ebene anzuzeigen."
 
 #: ../../howto/gdb_helpers.rst:314
 msgid ""
 "The frame numbers correspond to those displayed by GDB's standard "
 "``backtrace`` command."
 msgstr ""
+"Die Rahmennummern entsprechen denen, die GDBs Standardbefehl ``backtrace`` "
+"anzeigt."
 
 #: ../../howto/gdb_helpers.rst:318
 msgid "``py-print``"
-msgstr ""
+msgstr "``py-print``"
 
 #: ../../howto/gdb_helpers.rst:320
 msgid ""
@@ -345,20 +440,26 @@ msgid ""
 "looks in locals within the current thread, then globals, then finally "
 "builtins::"
 msgstr ""
+"Der Befehl ``py-print`` sucht einen Python-Namen und versucht, ihn "
+"auszugeben. Er schaut zuerst in den lokalen Namen des aktuellen Threads, "
+"dann in den globalen und schließlich in den eingebauten::"
 
 #: ../../howto/gdb_helpers.rst:335
 msgid "``py-locals``"
-msgstr ""
+msgstr "``py-locals``"
 
 #: ../../howto/gdb_helpers.rst:337
 msgid ""
 "The ``py-locals`` command looks up all Python locals within the current "
 "Python frame in the selected thread, and prints their representations::"
 msgstr ""
+"Der Befehl ``py-locals`` sucht alle lokalen Python-Namen innerhalb des "
+"aktuellen Python-Rahmens im ausgewählten Thread und gibt ihre Darstellungen "
+"aus::"
 
 #: ../../howto/gdb_helpers.rst:347
 msgid "Use with GDB commands"
-msgstr ""
+msgstr "Zusammen mit GDB-Befehlen verwenden"
 
 #: ../../howto/gdb_helpers.rst:349
 msgid ""
@@ -366,12 +467,18 @@ msgid ""
 "can use a frame numbers shown by ``py-bt`` with the ``frame`` command to go "
 "a specific frame within the selected thread, like this::"
 msgstr ""
+"Die Befehle der Erweiterung ergänzen die eingebauten Befehle von GDB. Du "
+"kannst zum Beispiel eine der von ``py-bt`` angezeigten Rahmennummern mit dem "
+"Befehl ``frame`` verwenden, um zu einem bestimmten Rahmen innerhalb des "
+"ausgewählten Threads zu springen, etwa so::"
 
 #: ../../howto/gdb_helpers.rst:368
 msgid ""
 "The ``info threads`` command will give you a list of the threads within the "
 "process, and you can use the ``thread`` command to select a different one::"
 msgstr ""
+"Der Befehl ``info threads`` liefert dir eine Liste der Threads innerhalb des "
+"Prozesses, und mit dem Befehl ``thread`` wählst du einen anderen aus::"
 
 #: ../../howto/gdb_helpers.rst:376
 msgid ""
@@ -379,3 +486,6 @@ msgid ""
 "run a command on all threads.  With ``py-bt``, this lets you see what every "
 "thread is doing at the Python level::"
 msgstr ""
+"Mit ``thread apply all COMMAND`` oder kurz ``t a a COMMAND`` führst du einen "
+"Befehl auf allen Threads aus.  Zusammen mit ``py-bt`` siehst du damit, was "
+"jeder Thread auf Python-Ebene gerade tut::"
