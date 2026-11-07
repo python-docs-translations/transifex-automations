@@ -1,19 +1,20 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2001-2024, Python Software Foundation
+# Copyright (C) 2001-2026, Python Software Foundation
 # This file is distributed under the same license as the Python package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 # Translators:
-# Jo K, 2023
+# Rafael Fontenelle <rffontenelle@gmail.com>, 2025
+# Swen Bachmann, 2026
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-26 14:13+0000\n"
-"PO-Revision-Date: 2022-11-05 19:48+0000\n"
-"Last-Translator: Jo K, 2023\n"
+"POT-Creation-Date: 2026-11-07 20:54+0000\n"
+"PO-Revision-Date: 2025-07-18 19:57+0000\n"
+"Last-Translator: Swen Bachmann, 2026\n"
 "Language-Team: German (https://app.transifex.com/python-doc/teams/5390/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,11 +24,11 @@ msgstr ""
 
 #: ../../howto/isolating-extensions.rst:7
 msgid "Isolating Extension Modules"
-msgstr ""
+msgstr "Erweiterungsmodule isolieren"
 
 #: ../../howto/isolating-extensions.rst-1
 msgid "Abstract"
-msgstr ""
+msgstr "Zusammenfassung"
 
 #: ../../howto/isolating-extensions.rst:11
 msgid ""
@@ -35,6 +36,10 @@ msgid ""
 "``static`` variables, which have process-wide scope. This document describes "
 "problems of such per-process state and shows a safer way: per-module state."
 msgstr ""
+"Herkömmlich wurde Zustand, der zu Python-Erweiterungsmodulen gehört, in C-"
+"``static``-Variablen gehalten, die prozessweit gelten. Dieses Dokument "
+"beschreibt die Probleme solchen Zustands je Prozess und zeigt einen "
+"sichereren Weg: Zustand je Modul."
 
 #: ../../howto/isolating-extensions.rst:16
 msgid ""
@@ -43,10 +48,15 @@ msgid ""
 "potentially switching from static types to heap types, and—perhaps most "
 "importantly—accessing per-module state from code."
 msgstr ""
+"Das Dokument beschreibt außerdem, wie du dort, wo es möglich ist, auf "
+"Zustand je Modul umstellst. Dieser Übergang umfasst das Anfordern von Platz "
+"für diesen Zustand, möglicherweise die Umstellung von statischen Typen auf "
+"Halden-Typen und – vielleicht am wichtigsten – den Zugriff auf den Zustand "
+"je Modul aus dem Code."
 
 #: ../../howto/isolating-extensions.rst:23
 msgid "Who should read this"
-msgstr ""
+msgstr "Für wen das gedacht ist"
 
 #: ../../howto/isolating-extensions.rst:25
 msgid ""
@@ -54,10 +64,13 @@ msgid ""
 "extensions who would like to make that extension safer to use in "
 "applications where Python itself is used as a library."
 msgstr ""
+"Diese Anleitung richtet sich an Betreuer von :ref:`C-API <c-api-index>`-"
+"Erweiterungen, die ihre Erweiterung sicherer machen wollen für Anwendungen, "
+"in denen Python selbst als Bibliothek verwendet wird."
 
 #: ../../howto/isolating-extensions.rst:31
 msgid "Background"
-msgstr ""
+msgstr "Hintergrund"
 
 #: ../../howto/isolating-extensions.rst:33
 msgid ""
@@ -65,24 +78,34 @@ msgid ""
 "configuration (e.g. the import path) and runtime state (e.g. the set of "
 "imported modules)."
 msgstr ""
+"Ein *Interpreter* ist der Zusammenhang, in dem Python-Code läuft. Er umfasst "
+"Konfiguration (etwa den Importpfad) und Laufzeitzustand (etwa die Menge der "
+"importierten Module)."
 
 #: ../../howto/isolating-extensions.rst:37
 msgid ""
 "Python supports running multiple interpreters in one process. There are two "
 "cases to think about—users may run interpreters:"
 msgstr ""
+"Python kann mehrere Interpreter in einem Prozess laufen lassen. Dabei sind "
+"zwei Fälle zu bedenken – Benutzer können Interpreter laufen lassen:"
 
 #: ../../howto/isolating-extensions.rst:40
 msgid ""
 "in sequence, with several :c:func:`Py_InitializeEx`/:c:func:`Py_FinalizeEx` "
 "cycles, and"
 msgstr ""
+"hintereinander, mit "
+"mehreren :c:func:`Py_InitializeEx`/:c:func:`Py_FinalizeEx`-Durchläufen, und"
 
 #: ../../howto/isolating-extensions.rst:42
 msgid ""
-"in parallel, managing \"sub-interpreters\" using :c:func:"
-"`Py_NewInterpreter`/:c:func:`Py_EndInterpreter`."
+"in parallel, managing \"sub-interpreters\" "
+"using :c:func:`Py_NewInterpreter`/:c:func:`Py_EndInterpreter`."
 msgstr ""
+"parallel, indem sie "
+"mit :c:func:`Py_NewInterpreter`/:c:func:`Py_EndInterpreter` "
+"„Unterinterpreter“ verwalten."
 
 #: ../../howto/isolating-extensions.rst:45
 msgid ""
@@ -91,6 +114,10 @@ msgid ""
 "about the application that uses them, which include assuming a process-wide "
 "\"main Python interpreter\"."
 msgstr ""
+"Beide Fälle (und Verbindungen davon) sind am nützlichsten, wenn Python in "
+"eine Bibliothek eingebettet wird. Bibliotheken sollten im Allgemeinen keine "
+"Annahmen über die Anwendung treffen, die sie verwendet – dazu gehört die "
+"Annahme eines prozessweiten „Haupt-Python-Interpreters“."
 
 #: ../../howto/isolating-extensions.rst:50
 msgid ""
@@ -102,6 +129,14 @@ msgid ""
 "introduce edge cases that lead to crashes when a module is loaded in more "
 "than one interpreter in the same process."
 msgstr ""
+"Historisch gehen Python-Erweiterungsmodule mit diesem Anwendungsfall nicht "
+"gut um. Viele Erweiterungsmodule (und sogar einige Module der "
+"Standardbibliothek) verwenden globalen Zustand *je Prozess*, weil C-"
+"``static``-Variablen ausgesprochen leicht zu verwenden sind. So landen "
+"Daten, die einem Interpreter eigen sein sollten, gemeinsam genutzt bei allen "
+"Interpretern. Sofern der Entwickler der Erweiterung nicht achtgibt, ist es "
+"sehr leicht, Grenzfälle einzuschleppen, die zu Abstürzen führen, wenn ein "
+"Modul in mehr als einem Interpreter im selben Prozess geladen wird."
 
 #: ../../howto/isolating-extensions.rst:58
 msgid ""
@@ -109,10 +144,13 @@ msgid ""
 "authors tend to not keep multiple interpreters in mind when developing, and "
 "it is currently cumbersome to test the behavior."
 msgstr ""
+"Zustand *je Interpreter* ist leider nicht leicht zu erreichen. Autoren von "
+"Erweiterungen denken beim Entwickeln meist nicht an mehrere Interpreter, und "
+"das Verhalten zu testen ist derzeit umständlich."
 
 #: ../../howto/isolating-extensions.rst:63
 msgid "Enter Per-Module State"
-msgstr ""
+msgstr "Auftritt: Zustand je Modul"
 
 #: ../../howto/isolating-extensions.rst:65
 msgid ""
@@ -123,6 +161,13 @@ msgid ""
 "multiple module objects corresponding to a single extension can even be "
 "loaded in a single interpreter."
 msgstr ""
+"Anstatt sich auf Zustand je Interpreter zu stützen, entwickelt sich die C-"
+"API von Python so, dass sie den feinkörnigeren Zustand *je Modul* besser "
+"unterstützt. Das heißt, dass Daten auf C-Ebene an ein *Modulobjekt* gebunden "
+"werden sollten. Jeder Interpreter erzeugt sein eigenes Modulobjekt und hält "
+"die Daten damit getrennt. Um die Isolation zu testen, lassen sich sogar "
+"mehrere Modulobjekte derselben Erweiterung in einem einzigen Interpreter "
+"laden."
 
 #: ../../howto/isolating-extensions.rst:72
 msgid ""
@@ -132,6 +177,12 @@ msgid ""
 "any other :c:expr:`PyObject *`; there are no \"on interpreter shutdown\" "
 "hooks to think—or forget—about."
 msgstr ""
+"Zustand je Modul bietet einen einfachen Weg, über Lebensdauer und Besitz von "
+"Ressourcen nachzudenken: Das Erweiterungsmodul initialisiert sich, wenn ein "
+"Modulobjekt erzeugt wird, und räumt auf, wenn es freigegeben wird. In dieser "
+"Hinsicht ist ein Modul wie jedes andere :c:expr:`PyObject *`. Es gibt keine "
+"Haken für „beim Herunterfahren des Interpreters“, an die man denken – oder "
+"die man vergessen – muss."
 
 #: ../../howto/isolating-extensions.rst:78
 msgid ""
@@ -141,10 +192,16 @@ msgid ""
 "exceptional cases: if you need them, you should give them additional care "
 "and testing. (Note that this guide does not cover them.)"
 msgstr ""
+"Beachte, dass es Anwendungsfälle für verschiedene Arten von „Globalen“ gibt: "
+"Zustand je Prozess, je Interpreter, je Thread oder je Aufgabe. Mit Zustand "
+"je Modul als Vorgabe sind diese weiter möglich, du solltest sie aber als "
+"Ausnahmefälle behandeln: Brauchst du sie, solltest du ihnen zusätzliche "
+"Aufmerksamkeit und Tests widmen. (Beachte, dass diese Anleitung sie nicht "
+"behandelt.)"
 
 #: ../../howto/isolating-extensions.rst:87
 msgid "Isolated Module Objects"
-msgstr ""
+msgstr "Isolated Module Objects"
 
 #: ../../howto/isolating-extensions.rst:89
 msgid ""
@@ -152,6 +209,27 @@ msgid ""
 "several module objects can be created from a single shared library. For "
 "example:"
 msgstr ""
+"Der wichtigste Punkt, den du beim Entwickeln eines Erweiterungsmoduls im "
+"Kopf behalten solltest, ist: Aus einer einzigen dynamischen Bibliothek "
+"können mehrere Modulobjekte erzeugt werden. Zum Beispiel:"
+
+#: ../../howto/isolating-extensions.rst:93
+msgid ""
+">>> import sys\n"
+">>> import binascii\n"
+">>> old_binascii = binascii\n"
+">>> del sys.modules['binascii']\n"
+">>> import binascii  # create a new module object\n"
+">>> old_binascii == binascii\n"
+"False"
+msgstr ""
+">>> import sys\n"
+">>> import binascii\n"
+">>> old_binascii = binascii\n"
+">>> del sys.modules['binascii']\n"
+">>> import binascii  # create a new module object\n"
+">>> old_binascii == binascii\n"
+"False"
 
 #: ../../howto/isolating-extensions.rst:103
 msgid ""
@@ -162,6 +240,12 @@ msgid ""
 "are possible (see `Managing Global State`_), but they will need more thought "
 "and attention to edge cases."
 msgstr ""
+"Als Daumenregel sollten die beiden Module vollständig unabhängig sein. Alle "
+"Objekte und aller Zustand, die dem Modul eigen sind, sollten im Modulobjekt "
+"eingekapselt sein, nicht mit anderen Modulobjekten geteilt werden und "
+"aufgeräumt werden, wenn das Modulobjekt freigegeben wird. Weil das nur eine "
+"Daumenregel ist, sind Ausnahmen möglich (siehe `Managing Global State`_), "
+"sie brauchen aber mehr Überlegung und Aufmerksamkeit für Grenzfälle."
 
 #: ../../howto/isolating-extensions.rst:111
 msgid ""
@@ -169,10 +253,13 @@ msgid ""
 "modules make it easier to set clear expectations and guidelines that work "
 "across a variety of use cases."
 msgstr ""
+"Manche Module kämen mit weniger strengen Einschränkungen aus, aber isolierte "
+"Module machen es leichter, klare Erwartungen und Richtlinien aufzustellen, "
+"die über eine Vielzahl von Anwendungsfällen hinweg funktionieren."
 
 #: ../../howto/isolating-extensions.rst:117
 msgid "Surprising Edge Cases"
-msgstr ""
+msgstr "Überraschende Grenzfälle"
 
 #: ../../howto/isolating-extensions.rst:119
 msgid ""
@@ -183,26 +270,61 @@ msgid ""
 "``binascii.Error`` are separate objects. In the following code, the "
 "exception is *not* caught:"
 msgstr ""
+"Beachte, dass isolierte Module einige überraschende Grenzfälle mit sich "
+"bringen. Am auffälligsten ist, dass jedes Modulobjekt seine Klassen und "
+"Ausnahmen üblicherweise nicht mit anderen ähnlichen Modulen teilt. Im "
+"Anschluss an das `Beispiel oben <Isolated Module Objects_>`__ ist zu "
+"beachten, dass ``old_binascii.Error`` und ``binascii.Error`` getrennte "
+"Objekte sind. Im folgenden Code wird die Ausnahme *nicht* gefangen:"
+
+#: ../../howto/isolating-extensions.rst:126
+msgid ""
+">>> old_binascii.Error == binascii.Error\n"
+"False\n"
+">>> try:\n"
+"...     old_binascii.unhexlify(b'qwertyuiop')\n"
+"... except binascii.Error:\n"
+"...     print('boo')\n"
+"...\n"
+"Traceback (most recent call last):\n"
+"  File \"<stdin>\", line 2, in <module>\n"
+"binascii.Error: Non-hexadecimal digit found"
+msgstr ""
+">>> old_binascii.Error == binascii.Error\n"
+"False\n"
+">>> try:\n"
+"...     old_binascii.unhexlify(b'qwertyuiop')\n"
+"... except binascii.Error:\n"
+"...     print('boo')\n"
+"...\n"
+"Traceback (most recent call last):\n"
+"  File \"<stdin>\", line 2, in <module>\n"
+"binascii.Error: Non-hexadecimal digit found"
 
 #: ../../howto/isolating-extensions.rst:139
 msgid ""
 "This is expected. Notice that pure-Python modules behave the same way: it is "
 "a part of how Python works."
 msgstr ""
+"Das ist zu erwarten. Beachte, dass reine Python-Module sich genauso "
+"verhalten: Es gehört dazu, wie Python arbeitet."
 
 #: ../../howto/isolating-extensions.rst:142
 msgid ""
 "The goal is to make extension modules safe at the C level, not to make hacks "
 "behave intuitively. Mutating ``sys.modules`` \"manually\" counts as a hack."
 msgstr ""
+"Das Ziel ist, Erweiterungsmodule auf C-Ebene sicher zu machen, nicht, Tricks "
+"naheliegend zu machen. ``sys.modules`` „von Hand“ zu verändern, zählt als "
+"Trick."
 
 #: ../../howto/isolating-extensions.rst:148
 msgid "Making Modules Safe with Multiple Interpreters"
-msgstr ""
+msgstr "Module mit mehreren Interpretern sicher machen"
 
 #: ../../howto/isolating-extensions.rst:152
 msgid "Managing Global State"
-msgstr ""
+msgstr "Managing Global State"
 
 #: ../../howto/isolating-extensions.rst:154
 msgid ""
@@ -210,15 +332,20 @@ msgid ""
 "module, but to the entire process (or something else \"more global\" than a "
 "module). For example:"
 msgstr ""
+"Manchmal ist der Zustand, der zu einem Python-Modul gehört, nicht diesem "
+"Modul eigen, sondern dem ganzen Prozess (oder etwas anderem, das „globaler“ "
+"ist als ein Modul). Zum Beispiel:"
 
 #: ../../howto/isolating-extensions.rst:158
 msgid "The ``readline`` module manages *the* terminal."
-msgstr ""
+msgstr "Das Modul ``readline`` verwaltet *das* Terminal."
 
 #: ../../howto/isolating-extensions.rst:159
 msgid ""
 "A module running on a circuit board wants to control *the* on-board LED."
 msgstr ""
+"Ein Modul, das auf einer Platine läuft, will *die* LED auf der Platine "
+"steuern."
 
 #: ../../howto/isolating-extensions.rst:162
 msgid ""
@@ -228,6 +355,11 @@ msgid ""
 "whether for Python or other languages). If that is not possible, consider "
 "explicit locking."
 msgstr ""
+"In diesen Fällen sollte das Python-Modul *Zugriff* auf den globalen Zustand "
+"bieten, anstatt ihn zu *besitzen*. Schreibe das Modul, wenn möglich, so, "
+"dass mehrere Kopien davon unabhängig voneinander auf den Zustand zugreifen "
+"können (ebenso wie andere Bibliotheken, ob für Python oder für andere "
+"Sprachen). Ist das nicht möglich, erwäge ausdrückliches Sperren."
 
 #: ../../howto/isolating-extensions.rst:168
 msgid ""
@@ -239,7 +371,7 @@ msgstr ""
 
 #: ../../howto/isolating-extensions.rst:175
 msgid "Managing Per-Module State"
-msgstr ""
+msgstr "Zustand je Modul verwalten"
 
 #: ../../howto/isolating-extensions.rst:177
 msgid ""
@@ -247,6 +379,9 @@ msgid ""
 "initialization <multi-phase-initialization>`. This signals that your module "
 "supports multiple interpreters correctly."
 msgstr ""
+"Um Zustand je Modul zu verwenden, nimm die :ref:`mehrphasige Initialisierung "
+"von Erweiterungsmodulen <multi-phase-initialization>`. Damit zeigst du an, "
+"dass dein Modul mehrere Interpreter korrekt unterstützt."
 
 #: ../../howto/isolating-extensions.rst:181
 msgid ""
@@ -258,6 +393,13 @@ msgid ""
 "``csv``'s :py:data:`~csv.field_size_limit`) which the C code needs to "
 "function."
 msgstr ""
+"Setze ``PyModuleDef.m_size`` auf eine positive Zahl, um so viele Bytes "
+"modullokalen Speicher anzufordern. Üblicherweise wird das auf die Größe "
+"einer modulspezifischen ``struct`` gesetzt, die den gesamten Zustand des "
+"Moduls auf C-Ebene aufnehmen kann. Dort solltest du insbesondere Zeiger auf "
+"Klassen (einschließlich Ausnahmen, aber ohne statische Typen) und "
+"Einstellungen ablegen (etwa :py:data:`~csv.field_size_limit` von ``csv``), "
+"die der C-Code zum Arbeiten braucht."
 
 #: ../../howto/isolating-extensions.rst:190
 msgid ""
@@ -266,12 +408,19 @@ msgid ""
 "means error- and type-checking at the C level, which is easy to get wrong "
 "and hard to test sufficiently."
 msgstr ""
+"Eine andere Möglichkeit ist, den Zustand im ``__dict__`` des Moduls zu "
+"halten, aber du musst dann Abstürze vermeiden, wenn Benutzer ``__dict__`` "
+"aus Python-Code verändern. Das bedeutet üblicherweise Fehler- und "
+"Typprüfungen auf C-Ebene, die man leicht falsch macht und schwer ausreichend "
+"testen kann."
 
 #: ../../howto/isolating-extensions.rst:195
 msgid ""
 "However, if module state is not needed in C code, storing it in ``__dict__`` "
 "only is a good idea."
 msgstr ""
+"Wird der Modulzustand im C-Code allerdings nicht gebraucht, ist es eine gute "
+"Idee, ihn nur im ``__dict__`` zu halten."
 
 #: ../../howto/isolating-extensions.rst:198
 msgid ""
@@ -282,17 +431,27 @@ msgid ""
 "and make the code longer; this is the price for modules which can be "
 "unloaded cleanly."
 msgstr ""
+"Enthält der Modulzustand ``PyObject``-Zeiger, muss das Modulobjekt "
+"Referenzen auf diese Objekte halten und die Haken auf Modulebene "
+"``m_traverse``, ``m_clear`` und ``m_free`` umsetzen. Diese arbeiten wie "
+"``tp_traverse``, ``tp_clear`` und ``tp_free`` einer Klasse. Sie zu ergänzen "
+"bedeutet etwas Arbeit und macht den Code länger. Das ist der Preis für "
+"Module, die sich sauber entladen lassen."
 
 #: ../../howto/isolating-extensions.rst:205
 msgid ""
 "An example of a module with per-module state is currently available as "
-"`xxlimited <https://github.com/python/cpython/blob/master/Modules/xxlimited."
-"c>`__; example module initialization shown at the bottom of the file."
+"`xxlimited <https://github.com/python/cpython/blob/master/Modules/"
+"xxlimited.c>`__; example module initialization shown at the bottom of the "
+"file."
 msgstr ""
+"Ein Beispiel für ein Modul mit Zustand je Modul ist derzeit als `xxlimited "
+"<https://github.com/python/cpython/blob/master/Modules/xxlimited.c>`__ "
+"verfügbar. Die Beispiel-Initialisierung des Moduls steht am Ende der Datei."
 
 #: ../../howto/isolating-extensions.rst:211
 msgid "Opt-Out: Limiting to One Module Object per Process"
-msgstr ""
+msgstr "Verzicht: Auf ein Modulobjekt je Prozess beschränken"
 
 #: ../../howto/isolating-extensions.rst:213
 msgid ""
@@ -301,10 +460,31 @@ msgid ""
 "module, you can explicitly make your module loadable only once per process. "
 "For example::"
 msgstr ""
+"Ein nicht negatives ``PyModuleDef.m_size`` zeigt an, dass ein Modul mehrere "
+"Interpreter korrekt unterstützt. Ist das bei deinem Modul noch nicht der "
+"Fall, kannst du es ausdrücklich nur einmal je Prozess ladbar machen. Zum "
+"Beispiel::"
+
+#: ../../howto/isolating-extensions.rst:218
+msgid ""
+"static int loaded = 0;\n"
+"\n"
+"static int\n"
+"exec_module(PyObject* module)\n"
+"{\n"
+"    if (loaded) {\n"
+"        PyErr_SetString(PyExc_ImportError,\n"
+"                        \"cannot load module more than once per process\");\n"
+"        return -1;\n"
+"    }\n"
+"    loaded = 1;\n"
+"    // ... rest of initialization\n"
+"}"
+msgstr ""
 
 #: ../../howto/isolating-extensions.rst:234
 msgid "Module State Access from Functions"
-msgstr ""
+msgstr "Zugriff auf den Modulzustand aus Funktionen"
 
 #: ../../howto/isolating-extensions.rst:236
 msgid ""
@@ -312,6 +492,31 @@ msgid ""
 "Functions get the module object as their first argument; for extracting the "
 "state, you can use ``PyModule_GetState``::"
 msgstr ""
+"Auf den Zustand aus Funktionen auf Modulebene zuzugreifen, ist einfach. "
+"Funktionen bekommen das Modulobjekt als erstes Argument. Um den Zustand "
+"herauszuholen, kannst du ``PyModule_GetState`` verwenden::"
+
+#: ../../howto/isolating-extensions.rst:240
+msgid ""
+"static PyObject *\n"
+"func(PyObject *module, PyObject *args)\n"
+"{\n"
+"    my_struct *state = (my_struct*)PyModule_GetState(module);\n"
+"    if (state == NULL) {\n"
+"        return NULL;\n"
+"    }\n"
+"    // ... rest of logic\n"
+"}"
+msgstr ""
+"static PyObject *\n"
+"func(PyObject *module, PyObject *args)\n"
+"{\n"
+"    my_struct *state = (my_struct*)PyModule_GetState(module);\n"
+"    if (state == NULL) {\n"
+"        return NULL;\n"
+"    }\n"
+"    // ... rest of logic\n"
+"}"
 
 #: ../../howto/isolating-extensions.rst:251
 msgid ""
@@ -319,10 +524,14 @@ msgid ""
 "there is no module state, i.e. ``PyModuleDef.m_size`` was zero. In your own "
 "module, you're in control of ``m_size``, so this is easy to prevent."
 msgstr ""
+"``PyModule_GetState`` kann ``NULL`` zurückgeben, ohne eine Ausnahme zu "
+"setzen, wenn es keinen Modulzustand gibt, also ``PyModuleDef.m_size`` null "
+"war. In deinem eigenen Modul hast du ``m_size`` in der Hand, das lässt sich "
+"also leicht verhindern."
 
 #: ../../howto/isolating-extensions.rst:258
 msgid "Heap Types"
-msgstr ""
+msgstr "Heap-Typen"
 
 #: ../../howto/isolating-extensions.rst:260
 msgid ""
@@ -330,6 +539,9 @@ msgid ""
 "PyTypeObject`` structures defined directly in code and initialized using "
 "``PyType_Ready()``."
 msgstr ""
+"Herkömmlich sind in C-Code definierte Typen *statisch*, also ``static "
+"PyTypeObject``-Strukturen, die unmittelbar im Code definiert und mit "
+"``PyType_Ready()`` initialisiert werden."
 
 #: ../../howto/isolating-extensions.rst:264
 msgid ""
@@ -338,6 +550,11 @@ msgid ""
 "limit the possible issues, static types are immutable at the Python level: "
 "for example, you can't set ``str.myattribute = 123``."
 msgstr ""
+"Solche Typen werden notwendigerweise prozessweit geteilt. Sie zwischen "
+"Modulobjekten zu teilen bedeutet, auf jeden Zustand achtzugeben, den sie "
+"besitzen oder auf den sie zugreifen. Um die möglichen Probleme zu begrenzen, "
+"sind statische Typen auf Python-Ebene unveränderlich: Du kannst zum Beispiel "
+"nicht ``str.myattribute = 123`` setzen."
 
 #: ../../howto/isolating-extensions.rst:270
 msgid ""
@@ -348,6 +565,13 @@ msgid ""
 "Python objects across interpreters implicitly depends on CPython's current, "
 "process-wide GIL."
 msgstr ""
+"Wirklich unveränderliche Objekte zwischen Interpretern zu teilen ist in "
+"Ordnung, solange sie keinen Zugriff auf veränderliche Objekte bieten. In "
+"CPython hat jedes Python-Objekt jedoch ein veränderliches "
+"Implementierungsdetail: den Referenzzähler. Änderungen am Referenzzähler "
+"sind durch den GIL abgesichert. Code, der irgendwelche Python-Objekte über "
+"Interpreter hinweg teilt, hängt damit implizit vom aktuellen, prozessweiten "
+"GIL von CPython ab."
 
 #: ../../howto/isolating-extensions.rst:277
 msgid ""
@@ -357,14 +581,22 @@ msgid ""
 "*heap type* for short. These correspond more closely to classes created by "
 "Python's ``class`` statement."
 msgstr ""
+"Weil sie unveränderlich und prozessglobal sind, können statische Typen nicht "
+"auf „ihren“ Modulzustand zugreifen. Wenn irgendeine Methode eines solchen "
+"Typs Zugriff auf den Modulzustand braucht, muss der Typ in einen *auf der "
+"Halde angelegten Typ* umgewandelt werden, kurz *Halden-Typ*. Diese "
+"entsprechen Klassen, die mit der ``class``-Anweisung von Python erzeugt "
+"werden, deutlich genauer."
 
 #: ../../howto/isolating-extensions.rst:284
 msgid "For new modules, using heap types by default is a good rule of thumb."
 msgstr ""
+"Für neue Module ist es eine gute Daumenregel, standardmäßig Halden-Typen zu "
+"verwenden."
 
 #: ../../howto/isolating-extensions.rst:288
 msgid "Changing Static Types to Heap Types"
-msgstr ""
+msgstr "Statische Typen in Halden-Typen umwandeln"
 
 #: ../../howto/isolating-extensions.rst:290
 msgid ""
@@ -375,18 +607,30 @@ msgid ""
 "unintentionally change a few details (e.g. pickleability or inherited "
 "slots). Always test the details that are important to you."
 msgstr ""
+"Statische Typen lassen sich in Halden-Typen umwandeln, aber beachte, dass "
+"die API für Halden-Typen nicht für eine „verlustfreie“ Umwandlung aus "
+"statischen Typen entworfen wurde – also dafür, einen Typ zu erzeugen, der "
+"sich genau wie ein gegebener statischer Typ verhält. Wenn du die "
+"Klassendefinition in einer neuen API neu schreibst, änderst du daher "
+"wahrscheinlich unbeabsichtigt ein paar Details (etwa die Pickle-Fähigkeit "
+"oder geerbte Slots). Teste immer die Details, die dir wichtig sind."
 
 #: ../../howto/isolating-extensions.rst:299
 msgid ""
 "Watch out for the following two points in particular (but note that this is "
 "not a comprehensive list):"
 msgstr ""
+"Achte besonders auf die folgenden zwei Punkte (aber beachte, dass dies keine "
+"vollständige Liste ist):"
 
 #: ../../howto/isolating-extensions.rst:302
 msgid ""
-"Unlike static types, heap type objects are mutable by default. Use the :c:"
-"macro:`Py_TPFLAGS_IMMUTABLETYPE` flag to prevent mutability."
+"Unlike static types, heap type objects are mutable by default. Use "
+"the :c:macro:`Py_TPFLAGS_IMMUTABLETYPE` flag to prevent mutability."
 msgstr ""
+"Anders als statische Typen sind Halden-Typobjekte standardmäßig "
+"veränderlich. Verwende das Flag :c:macro:`Py_TPFLAGS_IMMUTABLETYPE`, um die "
+"Veränderlichkeit zu verhindern."
 
 #: ../../howto/isolating-extensions.rst:304
 msgid ""
@@ -394,17 +638,24 @@ msgid ""
 "become possible to instantiate them from Python code. You can prevent this "
 "with the :c:macro:`Py_TPFLAGS_DISALLOW_INSTANTIATION` flag."
 msgstr ""
+"Halden-Typen erben standardmäßig :c:member:`~PyTypeObject.tp_new`, es kann "
+"also möglich werden, sie aus Python-Code zu erzeugen. Das kannst du mit dem "
+"Flag :c:macro:`Py_TPFLAGS_DISALLOW_INSTANTIATION` verhindern."
 
 #: ../../howto/isolating-extensions.rst:310
 msgid "Defining Heap Types"
-msgstr ""
+msgstr "Halden-Typen definieren"
 
 #: ../../howto/isolating-extensions.rst:312
 msgid ""
 "Heap types can be created by filling a :c:struct:`PyType_Spec` structure, a "
-"description or \"blueprint\" of a class, and calling :c:func:"
-"`PyType_FromModuleAndSpec` to construct a new class object."
+"description or \"blueprint\" of a class, and "
+"calling :c:func:`PyType_FromModuleAndSpec` to construct a new class object."
 msgstr ""
+"Halden-Typen lassen sich erzeugen, indem du eine :c:struct:`PyType_Spec`-"
+"Struktur füllst – eine Beschreibung oder „Blaupause“ einer Klasse – "
+"und :c:func:`PyType_FromModuleAndSpec` aufrufst, um ein neues Klassenobjekt "
+"zu bauen."
 
 #: ../../howto/isolating-extensions.rst:317
 msgid ""
@@ -412,16 +663,23 @@ msgid ""
 "but :c:func:`PyType_FromModuleAndSpec` associates the module with the class, "
 "allowing access to the module state from methods."
 msgstr ""
+"Andere Funktionen wie :c:func:`PyType_FromSpec` können ebenfalls Halden-"
+"Typen erzeugen, aber :c:func:`PyType_FromModuleAndSpec` verknüpft das Modul "
+"mit der Klasse und erlaubt damit den Zugriff auf den Modulzustand aus "
+"Methoden."
 
 #: ../../howto/isolating-extensions.rst:321
 msgid ""
 "The class should generally be stored in *both* the module state (for safe "
 "access from C) and the module's ``__dict__`` (for access from Python code)."
 msgstr ""
+"Die Klasse sollte im Allgemeinen *sowohl* im Modulzustand (für den sicheren "
+"Zugriff aus C) *als auch* im ``__dict__`` des Moduls (für den Zugriff aus "
+"Python-Code) abgelegt werden."
 
 #: ../../howto/isolating-extensions.rst:327
 msgid "Garbage-Collection Protocol"
-msgstr ""
+msgstr "Das Protokoll der Speicherbereinigung"
 
 #: ../../howto/isolating-extensions.rst:329
 msgid ""
@@ -429,16 +687,21 @@ msgid ""
 "the type isn't destroyed before all its instances are, but may result in "
 "reference cycles that need to be broken by the garbage collector."
 msgstr ""
+"Instanzen von Halden-Typen halten eine Referenz auf ihren Typ. Das stellt "
+"sicher, dass der Typ nicht vor allen seinen Instanzen zerstört wird, kann "
+"aber zu Referenzzyklen führen, die die Speicherbereinigung auflösen muss."
 
 #: ../../howto/isolating-extensions.rst:334
 msgid ""
 "To avoid memory leaks, instances of heap types must implement the garbage "
 "collection protocol. That is, heap types should:"
 msgstr ""
+"Um Speicherlecks zu vermeiden, müssen Instanzen von Halden-Typen das "
+"Protokoll der Speicherbereinigung umsetzen. Halden-Typen sollten also:"
 
 #: ../../howto/isolating-extensions.rst:338
 msgid "Have the :c:macro:`Py_TPFLAGS_HAVE_GC` flag."
-msgstr ""
+msgstr "das Flag :c:macro:`Py_TPFLAGS_HAVE_GC` haben."
 
 #: ../../howto/isolating-extensions.rst:339
 msgid ""
@@ -448,9 +711,11 @@ msgstr ""
 
 #: ../../howto/isolating-extensions.rst:342
 msgid ""
-"Please refer to the the documentation of :c:macro:`Py_TPFLAGS_HAVE_GC` and :"
-"c:member:`~PyTypeObject.tp_traverse` for additional considerations."
+"Please refer to the documentation of :c:macro:`Py_TPFLAGS_HAVE_GC` "
+"and :c:member:`~PyTypeObject.tp_traverse` for additional considerations."
 msgstr ""
+"Weitere Überlegungen findest du in der Dokumentation "
+"zu :c:macro:`Py_TPFLAGS_HAVE_GC` und :c:member:`~PyTypeObject.tp_traverse`."
 
 #: ../../howto/isolating-extensions.rst:346
 msgid ""
@@ -458,10 +723,13 @@ msgid ""
 "awkward to use in its current state. The following sections will guide you "
 "through common issues."
 msgstr ""
+"Die API zum Definieren von Halden-Typen ist organisch gewachsen, wodurch sie "
+"in ihrem heutigen Zustand etwas unhandlich ist. Die folgenden Abschnitte "
+"führen dich durch die verbreiteten Probleme."
 
 #: ../../howto/isolating-extensions.rst:352
 msgid "``tp_traverse`` in Python 3.8 and lower"
-msgstr ""
+msgstr "``tp_traverse`` in Python 3.8 und älter"
 
 #: ../../howto/isolating-extensions.rst:354
 msgid ""
@@ -469,97 +737,187 @@ msgid ""
 "3.9. If you support Python 3.8 and lower, the traverse function must *not* "
 "visit the type, so it must be more complicated::"
 msgstr ""
+"Die Anforderung, den Typ aus ``tp_traverse`` zu besuchen, wurde in Python "
+"3.9 ergänzt. Wenn du Python 3.8 und älter unterstützt, darf die traverse-"
+"Funktion den Typ *nicht* besuchen, sie muss also komplizierter sein::"
+
+#: ../../howto/isolating-extensions.rst:358
+msgid ""
+"static int my_traverse(PyObject *self, visitproc visit, void *arg)\n"
+"{\n"
+"    if (Py_Version >= 0x03090000) {\n"
+"        Py_VISIT(Py_TYPE(self));\n"
+"    }\n"
+"    return 0;\n"
+"}"
+msgstr ""
+"static int my_traverse(PyObject *self, visitproc visit, void *arg)\n"
+"{\n"
+"    if (Py_Version >= 0x03090000) {\n"
+"        Py_VISIT(Py_TYPE(self));\n"
+"    }\n"
+"    return 0;\n"
+"}"
 
 #: ../../howto/isolating-extensions.rst:366
 msgid ""
 "Unfortunately, :c:data:`Py_Version` was only added in Python 3.11. As a "
 "replacement, use:"
 msgstr ""
+"Leider wurde :c:data:`Py_Version` erst in Python 3.11 ergänzt. Verwende als "
+"Ersatz:"
 
 #: ../../howto/isolating-extensions.rst:369
 msgid ":c:macro:`PY_VERSION_HEX`, if not using the stable ABI, or"
 msgstr ""
+":c:macro:`PY_VERSION_HEX`, sofern du nicht das stabile ABI verwendest, oder"
 
 #: ../../howto/isolating-extensions.rst:370
 msgid ""
-":py:data:`sys.version_info` (via :c:func:`PySys_GetObject` and :c:func:"
-"`PyArg_ParseTuple`)."
+":py:data:`sys.version_info` (via :c:func:`PySys_GetObject` "
+"and :c:func:`PyArg_ParseTuple`)."
 msgstr ""
+":py:data:`sys.version_info` (über :c:func:`PySys_GetObject` "
+"und :c:func:`PyArg_ParseTuple`)."
 
 #: ../../howto/isolating-extensions.rst:375
 msgid "Delegating ``tp_traverse``"
-msgstr ""
+msgstr "``tp_traverse`` weitergeben"
 
 #: ../../howto/isolating-extensions.rst:377
 msgid ""
-"If your traverse function delegates to the :c:member:`~PyTypeObject."
-"tp_traverse` of its base class (or another type), ensure that "
-"``Py_TYPE(self)`` is visited only once. Note that only heap type are "
-"expected to visit the type in ``tp_traverse``."
+"If your traverse function delegates to "
+"the :c:member:`~PyTypeObject.tp_traverse` of its base class (or another "
+"type), ensure that ``Py_TYPE(self)`` is visited only once. Note that only "
+"heap type are expected to visit the type in ``tp_traverse``."
 msgstr ""
+"Wenn deine traverse-Funktion an :c:member:`~PyTypeObject.tp_traverse` ihrer "
+"Basisklasse (oder eines anderen Typs) weitergibt, stelle sicher, dass "
+"``Py_TYPE(self)`` nur einmal besucht wird. Beachte, dass nur von Halden-"
+"Typen erwartet wird, den Typ in ``tp_traverse`` zu besuchen."
 
 #: ../../howto/isolating-extensions.rst:382
 msgid "For example, if your traverse function includes::"
-msgstr ""
+msgstr "Wenn deine traverse-Funktion zum Beispiel Folgendes enthält::"
+
+#: ../../howto/isolating-extensions.rst:384
+msgid "base->tp_traverse(self, visit, arg)"
+msgstr "base->tp_traverse(self, visit, arg)"
 
 #: ../../howto/isolating-extensions.rst:386
 msgid "...and ``base`` may be a static type, then it should also include::"
 msgstr ""
+"… und ``base`` ein statischer Typ sein kann, dann sollte sie außerdem "
+"Folgendes enthalten::"
+
+#: ../../howto/isolating-extensions.rst:388
+msgid ""
+"if (base->tp_flags & Py_TPFLAGS_HEAPTYPE) {\n"
+"    // a heap type's tp_traverse already visited Py_TYPE(self)\n"
+"} else {\n"
+"    if (Py_Version >= 0x03090000) {\n"
+"        Py_VISIT(Py_TYPE(self));\n"
+"    }\n"
+"}"
+msgstr ""
+"if (base->tp_flags & Py_TPFLAGS_HEAPTYPE) {\n"
+"    // a heap type's tp_traverse already visited Py_TYPE(self)\n"
+"} else {\n"
+"    if (Py_Version >= 0x03090000) {\n"
+"        Py_VISIT(Py_TYPE(self));\n"
+"    }\n"
+"}"
 
 #: ../../howto/isolating-extensions.rst:396
 msgid ""
-"It is not necessary to handle the type's reference count in :c:member:"
-"`~PyTypeObject.tp_new` and :c:member:`~PyTypeObject.tp_clear`."
+"It is not necessary to handle the type's reference count "
+"in :c:member:`~PyTypeObject.tp_new` and :c:member:`~PyTypeObject.tp_clear`."
 msgstr ""
+"Den Referenzzähler des Typs in :c:member:`~PyTypeObject.tp_new` "
+"und :c:member:`~PyTypeObject.tp_clear` zu behandeln, ist nicht nötig."
 
 #: ../../howto/isolating-extensions.rst:401
 msgid "Defining ``tp_dealloc``"
-msgstr ""
+msgstr "``tp_dealloc`` definieren"
 
 #: ../../howto/isolating-extensions.rst:403
 msgid ""
 "If your type has a custom :c:member:`~PyTypeObject.tp_dealloc` function, it "
 "needs to:"
 msgstr ""
+"Wenn dein Typ eine eigene :c:member:`~PyTypeObject.tp_dealloc`-Funktion hat, "
+"muss sie:"
 
 #: ../../howto/isolating-extensions.rst:406
 msgid ""
 "call :c:func:`PyObject_GC_UnTrack` before any fields are invalidated, and"
 msgstr ""
+":c:func:`PyObject_GC_UnTrack` aufrufen, bevor irgendwelche Felder ungültig "
+"werden, und"
 
 #: ../../howto/isolating-extensions.rst:407
 msgid "decrement the reference count of the type."
-msgstr ""
+msgstr "den Referenzzähler des Typs verringern."
 
 #: ../../howto/isolating-extensions.rst:409
 msgid ""
 "To keep the type valid while ``tp_free`` is called, the type's refcount "
 "needs to be decremented *after* the instance is deallocated. For example::"
 msgstr ""
+"Damit der Typ gültig bleibt, während ``tp_free`` aufgerufen wird, muss der "
+"Referenzzähler des Typs *nach* der Freigabe der Instanz verringert werden. "
+"Zum Beispiel::"
+
+#: ../../howto/isolating-extensions.rst:412
+msgid ""
+"static void my_dealloc(PyObject *self)\n"
+"{\n"
+"    PyObject_GC_UnTrack(self);\n"
+"    ...\n"
+"    PyTypeObject *type = Py_TYPE(self);\n"
+"    type->tp_free(self);\n"
+"    Py_DECREF(type);\n"
+"}"
+msgstr ""
+"static void my_dealloc(PyObject *self)\n"
+"{\n"
+"    PyObject_GC_UnTrack(self);\n"
+"    ...\n"
+"    PyTypeObject *type = Py_TYPE(self);\n"
+"    type->tp_free(self);\n"
+"    Py_DECREF(type);\n"
+"}"
 
 #: ../../howto/isolating-extensions.rst:421
 msgid ""
 "The default ``tp_dealloc`` function does this, so if your type does *not* "
 "override ``tp_dealloc`` you don't need to add it."
 msgstr ""
+"Die Standardfunktion ``tp_dealloc`` tut das, wenn dein Typ ``tp_dealloc`` "
+"also *nicht* überschreibt, brauchst du es nicht zu ergänzen."
 
 #: ../../howto/isolating-extensions.rst:427
 msgid "Not overriding ``tp_free``"
-msgstr ""
+msgstr "``tp_free`` nicht überschreiben"
 
 #: ../../howto/isolating-extensions.rst:429
 msgid ""
-"The :c:member:`~PyTypeObject.tp_free` slot of a heap type must be set to :c:"
-"func:`PyObject_GC_Del`. This is the default; do not override it."
+"The :c:member:`~PyTypeObject.tp_free` slot of a heap type must be set "
+"to :c:func:`PyObject_GC_Del`. This is the default; do not override it."
 msgstr ""
+"Der Slot :c:member:`~PyTypeObject.tp_free` eines Halden-Typs muss "
+"auf :c:func:`PyObject_GC_Del` gesetzt sein. Das ist die Vorgabe. "
+"Überschreibe sie nicht."
 
 #: ../../howto/isolating-extensions.rst:435
 msgid "Avoiding ``PyObject_New``"
-msgstr ""
+msgstr "``PyObject_New`` vermeiden"
 
 #: ../../howto/isolating-extensions.rst:437
 msgid "GC-tracked objects need to be allocated using GC-aware functions."
 msgstr ""
+"Objekte, die von der Speicherbereinigung verfolgt werden, müssen über "
+"Funktionen angefordert werden, die die Speicherbereinigung kennen."
 
 #: ../../howto/isolating-extensions.rst:439
 msgid "If you use use :c:func:`PyObject_New` or :c:func:`PyObject_NewVar`:"
@@ -570,22 +928,43 @@ msgid ""
 "Get and call type's :c:member:`~PyTypeObject.tp_alloc` slot, if possible. "
 "That is, replace ``TYPE *o = PyObject_New(TYPE, typeobj)`` with::"
 msgstr ""
+"Hole und rufe, wenn möglich, den Slot :c:member:`~PyTypeObject.tp_alloc` des "
+"Typs auf. Ersetze also ``TYPE *o = PyObject_New(TYPE, typeobj)`` durch::"
+
+#: ../../howto/isolating-extensions.rst:444
+msgid "TYPE *o = typeobj->tp_alloc(typeobj, 0);"
+msgstr "TYPE *o = typeobj->tp_alloc(typeobj, 0);"
 
 #: ../../howto/isolating-extensions.rst:446
 msgid ""
 "Replace ``o = PyObject_NewVar(TYPE, typeobj, size)`` with the same, but use "
 "size instead of the 0."
 msgstr ""
+"Ersetze ``o = PyObject_NewVar(TYPE, typeobj, size)`` durch dasselbe, "
+"verwende aber size anstelle der 0."
 
 #: ../../howto/isolating-extensions.rst:449
 msgid ""
-"If the above is not possible (e.g. inside a custom ``tp_alloc``), call :c:"
-"func:`PyObject_GC_New` or :c:func:`PyObject_GC_NewVar`::"
+"If the above is not possible (e.g. inside a custom ``tp_alloc``), "
+"call :c:func:`PyObject_GC_New` or :c:func:`PyObject_GC_NewVar`::"
 msgstr ""
+"Ist das oben Genannte nicht möglich (etwa innerhalb eines eigenen "
+"``tp_alloc``), rufe :c:func:`PyObject_GC_New` "
+"oder :c:func:`PyObject_GC_NewVar` auf::"
+
+#: ../../howto/isolating-extensions.rst:452
+msgid ""
+"TYPE *o = PyObject_GC_New(TYPE, typeobj);\n"
+"\n"
+"TYPE *o = PyObject_GC_NewVar(TYPE, typeobj, size);"
+msgstr ""
+"TYPE *o = PyObject_GC_New(TYPE, typeobj);\n"
+"\n"
+"TYPE *o = PyObject_GC_NewVar(TYPE, typeobj, size);"
 
 #: ../../howto/isolating-extensions.rst:458
 msgid "Module State Access from Classes"
-msgstr ""
+msgstr "Zugriff auf den Modulzustand aus Klassen"
 
 #: ../../howto/isolating-extensions.rst:460
 msgid ""
@@ -593,16 +972,35 @@ msgid ""
 "you can call :c:func:`PyType_GetModule` to get the associated module, and "
 "then :c:func:`PyModule_GetState` to get the module's state."
 msgstr ""
+"Wenn du ein Typobjekt hast, das mit :c:func:`PyType_FromModuleAndSpec` "
+"definiert wurde, kannst du :c:func:`PyType_GetModule` aufrufen, um das "
+"zugehörige Modul zu bekommen, und dann :c:func:`PyModule_GetState`, um den "
+"Zustand des Moduls zu bekommen."
 
 #: ../../howto/isolating-extensions.rst:464
 msgid ""
 "To save a some tedious error-handling boilerplate code, you can combine "
 "these two steps with :c:func:`PyType_GetModuleState`, resulting in::"
 msgstr ""
+"Um ein paar Zeilen mühsamen Fehlerbehandlungscodes zu sparen, kannst du "
+"diese zwei Schritte mit :c:func:`PyType_GetModuleState` verbinden. Das "
+"ergibt::"
+
+#: ../../howto/isolating-extensions.rst:467
+msgid ""
+"my_struct *state = (my_struct*)PyType_GetModuleState(type);\n"
+"if (state == NULL) {\n"
+"    return NULL;\n"
+"}"
+msgstr ""
+"my_struct *state = (my_struct*)PyType_GetModuleState(type);\n"
+"if (state == NULL) {\n"
+"    return NULL;\n"
+"}"
 
 #: ../../howto/isolating-extensions.rst:474
 msgid "Module State Access from Regular Methods"
-msgstr ""
+msgstr "Zugriff auf den Modulzustand aus gewöhnlichen Methoden"
 
 #: ../../howto/isolating-extensions.rst:476
 msgid ""
@@ -611,6 +1009,10 @@ msgid ""
 "the state, you need to first get the *defining class*, and then get the "
 "module state from it."
 msgstr ""
+"Auf den Zustand auf Modulebene aus Methoden einer Klasse zuzugreifen, ist "
+"etwas komplizierter, aber dank einer in Python 3.9 eingeführten API möglich. "
+"Um an den Zustand zu kommen, musst du zuerst die *definierende Klasse* holen "
+"und daraus dann den Modulzustand."
 
 #: ../../howto/isolating-extensions.rst:481
 msgid ""
@@ -618,6 +1020,9 @@ msgid ""
 "that method's \"defining class\" for short. The defining class can have a "
 "reference to the module it is part of."
 msgstr ""
+"Die größte Hürde ist, *die Klasse zu bekommen, in der eine Methode definiert "
+"wurde*, kurz die „definierende Klasse“ dieser Methode. Die definierende "
+"Klasse kann eine Referenz auf das Modul haben, zu dem sie gehört."
 
 #: ../../howto/isolating-extensions.rst:485
 msgid ""
@@ -625,19 +1030,62 @@ msgid ""
 "called on a *subclass* of your type, ``Py_TYPE(self)`` will refer to that "
 "subclass, which may be defined in different module than yours."
 msgstr ""
+"Verwechsle die definierende Klasse nicht mit ``Py_TYPE(self)``. Wird die "
+"Methode auf einer *Unterklasse* deines Typs aufgerufen, verweist "
+"``Py_TYPE(self)`` auf diese Unterklasse, die in einem anderen Modul als "
+"deinem definiert sein kann."
 
 #: ../../howto/isolating-extensions.rst:490
 msgid ""
-"The following Python code can illustrate the concept. ``Base."
-"get_defining_class`` returns ``Base`` even if ``type(self) == Sub``:"
+"The following Python code can illustrate the concept. "
+"``Base.get_defining_class`` returns ``Base`` even if ``type(self) == Sub``:"
 msgstr ""
+"Der folgende Python-Code kann das Konzept veranschaulichen. "
+"``Base.get_defining_class`` gibt ``Base`` zurück, selbst wenn ``type(self) "
+"== Sub`` ist:"
+
+#: ../../howto/isolating-extensions.rst:494
+msgid ""
+"class Base:\n"
+"    def get_type_of_self(self):\n"
+"        return type(self)\n"
+"\n"
+"    def get_defining_class(self):\n"
+"        return __class__\n"
+"\n"
+"class Sub(Base):\n"
+"    pass"
+msgstr ""
+"class Base:\n"
+"    def get_type_of_self(self):\n"
+"        return type(self)\n"
+"\n"
+"    def get_defining_class(self):\n"
+"        return __class__\n"
+"\n"
+"class Sub(Base):\n"
+"    pass"
 
 #: ../../howto/isolating-extensions.rst:506
 msgid ""
-"For a method to get its \"defining class\", it must use the :ref:"
-"`METH_METHOD | METH_FASTCALL | METH_KEYWORDS <METH_METHOD-METH_FASTCALL-"
-"METH_KEYWORDS>` :c:type:`calling convention <PyMethodDef>` and the "
-"corresponding :c:type:`PyCMethod` signature::"
+"For a method to get its \"defining class\", it must use "
+"the :ref:`METH_METHOD | METH_FASTCALL | METH_KEYWORDS <METH_METHOD-"
+"METH_FASTCALL-METH_KEYWORDS>` :c:type:`calling convention <PyMethodDef>` and "
+"the corresponding :c:type:`PyCMethod` signature::"
+msgstr ""
+"Damit eine Methode ihre „definierende Klasse“ bekommt, muss sie "
+"die :c:type:`Aufrufkonvention <PyMethodDef>` :ref:`METH_METHOD | "
+"METH_FASTCALL | METH_KEYWORDS <METH_METHOD-METH_FASTCALL-METH_KEYWORDS>` und "
+"die entsprechende :c:type:`PyCMethod`-Signatur verwenden::"
+
+#: ../../howto/isolating-extensions.rst:511
+msgid ""
+"PyObject *PyCMethod(\n"
+"    PyObject *self,               // object the method was called on\n"
+"    PyTypeObject *defining_class, // defining class\n"
+"    PyObject *const *args,        // C array of arguments\n"
+"    Py_ssize_t nargs,             // length of \"args\"\n"
+"    PyObject *kwnames)            // NULL, or dict of keyword arguments"
 msgstr ""
 
 #: ../../howto/isolating-extensions.rst:518
@@ -645,35 +1093,113 @@ msgid ""
 "Once you have the defining class, call :c:func:`PyType_GetModuleState` to "
 "get the state of its associated module."
 msgstr ""
+"Sobald du die definierende Klasse hast, rufe :c:func:`PyType_GetModuleState` "
+"auf, um den Zustand des zugehörigen Moduls zu bekommen."
 
 #: ../../howto/isolating-extensions.rst:521
 msgid "For example::"
 msgstr "Zum Beispiel::"
 
+#: ../../howto/isolating-extensions.rst:523
+msgid ""
+"static PyObject *\n"
+"example_method(PyObject *self,\n"
+"        PyTypeObject *defining_class,\n"
+"        PyObject *const *args,\n"
+"        Py_ssize_t nargs,\n"
+"        PyObject *kwnames)\n"
+"{\n"
+"    my_struct *state = (my_struct*)PyType_GetModuleState(defining_class);\n"
+"    if (state == NULL) {\n"
+"        return NULL;\n"
+"    }\n"
+"    ... // rest of logic\n"
+"}\n"
+"\n"
+"PyDoc_STRVAR(example_method_doc, \"...\");\n"
+"\n"
+"static PyMethodDef my_methods[] = {\n"
+"    {\"example_method\",\n"
+"      (PyCFunction)(void(*)(void))example_method,\n"
+"      METH_METHOD|METH_FASTCALL|METH_KEYWORDS,\n"
+"      example_method_doc}\n"
+"    {NULL},\n"
+"}"
+msgstr ""
+"static PyObject *\n"
+"example_method(PyObject *self,\n"
+"        PyTypeObject *defining_class,\n"
+"        PyObject *const *args,\n"
+"        Py_ssize_t nargs,\n"
+"        PyObject *kwnames)\n"
+"{\n"
+"    my_struct *state = (my_struct*)PyType_GetModuleState(defining_class);\n"
+"    if (state == NULL) {\n"
+"        return NULL;\n"
+"    }\n"
+"    ... // rest of logic\n"
+"}\n"
+"\n"
+"PyDoc_STRVAR(example_method_doc, \"...\");\n"
+"\n"
+"static PyMethodDef my_methods[] = {\n"
+"    {\"example_method\",\n"
+"      (PyCFunction)(void(*)(void))example_method,\n"
+"      METH_METHOD|METH_FASTCALL|METH_KEYWORDS,\n"
+"      example_method_doc}\n"
+"    {NULL},\n"
+"}"
+
 #: ../../howto/isolating-extensions.rst:549
 msgid "Module State Access from Slot Methods, Getters and Setters"
 msgstr ""
+"Zugriff auf den Modulzustand aus Slot-Methoden, Lese- und Schreibfunktionen"
 
 #: ../../howto/isolating-extensions.rst:553
 msgid "This is new in Python 3.11."
-msgstr ""
+msgstr "Das ist neu in Python 3.11."
 
 #: ../../howto/isolating-extensions.rst:561
 msgid ""
-"Slot methods—the fast C equivalents for special methods, such as :c:member:"
-"`~PyNumberMethods.nb_add` for :py:attr:`~object.__add__` or :c:member:"
-"`~PyTypeObject.tp_new` for initialization—have a very simple API that "
-"doesn't allow passing in the defining class, unlike with :c:type:"
-"`PyCMethod`. The same goes for getters and setters defined with :c:type:"
-"`PyGetSetDef`."
+"Slot methods—the fast C equivalents for special methods, such "
+"as :c:member:`~PyNumberMethods.nb_add` for :py:attr:`~object.__add__` "
+"or :c:member:`~PyTypeObject.tp_new` for initialization—have a very simple "
+"API that doesn't allow passing in the defining class, unlike "
+"with :c:type:`PyCMethod`. The same goes for getters and setters defined "
+"with :c:type:`PyGetSetDef`."
 msgstr ""
+"Slot-Methoden – die schnellen C-Gegenstücke zu den besonderen Methoden, "
+"etwa :c:member:`~PyNumberMethods.nb_add` für :py:attr:`~object.__add__` "
+"oder :c:member:`~PyTypeObject.tp_new` für die Initialisierung – haben eine "
+"sehr einfache API, die es anders als bei :c:type:`PyCMethod` nicht erlaubt, "
+"die definierende Klasse hineinzugeben. Dasselbe gilt für Lese- und "
+"Schreibfunktionen, die mit :c:type:`PyGetSetDef` definiert werden."
 
 #: ../../howto/isolating-extensions.rst:568
 msgid ""
-"To access the module state in these cases, use the :c:func:"
-"`PyType_GetModuleByDef` function, and pass in the module definition. Once "
-"you have the module, call :c:func:`PyModule_GetState` to get the state::"
+"To access the module state in these cases, use "
+"the :c:func:`PyType_GetModuleByDef` function, and pass in the module "
+"definition. Once you have the module, call :c:func:`PyModule_GetState` to "
+"get the state::"
 msgstr ""
+"Um in diesen Fällen auf den Modulzustand zuzugreifen, verwende die "
+"Funktion :c:func:`PyType_GetModuleByDef` und gib die Moduldefinition hinein. "
+"Sobald du das Modul hast, rufe :c:func:`PyModule_GetState` auf, um an den "
+"Zustand zu kommen::"
+
+#: ../../howto/isolating-extensions.rst:573
+msgid ""
+"PyObject *module = PyType_GetModuleByDef(Py_TYPE(self), &module_def);\n"
+"my_struct *state = (my_struct*)PyModule_GetState(module);\n"
+"if (state == NULL) {\n"
+"    return NULL;\n"
+"}"
+msgstr ""
+"PyObject *module = PyType_GetModuleByDef(Py_TYPE(self), &module_def);\n"
+"my_struct *state = (my_struct*)PyModule_GetState(module);\n"
+"if (state == NULL) {\n"
+"    return NULL;\n"
+"}"
 
 #: ../../howto/isolating-extensions.rst:579
 msgid ""
@@ -681,6 +1207,10 @@ msgid ""
 "resolution order` (i.e. all superclasses) for the first superclass that has "
 "a corresponding module."
 msgstr ""
+":c:func:`!PyType_GetModuleByDef` arbeitet, indem es "
+"die :term:`Methodenauflösungsreihenfolge <method resolution order>` (also "
+"alle Oberklassen) nach der ersten Oberklasse durchsucht, die ein zugehöriges "
+"Modul hat."
 
 #: ../../howto/isolating-extensions.rst:585
 msgid ""
@@ -689,10 +1219,16 @@ msgid ""
 "the module of the true defining class. However, it will always return a "
 "module with the same definition, ensuring a compatible C memory layout."
 msgstr ""
+"In sehr exotischen Fällen (Vererbungsketten über mehrere Module hinweg, die "
+"aus derselben Definition erzeugt wurden) gibt :c:func:`!"
+"PyType_GetModuleByDef` möglicherweise nicht das Modul der wirklich "
+"definierenden Klasse zurück. Es gibt aber immer ein Modul mit derselben "
+"Definition zurück und stellt damit eine kompatible C-Speicheranordnung "
+"sicher."
 
 #: ../../howto/isolating-extensions.rst:593
 msgid "Lifetime of the Module State"
-msgstr ""
+msgstr "Lebensdauer des Modulzustands"
 
 #: ../../howto/isolating-extensions.rst:595
 msgid ""
@@ -700,23 +1236,32 @@ msgid ""
 "each pointer to (a part of) the module state, you must hold a reference to "
 "the module object."
 msgstr ""
+"Wird ein Modulobjekt von der Speicherbereinigung eingesammelt, wird sein "
+"Modulzustand freigegeben. Für jeden Zeiger auf (einen Teil des) Modulzustand "
+"musst du eine Referenz auf das Modulobjekt halten."
 
 #: ../../howto/isolating-extensions.rst:599
 msgid ""
-"Usually this is not an issue, because types created with :c:func:"
-"`PyType_FromModuleAndSpec`, and their instances, hold a reference to the "
-"module. However, you must be careful in reference counting when you "
-"reference module state from other places, such as callbacks for external "
-"libraries."
+"Usually this is not an issue, because types created "
+"with :c:func:`PyType_FromModuleAndSpec`, and their instances, hold a "
+"reference to the module. However, you must be careful in reference counting "
+"when you reference module state from other places, such as callbacks for "
+"external libraries."
 msgstr ""
+"Üblicherweise ist das kein Problem, weil Typen, die "
+"mit :c:func:`PyType_FromModuleAndSpec` erzeugt wurden, und ihre Instanzen "
+"eine Referenz auf das Modul halten. Du musst bei der Referenzzählung aber "
+"achtgeben, wenn du den Modulzustand von anderen Stellen aus referenzierst, "
+"etwa aus Rückrufen für externe Bibliotheken."
 
 #: ../../howto/isolating-extensions.rst:608
 msgid "Open Issues"
-msgstr ""
+msgstr "Offene Fragen"
 
 #: ../../howto/isolating-extensions.rst:610
 msgid "Several issues around per-module state and heap types are still open."
 msgstr ""
+"Rund um Zustand je Modul und Halden-Typen sind noch mehrere Fragen offen."
 
 #: ../../howto/isolating-extensions.rst:612
 msgid ""
@@ -727,7 +1272,7 @@ msgstr ""
 
 #: ../../howto/isolating-extensions.rst:617
 msgid "Per-Class Scope"
-msgstr ""
+msgstr "Gültigkeitsbereich je Klasse"
 
 #: ../../howto/isolating-extensions.rst:619
 msgid ""
@@ -736,13 +1281,20 @@ msgid ""
 "may change in the future—perhaps, ironically, to allow a proper solution for "
 "per-class scope)."
 msgstr ""
+"Derzeit (Stand Python 3.11) ist es nicht möglich, Zustand an einzelne "
+"*Typen* zu binden, ohne sich auf Implementierungsdetails von CPython zu "
+"stützen (die sich künftig ändern können – vielleicht, ironischerweise, um "
+"eine saubere Lösung für den Gültigkeitsbereich je Klasse zu erlauben)."
 
 #: ../../howto/isolating-extensions.rst:626
 msgid "Lossless Conversion to Heap Types"
-msgstr ""
+msgstr "Verlustfreie Umwandlung in Halden-Typen"
 
 #: ../../howto/isolating-extensions.rst:628
 msgid ""
 "The heap type API was not designed for \"lossless\" conversion from static "
 "types; that is, creating a type that works exactly like a given static type."
 msgstr ""
+"Die API für Halden-Typen wurde nicht für eine „verlustfreie“ Umwandlung aus "
+"statischen Typen entworfen, also dafür, einen Typ zu erzeugen, der sich "
+"genau wie ein gegebener statischer Typ verhält."
