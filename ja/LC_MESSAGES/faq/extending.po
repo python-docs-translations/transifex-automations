@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Python 3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-10 00:04+0000\n"
+"POT-Creation-Date: 2026-11-13 21:41+0000\n"
 "PO-Revision-Date: 2026-05-08 17:17+0000\n"
 "Last-Translator: Inada Naoki <songofacandy@gmail.com>, 2026\n"
 "Language-Team: Japanese (https://app.transifex.com/python-doc/teams/5390/"
@@ -414,35 +414,27 @@ msgstr "拡張をデバッグするにはどうしますか？"
 
 #: ../../faq/extending.rst:212
 msgid ""
-"When using GDB with dynamically loaded extensions, you can't set a "
-"breakpoint in your extension until your extension is loaded."
-msgstr ""
-"動的にロードされた拡張に GDB を使うとき、拡張がロードされるまでブレークポイン"
-"トを設定してはいけません。"
-
-#: ../../faq/extending.rst:215
-msgid "In your ``.gdbinit`` file (or interactively), add the command:"
-msgstr "``.gdbinit`` ファイルに(または対話的に)、このコマンドを加えてください:"
-
-#: ../../faq/extending.rst:217
-msgid "br _PyImport_LoadDynamicModule"
+"When using GDB with dynamically loaded extensions, enable pending "
+"breakpoints to set a breakpoint before the extension is loaded.  For "
+"example, to stop in a function named ``myfunction``:"
 msgstr ""
 
-#: ../../faq/extending.rst:221
-msgid "Then, when you run GDB:"
-msgstr "そして、GDB を起動するときに:"
+#: ../../faq/extending.rst:216
+msgid ""
+"$ gdb /local/bin/python\n"
+"(gdb) set breakpoint pending on\n"
+"(gdb) break myfunction\n"
+"(gdb) run myscript.py"
+msgstr ""
 
 #: ../../faq/extending.rst:223
 msgid ""
-"$ gdb /local/bin/python\n"
-"gdb) run myscript.py\n"
-"gdb) continue # repeat until your extension is loaded\n"
-"gdb) finish   # so that your extension is loaded\n"
-"gdb) br myfunction.c:50\n"
-"gdb) continue"
+"GDB resolves the breakpoint when the extension is loaded and stops when the "
+"function is called.  You can also set a pending breakpoint directly in your "
+"extension's source code, for example with ``break myfunction.c:50``."
 msgstr ""
 
-#: ../../faq/extending.rst:233
+#: ../../faq/extending.rst:228
 msgid ""
 "I want to compile a Python module on my Linux system, but some files are "
 "missing. Why?"
@@ -450,7 +442,7 @@ msgstr ""
 "Linux システムで Python モジュールをコンパイルしたいのですが、見つからない"
 "ファイルがあります。なぜですか？"
 
-#: ../../faq/extending.rst:235
+#: ../../faq/extending.rst:230
 msgid ""
 "Most packaged versions of Python omit some files required for compiling "
 "Python extensions."
@@ -458,23 +450,23 @@ msgstr ""
 "パッケージとして配布されている Python の多くでは、Python 拡張のコンパイルに必"
 "要なファイルの一部が省かれています。"
 
-#: ../../faq/extending.rst:238
+#: ../../faq/extending.rst:233
 msgid "For Red Hat, install the python3-devel RPM to get the necessary files."
 msgstr ""
 "Red Hat では、必要なファイルを入手するために python3-devel RPM をインストール"
 "してください。"
 
-#: ../../faq/extending.rst:240
+#: ../../faq/extending.rst:235
 msgid "For Debian, run ``apt-get install python3-dev``."
 msgstr "Debian では ``apt-get install python3-dev`` を実行してください。"
 
-#: ../../faq/extending.rst:243
+#: ../../faq/extending.rst:238
 msgid "How do I tell \"incomplete input\" from \"invalid input\"?"
 msgstr ""
 "\"不完全 (incomplete) な入力\" を \"不適切 (invalid) な入力\" から区別するに"
 "はどうしますか？"
 
-#: ../../faq/extending.rst:245
+#: ../../faq/extending.rst:240
 msgid ""
 "Sometimes you want to emulate the Python interactive interpreter's behavior, "
 "where it gives you a continuation prompt when the input is incomplete (e.g. "
@@ -487,7 +479,7 @@ msgstr ""
 "は継続プロンプトを与えられますが、入力が不適切であるときには即座に構文エラー"
 "メッセージが与えられます。このようなふるまいを模倣したいことがあります。"
 
-#: ../../faq/extending.rst:251
+#: ../../faq/extending.rst:246
 msgid ""
 "In Python you can use the :mod:`codeop` module, which approximates the "
 "parser's behavior sufficiently.  IDLE uses this, for example."
@@ -495,7 +487,7 @@ msgstr ""
 "Python では構文解析器のふるまいに十分に近い :mod:`codeop` モジュールが使えま"
 "す。例えば IDLE がこれを使っています。"
 
-#: ../../faq/extending.rst:254
+#: ../../faq/extending.rst:249
 msgid ""
 "The easiest way to do it in C is to call :c:func:`PyRun_InteractiveLoop` "
 "(perhaps in a separate thread) and let the Python interpreter handle the "
@@ -509,13 +501,13 @@ msgstr ""
 "定することもできます。詳しいヒントは、 ``Modules/readline.c`` や ``Parser/"
 "myreadline.c`` を参照してください。"
 
-#: ../../faq/extending.rst:261
+#: ../../faq/extending.rst:256
 msgid "How do I find undefined g++ symbols __builtin_new or __pure_virtual?"
 msgstr ""
 "未定義の g++ シンボル __builtin_new や __pure_virtual を見つけるにはどうしま"
 "すか？"
 
-#: ../../faq/extending.rst:263
+#: ../../faq/extending.rst:258
 msgid ""
 "To dynamically load g++ extension modules, you must recompile Python, relink "
 "it using g++ (change LINKCC in the Python Modules Makefile), and link your "
@@ -525,7 +517,7 @@ msgstr ""
 "再リンク (Python Modules Makefile 内の LINKCC を変更) し、拡張を g++ でリン"
 "ク (例えば ``g++ -shared -o mymodule.so mymodule.o``) しなければなりません。"
 
-#: ../../faq/extending.rst:269
+#: ../../faq/extending.rst:264
 msgid ""
 "Can I create an object class with some methods implemented in C and others "
 "in Python (e.g. through inheritance)?"
@@ -533,7 +525,7 @@ msgstr ""
 "メソッドのいくつかは C で、その他は Python で実装されたオブジェクトクラスを "
 "(継承などで) 作ることはできますか？"
 
-#: ../../faq/extending.rst:271
+#: ../../faq/extending.rst:266
 msgid ""
 "Yes, you can inherit from built-in classes such "
 "as :class:`int`, :class:`list`, :class:`dict`, etc."
@@ -541,7 +533,7 @@ msgstr ""
 "はい、 :class:`int` 、 :class:`list` 、 :class:`dict` などのビルトインクラス"
 "から継承できます。"
 
-#: ../../faq/extending.rst:274
+#: ../../faq/extending.rst:269
 msgid ""
 "The Boost Python Library (BPL, https://www.boost.org/libs/python/doc/"
 "index.html) provides a way of doing this from C++ (i.e. you can inherit from "
